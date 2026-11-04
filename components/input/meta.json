@@ -1,0 +1,58 @@
+{
+  "name": "input",
+  "title": "Input",
+  "description": "Kolom teks dengan label, petunjuk, dan pesan error yang terhubung lewat ARIA.",
+  "category": "form",
+  "tags": ["input", "form", "text", "field"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "input.blade.php", "deps": [] },
+    "react": { "file": "Input.tsx", "deps": [] },
+    "vue": { "file": "Input.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Teks label yang terhubung ke input lewat for/id."
+    },
+    {
+      "name": "hint",
+      "type": "string",
+      "default": "-",
+      "description": "Teks petunjuk di bawah input. Disembunyikan saat ada error."
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "default": "-",
+      "description": "Pesan error. Mengaktifkan aria-invalid dan border danger."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id input. Dibuat otomatis kalau kosong."
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "default": "text",
+      "description": "Atribut type native (email, password, dan seterusnya)."
+    }
+  ],
+  "a11y": [
+    "Label terhubung ke input lewat atribut for dan id.",
+    "Pesan error dan petunjuk dibacakan screen reader lewat aria-describedby.",
+    "aria-invalid aktif saat prop error terisi."
+  ],
+  "ai": {
+    "whenToUse": "Input teks satu baris di form: nama, email, kata sandi, pencarian.",
+    "rules": [
+      "Selalu isi label, jangan hanya placeholder",
+      "Teruskan pesan validasi server ke prop error"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

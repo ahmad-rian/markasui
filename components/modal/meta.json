@@ -1,0 +1,54 @@
+{
+  "name": "modal",
+  "title": "Modal",
+  "description": "Dialog modal berbasis elemen dialog native dengan fokus terkunci dan tombol tutup.",
+  "category": "overlay",
+  "tags": ["modal", "dialog", "overlay", "popup"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "modal.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Modal.tsx", "deps": [] },
+    "vue": { "file": "Modal.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "-",
+      "description": "Judul dialog, dipakai juga sebagai aria-labelledby."
+    },
+    {
+      "name": "trigger",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Elemen yang membuka modal saat diklik."
+    },
+    {
+      "name": "footer",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup modal."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id dialog. Bisa dipakai untuk membuka modal dari luar lewat showModal()."
+    }
+  ],
+  "a11y": [
+    "Memakai dialog dan showModal(), jadi fokus terkunci di dalam modal dan konten di belakangnya inert.",
+    "Escape menutup modal dan fokus kembali ke elemen pemicu.",
+    "Klik di luar panel (backdrop) menutup modal.",
+    "Tombol tutup punya aria-label Tutup."
+  ],
+  "ai": {
+    "whenToUse": "Konfirmasi aksi penting atau form singkat yang butuh perhatian penuh user.",
+    "rules": [
+      "Tombol di footer yang harus menutup modal wajib type=submit",
+      "Jangan menumpuk modal di dalam modal",
+      "Untuk panel samping gunakan Drawer, bukan Modal"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

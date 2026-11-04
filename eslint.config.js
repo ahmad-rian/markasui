@@ -7,7 +7,19 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["**/node_modules/", "**/dist/", "**/.astro/", "vendor/"] },
+  {
+    ignores: [
+      "**/node_modules/",
+      "**/dist/",
+      "**/.astro/",
+      "vendor/",
+      ".cache/",
+      "coverage/",
+      "test-results/",
+      "playwright-report/",
+      "playground/public/",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

@@ -1,0 +1,8 @@
+@import "../../packages/theme/markas.css";
+
+@source "../../components";
+@source "../../examples";
+
+body {
+  @apply bg-canvas text-ink antialiased;
+}

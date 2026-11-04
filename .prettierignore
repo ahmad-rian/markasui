@@ -6,3 +6,8 @@ dist/
 *.blade.php
 docs/PRD.md
 composer.json
+.cache/
+coverage/
+test-results/
+playwright-report/
+playground/public/

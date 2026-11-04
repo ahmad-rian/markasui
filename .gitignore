@@ -9,3 +9,6 @@ vendor/
 coverage/
 playwright-report/
 test-results/
+.cache/
+playground/public/blade/
+apps/docs/public/r/

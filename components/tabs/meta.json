@@ -1,0 +1,46 @@
+{
+  "name": "tabs",
+  "title": "Tabs",
+  "description": "Tab untuk berpindah antar panel konten dengan navigasi keyboard sesuai WAI-ARIA.",
+  "category": "navigation",
+  "tags": ["tabs", "tablist", "navigation", "panel"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "tabs.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Tabs.tsx", "deps": [] },
+    "vue": { "file": "Tabs.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Blade: array<key, label> · React: { value, label, content }[] · Vue: { value, label }[]",
+      "default": "[]",
+      "description": "Daftar tab. Di Blade dan Vue, isi panel lewat slot dengan nama sama seperti key/value."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "tab pertama",
+      "description": "Tab yang aktif saat pertama dirender."
+    },
+    {
+      "name": "v-model / onValueChange",
+      "type": "string",
+      "default": "-",
+      "description": "Vue memakai v-model, React memakai callback onValueChange."
+    }
+  ],
+  "a11y": [
+    "Memakai role tablist, tab, dan tabpanel dengan aria-selected, aria-controls, dan aria-labelledby.",
+    "Panah kiri dan kanan berpindah tab (berputar di ujung), Home dan End ke tab pertama dan terakhir.",
+    "Hanya tab aktif yang masuk urutan Tab (roving tabindex), lalu Tab berikutnya masuk ke panel."
+  ],
+  "ai": {
+    "whenToUse": "Mengelompokkan konten setara di satu halaman, misalnya pengaturan akun, profil, dan keamanan.",
+    "rules": [
+      "Key atau value tab hanya huruf kecil, angka, dan underscore karena dipakai sebagai id dan nama slot",
+      "Jangan memakai Tabs untuk navigasi antar halaman, gunakan link biasa"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

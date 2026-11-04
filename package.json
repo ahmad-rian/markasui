@@ -9,8 +9,14 @@
     "node": ">=26"
   },
   "scripts": {
+    "playground": "pnpm blade:playground && vite playground",
+    "blade:playground": "php scripts/render-blade.php examples/blade playground/public/blade",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
     "lint": "eslint . && prettier --check . && composer lint",
-    "format": "prettier --write . && composer format"
+    "format": "prettier --write . && composer format",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "registry": "node packages/registry/src/build.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
@@ -28,6 +34,7 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.2.1",
     "@vitejs/plugin-vue": "6.0.10",
+    "@vitest/coverage-v8": "5.1.0",
     "alpinejs": "3.17.5",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
@@ -47,6 +54,7 @@
     "typescript-eslint": "8.72.1",
     "vite": "8.3.5",
     "vitest": "5.1.0",
-    "vue": "3.5.44"
+    "vue": "3.5.44",
+    "vue-tsc": "3.3.14"
   }
 }

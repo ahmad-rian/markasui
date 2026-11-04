@@ -2,5 +2,27 @@
   "name": "@markasui/docs",
   "version": "0.0.0",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@astrojs/markdown-remark": "7.3.5",
+    "@astrojs/react": "7.1.2",
+    "@astrojs/vue": "7.1.2",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
+    "@markasui/registry": "workspace:*",
+    "@tailwindcss/vite": "4.3.4",
+    "alpinejs": "3.17.5",
+    "astro": "7.4.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.3.4",
+    "vue": "3.5.44"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  }
 }
