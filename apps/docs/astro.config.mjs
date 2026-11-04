@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: process.env.SITE_URL ?? "https://markasui.pages.dev",
+  site: process.env.SITE_URL || "https://markasui.pages.dev",
   trailingSlash: "never",
   build: { format: "file" },
   integrations: [react(), vue()],
