@@ -6,7 +6,7 @@ Status: tahap awal (Fase 0, fondasi). Spesifikasi lengkap ada di [docs/PRD.md](d
 
 ## Pengembangan
 
-Butuh Node 20.19+, pnpm 9, PHP 8.3+, dan Composer.
+Butuh Node 26 LTS (lihat .nvmrc), pnpm 12, PHP 8.3+, dan Composer.
 
 ```bash
 pnpm install
