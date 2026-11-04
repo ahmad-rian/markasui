@@ -1,45 +1,59 @@
 ---
+import type { Framework } from "@markasui/registry/schema";
 import { Code } from "astro:components";
+import FrameworkIcon from "./FrameworkIcon.astro";
 import Icon from "./Icon.astro";
 
 interface Props {
   code: string;
   lang: "blade" | "tsx" | "vue" | "bash" | "css" | "json" | "ts" | "js";
-  /** Judul kecil di atas kode, misalnya path file. */
+  /** Judul di atas kode, biasanya path file. */
   title?: string;
+  /** Logo framework di samping judul. */
+  framework?: Framework;
   /** Kode lebih dari 12 baris dipotong dengan tombol "Lihat kode" (PRD bagian 7). */
   collapsible?: boolean;
+  class?: string;
 }
 
 const COLLAPSE_AFTER_LINES = 12;
-const { code, lang, title, collapsible = false } = Astro.props;
+const { code, lang, title, framework, collapsible = false, class: className } = Astro.props;
 const trimmed = code.trim();
 const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LINES;
 ---
 
-<div class="group relative overflow-hidden rounded-xl border border-line bg-surface" data-code-block>
-  {title && <div class="border-b border-line px-4 py-2 font-mono text-xs text-muted">{title}</div>}
+<div class:list={["group relative overflow-hidden rounded-xl border border-line bg-surface", className]} data-code-block>
+  {
+    title && (
+      <div class="flex h-10 items-center gap-2 border-b border-line pr-12 pl-4">
+        {framework && <FrameworkIcon framework={framework} brand class="size-3.5" />}
+        <span class="truncate font-mono text-xs text-muted">{title}</span>
+      </div>
+    )
+  }
   <button
     type="button"
     data-copy
     aria-label="Salin kode"
-    class="absolute right-2 z-10 inline-flex size-8 items-center justify-center rounded-md bg-surface text-muted transition-colors hover:bg-subtle hover:text-ink"
-    class:list={[title ? "top-10" : "top-2"]}
+    class:list={["icon-button absolute right-1.5 z-10 size-8 bg-surface", title ? "top-1" : "top-2"]}
   >
-    <Icon name="copy" class="size-4 [[data-copied]_&]:hidden" />
-    <Icon name="check" class="hidden size-4 text-primary [[data-copied]_&]:block" />
+    <Icon name="copy" class="size-4 group-data-copied:hidden" />
+    <Icon name="check" class="hidden size-4 text-primary group-data-copied:block" />
   </button>
-  <div class:list={["overflow-x-auto p-4 font-mono text-[13px] leading-6", collapsed && "max-h-80 overflow-y-hidden [[data-expanded]_&]:max-h-none"]} data-code>
+  <div
+    class:list={[
+      "overflow-x-auto px-4 py-3.5 font-mono text-[13px] leading-6",
+      !title && "pr-12",
+      collapsed && "max-h-80 overflow-y-hidden group-data-expanded:max-h-none",
+    ]}
+    data-code
+  >
     <Code code={trimmed} lang={lang} themes={{ light: "github-light", dark: "github-dark" }} defaultColor={false} />
   </div>
   {
     collapsed && (
-      <div class="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center bg-linear-to-t from-surface to-transparent pb-4 [[data-expanded]_&]:hidden">
-        <button
-          type="button"
-          data-expand
-          class="h-8 rounded-md border border-line bg-surface px-3 text-sm font-medium text-ink hover:bg-subtle"
-        >
+      <div class="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center bg-linear-to-t from-surface via-surface/90 to-transparent pb-4 group-data-expanded:hidden">
+        <button type="button" data-expand class="site-button-secondary h-8 px-3">
           Lihat kode
         </button>
       </div>
@@ -55,9 +69,6 @@ const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LIN
     const block = target.closest<HTMLElement>("[data-code-block]");
     if (!block) return;
     if (target.closest("[data-expand]")) block.dataset.expanded = "";
-    if (target.closest("[data-copy]")) {
-      const code = block.querySelector("pre")?.textContent ?? "";
-      void copyText(code, block);
-    }
+    if (target.closest("[data-copy]")) void copyText(block.querySelector("pre")?.textContent ?? "", block);
   });
 </script>

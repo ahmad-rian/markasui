@@ -5,7 +5,7 @@
 
 @php
     $root = 'inline-flex';
-    $tooltip = 'inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-md';
+    $tooltip = 'inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay';
 
     $id = $attributes->get('id') ?? 'markas-tooltip-'.\Illuminate\Support\Str::random(8);
 @endphp

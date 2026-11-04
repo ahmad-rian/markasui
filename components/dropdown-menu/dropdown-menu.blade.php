@@ -7,7 +7,7 @@
     $root = 'inline-block';
     $triggerClass = 'inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none';
     $chevron = 'size-4 text-muted';
-    $menu = 'inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-lg';
+    $menu = 'inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay';
     $item = 'flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none';
     $tones = [
         'default' => 'text-ink hover:bg-subtle focus:bg-subtle',

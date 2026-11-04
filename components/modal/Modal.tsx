@@ -10,7 +10,7 @@ import {
 } from "react";
 
 const dialogClass =
-  "m-auto w-full max-w-lg rounded-xl border border-line bg-surface p-0 text-ink shadow-xl backdrop:bg-ink/40";
+  "m-auto w-full max-w-lg rounded-xl border border-line bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/40";
 const panel = "grid gap-4 p-6";
 const header = "flex items-start justify-between gap-4";
 const titleClass = "text-lg font-semibold text-ink";

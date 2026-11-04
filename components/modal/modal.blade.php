@@ -3,7 +3,7 @@
 ])
 
 @php
-    $dialog = 'm-auto w-full max-w-lg rounded-xl border border-line bg-surface p-0 text-ink shadow-xl backdrop:bg-ink/40';
+    $dialog = 'm-auto w-full max-w-lg rounded-xl border border-line bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/40';
     $panel = 'grid gap-4 p-6';
     $header = 'flex items-start justify-between gap-4';
     $titleClass = 'text-lg font-semibold text-ink';

@@ -1,0 +1,47 @@
+---
+import Icon from "./Icon.astro";
+
+/** Transkrip nyata alur MCP: tool dan path yang dipakai agent persis seperti di @markasui/mcp. */
+const calls = [
+  ["get_setup", "blade"],
+  ["get_component", "input, blade"],
+  ["get_component", "button, blade"],
+];
+const written = [
+  "resources/views/components/markas/input.blade.php",
+  "resources/views/components/markas/button.blade.php",
+  "resources/views/auth/login.blade.php",
+];
+---
+
+<figure class="overflow-hidden rounded-2xl border border-line bg-surface font-mono text-[13px] leading-6">
+  <figcaption class="flex h-11 items-center gap-2 border-b border-line px-4 text-xs text-muted">
+    <span class="size-2 rounded-full bg-primary" aria-hidden="true"></span>
+    Claude Code dengan MCP markasui
+  </figcaption>
+  <div class="grid grid-cols-[minmax(0,1fr)] gap-4 p-4 sm:p-5">
+    <p class="font-sans text-[15px] leading-6 text-ink">
+      Buat halaman login Laravel memakai MarkasUI, dengan pesan error dari validasi
+    </p>
+    <ol class="grid grid-cols-[minmax(0,1fr)] gap-1 text-muted" aria-label="Tool yang dipanggil">
+      {
+        calls.map(([tool, args]) => (
+          <li class="flex gap-3">
+            <span class="w-28 shrink-0 text-ink sm:w-32">{tool}</span>
+            <span class="truncate">{args}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <ul class="grid grid-cols-[minmax(0,1fr)] gap-1" aria-label="File yang ditulis">
+      {
+        written.map((path) => (
+          <li class="flex items-center gap-2 text-muted">
+            <Icon name="check" class="size-3.5 shrink-0 text-primary" />
+            <span class="truncate">{path}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</figure>

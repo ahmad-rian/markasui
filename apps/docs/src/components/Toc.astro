@@ -9,14 +9,14 @@ const headings = Astro.props.headings.filter((heading) => heading.depth === 2);
 
 {
   headings.length > 0 && (
-    <nav aria-labelledby="toc-title" class="sticky top-24 hidden max-h-[calc(100dvh-8rem)] overflow-y-auto xl:block">
-      <h2 id="toc-title" class="label-mono mb-3">
+    <nav aria-labelledby="toc-title" class="sticky top-24">
+      <h2 id="toc-title" class="mb-3 text-xs font-medium text-muted">
         Di halaman ini
       </h2>
-      <ul class="grid gap-2 text-sm">
+      <ul class="grid gap-2 border-l border-line text-sm">
         {headings.map((heading) => (
           <li>
-            <a href={`#${heading.slug}`} class="text-muted transition-colors hover:text-ink">
+            <a href={`#${heading.slug}`} class="-ml-px block border-l border-transparent pl-3 text-muted transition-colors hover:border-faint hover:text-ink">
               {heading.text}
             </a>
           </li>

@@ -20,8 +20,12 @@ export const CATEGORY_LABELS: Record<RegistryItem["category"], string> = {
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-/** Label BARU tampil 30 hari sejak addedAt (PRD bagian 7). */
-const NEW_WINDOW_DAYS = 30;
+/** Label tampil 30 hari sejak addedAt atau updatedAt (PRD bagian 7). */
+const FRESH_WINDOW_DAYS = 30;
+/**
+ * Komponen yang ikut rilis pertama tidak diberi label: kalau semuanya "baru", tidak ada yang menonjol.
+ */
+const FIRST_RELEASE = "2026-11-04";
 
 export type Freshness = "baru" | "diperbarui" | null;
 
@@ -29,10 +33,14 @@ export function freshness(
   item: Pick<RegistryItem, "addedAt" | "updatedAt">,
   now = new Date(),
 ): Freshness {
-  const age = (date: string) =>
-    (now.getTime() - new Date(date).getTime()) / DAY_MS;
-  if (age(item.addedAt) <= NEW_WINDOW_DAYS) return "baru";
-  if (item.updatedAt && age(item.updatedAt) <= NEW_WINDOW_DAYS)
+  const recent = (date: string) =>
+    (now.getTime() - new Date(date).getTime()) / DAY_MS <= FRESH_WINDOW_DAYS;
+  if (item.addedAt > FIRST_RELEASE && recent(item.addedAt)) return "baru";
+  if (
+    item.updatedAt &&
+    item.updatedAt > FIRST_RELEASE &&
+    recent(item.updatedAt)
+  )
     return "diperbarui";
   return null;
 }

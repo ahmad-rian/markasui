@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
@@ -8,12 +9,10 @@ import sansFont from "../../node_modules/@fontsource-variable/plus-jakarta-sans/
 interface Props {
   title: string;
   description?: string;
-  /** Halaman dengan preview Blade interaktif memuat Alpine.js. */
-  alpine?: boolean;
 }
 
-const { title, description = SITE.description, alpine = false } = Astro.props;
-const fullTitle = title === SITE.name ? title : `${title} · ${SITE.name}`;
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = title === SITE.name ? `${SITE.name}: komponen UI untuk Blade, React, dan Vue` : `${title} · ${SITE.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -34,36 +33,39 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="theme-color" content="#f4f4f1" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0e110e" media="(prefers-color-scheme: dark)" />
     <script is:inline>
+      // Tema dan framework dipasang sebelum render pertama, dan dipasang ulang setiap navigasi
+      // karena ClientRouter menyalin atribut <html> dari halaman baru.
       (() => {
-        const root = document.documentElement;
-        let framework = null;
-        let theme = null;
-        try {
-          framework = localStorage.getItem("markas-framework");
-          theme = localStorage.getItem("markas-theme");
-        } catch {}
-        if (framework === "blade" || framework === "react" || framework === "vue") root.dataset.framework = framework;
-        const dark = theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-        root.classList.toggle("dark", dark);
+        const read = (key) => {
+          try {
+            return localStorage.getItem(key);
+          } catch {
+            return null;
+          }
+        };
+        const apply = (root) => {
+          const framework = read("markas-framework");
+          if (framework === "blade" || framework === "react" || framework === "vue") root.dataset.framework = framework;
+          const theme = read("markas-theme");
+          root.classList.toggle("dark", theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+        };
+        apply(document.documentElement);
+        document.addEventListener("astro:before-swap", (event) => apply(event.newDocument.documentElement));
       })();
     </script>
+    <ClientRouter fallback="swap" />
   </head>
-  <body class="min-h-dvh bg-canvas font-sans text-ink">
+  <body class="flex min-h-dvh flex-col bg-canvas font-sans text-ink">
     <a
       href="#konten"
-      class="sr-only rounded-md bg-primary px-3 py-2 text-sm text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+      class="sr-only rounded-lg bg-primary px-3 py-2 text-sm text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
       >Lewati ke konten</a
     >
     <Header />
-    <slot />
+    <div class="flex-1"><slot /></div>
     <Footer />
-    {
-      alpine && (
-        <script>
-          import { loadAlpineWhenBlade } from "../scripts/alpine";
-          loadAlpineWhenBlade();
-        </script>
-      )
-    }
+    <script>
+      import "../scripts/alpine";
+    </script>
   </body>
 </html>

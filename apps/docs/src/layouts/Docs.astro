@@ -1,7 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
 import Base from "./Base.astro";
-import Icon from "../components/Icon.astro";
 import SidebarNav from "../components/SidebarNav.astro";
 import Toc from "../components/Toc.astro";
 
@@ -9,56 +8,24 @@ interface Props {
   title: string;
   description?: string;
   headings?: MarkdownHeading[];
-  alpine?: boolean;
 }
-const { title, description, headings = [], alpine } = Astro.props;
+const { title, description, headings = [] } = Astro.props;
 ---
 
-<Base title={title} description={description} alpine={alpine}>
-  <div class="mx-auto flex max-w-screen-2xl gap-10 px-4 sm:px-6">
-    <aside class="sticky top-16 hidden h-[calc(100dvh-4rem)] w-60 shrink-0 overflow-y-auto py-8 lg:block" aria-label="Navigasi docs">
+<Base title={title} description={description}>
+  <div class="mx-auto flex max-w-screen-2xl gap-10 px-4 sm:px-6 lg:px-8 xl:gap-12">
+    <aside class="sticky top-16 hidden h-[calc(100dvh-4rem)] w-60 shrink-0 overflow-y-auto py-8 pr-2 lg:block" aria-label="Navigasi docs">
       <SidebarNav />
     </aside>
 
-    <main id="konten" class="min-w-0 flex-1 py-8 lg:py-10" data-pagefind-body>
-      <button
-        type="button"
-        data-drawer-open
-        class="mb-6 inline-flex h-9 items-center gap-2 rounded-md border border-line bg-surface px-3 text-sm text-muted lg:hidden"
-      >
-        <Icon name="menu" />
-        Menu
-      </button>
+    <main id="konten" class="min-w-0 flex-1 pt-8 pb-16 sm:pt-12" data-pagefind-body>
       <div class="mx-auto max-w-3xl min-w-0">
         <slot />
       </div>
     </main>
 
-    <aside class="w-50 shrink-0 py-10 max-xl:hidden">
+    <aside class="hidden w-52 shrink-0 py-12 xl:block">
       <Toc headings={headings} />
     </aside>
   </div>
-
-  <dialog
-    data-drawer
-    aria-label="Navigasi docs"
-    class="m-0 h-dvh max-h-dvh w-72 max-w-[85vw] border-r border-line bg-canvas p-0 text-ink backdrop:bg-ink/40"
-  >
-    <div class="flex h-16 items-center justify-end border-b border-line px-4">
-      <form method="dialog">
-        <button type="submit" aria-label="Tutup menu" class="inline-flex size-9 items-center justify-center rounded-md text-muted hover:bg-subtle">
-          <Icon name="close" />
-        </button>
-      </form>
-    </div>
-    <div class="p-4"><SidebarNav /></div>
-  </dialog>
 </Base>
-
-<script>
-  const drawer = document.querySelector<HTMLDialogElement>("[data-drawer]");
-  document.querySelector("[data-drawer-open]")?.addEventListener("click", () => drawer?.showModal());
-  drawer?.addEventListener("click", (event) => {
-    if (event.target === drawer) drawer.close();
-  });
-</script>

@@ -5,14 +5,15 @@ import { freshness, getComponents, groupByCategory } from "../lib/registry";
 
 const path = Astro.url.pathname;
 const groups = groupByCategory(await getComponents());
+const heading = "mb-2 px-3 text-xs font-medium text-muted";
 const link =
-  "flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm text-muted transition-colors hover:bg-subtle hover:text-ink aria-[current=page]:bg-subtle aria-[current=page]:font-medium aria-[current=page]:text-ink";
+  "flex h-8 items-center justify-between gap-2 rounded-lg px-3 text-sm text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink aria-[current=page]:bg-subtle aria-[current=page]:font-medium aria-[current=page]:text-ink";
 ---
 
 <div class="grid gap-6">
   <FrameworkSwitcher />
   <section>
-    <h2 class="label-mono mb-2 px-2">Mulai</h2>
+    <h2 class={heading}>Mulai</h2>
     <ul class="grid gap-0.5">
       {
         DOCS_NAV.map((item) => (
@@ -28,7 +29,7 @@ const link =
   {
     groups.map((group) => (
       <section>
-        <h2 class="label-mono mb-2 px-2">{group.label}</h2>
+        <h2 class={heading}>{group.label}</h2>
         <ul class="grid gap-0.5">
           {group.items.map((item) => {
             const label = freshness(item);
@@ -37,11 +38,7 @@ const link =
               <li>
                 <a href={href} class={link} aria-current={path === href ? "page" : undefined}>
                   {item.title}
-                  {label && (
-                    <span class="rounded-full border border-primary-line bg-primary-soft px-1.5 font-mono text-[10px] text-primary">
-                      {label}
-                    </span>
-                  )}
+                  {label && <span class="text-xs text-primary">{label === "baru" ? "Baru" : "Diperbarui"}</span>}
                 </a>
               </li>
             );

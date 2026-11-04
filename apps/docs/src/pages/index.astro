@@ -1,113 +1,109 @@
 ---
+import AgentDemo from "../components/AgentDemo.astro";
 import CodeBlock from "../components/CodeBlock.astro";
-import FrameworkSwitcher from "../components/FrameworkSwitcher.astro";
+import HeroDemo from "../components/HeroDemo.astro";
 import Tabs from "../components/Tabs.astro";
-import Preview from "../components/preview/Preview.astro";
 import Base from "../layouts/Base.astro";
 import { PACKAGE_MANAGERS, cliCommand } from "../lib/frameworks";
-import { CATEGORY_LABELS, getComponents, groupByCategory } from "../lib/registry";
+import { getComponents, groupByCategory } from "../lib/registry";
 import { SITE } from "../lib/site";
 
 const items = await getComponents();
 const groups = groupByCategory(items);
-const button =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
-
-const prompt = "Buat halaman login Laravel memakai MarkasUI: input email, input kata sandi dengan pesan error, dan tombol masuk.";
-const result = `<form method="POST" action="{{ route('login') }}" class="grid gap-4">
-    @csrf
-    <x-markas.input name="email" type="email" label="Email" :error="$errors->first('email')" />
-    <x-markas.input name="password" type="password" label="Kata sandi" />
-    <x-markas.button type="submit" class="w-full">Masuk</x-markas.button>
-</form>`;
+const sectionTitle = "text-2xl leading-tight font-medium tracking-[-0.02em] sm:text-[28px]";
+const link = "text-primary underline decoration-primary-line underline-offset-4 transition-colors hover:decoration-primary";
 ---
 
-<Base title={SITE.name} alpine>
+<Base title={SITE.name}>
   <main id="konten">
-    <section class="dot-grid border-b border-line">
-      <div class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6 sm:py-28">
-        <p class="label-mono">Open source · Blade · React · Vue</p>
-        <h1 class="mt-6 max-w-3xl text-[40px] leading-[1.05] font-bold tracking-tight sm:text-[64px]">
-          Komponen UI ringan untuk <span class="font-serif font-normal italic">setiap stack.</span>
+    <section class="mx-auto grid max-w-screen-xl items-center gap-12 px-4 pt-12 pb-20 sm:px-6 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:px-8 lg:pt-20 lg:pb-28">
+      <div class="min-w-0">
+        <h1 class="max-w-xl text-[40px] leading-[1.06] font-medium tracking-[-0.03em] text-balance sm:text-[52px] xl:text-[56px]">
+          Komponen UI untuk Blade, React, dan Vue
         </h1>
-        <p class="mt-6 max-w-xl text-lg text-muted">
-          Satu desain untuk Blade, React, dan Vue. Tanpa dependensi tambahan, siap disalin, dan siap dipakai agent AI.
+        <p class="mt-6 max-w-lg text-lg leading-7 text-muted sm:text-xl sm:leading-8">
+          Satu desain di tiga framework, di atas Tailwind CSS v4. Salin kodenya ke project Laravel, React, atau Vue tanpa paket tambahan.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/components" class={`${button} bg-primary text-on-primary hover:bg-primary-strong`}>Lihat Komponen</a>
-          <a href="/docs/introduction" class={`${button} border border-line bg-surface text-ink hover:bg-subtle`}>Baca Docs</a>
+          <a href="/components" class="site-button-primary">Lihat komponen</a>
+          <a href="/docs/introduction" class="site-button-secondary">Baca docs</a>
         </div>
-        <div class="mt-10 max-w-xl">
+        <p class="mt-8 font-mono text-xs text-muted tabular-nums">{items.length} komponen · Open source, MIT</p>
+      </div>
+      <div class="min-w-0">
+        <HeroDemo />
+      </div>
+    </section>
+
+    <section class="border-t border-line" aria-labelledby="mulai-title">
+      <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:px-8">
+        <div class="min-w-0">
+          <h2 id="mulai-title" class={sectionTitle}>Pasang dari terminal</h2>
+          <p class="mt-4 max-w-md leading-7 text-muted">
+            <code class="font-mono text-sm text-ink">init</code>{" "}mengenali project Laravel, React, Next.js, Vue, atau Nuxt, lalu menyalin{" "}
+            <code class="font-mono text-sm text-ink">markas.css</code>. Setelah itu{" "}<code class="font-mono text-sm text-ink">add</code>{" "}
+            menulis file komponen ke folder yang tepat dan tidak pernah menimpa file yang sudah Anda ubah.
+          </p>
+          <a href="/docs/cli" class={`mt-5 inline-block text-sm ${link}`}>Semua perintah CLI</a>
+        </div>
+        <div class="min-w-0">
           <Tabs label="Package manager" group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
-            {PACKAGE_MANAGERS.map((pm) => <div slot={pm}><CodeBlock code={cliCommand(pm, "init")} lang="bash" /></div>)}
+            {
+              PACKAGE_MANAGERS.map((pm) => (
+                <div slot={pm}>
+                  <CodeBlock code={`${cliCommand(pm, "init")}\n${cliCommand(pm, "add button input modal")}`} lang="bash" />
+                </div>
+              ))
+            }
           </Tabs>
         </div>
       </div>
     </section>
 
-    <section class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6" aria-labelledby="demo-title">
-      <div class="flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <p class="label-mono">Coba langsung</p>
-          <h2 id="demo-title" class="mt-3 text-3xl font-bold tracking-tight">Tampilan sama di tiga framework</h2>
-        </div>
-        <div class="w-full sm:w-72"><FrameworkSwitcher /></div>
-      </div>
-      <div class="mt-8 grid gap-4 lg:grid-cols-2">
-        <Preview name="tabs" />
-        <Preview name="input" />
-      </div>
-    </section>
-
-    <section class="border-y border-line bg-surface" aria-labelledby="ai-title">
-      <div class="mx-auto grid max-w-screen-xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2">
-        <div>
-          <p class="label-mono">Untuk vibe coding</p>
-          <h2 id="ai-title" class="mt-3 text-3xl font-bold tracking-tight">Minta komponen dengan bahasa biasa.</h2>
-          <p class="mt-4 text-muted">
-            MCP server, Agent Skill, Copy Prompt, dan <code class="font-mono text-sm">llms.txt</code> membuat Claude Code,
-            Cursor, dan Codex memakai komponen MarkasUI dengan path dan token yang benar.
+    <section class="border-t border-line bg-surface" aria-labelledby="agent-title">
+      <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:px-8">
+        <div class="min-w-0">
+          <h2 id="agent-title" class={sectionTitle}>Dipakai agent AI dengan path dan token yang benar</h2>
+          <p class="mt-4 max-w-md leading-7 text-muted">
+            MCP server mengambil kode untuk framework project Anda. Agent Skill, Copy prompt, dan llms.txt memberi aturan yang sama ke Claude Code,
+            Cursor, atau Codex.
           </p>
-          <figure class="mt-8 rounded-xl border border-line bg-canvas p-5">
-            <figcaption class="label-mono mb-2">Prompt</figcaption>
-            <p class="text-ink">{prompt}</p>
-          </figure>
-          <a href="/docs/mcp" class="mt-6 inline-block text-sm font-medium text-primary underline underline-offset-4">Pasang MCP server</a>
+          <ul class="mt-5 grid gap-2 text-sm">
+            <li><a href="/docs/mcp" class={link}>Pasang MCP server</a></li>
+            <li><a href="/docs/skills" class={link}>Agent Skill</a></li>
+            <li><a href="/llms.txt" class={link}>llms.txt</a></li>
+          </ul>
         </div>
-        <div>
-          <p class="label-mono mb-2">Hasil</p>
-          <CodeBlock code={result} lang="blade" title="resources/views/auth/login.blade.php" />
+        <div class="min-w-0">
+          <AgentDemo />
         </div>
       </div>
     </section>
 
-    <section class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6" aria-labelledby="stats-title">
-      <h2 id="stats-title" class="sr-only">Ringkasan</h2>
-      <dl class="grid gap-8 sm:grid-cols-3">
-        <div>
-          <dt class="label-mono">Komponen</dt>
-          <dd class="mt-2 text-5xl font-bold tracking-tight">{items.length}</dd>
+    <section class="border-t border-line" aria-labelledby="komponen-title">
+      <div class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-baseline justify-between gap-4">
+          <h2 id="komponen-title" class={sectionTitle}>{items.length} komponen</h2>
+          <a href="/components" class={`text-sm ${link}`}>Lihat dengan preview</a>
         </div>
-        <div>
-          <dt class="label-mono">Framework</dt>
-          <dd class="mt-2 text-5xl font-bold tracking-tight">3</dd>
+        <div class="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+          {
+            groups.map((group) => (
+              <div>
+                <h3 class="text-sm font-medium text-ink">{group.label}</h3>
+                <ul class="mt-3 grid gap-2 text-sm">
+                  {group.items.map((item) => (
+                    <li>
+                      <a href={`/components/${item.name}`} class="text-muted transition-colors hover:text-ink">
+                        {item.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
         </div>
-        <div>
-          <dt class="label-mono">JS per komponen</dt>
-          <dd class="mt-2 text-5xl font-bold tracking-tight">&lt; 3 KB</dd>
-        </div>
-      </dl>
-
-      <div class="mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {
-          groups.map((group) => (
-            <a href="/components" class="rounded-xl border border-line bg-surface p-5 transition-colors hover:border-primary-line">
-              <p class="label-mono">{group.items.length} komponen</p>
-              <p class="mt-2 font-semibold">{CATEGORY_LABELS[group.category]}</p>
-              <p class="mt-1 text-sm text-muted">{group.items.map((item) => item.title).join(", ")}</p>
-            </a>
-          ))
-        }
       </div>
     </section>
   </main>

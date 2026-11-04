@@ -18,7 +18,7 @@ const props = withDefaults(
 );
 
 const dialogClass =
-  "fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-xl transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none";
+  "fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none";
 const panel = "flex h-full flex-col gap-4 p-6";
 const header = "flex items-start justify-between gap-4";
 const titleClass = "text-lg font-semibold text-ink";

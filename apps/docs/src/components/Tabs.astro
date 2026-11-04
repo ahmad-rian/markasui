@@ -14,7 +14,7 @@ const first = items[0]?.value;
 ---
 
 <div data-docs-tabs data-tabs-group={group}>
-  <div role="tablist" aria-label={label} class="flex gap-4 border-b border-line">
+  <div role="tablist" aria-label={label} class="flex gap-5 overflow-x-auto border-b border-line">
     {
       items.map((item) => (
         <button
@@ -25,7 +25,7 @@ const first = items[0]?.value;
           aria-selected={item.value === first ? "true" : "false"}
           tabindex={item.value === first ? 0 : -1}
           data-value={item.value}
-          class="-mb-px border-b-2 border-transparent pb-2 text-sm font-medium text-muted transition-colors hover:text-ink aria-selected:border-primary aria-selected:text-ink"
+          class="-mb-px shrink-0 border-b-2 border-transparent pb-2.5 text-sm text-muted transition-colors hover:text-ink aria-selected:border-ink aria-selected:font-medium aria-selected:text-ink"
         >
           {item.label}
         </button>
@@ -49,6 +49,8 @@ const first = items[0]?.value;
 </div>
 
 <script>
+  import { onPageLoad } from "../scripts/lifecycle";
+
   const storageKey = (group: string) => `markas-tabs-${group}`;
 
   function select(root: HTMLElement, value: string, focus = false) {
@@ -67,7 +69,8 @@ const first = items[0]?.value;
     document.querySelectorAll<HTMLElement>(`[data-tabs-group="${group}"]`).forEach((root) => select(root, value));
   }
 
-  document.querySelectorAll<HTMLElement>("[data-docs-tabs]").forEach((root) => {
+  onPageLoad(() => document.querySelectorAll<HTMLElement>("[data-docs-tabs]:not([data-ready])").forEach((root) => {
+    root.dataset.ready = "";
     const group = root.dataset.tabsGroup;
     const tabs = [...root.querySelectorAll<HTMLElement>(":scope > [role=tablist] > [role=tab]")];
     if (group) {
@@ -102,5 +105,5 @@ const first = items[0]?.value;
       event.preventDefault();
       choose(tabs[(next + tabs.length) % tabs.length]!.dataset.value!, true);
     });
-  });
+  }));
 </script>

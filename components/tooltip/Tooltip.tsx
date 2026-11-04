@@ -11,7 +11,7 @@ import {
 
 const root = "inline-flex";
 const tooltip =
-  "inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-md";
+  "inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay";
 
 const cx = (...c: (string | false | null | undefined)[]) =>
   c.filter(Boolean).join(" ");

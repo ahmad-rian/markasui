@@ -19,17 +19,17 @@ const item =
   <button
     type="button"
     data-copy-markdown
-    class="inline-flex h-8 items-center gap-1.5 rounded-l-md border border-line bg-surface px-3 text-sm font-medium text-ink hover:bg-subtle"
+    class="inline-flex h-8 items-center gap-1.5 rounded-l-lg border border-line bg-surface px-3 text-sm text-ink transition-colors hover:bg-subtle"
   >
-    <Icon name="copy" class="size-3.5 [[data-copied]_&]:hidden" />
-    <Icon name="check" class="hidden size-3.5 text-primary [[data-copied]_&]:block" />
+    <Icon name="copy" class="size-3.5 in-data-copied:hidden" />
+    <Icon name="check" class="hidden size-3.5 text-primary in-data-copied:block" />
     Copy page
   </button>
   <button
     type="button"
     popovertarget="copy-page-menu"
     aria-label="Opsi lain"
-    class="inline-flex h-8 items-center rounded-r-md border border-l-0 border-line bg-surface px-2 text-muted hover:bg-subtle hover:text-ink"
+    class="inline-flex h-8 items-center rounded-r-lg border border-l-0 border-line bg-surface px-2 text-muted hover:bg-subtle hover:text-ink"
   >
     <Icon name="chevronDown" class="size-3.5" />
   </button>
@@ -37,12 +37,12 @@ const item =
     id="copy-page-menu"
     popover
     role="menu"
-    class="m-0 w-60 rounded-lg border border-line bg-surface p-1 text-ink shadow-lg [position-area:bottom_span-left] [position-try-fallbacks:flip-block]"
+    class="m-0 w-60 rounded-xl border border-line bg-surface p-1 text-ink shadow-overlay [position-area:bottom_span-left] [position-try-fallbacks:flip-block]"
   >
     <button type="button" role="menuitem" data-copy-prompt class={item}>
-      <Icon name="sparkle" class="size-4 text-muted" />
-      <span class="[[data-copied]_&]:hidden">Copy prompt</span>
-      <span class="hidden [[data-copied]_&]:inline">Prompt tersalin</span>
+      <Icon name="message" class="size-4 text-muted" />
+      <span class="in-data-copied:hidden">Copy prompt</span>
+      <span class="hidden in-data-copied:inline">Prompt tersalin</span>
     </button>
     <a role="menuitem" href={markdownUrl} class={item}><Icon name="file" class="size-4 text-muted" />Lihat Markdown</a>
     <a role="menuitem" href={`https://claude.ai/new?q=${ask}`} target="_blank" rel="noopener" class={item}>
@@ -56,9 +56,11 @@ const item =
 
 <script>
   import { copyText } from "../scripts/clipboard";
+  import { onPageLoad } from "../scripts/lifecycle";
   import { getFramework } from "../scripts/prefs";
 
-  document.querySelectorAll<HTMLElement>("[data-copy-page]").forEach((root) => {
+  onPageLoad(() => document.querySelectorAll<HTMLElement>("[data-copy-page]:not([data-ready])").forEach((root) => {
+    root.dataset.ready = "";
     const raw = root.querySelector("[data-copy-page-data]")?.textContent;
     if (!raw) return;
     const data = JSON.parse(raw) as { markdown: string; prompts: Record<string, string> };
@@ -82,5 +84,5 @@ const item =
       event.preventDefault();
       items[(next + items.length) % items.length]?.focus();
     });
-  });
+  }));
 </script>

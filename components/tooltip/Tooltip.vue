@@ -21,7 +21,7 @@ const props = withDefaults(
 
 const root = "inline-flex";
 const tooltip =
-  "inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-md";
+  "inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay";
 
 const GAP = 6;
 const SHOW_DELAY = 300;

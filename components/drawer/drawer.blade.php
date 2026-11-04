@@ -4,7 +4,7 @@
 ])
 
 @php
-    $dialog = 'fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-xl transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none';
+    $dialog = 'fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none';
     $sides = [
         'right' => 'right-0 left-auto border-l starting:open:translate-x-full',
         'left' => 'right-auto left-0 border-r starting:open:-translate-x-full',

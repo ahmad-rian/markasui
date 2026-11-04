@@ -21,37 +21,23 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Instrument Serif";
-  src: url("../../node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Latar titik halus, hanya untuk kotak preview komponen. */
 @utility dot-grid {
-  background-image: radial-gradient(
-    color-mix(in oklab, var(--color-line) 100%, transparent) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
   background-size: 16px 16px;
-}
-
-@utility label-mono {
-  @apply font-mono text-[11px] tracking-[0.2em] text-faint uppercase;
 }
 
 @layer base {
   html {
     @apply bg-canvas text-ink antialiased;
     scroll-padding-top: 5rem;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :focus-visible {
@@ -65,6 +51,20 @@
     display: none;
   }
 
+  /* Logo framework: warna brand hanya untuk framework yang sedang dipilih. */
+  .fw-icon[data-brand],
+  html[data-framework="blade"] [data-fw-option="blade"] .fw-icon,
+  html[data-framework="react"] [data-fw-option="react"] .fw-icon,
+  html[data-framework="vue"] [data-fw-option="vue"] .fw-icon {
+    color: var(--fw-light);
+  }
+  .dark .fw-icon[data-brand],
+  .dark[data-framework="blade"] [data-fw-option="blade"] .fw-icon,
+  .dark[data-framework="react"] [data-fw-option="react"] .fw-icon,
+  .dark[data-framework="vue"] [data-fw-option="vue"] .fw-icon {
+    color: var(--fw-dark);
+  }
+
   /* Kode Shiki dua tema. */
   .shiki,
   .shiki span {
@@ -74,6 +74,12 @@
   .dark .shiki,
   .dark .shiki span {
     color: var(--shiki-dark);
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 160ms;
+    animation-timing-function: var(--ease-out-quint);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -95,25 +101,25 @@
     @apply mt-5;
   }
   .prose h2 {
-    @apply mt-12 scroll-mt-24 border-b border-line pb-2 text-xl font-semibold tracking-tight;
+    @apply mt-12 scroll-mt-24 text-xl font-medium tracking-[-0.01em];
   }
   .prose h3 {
-    @apply mt-8 text-base font-semibold;
+    @apply mt-8 text-base font-medium;
   }
   .prose a {
-    @apply font-medium text-primary underline underline-offset-4 hover:text-primary-strong;
+    @apply text-primary underline decoration-primary-line underline-offset-4 transition-colors hover:decoration-primary;
   }
   .prose ul {
-    @apply list-disc pl-5;
+    @apply list-disc pl-5 marker:text-faint;
   }
   .prose ol {
-    @apply list-decimal pl-5;
+    @apply list-decimal pl-5 marker:text-faint;
   }
   .prose li + li {
     @apply mt-1.5;
   }
   .prose :not(pre) > code {
-    @apply rounded bg-subtle px-1.5 py-0.5 font-mono text-[13px];
+    @apply rounded-md bg-subtle px-1.5 py-0.5 font-mono text-[13px];
   }
   .prose pre {
     @apply overflow-x-auto rounded-xl border border-line bg-surface p-4 font-mono text-[13px] leading-6;
@@ -125,9 +131,23 @@
     @apply border-b border-line py-2 pr-4 text-left font-medium text-muted;
   }
   .prose td {
-    @apply border-b border-line py-2 pr-4 align-top;
+    @apply border-b border-line py-2.5 pr-4 align-top;
   }
   .prose blockquote {
     @apply border-l-2 border-primary-line pl-4 text-muted;
   }
+}
+
+/* Tombol situs docs (bukan komponen MarkasUI). */
+@utility site-button {
+  @apply inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition-[color,background-color,border-color,transform] duration-150 ease-out active:scale-[0.98];
+}
+@utility site-button-primary {
+  @apply site-button bg-primary text-on-primary hover:bg-primary-strong;
+}
+@utility site-button-secondary {
+  @apply site-button border border-line bg-surface text-ink hover:bg-subtle;
+}
+@utility icon-button {
+  @apply inline-flex size-9 items-center justify-center rounded-lg text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink;
 }

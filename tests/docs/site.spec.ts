@@ -173,14 +173,108 @@ test("versi Markdown, llms.txt, dan registry tersedia", async ({ request }) => {
 
 test("menu mobile membuka drawer @mobile", async ({ page, isMobile }) => {
   test.skip(!isMobile, "khusus mobile");
-  await page.goto("/components/button");
+  await page.goto("/");
   await page.getByRole("button", { name: "Menu" }).click();
-  await expect(
-    page.getByRole("dialog", { name: "Navigasi docs" }),
-  ).toBeVisible();
-  await page
-    .getByRole("dialog", { name: "Navigasi docs" })
-    .getByRole("link", { name: "Modal" })
-    .click();
+  const drawer = page.getByRole("dialog", { name: "Navigasi" });
+  await expect(drawer).toBeVisible();
+  await drawer.getByRole("link", { name: "Modal" }).click();
   await expect(page).toHaveURL(/\/components\/modal/);
+  await expect(drawer).toBeHidden();
+});
+
+test.describe("navigasi SPA", () => {
+  test("pindah halaman tanpa reload, tema dan framework tetap", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.evaluate(
+      () => ((window as unknown as { __spa: number }).__spa = 1),
+    );
+    await page
+      .getByRole("button", { name: "Ganti tema terang atau gelap" })
+      .click();
+    const dark = await page.evaluate(() =>
+      document.documentElement.classList.contains("dark"),
+    );
+    await page.getByRole("radio", { name: "Vue" }).first().click();
+
+    await page.getByRole("link", { name: "Lihat komponen" }).click();
+    await expect(page).toHaveURL(/\/components$/);
+    await page.locator('main a[href="/components/tabs"]').first().click();
+    await expect(page).toHaveURL(/\/components\/tabs$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Tabs" }),
+    ).toBeVisible();
+
+    expect(
+      await page.evaluate(
+        () => (window as unknown as { __spa?: number }).__spa,
+      ),
+    ).toBe(1);
+    expect(
+      await page.evaluate(() =>
+        document.documentElement.classList.contains("dark"),
+      ),
+    ).toBe(dark);
+    await expect(page.locator("html")).toHaveAttribute("data-framework", "vue");
+
+    // Island di halaman baru hydrate dan interaktif.
+    await waitInteractive(page, "vue");
+    await pane(page, "vue").getByRole("tab", { name: "Kata sandi" }).click();
+    await expect(
+      pane(page, "vue").getByRole("tab", { name: "Kata sandi" }),
+    ).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("preview Blade dengan Alpine tetap jalan setelah navigasi", async ({
+    page,
+  }) => {
+    await page.goto("/docs/introduction");
+    await page.evaluate(
+      () => ((window as unknown as { __spa: number }).__spa = 1),
+    );
+    await page.locator('aside a[href="/components/modal"]').click();
+    await expect(page).toHaveURL(/\/components\/modal$/);
+    await page.getByRole("radio", { name: "Blade" }).first().click();
+    await pane(page, "blade")
+      .getByRole("button", { name: "Hapus proyek" })
+      .click();
+    await expect(
+      page.getByRole("dialog", { name: "Hapus proyek?" }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => (window as unknown as { __spa?: number }).__spa,
+      ),
+    ).toBe(1);
+  });
+
+  test("pencarian, tab instalasi, dan Copy page bekerja setelah navigasi", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+    await page
+      .getByRole("link", { name: "Komponen", exact: true })
+      .first()
+      .click();
+    await page.locator('main a[href="/components/button"]').first().click();
+    await expect(page).toHaveURL(/\/components\/button$/);
+
+    await page.getByRole("tab", { name: "pnpm" }).first().click();
+    await expect(
+      page.getByText("pnpm dlx markasui@latest add button"),
+    ).toBeVisible();
+
+    await page.getByRole("button", { name: "Copy page" }).click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+      "# Button",
+    );
+
+    await page.keyboard.press("Control+k");
+    await page.getByLabel("Kata kunci").fill("accordion");
+    await page.locator("[data-search-results] a").first().click();
+    await expect(page).toHaveURL(/\/components\/accordion$/);
+  });
 });

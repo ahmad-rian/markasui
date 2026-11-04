@@ -24,6 +24,8 @@ export const isFramework = (value: unknown): value is Framework =>
   FRAMEWORKS.includes(value as Framework);
 
 export const getFramework = (): Framework => {
+  const current = document.documentElement.dataset.framework;
+  if (isFramework(current)) return current;
   const stored = read(FRAMEWORK_KEY);
   return isFramework(stored) ? stored : DEFAULT_FRAMEWORK;
 };

@@ -52,6 +52,10 @@ Pastikan pasangan teks dan latar tetap lolos kontras WCAG AA (4.5:1).
 
 Nilai light dan dark setiap token juga tersedia di registry: [`/r/theme.json`](/r/theme.json).
 
+## Bayangan
+
+Elemen yang melayang (Dropdown Menu, Tooltip, Toast, Modal, Drawer) memakai satu token `shadow-overlay`. Ganti lewat `--shadow-overlay` di `@theme` kalau perlu.
+
 ## Radius dan font
 
 Komponen memakai radius bawaan Tailwind (`rounded-md` 6px, `rounded-lg` 8px, `rounded-xl` 12px) dan tidak memuat font apa pun. Teks mengikuti font project Anda.

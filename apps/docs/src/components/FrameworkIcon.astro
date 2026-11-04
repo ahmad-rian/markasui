@@ -1,0 +1,22 @@
+---
+import type { Framework } from "@markasui/registry/schema";
+import { FRAMEWORK_ICONS } from "../lib/frameworks";
+
+interface Props {
+  framework: Framework;
+  class?: string;
+  /** Selalu pakai warna brand, bukan warna teks. */
+  brand?: boolean;
+}
+const { framework, class: className = "size-4", brand = false } = Astro.props;
+const icon = FRAMEWORK_ICONS[framework];
+---
+
+<svg
+  class:list={["fw-icon shrink-0", className]}
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  aria-hidden="true"
+  data-brand={brand ? "" : undefined}
+  style={`--fw-light:${icon.light};--fw-dark:${icon.dark}`}><path d={icon.path}></path></svg
+>

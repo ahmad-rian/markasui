@@ -5,37 +5,37 @@ import Icon from "./Icon.astro";
 <button
   type="button"
   data-search-open
-  class="flex h-9 items-center gap-2 rounded-md border border-line bg-surface px-3 text-sm text-muted transition-colors hover:text-ink sm:w-56"
+  class="icon-button md:w-60 md:justify-start md:gap-2 md:border md:border-line md:bg-surface md:px-3 md:hover:bg-surface md:hover:text-ink"
 >
   <Icon name="search" />
-  <span class="hidden sm:inline">Cari komponen</span>
-  <kbd class="ml-auto hidden rounded border border-line px-1.5 font-mono text-[10px] text-faint sm:inline">Ctrl K</kbd>
-  <span class="sr-only sm:hidden">Cari</span>
+  <span class="sr-only text-sm md:not-sr-only">Cari</span>
+  <kbd aria-hidden="true" class="ml-auto hidden items-center gap-0.5 rounded-md border border-line bg-canvas px-1.5 font-mono text-[11px] leading-5 text-muted md:inline-flex"
+    ><span data-shortcut-mod>Ctrl</span><span>K</span></kbd
+  >
 </button>
 
 <dialog
   data-search-dialog
   aria-label="Pencarian"
-  class="mx-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl rounded-xl border border-line bg-surface p-0 text-ink shadow-xl backdrop:bg-ink/40"
+  class="mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-xl rounded-2xl border border-line bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/30"
 >
-  <form method="dialog" class="flex items-center gap-2 border-b border-line px-4">
-    <Icon name="search" class="size-4 text-faint" />
+  <form method="dialog" class="flex items-center gap-3 border-b border-line px-4">
+    <Icon name="search" class="size-4 text-muted" />
     <label for="search-input" class="sr-only">Kata kunci</label>
     <input
       id="search-input"
       data-search-input
       type="search"
       autocomplete="off"
-      placeholder="Cari komponen atau docs..."
-      class="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-faint"
+      placeholder="Cari komponen atau docs"
+      class="h-14 min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-faint"
     />
-    <button type="submit" class="rounded border border-line px-1.5 font-mono text-[10px] text-faint">Esc</button>
+    <button type="submit" class="rounded-md border border-line px-1.5 font-mono text-[11px] leading-5 text-muted">Esc</button>
   </form>
-  <div data-search-status role="status" class="px-4 py-3 text-sm text-muted">Ketik untuk mencari.</div>
-  <ul data-search-results class="max-h-[50vh] overflow-y-auto px-2 pb-2"></ul>
+  <div data-search-status role="status" class="px-5 pt-3 pb-2 text-[13px] text-muted">Ketik untuk mencari</div>
+  <ul data-search-results class="max-h-[55vh] overflow-y-auto px-2 pb-2"></ul>
 </dialog>
 
 <script>
-  import { setupSearch } from "../scripts/search";
-  setupSearch();
+  import "../scripts/search";
 </script>

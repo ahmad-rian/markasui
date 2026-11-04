@@ -1,17 +1,39 @@
 ---
 import { FRAMEWORKS } from "@markasui/registry/schema";
+import FrameworkIcon from "./FrameworkIcon.astro";
 import { FRAMEWORK_LABELS } from "../lib/frameworks";
+
+interface Props {
+  /** compact: hanya untuk header panel kode, tanpa latar segmen. */
+  variant?: "segmented" | "compact";
+  label?: string;
+}
+const { variant = "segmented", label = "Framework" } = Astro.props;
+const isCompact = variant === "compact";
 ---
 
-<div role="radiogroup" aria-label="Framework" class="grid grid-cols-3 gap-1 rounded-lg bg-subtle p-1" data-framework-switcher>
+<div
+  role="radiogroup"
+  aria-label={label}
+  data-framework-switcher
+  class:list={isCompact ? "flex items-center gap-1" : "grid grid-cols-3 gap-1 rounded-lg border border-line bg-subtle p-1"}
+>
   {
     FRAMEWORKS.map((framework) => (
       <button
         type="button"
         role="radio"
+        aria-checked="false"
         data-value={framework}
-        class="h-8 rounded-md text-sm font-medium text-muted transition-colors hover:text-ink aria-checked:bg-surface aria-checked:text-ink"
+        data-fw-option={framework}
+        class:list={[
+          "inline-flex items-center justify-center gap-2 rounded-md text-sm text-muted transition-colors duration-150 ease-out hover:text-ink aria-checked:text-ink",
+          isCompact
+            ? "h-8 px-2.5 aria-checked:bg-subtle"
+            : "h-8 aria-checked:bg-surface aria-checked:font-medium aria-checked:shadow-[0_1px_2px_rgb(0_0_0/0.06)]",
+        ]}
       >
+        <FrameworkIcon framework={framework} class="size-4" />
         {FRAMEWORK_LABELS[framework]}
       </button>
     ))
@@ -19,6 +41,7 @@ import { FRAMEWORK_LABELS } from "../lib/frameworks";
 </div>
 
 <script>
+  import { onPageLoad } from "../scripts/lifecycle";
   import { getFramework, isFramework, setFramework } from "../scripts/prefs";
 
   function sync() {
@@ -30,23 +53,24 @@ import { FRAMEWORK_LABELS } from "../lib/frameworks";
     });
   }
 
-  document.querySelectorAll<HTMLElement>("[data-framework-switcher]").forEach((group) => {
+  const STEPS: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+
+  document.addEventListener("click", (event) => {
+    const radio = (event.target as HTMLElement).closest<HTMLElement>("[data-framework-switcher] [role=radio]");
+    if (radio && isFramework(radio.dataset.value)) setFramework(radio.dataset.value);
+  });
+  document.addEventListener("keydown", (event) => {
+    const group = (event.target as HTMLElement).closest<HTMLElement>("[data-framework-switcher]");
+    const step = STEPS[event.key];
+    if (!group || !step) return;
+    event.preventDefault();
     const radios = [...group.querySelectorAll<HTMLElement>("[role=radio]")];
-    group.addEventListener("click", (event) => {
-      const value = (event.target as HTMLElement).closest<HTMLElement>("[role=radio]")?.dataset.value;
-      if (isFramework(value)) setFramework(value);
-    });
-    group.addEventListener("keydown", (event) => {
-      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
-      if (!step) return;
-      event.preventDefault();
-      const index = radios.findIndex((radio) => radio.getAttribute("aria-checked") === "true");
-      const next = radios[(index + step + radios.length) % radios.length]!;
-      if (isFramework(next.dataset.value)) setFramework(next.dataset.value);
-      next.focus();
-    });
+    const index = radios.findIndex((radio) => radio.getAttribute("aria-checked") === "true");
+    const next = radios[(index + step + radios.length) % radios.length]!;
+    if (isFramework(next.dataset.value)) setFramework(next.dataset.value);
+    next.focus();
   });
 
   document.addEventListener("markas:framework", sync);
-  sync();
+  onPageLoad(sync);
 </script>
