@@ -2,5 +2,16 @@
   "name": "@markasui/registry",
   "version": "0.0.0",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "exports": {
+    ".": "./src/lib.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "scripts": {
+    "build": "node src/build.ts"
+  }
 }
