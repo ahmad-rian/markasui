@@ -410,3 +410,19 @@ test.describe("blok kode", () => {
     );
   });
 });
+
+test("ganti bahasa menampilkan overlay transisi lalu menutupnya", async ({
+  page,
+}) => {
+  await page.goto("/components/modal");
+  const overlay = page.locator("[data-language-overlay]");
+  await expect(overlay).toBeHidden();
+
+  await page.getByRole("link", { name: "Bahasa Indonesia" }).first().click();
+  await expect(overlay).toBeVisible();
+  await expect(overlay.getByText("Beralih ke Bahasa Indonesia")).toBeVisible();
+
+  await expect(page).toHaveURL(/\/id\/components\/modal$/);
+  await expect(overlay).toBeHidden();
+  await expect(page.locator("html")).toHaveAttribute("lang", "id");
+});

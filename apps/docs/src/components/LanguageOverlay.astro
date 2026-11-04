@@ -1,0 +1,101 @@
+---
+import { FRAMEWORK_ICONS } from "../lib/frameworks";
+import { LOCALES, t } from "../lib/i18n";
+
+// Lintasan elips untuk tiap orbit. Titik bergerak lewat animateMotion di sepanjang lintasan ini.
+const ORBIT = "M -54 0 a 54 21 0 1 0 108 0 a 54 21 0 1 0 -108 0";
+const orbits = [
+  { rotate: 0, color: FRAMEWORK_ICONS.blade.light, duration: "2.4s", begin: "0s" },
+  { rotate: 60, color: FRAMEWORK_ICONS.react.light, duration: "2.8s", begin: "-0.9s" },
+  { rotate: 120, color: FRAMEWORK_ICONS.vue.light, duration: "3.2s", begin: "-1.7s" },
+];
+---
+
+<div
+  id="language-overlay"
+  transition:persist="language-overlay"
+  data-language-overlay
+  role="status"
+  aria-live="polite"
+  hidden
+  class="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-7 bg-surface px-6 text-center opacity-0 transition-opacity duration-200 ease-out data-visible:opacity-100"
+>
+  <svg viewBox="-64 -64 128 128" class="lang-orbit size-32 text-ink" aria-hidden="true">
+    {
+      orbits.map((orbit) => (
+        <g transform={`rotate(${orbit.rotate})`}>
+          <path d={ORBIT} fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.85" />
+          <circle r="4.5" fill={orbit.color} class="lang-orbit-dot">
+            <animateMotion dur={orbit.duration} begin={orbit.begin} repeatCount="indefinite" path={ORBIT} />
+          </circle>
+        </g>
+      ))
+    }
+    <g class="lang-orbit-core">
+      <rect x="-15" y="-15" width="30" height="30" rx="8" class="fill-primary"></rect>
+      <path d="M-7.5 7.2V-2.2l7.5-4.7 7.5 4.7v9.4h-4.7V1.6h-5.6v5.6z" class="fill-on-primary"></path>
+    </g>
+  </svg>
+  {
+    LOCALES.map((locale) => (
+      <div data-overlay-lang={locale} lang={locale} hidden class="grid gap-2">
+        <p class="text-[32px] leading-tight font-semibold tracking-[-0.025em] sm:text-[40px]">
+          {t(locale).switching.title}
+          <span class="lang-dots" aria-hidden="true">
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
+          </span>
+        </p>
+        <p class="text-[15px] text-muted">{t(locale).switching.subtitle}</p>
+      </div>
+    ))
+  }
+  <div class="h-0.5 w-56 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
+    <div class="lang-progress h-full rounded-full bg-primary"></div>
+  </div>
+</div>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  /** Overlay tampil minimal selama ini supaya transisinya terbaca, tidak berkedip. */
+  const MIN_VISIBLE_MS = 900;
+  const FADE_MS = 200;
+
+  const overlay = () => document.querySelector<HTMLElement>("[data-language-overlay]");
+
+  async function switchLanguage(href: string, locale: string) {
+    const element = overlay();
+    if (!element) return navigate(href);
+
+    element.querySelectorAll<HTMLElement>("[data-overlay-lang]").forEach((block) => {
+      block.hidden = block.dataset.overlayLang !== locale;
+    });
+    element.hidden = false;
+    element.getBoundingClientRect(); // paksa reflow agar transisi opacity berjalan
+    element.dataset.visible = "";
+    element.dataset.running = "";
+
+    const started = performance.now();
+    const loaded = new Promise<void>((resolve) => document.addEventListener("astro:page-load", () => resolve(), { once: true }));
+    await navigate(href);
+    await loaded;
+    const remaining = MIN_VISIBLE_MS - (performance.now() - started);
+    if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining));
+
+    delete element.dataset.visible;
+    setTimeout(() => {
+      element.hidden = true;
+      delete element.dataset.running;
+    }, FADE_MS);
+  }
+
+  document.addEventListener("click", (event) => {
+    const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[data-lang-switch]");
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    if (link.getAttribute("aria-current") === "true") return event.preventDefault();
+    event.preventDefault();
+    void switchLanguage(link.href, link.hreflang);
+  });
+</script>

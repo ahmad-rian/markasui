@@ -164,6 +164,62 @@
   @apply inline-flex size-9 items-center justify-center rounded-lg text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink;
 }
 
+/* Overlay ganti bahasa. */
+@keyframes lang-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes lang-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+@keyframes lang-core {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+@layer components {
+  .lang-progress {
+    transform: translateX(-100%);
+  }
+  [data-running] .lang-progress {
+    animation: lang-progress 900ms var(--ease-out-quint) forwards;
+  }
+  .lang-dots > span {
+    animation: lang-dot 1.2s ease-in-out infinite;
+  }
+  .lang-dots > span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .lang-dots > span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .lang-orbit-core {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: lang-core 1.8s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lang-orbit-dot {
+      display: none;
+    }
+  }
+}
+
 /* Bingkai ala Animate UI: cincin abu-abu tipis dengan panel putih di dalamnya. */
 @utility frame {
   @apply rounded-2xl bg-subtle p-1;

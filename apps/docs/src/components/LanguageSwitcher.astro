@@ -11,6 +11,7 @@ const path = stripLocale(Astro.url.pathname);
       <a
         href={localePath(code, path)}
         hreflang={code}
+        data-lang-switch
         lang={code}
         aria-current={code === locale ? "true" : undefined}
         class="inline-flex h-7 min-w-8 items-center justify-center rounded-md px-1.5 text-muted uppercase transition-colors hover:text-ink aria-[current=true]:bg-subtle aria-[current=true]:text-ink"

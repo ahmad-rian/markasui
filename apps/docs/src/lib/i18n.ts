@@ -177,6 +177,10 @@ const en = {
     componentsTitle: (n: number) => `${n} components`,
     componentsLink: "Browse with previews",
   },
+  switching: {
+    title: "Preparing your experience",
+    subtitle: "Switching to English",
+  },
   agentDemo: {
     caption: "Claude Code with the markasui MCP server",
     prompt:
@@ -331,6 +335,10 @@ const id: Dictionary = {
     },
     componentsTitle: (n: number) => `${n} komponen`,
     componentsLink: "Lihat dengan preview",
+  },
+  switching: {
+    title: "Menyiapkan tampilan",
+    subtitle: "Beralih ke Bahasa Indonesia",
   },
   agentDemo: {
     caption: "Claude Code dengan MCP markasui",
