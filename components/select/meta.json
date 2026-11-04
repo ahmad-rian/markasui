@@ -1,0 +1,64 @@
+{
+  "name": "select",
+  "title": "Select",
+  "description": "Pilihan dropdown memakai select native yang di-styling, lengkap dengan label, petunjuk, dan pesan error.",
+  "category": "form",
+  "tags": ["select", "form", "dropdown", "option", "field"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "select.blade.php", "deps": [] },
+    "react": { "file": "Select.tsx", "deps": [] },
+    "vue": { "file": "Select.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Teks label yang terhubung ke select lewat for/id."
+    },
+    {
+      "name": "hint",
+      "type": "string",
+      "default": "-",
+      "description": "Teks petunjuk di bawah select. Disembunyikan saat ada error."
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "default": "-",
+      "description": "Pesan error. Mengaktifkan aria-invalid dan border danger."
+    },
+    {
+      "name": "slot / children",
+      "type": "<option>",
+      "default": "-",
+      "description": "Daftar elemen option (dan optgroup) native."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "string",
+      "default": "-",
+      "description": "Nilai terpilih. Blade memakai atribut selected di option, React value atau defaultValue, Vue v-model."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id select. Dibuat otomatis kalau kosong."
+    }
+  ],
+  "a11y": [
+    "Memakai elemen select native, jadi keyboard dan screen reader bekerja tanpa JavaScript.",
+    "Label terhubung lewat for dan id, petunjuk dan error lewat aria-describedby.",
+    "Ikon panah disembunyikan dari screen reader dan tidak menangkap klik."
+  ],
+  "ai": {
+    "whenToUse": "Memilih satu nilai dari daftar pendek sampai sedang, misalnya kota, peran, atau negara.",
+    "rules": [
+      "Untuk dua sampai lima pilihan yang perlu terlihat semua, pakai Radio Group",
+      "Tambahkan option kosong sebagai placeholder kalau pilihan belum wajib terisi"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

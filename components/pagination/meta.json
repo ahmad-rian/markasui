@@ -1,0 +1,54 @@
+{
+  "name": "pagination",
+  "title": "Pagination",
+  "description": "Navigasi antar halaman berbasis link dengan tombol Sebelumnya, Berikutnya, dan elipsis untuk halaman yang dilewati.",
+  "category": "navigation",
+  "tags": ["pagination", "halaman", "navigation", "link"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "pagination.blade.php", "deps": [] },
+    "react": { "file": "Pagination.tsx", "deps": [] },
+    "vue": { "file": "Pagination.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "page",
+      "type": "number",
+      "default": "1",
+      "description": "Halaman saat ini. Dibatasi ke rentang 1 sampai total."
+    },
+    {
+      "name": "total",
+      "type": "number",
+      "default": "1",
+      "description": "Jumlah halaman."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "'?page={page}'",
+      "description": "Pola URL. {page} diganti nomor halaman."
+    },
+    {
+      "name": "siblings",
+      "type": "number",
+      "default": "1",
+      "description": "Jumlah halaman yang tampil di kiri dan kanan halaman saat ini."
+    }
+  ],
+  "a11y": [
+    "Dibungkus nav dengan aria-label Navigasi halaman.",
+    "Halaman aktif memakai aria-current=page.",
+    "Sebelumnya dan Berikutnya memakai rel prev dan next, dan menjadi span aria-disabled di halaman pertama atau terakhir.",
+    "Elipsis diberi aria-hidden.",
+    "Di container sempit teks Sebelumnya dan Berikutnya hanya disembunyikan secara visual (sr-only), nama aksesibelnya tetap ada."
+  ],
+  "ai": {
+    "whenToUse": "Daftar panjang yang dibagi ke beberapa halaman dan dimuat ulang lewat URL, misalnya tabel atau hasil pencarian.",
+    "rules": [
+      "Pola href wajib memuat {page}",
+      "Jumlah tombol tetap siblings * 2 + 5 agar posisi tidak bergeser saat berpindah halaman"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

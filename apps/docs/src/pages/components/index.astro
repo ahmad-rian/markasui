@@ -18,14 +18,14 @@ const control =
 
     <form class="mt-8 flex flex-wrap gap-3" role="search" data-filters data-pagefind-ignore>
       <label class="sr-only" for="filter-query">Cari komponen</label>
-      <input id="filter-query" name="q" type="search" placeholder="Cari nama atau tag..." class={`${control} min-w-0 flex-1 sm:max-w-xs`} />
+      <input id="filter-query" name="q" type="search" placeholder="Cari nama atau tag..." class={`${control} w-full min-w-0 sm:w-auto sm:max-w-xs sm:flex-1`} />
       <label class="sr-only" for="filter-category">Kategori</label>
-      <select id="filter-category" name="category" class={control}>
+      <select id="filter-category" name="category" class={`${control} flex-1 sm:flex-none`}>
         <option value="">Semua kategori</option>
         {categories.map(([value, label]) => <option value={value}>{label}</option>)}
       </select>
       <label class="sr-only" for="filter-sort">Urutan</label>
-      <select id="filter-sort" name="sort" class={control}>
+      <select id="filter-sort" name="sort" class={`${control} flex-1 sm:flex-none`}>
         <option value="az">A sampai Z</option>
         <option value="new">Terbaru</option>
       </select>

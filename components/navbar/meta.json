@@ -1,0 +1,47 @@
+{
+  "name": "navbar",
+  "title": "Navbar",
+  "description": "Header situs dengan brand, menu link, area aksi, dan menu seluler yang bisa dibuka lewat tombol.",
+  "category": "navigation",
+  "tags": ["navbar", "header", "menu", "navigation", "mobile"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "navbar.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Navbar.tsx", "deps": [] },
+    "vue": { "file": "Navbar.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "links",
+      "type": "{ label, href, active? }[]",
+      "default": "[]",
+      "description": "Menu utama. Link dengan active diberi aria-current=page."
+    },
+    {
+      "name": "brand",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Logo atau nama situs di kiri."
+    },
+    {
+      "name": "actions",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Area kanan, misalnya tombol Masuk."
+    }
+  ],
+  "a11y": [
+    "Tombol menu seluler memakai aria-expanded dan aria-controls yang menunjuk ke panel menu.",
+    "Escape menutup panel dan fokus kembali ke tombol menu.",
+    "Menu desktop dan seluler masing-masing dibungkus nav dengan label berbeda.",
+    "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 48rem."
+  ],
+  "ai": {
+    "whenToUse": "Header utama di bagian atas setiap halaman situs atau aplikasi.",
+    "rules": [
+      "Tandai halaman saat ini dengan active",
+      "Jaga jumlah link utama sedikit, sisanya taruh di footer atau dropdown"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

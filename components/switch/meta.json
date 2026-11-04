@@ -1,0 +1,58 @@
+{
+  "name": "switch",
+  "title": "Switch",
+  "description": "Saklar nyala/mati dari checkbox native dengan role switch, tanpa JavaScript di Blade.",
+  "category": "form",
+  "tags": ["switch", "toggle", "form", "boolean"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "switch.blade.php", "deps": [] },
+    "react": { "file": "Switch.tsx", "deps": [] },
+    "vue": { "file": "Switch.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Teks label di samping saklar, terhubung lewat for/id."
+    },
+    {
+      "name": "checked / defaultChecked / v-model",
+      "type": "boolean",
+      "default": "false",
+      "description": "Status nyala. Blade memakai atribut checked, React checked atau defaultChecked, Vue v-model."
+    },
+    {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean) => void",
+      "default": "-",
+      "description": "Khusus React. Dipanggil dengan status baru setiap kali saklar berubah."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Menonaktifkan saklar dan meredupkan label."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id input. Dibuat otomatis kalau kosong."
+    }
+  ],
+  "a11y": [
+    "Input checkbox native dengan role switch, sehingga screen reader membacakan aktif atau nonaktif dari status checked.",
+    "Spasi mengubah status, label yang diklik ikut mengubah status.",
+    "Thumb hanya dekorasi (aria-hidden) dan bergerak lewat CSS peer-checked."
+  ],
+  "ai": {
+    "whenToUse": "Pengaturan yang langsung berlaku tanpa tombol simpan, misalnya notifikasi atau mode hemat data.",
+    "rules": [
+      "Pakai Checkbox kalau perubahan baru berlaku setelah form dikirim",
+      "Label menjelaskan apa yang dinyalakan, bukan status saat ini"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

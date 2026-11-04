@@ -1,0 +1,46 @@
+{
+  "name": "accordion",
+  "title": "Accordion",
+  "description": "Daftar bagian yang bisa dibuka dan ditutup, dibangun dari details dan summary native tanpa JavaScript.",
+  "category": "navigation",
+  "tags": ["accordion", "details", "collapse", "faq"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "accordion.blade.php", "deps": [] },
+    "react": { "file": "Accordion.tsx", "deps": [] },
+    "vue": { "file": "Accordion.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Blade: array<key, title> · React: { value, title, content }[] · Vue: { value, title }[]",
+      "default": "[]",
+      "description": "Daftar bagian. Di Blade dan Vue, isi tiap bagian lewat slot dengan nama sama seperti key/value."
+    },
+    {
+      "name": "type",
+      "type": "'single' | 'multiple'",
+      "default": "'single'",
+      "description": "single: hanya satu bagian terbuka (atribut name yang sama di details). multiple: bebas."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string | string[]",
+      "default": "-",
+      "description": "Bagian yang terbuka saat pertama dirender. Pada type single hanya nilai pertama yang dipakai."
+    }
+  ],
+  "a11y": [
+    "Memakai details dan summary native, jadi summary berperan sebagai tombol dengan status terbuka atau tertutup.",
+    "Enter dan Spasi pada summary membuka dan menutup bagian.",
+    "Ikon chevron diberi aria-hidden."
+  ],
+  "ai": {
+    "whenToUse": "FAQ atau pengaturan panjang yang perlu diringkas menjadi bagian yang bisa dibuka satu per satu.",
+    "rules": [
+      "Key atau value hanya huruf kecil, angka, dan underscore karena dipakai sebagai nama slot",
+      "Jangan menaruh konten penting yang wajib dibaca di bagian yang tertutup"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

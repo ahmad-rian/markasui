@@ -1,0 +1,53 @@
+{
+  "name": "tooltip",
+  "title": "Tooltip",
+  "description": "Teks bantuan singkat berbasis Popover API yang muncul saat pemicu di-hover atau difokus.",
+  "category": "overlay",
+  "tags": ["tooltip", "popover", "hint", "overlay"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "tooltip.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Tooltip.tsx", "deps": [] },
+    "vue": { "file": "Tooltip.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "content",
+      "type": "string",
+      "default": "-",
+      "description": "Teks tooltip."
+    },
+    {
+      "name": "side",
+      "type": "top | bottom",
+      "default": "top",
+      "description": "Sisi tooltip terhadap pemicu. Pindah ke sisi lain kalau tidak muat di layar."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Satu elemen pemicu yang bisa difokus, misalnya tombol."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id elemen tooltip, dipakai untuk aria-describedby pemicu."
+    }
+  ],
+  "a11y": [
+    "Memakai role=tooltip dan pemicu otomatis diberi aria-describedby ke tooltip.",
+    "Muncul saat pemicu difokus dengan keyboard dan saat di-hover (jeda 300ms).",
+    "Escape, blur, atau mouse keluar menyembunyikan tooltip."
+  ],
+  "ai": {
+    "whenToUse": "Menjelaskan tombol ikon atau aksi singkat yang labelnya kurang jelas.",
+    "rules": [
+      "Isi tooltip hanya teks pendek, jangan link atau tombol",
+      "Pemicu harus satu elemen yang bisa difokus",
+      "Jangan menyimpan informasi penting hanya di tooltip"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

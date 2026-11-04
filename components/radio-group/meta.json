@@ -1,0 +1,70 @@
+{
+  "name": "radio-group",
+  "title": "Radio Group",
+  "description": "Kelompok radio native dalam fieldset dan legend untuk memilih satu dari beberapa opsi.",
+  "category": "form",
+  "tags": ["radio", "radio-group", "form", "fieldset", "option"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "radio-group.blade.php", "deps": [] },
+    "react": { "file": "RadioGroup.tsx", "deps": [] },
+    "vue": { "file": "RadioGroup.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "name",
+      "type": "string",
+      "default": "wajib",
+      "description": "Atribut name untuk semua radio di grup."
+    },
+    {
+      "name": "options",
+      "type": "{ value, label, description? }[]",
+      "default": "[]",
+      "description": "Daftar opsi. Value dipakai juga sebagai bagian id."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Judul grup, dirender sebagai legend."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "string",
+      "default": "-",
+      "description": "Opsi terpilih. Blade memakai value, React value atau defaultValue, Vue v-model."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Khusus React. Dipanggil dengan value opsi yang baru dipilih."
+    },
+    {
+      "name": "orientation",
+      "type": "\"vertical\" | \"horizontal\"",
+      "default": "vertical",
+      "description": "Susunan opsi: bertumpuk atau berjajar."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id fieldset, juga awalan id tiap radio. Dibuat otomatis kalau kosong."
+    }
+  ],
+  "a11y": [
+    "Memakai fieldset dan legend sehingga judul grup dibacakan saat masuk ke radio.",
+    "Radio native: Tab masuk ke opsi terpilih, panah memindah pilihan.",
+    "Deskripsi opsi dihubungkan ke radio lewat aria-describedby."
+  ],
+  "ai": {
+    "whenToUse": "Memilih tepat satu dari dua sampai lima opsi yang perlu terlihat semua, misalnya paket langganan.",
+    "rules": [
+      "Value opsi hanya huruf kecil, angka, tanda hubung, atau underscore karena dipakai sebagai id",
+      "Untuk daftar panjang pakai Select"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

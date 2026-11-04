@@ -1,0 +1,71 @@
+{
+  "name": "table",
+  "title": "Table",
+  "description": "Tabel data dari daftar kolom dan baris, dengan pembungkus yang bisa difokus dan digulir horizontal di layar sempit.",
+  "category": "data",
+  "tags": ["table", "tabel", "data", "grid", "daftar"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "table.blade.php", "deps": [] },
+    "react": { "file": "Table.tsx", "deps": [] },
+    "vue": { "file": "Table.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "columns",
+      "type": "{ key: string, label: string, align?: 'left' | 'center' | 'right' }[]",
+      "default": "[]",
+      "description": "Daftar kolom. key menunjuk properti di setiap baris."
+    },
+    {
+      "name": "rows",
+      "type": "Record<string, string | number>[]",
+      "default": "[]",
+      "description": "Data baris. Di Blade berupa array PHP."
+    },
+    {
+      "name": "caption",
+      "type": "string",
+      "default": "-",
+      "description": "Judul tabel di elemen caption. Disembunyikan secara visual kecuali show-caption aktif."
+    },
+    {
+      "name": "showCaption",
+      "type": "boolean",
+      "default": "false",
+      "description": "Tampilkan caption di atas tabel."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "caption atau Tabel",
+      "description": "aria-label untuk region pembungkus yang bisa digulir."
+    },
+    {
+      "name": "rowKey",
+      "type": "string",
+      "default": "-",
+      "description": "Nama field berisi id unik per baris (misalnya id), dipakai sebagai key React dan Vue agar baris tidak tertukar saat data diurutkan atau dihapus. Tanpa ini key memakai indeks. Blade tidak memakainya."
+    },
+    {
+      "name": "renderCell / slot cell-<key>",
+      "type": "(row, key) => ReactNode · slot { row }",
+      "default": "-",
+      "description": "Isi sel kustom. React lewat renderCell, Vue lewat named slot cell-<key>. Blade hanya teks."
+    }
+  ],
+  "a11y": [
+    "Pembungkus memakai role region, aria-label, dan tabindex 0 agar tabel yang terpotong bisa difokus lalu digulir dengan panah.",
+    "Header kolom memakai th dengan scope col.",
+    "Caption tetap dibacakan screen reader walau disembunyikan secara visual."
+  ],
+  "ai": {
+    "whenToUse": "Menampilkan data terstruktur yang perlu dibandingkan per kolom, misalnya daftar pesanan atau anggota.",
+    "rules": [
+      "Selalu isi caption atau label agar region punya nama",
+      "Ratakan kanan kolom angka dan nominal dengan align right",
+      "Untuk sel berisi badge atau tombol pakai renderCell di React dan slot cell-<key> di Vue"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

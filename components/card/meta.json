@@ -1,0 +1,47 @@
+{
+  "name": "card",
+  "title": "Card",
+  "description": "Kartu untuk mengelompokkan konten dengan judul, deskripsi, isi, dan footer opsional.",
+  "category": "data",
+  "tags": ["card", "kartu", "panel", "container"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "card.blade.php", "deps": [] },
+    "react": { "file": "Card.tsx", "deps": [] },
+    "vue": { "file": "Card.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "string / ReactNode",
+      "default": "-",
+      "description": "Judul kartu, dirender sebagai h3."
+    },
+    {
+      "name": "description",
+      "type": "string / ReactNode",
+      "default": "-",
+      "description": "Teks pendek di bawah judul."
+    },
+    {
+      "name": "footer",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Area aksi di bagian bawah kartu, misalnya tombol."
+    }
+  ],
+  "a11y": [
+    "Memakai elemen article, jadi kartu terbaca sebagai satu kesatuan konten.",
+    "Judul memakai h3. Sesuaikan struktur heading halaman bila kartu berada di bawah h1 langsung.",
+    "Tanpa JavaScript dan tanpa elemen interaktif bawaan."
+  ],
+  "ai": {
+    "whenToUse": "Mengelompokkan informasi yang saling terkait, misalnya ringkasan paket, profil, atau statistik.",
+    "rules": [
+      "Jangan membuat seluruh kartu bisa diklik, taruh link atau tombol di footer",
+      "Jangan menumpuk Card di dalam Card",
+      "Kartu tidak memakai bayangan, cukup border"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

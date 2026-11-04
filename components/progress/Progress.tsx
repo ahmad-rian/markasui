@@ -1,0 +1,53 @@
+import { useId, type ComponentProps, type ReactNode } from "react";
+
+const wrapper = "grid gap-1.5";
+const header = "flex items-center justify-between gap-4 text-sm";
+const labelClass = "font-medium text-ink";
+const valueClass = "text-muted tabular-nums";
+const bar =
+  "block h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-subtle [&::-webkit-progress-bar]:bg-subtle [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-primary [&::-webkit-progress-value]:transition-[width] [&::-webkit-progress-value]:duration-200 [&::-webkit-progress-value]:ease-out [&::-moz-progress-bar]:rounded-full [&::-moz-progress-bar]:bg-primary indeterminate:animate-pulse indeterminate:bg-primary/30 indeterminate:[&::-webkit-progress-bar]:bg-primary/30 motion-reduce:animate-none motion-reduce:[&::-webkit-progress-value]:transition-none";
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+
+const percentOf = (value: number, max: number): number =>
+  Math.min(100, Math.max(0, Math.round((value / max) * 100)));
+
+export type ProgressProps = Omit<ComponentProps<"progress">, "value"> & {
+  value?: number | null;
+  max?: number;
+  label?: ReactNode;
+};
+
+export function Progress({
+  value = null,
+  max = 100,
+  label,
+  id,
+  className,
+  ...props
+}: ProgressProps) {
+  const generatedId = useId();
+  const progressId = id ?? generatedId;
+
+  return (
+    <div className={wrapper}>
+      {label && (
+        <div className={header}>
+          <label htmlFor={progressId} className={labelClass}>
+            {label}
+          </label>
+          {value !== null && (
+            <span className={valueClass}>{percentOf(value, max)}%</span>
+          )}
+        </div>
+      )}
+      <progress
+        id={progressId}
+        value={value ?? undefined}
+        max={max}
+        className={cx(bar, className)}
+        {...props}
+      />
+    </div>
+  );
+}

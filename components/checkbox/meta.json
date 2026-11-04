@@ -1,0 +1,58 @@
+{
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "Kotak centang native dengan label dan deskripsi opsional, tampilan kustom tanpa JavaScript.",
+  "category": "form",
+  "tags": ["checkbox", "form", "toggle", "boolean"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "checkbox.blade.php", "deps": [] },
+    "react": { "file": "Checkbox.tsx", "deps": [] },
+    "vue": { "file": "Checkbox.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Teks label di samping kotak, terhubung lewat for/id."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "-",
+      "description": "Teks penjelas di bawah label, dihubungkan lewat aria-describedby."
+    },
+    {
+      "name": "checked / defaultChecked / v-model",
+      "type": "boolean",
+      "default": "false",
+      "description": "Status centang. Blade memakai atribut checked, React checked atau defaultChecked, Vue v-model."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Menonaktifkan checkbox dan meredupkan label."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id input. Dibuat otomatis kalau kosong."
+    }
+  ],
+  "a11y": [
+    "Memakai input type checkbox native, jadi Spasi mencentang dan status dibacakan screen reader.",
+    "Label terhubung lewat for dan id sehingga mengklik label ikut mencentang.",
+    "Ikon centang hanya dekorasi (aria-hidden), status visual mengikuti :checked."
+  ],
+  "ai": {
+    "whenToUse": "Persetujuan atau pilihan ya/tidak yang baru berlaku setelah form dikirim, atau beberapa pilihan bebas.",
+    "rules": [
+      "Pakai Switch untuk pengaturan yang langsung berlaku",
+      "Selalu isi label atau aria-label"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

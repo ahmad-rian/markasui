@@ -1,0 +1,66 @@
+import type { ComponentProps, ReactNode } from "react";
+
+const base = "flex gap-3 rounded-lg border p-4 text-sm text-ink";
+const variants = {
+  info: "border-primary-line bg-primary-soft",
+  success: "border-success/30 bg-success/10",
+  warning: "border-warning/30 bg-warning/10",
+  danger: "border-danger/30 bg-danger/10",
+};
+const iconBase = "mt-0.5 size-4 shrink-0";
+const iconVariants = {
+  info: "text-primary",
+  success: "text-success",
+  warning: "text-warning",
+  danger: "text-danger",
+};
+const icons = {
+  info: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM12 16v-4M12 8h.01",
+  success: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8.5 12l2.5 2.5 4.5-5",
+  warning: "M12 3.5 2.5 20h19L12 3.5ZM12 10v4M12 17h.01",
+  danger: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15 9l-6 6M9 9l6 6",
+};
+const content = "grid gap-1";
+const titleClass = "font-semibold";
+const body = "text-ink";
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+
+export type AlertProps = Omit<ComponentProps<"div">, "title"> & {
+  variant?: keyof typeof variants;
+  title?: ReactNode;
+};
+
+export function Alert({
+  variant = "info",
+  title,
+  role = "alert",
+  className,
+  children,
+  ...props
+}: AlertProps) {
+  return (
+    <div
+      role={role}
+      className={cx(base, variants[variant], className)}
+      {...props}
+    >
+      <svg
+        className={cx(iconBase, iconVariants[variant])}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d={icons[variant]} />
+      </svg>
+      <div className={content}>
+        {title && <p className={titleClass}>{title}</p>}
+        <div className={body}>{children}</div>
+      </div>
+    </div>
+  );
+}

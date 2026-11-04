@@ -1,0 +1,53 @@
+{
+  "name": "progress",
+  "title": "Progress",
+  "description": "Bilah kemajuan berbasis elemen progress native dengan label, persentase, dan mode tak tentu.",
+  "category": "feedback",
+  "tags": ["progress", "loading", "upload", "bar"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "progress.blade.php", "deps": [] },
+    "react": { "file": "Progress.tsx", "deps": [] },
+    "vue": { "file": "Progress.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "number | null",
+      "default": "null",
+      "description": "Nilai saat ini. null membuat progress tak tentu (indeterminate) dengan animasi denyut."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "100",
+      "description": "Nilai maksimum."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Label di atas bilah, dihubungkan lewat label for. Persentase tampil di kanan bila value terisi."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id elemen progress."
+    }
+  ],
+  "a11y": [
+    "Memakai elemen progress native, jadi role progressbar dan nilainya terbaca otomatis.",
+    "Label terhubung lewat label for. Tanpa label, isi aria-label.",
+    "Animasi mode tak tentu dimatikan saat prefers-reduced-motion."
+  ],
+  "ai": {
+    "whenToUse": "Menampilkan kemajuan proses yang terukur seperti unggah berkas atau langkah onboarding.",
+    "rules": [
+      "Biarkan value kosong bila durasi proses tidak diketahui",
+      "Selalu beri label atau aria-label",
+      "Untuk placeholder konten yang sedang dimuat gunakan Skeleton"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

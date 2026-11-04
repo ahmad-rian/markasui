@@ -53,6 +53,38 @@ describe("Blade", { timeout: PHP_TIMEOUT_MS }, () => {
     expect(html).toContain('<label for="e"');
   });
 
+  it("href berskema berbahaya menjadi # di dropdown-menu, breadcrumb, navbar, dan pagination", () => {
+    const unsafe = ["javascript:alert(1)", " JaVaScRiPt:x", "data:text/html,x"];
+    const safe = ["/a", "https://x.id", "mailto:a@b.c", "#top"];
+    const hrefs = [...unsafe, ...safe];
+    const expected = [...unsafe.map(() => "#"), ...safe];
+    const items = `[${hrefs
+      .map((href, index) => `['label' => 'Item ${index}', 'href' => '${href}']`)
+      .join(", ")}]`;
+    const pagination = hrefs
+      .map(
+        (href) =>
+          `<section data-case><x-markas.pagination :page="1" :total="2" href="${href}?p={page}" /></section>`,
+      )
+      .join("\n");
+    const html = renderBlade(`
+<section data-case><x-markas.dropdown-menu :items="${items}" /></section>
+<section data-case><x-markas.breadcrumb :items="[...${items}, ['label' => 'Akhir']]" /></section>
+<section data-case><x-markas.navbar :links="${items}" /></section>
+${pagination}`);
+    const sections = html.split("<section data-case>").slice(1);
+    const hrefsOf = (section = "") =>
+      [...section.matchAll(/<a\b[^>]*?\shref="([^"]*)"/g)].map((m) => m[1]);
+    const [dropdown, breadcrumb, navbar, ...pages] = sections;
+
+    expect(hrefsOf(dropdown)).toEqual(expected);
+    expect(hrefsOf(breadcrumb)).toEqual(expected);
+    expect(hrefsOf(navbar)).toEqual([...expected, ...expected]);
+    expect(pages.map((page) => hrefsOf(page)[2])).toEqual(
+      hrefs.map((href, index) => (index < unsafe.length ? "#" : `${href}?p=2`)),
+    );
+  });
+
   it("escape teks dari props", () => {
     const html = renderBlade(
       '<x-markas.modal title="<script>alert(1)</script>">Isi</x-markas.modal>',

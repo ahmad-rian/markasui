@@ -1,0 +1,34 @@
+{
+  "name": "breadcrumb",
+  "title": "Breadcrumb",
+  "description": "Jejak lokasi halaman dalam hierarki situs, dengan halaman saat ini ditandai aria-current.",
+  "category": "navigation",
+  "tags": ["breadcrumb", "navigation", "hierarki", "link"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "breadcrumb.blade.php", "deps": [] },
+    "react": { "file": "Breadcrumb.tsx", "deps": [] },
+    "vue": { "file": "Breadcrumb.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ label, href? }[]",
+      "default": "[]",
+      "description": "Urutan halaman dari akar ke halaman saat ini. Item terakhir dianggap halaman saat ini dan tidak diberi link."
+    }
+  ],
+  "a11y": [
+    "Dibungkus nav dengan aria-label Breadcrumb dan daftar berurutan ol.",
+    "Item terakhir memakai aria-current=page.",
+    "Pemisah chevron diberi aria-hidden sehingga tidak dibacakan."
+  ],
+  "ai": {
+    "whenToUse": "Halaman yang berada beberapa tingkat di dalam hierarki, misalnya detail produk di dalam kategori.",
+    "rules": [
+      "Item terakhir selalu halaman saat ini, jangan beri href",
+      "Jangan memakai breadcrumb untuk langkah proses atau wizard"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

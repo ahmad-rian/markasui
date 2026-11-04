@@ -1,0 +1,53 @@
+{
+  "name": "avatar",
+  "title": "Avatar",
+  "description": "Foto profil bulat dengan tiga ukuran dan inisial nama sebagai fallback saat gambar kosong atau gagal dimuat.",
+  "category": "data",
+  "tags": ["avatar", "profil", "foto", "inisial", "user"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "avatar.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Avatar.tsx", "deps": [] },
+    "vue": { "file": "Avatar.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "name",
+      "type": "string",
+      "default": "-",
+      "description": "Nama orang. Dipakai untuk inisial dan sebagai alt bawaan."
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "default": "-",
+      "description": "URL gambar. Kalau kosong atau gagal dimuat, inisial yang tampil."
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "default": "name",
+      "description": "Teks alternatif. Isi string kosong bila avatar hanya dekorasi di samping nama yang sudah tertulis."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Ukuran 32, 40, atau 48 piksel."
+    }
+  ],
+  "a11y": [
+    "Gambar selalu punya alt, bawaannya sama dengan name.",
+    "Inisial fallback memakai role img dan aria-label yang sama dengan alt, jadi screen reader membaca nama, bukan huruf.",
+    "Dengan alt kosong, avatar disembunyikan dari screen reader (aria-hidden)."
+  ],
+  "ai": {
+    "whenToUse": "Menampilkan foto atau inisial pengguna di daftar anggota, komentar, dan menu akun.",
+    "rules": [
+      "Selalu isi name walau src tersedia, agar fallback dan alt tetap bermakna",
+      "Isi alt kosong bila nama sudah tertulis tepat di sebelah avatar",
+      "Blade butuh Alpine.js hanya untuk fallback saat gambar gagal dimuat"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

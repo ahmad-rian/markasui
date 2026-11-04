@@ -1,0 +1,60 @@
+{
+  "name": "drawer",
+  "title": "Drawer",
+  "description": "Panel samping setinggi layar berbasis elemen dialog native, muncul dari kanan atau kiri.",
+  "category": "overlay",
+  "tags": ["drawer", "sheet", "dialog", "panel", "overlay"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "drawer.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Drawer.tsx", "deps": [] },
+    "vue": { "file": "Drawer.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "-",
+      "description": "Judul drawer, dipakai juga sebagai aria-labelledby."
+    },
+    {
+      "name": "side",
+      "type": "right | left",
+      "default": "right",
+      "description": "Sisi layar tempat drawer muncul."
+    },
+    {
+      "name": "trigger",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Elemen yang membuka drawer saat diklik."
+    },
+    {
+      "name": "footer",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup drawer."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "otomatis",
+      "description": "Id dialog. Bisa dipakai untuk membuka drawer dari luar lewat showModal()."
+    }
+  ],
+  "a11y": [
+    "Memakai dialog dan showModal(), jadi fokus terkunci di dalam drawer dan konten di belakangnya inert.",
+    "Escape menutup drawer dan fokus kembali ke elemen pemicu.",
+    "Klik di luar panel (backdrop) menutup drawer.",
+    "Tombol tutup punya aria-label Tutup."
+  ],
+  "ai": {
+    "whenToUse": "Panel samping untuk filter, detail item, atau form yang lebih panjang tanpa meninggalkan halaman.",
+    "rules": [
+      "Tombol di footer yang harus menutup drawer wajib type=submit",
+      "Untuk konfirmasi singkat gunakan Modal, bukan Drawer",
+      "Jangan membuka drawer di dalam drawer"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

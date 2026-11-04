@@ -1,0 +1,48 @@
+{
+  "name": "alert",
+  "title": "Alert",
+  "description": "Pesan penting di dalam halaman dengan varian info, success, warning, dan danger.",
+  "category": "feedback",
+  "tags": ["alert", "callout", "notice", "message"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "alert.blade.php", "deps": [] },
+    "react": { "file": "Alert.tsx", "deps": [] },
+    "vue": { "file": "Alert.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "'info' | 'success' | 'warning' | 'danger'",
+      "default": "info",
+      "description": "Warna latar, border, dan ikon."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "-",
+      "description": "Judul tebal di atas isi. Isi alert lewat slot atau children."
+    },
+    {
+      "name": "role",
+      "type": "'alert' | 'status'",
+      "default": "alert",
+      "description": "Atribut role native. Pakai status untuk info yang tidak mendesak agar pembaca layar tidak menyela."
+    }
+  ],
+  "a11y": [
+    "Default role alert, jadi pembaca layar langsung membacakan alert yang muncul setelah halaman dimuat.",
+    "Isi role status untuk informasi yang tidak mendesak.",
+    "Ikon hanya hiasan (aria-hidden), makna tetap dibawa oleh judul dan teks.",
+    "Judul dan isi memakai warna ink sehingga kontras AA di mode terang dan gelap."
+  ],
+  "ai": {
+    "whenToUse": "Memberi tahu hal penting yang berkaitan dengan isi halaman, misalnya error form atau kuota hampir habis.",
+    "rules": [
+      "Gunakan danger hanya untuk kegagalan yang butuh tindakan",
+      "Untuk umpan balik singkat setelah aksi gunakan Toast, bukan Alert",
+      "Jangan menumpuk lebih dari dua alert di satu area"
+    ]
+  },
+  "addedAt": "2026-11-04"
+}

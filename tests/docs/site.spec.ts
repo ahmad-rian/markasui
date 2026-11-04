@@ -1,19 +1,35 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+
+/** Semua halaman komponen dari registry hasil build, plus halaman utama dan docs. */
+const componentNames: string[] = JSON.parse(
+  readFileSync(
+    resolve(import.meta.dirname, "../../apps/docs/dist/r/index.json"),
+    "utf8",
+  ),
+).map((item: { name: string }) => item.name);
 
 const PAGES = [
   "/",
   "/components",
-  "/components/button",
-  "/components/modal",
-  "/components/tabs",
   "/docs/installation",
   "/docs/theming",
+  ...componentNames.map((name) => `/components/${name}`),
 ];
 
 const preview = (page: Page) => page.locator("[data-preview]").first();
 const pane = (page: Page, framework: string) =>
   preview(page).locator(`[data-fw="${framework}"]`);
+
+/** Island Astro menghapus atribut ssr setelah hydrate. Klik sebelum itu tidak berefek. */
+async function waitInteractive(page: Page, framework: string) {
+  if (framework === "blade") return;
+  await expect(pane(page, framework).locator("astro-island[ssr]")).toHaveCount(
+    0,
+  );
+}
 
 for (const path of PAGES) {
   for (const theme of ["light", "dark"] as const) {
@@ -74,6 +90,7 @@ for (const framework of ["blade", "react", "vue"] as const) {
       .getByRole("button", { name: "Muat ulang preview" })
       .click();
     const fresh = pane(page, framework);
+    await waitInteractive(page, framework);
     await expect(fresh.getByRole("tab", { name: "Akun" })).toHaveAttribute(
       "aria-selected",
       "true",
@@ -117,20 +134,29 @@ test("Copy prompt mengikuti framework terpilih", async ({ page, context }) => {
 test("pencarian Ctrl+K menemukan komponen", async ({ page }) => {
   await page.goto("/docs/introduction");
   await page.keyboard.press("Control+k");
-  await page.getByLabel("Kata kunci").fill("dialog");
+  await page.getByLabel("Kata kunci").fill("accordion");
   await expect(page.locator("[data-search-results] a").first()).toHaveAttribute(
     "href",
-    /\/components\/modal/,
+    /\/components\/accordion/,
   );
 });
 
-test("filter halaman komponen", async ({ page }) => {
+test("filter halaman komponen", async ({ page, request }) => {
+  const index: { name: string; category: string }[] = await (
+    await request.get("/r/index.json")
+  ).json();
   await page.goto("/components");
-  await page.getByLabel("Cari komponen").fill("tab");
+  await expect(page.locator("[data-card]:visible")).toHaveCount(index.length);
+
+  await page.getByLabel("Cari komponen").fill("accordion");
   await expect(page.locator("[data-card]:visible")).toHaveCount(1);
+  await page.getByLabel("Cari komponen").fill("tidak-ada-komponen-ini");
+  await expect(page.getByText("Tidak ada komponen yang cocok.")).toBeVisible();
+
   await page.getByLabel("Cari komponen").fill("");
   await page.getByLabel("Kategori").selectOption("form");
-  await expect(page.locator("[data-card]:visible")).toHaveCount(2);
+  const formCount = index.filter((item) => item.category === "form").length;
+  await expect(page.locator("[data-card]:visible")).toHaveCount(formCount);
 });
 
 test("versi Markdown, llms.txt, dan registry tersedia", async ({ request }) => {
