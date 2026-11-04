@@ -6,7 +6,8 @@ import { getLocale, t } from "../lib/i18n";
 interface Props {
   markdown: string;
   markdownUrl: string;
-  prompts: Record<Framework, string>;
+  /** Tanpa prompts (halaman docs), menu Copy prompt disembunyikan. */
+  prompts?: Record<Framework, string>;
 }
 const { markdown, markdownUrl, prompts } = Astro.props;
 const absoluteMd = new URL(markdownUrl, Astro.site).toString();
@@ -17,7 +18,7 @@ const item =
 ---
 
 <div class="flex items-center" data-copy-page>
-  <script type="application/json" data-copy-page-data set:html={JSON.stringify({ markdown, prompts }).replaceAll("<", "\\u003c")} />
+  <script type="application/json" data-copy-page-data set:html={JSON.stringify({ markdown, prompts: prompts ?? {} }).replaceAll("<", "\\u003c")} />
   <button
     type="button"
     data-copy-markdown
@@ -41,11 +42,11 @@ const item =
     role="menu"
     class="m-0 w-60 rounded-xl border border-line bg-surface p-1 text-ink shadow-overlay [position-area:bottom_span-left] [position-try-fallbacks:flip-block]"
   >
-    <button type="button" role="menuitem" data-copy-prompt class={item}>
+    {prompts && (<button type="button" role="menuitem" data-copy-prompt class={item}>
       <Icon name="message" class="size-4 text-muted" />
       <span class="in-data-copied:hidden">{strings.prompt}</span>
       <span class="hidden in-data-copied:inline">{strings.promptCopied}</span>
-    </button>
+    </button>)}
     <a role="menuitem" href={markdownUrl} class={item}><Icon name="file" class="size-4 text-muted" />{strings.markdown}</a>
     <a role="menuitem" href={`https://claude.ai/new?q=${ask}`} target="_blank" rel="noopener" class={item}>
       <Icon name="external" class="size-4 text-muted" />{strings.claude}

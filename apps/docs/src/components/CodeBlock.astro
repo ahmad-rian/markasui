@@ -53,7 +53,7 @@ const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LIN
       ]}
       data-code
     >
-      <Code code={trimmed} lang={lang} themes={{ light: "github-light", dark: "github-dark" }} defaultColor={false} />
+      <Code code={trimmed} lang={lang} themes={{ light: "github-light-high-contrast", dark: "github-dark-high-contrast" }} defaultColor={false} />
     </div>
     {
       collapsed && (
@@ -66,15 +66,3 @@ const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LIN
     }
   </div>
 </div>
-
-<script>
-  import { copyText } from "../scripts/clipboard";
-
-  document.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    const block = target.closest<HTMLElement>("[data-code-block]");
-    if (!block) return;
-    if (target.closest("[data-expand]")) block.dataset.expanded = "";
-    if (target.closest("[data-copy]")) void copyText(block.querySelector("pre")?.textContent ?? "", block);
-  });
-</script>

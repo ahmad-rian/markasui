@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import vue from "@astrojs/vue";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { rehypeCodeFrame } from "./src/lib/rehype-code-frame.ts";
 
 export default defineConfig({
   site: process.env.SITE_URL || "https://markasui.pages.dev",
@@ -19,8 +20,12 @@ export default defineConfig({
     server: { fs: { allow: ["../.."] } },
   },
   markdown: {
+    rehypePlugins: [rehypeCodeFrame],
     shikiConfig: {
-      themes: { light: "github-light", dark: "github-dark" },
+      themes: {
+        light: "github-light-high-contrast",
+        dark: "github-dark-high-contrast",
+      },
       defaultColor: false,
     },
   },

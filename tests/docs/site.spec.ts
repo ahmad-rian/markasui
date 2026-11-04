@@ -344,3 +344,69 @@ test.describe("bahasa", () => {
     );
   });
 });
+
+test.describe("blok kode", () => {
+  test("setiap blok kode di docs punya tombol salin yang bekerja", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/docs/installation");
+    const blocks = page.locator("main [data-code-block]");
+    const count = await blocks.count();
+    expect(count).toBeGreaterThan(5);
+    await expect(
+      page.locator("main [data-code-block] [data-copy]"),
+    ).toHaveCount(count);
+
+    await blocks.nth(1).getByRole("button", { name: "Copy code" }).click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      "npm install tailwindcss @tailwindcss/vite alpinejs",
+    );
+  });
+
+  test("kode diwarnai Shiki", async ({ page }) => {
+    await page.goto("/docs/installation");
+    const keyword = page
+      .locator("main pre span", { hasText: "import" })
+      .first();
+    expect(await keyword.evaluate((el) => getComputedStyle(el).color)).not.toBe(
+      await page
+        .locator("main p")
+        .first()
+        .evaluate((el) => getComputedStyle(el).color),
+    );
+  });
+
+  test("label tombol salin di /id berbahasa Indonesia", async ({ page }) => {
+    await page.goto("/id/docs/installation");
+    await expect(page.locator("main [data-copy]").first()).toHaveAttribute(
+      "aria-label",
+      "Salin kode",
+    );
+  });
+
+  test("halaman docs punya Copy page, versi Markdown, dan navigasi", async ({
+    page,
+    context,
+    request,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/docs/installation");
+    await page.getByRole("button", { name: "Copy page" }).click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+      "# Installation",
+    );
+    await page.getByRole("button", { name: "More options" }).click();
+    await expect(
+      page.getByRole("menuitem", { name: "Copy prompt" }),
+    ).toHaveCount(0);
+    await page.keyboard.press("Escape");
+
+    await page.getByRole("link", { name: "Next: Theming" }).click();
+    await expect(page).toHaveURL(/\/docs\/theming$/);
+    expect(await (await request.get("/docs/installation.md")).text()).toContain(
+      "# Installation",
+    );
+  });
+});

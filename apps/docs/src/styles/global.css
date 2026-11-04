@@ -78,13 +78,13 @@
   }
 
   /* Kode Shiki dua tema. */
-  .shiki,
-  .shiki span {
+  :is(.shiki, .astro-code),
+  :is(.shiki, .astro-code) span {
     color: var(--shiki-light);
     background-color: transparent !important;
   }
-  .dark .shiki,
-  .dark .shiki span {
+  .dark :is(.shiki, .astro-code),
+  .dark :is(.shiki, .astro-code) span {
     color: var(--shiki-dark);
   }
 
@@ -133,8 +133,8 @@
   .prose :not(pre) > code {
     @apply rounded-md bg-subtle px-1.5 py-0.5 font-mono text-[12.5px];
   }
-  .prose pre {
-    @apply overflow-x-auto rounded-2xl bg-subtle p-1 font-mono text-[12.5px] leading-6 [&>code]:block [&>code]:rounded-xl [&>code]:bg-surface [&>code]:p-4 [&>code]:shadow-[0_0_0_1px_var(--color-line)];
+  .prose [data-code-block] {
+    @apply my-6;
   }
   .prose table {
     @apply w-full border-collapse text-sm;
