@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+composer.lock
+vendor/
+dist/
+.astro/
+*.blade.php
+docs/PRD.md
+composer.json

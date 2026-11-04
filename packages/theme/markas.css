@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --markas-canvas: #f4f4f1;
+  --markas-surface: #ffffff;
+  --markas-subtle: #ecece8;
+  --markas-line: #e2e2dd;
+  --markas-ink: #121412;
+  --markas-muted: #5e625d;
+  --markas-faint: #8a8e89;
+  --markas-primary: #2e6b3a;
+  --markas-primary-strong: #24552e;
+  --markas-on-primary: #ffffff;
+  --markas-primary-soft: #e7efe5;
+  --markas-primary-line: #b9d1b5;
+  --markas-success: #3fa463;
+  --markas-warning: #b54708;
+  --markas-danger: #b42318;
+}
+
+.dark {
+  --markas-canvas: #0e110e;
+  --markas-surface: #151915;
+  --markas-subtle: #1c211c;
+  --markas-line: #2a302a;
+  --markas-ink: #f2f4f1;
+  --markas-muted: #a3a9a2;
+  --markas-faint: #6e756d;
+  --markas-primary: #5fa36b;
+  --markas-primary-strong: #74b47f;
+  --markas-on-primary: #0e110e;
+  --markas-primary-soft: #1b2a1d;
+  --markas-primary-line: #2f4a33;
+  --markas-success: #4cc074;
+  --markas-warning: #fdb022;
+  --markas-danger: #f97066;
+}
+
+@theme inline {
+  --color-canvas: var(--markas-canvas);
+  --color-surface: var(--markas-surface);
+  --color-subtle: var(--markas-subtle);
+  --color-line: var(--markas-line);
+  --color-ink: var(--markas-ink);
+  --color-muted: var(--markas-muted);
+  --color-faint: var(--markas-faint);
+  --color-primary: var(--markas-primary);
+  --color-primary-strong: var(--markas-primary-strong);
+  --color-on-primary: var(--markas-on-primary);
+  --color-primary-soft: var(--markas-primary-soft);
+  --color-primary-line: var(--markas-primary-line);
+  --color-success: var(--markas-success);
+  --color-warning: var(--markas-warning);
+  --color-danger: var(--markas-danger);
+}

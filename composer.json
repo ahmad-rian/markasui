@@ -1,0 +1,19 @@
+{
+  "name": "jenderal/markasui",
+  "description": "Tooling PHP untuk monorepo MarkasUI.",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "php": "^8.3"
+  },
+  "scripts": {
+    "lint": "pint --test",
+    "format": "pint"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "require-dev": {
+    "laravel/pint": "1.32.1"
+  }
+}
