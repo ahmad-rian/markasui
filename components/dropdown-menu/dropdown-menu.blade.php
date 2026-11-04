@@ -1,6 +1,6 @@
 @props([
     'items' => [],
-    'label' => 'Opsi',
+    'label' => 'Options',
 ])
 
 @php

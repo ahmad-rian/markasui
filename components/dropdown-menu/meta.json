@@ -1,60 +1,95 @@
 {
   "name": "dropdown-menu",
   "title": "Dropdown Menu",
-  "description": "Menu aksi berbasis Popover API dengan navigasi keyboard sesuai pola WAI-ARIA Menu Button.",
+  "description": "Action menu built on the Popover API, with keyboard navigation following the WAI-ARIA Menu Button pattern.",
   "category": "overlay",
-  "tags": ["dropdown", "menu", "popover", "aksi", "overlay"],
+  "tags": ["dropdown", "menu", "popover", "actions", "overlay"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "dropdown-menu.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "DropdownMenu.tsx", "deps": [] },
-    "vue": { "file": "DropdownMenu.vue", "deps": [] }
+    "blade": {
+      "file": "dropdown-menu.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "DropdownMenu.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "DropdownMenu.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "items",
-      "type": "{ label, value?, href?, danger?, disabled? }[] atau { separator: true }",
+      "type": "{ label, value?, href?, danger?, disabled? }[] or { separator: true }",
       "default": "[]",
-      "description": "Daftar item menu. Item dengan href dirender sebagai link, separator menjadi garis pemisah."
+      "description": "Menu items. Items with href render as links, separators render as a dividing line."
     },
     {
       "name": "label",
       "type": "string",
-      "default": "Opsi",
-      "description": "Teks tombol pemicu."
+      "default": "Options",
+      "description": "Text of the trigger button."
     },
     {
       "name": "trigger",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Isi tombol pemicu kustom, menggantikan label."
+      "description": "Custom trigger button content, replaces label."
     },
     {
       "name": "onSelect / @select / markas-select",
       "type": "(value: string) => void",
       "default": "-",
-      "description": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select."
+      "description": "Called when an item is selected, with the item value (or label when value is empty). Blade dispatches a markas-select event."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id panel menu. Tombol pemicu memakai id ini dengan akhiran -trigger."
+      "default": "auto",
+      "description": "Menu panel id. The trigger button uses this id with a -trigger suffix."
     }
   ],
   "a11y": [
-    "Tombol pemicu memakai aria-haspopup=menu, aria-expanded, dan aria-controls ke panel role=menu.",
-    "Enter, Spasi, atau panah bawah membuka menu dan memfokuskan item pertama; panah atas memfokuskan item terakhir.",
-    "Panah atas dan bawah berpindah item (berputar di ujung), Home dan End ke item pertama dan terakhir, item nonaktif dilewati.",
-    "Escape menutup menu dan mengembalikan fokus ke pemicu. Klik di luar menutup menu (light dismiss Popover API)."
+    "The trigger button uses aria-haspopup=menu, aria-expanded, and aria-controls pointing to the role=menu panel.",
+    "Enter, Space, or Arrow Down opens the menu and focuses the first item; Arrow Up focuses the last item.",
+    "Arrow Up and Arrow Down move between items (wrapping at the ends), Home and End jump to the first and last item, disabled items are skipped.",
+    "Escape closes the menu and returns focus to the trigger. Clicking outside closes the menu (Popover API light dismiss)."
   ],
   "ai": {
-    "whenToUse": "Kumpulan aksi untuk satu objek, misalnya ubah, duplikat, dan hapus pada baris tabel atau kartu.",
+    "whenToUse": "A set of actions for one object, such as edit, duplicate, and delete on a table row or card.",
     "rules": [
-      "Pakai untuk aksi, bukan untuk memilih nilai form; gunakan Select untuk itu",
-      "Letakkan aksi berbahaya di akhir dengan danger: true dan pisahkan dengan separator",
-      "Jangan menaruh elemen interaktif lain di dalam item menu"
+      "Use it for actions, not for picking a form value; use Select for that",
+      "Put destructive actions last with danger: true and separate them with a separator",
+      "Never put other interactive elements inside a menu item"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Menu aksi berbasis Popover API dengan navigasi keyboard sesuai pola WAI-ARIA Menu Button.",
+      "props": {
+        "items": "Daftar item menu. Item dengan href dirender sebagai link, separator menjadi garis pemisah.",
+        "label": "Teks tombol pemicu. Default \"Options\", isi misalnya \"Opsi\" atau \"Aksi\" untuk situs berbahasa Indonesia.",
+        "trigger": "Isi tombol pemicu kustom, menggantikan label.",
+        "onSelect / @select / markas-select": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select.",
+        "id": "Id panel menu. Tombol pemicu memakai id ini dengan akhiran -trigger."
+      },
+      "a11y": [
+        "Tombol pemicu memakai aria-haspopup=menu, aria-expanded, dan aria-controls ke panel role=menu.",
+        "Enter, Spasi, atau panah bawah membuka menu dan memfokuskan item pertama; panah atas memfokuskan item terakhir.",
+        "Panah atas dan bawah berpindah item (berputar di ujung), Home dan End ke item pertama dan terakhir, item nonaktif dilewati.",
+        "Escape menutup menu dan mengembalikan fokus ke pemicu. Klik di luar menutup menu (light dismiss Popover API)."
+      ],
+      "ai": {
+        "whenToUse": "Kumpulan aksi untuk satu objek, misalnya ubah, duplikat, dan hapus pada baris tabel atau kartu.",
+        "rules": [
+          "Pakai untuk aksi, bukan untuk memilih nilai form; gunakan Select untuk itu",
+          "Letakkan aksi berbahaya di akhir dengan danger: true dan pisahkan dengan separator",
+          "Jangan menaruh elemen interaktif lain di dalam item menu"
+        ]
+      }
+    }
+  }
 }

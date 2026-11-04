@@ -1,8 +1,8 @@
 import { Breadcrumb } from "../../components/breadcrumb/Breadcrumb";
 
 const items = [
-  { label: "Beranda", href: "/" },
-  { label: "Komponen", href: "/komponen" },
+  { label: "Home", href: "/" },
+  { label: "Components", href: "/components" },
   { label: "Breadcrumb" },
 ];
 

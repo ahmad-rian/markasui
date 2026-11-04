@@ -33,11 +33,14 @@ export type DrawerProps = Omit<
   side?: keyof typeof sides;
   trigger?: ReactNode;
   footer?: ReactNode;
+  /** Label aksesibel tombol tutup. */
+  closeLabel?: string;
 };
 
 export function Drawer({
   title,
   side = "right",
+  closeLabel = "Close",
   trigger,
   footer,
   id,
@@ -87,7 +90,7 @@ export function Drawer({
               {title}
             </h2>
             <form method="dialog">
-              <button type="submit" className={close} aria-label="Tutup">
+              <button type="submit" className={close} aria-label={closeLabel}>
                 <svg
                   className="size-4"
                   viewBox="0 0 24 24"

@@ -1,8 +1,8 @@
 ## Blade
 
 ```blade
-<x-markas.input name="email" type="email" label="Email" hint="Kami tidak membagikan email Anda." />
-<x-markas.input name="password" type="password" label="Kata sandi" :error="$errors->first('password')" />
+<x-markas.input name="email" type="email" label="Email" hint="We never share your email." />
+<x-markas.input name="password" type="password" label="Password" :error="$errors->first('password')" />
 ```
 
 ## React
@@ -10,8 +10,8 @@
 ```tsx
 import { Input } from "@/components/markas/Input";
 
-<Input name="email" type="email" label="Email" hint="Kami tidak membagikan email Anda." />
-<Input name="password" type="password" label="Kata sandi" error={errors.password} />
+<Input name="email" type="email" label="Email" hint="We never share your email." />
+<Input name="password" type="password" label="Password" error={errors.password} />
 ```
 
 ## Vue
@@ -30,11 +30,12 @@ const email = ref("");
     name="email"
     type="email"
     label="Email"
-    hint="Kami tidak membagikan email Anda."
+    hint="We never share your email."
   />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Atribut tambahan (`name`, `placeholder`, `required`, `class`) diteruskan ke elemen `<input>`, bukan ke pembungkusnya.
+- Extra attributes (`name`, `placeholder`, `required`, `class`) go to the `<input>` element, not its wrapper.
+- Input has no built-in text. All visible text comes from `label`, `hint`, and `error`, so pass them in your site's language.

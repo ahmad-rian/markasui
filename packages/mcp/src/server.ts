@@ -68,14 +68,14 @@ export function createServer(registry: Registry = createRegistry()) {
   const server = new McpServer({ name: "markasui", version: VERSION });
   const framework = z
     .enum(FRAMEWORKS)
-    .describe("blade (Laravel + Alpine.js), react, atau vue");
+    .describe("blade (Laravel + Alpine.js), react, or vue");
 
   server.registerTool(
     "list_components",
     {
-      title: "Daftar komponen",
+      title: "List components",
       description:
-        "Daftar semua komponen MarkasUI (nama, judul, kategori, deskripsi). Filter opsional per kategori.",
+        "List every MarkasUI component (name, title, category, description). Optionally filter by category.",
       inputSchema: {
         category: z
           .enum(["form", "feedback", "overlay", "navigation", "data"])
@@ -96,9 +96,9 @@ export function createServer(registry: Registry = createRegistry()) {
   server.registerTool(
     "search_components",
     {
-      title: "Cari komponen",
+      title: "Search components",
       description:
-        "Cari komponen MarkasUI berdasarkan nama, deskripsi, dan tag. Contoh query: 'dialog', 'form login', 'tabel'.",
+        "Search MarkasUI components by name, description, and tags. Example queries: 'dialog', 'login form', 'table'.",
       inputSchema: { query: z.string().min(1) },
     },
     ({ query }) =>
@@ -110,11 +110,11 @@ export function createServer(registry: Registry = createRegistry()) {
   server.registerTool(
     "get_component",
     {
-      title: "Ambil komponen",
+      title: "Get component",
       description:
-        "Kode lengkap satu komponen untuk framework tertentu, beserta path tujuan, dependensi, props, aturan AI, dan contoh pemakaian. Simpan kode apa adanya di targetPath.",
+        "Full code of one component for a framework, with target path, dependencies, props, AI rules, and usage examples. Save the code as is at targetPath.",
       inputSchema: {
-        name: z.string().min(1).describe("nama komponen, misalnya button"),
+        name: z.string().min(1).describe("component name, for example button"),
         framework,
       },
     },
@@ -141,9 +141,9 @@ export function createServer(registry: Registry = createRegistry()) {
   server.registerTool(
     "get_theme",
     {
-      title: "Ambil tema",
+      title: "Get theme",
       description:
-        "Isi markas.css (token warna terang dan gelap) beserta daftar token. Komponen hanya memakai token ini.",
+        "The contents of markas.css (light and dark color tokens) and the token list. Components only use these tokens.",
       inputSchema: {},
     },
     () => safely(async () => json(await registry.theme())),
@@ -152,9 +152,9 @@ export function createServer(registry: Registry = createRegistry()) {
   server.registerTool(
     "get_setup",
     {
-      title: "Langkah setup",
+      title: "Setup steps",
       description:
-        "Langkah instalasi Tailwind CSS v4 dan markas.css untuk satu framework. Panggil sebelum menambah komponen ke project baru.",
+        "Tailwind CSS v4 and markas.css setup steps for one framework. Call this before adding components to a new project.",
       inputSchema: { framework },
     },
     ({ framework: fw }) =>
@@ -162,7 +162,7 @@ export function createServer(registry: Registry = createRegistry()) {
         content: [
           {
             type: "text",
-            text: `${setupGuide(fw)}\n\nCara cepat: jalankan "npx markasui@latest init" di root project.`,
+            text: `${setupGuide(fw)}\n\nShortcut: run "npx markasui@latest init" in the project root.`,
           },
         ],
       })),

@@ -55,7 +55,7 @@ export function Table({
     <div
       tabIndex={0}
       role="region"
-      aria-label={label ?? caption ?? "Tabel"}
+      aria-label={label ?? caption ?? "Table"}
       className={cx(wrapper, className)}
       {...props}
     >

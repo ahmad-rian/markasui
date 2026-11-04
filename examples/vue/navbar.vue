@@ -3,9 +3,9 @@ import Button from "../../components/button/Button.vue";
 import Navbar from "../../components/navbar/Navbar.vue";
 
 const links = [
-  { label: "Beranda", href: "/", active: true },
-  { label: "Komponen", href: "/komponen" },
-  { label: "Dokumentasi", href: "/dokumentasi" },
+  { label: "Home", href: "/", active: true },
+  { label: "Components", href: "/components" },
+  { label: "Docs", href: "/docs" },
 ];
 </script>
 
@@ -13,7 +13,7 @@ const links = [
   <Navbar :links="links">
     <template #brand>MarkasUI</template>
     <template #actions>
-      <Button size="sm">Masuk</Button>
+      <Button size="sm">Sign in</Button>
     </template>
   </Navbar>
 </template>

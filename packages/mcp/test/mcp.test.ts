@@ -95,7 +95,7 @@ describe("MCP server", () => {
       framework: "react",
     });
     expect(missing.isError).toBe(true);
-    expect(missing.text).toContain("Tidak ditemukan");
+    expect(missing.text).toContain("Not found");
   });
 
   it("get_theme dan get_setup", async () => {

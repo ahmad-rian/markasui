@@ -90,7 +90,7 @@ type FocusTarget = "first" | "last";
 
 export function DropdownMenu({
   items,
-  label = "Opsi",
+  label = "Options",
   trigger,
   onSelect,
   id,

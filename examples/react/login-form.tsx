@@ -4,7 +4,7 @@ import { Input } from "../../components/input/Input";
 
 export default function LoginFormExample() {
   return (
-    <form className="grid gap-4" method="POST" action="/masuk">
+    <form className="grid gap-4" method="POST" action="/login">
       <Input
         name="email"
         type="email"
@@ -15,14 +15,14 @@ export default function LoginFormExample() {
       <Input
         name="password"
         type="password"
-        label="Kata sandi"
-        defaultValue="rahasia"
-        error="Kata sandi minimal 8 karakter."
+        label="Password"
+        defaultValue="secret"
+        error="Password must be at least 8 characters"
         autoComplete="current-password"
       />
-      <Checkbox name="ingat" label="Ingat saya di perangkat ini" />
+      <Checkbox name="remember" label="Remember me on this device" />
       <Button type="submit" className="w-full">
-        Masuk
+        Sign in
       </Button>
     </form>
   );

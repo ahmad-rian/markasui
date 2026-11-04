@@ -20,7 +20,7 @@ const props = withDefaults(
     label?: string;
     id?: string;
   }>(),
-  { label: "Opsi", id: undefined },
+  { label: "Options", id: undefined },
 );
 const emit = defineEmits<{ select: [value: string] }>();
 

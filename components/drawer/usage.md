@@ -1,21 +1,21 @@
 ## Blade
 
 ```blade
-<x-markas.drawer title="Filter produk">
+<x-markas.drawer title="Filter products">
     <x-slot:trigger>
-        <x-markas.button variant="secondary">Buka filter</x-markas.button>
+        <x-markas.button variant="secondary">Open filters</x-markas.button>
     </x-slot:trigger>
 
-    Pilih kategori dan rentang harga untuk menyaring daftar produk.
+    Choose a category and price range to filter the product list.
 
     <x-slot:footer>
-        <x-markas.button variant="secondary" type="submit" value="batal">Batal</x-markas.button>
-        <x-markas.button type="submit" value="terapkan">Terapkan</x-markas.button>
+        <x-markas.button variant="secondary" type="submit" value="cancel">Cancel</x-markas.button>
+        <x-markas.button type="submit" value="apply">Apply</x-markas.button>
     </x-slot:footer>
 </x-markas.drawer>
 ```
 
-Butuh Alpine.js. Livewire 3 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+Needs Alpine.js. Livewire 3 already ships it.
 
 ## React
 
@@ -24,21 +24,21 @@ import { Button } from "@/components/markas/Button";
 import { Drawer } from "@/components/markas/Drawer";
 
 <Drawer
-  title="Filter produk"
-  trigger={<Button variant="secondary">Buka filter</Button>}
+  title="Filter products"
+  trigger={<Button variant="secondary">Open filters</Button>}
   footer={
     <>
-      <Button variant="secondary" type="submit" value="batal">
-        Batal
+      <Button variant="secondary" type="submit" value="cancel">
+        Cancel
       </Button>
-      <Button type="submit" value="terapkan">
-        Terapkan
+      <Button type="submit" value="apply">
+        Apply
       </Button>
     </>
   }
   onClose={(e) => console.log(e.currentTarget.returnValue)}
 >
-  Pilih kategori dan rentang harga untuk menyaring daftar produk.
+  Choose a category and price range to filter the product list.
 </Drawer>;
 ```
 
@@ -46,22 +46,23 @@ import { Drawer } from "@/components/markas/Drawer";
 
 ```vue
 <template>
-  <Drawer title="Filter produk">
+  <Drawer title="Filter products">
     <template #trigger>
-      <Button variant="secondary">Buka filter</Button>
+      <Button variant="secondary">Open filters</Button>
     </template>
 
-    Pilih kategori dan rentang harga untuk menyaring daftar produk.
+    Choose a category and price range to filter the product list.
 
     <template #footer>
-      <Button variant="secondary" type="submit" value="batal">Batal</Button>
-      <Button type="submit" value="terapkan">Terapkan</Button>
+      <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+      <Button type="submit" value="apply">Apply</Button>
     </template>
   </Drawer>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Pakai `side="left"` untuk drawer dari sisi kiri.
-- Nilai `value` tombol yang dipakai menutup drawer tersedia di `dialog.returnValue` saat event `close`.
+- Use `side="left"` for a drawer from the left side.
+- The `value` of the button that closed the drawer is available as `dialog.returnValue` in the `close` event.
+- The close button is labelled "Close". Translate it with `closeLabel` (Blade: `close-label`).

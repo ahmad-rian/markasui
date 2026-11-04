@@ -2,14 +2,14 @@
 import DropdownMenu from "../../components/dropdown-menu/DropdownMenu.vue";
 
 const items = [
-  { label: "Ubah", value: "ubah" },
-  { label: "Duplikat", value: "duplikat" },
-  { label: "Arsipkan", value: "arsipkan", disabled: true },
+  { label: "Edit", value: "edit" },
+  { label: "Duplicate", value: "duplicate" },
+  { label: "Archive", value: "archive", disabled: true },
   { separator: true as const },
-  { label: "Hapus", value: "hapus", danger: true },
+  { label: "Delete", value: "delete", danger: true },
 ];
 </script>
 
 <template>
-  <DropdownMenu label="Aksi" :items="items" />
+  <DropdownMenu label="Actions" :items="items" />
 </template>

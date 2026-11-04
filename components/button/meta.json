@@ -1,47 +1,79 @@
 {
   "name": "button",
   "title": "Button",
-  "description": "Tombol dengan varian primary, secondary, ghost, dan danger.",
+  "description": "Button with primary, secondary, ghost, and danger variants.",
   "category": "form",
   "tags": ["button", "cta", "action"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "button.blade.php", "deps": [] },
-    "react": { "file": "Button.tsx", "deps": [] },
-    "vue": { "file": "Button.vue", "deps": [] }
+    "blade": {
+      "file": "button.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Button.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Button.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "variant",
       "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
       "default": "primary",
-      "description": "Gaya visual tombol."
+      "description": "Visual style of the button."
     },
     {
       "name": "size",
       "type": "'sm' | 'md' | 'lg'",
       "default": "md",
-      "description": "Tinggi dan padding tombol."
+      "description": "Height and padding."
     },
     {
       "name": "type",
       "type": "'button' | 'submit' | 'reset'",
       "default": "button",
-      "description": "Atribut type native. Default button agar tidak submit form tanpa sengaja."
+      "description": "Native type attribute. Defaults to button so it never submits a form by accident."
     }
   ],
   "a11y": [
-    "Memakai elemen button native, jadi Enter dan Spasi langsung berfungsi.",
-    "Fokus terlihat lewat outline 2px warna primary saat navigasi keyboard.",
-    "Tombol yang hanya berisi ikon wajib diberi aria-label."
+    "Uses the native button element, so Enter and Space work out of the box.",
+    "Keyboard focus shows a 2px primary outline.",
+    "An icon-only button needs an aria-label."
   ],
   "ai": {
-    "whenToUse": "Aksi utama atau sekunder di form dan halaman.",
+    "whenToUse": "Primary or secondary actions in forms and pages.",
     "rules": [
-      "Satu tombol primary per area",
-      "Gunakan ghost untuk aksi di toolbar",
-      "Gunakan danger hanya untuk aksi yang menghapus atau tidak bisa dibatalkan"
+      "One primary button per area",
+      "Use ghost for toolbar actions",
+      "Use danger only for destructive or irreversible actions"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Tombol dengan varian primary, secondary, ghost, dan danger.",
+      "props": {
+        "variant": "Gaya visual tombol.",
+        "size": "Tinggi dan padding tombol.",
+        "type": "Atribut type native. Default button agar tidak submit form tanpa sengaja."
+      },
+      "a11y": [
+        "Memakai elemen button native, jadi Enter dan Spasi langsung berfungsi.",
+        "Fokus terlihat lewat outline 2px warna primary saat navigasi keyboard.",
+        "Tombol yang hanya berisi ikon wajib diberi aria-label."
+      ],
+      "ai": {
+        "whenToUse": "Aksi utama atau sekunder di form dan halaman.",
+        "rules": [
+          "Satu tombol primary per area",
+          "Gunakan ghost untuk aksi di toolbar",
+          "Gunakan danger hanya untuk aksi yang menghapus atau tidak bisa dibatalkan"
+        ]
+      }
+    }
+  }
 }

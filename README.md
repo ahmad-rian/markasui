@@ -1,52 +1,55 @@
 # MarkasUI
 
-Markas komponen UI ringan untuk **Blade, React, dan Vue**. Satu desain, dibangun di atas Tailwind CSS v4, tanpa dependensi runtime selain framework-nya sendiri, dan siap dipakai agent AI.
+English · [Bahasa Indonesia](README.id.md)
+
+Lightweight UI components for **Blade, React, and Vue**. One design built on Tailwind CSS v4, no runtime dependencies beyond the framework itself, and ready for AI agents.
 
 **Docs:** https://markasui.pages.dev
 
-## Kenapa MarkasUI
+## Why MarkasUI
 
-- **Blade didukung penuh.** Interaksi memakai Alpine.js, jadi langsung jalan di Livewire.
-- **Tampilan sama persis** di tiga framework. Dijamin uji kesamaan tampilan otomatis (selisih piksel maks 0,5%).
-- **Ringan.** Tanpa `clsx`, `tailwind-merge`, atau icon pack. JS tiap komponen React/Vue di bawah 3 KB gzip.
-- **Elemen native dulu.** `<dialog>`, Popover API, `<details>`.
-- **Siap untuk AI.** Registry JSON, Copy Prompt, `llms.txt`, Agent Skill, dan MCP server.
+- **First-class Blade.** Interactivity uses Alpine.js, so it works in Livewire as is.
+- **Identical in every framework.** Guarded by automated visual parity tests (max 0.5% pixel difference).
+- **Lightweight.** No `clsx`, `tailwind-merge`, or icon pack. Each React or Vue component ships under 3 KB of gzipped JS.
+- **Native elements first.** `<dialog>`, the Popover API, `<details>`.
+- **Ready for AI.** Registry JSON, Copy prompt, `llms.txt`, an Agent Skill, and an MCP server.
+- **Translatable.** English by default; every built-in label is a prop.
 
-## Mulai
+## Get started
 
 ```bash
 npx markasui@latest init
 npx markasui@latest add button modal
 ```
 
-Atau salin kode dari halaman komponen di docs. Panduan lengkap: [Instalasi](https://markasui.pages.dev/docs/installation).
+Or copy the code from a component page in the docs. Full guide: [Installation](https://markasui.pages.dev/docs/installation).
 
-### Untuk agent AI
+### For AI agents
 
 ```bash
 claude mcp add markasui -- npx -y @markasui/mcp
 ```
 
-Agent Skill ada di [`skills/markasui`](skills/markasui/SKILL.md).
+The Agent Skill lives in [`skills/markasui`](skills/markasui/SKILL.md).
 
-## Struktur repo
+## Repository layout
 
 ```
-apps/docs/          website docs (Astro)
-components/<nama>/  sumber tunggal tiap komponen: Blade, React, Vue, meta.json, usage.md
-examples/           contoh identik per framework, dipakai playground, tes, dan preview docs
-packages/theme/     markas.css (token warna)
-packages/registry/  build registry JSON dengan validasi Zod
-packages/cli/       paket npm "markasui"
-packages/mcp/       paket npm "@markasui/mcp"
+apps/docs/          docs site (Astro), English at / and Indonesian at /id
+components/<name>/  single source per component: Blade, React, Vue, meta.json, usage.md, usage.id.md
+examples/           identical examples per framework, used by the playground, tests, and docs previews
+packages/theme/     markas.css (color tokens)
+packages/registry/  registry JSON build with Zod validation
+packages/cli/       the "markasui" npm package
+packages/mcp/       the "@markasui/mcp" npm package
 skills/markasui/    Agent Skill
-playground/         halaman uji Vite untuk tiga framework
+playground/         Vite test pages for the three frameworks
 ```
 
-## Kontribusi
+## Contributing
 
-Lihat [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Lisensi
+## License
 
-[MIT](LICENSE). Dibuat oleh CV Jenderal Solusi Digital, Purwokerto.
+[MIT](LICENSE). Made by CV Jenderal Solusi Digital, Purwokerto.

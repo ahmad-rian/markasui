@@ -2,14 +2,18 @@
 import { ref } from "vue";
 import Switch from "../../components/switch/Switch.vue";
 
-const notifikasi = ref(true);
-const hemat = ref(false);
+const notifications = ref(true);
+const saver = ref(false);
 </script>
 
 <template>
   <div class="grid gap-4">
-    <Switch v-model="notifikasi" name="notifikasi" label="Notifikasi email" />
-    <Switch v-model="hemat" name="hemat" label="Mode hemat data" />
-    <Switch name="beta" label="Fitur beta" disabled />
+    <Switch
+      v-model="notifications"
+      name="notifications"
+      label="Email notifications"
+    />
+    <Switch v-model="saver" name="saver" label="Data saver mode" />
+    <Switch name="beta" label="Beta features" disabled />
   </div>
 </template>

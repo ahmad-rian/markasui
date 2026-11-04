@@ -25,8 +25,8 @@ async function openWithPausedClock(page: Page, framework: Framework) {
 }
 
 async function showToast(page: Page) {
-  await page.getByRole("button", { name: "Tampilkan toast" }).click();
-  await toastCard(page, "Perubahan disimpan").waitFor();
+  await page.getByRole("button", { name: "Show toast" }).click();
+  await toastCard(page, "Changes saved").waitFor();
 }
 
 for (const theme of themes) {
@@ -47,33 +47,33 @@ for (const theme of themes) {
 
 for (const framework of frameworks) {
   test.describe(framework, () => {
-    test("toast: muncul di region live, lolos axe, dan tombol Tutup menutup", async ({
+    test("toast: muncul di region live, lolos axe, dan tombol Close menutup", async ({
       page,
     }) => {
       await openFixture(page, framework, "toast");
       const live = region(page);
-      await expect(live).toHaveAccessibleName("Notifikasi");
+      await expect(live).toHaveAccessibleName("Notifications");
       await expect(live).toBeEmpty();
 
       await page.keyboard.press("Tab");
       await expect(
-        page.getByRole("button", { name: "Tampilkan toast" }),
+        page.getByRole("button", { name: "Show toast" }),
       ).toBeFocused();
       await page.keyboard.press("Enter");
 
-      await expect(live).toContainText("Perubahan disimpan");
-      await expect(live).toContainText("Profil Anda sudah diperbarui.");
+      await expect(live).toContainText("Changes saved");
+      await expect(live).toContainText("Your profile has been updated");
 
       const { violations } = await new AxeBuilder({ page })
         .withTags(WCAG_TAGS)
         .analyze();
       expect(violations.map((v) => v.id)).toEqual([]);
 
-      const close = live.getByRole("button", { name: "Tutup" });
+      const close = live.getByRole("button", { name: "Close" });
       await close.focus();
       await expect(close).toBeFocused();
       await page.keyboard.press("Enter");
-      await expect(toastCard(page, "Perubahan disimpan")).toHaveCount(0);
+      await expect(toastCard(page, "Changes saved")).toHaveCount(0);
       await expect(live).toBeEmpty();
     });
 
@@ -83,34 +83,34 @@ for (const framework of frameworks) {
       await openWithPausedClock(page, framework);
 
       await showToast(page);
-      await page.getByRole("button", { name: "Toast sementara" }).click();
-      await expect(toastCard(page, "Draf tersimpan otomatis")).toBeVisible();
+      await page.getByRole("button", { name: "Temporary toast" }).click();
+      await expect(toastCard(page, "Draft saved automatically")).toBeVisible();
       await page.mouse.move(0, 0);
 
       await page.clock.runFor(DEFAULT_DURATION - 100);
-      await expect(toastCard(page, "Draf tersimpan otomatis")).toBeVisible();
+      await expect(toastCard(page, "Draft saved automatically")).toBeVisible();
       await page.clock.runFor(200);
-      await expect(toastCard(page, "Draf tersimpan otomatis")).toHaveCount(0);
+      await expect(toastCard(page, "Draft saved automatically")).toHaveCount(0);
 
       await page.clock.runFor(DEFAULT_DURATION * 2);
-      await expect(toastCard(page, "Perubahan disimpan")).toBeVisible();
+      await expect(toastCard(page, "Changes saved")).toBeVisible();
     });
 
     test("toast: timer berhenti saat hover dan fokus", async ({ page }) => {
       await openWithPausedClock(page, framework);
-      const card = toastCard(page, "Draf tersimpan otomatis");
+      const card = toastCard(page, "Draft saved automatically");
 
-      await page.getByRole("button", { name: "Toast sementara" }).click();
+      await page.getByRole("button", { name: "Temporary toast" }).click();
       await card.hover();
       await page.clock.runFor(DEFAULT_DURATION * 2);
       await expect(card).toBeVisible();
 
       await page.mouse.move(0, 0);
-      await card.getByRole("button", { name: "Tutup" }).focus();
+      await card.getByRole("button", { name: "Close" }).focus();
       await page.clock.runFor(DEFAULT_DURATION * 2);
       await expect(card).toBeVisible();
 
-      await page.getByRole("button", { name: "Toast sementara" }).focus();
+      await page.getByRole("button", { name: "Temporary toast" }).focus();
       await page.clock.runFor(DEFAULT_DURATION + 100);
       await expect(card).toHaveCount(0);
     });
@@ -122,12 +122,12 @@ test("blade toast: dipicu lewat CustomEvent di window", async ({ page }) => {
   await page.evaluate(() =>
     window.dispatchEvent(
       new CustomEvent("markas-toast", {
-        detail: { title: "Gagal mengirim", variant: "danger", duration: 0 },
+        detail: { title: "Could not send", variant: "danger", duration: 0 },
       }),
     ),
   );
-  await expect(region(page)).toContainText("Gagal mengirim");
-  await expect(toastCard(page, "Gagal mengirim")).toHaveClass(
+  await expect(region(page)).toContainText("Could not send");
+  await expect(toastCard(page, "Could not send")).toHaveClass(
     /border-danger\/40/,
   );
 });

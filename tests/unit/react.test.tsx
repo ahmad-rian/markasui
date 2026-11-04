@@ -8,8 +8,8 @@ import { Tabs } from "../../components/tabs/Tabs";
 
 describe("React Button", () => {
   it("default type button, varian primary, ukuran md", () => {
-    render(<Button>Simpan</Button>);
-    const button = screen.getByRole("button", { name: "Simpan" });
+    render(<Button>Save</Button>);
+    const button = screen.getByRole("button", { name: "Save" });
     expect(button).toHaveAttribute("type", "button");
     expect(button).toHaveClass("bg-primary", "h-10");
   });
@@ -17,10 +17,10 @@ describe("React Button", () => {
   it("menerapkan varian, ukuran, dan class user di akhir", () => {
     render(
       <Button variant="danger" size="sm" className="w-full" type="submit">
-        Hapus
+        Delete
       </Button>,
     );
-    const button = screen.getByRole("button", { name: "Hapus" });
+    const button = screen.getByRole("button", { name: "Delete" });
     expect(button).toHaveAttribute("type", "submit");
     expect(button).toHaveClass("bg-danger", "h-8");
     expect(button.className.endsWith("w-full")).toBe(true);
@@ -30,21 +30,21 @@ describe("React Button", () => {
     const onClick = vi.fn();
     render(
       <Button disabled onClick={onClick}>
-        Nonaktif
+        Disabled
       </Button>,
     );
-    await userEvent.click(screen.getByRole("button", { name: "Nonaktif" }));
+    await userEvent.click(screen.getByRole("button", { name: "Disabled" }));
     expect(onClick).not.toHaveBeenCalled();
   });
 });
 
 describe("React Input", () => {
   it("menghubungkan label dan petunjuk", () => {
-    render(<Input id="nama" label="Nama" hint="Sesuai KTP." />);
-    const input = screen.getByLabelText("Nama");
-    expect(input).toHaveAttribute("id", "nama");
+    render(<Input id="name" label="Name" hint="As shown on your ID" />);
+    const input = screen.getByLabelText("Name");
+    expect(input).toHaveAttribute("id", "name");
     expect(input).toHaveAttribute("type", "text");
-    expect(input).toHaveAccessibleDescription("Sesuai KTP.");
+    expect(input).toHaveAccessibleDescription("As shown on your ID");
     expect(input).not.toHaveAttribute("aria-invalid");
   });
 
@@ -52,21 +52,21 @@ describe("React Input", () => {
     render(
       <Input
         label="Email"
-        hint="Petunjuk"
-        error="Wajib diisi"
+        hint="Hint"
+        error="Required"
         className="font-mono"
       />,
     );
     const input = screen.getByLabelText("Email");
     expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input).toHaveAccessibleDescription("Wajib diisi");
-    expect(screen.queryByText("Petunjuk")).toBeNull();
+    expect(input).toHaveAccessibleDescription("Required");
+    expect(screen.queryByText("Hint")).toBeNull();
     expect(input.className.endsWith("font-mono")).toBe(true);
   });
 
   it("membuat id otomatis kalau tidak diisi", () => {
-    render(<Input label="Kota" />);
-    expect(screen.getByLabelText("Kota").id).not.toBe("");
+    render(<Input label="City" />);
+    expect(screen.getByLabelText("City").id).not.toBe("");
   });
 });
 
@@ -74,8 +74,8 @@ describe("React Modal", () => {
   const renderModal = (onClose = vi.fn()) =>
     render(
       <Modal
-        title="Hapus?"
-        trigger={<Button>Buka</Button>}
+        title="Delete?"
+        trigger={<Button>Open</Button>}
         footer={
           <Button type="submit" value="ok">
             OK
@@ -83,7 +83,7 @@ describe("React Modal", () => {
         }
         onClose={onClose}
       >
-        Isi modal
+        Modal body
       </Modal>,
     );
 
@@ -94,13 +94,13 @@ describe("React Modal", () => {
     expect(dialog).not.toHaveAttribute("open");
     expect(
       document.getElementById(dialog.getAttribute("aria-labelledby")!),
-    ).toHaveTextContent("Hapus?");
+    ).toHaveTextContent("Delete?");
   });
 
   it("pemicu membuka modal, event close menutup dan memanggil onClose", async () => {
     const onClose = vi.fn();
     renderModal(onClose);
-    await userEvent.click(screen.getByRole("button", { name: "Buka" }));
+    await userEvent.click(screen.getByRole("button", { name: "Open" }));
     const dialog = document.querySelector("dialog")!;
     expect(dialog).toHaveAttribute("open");
     expect(dialog).toHaveAttribute("data-state", "open");
@@ -113,43 +113,64 @@ describe("React Modal", () => {
 
   it("klik backdrop (dialog itu sendiri) menutup, klik isi tidak", async () => {
     renderModal();
-    await userEvent.click(screen.getByRole("button", { name: "Buka" }));
+    await userEvent.click(screen.getByRole("button", { name: "Open" }));
     const dialog = document.querySelector("dialog")!;
 
-    fireEvent.click(screen.getByText("Isi modal"));
+    fireEvent.click(screen.getByText("Modal body"));
     expect(dialog).toHaveAttribute("open");
 
     fireEvent.click(dialog);
     expect(dialog).not.toHaveAttribute("open");
   });
+
+  it("tombol tutup berlabel Close secara default", () => {
+    renderModal();
+    expect(
+      screen.getByRole("button", { name: "Close", hidden: true }),
+    ).toBeInTheDocument();
+  });
+
+  it("closeLabel menimpa label tombol tutup", () => {
+    render(
+      <Modal title="Hapus?" closeLabel="Tutup">
+        Isi
+      </Modal>,
+    );
+    expect(
+      screen.getByRole("button", { name: "Tutup", hidden: true }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Close", hidden: true }),
+    ).toBeNull();
+  });
 });
 
 describe("React Tabs", () => {
   const items = [
-    { value: "a", label: "Satu", content: "Panel satu" },
-    { value: "b", label: "Dua", content: "Panel dua" },
-    { value: "c", label: "Tiga", content: "Panel tiga" },
+    { value: "a", label: "One", content: "Panel one" },
+    { value: "b", label: "Two", content: "Panel two" },
+    { value: "c", label: "Three", content: "Panel three" },
   ];
 
   it("defaultValue menentukan tab aktif", () => {
     render(<Tabs items={items} defaultValue="b" />);
-    expect(screen.getByRole("tab", { name: "Dua" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "Two" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel dua");
+    expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel two");
   });
 
   it("klik memilih tab dan memanggil onValueChange", async () => {
     const onValueChange = vi.fn();
     render(<Tabs items={items} onValueChange={onValueChange} />);
-    await userEvent.click(screen.getByRole("tab", { name: "Tiga" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Three" }));
     expect(onValueChange).toHaveBeenCalledWith("c");
-    expect(screen.getByRole("tab", { name: "Tiga" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "Three" })).toHaveAttribute(
       "tabindex",
       "0",
     );
-    expect(screen.getByRole("tab", { name: "Satu" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "One" })).toHaveAttribute(
       "tabindex",
       "-1",
     );
@@ -161,14 +182,14 @@ describe("React Tabs", () => {
     const tab = (name: string) => screen.getByRole("tab", { name });
 
     fireEvent.keyDown(list, { key: "ArrowLeft" });
-    expect(tab("Tiga")).toHaveFocus();
+    expect(tab("Three")).toHaveFocus();
     fireEvent.keyDown(list, { key: "ArrowRight" });
-    expect(tab("Satu")).toHaveFocus();
+    expect(tab("One")).toHaveFocus();
     fireEvent.keyDown(list, { key: "End" });
-    expect(tab("Tiga")).toHaveAttribute("aria-selected", "true");
+    expect(tab("Three")).toHaveAttribute("aria-selected", "true");
     fireEvent.keyDown(list, { key: "Home" });
-    expect(tab("Satu")).toHaveAttribute("aria-selected", "true");
+    expect(tab("One")).toHaveAttribute("aria-selected", "true");
     fireEvent.keyDown(list, { key: "a" });
-    expect(tab("Satu")).toHaveFocus();
+    expect(tab("One")).toHaveFocus();
   });
 });

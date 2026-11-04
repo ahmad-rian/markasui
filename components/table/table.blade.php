@@ -23,7 +23,7 @@
         'right' => 'text-right',
     ];
 
-    $regionLabel = $label ?? $caption ?? 'Tabel';
+    $regionLabel = $label ?? $caption ?? 'Table';
 @endphp
 
 <div {{ $attributes->merge(['tabindex' => '0', 'role' => 'region', 'aria-label' => $regionLabel])->class([$wrapper]) }}>

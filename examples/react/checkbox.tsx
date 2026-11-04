@@ -4,16 +4,16 @@ export default function CheckboxFixture() {
   return (
     <div className="grid gap-4">
       <Checkbox
-        name="syarat"
-        label="Saya setuju dengan syarat layanan"
+        name="terms"
+        label="I agree to the terms of service"
         defaultChecked
       />
       <Checkbox
-        name="kabar"
-        label="Kirimi saya kabar terbaru"
-        description="Paling banyak satu email per bulan."
+        name="updates"
+        label="Send me product updates"
+        description="At most one email per month."
       />
-      <Checkbox name="arsip" label="Arsipkan otomatis" disabled />
+      <Checkbox name="archive" label="Archive automatically" disabled />
     </div>
   );
 }

@@ -1,38 +1,38 @@
 import { RadioGroup } from "../../components/radio-group/RadioGroup";
 
-const paket = [
-  { value: "gratis", label: "Gratis", description: "Untuk proyek pribadi." },
+const plan = [
+  { value: "free", label: "Free", description: "For personal projects." },
   {
     value: "pro",
     label: "Pro",
-    description: "Untuk tim kecil hingga 10 orang.",
+    description: "For small teams of up to 10 people.",
   },
   {
-    value: "bisnis",
-    label: "Bisnis",
-    description: "Untuk organisasi dengan kebutuhan khusus.",
+    value: "business",
+    label: "Business",
+    description: "For organizations with custom needs.",
   },
 ];
-const tagihan = [
-  { value: "bulanan", label: "Bulanan" },
-  { value: "tahunan", label: "Tahunan" },
+const billing = [
+  { value: "monthly", label: "Monthly" },
+  { value: "yearly", label: "Yearly" },
 ];
 
 export default function RadioGroupFixture() {
   return (
     <div className="grid gap-6">
       <RadioGroup
-        name="paket"
-        label="Paket langganan"
+        name="plan"
+        label="Subscription plan"
         defaultValue="pro"
-        options={paket}
+        options={plan}
       />
       <RadioGroup
-        name="tagihan"
-        label="Siklus tagihan"
-        defaultValue="bulanan"
+        name="billing"
+        label="Billing cycle"
+        defaultValue="monthly"
         orientation="horizontal"
-        options={tagihan}
+        options={billing}
       />
     </div>
   );

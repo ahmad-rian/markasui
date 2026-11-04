@@ -1,5 +1,6 @@
 @props([
     'items' => [],
+    'navLabel' => 'Breadcrumb',
 ])
 
 @php
@@ -20,7 +21,7 @@
     };
 @endphp
 
-<nav {{ $attributes->merge(['aria-label' => 'Breadcrumb']) }}>
+<nav {{ $attributes->merge(['aria-label' => $navLabel]) }}>
     <ol class="{{ $list }}">
         @foreach (array_values($items) as $index => $crumb)
             <li class="{{ $item }}">

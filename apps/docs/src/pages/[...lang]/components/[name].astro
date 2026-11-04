@@ -1,0 +1,165 @@
+---
+import type { Framework } from "@markasui/registry/schema";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPage from "../../../components/CopyPage.astro";
+import Icon from "../../../components/Icon.astro";
+import Tabs from "../../../components/Tabs.astro";
+import Preview from "../../../components/preview/Preview.astro";
+import Docs from "../../../layouts/Docs.astro";
+import { buildPrompt, componentMarkdown, splitUsage } from "../../../lib/ai";
+import { FRAMEWORK_LABELS, PACKAGE_MANAGERS, cliCommand, shikiLang } from "../../../lib/frameworks";
+import { LOCALES, localePath, t, toLocale } from "../../../lib/i18n";
+import { renderMarkdown } from "../../../lib/markdown";
+import { categoryLabel, getComponents, localized } from "../../../lib/registry";
+
+export async function getStaticPaths() {
+  const items = await getComponents();
+  return LOCALES.flatMap((locale) =>
+    items.map((item, index) => ({
+      params: { lang: locale === "en" ? undefined : locale, name: item.name },
+      props: { item, prev: items[index - 1], next: items[index + 1] },
+    })),
+  );
+}
+
+const { item, prev, next } = Astro.props;
+const locale = toLocale(Astro.params.lang);
+const strings = t(locale).component;
+const text = localized(item, locale);
+const frameworks: Framework[] = ["blade", "react", "vue"];
+const site = Astro.site!.toString();
+const usage = splitUsage(text.usage);
+const usageHtml = Object.fromEntries(
+  await Promise.all(frameworks.map(async (fw) => [fw, await renderMarkdown(usage[fw])] as const)),
+) as Record<Framework, string>;
+const notesHtml = usage.notes ? await renderMarkdown(usage.notes) : "";
+const prompts = Object.fromEntries(frameworks.map((fw) => [fw, buildPrompt(item, fw, site, locale)])) as Record<Framework, string>;
+
+const headings = [
+  { depth: 2, slug: "instalasi", text: strings.installation },
+  { depth: 2, slug: "pemakaian", text: strings.usage },
+  { depth: 2, slug: "props", text: strings.props },
+  { depth: 2, slug: "aksesibilitas", text: strings.accessibility },
+];
+const pager = "icon-button size-8 border border-line bg-surface";
+---
+
+<Docs title={item.title} description={text.description} headings={headings}>
+  <p class="text-sm text-muted">
+    <a href={localePath(locale, "/components")} class="transition-colors hover:text-ink">{strings.breadcrumb}</a>
+    <span class="px-1.5 text-faint" aria-hidden="true">/</span>
+    {categoryLabel(item.category, locale)}
+  </p>
+  <div class="mt-3 flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+    <div class="min-w-0 basis-full sm:basis-auto sm:flex-1">
+      <h1 class="text-[32px] leading-tight font-medium tracking-[-0.02em] sm:text-4xl">{item.title}</h1>
+      <p class="mt-3 max-w-2xl text-lg leading-7 text-muted">{text.description}</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <CopyPage markdown={componentMarkdown(item, site, locale)} markdownUrl={localePath(locale, `/components/${item.name}.md`)} prompts={prompts} />
+      {
+        prev ? (
+          <a href={localePath(locale, `/components/${prev.name}`)} class={pager} aria-label={strings.previous(prev.title)}>
+            <Icon name="chevronLeft" />
+          </a>
+        ) : (
+          <span class={`${pager} opacity-40`} aria-hidden="true">
+            <Icon name="chevronLeft" />
+          </span>
+        )
+      }
+      {
+        next ? (
+          <a href={localePath(locale, `/components/${next.name}`)} class={pager} aria-label={strings.next(next.title)}>
+            <Icon name="chevronRight" />
+          </a>
+        ) : (
+          <span class={`${pager} opacity-40`} aria-hidden="true">
+            <Icon name="chevronRight" />
+          </span>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-3">
+    <Preview name={item.name} />
+    {
+      frameworks.map((fw) => (
+        <div data-fw={fw}>
+          <CodeBlock code={item.frameworks[fw].code} lang={shikiLang(fw)} title={item.frameworks[fw].target} framework={fw} collapsible />
+        </div>
+      ))
+    }
+  </div>
+
+  <section class="prose mt-14">
+    <h2 id="instalasi">{strings.installation}</h2>
+  </section>
+  <div class="mt-5">
+    <Tabs label={strings.installMethod} group="install-method" items={[{ value: "cli", label: strings.cli }, { value: "manual", label: strings.manual }]}>
+      <div slot="cli">
+        <Tabs label={strings.packageManager} group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
+          {
+            PACKAGE_MANAGERS.map((pm) => (
+              <div slot={pm}>
+                <CodeBlock code={cliCommand(pm, `add ${item.name}`)} lang="bash" />
+              </div>
+            ))
+          }
+        </Tabs>
+      </div>
+      <div slot="manual" class="prose">
+        {
+          frameworks.map((fw) => (
+            <ol data-fw={fw}>
+              <li>
+                {strings.manualSetup} <a href={localePath(locale, "/docs/installation")}>{strings.manualSetupLink}</a>.
+              </li>
+              {item.frameworks[fw].deps.length > 0 && (
+                <li>
+                  {strings.manualDeps} <code>npm install {item.frameworks[fw].deps.join(" ")}</code>
+                </li>
+              )}
+              <li>
+                {strings.manualCopy(FRAMEWORK_LABELS[fw], item.frameworks[fw].target)[0]} <code>{item.frameworks[fw].target}</code>.
+              </li>
+            </ol>
+          ))
+        }
+      </div>
+    </Tabs>
+  </div>
+
+  <section class="prose mt-14">
+    <h2 id="pemakaian">{strings.usage}</h2>
+    {frameworks.map((fw) => <div data-fw={fw} set:html={usageHtml[fw]} />)}
+    {notesHtml && <Fragment set:html={notesHtml} />}
+
+    <h2 id="props">{strings.props}</h2>
+    <div class="overflow-x-auto" tabindex="0" role="region" aria-label={strings.table.label}>
+      <table>
+        <thead>
+          <tr><th>{strings.table.name}</th><th>{strings.table.type}</th><th>{strings.table.default}</th><th>{strings.table.description}</th></tr>
+        </thead>
+        <tbody>
+          {
+            text.props.map((prop) => (
+              <tr>
+                <td><code>{prop.name}</code></td>
+                <td><code>{prop.type}</code></td>
+                <td class="font-mono text-[13px] text-muted">{prop.default}</td>
+                <td>{prop.description}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="aksesibilitas">{strings.accessibility}</h2>
+    <ul>
+      {text.a11y.map((note) => <li>{note}</li>)}
+    </ul>
+  </section>
+</Docs>

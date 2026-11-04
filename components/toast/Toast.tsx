@@ -122,9 +122,19 @@ export function toast({
   return id;
 }
 
-export type ToasterProps = ComponentProps<"div">;
+export type ToasterProps = ComponentProps<"div"> & {
+  /** Label aksesibel tombol tutup di setiap toast. */
+  closeLabel?: string;
+  /** Label aksesibel region live. */
+  regionLabel?: string;
+};
 
-export function Toaster({ className, ...props }: ToasterProps) {
+export function Toaster({
+  closeLabel = "Close",
+  regionLabel = "Notifications",
+  className,
+  ...props
+}: ToasterProps) {
   const items = useSyncExternalStore(
     subscribe,
     () => toasts,
@@ -145,7 +155,7 @@ export function Toaster({ className, ...props }: ToasterProps) {
     <div
       role="status"
       aria-live="polite"
-      aria-label="Notifikasi"
+      aria-label={regionLabel}
       className={cx(region, className)}
       {...props}
     >
@@ -182,7 +192,7 @@ export function Toaster({ className, ...props }: ToasterProps) {
           <button
             type="button"
             className={close}
-            aria-label="Tutup"
+            aria-label={closeLabel}
             onClick={() => dismissToast(item.id)}
           >
             <svg

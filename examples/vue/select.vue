@@ -2,30 +2,25 @@
 import { ref } from "vue";
 import Select from "../../components/select/Select.vue";
 
-const kota = ref("bandung");
-const peran = ref("");
-const paket = ref("gratis");
+const city = ref("bandung");
+const role = ref("");
+const plan = ref("free");
 </script>
 
 <template>
   <div class="grid gap-4">
-    <Select v-model="kota" name="kota" label="Kota" hint="Pilih kota domisili.">
+    <Select v-model="city" name="city" label="City" hint="Choose your city.">
       <option value="jakarta">Jakarta</option>
       <option value="bandung">Bandung</option>
       <option value="surabaya">Surabaya</option>
     </Select>
-    <Select
-      v-model="peran"
-      name="peran"
-      label="Peran"
-      error="Peran wajib dipilih."
-    >
-      <option value="">Pilih peran</option>
+    <Select v-model="role" name="role" label="Role" error="Role is required.">
+      <option value="">Choose a role</option>
       <option value="admin">Admin</option>
       <option value="editor">Editor</option>
     </Select>
-    <Select v-model="paket" name="paket" label="Paket" disabled>
-      <option value="gratis">Gratis</option>
+    <Select v-model="plan" name="plan" label="Plan" disabled>
+      <option value="free">Free</option>
     </Select>
   </div>
 </template>

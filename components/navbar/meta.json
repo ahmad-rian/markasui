@@ -1,47 +1,100 @@
 {
   "name": "navbar",
   "title": "Navbar",
-  "description": "Header situs dengan brand, menu link, area aksi, dan menu seluler yang bisa dibuka lewat tombol.",
+  "description": "Site header with a brand, menu links, an actions area, and a mobile menu opened by a toggle button.",
   "category": "navigation",
   "tags": ["navbar", "header", "menu", "navigation", "mobile"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "navbar.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Navbar.tsx", "deps": [] },
-    "vue": { "file": "Navbar.vue", "deps": [] }
+    "blade": {
+      "file": "navbar.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Navbar.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Navbar.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "links",
       "type": "{ label, href, active? }[]",
       "default": "[]",
-      "description": "Menu utama. Link dengan active diberi aria-current=page."
+      "description": "Main menu. Links with active get aria-current=page."
     },
     {
       "name": "brand",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Logo atau nama situs di kiri."
+      "description": "Logo or site name on the left."
     },
     {
       "name": "actions",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Area kanan, misalnya tombol Masuk."
+      "description": "Right-hand area, such as a Sign in button."
+    },
+    {
+      "name": "menuLabel",
+      "type": "string",
+      "default": "Menu",
+      "description": "Accessible label of the mobile menu button."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Main",
+      "description": "Accessible label of the desktop nav element."
+    },
+    {
+      "name": "mobileNavLabel",
+      "type": "string",
+      "default": "Main mobile",
+      "description": "Accessible label of the mobile nav element."
     }
   ],
   "a11y": [
-    "Tombol menu seluler memakai aria-expanded dan aria-controls yang menunjuk ke panel menu.",
-    "Escape menutup panel dan fokus kembali ke tombol menu.",
-    "Menu desktop dan seluler masing-masing dibungkus nav dengan label berbeda.",
-    "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 48rem."
+    "The mobile menu button uses aria-expanded and aria-controls pointing to the menu panel.",
+    "Escape closes the panel and returns focus to the menu button.",
+    "The desktop and mobile menus are each wrapped in a nav with different labels (navLabel and mobileNavLabel).",
+    "The layout follows the header width (container query), the desktop menu shows from 48rem wide."
   ],
   "ai": {
-    "whenToUse": "Header utama di bagian atas setiap halaman situs atau aplikasi.",
+    "whenToUse": "Main header at the top of every page of a site or app.",
     "rules": [
-      "Tandai halaman saat ini dengan active",
-      "Jaga jumlah link utama sedikit, sisanya taruh di footer atau dropdown"
+      "Mark the current page with active",
+      "Keep the number of main links small, move the rest to the footer or a dropdown"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Header situs dengan brand, menu link, area aksi, dan menu seluler yang bisa dibuka lewat tombol.",
+      "props": {
+        "links": "Menu utama. Link dengan active diberi aria-current=page.",
+        "brand": "Logo atau nama situs di kiri.",
+        "actions": "Area kanan, misalnya tombol Masuk.",
+        "menuLabel": "Label aksesibel tombol menu seluler. Default \"Menu\" sudah cocok untuk Bahasa Indonesia.",
+        "navLabel": "Label aksesibel nav desktop. Isi \"Utama\" untuk situs berbahasa Indonesia.",
+        "mobileNavLabel": "Label aksesibel nav seluler. Isi \"Utama seluler\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Tombol menu seluler memakai aria-expanded dan aria-controls yang menunjuk ke panel menu.",
+        "Escape menutup panel dan fokus kembali ke tombol menu.",
+        "Menu desktop dan seluler masing-masing dibungkus nav dengan label berbeda (navLabel dan mobileNavLabel).",
+        "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 48rem."
+      ],
+      "ai": {
+        "whenToUse": "Header utama di bagian atas setiap halaman situs atau aplikasi.",
+        "rules": [
+          "Tandai halaman saat ini dengan active",
+          "Jaga jumlah link utama sedikit, sisanya taruh di footer atau dropdown"
+        ]
+      }
+    }
+  }
 }

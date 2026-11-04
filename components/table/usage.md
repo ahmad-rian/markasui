@@ -2,13 +2,13 @@
 
 ```blade
 <x-markas.table
-    caption="Daftar pesanan terbaru"
+    caption="Recent orders"
     :columns="[
-        ['key' => 'kode', 'label' => 'Pesanan'],
-        ['key' => 'pelanggan', 'label' => 'Pelanggan'],
+        ['key' => 'code', 'label' => 'Order'],
+        ['key' => 'customer', 'label' => 'Customer'],
         ['key' => 'total', 'label' => 'Total', 'align' => 'right'],
     ]"
-    :rows="$orders->map(fn ($o) => ['kode' => $o->code, 'pelanggan' => $o->customer, 'total' => $o->total_label])->all()"
+    :rows="$orders->map(fn ($o) => ['code' => $o->code, 'customer' => $o->customer, 'total' => $o->total_label])->all()"
 />
 ```
 
@@ -18,9 +18,9 @@
 import { Table } from "@/components/markas/Table";
 
 <Table
-  caption="Daftar pesanan terbaru"
+  caption="Recent orders"
   columns={[
-    { key: "kode", label: "Pesanan" },
+    { key: "code", label: "Order" },
     { key: "status", label: "Status" },
     { key: "total", label: "Total", align: "right" },
   ]}
@@ -36,9 +36,9 @@ import { Table } from "@/components/markas/Table";
 ```vue
 <template>
   <Table
-    caption="Daftar pesanan terbaru"
+    caption="Recent orders"
     :columns="[
-      { key: 'kode', label: 'Pesanan' },
+      { key: 'code', label: 'Order' },
       { key: 'status', label: 'Status' },
       { key: 'total', label: 'Total', align: 'right' },
     ]"
@@ -51,10 +51,11 @@ import { Table } from "@/components/markas/Table";
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Blade hanya menampilkan nilai teks yang di-escape. Untuk sel berisi komponen lain, tulis tabel langsung memakai class yang sama, atau siapkan string di controller.
-- `renderCell` yang mengembalikan `undefined` memakai nilai teks bawaan, jadi cukup tangani kolom yang perlu diubah.
-- Tambahkan `show-caption` (Blade, Vue) atau `showCaption` (React) untuk menampilkan caption di atas tabel.
-- Sel tidak memotong baris (`whitespace-nowrap`). Di layar sempit tabel digulir horizontal di dalam pembungkusnya.
-- Isi `rowKey` (React dan Vue, misalnya `rowKey="id"`) dengan nama field berisi id unik per baris saat baris bisa diurutkan, disaring, atau dihapus. Tanpa `rowKey`, key memakai indeks baris. Blade tidak membutuhkannya.
+- Blade only shows escaped text values. For cells with other components, write the table by hand with the same classes, or prepare the string in the controller.
+- A `renderCell` that returns `undefined` falls back to the plain text value, so only handle the columns that need it.
+- Add `show-caption` (Blade, Vue) or `showCaption` (React) to show the caption above the table.
+- Cells do not wrap (`whitespace-nowrap`). On narrow screens the table scrolls horizontally inside its wrapper.
+- Set `rowKey` (React and Vue, such as `rowKey="id"`) to a field with a unique id per row when rows can be sorted, filtered, or removed. Without `rowKey`, the key is the row index. Blade does not need it.
+- The region is named by `label`, then `caption`, then "Table". Set `label` or `caption` in your site's language.

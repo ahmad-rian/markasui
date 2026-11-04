@@ -1,9 +1,9 @@
 ## Blade
 
 ```blade
-<x-markas.progress label="Mengunggah berkas" :value="60" />
-<x-markas.progress label="Penyimpanan terpakai" :value="3" :max="4" />
-<x-markas.progress label="Menyiapkan laporan" />
+<x-markas.progress label="Uploading file" :value="60" />
+<x-markas.progress label="Storage used" :value="3" :max="4" />
+<x-markas.progress label="Preparing report" />
 ```
 
 ## React
@@ -11,9 +11,9 @@
 ```tsx
 import { Progress } from "@/components/markas/Progress";
 
-<Progress label="Mengunggah berkas" value={60} />
-<Progress label="Penyimpanan terpakai" value={3} max={4} />
-<Progress label="Menyiapkan laporan" />
+<Progress label="Uploading file" value={60} />
+<Progress label="Storage used" value={3} max={4} />
+<Progress label="Preparing report" />
 ```
 
 ## Vue
@@ -24,14 +24,14 @@ import Progress from "@/components/markas/Progress.vue";
 </script>
 
 <template>
-  <Progress label="Mengunggah berkas" :value="60" />
-  <Progress label="Penyimpanan terpakai" :value="3" :max="4" />
-  <Progress label="Menyiapkan laporan" />
+  <Progress label="Uploading file" :value="60" />
+  <Progress label="Storage used" :value="3" :max="4" />
+  <Progress label="Preparing report" />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Tanpa `value`, progress menjadi tak tentu dan berdenyut. Animasi mati saat `prefers-reduced-motion`.
-- Tanpa `label`, isi `aria-label` supaya progress punya nama.
-- Persentase dibulatkan dan dibatasi 0 sampai 100.
+- Without `value`, the progress is indeterminate and pulses. The animation stops under `prefers-reduced-motion`.
+- Without `label`, set `aria-label` so the progress has a name.
+- The percentage is rounded and clamped between 0 and 100.

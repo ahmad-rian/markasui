@@ -7,6 +7,11 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: process.env.SITE_URL || "https://markasui.pages.dev",
   trailingSlash: "never",
+  i18n: {
+    locales: ["en", "id"],
+    defaultLocale: "en",
+    routing: { prefixDefaultLocale: false },
+  },
   build: { format: "file" },
   integrations: [react(), vue()],
   vite: {

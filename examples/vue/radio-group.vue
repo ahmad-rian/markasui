@@ -2,41 +2,41 @@
 import { ref } from "vue";
 import RadioGroup from "../../components/radio-group/RadioGroup.vue";
 
-const paketOptions = [
-  { value: "gratis", label: "Gratis", description: "Untuk proyek pribadi." },
+const planOptions = [
+  { value: "free", label: "Free", description: "For personal projects." },
   {
     value: "pro",
     label: "Pro",
-    description: "Untuk tim kecil hingga 10 orang.",
+    description: "For small teams of up to 10 people.",
   },
   {
-    value: "bisnis",
-    label: "Bisnis",
-    description: "Untuk organisasi dengan kebutuhan khusus.",
+    value: "business",
+    label: "Business",
+    description: "For organizations with custom needs.",
   },
 ];
-const tagihanOptions = [
-  { value: "bulanan", label: "Bulanan" },
-  { value: "tahunan", label: "Tahunan" },
+const billingOptions = [
+  { value: "monthly", label: "Monthly" },
+  { value: "yearly", label: "Yearly" },
 ];
-const paket = ref("pro");
-const tagihan = ref("bulanan");
+const plan = ref("pro");
+const billing = ref("monthly");
 </script>
 
 <template>
   <div class="grid gap-6">
     <RadioGroup
-      v-model="paket"
-      name="paket"
-      label="Paket langganan"
-      :options="paketOptions"
+      v-model="plan"
+      name="plan"
+      label="Subscription plan"
+      :options="planOptions"
     />
     <RadioGroup
-      v-model="tagihan"
-      name="tagihan"
-      label="Siklus tagihan"
+      v-model="billing"
+      name="billing"
+      label="Billing cycle"
       orientation="horizontal"
-      :options="tagihanOptions"
+      :options="billingOptions"
     />
   </div>
 </template>

@@ -1,7 +1,7 @@
 {
   "name": "tabs",
   "title": "Tabs",
-  "description": "Tab untuk berpindah antar panel konten dengan navigasi keyboard sesuai WAI-ARIA.",
+  "description": "Tabs for switching between content panels, with WAI-ARIA keyboard navigation.",
   "category": "navigation",
   "tags": ["tabs", "tablist", "navigation", "panel"],
   "status": "stable",
@@ -15,32 +15,54 @@
       "name": "items",
       "type": "Blade: array<key, label> · React: { value, label, content }[] · Vue: { value, label }[]",
       "default": "[]",
-      "description": "Daftar tab. Di Blade dan Vue, isi panel lewat slot dengan nama sama seperti key/value."
+      "description": "List of tabs. In Blade and Vue, fill each panel through a slot named after its key or value."
     },
     {
       "name": "defaultValue",
       "type": "string",
-      "default": "tab pertama",
-      "description": "Tab yang aktif saat pertama dirender."
+      "default": "first tab",
+      "description": "Tab that is active on first render."
     },
     {
       "name": "v-model / onValueChange",
       "type": "string",
       "default": "-",
-      "description": "Vue memakai v-model, React memakai callback onValueChange."
+      "description": "Vue uses v-model, React uses the onValueChange callback."
     }
   ],
   "a11y": [
-    "Memakai role tablist, tab, dan tabpanel dengan aria-selected, aria-controls, dan aria-labelledby.",
-    "Panah kiri dan kanan berpindah tab (berputar di ujung), Home dan End ke tab pertama dan terakhir.",
-    "Hanya tab aktif yang masuk urutan Tab (roving tabindex), lalu Tab berikutnya masuk ke panel."
+    "Uses the tablist, tab, and tabpanel roles with aria-selected, aria-controls, and aria-labelledby.",
+    "Left and right arrows move between tabs (wrapping at the ends), Home and End jump to the first and last tab.",
+    "Only the active tab is in the Tab order (roving tabindex), so the next Tab moves into the panel."
   ],
   "ai": {
-    "whenToUse": "Mengelompokkan konten setara di satu halaman, misalnya pengaturan akun, profil, dan keamanan.",
+    "whenToUse": "Grouping peer content on one page, for example account, profile, and security settings.",
     "rules": [
-      "Key atau value tab hanya huruf kecil, angka, dan underscore karena dipakai sebagai id dan nama slot",
-      "Jangan memakai Tabs untuk navigasi antar halaman, gunakan link biasa"
+      "Tab keys or values use only lowercase letters, digits, and underscores because they become ids and slot names",
+      "Do not use Tabs to navigate between pages, use regular links"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Tab untuk berpindah antar panel konten dengan navigasi keyboard sesuai WAI-ARIA.",
+      "props": {
+        "items": "Daftar tab. Di Blade dan Vue, isi panel lewat slot dengan nama sama seperti key/value.",
+        "defaultValue": "Tab yang aktif saat pertama dirender.",
+        "v-model / onValueChange": "Vue memakai v-model, React memakai callback onValueChange."
+      },
+      "a11y": [
+        "Memakai role tablist, tab, dan tabpanel dengan aria-selected, aria-controls, dan aria-labelledby.",
+        "Panah kiri dan kanan berpindah tab (berputar di ujung), Home dan End ke tab pertama dan terakhir.",
+        "Hanya tab aktif yang masuk urutan Tab (roving tabindex), lalu Tab berikutnya masuk ke panel."
+      ],
+      "ai": {
+        "whenToUse": "Mengelompokkan konten setara di satu halaman, misalnya pengaturan akun, profil, dan keamanan.",
+        "rules": [
+          "Key atau value tab hanya huruf kecil, angka, dan underscore karena dipakai sebagai id dan nama slot",
+          "Jangan memakai Tabs untuk navigasi antar halaman, gunakan link biasa"
+        ]
+      }
+    }
+  }
 }

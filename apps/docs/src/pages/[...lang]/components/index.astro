@@ -1,42 +1,47 @@
 ---
-import Base from "../../layouts/Base.astro";
-import { CATEGORY_LABELS, freshness, getComponents } from "../../lib/registry";
+import Base from "../../../layouts/Base.astro";
+import { localeParams, localePath, t, toLocale } from "../../../lib/i18n";
+import { CATEGORIES, categoryLabel, freshness, getComponents } from "../../../lib/registry";
 
+export const getStaticPaths = localeParams;
+
+const locale = toLocale(Astro.params.lang);
+const strings = t(locale).list;
 const items = await getComponents();
-const thumbs = import.meta.glob<string>("../../../public/thumbs/*.webp", { query: "?url", import: "default", eager: true });
-const hasThumb = (name: string) => `../../../public/thumbs/${name}.webp` in thumbs;
-const categories = Object.entries(CATEGORY_LABELS).filter(([key]) => items.some((item) => item.category === key));
+const thumbs = import.meta.glob<string>("../../../../public/thumbs/*.webp", { query: "?url", import: "default", eager: true });
+const hasThumb = (name: string) => `../../../../public/thumbs/${name}.webp` in thumbs;
+const categories = CATEGORIES.filter((category) => items.some((item) => item.category === category)).map((category) => [category, categoryLabel(category, locale)] as const);
 const control =
   "h-10 rounded-lg border border-line bg-surface px-3 text-sm text-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 ---
 
-<Base title="Komponen" description={`${items.length} komponen UI untuk Blade, React, dan Vue.`}>
+<Base title={strings.title} description={strings.subtitle(items.length)}>
   <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-20 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
     <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <div>
-        <h1 class="text-[32px] leading-tight font-medium tracking-[-0.02em] sm:text-4xl">Komponen</h1>
+        <h1 class="text-[32px] leading-tight font-medium tracking-[-0.02em] sm:text-4xl">{strings.title}</h1>
         <p class="mt-3 max-w-xl text-lg leading-7 text-muted">
-          {items.length} komponen, masing-masing dalam versi Blade, React, dan Vue dengan tampilan yang sama
+          {strings.subtitle(items.length)}
         </p>
       </div>
     </div>
 
     <form class="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap" role="search" data-filters data-pagefind-ignore>
-      <label class="sr-only" for="filter-query">Cari komponen</label>
-      <input id="filter-query" name="q" type="search" placeholder="Cari" class={`${control} col-span-2 min-w-0 placeholder:text-faint sm:w-72`} />
-      <label class="sr-only" for="filter-category">Kategori</label>
+      <label class="sr-only" for="filter-query">{strings.search}</label>
+      <input id="filter-query" name="q" type="search" placeholder={strings.searchPlaceholder} class={`${control} col-span-2 min-w-0 placeholder:text-faint sm:w-72`} />
+      <label class="sr-only" for="filter-category">{strings.category}</label>
       <select id="filter-category" name="category" class={control}>
-        <option value="">Semua kategori</option>
+        <option value="">{strings.allCategories}</option>
         {categories.map(([value, label]) => <option value={value}>{label}</option>)}
       </select>
-      <label class="sr-only" for="filter-sort">Urutan</label>
+      <label class="sr-only" for="filter-sort">{strings.sort}</label>
       <select id="filter-sort" name="sort" class={control}>
-        <option value="az">A sampai Z</option>
-        <option value="new">Terbaru</option>
+        <option value="az">{strings.sortAz}</option>
+        <option value="new">{strings.sortNew}</option>
       </select>
     </form>
 
-    <p data-empty hidden class="mt-10 text-muted">Tidak ada komponen yang cocok.</p>
+    <p data-empty hidden class="mt-10 text-muted">{strings.empty}</p>
     <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-grid>
       {
         items.map((item) => {
@@ -50,7 +55,7 @@ const control =
               data-search={[item.name, item.title, item.description, ...item.tags].join(" ").toLowerCase()}
             >
               <a
-                href={`/components/${item.name}`}
+                href={localePath(locale, `/components/${item.name}`)}
                 class="group block overflow-hidden rounded-xl border border-line bg-surface transition-colors duration-150 ease-out hover:border-faint"
               >
                 <div class="aspect-[16/10] overflow-hidden border-b border-line bg-canvas">
@@ -66,8 +71,8 @@ const control =
                 <div class="flex items-baseline justify-between gap-3 px-4 py-3.5">
                   <h2 class="font-medium text-ink">{item.title}</h2>
                   <p class="text-sm text-muted">
-                    {label && <span class="mr-2 text-primary">{label === "baru" ? "Baru" : "Diperbarui"}</span>}
-                    {CATEGORY_LABELS[item.category]}
+                    {label && <span class="mr-2 text-primary">{label === "new" ? t(locale).sidebar.fresh : t(locale).sidebar.updated}</span>}
+                    {categoryLabel(item.category, locale)}
                   </p>
                 </div>
               </a>
@@ -80,7 +85,7 @@ const control =
 </Base>
 
 <script>
-  import { onPageLoad } from "../../scripts/lifecycle";
+  import { onPageLoad } from "../../../scripts/lifecycle";
 
   function apply(form: HTMLFormElement) {
     const grid = document.querySelector<HTMLElement>("[data-grid]");

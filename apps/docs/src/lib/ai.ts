@@ -1,5 +1,7 @@
 import type { Framework, RegistryItem } from "@markasui/registry/schema";
 import { FRAMEWORK_LABELS } from "./frameworks";
+import { localePath, type Locale } from "./i18n";
+import { categoryLabel, localized } from "./registry";
 
 export const FRAMEWORK_FENCE: Record<Framework, string> = {
   blade: "blade",
@@ -7,65 +9,131 @@ export const FRAMEWORK_FENCE: Record<Framework, string> = {
   vue: "vue",
 };
 
-/** Bagian usage.md per framework ("## Blade", "## React", "## Vue") plus catatan umum. */
+/** Bagian usage.md per framework ("## Blade", "## React", "## Vue") plus catatan ("## Notes" / "## Catatan"). */
 export function splitUsage(usage: string): Record<Framework | "notes", string> {
   const sections: Record<string, string> = {};
   for (const block of usage.split(/^## /m).filter(Boolean)) {
     const newline = block.indexOf("\n");
-    const heading = block.slice(0, newline).trim().toLowerCase();
-    sections[heading] = block.slice(newline + 1).trim();
+    sections[block.slice(0, newline).trim().toLowerCase()] = block
+      .slice(newline + 1)
+      .trim();
   }
   return {
     blade: sections.blade ?? "",
     react: sections.react ?? "",
     vue: sections.vue ?? "",
-    notes: sections.catatan ?? "",
+    notes: sections.notes ?? sections.catatan ?? "",
   };
 }
 
-/** Template Copy Prompt dari PRD bagian 9. */
+const PROMPT = {
+  en: {
+    intro: (title: string, framework: string) =>
+      `Add the ${title} component from MarkasUI to my ${framework} project.`,
+    rules: "Rules:",
+    save: (target: string) => `Save the file at ${target}.`,
+    css: (url: string) =>
+      `Make sure markas.css is imported. If not, follow ${url}.`,
+    keep: "Do not change the core Tailwind classes or the color token names.",
+    deps: (deps: string) => `Install the dependency: ${deps}.`,
+    code: "Component code:",
+    usage: "Usage:",
+  },
+  id: {
+    intro: (title: string, framework: string) =>
+      `Tambahkan komponen ${title} dari MarkasUI ke project ${framework} saya.`,
+    rules: "Aturan:",
+    save: (target: string) => `Simpan file di ${target}.`,
+    css: (url: string) =>
+      `Pastikan markas.css sudah di-import. Kalau belum, ikuti ${url}.`,
+    keep: "Jangan ubah class Tailwind inti dan nama token warna.",
+    deps: (deps: string) => `Pastikan dependensi terpasang: ${deps}.`,
+    code: "Kode komponen:",
+    usage: "Contoh pemakaian:",
+  },
+} satisfies Record<Locale, unknown>;
+
+/** Template Copy prompt dari PRD bagian 9, dalam bahasa halaman. */
 export function buildPrompt(
   item: RegistryItem,
   framework: Framework,
   siteUrl: string,
+  locale: Locale,
 ): string {
+  const strings = PROMPT[locale];
+  const text = localized(item, locale);
   const file = item.frameworks[framework];
-  const usage = splitUsage(item.usage);
-  const rules = item.ai.rules.map((rule) => `- ${rule}`).join("\n");
-  const deps = file.deps.length
-    ? `\n- Pastikan dependensi terpasang: ${file.deps.join(", ")}.`
-    : "";
+  const rules = [
+    strings.save(file.target),
+    strings.css(
+      new URL(localePath(locale, "/docs/installation"), siteUrl).toString(),
+    ),
+    strings.keep,
+    ...(file.deps.length ? [strings.deps(file.deps.join(", "))] : []),
+    ...text.ai.rules,
+  ];
+  return `${strings.intro(item.title, FRAMEWORK_LABELS[framework])}
 
-  return `Tambahkan komponen ${item.title} dari MarkasUI ke project ${FRAMEWORK_LABELS[framework]} saya.
+${strings.rules}
+${rules.map((rule) => `- ${rule}`).join("\n")}
 
-Aturan:
-- Simpan file di ${file.target}.
-- Pastikan markas.css sudah di-import. Kalau belum, ikuti ${new URL("/docs/installation", siteUrl)}.
-- Jangan ubah class Tailwind inti dan nama token warna.${deps}
-${rules}
-
-Kode komponen:
+${strings.code}
 \`\`\`${FRAMEWORK_FENCE[framework]}
 ${file.code.trim()}
 \`\`\`
 
-Contoh pemakaian:
-${usage[framework]}
+${strings.usage}
+${splitUsage(text.usage)[framework]}
 `;
 }
 
+const MARKDOWN = {
+  en: {
+    category: "Category",
+    status: "Status",
+    whenToUse: "When to use",
+    code: "Code",
+    saveAt: (target: string) => `Save at \`${target}\`.`,
+    deps: (deps: string) => `Dependencies: ${deps}.`,
+    noDeps: "No extra dependencies.",
+    props: "Props",
+    table: "| Name | Type | Default | Description |",
+    accessibility: "Accessibility",
+    notes: "Notes",
+  },
+  id: {
+    category: "Kategori",
+    status: "Status",
+    whenToUse: "Kapan dipakai",
+    code: "Kode",
+    saveAt: (target: string) => `Simpan di \`${target}\`.`,
+    deps: (deps: string) => `Dependensi: ${deps}.`,
+    noDeps: "Tanpa dependensi tambahan.",
+    props: "Props",
+    table: "| Nama | Tipe | Default | Keterangan |",
+    accessibility: "Aksesibilitas",
+    notes: "Catatan",
+  },
+} satisfies Record<Locale, unknown>;
+
 /** Versi Markdown halaman komponen (/components/[name].md dan llms-full.txt). */
-export function componentMarkdown(item: RegistryItem, siteUrl: string): string {
-  const usage = splitUsage(item.usage);
+export function componentMarkdown(
+  item: RegistryItem,
+  siteUrl: string,
+  locale: Locale,
+): string {
+  const strings = MARKDOWN[locale];
+  const text = localized(item, locale);
+  const usage = splitUsage(text.usage);
   const frameworks = (["blade", "react", "vue"] as const)
     .map((framework) => {
       const file = item.frameworks[framework];
       const deps = file.deps.length
-        ? `Dependensi: ${file.deps.join(", ")}.`
-        : "Tanpa dependensi tambahan.";
+        ? strings.deps(file.deps.join(", "))
+        : strings.noDeps;
       return `### ${FRAMEWORK_LABELS[framework]}
 
-Simpan di \`${file.target}\`. ${deps}
+${strings.saveAt(file.target)} ${deps}
 
 \`\`\`${FRAMEWORK_FENCE[framework]}
 ${file.code.trim()}
@@ -75,38 +143,38 @@ ${usage[framework]}`;
     })
     .join("\n\n");
 
-  const props = item.props.map(
+  const props = text.props.map(
     (prop) =>
       `| \`${prop.name}\` | \`${prop.type.replaceAll("|", "\\|")}\` | ${prop.default} | ${prop.description} |`,
   );
 
   return `# ${item.title}
 
-${item.description}
+${text.description}
 
-- Kategori: ${item.category}
-- Status: ${item.status}
+- ${strings.category}: ${categoryLabel(item.category, locale)}
+- ${strings.status}: ${item.status}
 - Registry: ${new URL(`/r/${item.name}.json`, siteUrl)}
 - CLI: \`npx markasui@latest add ${item.name}\`
 
-## Kapan dipakai
+## ${strings.whenToUse}
 
-${item.ai.whenToUse}
+${text.ai.whenToUse}
 
-${item.ai.rules.map((rule) => `- ${rule}`).join("\n")}
+${text.ai.rules.map((rule) => `- ${rule}`).join("\n")}
 
-## Kode
+## ${strings.code}
 
 ${frameworks}
 
-## Props
+## ${strings.props}
 
-| Nama | Tipe | Default | Keterangan |
+${strings.table}
 | --- | --- | --- | --- |
 ${props.join("\n")}
 
-## Aksesibilitas
+## ${strings.accessibility}
 
-${item.a11y.map((note) => `- ${note}`).join("\n")}
-${usage.notes ? `\n## Catatan\n\n${usage.notes}\n` : ""}`;
+${text.a11y.map((note) => `- ${note}`).join("\n")}
+${usage.notes ? `\n## ${strings.notes}\n\n${usage.notes}\n` : ""}`;
 }

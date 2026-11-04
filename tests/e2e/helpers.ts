@@ -33,7 +33,7 @@ export async function openFixture(
 }
 
 export async function openModal(page: Page) {
-  await page.getByRole("button", { name: "Hapus proyek" }).click();
+  await page.getByRole("button", { name: "Delete project" }).click();
   await page.locator("dialog[open]").waitFor();
 }
 

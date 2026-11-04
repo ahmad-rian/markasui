@@ -13,7 +13,7 @@ for (const framework of frameworks) {
       await expect(photo).toBeVisible();
 
       await photo.evaluate((img: HTMLImageElement) => {
-        img.src = "/tidak-ada/avatar-rusak.png";
+        img.src = "/missing/broken-avatar.png";
       });
 
       const fallback = page.getByRole("img", { name: "Dewi Lestari" });
@@ -30,7 +30,7 @@ for (const framework of frameworks) {
         .locator("#fixture")
         .evaluate((el, width) => (el.style.width = width), NARROW_WIDTH);
       const region = page.getByRole("region", {
-        name: "Daftar pesanan terbaru",
+        name: "Recent orders",
       });
 
       await page.keyboard.press("Tab");

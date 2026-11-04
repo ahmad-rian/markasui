@@ -1,13 +1,13 @@
 ## Blade
 
 ```blade
-<x-markas.tabs :items="['akun' => 'Akun', 'sandi' => 'Kata sandi']" default-value="akun">
-    <x-slot:akun>Ubah nama dan email akun Anda.</x-slot:akun>
-    <x-slot:sandi>Ganti kata sandi secara berkala.</x-slot:sandi>
+<x-markas.tabs :items="['account' => 'Account', 'password' => 'Password']" default-value="account">
+    <x-slot:account>Change your account name and email.</x-slot:account>
+    <x-slot:password>Change your password regularly.</x-slot:password>
 </x-markas.tabs>
 ```
 
-Butuh Alpine.js.
+Needs Alpine.js.
 
 ## React
 
@@ -15,13 +15,17 @@ Butuh Alpine.js.
 import { Tabs } from "@/components/markas/Tabs";
 
 <Tabs
-  defaultValue="akun"
+  defaultValue="account"
   items={[
-    { value: "akun", label: "Akun", content: "Ubah nama dan email akun Anda." },
     {
-      value: "sandi",
-      label: "Kata sandi",
-      content: "Ganti kata sandi secara berkala.",
+      value: "account",
+      label: "Account",
+      content: "Change your account name and email.",
+    },
+    {
+      value: "password",
+      label: "Password",
+      content: "Change your password regularly.",
     },
   ]}
 />;
@@ -32,18 +36,19 @@ import { Tabs } from "@/components/markas/Tabs";
 ```vue
 <template>
   <Tabs
-    default-value="akun"
+    default-value="account"
     :items="[
-      { value: 'akun', label: 'Akun' },
-      { value: 'sandi', label: 'Kata sandi' },
+      { value: 'account', label: 'Account' },
+      { value: 'password', label: 'Password' },
     ]"
   >
-    <template #akun>Ubah nama dan email akun Anda.</template>
-    <template #sandi>Ganti kata sandi secara berkala.</template>
+    <template #account>Change your account name and email.</template>
+    <template #password>Change your password regularly.</template>
   </Tabs>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Key tab dipakai sebagai id dan nama slot, jadi pakai huruf kecil, angka, atau underscore saja.
+- Tab keys become ids and slot names, so use only lowercase letters, digits, or underscores.
+- Tabs has no built-in text. Tab labels come from `items`, so pass them in your site's language.

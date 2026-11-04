@@ -3,53 +3,55 @@ import { frameworks, openFixture } from "./helpers";
 
 for (const framework of frameworks) {
   test.describe(framework, () => {
-    test("checkbox: Spasi mencentang dan melepas centang", async ({ page }) => {
+    test("checkbox: Space checks and unchecks", async ({ page }) => {
       await openFixture(page, framework, "checkbox");
-      const syarat = page.getByRole("checkbox", {
-        name: "Saya setuju dengan syarat layanan",
+      const terms = page.getByRole("checkbox", {
+        name: "I agree to the terms of service",
       });
-      const kabar = page.getByRole("checkbox", {
-        name: "Kirimi saya kabar terbaru",
+      const updates = page.getByRole("checkbox", {
+        name: "Send me product updates",
       });
 
       await page.keyboard.press("Tab");
-      await expect(syarat).toBeFocused();
-      await expect(syarat).toBeChecked();
+      await expect(terms).toBeFocused();
+      await expect(terms).toBeChecked();
       await page.keyboard.press("Space");
-      await expect(syarat).not.toBeChecked();
+      await expect(terms).not.toBeChecked();
 
       await page.keyboard.press("Tab");
-      await expect(kabar).toBeFocused();
+      await expect(updates).toBeFocused();
       await page.keyboard.press("Space");
-      await expect(kabar).toBeChecked();
+      await expect(updates).toBeChecked();
 
       await page.keyboard.press("Tab");
       await expect(
-        page.getByRole("checkbox", { name: "Arsipkan otomatis" }),
+        page.getByRole("checkbox", { name: "Archive automatically" }),
       ).not.toBeFocused();
     });
 
-    test("switch: Spasi mengubah status", async ({ page }) => {
+    test("switch: Space toggles the state", async ({ page }) => {
       await openFixture(page, framework, "switch");
-      const notifikasi = page.getByRole("switch", { name: "Notifikasi email" });
-      const hemat = page.getByRole("switch", { name: "Mode hemat data" });
+      const notifications = page.getByRole("switch", {
+        name: "Email notifications",
+      });
+      const saver = page.getByRole("switch", { name: "Data saver mode" });
 
       await page.keyboard.press("Tab");
-      await expect(notifikasi).toBeFocused();
-      await expect(notifikasi).toBeChecked();
+      await expect(notifications).toBeFocused();
+      await expect(notifications).toBeChecked();
       await page.keyboard.press("Space");
-      await expect(notifikasi).not.toBeChecked();
+      await expect(notifications).not.toBeChecked();
 
       await page.keyboard.press("Tab");
-      await expect(hemat).toBeFocused();
+      await expect(saver).toBeFocused();
       await page.keyboard.press("Space");
-      await expect(hemat).toBeChecked();
+      await expect(saver).toBeChecked();
       await expect(
-        page.getByRole("switch", { name: "Fitur beta" }),
+        page.getByRole("switch", { name: "Beta features" }),
       ).toBeDisabled();
     });
 
-    test("radio-group: Tab ke opsi terpilih, panah memindah pilihan", async ({
+    test("radio-group: Tab goes to the selected option, arrows move the selection", async ({
       page,
     }) => {
       await openFixture(page, framework, "radio-group");
@@ -60,18 +62,18 @@ for (const framework of frameworks) {
       await expect(radio("Pro")).toBeChecked();
 
       await page.keyboard.press("ArrowDown");
-      await expect(radio("Bisnis")).toBeFocused();
-      await expect(radio("Bisnis")).toBeChecked();
+      await expect(radio("Business")).toBeFocused();
+      await expect(radio("Business")).toBeChecked();
       await expect(radio("Pro")).not.toBeChecked();
 
       await page.keyboard.press("ArrowUp");
       await page.keyboard.press("ArrowUp");
-      await expect(radio("Gratis")).toBeChecked();
+      await expect(radio("Free")).toBeChecked();
 
       await page.keyboard.press("Tab");
-      await expect(radio("Bulanan")).toBeFocused();
+      await expect(radio("Monthly")).toBeFocused();
       await page.keyboard.press("ArrowRight");
-      await expect(radio("Tahunan")).toBeChecked();
+      await expect(radio("Yearly")).toBeChecked();
     });
   });
 }

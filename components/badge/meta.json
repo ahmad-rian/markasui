@@ -1,35 +1,65 @@
 {
   "name": "badge",
   "title": "Badge",
-  "description": "Label status kecil berbentuk pil dengan titik warna untuk neutral, primary, success, warning, dan danger.",
+  "description": "Small pill-shaped status label with a colored dot for neutral, primary, success, warning, and danger.",
   "category": "feedback",
   "tags": ["badge", "label", "status", "tag", "pill"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "badge.blade.php", "deps": [] },
-    "react": { "file": "Badge.tsx", "deps": [] },
-    "vue": { "file": "Badge.vue", "deps": [] }
+    "blade": {
+      "file": "badge.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Badge.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Badge.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "variant",
       "type": "'neutral' | 'primary' | 'success' | 'warning' | 'danger'",
       "default": "neutral",
-      "description": "Warna latar, border, dan titik status."
+      "description": "Background, border, and status dot color."
     }
   ],
   "a11y": [
-    "Elemen span biasa tanpa role, teks badge dibaca apa adanya.",
-    "Titik warna hanya hiasan (aria-hidden), jadi status wajib tertulis di teks.",
-    "Teks success, warning, dan danger memakai ink agar kontras AA di mode terang dan gelap."
+    "A plain span without a role. The badge text is read as is.",
+    "The colored dot is decorative (aria-hidden), so the status must be written in the text.",
+    "Success, warning, and danger text uses ink so contrast meets AA in light and dark mode."
   ],
   "ai": {
-    "whenToUse": "Menandai status atau kategori singkat di tabel, kartu, atau judul.",
+    "whenToUse": "Marking a short status or category in tables, cards, or headings.",
     "rules": [
-      "Teks badge satu atau dua kata",
-      "Jangan menjadikan badge sebagai tombol atau link",
-      "Jangan mengandalkan warna saja untuk menyampaikan status"
+      "Keep badge text to one or two words",
+      "Do not turn a badge into a button or link",
+      "Do not rely on color alone to convey status"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Label status kecil berbentuk pil dengan titik warna untuk neutral, primary, success, warning, dan danger.",
+      "props": {
+        "variant": "Warna latar, border, dan titik status."
+      },
+      "a11y": [
+        "Elemen span biasa tanpa role, teks badge dibaca apa adanya.",
+        "Titik warna hanya hiasan (aria-hidden), jadi status wajib tertulis di teks.",
+        "Teks success, warning, dan danger memakai ink agar kontras AA di mode terang dan gelap."
+      ],
+      "ai": {
+        "whenToUse": "Menandai status atau kategori singkat di tabel, kartu, atau judul.",
+        "rules": [
+          "Teks badge satu atau dua kata",
+          "Jangan menjadikan badge sebagai tombol atau link",
+          "Jangan mengandalkan warna saja untuk menyampaikan status"
+        ]
+      }
+    }
+  }
 }

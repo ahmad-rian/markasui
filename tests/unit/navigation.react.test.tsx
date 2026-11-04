@@ -7,9 +7,9 @@ import { Navbar } from "../../components/navbar/Navbar";
 import { Pagination, pageRange } from "../../components/pagination/Pagination";
 
 const accordionItems = [
-  { value: "a", title: "Satu", content: "Isi satu" },
-  { value: "b", title: "Dua", content: "Isi dua" },
-  { value: "c", title: "Tiga", content: "Isi tiga" },
+  { value: "a", title: "One", content: "Content one" },
+  { value: "b", title: "Two", content: "Content two" },
+  { value: "c", title: "Three", content: "Content three" },
 ];
 
 describe("React Accordion", () => {
@@ -52,34 +52,34 @@ describe("React Accordion", () => {
   it("summary berisi judul dan ikon tersembunyi dari pembaca layar", () => {
     const { container } = render(<Accordion items={accordionItems} />);
     const summary = container.querySelector("summary")!;
-    expect(summary).toHaveTextContent("Satu");
+    expect(summary).toHaveTextContent("One");
     expect(summary.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
-    expect(screen.getByText("Isi satu")).toBeInTheDocument();
+    expect(screen.getByText("Content one")).toBeInTheDocument();
   });
 });
 
 describe("React Breadcrumb", () => {
   const items = [
-    { label: "Beranda", href: "/" },
-    { label: "Kategori" },
-    { label: "Produk", href: "/produk" },
+    { label: "Home", href: "/" },
+    { label: "Category" },
+    { label: "Product", href: "/product" },
   ];
 
   it("nav berlabel, item terakhir aria-current tanpa link", () => {
     render(<Breadcrumb items={items} className="mb-2" />);
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     expect(nav.className).toBe("mb-2");
-    expect(screen.getByRole("link", { name: "Beranda" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
       "href",
       "/",
     );
-    expect(screen.queryByRole("link", { name: "Produk" })).toBeNull();
-    expect(screen.getByText("Produk")).toHaveAttribute("aria-current", "page");
+    expect(screen.queryByRole("link", { name: "Product" })).toBeNull();
+    expect(screen.getByText("Product")).toHaveAttribute("aria-current", "page");
   });
 
   it("item tengah tanpa href dirender sebagai teks, pemisah aria-hidden", () => {
     const { container } = render(<Breadcrumb items={items} />);
-    expect(screen.queryByRole("link", { name: "Kategori" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Category" })).toBeNull();
     const separators = container.querySelectorAll('svg[aria-hidden="true"]');
     expect(separators).toHaveLength(2);
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
@@ -111,7 +111,7 @@ describe("React Pagination", () => {
     render(
       <Pagination page={5} total={10} href="/p/{page}" className="mt-6" />,
     );
-    const nav = screen.getByRole("navigation", { name: "Navigasi halaman" });
+    const nav = screen.getByRole("navigation", { name: "Pagination" });
     expect(nav.className).toBe("@container mt-6");
     const active = screen.getByRole("link", { name: "5" });
     expect(active).toHaveAttribute("aria-current", "page");
@@ -119,19 +119,19 @@ describe("React Pagination", () => {
     expect(screen.getByRole("link", { name: "4" })).not.toHaveAttribute(
       "aria-current",
     );
-    expect(screen.getByRole("link", { name: "Sebelumnya" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Previous" })).toHaveAttribute(
       "href",
       "/p/4",
     );
-    const next = screen.getByRole("link", { name: "Berikutnya" });
+    const next = screen.getByRole("link", { name: "Next" });
     expect(next).toHaveAttribute("href", "/p/6");
     expect(next).toHaveAttribute("rel", "next");
   });
 
   it("Sebelumnya nonaktif di halaman pertama, default href ?page=", () => {
     render(<Pagination page={1} total={3} />);
-    expect(screen.queryByRole("link", { name: "Sebelumnya" })).toBeNull();
-    expect(screen.getByText("Sebelumnya").parentElement).toHaveAttribute(
+    expect(screen.queryByRole("link", { name: "Previous" })).toBeNull();
+    expect(screen.getByText("Previous").parentElement).toHaveAttribute(
       "aria-disabled",
       "true",
     );
@@ -143,8 +143,8 @@ describe("React Pagination", () => {
 
   it("Berikutnya nonaktif di halaman terakhir", () => {
     render(<Pagination page={3} total={3} />);
-    expect(screen.queryByRole("link", { name: "Berikutnya" })).toBeNull();
-    expect(screen.getByText("Berikutnya").parentElement).toHaveAttribute(
+    expect(screen.queryByRole("link", { name: "Next" })).toBeNull();
+    expect(screen.getByText("Next").parentElement).toHaveAttribute(
       "aria-disabled",
       "true",
     );
@@ -153,7 +153,7 @@ describe("React Pagination", () => {
 
 describe("React Navbar", () => {
   const links = [
-    { label: "Beranda", href: "/", active: true },
+    { label: "Home", href: "/", active: true },
     { label: "Blog", href: "/blog" },
   ];
 
@@ -179,11 +179,11 @@ describe("React Navbar", () => {
     );
     const current = document.querySelectorAll('a[aria-current="page"]');
     expect(current).toHaveLength(2);
-    expect(current[0]).toHaveTextContent("Beranda");
+    expect(current[0]).toHaveTextContent("Home");
   });
 
   it("klik membuka panel, Escape menutup dan mengembalikan fokus", async () => {
-    render(<Navbar links={links} actions={<a href="/masuk">Masuk</a>} />);
+    render(<Navbar links={links} actions={<a href="/sign-in">Sign in</a>} />);
     const button = screen.getByRole("button", { name: "Menu" });
     await userEvent.click(button);
     expect(button).toHaveAttribute("aria-expanded", "true");
@@ -199,7 +199,7 @@ describe("React Navbar", () => {
     expect(button).toHaveAttribute("aria-expanded", "false");
     expect(panel).toHaveAttribute("data-state", "closed");
     expect(button).toHaveFocus();
-    expect(screen.getByRole("link", { name: "Masuk" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sign in" })).toBeInTheDocument();
   });
 });
 
@@ -214,7 +214,7 @@ describe("React href aman", () => {
   it("Breadcrumb mengganti skema berbahaya dengan #", () => {
     const items = [
       ...hrefs.map((href, index) => ({ label: `Item ${index}`, href })),
-      { label: "Akhir" },
+      { label: "End" },
     ];
     const { container } = render(<Breadcrumb items={items} />);
     expect(hrefsOf(container)).toEqual(expected);
@@ -245,5 +245,77 @@ describe("React href aman", () => {
       `${href}?p=2`,
       `${href}?p=2`,
     ]);
+  });
+});
+
+describe("React label bawaan", () => {
+  it("default Inggris di Breadcrumb, Pagination, dan Navbar", () => {
+    render(
+      <>
+        <Breadcrumb items={[{ label: "Home" }]} />
+        <Pagination page={1} total={2} />
+        <Navbar links={[{ label: "Home", href: "/" }]} />
+      </>,
+    );
+    for (const name of ["Breadcrumb", "Pagination", "Main"]) {
+      expect(screen.getByRole("navigation", { name })).toBeInTheDocument();
+    }
+    expect(screen.getByText("Previous")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Menu" })).toBeInTheDocument();
+    expect(
+      document.querySelector('nav[aria-label="Main mobile"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("navLabel menimpa label Breadcrumb", () => {
+    render(<Breadcrumb items={[{ label: "Beranda" }]} navLabel="Jejak" />);
+    expect(
+      screen.getByRole("navigation", { name: "Jejak" }),
+    ).toBeInTheDocument();
+  });
+
+  it("navLabel, previousLabel, dan nextLabel menimpa label Pagination", () => {
+    render(
+      <Pagination
+        page={2}
+        total={3}
+        navLabel="Navigasi halaman"
+        previousLabel="Sebelumnya"
+        nextLabel="Berikutnya"
+      />,
+    );
+    expect(
+      screen.getByRole("navigation", { name: "Navigasi halaman" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sebelumnya" })).toHaveAttribute(
+      "rel",
+      "prev",
+    );
+    expect(screen.getByRole("link", { name: "Berikutnya" })).toHaveAttribute(
+      "rel",
+      "next",
+    );
+    expect(screen.queryByText("Previous")).toBeNull();
+  });
+
+  it("menuLabel, navLabel, dan mobileNavLabel menimpa label Navbar", () => {
+    render(
+      <Navbar
+        links={[{ label: "Beranda", href: "/" }]}
+        menuLabel="Buka menu"
+        navLabel="Utama"
+        mobileNavLabel="Utama seluler"
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Buka menu" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("navigation", { name: "Utama" }),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('nav[aria-label="Utama seluler"]'),
+    ).toBeInTheDocument();
   });
 });

@@ -31,12 +31,13 @@ for (const framework of frameworks) {
       await expect(toggle).toHaveAttribute("aria-expanded", "true");
       await expect(panel).toBeVisible();
       await expect(panel).toHaveAttribute("data-state", "open");
-      await expect(
-        panel.getByRole("link", { name: "Beranda" }),
-      ).toHaveAttribute("aria-current", "page");
+      await expect(panel.getByRole("link", { name: "Home" })).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
 
       await page.keyboard.press("Tab");
-      await expect(panel.getByRole("link", { name: "Beranda" })).toBeFocused();
+      await expect(panel.getByRole("link", { name: "Home" })).toBeFocused();
       await page.keyboard.press("Escape");
       await expect(panel).toBeHidden();
       await expect(toggle).toHaveAttribute("aria-expanded", "false");
@@ -59,13 +60,13 @@ for (const framework of frameworks) {
       await expect(details.nth(0)).toHaveAttribute("open", "");
       await expect(details.nth(1)).not.toHaveAttribute("open");
 
-      await summary("Metode pembayaran").focus();
+      await summary("Which payment methods").focus();
       await page.keyboard.press("Enter");
       await expect(details.nth(1)).toHaveAttribute("open", "");
       await expect(details.nth(0)).not.toHaveAttribute("open");
-      await expect(page.getByText("Transfer bank")).toBeVisible();
+      await expect(page.getByText("Bank transfer")).toBeVisible();
 
-      await summary("Bagaimana cara retur").focus();
+      await summary("How do I return").focus();
       await page.keyboard.press("Space");
       await expect(details.nth(2)).toHaveAttribute("open", "");
       await expect(details.nth(1)).not.toHaveAttribute("open");
@@ -78,27 +79,29 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "pagination");
-      const nav = page.getByRole("navigation", { name: "Navigasi halaman" });
+      const nav = page.getByRole("navigation", { name: "Pagination" });
 
       await expect(nav.getByRole("link", { name: "5" })).toHaveAttribute(
         "aria-current",
         "page",
       );
       await expect(nav.locator("[aria-current]")).toHaveCount(1);
-      await expect(
-        nav.getByRole("link", { name: "Sebelumnya" }),
-      ).toHaveAttribute("href", "?halaman=4");
-      await expect(
-        nav.getByRole("link", { name: "Berikutnya" }),
-      ).toHaveAttribute("href", "?halaman=6");
+      await expect(nav.getByRole("link", { name: "Previous" })).toHaveAttribute(
+        "href",
+        "?p=4",
+      );
+      await expect(nav.getByRole("link", { name: "Next" })).toHaveAttribute(
+        "href",
+        "?p=6",
+      );
       await expect(nav.getByRole("link")).toHaveText([
-        "Sebelumnya",
+        "Previous",
         "1",
         "4",
         "5",
         "6",
         "10",
-        "Berikutnya",
+        "Next",
       ]);
     });
 
@@ -106,7 +109,7 @@ for (const framework of frameworks) {
       await openFixture(page, framework, "breadcrumb");
       const nav = page.getByRole("navigation", { name: "Breadcrumb" });
 
-      await expect(nav.getByRole("link")).toHaveText(["Beranda", "Komponen"]);
+      await expect(nav.getByRole("link")).toHaveText(["Home", "Components"]);
       await expect(nav.getByRole("listitem")).toHaveCount(3);
       const current = nav.locator('[aria-current="page"]');
       await expect(current).toHaveText("Breadcrumb");
@@ -139,7 +142,7 @@ for (const theme of themes) {
       "accordion",
       theme,
       async (p) => {
-        await p.locator("summary", { hasText: "Bagaimana cara retur" }).click();
+        await p.locator("summary", { hasText: "How do I return" }).click();
         await p.locator("details").nth(2).and(p.locator("[open]")).waitFor();
         await p.mouse.move(0, 0);
         return screenshot(p);

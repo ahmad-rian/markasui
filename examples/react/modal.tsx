@@ -4,20 +4,20 @@ import { Modal } from "../../components/modal/Modal";
 export default function ModalFixture() {
   return (
     <Modal
-      title="Hapus proyek?"
-      trigger={<Button variant="danger">Hapus proyek</Button>}
+      title="Delete project?"
+      trigger={<Button variant="danger">Delete project</Button>}
       footer={
         <>
-          <Button variant="secondary" type="submit" value="batal">
-            Batal
+          <Button variant="secondary" type="submit" value="cancel">
+            Cancel
           </Button>
-          <Button variant="danger" type="submit" value="hapus">
-            Ya, hapus
+          <Button variant="danger" type="submit" value="delete">
+            Delete
           </Button>
         </>
       }
     >
-      Proyek dan semua datanya akan dihapus permanen.
+      The project and all of its data will be deleted permanently.
     </Modal>
   );
 }

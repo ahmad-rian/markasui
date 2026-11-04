@@ -39,8 +39,17 @@ const props = withDefaults(
     total: number;
     href?: string;
     siblings?: number;
+    navLabel?: string;
+    previousLabel?: string;
+    nextLabel?: string;
   }>(),
-  { href: "?page={page}", siblings: 1 },
+  {
+    href: "?page={page}",
+    siblings: 1,
+    navLabel: "Pagination",
+    previousLabel: "Previous",
+    nextLabel: "Next",
+  },
 );
 
 const root = "@container";
@@ -74,7 +83,7 @@ const hrefFor = (target: number) =>
 </script>
 
 <template>
-  <nav aria-label="Navigasi halaman" :class="root">
+  <nav :aria-label="props.navLabel" :class="root">
     <ul :class="list">
       <li>
         <a
@@ -95,7 +104,7 @@ const hrefFor = (target: number) =>
           >
             <path d="m15 18-6-6 6-6" />
           </svg>
-          <span :class="label">Sebelumnya</span>
+          <span :class="label">{{ props.previousLabel }}</span>
         </a>
         <span v-else aria-disabled="true" :class="link">
           <svg
@@ -110,7 +119,7 @@ const hrefFor = (target: number) =>
           >
             <path d="m15 18-6-6 6-6" />
           </svg>
-          <span :class="label">Sebelumnya</span>
+          <span :class="label">{{ props.previousLabel }}</span>
         </span>
       </li>
       <li v-for="(item, index) in pages" :key="index">
@@ -133,7 +142,7 @@ const hrefFor = (target: number) =>
           rel="next"
           :class="link"
         >
-          <span :class="label">Berikutnya</span>
+          <span :class="label">{{ props.nextLabel }}</span>
           <svg
             :class="icon"
             viewBox="0 0 24 24"
@@ -148,7 +157,7 @@ const hrefFor = (target: number) =>
           </svg>
         </a>
         <span v-else aria-disabled="true" :class="link">
-          <span :class="label">Berikutnya</span>
+          <span :class="label">{{ props.nextLabel }}</span>
           <svg
             :class="icon"
             viewBox="0 0 24 24"

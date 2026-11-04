@@ -1,22 +1,22 @@
 <div class="grid gap-6">
     <x-markas.radio-group
-        name="paket"
-        label="Paket langganan"
+        name="plan"
+        label="Subscription plan"
         value="pro"
         :options="[
-            ['value' => 'gratis', 'label' => 'Gratis', 'description' => 'Untuk proyek pribadi.'],
-            ['value' => 'pro', 'label' => 'Pro', 'description' => 'Untuk tim kecil hingga 10 orang.'],
-            ['value' => 'bisnis', 'label' => 'Bisnis', 'description' => 'Untuk organisasi dengan kebutuhan khusus.'],
+            ['value' => 'free', 'label' => 'Free', 'description' => 'For personal projects.'],
+            ['value' => 'pro', 'label' => 'Pro', 'description' => 'For small teams of up to 10 people.'],
+            ['value' => 'business', 'label' => 'Business', 'description' => 'For organizations with custom needs.'],
         ]"
     />
     <x-markas.radio-group
-        name="tagihan"
-        label="Siklus tagihan"
-        value="bulanan"
+        name="billing"
+        label="Billing cycle"
+        value="monthly"
         orientation="horizontal"
         :options="[
-            ['value' => 'bulanan', 'label' => 'Bulanan'],
-            ['value' => 'tahunan', 'label' => 'Tahunan'],
+            ['value' => 'monthly', 'label' => 'Monthly'],
+            ['value' => 'yearly', 'label' => 'Yearly'],
         ]"
     />
 </div>

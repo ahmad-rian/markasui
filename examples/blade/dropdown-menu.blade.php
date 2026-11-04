@@ -1,10 +1,10 @@
 <x-markas.dropdown-menu
-    label="Aksi"
+    label="Actions"
     :items="[
-        ['label' => 'Ubah', 'value' => 'ubah'],
-        ['label' => 'Duplikat', 'value' => 'duplikat'],
-        ['label' => 'Arsipkan', 'value' => 'arsipkan', 'disabled' => true],
+        ['label' => 'Edit', 'value' => 'edit'],
+        ['label' => 'Duplicate', 'value' => 'duplicate'],
+        ['label' => 'Archive', 'value' => 'archive', 'disabled' => true],
         ['separator' => true],
-        ['label' => 'Hapus', 'value' => 'hapus', 'danger' => true],
+        ['label' => 'Delete', 'value' => 'delete', 'danger' => true],
     ]"
 />

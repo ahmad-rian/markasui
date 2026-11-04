@@ -2,13 +2,15 @@
 import { FRAMEWORKS } from "@markasui/registry/schema";
 import FrameworkIcon from "./FrameworkIcon.astro";
 import { FRAMEWORK_LABELS } from "../lib/frameworks";
+import { getLocale, t } from "../lib/i18n";
 
 interface Props {
   /** compact: hanya untuk header panel kode, tanpa latar segmen. */
   variant?: "segmented" | "compact";
   label?: string;
 }
-const { variant = "segmented", label = "Framework" } = Astro.props;
+const strings = t(getLocale(Astro.url)).framework;
+const { variant = "segmented", label = strings.label } = Astro.props;
 const isCompact = variant === "compact";
 ---
 

@@ -2,23 +2,23 @@
 import { ref } from "vue";
 import Textarea from "../../components/textarea/Textarea.vue";
 
-const alamat = ref("Jl. Merdeka");
+const address = ref("12 Main Street");
 </script>
 
 <template>
   <div class="grid gap-4">
     <Textarea
       name="bio"
-      label="Bio singkat"
-      placeholder="Ceritakan sedikit tentang Anda"
-      hint="Maksimal 200 karakter."
+      label="Short bio"
+      placeholder="Tell us a little about yourself"
+      hint="Up to 200 characters."
     />
     <Textarea
-      v-model="alamat"
-      name="alamat"
-      label="Alamat"
+      v-model="address"
+      name="address"
+      label="Address"
       :rows="2"
-      error="Alamat belum lengkap."
+      error="Address is incomplete."
     />
   </div>
 </template>

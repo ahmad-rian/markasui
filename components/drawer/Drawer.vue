@@ -13,8 +13,9 @@ const props = withDefaults(
     title: string;
     side?: keyof typeof sides;
     id?: string;
+    closeLabel?: string;
   }>(),
-  { side: "right", id: undefined },
+  { side: "right", id: undefined, closeLabel: "Close" },
 );
 
 const dialogClass =
@@ -59,7 +60,7 @@ function show() {
             {{ props.title }}
           </h2>
           <form method="dialog">
-            <button type="submit" :class="close" aria-label="Tutup">
+            <button type="submit" :class="close" :aria-label="props.closeLabel">
               <svg
                 class="size-4"
                 viewBox="0 0 24 24"

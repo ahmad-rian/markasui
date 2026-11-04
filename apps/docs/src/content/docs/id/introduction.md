@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DocsMarkdown.astro
 title: Pengenalan
 description: Apa itu MarkasUI dan cara memakainya di project Blade, React, atau Vue.
 ---
@@ -16,7 +15,7 @@ MarkasUI adalah library komponen UI gratis dan open source dari CV Jenderal Solu
 
 ## Cara memakai
 
-1. Pasang Tailwind CSS v4 dan `markas.css`. Ikuti [Instalasi](/docs/installation).
+1. Pasang Tailwind CSS v4 dan `markas.css`. Ikuti [Instalasi](/id/docs/installation).
 2. Pilih framework di sidebar. Pilihan ini berlaku di seluruh situs.
 3. Buka halaman komponen, lalu salin kode atau jalankan perintah CLI:
 
@@ -31,6 +30,10 @@ npx markasui@latest add button
 | Blade     | `resources/views/components/markas/` | `<x-markas.button>`  |
 | React     | `src/components/markas/`             | `import { Button }`  |
 | Vue       | `src/components/markas/`             | `import Button from` |
+
+## Bahasa
+
+Teks bawaan komponen, seperti label tombol tutup di Modal, default dalam bahasa Inggris. Setiap label bawaan adalah prop, jadi bisa diterjemahkan, misalnya `close-label="Tutup"` di Blade atau `closeLabel="Tutup"` di React dan Vue.
 
 ## Lisensi
 

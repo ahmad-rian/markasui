@@ -1,9 +1,9 @@
 ## Blade
 
 ```blade
-<x-markas.button>Simpan</x-markas.button>
-<x-markas.button variant="secondary" size="sm">Batal</x-markas.button>
-<x-markas.button variant="danger" type="submit">Hapus akun</x-markas.button>
+<x-markas.button>Save</x-markas.button>
+<x-markas.button variant="secondary" size="sm">Cancel</x-markas.button>
+<x-markas.button variant="danger" type="submit">Delete account</x-markas.button>
 ```
 
 ## React
@@ -11,9 +11,9 @@
 ```tsx
 import { Button } from "@/components/markas/Button";
 
-<Button>Simpan</Button>
-<Button variant="secondary" size="sm">Batal</Button>
-<Button variant="danger" type="submit">Hapus akun</Button>
+<Button>Save</Button>
+<Button variant="secondary" size="sm">Cancel</Button>
+<Button variant="danger" type="submit">Delete account</Button>
 ```
 
 ## Vue
@@ -24,13 +24,13 @@ import Button from "@/components/markas/Button.vue";
 </script>
 
 <template>
-  <Button>Simpan</Button>
-  <Button variant="secondary" size="sm">Batal</Button>
-  <Button variant="danger" type="submit">Hapus akun</Button>
+  <Button>Save</Button>
+  <Button variant="secondary" size="sm">Cancel</Button>
+  <Button variant="danger" type="submit">Delete account</Button>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Default `type="button"`. Isi `type="submit"` untuk tombol kirim form.
-- Class tambahan digabung di akhir. Karena tanpa `tailwind-merge`, class yang bentrok (misalnya dua warna latar) bergantung pada urutan CSS Tailwind, jadi utamakan prop `variant` dan `size`.
+- `type` defaults to `button`. Set `type="submit"` for a form submit button.
+- Extra classes are appended last. There is no `tailwind-merge`, so conflicting classes (two background colors, for example) depend on Tailwind's CSS order. Prefer the `variant` and `size` props.

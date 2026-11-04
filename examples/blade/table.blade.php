@@ -1,14 +1,14 @@
 <x-markas.table
-    caption="Daftar pesanan terbaru"
+    caption="Recent orders"
     :columns="[
-        ['key' => 'kode', 'label' => 'Pesanan'],
-        ['key' => 'pelanggan', 'label' => 'Pelanggan'],
+        ['key' => 'code', 'label' => 'Order'],
+        ['key' => 'customer', 'label' => 'Customer'],
         ['key' => 'status', 'label' => 'Status'],
         ['key' => 'total', 'label' => 'Total', 'align' => 'right'],
     ]"
     :rows="[
-        ['kode' => 'INV-1024', 'pelanggan' => 'Budi Santoso', 'status' => 'Dibayar', 'total' => 'Rp250.000'],
-        ['kode' => 'INV-1025', 'pelanggan' => 'Siti Aminah', 'status' => 'Menunggu', 'total' => 'Rp85.000'],
-        ['kode' => 'INV-1026', 'pelanggan' => 'Dewi Lestari', 'status' => 'Dikirim', 'total' => 'Rp1.200.000'],
+        ['code' => 'INV-1024', 'customer' => 'Budi Santoso', 'status' => 'Paid', 'total' => '$250.00'],
+        ['code' => 'INV-1025', 'customer' => 'Siti Aminah', 'status' => 'Pending', 'total' => '$85.00'],
+        ['code' => 'INV-1026', 'customer' => 'Dewi Lestari', 'status' => 'Shipped', 'total' => '$1,200.00'],
     ]"
 />

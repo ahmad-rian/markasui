@@ -2,13 +2,13 @@
 
 ```blade
 <x-markas.breadcrumb :items="[
-    ['label' => 'Beranda', 'href' => '/'],
-    ['label' => 'Komponen', 'href' => '/komponen'],
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Components', 'href' => '/components'],
     ['label' => 'Breadcrumb'],
 ]" />
 ```
 
-Tidak butuh Alpine.js.
+No Alpine.js needed.
 
 ## React
 
@@ -17,8 +17,8 @@ import { Breadcrumb } from "@/components/markas/Breadcrumb";
 
 <Breadcrumb
   items={[
-    { label: "Beranda", href: "/" },
-    { label: "Komponen", href: "/komponen" },
+    { label: "Home", href: "/" },
+    { label: "Components", href: "/components" },
     { label: "Breadcrumb" },
   ]}
 />;
@@ -30,14 +30,15 @@ import { Breadcrumb } from "@/components/markas/Breadcrumb";
 <template>
   <Breadcrumb
     :items="[
-      { label: 'Beranda', href: '/' },
-      { label: 'Komponen', href: '/komponen' },
+      { label: 'Home', href: '/' },
+      { label: 'Components', href: '/components' },
       { label: 'Breadcrumb' },
     ]"
   />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Item terakhir selalu dirender sebagai teks dengan `aria-current="page"`, walau diberi `href`.
+- The last item is always rendered as text with `aria-current="page"`, even when it has an `href`.
+- The nav is labelled "Breadcrumb". Translate it with `navLabel` (Blade: `nav-label`).

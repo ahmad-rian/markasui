@@ -3,6 +3,7 @@ import type { Framework } from "@markasui/registry/schema";
 import { Code } from "astro:components";
 import FrameworkIcon from "./FrameworkIcon.astro";
 import Icon from "./Icon.astro";
+import { getLocale, t } from "../lib/i18n";
 
 interface Props {
   code: string;
@@ -18,6 +19,7 @@ interface Props {
 
 const COLLAPSE_AFTER_LINES = 12;
 const { code, lang, title, framework, collapsible = false, class: className } = Astro.props;
+const strings = t(getLocale(Astro.url)).code;
 const trimmed = code.trim();
 const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LINES;
 ---
@@ -34,7 +36,7 @@ const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LIN
   <button
     type="button"
     data-copy
-    aria-label="Salin kode"
+    aria-label={strings.copy}
     class:list={["icon-button absolute right-1.5 z-10 size-8 bg-surface", title ? "top-1" : "top-2"]}
   >
     <Icon name="copy" class="size-4 group-data-copied:hidden" />
@@ -54,7 +56,7 @@ const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LIN
     collapsed && (
       <div class="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center bg-linear-to-t from-surface via-surface/90 to-transparent pb-4 group-data-expanded:hidden">
         <button type="button" data-expand class="site-button-secondary h-8 px-3">
-          Lihat kode
+          {strings.expand}
         </button>
       </div>
     )

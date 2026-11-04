@@ -4,16 +4,16 @@ import Drawer from "../../components/drawer/Drawer.vue";
 </script>
 
 <template>
-  <Drawer title="Filter produk">
+  <Drawer title="Filter products">
     <template #trigger>
-      <Button variant="secondary">Buka filter</Button>
+      <Button variant="secondary">Open filters</Button>
     </template>
 
-    Pilih kategori dan rentang harga untuk menyaring daftar produk.
+    Choose a category and price range to filter the product list.
 
     <template #footer>
-      <Button variant="secondary" type="submit" value="batal">Batal</Button>
-      <Button type="submit" value="terapkan">Terapkan</Button>
+      <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+      <Button type="submit" value="apply">Apply</Button>
     </template>
   </Drawer>
 </template>

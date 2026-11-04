@@ -19,31 +19,31 @@ describe("React Card", () => {
   it("merender judul, deskripsi, isi, dan footer", () => {
     render(
       <Card
-        title="Paket Pro"
-        description="Untuk tim kecil."
-        footer={<button type="button">Pilih</button>}
+        title="Pro plan"
+        description="For small teams."
+        footer={<button type="button">Choose</button>}
       >
-        Isi kartu
+        Card body
       </Card>,
     );
     const card = screen.getByRole("article");
     expect(
-      within(card).getByRole("heading", { level: 3, name: "Paket Pro" }),
+      within(card).getByRole("heading", { level: 3, name: "Pro plan" }),
     ).toBeInTheDocument();
-    expect(within(card).getByText("Untuk tim kecil.")).toHaveClass(
+    expect(within(card).getByText("For small teams.")).toHaveClass(
       "text-muted",
     );
-    expect(within(card).getByText("Isi kartu")).toBeInTheDocument();
-    expect(within(card).getByRole("button", { name: "Pilih" })).toBeVisible();
+    expect(within(card).getByText("Card body")).toBeInTheDocument();
+    expect(within(card).getByRole("button", { name: "Choose" })).toBeVisible();
   });
 
   it("tidak merender bagian kosong dan menggabung class user di akhir", () => {
     render(
-      <Card className="max-w-sm" data-testid="kartu">
-        Hanya isi
+      <Card className="max-w-sm" data-testid="card">
+        Body only
       </Card>,
     );
-    const card = screen.getByTestId("kartu");
+    const card = screen.getByTestId("card");
     expect(card.querySelector("header")).toBeNull();
     expect(card.children).toHaveLength(1);
     expect(card).toHaveClass("rounded-xl", "border-line", "p-6", "gap-4");
@@ -79,13 +79,13 @@ describe("React Avatar", () => {
     render(
       <Avatar
         name="Dewi Lestari"
-        src="/rusak.png"
-        alt="Foto Dewi"
+        src="/broken.png"
+        alt="Photo of Dewi"
         onError={onError}
       />,
     );
-    fireEvent.error(screen.getByRole("img", { name: "Foto Dewi" }));
-    const fallback = screen.getByRole("img", { name: "Foto Dewi" });
+    fireEvent.error(screen.getByRole("img", { name: "Photo of Dewi" }));
+    const fallback = screen.getByRole("img", { name: "Photo of Dewi" });
     expect(fallback.tagName).toBe("SPAN");
     expect(fallback).toHaveTextContent("DL");
     expect(onError).toHaveBeenCalledOnce();
@@ -100,66 +100,74 @@ describe("React Avatar", () => {
 
 describe("React Table", () => {
   const columns = [
-    { key: "kode", label: "Pesanan" },
+    { key: "code", label: "Order" },
     { key: "total", label: "Total", align: "right" as const },
   ];
   const rows = [
-    { kode: "INV-1", total: "Rp10.000" },
-    { kode: "INV-2", total: null },
+    { code: "INV-1", total: "$10.00" },
+    { code: "INV-2", total: null },
   ];
 
   it("merender region yang bisa difokus, header, dan baris", () => {
     render(
       <Table
-        caption="Pesanan"
+        caption="Orders"
         columns={columns}
         rows={rows}
         className="max-h-80"
       />,
     );
-    const region = screen.getByRole("region", { name: "Pesanan" });
+    const region = screen.getByRole("region", { name: "Orders" });
     expect(region).toHaveAttribute("tabindex", "0");
     expect(region).toHaveClass("overflow-x-auto", "rounded-xl");
     expect(region.className.endsWith("max-h-80")).toBe(true);
 
-    const table = within(region).getByRole("table", { name: "Pesanan" });
+    const table = within(region).getByRole("table", { name: "Orders" });
     const headers = within(table).getAllByRole("columnheader");
-    expect(headers.map((th) => th.textContent)).toEqual(["Pesanan", "Total"]);
+    expect(headers.map((th) => th.textContent)).toEqual(["Order", "Total"]);
     expect(headers[0]).toHaveAttribute("scope", "col");
     expect(headers[1]).toHaveClass("text-right");
     expect(within(table).getAllByRole("row")).toHaveLength(3);
-    expect(within(table).getByText("Rp10.000")).toHaveClass("text-right");
+    expect(within(table).getByText("$10.00")).toHaveClass("text-right");
     expect(table.querySelector("caption")).toHaveClass("sr-only");
   });
 
   it("caption bisa ditampilkan dan label mengganti nama region", () => {
     render(
       <Table
-        caption="Pesanan"
+        caption="Orders"
         showCaption
-        label="Tabel pesanan"
+        label="Order table"
         columns={columns}
         rows={[]}
       />,
     );
     expect(
-      screen.getByRole("region", { name: "Tabel pesanan" }),
+      screen.getByRole("region", { name: "Order table" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText("Pesanan", { selector: "caption" }),
-    ).not.toHaveClass("sr-only");
+    expect(screen.getByText("Orders", { selector: "caption" })).not.toHaveClass(
+      "sr-only",
+    );
   });
 
-  it("tanpa caption dan label, region bernama Tabel", () => {
+  it("tanpa caption dan label, region bernama Table", () => {
     render(<Table columns={columns} rows={rows} />);
-    expect(screen.getByRole("region", { name: "Tabel" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Table" })).toBeInTheDocument();
+  });
+
+  it("label menimpa default Table tanpa caption", () => {
+    render(<Table label="Tabel pesanan" columns={columns} rows={rows} />);
+    expect(
+      screen.getByRole("region", { name: "Tabel pesanan" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Table" })).toBeNull();
   });
 
   const keyedRows = [
-    { id: 1, kode: "INV-1" },
-    { id: 2, kode: "INV-2" },
+    { id: 1, code: "INV-1" },
+    { id: 2, code: "INV-2" },
   ];
-  const keyedColumns = [{ key: "kode", label: "Pesanan" }];
+  const keyedColumns = [{ key: "code", label: "Order" }];
   const rowOf = (text: string) => screen.getByText(text).closest("tr");
 
   it("rowKey menjaga elemen baris saat data diurutkan ulang", () => {
@@ -192,37 +200,64 @@ describe("React Table", () => {
         columns={columns}
         rows={rows}
         renderCell={(row, key) =>
-          key === "kode" ? <strong>{row.kode}</strong> : undefined
+          key === "code" ? <strong>{row.code}</strong> : undefined
         }
       />,
     );
     expect(screen.getByText("INV-1").tagName).toBe("STRONG");
-    expect(screen.getByText("Rp10.000").tagName).toBe("TD");
+    expect(screen.getByText("$10.00").tagName).toBe("TD");
   });
 });
 
-describe("Blade Avatar inisial", () => {
-  const root = resolve(import.meta.dirname, "../..");
-  const RENDER_TIMEOUT_MS = 20_000;
+const root = resolve(import.meta.dirname, "../..");
+const RENDER_TIMEOUT_MS = 20_000;
 
+function renderBlade(source: string): string {
+  const dir = mkdtempSync(join(tmpdir(), "markas-data-"));
+  writeFileSync(join(dir, "page.blade.php"), source);
+  execFileSync(
+    "php",
+    [join(root, "scripts/render-blade.php"), dir, join(dir, "out")],
+    { stdio: "pipe" },
+  );
+  return readFileSync(join(dir, "out/page.html"), "utf8");
+}
+
+describe("Blade Avatar inisial", () => {
   it(
     "identik dengan getInitials di React dan Vue",
     () => {
-      const dir = mkdtempSync(join(tmpdir(), "markas-avatar-"));
-      const source = INITIAL_CASES.map(
-        ([name]) => `<x-markas.avatar name="${name}" />`,
-      ).join("\n");
-      writeFileSync(join(dir, "page.blade.php"), source);
-      execFileSync(
-        "php",
-        [join(root, "scripts/render-blade.php"), dir, join(dir, "out")],
-        { stdio: "pipe" },
+      const html = renderBlade(
+        INITIAL_CASES.map(
+          ([name]) => `<x-markas.avatar name="${name}" />`,
+        ).join("\n"),
       );
-      const html = readFileSync(join(dir, "out/page.html"), "utf8");
       const rendered = [...html.matchAll(/<span[^>]*>([^<]*)<\/span>/g)].map(
         (match) => match[1],
       );
       expect(rendered).toEqual(INITIAL_CASES.map(([, initials]) => initials));
+    },
+    RENDER_TIMEOUT_MS,
+  );
+});
+
+describe("Blade Table label region", () => {
+  const regionLabels = (html: string) =>
+    [...html.matchAll(/role="region"[^>]*aria-label="([^"]*)"/g)].map(
+      (match) => match[1],
+    );
+
+  it(
+    "urutan label > caption > default Table",
+    () => {
+      const html = renderBlade(
+        [
+          `<x-markas.table :columns="[]" :rows="[]" />`,
+          `<x-markas.table caption="Orders" :columns="[]" :rows="[]" />`,
+          `<x-markas.table label="Tabel pesanan" caption="Orders" :columns="[]" :rows="[]" />`,
+        ].join("\n"),
+      );
+      expect(regionLabels(html)).toEqual(["Table", "Orders", "Tabel pesanan"]);
     },
     RENDER_TIMEOUT_MS,
   );

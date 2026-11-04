@@ -5,16 +5,16 @@ export default function TextareaFixture() {
     <div className="grid gap-4">
       <Textarea
         name="bio"
-        label="Bio singkat"
-        placeholder="Ceritakan sedikit tentang Anda"
-        hint="Maksimal 200 karakter."
+        label="Short bio"
+        placeholder="Tell us a little about yourself"
+        hint="Up to 200 characters."
       />
       <Textarea
-        name="alamat"
-        label="Alamat"
+        name="address"
+        label="Address"
         rows={2}
-        defaultValue="Jl. Merdeka"
-        error="Alamat belum lengkap."
+        defaultValue="12 Main Street"
+        error="Address is incomplete."
       />
     </div>
   );

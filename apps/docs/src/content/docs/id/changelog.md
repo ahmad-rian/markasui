@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DocsMarkdown.astro
 title: Changelog
 description: Riwayat rilis MarkasUI.
 ---
@@ -21,3 +20,4 @@ Juga termasuk:
 - CLI `markasui` (`init`, `add`, `list`) dan MCP server `@markasui/mcp`.
 - Agent Skill di `skills/markasui`.
 - Uji kesamaan tampilan, axe-core, dan keyboard otomatis untuk setiap komponen di ketiga framework.
+- Default bahasa Inggris, dan setiap label bawaan komponen tersedia sebagai prop.

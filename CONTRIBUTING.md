@@ -1,10 +1,10 @@
-# Berkontribusi ke MarkasUI
+# Contributing to MarkasUI
 
-Terima kasih sudah ingin membantu. Dokumen ini menjelaskan cara menyiapkan repo dan standar komponen.
+Thanks for helping. This guide covers repository setup and the component standards.
 
-## Persiapan
+## Setup
 
-Butuh Node 26 (lihat `.nvmrc`), pnpm 12, PHP 8.4+, dan Composer.
+You need Node 26 (see `.nvmrc`), pnpm 12, PHP 8.4+, and Composer.
 
 ```bash
 pnpm install
@@ -12,37 +12,39 @@ composer install
 pnpm exec playwright install chromium
 ```
 
-## Perintah harian
+## Everyday commands
 
-| Perintah                                           | Fungsi                                                         |
-| -------------------------------------------------- | -------------------------------------------------------------- |
-| `pnpm playground`                                  | Halaman uji Blade, React, Vue di http://localhost:5173         |
-| `pnpm dev`                                         | Website docs di http://localhost:4321                          |
-| `pnpm lint`                                        | ESLint, Prettier, Laravel Pint                                 |
-| `pnpm typecheck`                                   | vue-tsc dan astro check                                        |
-| `pnpm test`                                        | Vitest (React, Vue, render Blade, registry, CLI, MCP)          |
-| `pnpm test:e2e`                                    | Kesamaan tampilan, axe-core, dan keyboard untuk semua komponen |
-| `pnpm build` lalu `pnpm test:docs` dan `pnpm size` | Website, uji website, dan budget ukuran                        |
+| Command                                             | What it does                                                    |
+| --------------------------------------------------- | --------------------------------------------------------------- |
+| `pnpm playground`                                   | Blade, React, and Vue test pages at http://localhost:5173       |
+| `pnpm dev`                                          | Docs site at http://localhost:4321                              |
+| `pnpm lint`                                         | ESLint, Prettier, Laravel Pint                                  |
+| `pnpm typecheck`                                    | vue-tsc and astro check                                         |
+| `pnpm test`                                         | Vitest (React, Vue, Blade rendering, registry, CLI, MCP)        |
+| `pnpm test:e2e`                                     | Visual parity, axe-core, and keyboard tests for every component |
+| `pnpm build`, then `pnpm test:docs` and `pnpm size` | Docs site, site tests, and size budgets                         |
 
-## Menambah komponen
+## Adding a component
 
-1. Buat `components/<nama>/` berisi `<nama>.blade.php`, `<Nama>.tsx`, `<Nama>.vue`, `meta.json`, dan `usage.md`. Contoh lengkap: `components/modal/`.
-2. Tulis class Tailwind yang **identik** di ketiga versi dan simpan di konstanta, bukan langsung di template.
-3. Pakai hanya token warna dari `markas.css` (`bg-primary`, `text-muted`, `border-line`). Build registry gagal kalau ada hex atau warna palet Tailwind.
-4. Tambahkan contoh identik di `examples/blade`, `examples/react`, dan `examples/vue`. Komponen otomatis masuk uji kesamaan tampilan dan axe-core.
-5. Tambahkan unit test di `tests/unit/` dan uji keyboard di `tests/e2e/` kalau komponen punya interaksi.
+1. Create `components/<name>/` with `<name>.blade.php`, `<Name>.tsx`, `<Name>.vue`, `meta.json`, `usage.md`, and `usage.id.md`. See `components/modal/` for a complete example.
+2. Write **identical** Tailwind classes in all three versions and keep them in constants, not inline in templates.
+3. Use only the color tokens from `markas.css` (`bg-primary`, `text-muted`, `border-line`). The registry build fails on hex values or Tailwind palette colors.
+4. Make every built-in text a prop named `<purpose>Label` with an English default, the same in all three versions.
+5. Write `meta.json` in English and add the complete Indonesian translation in `i18n.id`. The build fails when a translation is missing.
+6. Add identical examples in `examples/blade`, `examples/react`, and `examples/vue`. The component then joins the visual parity and axe-core tests automatically.
+7. Add unit tests in `tests/unit/` and keyboard tests in `tests/e2e/` for interactive components.
 
-Aturan lengkap ada di [`CLAUDE.md`](CLAUDE.md) dan [`docs/PRD.md`](docs/PRD.md) bagian 6 dan 11.
+Full rules: [`CLAUDE.md`](CLAUDE.md) and [`docs/PRD.md`](docs/PRD.md) sections 6 and 11.
 
 ## Definition of done
 
-- [ ] File Blade, React, Vue, `meta.json`, dan `usage.md` lengkap
-- [ ] Hanya memakai token warna dari `markas.css`
-- [ ] Lolos uji kesamaan tampilan, axe-core, dan keyboard
-- [ ] Lolos batas ukuran (`pnpm size`)
-- [ ] Tampil benar di mode terang dan gelap
-- [ ] Halaman docs, `.md`, dan entri registry ter-generate
+- [ ] Blade, React, Vue, `meta.json`, `usage.md`, and `usage.id.md` are complete
+- [ ] Only color tokens from `markas.css`
+- [ ] Passes visual parity, axe-core, and keyboard tests
+- [ ] Within the size budget (`pnpm size`)
+- [ ] Correct in light and dark mode
+- [ ] Docs pages, `.md` versions, and registry entries generate in both languages
 
-## Commit
+## Commits
 
-Format `<type>: <deskripsi>` dengan type `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, atau `ci`. Teks UI dan docs dalam Bahasa Indonesia, tanpa em dash.
+Use `<type>: <description>` with `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, or `ci`. No em dashes in UI text or docs.

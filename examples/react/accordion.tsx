@@ -2,22 +2,22 @@ import { Accordion } from "../../components/accordion/Accordion";
 
 const items = [
   {
-    value: "pengiriman",
-    title: "Berapa lama pengiriman?",
-    content: "Pesanan tiba dalam 2 sampai 4 hari kerja.",
+    value: "shipping",
+    title: "How long does shipping take?",
+    content: "Orders arrive in 2 to 4 business days.",
   },
   {
-    value: "pembayaran",
-    title: "Metode pembayaran apa saja?",
-    content: "Transfer bank, kartu kredit, dan dompet digital.",
+    value: "payment",
+    title: "Which payment methods are available?",
+    content: "Bank transfer, credit card, and digital wallets.",
   },
   {
-    value: "retur",
-    title: "Bagaimana cara retur barang?",
-    content: "Ajukan retur dalam 7 hari lewat halaman pesanan.",
+    value: "returns",
+    title: "How do I return an item?",
+    content: "Request a return within 7 days from the order page.",
   },
 ];
 
 export default function AccordionFixture() {
-  return <Accordion items={items} defaultValue="pengiriman" />;
+  return <Accordion items={items} defaultValue="shipping" />;
 }

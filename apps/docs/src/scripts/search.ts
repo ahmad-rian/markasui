@@ -42,17 +42,31 @@ function open() {
   void loadPagefind();
 }
 
+/** Teks status dalam bahasa halaman, dari atribut data-strings dialog. */
+function messages() {
+  const raw = elements().dialog?.dataset.strings;
+  const fallback = {
+    idle: "Type to search",
+    unavailable: "Search is not available",
+    none: "No results",
+    one: "1 result",
+    many: "{n} results",
+  };
+  return raw ? (JSON.parse(raw) as typeof fallback) : fallback;
+}
+
 async function run(query: string) {
   const { status, list } = elements();
   if (!status || !list) return;
+  const text = messages();
   if (!query) {
     list.innerHTML = "";
-    status.textContent = "Ketik untuk mencari";
+    status.textContent = text.idle;
     return;
   }
   const engine = await loadPagefind();
   if (!engine) {
-    status.textContent = "Pencarian tersedia setelah situs dibangun";
+    status.textContent = text.unavailable;
     return;
   }
   const { results } = await engine.search(query);

@@ -1,14 +1,18 @@
 ---
 import Icon from "./Icon.astro";
+import { getLocale, t } from "../lib/i18n";
+
+const strings = t(getLocale(Astro.url)).search;
+const label = t(getLocale(Astro.url)).header.search;
 ---
 
 <button
   type="button"
   data-search-open
-  class="icon-button md:w-60 md:justify-start md:gap-2 md:border md:border-line md:bg-surface md:px-3 md:hover:bg-surface md:hover:text-ink"
+  class="icon-button md:w-56 md:justify-start md:gap-2 md:border md:border-line md:bg-surface md:px-3 md:hover:bg-surface md:hover:text-ink"
 >
   <Icon name="search" />
-  <span class="sr-only text-sm md:not-sr-only">Cari</span>
+  <span class="sr-only text-sm md:not-sr-only">{label}</span>
   <kbd aria-hidden="true" class="ml-auto hidden items-center gap-0.5 rounded-md border border-line bg-canvas px-1.5 font-mono text-[11px] leading-5 text-muted md:inline-flex"
     ><span data-shortcut-mod>Ctrl</span><span>K</span></kbd
   >
@@ -16,23 +20,24 @@ import Icon from "./Icon.astro";
 
 <dialog
   data-search-dialog
-  aria-label="Pencarian"
+  aria-label={strings.dialog}
+  data-strings={JSON.stringify({ idle: strings.idle, unavailable: strings.unavailable, none: strings.none, one: strings.results(1), many: strings.results(2).replace("2", "{n}") })}
   class="mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-xl rounded-2xl border border-line bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/30"
 >
   <form method="dialog" class="flex items-center gap-3 border-b border-line px-4">
     <Icon name="search" class="size-4 text-muted" />
-    <label for="search-input" class="sr-only">Kata kunci</label>
+    <label for="search-input" class="sr-only">{strings.keyword}</label>
     <input
       id="search-input"
       data-search-input
       type="search"
       autocomplete="off"
-      placeholder="Cari komponen atau docs"
+      placeholder={strings.placeholder}
       class="h-14 min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-faint"
     />
     <button type="submit" class="rounded-md border border-line px-1.5 font-mono text-[11px] leading-5 text-muted">Esc</button>
   </form>
-  <div data-search-status role="status" class="px-5 pt-3 pb-2 text-[13px] text-muted">Ketik untuk mencari</div>
+  <div data-search-status role="status" class="px-5 pt-3 pb-2 text-[13px] text-muted">{strings.idle}</div>
   <ul data-search-results class="max-h-[55vh] overflow-y-auto px-2 pb-2"></ul>
 </dialog>
 

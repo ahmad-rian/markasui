@@ -1,54 +1,109 @@
 {
   "name": "pagination",
   "title": "Pagination",
-  "description": "Navigasi antar halaman berbasis link dengan tombol Sebelumnya, Berikutnya, dan elipsis untuk halaman yang dilewati.",
+  "description": "Link-based page navigation with Previous and Next links and an ellipsis for skipped pages.",
   "category": "navigation",
-  "tags": ["pagination", "halaman", "navigation", "link"],
+  "tags": ["pagination", "pages", "navigation", "link"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "pagination.blade.php", "deps": [] },
-    "react": { "file": "Pagination.tsx", "deps": [] },
-    "vue": { "file": "Pagination.vue", "deps": [] }
+    "blade": {
+      "file": "pagination.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Pagination.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Pagination.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "page",
       "type": "number",
       "default": "1",
-      "description": "Halaman saat ini. Dibatasi ke rentang 1 sampai total."
+      "description": "Current page. Clamped to the range 1 to total."
     },
     {
       "name": "total",
       "type": "number",
       "default": "1",
-      "description": "Jumlah halaman."
+      "description": "Number of pages."
     },
     {
       "name": "href",
       "type": "string",
       "default": "'?page={page}'",
-      "description": "Pola URL. {page} diganti nomor halaman."
+      "description": "URL pattern. {page} is replaced with the page number."
     },
     {
       "name": "siblings",
       "type": "number",
       "default": "1",
-      "description": "Jumlah halaman yang tampil di kiri dan kanan halaman saat ini."
+      "description": "Number of pages shown on each side of the current page."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Pagination",
+      "description": "Accessible label of the nav element."
+    },
+    {
+      "name": "previousLabel",
+      "type": "string",
+      "default": "Previous",
+      "description": "Text of the previous page link."
+    },
+    {
+      "name": "nextLabel",
+      "type": "string",
+      "default": "Next",
+      "description": "Text of the next page link."
     }
   ],
   "a11y": [
-    "Dibungkus nav dengan aria-label Navigasi halaman.",
-    "Halaman aktif memakai aria-current=page.",
-    "Sebelumnya dan Berikutnya memakai rel prev dan next, dan menjadi span aria-disabled di halaman pertama atau terakhir.",
-    "Elipsis diberi aria-hidden.",
-    "Di container sempit teks Sebelumnya dan Berikutnya hanya disembunyikan secara visual (sr-only), nama aksesibelnya tetap ada."
+    "Wrapped in a nav labelled by navLabel.",
+    "The active page has aria-current=page.",
+    "Previous and Next use rel prev and next, and become an aria-disabled span on the first or last page.",
+    "The ellipsis is aria-hidden.",
+    "In a narrow container the Previous and Next text is only visually hidden (sr-only), so the accessible name stays."
   ],
   "ai": {
-    "whenToUse": "Daftar panjang yang dibagi ke beberapa halaman dan dimuat ulang lewat URL, misalnya tabel atau hasil pencarian.",
+    "whenToUse": "Long lists split across pages and reloaded through the URL, such as tables or search results.",
     "rules": [
-      "Pola href wajib memuat {page}",
-      "Jumlah tombol tetap siblings * 2 + 5 agar posisi tidak bergeser saat berpindah halaman"
+      "The href pattern must contain {page}",
+      "The number of buttons stays at siblings * 2 + 5 so positions do not shift when changing pages"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Navigasi antar halaman berbasis link dengan tombol Sebelumnya, Berikutnya, dan elipsis untuk halaman yang dilewati.",
+      "props": {
+        "page": "Halaman saat ini. Dibatasi ke rentang 1 sampai total.",
+        "total": "Jumlah halaman.",
+        "href": "Pola URL. {page} diganti nomor halaman.",
+        "siblings": "Jumlah halaman yang tampil di kiri dan kanan halaman saat ini.",
+        "navLabel": "Label aksesibel elemen nav. Isi \"Navigasi halaman\" untuk situs berbahasa Indonesia.",
+        "previousLabel": "Teks link halaman sebelumnya. Isi \"Sebelumnya\" untuk situs berbahasa Indonesia.",
+        "nextLabel": "Teks link halaman berikutnya. Isi \"Berikutnya\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Dibungkus nav dengan label dari navLabel (default Pagination).",
+        "Halaman aktif memakai aria-current=page.",
+        "Link sebelumnya dan berikutnya memakai rel prev dan next, dan menjadi span aria-disabled di halaman pertama atau terakhir.",
+        "Elipsis diberi aria-hidden.",
+        "Di container sempit teks previousLabel dan nextLabel hanya disembunyikan secara visual (sr-only), nama aksesibelnya tetap ada."
+      ],
+      "ai": {
+        "whenToUse": "Daftar panjang yang dibagi ke beberapa halaman dan dimuat ulang lewat URL, misalnya tabel atau hasil pencarian.",
+        "rules": [
+          "Pola href wajib memuat {page}",
+          "Jumlah tombol tetap siblings * 2 + 5 agar posisi tidak bergeser saat berpindah halaman"
+        ]
+      }
+    }
+  }
 }

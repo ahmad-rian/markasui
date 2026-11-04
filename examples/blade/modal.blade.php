@@ -1,12 +1,12 @@
-<x-markas.modal title="Hapus proyek?">
+<x-markas.modal title="Delete project?">
     <x-slot:trigger>
-        <x-markas.button variant="danger">Hapus proyek</x-markas.button>
+        <x-markas.button variant="danger">Delete project</x-markas.button>
     </x-slot:trigger>
 
-    Proyek dan semua datanya akan dihapus permanen.
+    The project and all of its data will be deleted permanently.
 
     <x-slot:footer>
-        <x-markas.button variant="secondary" type="submit" value="batal">Batal</x-markas.button>
-        <x-markas.button variant="danger" type="submit" value="hapus">Ya, hapus</x-markas.button>
+        <x-markas.button variant="secondary" type="submit" value="cancel">Cancel</x-markas.button>
+        <x-markas.button variant="danger" type="submit" value="delete">Delete</x-markas.button>
     </x-slot:footer>
 </x-markas.modal>

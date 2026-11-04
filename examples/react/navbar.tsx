@@ -2,9 +2,9 @@ import { Button } from "../../components/button/Button";
 import { Navbar } from "../../components/navbar/Navbar";
 
 const links = [
-  { label: "Beranda", href: "/", active: true },
-  { label: "Komponen", href: "/komponen" },
-  { label: "Dokumentasi", href: "/dokumentasi" },
+  { label: "Home", href: "/", active: true },
+  { label: "Components", href: "/components" },
+  { label: "Docs", href: "/docs" },
 ];
 
 export default function NavbarFixture() {
@@ -12,7 +12,7 @@ export default function NavbarFixture() {
     <Navbar
       links={links}
       brand="MarkasUI"
-      actions={<Button size="sm">Masuk</Button>}
+      actions={<Button size="sm">Sign in</Button>}
     />
   );
 }

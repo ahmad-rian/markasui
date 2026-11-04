@@ -57,6 +57,12 @@ export type PaginationProps = ComponentProps<"nav"> & {
   total: number;
   href?: string;
   siblings?: number;
+  /** Accessible label of the nav element. */
+  navLabel?: string;
+  /** Text of the previous page link. */
+  previousLabel?: string;
+  /** Text of the next page link. */
+  nextLabel?: string;
 };
 
 const PrevIcon = () => (
@@ -94,6 +100,9 @@ export function Pagination({
   total,
   href = "?page={page}",
   siblings = 1,
+  navLabel = "Pagination",
+  previousLabel = "Previous",
+  nextLabel = "Next",
   className,
   ...props
 }: PaginationProps) {
@@ -103,22 +112,18 @@ export function Pagination({
     safeHref(href.replaceAll("{page}", String(target)));
 
   return (
-    <nav
-      aria-label="Navigasi halaman"
-      className={cx(root, className)}
-      {...props}
-    >
+    <nav aria-label={navLabel} className={cx(root, className)} {...props}>
       <ul className={list}>
         <li>
           {current > 1 ? (
             <a href={hrefFor(current - 1)} rel="prev" className={link}>
               <PrevIcon />
-              <span className={label}>Sebelumnya</span>
+              <span className={label}>{previousLabel}</span>
             </a>
           ) : (
             <span aria-disabled="true" className={link}>
               <PrevIcon />
-              <span className={label}>Sebelumnya</span>
+              <span className={label}>{previousLabel}</span>
             </span>
           )}
         </li>
@@ -143,12 +148,12 @@ export function Pagination({
         <li>
           {current < total ? (
             <a href={hrefFor(current + 1)} rel="next" className={link}>
-              <span className={label}>Berikutnya</span>
+              <span className={label}>{nextLabel}</span>
               <NextIcon />
             </a>
           ) : (
             <span aria-disabled="true" className={link}>
-              <span className={label}>Berikutnya</span>
+              <span className={label}>{nextLabel}</span>
               <NextIcon />
             </span>
           )}

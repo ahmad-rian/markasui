@@ -49,7 +49,7 @@ const aligns = {
   <div
     tabindex="0"
     role="region"
-    :aria-label="props.label ?? props.caption ?? 'Tabel'"
+    :aria-label="props.label ?? props.caption ?? 'Table'"
     :class="wrapper"
   >
     <table :class="tableClass">

@@ -1,46 +1,77 @@
 {
   "name": "accordion",
   "title": "Accordion",
-  "description": "Daftar bagian yang bisa dibuka dan ditutup, dibangun dari details dan summary native tanpa JavaScript.",
+  "description": "Collapsible sections built on native details and summary, no JavaScript needed.",
   "category": "navigation",
   "tags": ["accordion", "details", "collapse", "faq"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "accordion.blade.php", "deps": [] },
-    "react": { "file": "Accordion.tsx", "deps": [] },
-    "vue": { "file": "Accordion.vue", "deps": [] }
+    "blade": {
+      "file": "accordion.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Accordion.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Accordion.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "items",
       "type": "Blade: array<key, title> · React: { value, title, content }[] · Vue: { value, title }[]",
       "default": "[]",
-      "description": "Daftar bagian. Di Blade dan Vue, isi tiap bagian lewat slot dengan nama sama seperti key/value."
+      "description": "Section list. In Blade and Vue, fill each section through a slot named after its key or value."
     },
     {
       "name": "type",
       "type": "'single' | 'multiple'",
       "default": "'single'",
-      "description": "single: hanya satu bagian terbuka (atribut name yang sama di details). multiple: bebas."
+      "description": "single: only one section open at a time (shared name attribute on details). multiple: any number open."
     },
     {
       "name": "defaultValue",
       "type": "string | string[]",
       "default": "-",
-      "description": "Bagian yang terbuka saat pertama dirender. Pada type single hanya nilai pertama yang dipakai."
+      "description": "Sections open on first render. With type single only the first value is used."
     }
   ],
   "a11y": [
-    "Memakai details dan summary native, jadi summary berperan sebagai tombol dengan status terbuka atau tertutup.",
-    "Enter dan Spasi pada summary membuka dan menutup bagian.",
-    "Ikon chevron diberi aria-hidden."
+    "Uses native details and summary, so the summary acts as a button with an open or closed state.",
+    "Enter and Space on the summary open and close the section.",
+    "The chevron icon is aria-hidden."
   ],
   "ai": {
-    "whenToUse": "FAQ atau pengaturan panjang yang perlu diringkas menjadi bagian yang bisa dibuka satu per satu.",
+    "whenToUse": "FAQs or long settings that should be condensed into sections opened one at a time.",
     "rules": [
-      "Key atau value hanya huruf kecil, angka, dan underscore karena dipakai sebagai nama slot",
-      "Jangan menaruh konten penting yang wajib dibaca di bagian yang tertutup"
+      "Keys or values use only lowercase letters, digits, and underscores because they become slot names",
+      "Do not hide must-read content in a closed section"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Daftar bagian yang bisa dibuka dan ditutup, dibangun dari details dan summary native tanpa JavaScript.",
+      "props": {
+        "items": "Daftar bagian. Di Blade dan Vue, isi tiap bagian lewat slot dengan nama sama seperti key/value.",
+        "type": "single: hanya satu bagian terbuka (atribut name yang sama di details). multiple: bebas.",
+        "defaultValue": "Bagian yang terbuka saat pertama dirender. Pada type single hanya nilai pertama yang dipakai."
+      },
+      "a11y": [
+        "Memakai details dan summary native, jadi summary berperan sebagai tombol dengan status terbuka atau tertutup.",
+        "Enter dan Spasi pada summary membuka dan menutup bagian.",
+        "Ikon chevron diberi aria-hidden."
+      ],
+      "ai": {
+        "whenToUse": "FAQ atau pengaturan panjang yang perlu diringkas menjadi bagian yang bisa dibuka satu per satu.",
+        "rules": [
+          "Key atau value hanya huruf kecil, angka, dan underscore karena dipakai sebagai nama slot",
+          "Jangan menaruh konten penting yang wajib dibaca di bagian yang tertutup"
+        ]
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 # MarkasUI
 
-Library komponen UI open source untuk Blade, React, dan Vue. Spesifikasi lengkap ada di docs/PRD.md.
+Library komponen UI open source untuk Blade, React, dan Vue. Spesifikasi lengkap ada di docs/PRD.md. Keputusan yang mengubah PRD: bahasa default Inggris, desain situs mengikuti panduan unslop (tanpa label kapital mono dan serif miring).
 
 ## Aturan wajib
 
@@ -9,7 +9,8 @@ Library komponen UI open source untuk Blade, React, dan Vue. Spesifikasi lengkap
 - Komponen inti tanpa dependensi selain React, Vue, atau Alpine.js.
 - Pakai elemen native dulu: dialog, Popover API, details.
 - Jangan menambah package npm tanpa bertanya.
-- Teks UI dan docs dalam Bahasa Indonesia. Jangan pakai em dash.
+- Bahasa: Inggris default (komponen, registry, CLI, MCP, situs di /). Indonesia lewat i18n.id di meta.json, usage.id.md, content/docs/id, dan /id. Jangan pakai em dash.
+- Setiap teks bawaan komponen (aria-label, teks default) adalah prop `<tujuan>Label` dengan default Inggris yang sama di Blade, React, dan Vue.
 
 ## Perintah
 

@@ -8,20 +8,20 @@ import Toaster, { toast } from "../../components/toast/Toast.vue";
     <Button
       @click="
         toast({
-          title: 'Perubahan disimpan',
-          description: 'Profil Anda sudah diperbarui.',
+          title: 'Changes saved',
+          description: 'Your profile has been updated',
           variant: 'success',
           duration: 0,
         })
       "
     >
-      Tampilkan toast
+      Show toast
     </Button>
     <Button
       variant="secondary"
-      @click="toast({ title: 'Draf tersimpan otomatis' })"
+      @click="toast({ title: 'Draft saved automatically' })"
     >
-      Toast sementara
+      Temporary toast
     </Button>
   </div>
   <Toaster />

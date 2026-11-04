@@ -52,24 +52,24 @@ const rect = (top: number, left: number, width: number, height: number) =>
 
 describe("React DropdownMenu", () => {
   const items = [
-    { label: "Ubah", value: "ubah" },
-    { label: "Duplikat" },
-    { label: "Arsipkan", value: "arsip", disabled: true },
+    { label: "Edit", value: "edit" },
+    { label: "Duplicate" },
+    { label: "Archive", value: "archive", disabled: true },
     { separator: true as const },
-    { label: "Bantuan", href: "/bantuan" },
-    { label: "Hapus", value: "hapus", danger: true },
+    { label: "Help", href: "/help" },
+    { label: "Delete", value: "delete", danger: true },
   ];
   const renderMenu = (onSelect = vi.fn()) =>
     render(
       <DropdownMenu
-        id="aksi"
-        label="Aksi"
+        id="actions"
+        label="Actions"
         items={items}
         onSelect={onSelect}
         className="ms-auto"
       />,
     );
-  const trigger = () => screen.getByRole("button", { name: "Aksi" });
+  const trigger = () => screen.getByRole("button", { name: "Actions" });
   const item = (name: string) =>
     screen.getByRole("menuitem", { name, hidden: true });
 
@@ -78,12 +78,12 @@ describe("React DropdownMenu", () => {
     const menu = screen.getByRole("menu", { hidden: true });
     expect(trigger()).toHaveAttribute("aria-haspopup", "menu");
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
-    expect(trigger()).toHaveAttribute("popovertarget", "aksi");
-    expect(trigger()).toHaveAttribute("aria-controls", "aksi");
-    expect(menu).toHaveAttribute("id", "aksi");
+    expect(trigger()).toHaveAttribute("popovertarget", "actions");
+    expect(trigger()).toHaveAttribute("aria-controls", "actions");
+    expect(menu).toHaveAttribute("id", "actions");
     expect(menu).toHaveAttribute("popover", "auto");
     expect(menu).toHaveAttribute("data-state", "closed");
-    expect(menu).toHaveAttribute("aria-labelledby", "aksi-trigger");
+    expect(menu).toHaveAttribute("aria-labelledby", "actions-trigger");
     expect(container.firstElementChild!.className.endsWith("ms-auto")).toBe(
       true,
     );
@@ -94,11 +94,11 @@ describe("React DropdownMenu", () => {
     expect(screen.getByRole("separator", { hidden: true })).toHaveClass(
       "bg-line",
     );
-    expect(item("Bantuan").tagName).toBe("A");
-    expect(item("Bantuan")).toHaveAttribute("href", "/bantuan");
-    expect(item("Arsipkan")).toBeDisabled();
-    expect(item("Hapus")).toHaveClass("text-danger");
-    expect(item("Ubah")).toHaveAttribute("tabindex", "-1");
+    expect(item("Help").tagName).toBe("A");
+    expect(item("Help")).toHaveAttribute("href", "/help");
+    expect(item("Archive")).toBeDisabled();
+    expect(item("Delete")).toHaveClass("text-danger");
+    expect(item("Edit")).toHaveAttribute("tabindex", "-1");
   });
 
   it("panah bawah membuka dan fokus item pertama, navigasi melewati item nonaktif", () => {
@@ -109,34 +109,34 @@ describe("React DropdownMenu", () => {
       "open",
     );
     expect(trigger()).toHaveAttribute("aria-expanded", "true");
-    expect(item("Ubah")).toHaveFocus();
+    expect(item("Edit")).toHaveFocus();
 
     const press = (key: string) =>
       fireEvent.keyDown(document.activeElement!, { key });
     press("ArrowDown");
-    expect(item("Duplikat")).toHaveFocus();
+    expect(item("Duplicate")).toHaveFocus();
     press("ArrowDown");
-    expect(item("Bantuan")).toHaveFocus();
+    expect(item("Help")).toHaveFocus();
     press("End");
-    expect(item("Hapus")).toHaveFocus();
+    expect(item("Delete")).toHaveFocus();
     press("ArrowDown");
-    expect(item("Ubah")).toHaveFocus();
+    expect(item("Edit")).toHaveFocus();
     press("ArrowUp");
-    expect(item("Hapus")).toHaveFocus();
+    expect(item("Delete")).toHaveFocus();
     press("Home");
-    expect(item("Ubah")).toHaveFocus();
+    expect(item("Edit")).toHaveFocus();
     press("a");
-    expect(item("Ubah")).toHaveFocus();
+    expect(item("Edit")).toHaveFocus();
   });
 
   it("panah atas membuka dan fokus item terakhir, panah saat terbuka memindah fokus", () => {
     renderMenu();
     fireEvent.keyDown(trigger(), { key: "ArrowUp" });
-    expect(item("Hapus")).toHaveFocus();
+    expect(item("Delete")).toHaveFocus();
     fireEvent.keyDown(trigger(), { key: "ArrowDown" });
-    expect(item("Ubah")).toHaveFocus();
+    expect(item("Edit")).toHaveFocus();
     fireEvent.keyDown(trigger(), { key: "Enter" });
-    expect(item("Ubah")).toHaveFocus();
+    expect(item("Edit")).toHaveFocus();
   });
 
   it("Escape menutup menu dan mengembalikan fokus ke pemicu, Tab menutup menu", () => {
@@ -161,16 +161,16 @@ describe("React DropdownMenu", () => {
     const onSelect = vi.fn();
     renderMenu(onSelect);
     fireEvent.keyDown(trigger(), { key: "ArrowDown" });
-    await userEvent.click(item("Ubah"));
-    expect(onSelect).toHaveBeenLastCalledWith("ubah");
+    await userEvent.click(item("Edit"));
+    expect(onSelect).toHaveBeenLastCalledWith("edit");
     expect(screen.getByRole("menu", { hidden: true })).toHaveAttribute(
       "data-state",
       "closed",
     );
     expect(trigger()).toHaveFocus();
 
-    await userEvent.click(item("Duplikat"));
-    expect(onSelect).toHaveBeenLastCalledWith("Duplikat");
+    await userEvent.click(item("Duplicate"));
+    expect(onSelect).toHaveBeenLastCalledWith("Duplicate");
   });
 
   it("menu pindah ke atas pemicu kalau di bawah tidak muat", () => {
@@ -189,45 +189,51 @@ describe("React DropdownMenu", () => {
   });
 
   it("prop trigger menggantikan label dan id otomatis dibuat", () => {
-    render(<DropdownMenu items={items} trigger={<span>Lainnya</span>} />);
-    const button = screen.getByRole("button", { name: "Lainnya" });
+    render(<DropdownMenu items={items} trigger={<span>More</span>} />);
+    const button = screen.getByRole("button", { name: "More" });
     expect(button.getAttribute("popovertarget")).toBe(
       screen.getByRole("menu", { hidden: true }).id,
     );
     expect(screen.getByRole("menu", { hidden: true }).id).not.toBe("");
   });
 
-  it("label default Opsi", () => {
+  it("label default Options", () => {
     render(<DropdownMenu items={[]} />);
-    expect(screen.getByRole("button", { name: "Opsi" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Options" })).toBeInTheDocument();
     fireEvent.keyDown(screen.getByRole("button"), { key: "ArrowDown" });
     expect(screen.getByRole("button")).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("prop label menimpa label default", () => {
+    render(<DropdownMenu items={[]} label="Opsi" />);
+    expect(screen.getByRole("button", { name: "Opsi" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Options" })).toBeNull();
   });
 });
 
 describe("React Tooltip", () => {
   const renderTooltip = (side?: "top" | "bottom") =>
     render(
-      <Tooltip content="Salin tautan" side={side} className="ms-2">
-        <Button aria-describedby="lain">Salin</Button>
+      <Tooltip content="Copy link" side={side} className="ms-2">
+        <Button aria-describedby="other">Copy</Button>
       </Tooltip>,
     );
   const tooltip = () => screen.getByRole("tooltip", { hidden: true });
 
   it("pemicu diberi aria-describedby ke tooltip dan class user di akhir", () => {
     const { container } = renderTooltip();
-    const button = screen.getByRole("button", { name: "Salin" });
+    const button = screen.getByRole("button", { name: "Copy" });
     expect(tooltip()).toHaveAttribute("popover", "manual");
-    expect(tooltip()).toHaveTextContent("Salin tautan");
+    expect(tooltip()).toHaveTextContent("Copy link");
     expect(button.getAttribute("aria-describedby")).toBe(
-      `lain ${tooltip().id}`,
+      `other ${tooltip().id}`,
     );
     expect(container.firstElementChild!.className.endsWith("ms-2")).toBe(true);
   });
 
   it("muncul saat fokus, hilang saat blur dan Escape", () => {
     renderTooltip();
-    const button = screen.getByRole("button", { name: "Salin" });
+    const button = screen.getByRole("button", { name: "Copy" });
     fireEvent.focus(button);
     expect(tooltip()).toHaveAttribute("data-state", "open");
     fireEvent.blur(button);
@@ -292,7 +298,7 @@ describe("React Drawer", () => {
       <Drawer
         title="Filter"
         side={side}
-        trigger={<Button>Buka</Button>}
+        trigger={<Button>Open</Button>}
         footer={
           <Button type="submit" value="ok">
             OK
@@ -301,7 +307,7 @@ describe("React Drawer", () => {
         onClose={onClose}
         className="max-w-md"
       >
-        Isi drawer
+        Drawer content
       </Drawer>,
     );
 
@@ -326,18 +332,38 @@ describe("React Drawer", () => {
   it("pemicu membuka, close menutup dan memanggil onClose, klik backdrop menutup", async () => {
     const onClose = vi.fn();
     renderDrawer("right", onClose);
-    await userEvent.click(screen.getByRole("button", { name: "Buka" }));
+    await userEvent.click(screen.getByRole("button", { name: "Open" }));
     const dialog = document.querySelector("dialog")!;
     expect(dialog).toHaveAttribute("open");
     expect(dialog).toHaveAttribute("data-state", "open");
 
-    fireEvent.click(screen.getByText("Isi drawer"));
+    fireEvent.click(screen.getByText("Drawer content"));
     expect(dialog).toHaveAttribute("open");
 
     fireEvent.click(dialog);
     expect(dialog).not.toHaveAttribute("open");
     expect(dialog).toHaveAttribute("data-state", "closed");
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it("tombol tutup berlabel Close secara default dan closeLabel menimpanya", () => {
+    const { unmount } = renderDrawer();
+    expect(
+      screen.getByRole("button", { name: "Close", hidden: true }),
+    ).toBeInTheDocument();
+    unmount();
+
+    render(
+      <Drawer title="Filter" closeLabel="Tutup">
+        Drawer content
+      </Drawer>,
+    );
+    expect(
+      screen.getByRole("button", { name: "Tutup", hidden: true }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Close", hidden: true }),
+    ).toBeNull();
   });
 });
 

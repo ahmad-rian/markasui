@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { mkdtemp, readFile, writeFile, mkdir, cp } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -118,6 +118,48 @@ describe("registry", () => {
       (await readFile(file, "utf8")).replace("bg-primary", "bg-green-700"),
     );
     await expect(loadComponent(dir)).rejects.toThrow(/bg-green-700/);
+  });
+
+  it("memuat terjemahan Indonesia lengkap dengan usage.id.md", async () => {
+    const modal = await loadComponent(join(root, "components", "modal"));
+    expect(modal.description).toMatch(/^Modal dialog/);
+    expect(modal.i18n.id.description).toMatch(/^Dialog modal/);
+    expect(Object.keys(modal.i18n.id.props).sort()).toEqual(
+      modal.props.map((prop) => prop.name).sort(),
+    );
+    expect(modal.i18n.id.usage).toContain("## Catatan");
+  });
+
+  it("gagal kalau terjemahan props tidak lengkap", async () => {
+    const dir = await copyComponent("modal");
+    await editMeta(dir, (meta) => {
+      const i18n = meta.i18n as { id: { props: Record<string, string> } };
+      const props = Object.fromEntries(
+        Object.entries(i18n.id.props).filter(([name]) => name !== "closeLabel"),
+      );
+      return { ...meta, i18n: { id: { ...i18n.id, props } } };
+    });
+    await expect(loadComponent(dir)).rejects.toThrow(/kurang: closeLabel/);
+  });
+
+  it("gagal kalau jumlah catatan a11y terjemahan berbeda", async () => {
+    const dir = await copyComponent("button");
+    await editMeta(dir, (meta) => {
+      const i18n = meta.i18n as { id: { a11y: string[] } };
+      return {
+        ...meta,
+        i18n: { id: { ...i18n.id, a11y: i18n.id.a11y.slice(1) } },
+      };
+    });
+    await expect(loadComponent(dir)).rejects.toThrow(/jumlah catatan a11y/);
+  });
+
+  it("gagal kalau usage.id.md tidak ada", async () => {
+    const dir = await copyComponent("button");
+    await rm(join(dir, "usage.id.md"));
+    await expect(loadComponent(dir)).rejects.toThrow(
+      /usage.id.md tidak ditemukan/,
+    );
   });
 
   it("findColorViolations menangkap hex dan warna palet bawaan", () => {

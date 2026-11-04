@@ -1,21 +1,21 @@
 ## Blade
 
 ```blade
-<x-markas.modal title="Hapus proyek?">
+<x-markas.modal title="Delete project?">
     <x-slot:trigger>
-        <x-markas.button variant="danger">Hapus</x-markas.button>
+        <x-markas.button variant="danger">Delete</x-markas.button>
     </x-slot:trigger>
 
-    Proyek dan semua datanya akan dihapus permanen.
+    The project and all of its data will be deleted permanently.
 
     <x-slot:footer>
-        <x-markas.button variant="secondary" type="submit" value="batal">Batal</x-markas.button>
-        <x-markas.button variant="danger" type="submit" value="hapus">Ya, hapus</x-markas.button>
+        <x-markas.button variant="secondary" type="submit" value="cancel">Cancel</x-markas.button>
+        <x-markas.button variant="danger" type="submit" value="delete">Delete</x-markas.button>
     </x-slot:footer>
 </x-markas.modal>
 ```
 
-Butuh Alpine.js. Livewire 3 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+Needs Alpine.js. Livewire 3 already ships it.
 
 ## React
 
@@ -24,21 +24,21 @@ import { Button } from "@/components/markas/Button";
 import { Modal } from "@/components/markas/Modal";
 
 <Modal
-  title="Hapus proyek?"
-  trigger={<Button variant="danger">Hapus</Button>}
+  title="Delete project?"
+  trigger={<Button variant="danger">Delete</Button>}
   footer={
     <>
-      <Button variant="secondary" type="submit" value="batal">
-        Batal
+      <Button variant="secondary" type="submit" value="cancel">
+        Cancel
       </Button>
-      <Button variant="danger" type="submit" value="hapus">
-        Ya, hapus
+      <Button variant="danger" type="submit" value="delete">
+        Delete
       </Button>
     </>
   }
   onClose={(e) => console.log(e.currentTarget.returnValue)}
 >
-  Proyek dan semua datanya akan dihapus permanen.
+  The project and all of its data will be deleted permanently.
 </Modal>;
 ```
 
@@ -46,22 +46,23 @@ import { Modal } from "@/components/markas/Modal";
 
 ```vue
 <template>
-  <Modal title="Hapus proyek?">
+  <Modal title="Delete project?">
     <template #trigger>
-      <Button variant="danger">Hapus</Button>
+      <Button variant="danger">Delete</Button>
     </template>
 
-    Proyek dan semua datanya akan dihapus permanen.
+    The project and all of its data will be deleted permanently.
 
     <template #footer>
-      <Button variant="secondary" type="submit" value="batal">Batal</Button>
-      <Button variant="danger" type="submit" value="hapus">Ya, hapus</Button>
+      <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+      <Button variant="danger" type="submit" value="delete">Delete</Button>
     </template>
   </Modal>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Nilai `value` tombol yang dipakai menutup modal tersedia di `dialog.returnValue` saat event `close`.
-- Untuk membuka modal dari kode, panggil `document.getElementById(id).showModal()`.
+- The `value` of the button that closed the modal is available as `dialog.returnValue` in the `close` event.
+- To open the modal from code, call `document.getElementById(id).showModal()`.
+- The close button is labelled "Close". Translate it with `closeLabel` (Blade: `close-label`).

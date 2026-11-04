@@ -1,9 +1,9 @@
 ## Blade
 
 ```blade
-<x-markas.select name="kota" label="Kota" hint="Pilih kota domisili.">
+<x-markas.select name="city" label="City" hint="Choose your city.">
     <option value="jakarta">Jakarta</option>
-    <option value="bandung" @selected(old('kota') === 'bandung')>Bandung</option>
+    <option value="bandung" @selected(old('city') === 'bandung')>Bandung</option>
 </x-markas.select>
 ```
 
@@ -12,7 +12,7 @@
 ```tsx
 import { Select } from "@/components/markas/Select";
 
-<Select name="kota" label="Kota" defaultValue="bandung">
+<Select name="city" label="City" defaultValue="bandung">
   <option value="jakarta">Jakarta</option>
   <option value="bandung">Bandung</option>
 </Select>;
@@ -25,18 +25,19 @@ import { Select } from "@/components/markas/Select";
 import { ref } from "vue";
 import Select from "@/components/markas/Select.vue";
 
-const kota = ref("bandung");
+const city = ref("bandung");
 </script>
 
 <template>
-  <Select v-model="kota" name="kota" label="Kota">
+  <Select v-model="city" name="city" label="City">
     <option value="jakarta">Jakarta</option>
     <option value="bandung">Bandung</option>
   </Select>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Atribut tambahan (`name`, `required`, `multiple`, `class`) diteruskan ke elemen `<select>`.
-- Di Vue, nilai awal diatur lewat `v-model`. Tanpa `v-model`, Vue tidak memilih option apa pun.
+- Extra attributes (`name`, `required`, `multiple`, `class`) go to the `<select>` element.
+- Without `v-model`, the Vue version selects the option marked `selected`, or the first option, just like Blade and React.
+- The component has no built-in text. Every visible string comes from your props and options, so translate them directly.

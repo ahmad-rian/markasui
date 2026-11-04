@@ -25,13 +25,19 @@ export type BreadcrumbItem = {
 
 export type BreadcrumbProps = ComponentProps<"nav"> & {
   items: BreadcrumbItem[];
+  /** Accessible label of the nav element. */
+  navLabel?: string;
 };
 
-export function Breadcrumb({ items, ...props }: BreadcrumbProps) {
+export function Breadcrumb({
+  items,
+  navLabel = "Breadcrumb",
+  ...props
+}: BreadcrumbProps) {
   const lastIndex = items.length - 1;
 
   return (
-    <nav aria-label="Breadcrumb" {...props}>
+    <nav aria-label={navLabel} {...props}>
       <ol className={list}>
         {items.map((crumb, index) => (
           <li key={index} className={item}>

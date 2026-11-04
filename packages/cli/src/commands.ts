@@ -29,7 +29,7 @@ function parseFramework(value: string | undefined): Framework | undefined {
   if (value === undefined) return undefined;
   if (!isFramework(value))
     throw new CliError(
-      `--framework harus blade, react, atau vue (bukan "${value}")`,
+      `--framework must be blade, react, or vue (got "${value}")`,
     );
   return value;
 }
@@ -47,7 +47,7 @@ async function resolveConfig(options: CommonOptions): Promise<ProjectConfig> {
     : await detectFramework(options.cwd);
   if (!detection) {
     throw new CliError(
-      "Framework tidak terdeteksi. Jalankan dari root project Laravel, React, atau Vue, atau pakai --framework.",
+      "Could not detect the framework. Run this from the root of a Laravel, React, or Vue project, or pass --framework.",
     );
   }
   return defaultConfig(options.cwd, detection);
@@ -76,10 +76,10 @@ async function writeSafely(
   if (current !== null && !options.overwrite) {
     const answer = options.yes
       ? true
-      : await io.confirm(`${shown} sudah ada dan berbeda. Timpa?`);
+      : await io.confirm(`${shown} already exists and differs. Overwrite?`);
     if (answer !== true) {
       io.warn(
-        `  dilewati: ${shown}${answer === null ? " (pakai --overwrite untuk menimpa)" : ""}`,
+        `  skipped: ${shown}${answer === null ? " (use --overwrite to replace it)" : ""}`,
       );
       return "skipped";
     }
@@ -133,7 +133,7 @@ export async function add(
 ): Promise<void> {
   if (names.length === 0)
     throw new CliError(
-      "Sebutkan komponen, misalnya: npx markasui add button modal",
+      "Name at least one component, for example: npx markasui add button modal",
     );
   const config = await resolveConfig(options);
   const registry = registryFor(options, config);
@@ -145,7 +145,7 @@ export async function add(
   for (const item of items) {
     const file = item.frameworks[config.framework];
     if (!SAFE_FILE_NAME.test(file.file))
-      throw new CliError(`Nama file dari registry tidak aman: "${file.file}"`);
+      throw new CliError(`Unsafe file name from the registry: "${file.file}"`);
     file.deps.forEach((dep) => deps.add(dep));
     const result = await writeSafely(
       join(options.cwd, config.componentsDir, file.file),
@@ -158,17 +158,17 @@ export async function add(
 
   if (!(await readConfig(options.cwd))) {
     io.log(
-      `\nmarkas.json belum ada. Jalankan "npx markasui init" agar markas.css ikut tersalin.`,
+      `\nmarkas.json is missing. Run "npx markasui init" to copy markas.css as well.`,
     );
   }
   if (deps.size > 0) {
     const manager = await detectPackageManager(options.cwd);
     io.log(
-      `\nKomponen ini butuh dependensi berikut:\n  ${installCommand(manager, [...deps])}`,
+      `\nThese components need the following dependencies:\n  ${installCommand(manager, [...deps])}`,
     );
     if (deps.has("alpinejs"))
       io.log(
-        "  (Livewire 3 sudah membawa Alpine.js, jadi langkah ini bisa dilewati.)",
+        "  (Livewire 3 already ships Alpine.js, so you can skip this step.)",
       );
   }
 }

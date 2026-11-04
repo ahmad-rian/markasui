@@ -94,10 +94,15 @@ export async function loadComponent(
   );
 
   const usage = await readText(join(componentDir, "usage.md"), "usage.md");
+  const usageId = await readText(
+    join(componentDir, "usage.id.md"),
+    "usage.id.md",
+  );
   return {
     ...meta,
     frameworks: Object.fromEntries(entries) as RegistryItem["frameworks"],
     usage,
+    i18n: { id: { ...meta.i18n.id, usage: usageId } },
   };
 }
 

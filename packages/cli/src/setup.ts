@@ -8,35 +8,35 @@ export function setupGuide(
   const cssImport = `@import "./${cssPath.split("/").at(-1)}";`;
   switch (framework) {
     case "blade":
-      return `## Setup MarkasUI untuk Laravel (Blade)
+      return `## MarkasUI setup for Laravel (Blade)
 
-1. Pasang Tailwind CSS v4 dan Alpine.js:
+1. Install Tailwind CSS v4 and Alpine.js:
    npm install tailwindcss @tailwindcss/vite alpinejs
-2. Tambahkan plugin di vite.config.js:
+2. Add the plugin to vite.config.js:
    import tailwindcss from "@tailwindcss/vite";
    plugins: [laravel({ input: ["resources/css/app.css", "resources/js/app.js"], refresh: true }), tailwindcss()]
-3. Simpan markas.css di ${cssPath}, lalu isi resources/css/app.css:
+3. Save markas.css as ${cssPath}, then set resources/css/app.css to:
    ${cssImport}
    @source "../views";
-4. Jalankan Alpine di resources/js/app.js (lewati kalau memakai Livewire 3):
+4. Start Alpine in resources/js/app.js (skip this with Livewire 3):
    import Alpine from "alpinejs"; window.Alpine = Alpine; Alpine.start();
-5. Komponen dipakai sebagai <x-markas.button>, file di resources/views/components/markas/.`;
+5. Use components as <x-markas.button>, stored in resources/views/components/markas/.`;
     case "react":
-      return `## Setup MarkasUI untuk React (Vite atau Next.js)
+      return `## MarkasUI setup for React (Vite or Next.js)
 
-1. Vite: npm install tailwindcss @tailwindcss/vite, lalu tambahkan tailwindcss() ke plugins di vite.config.ts.
-   Next.js: npm install tailwindcss @tailwindcss/postcss, lalu postcss.config.mjs berisi { plugins: { "@tailwindcss/postcss": {} } }.
-2. Simpan markas.css di ${cssPath} dan import sekali dari entry (src/main.tsx atau app/layout.tsx).
-3. Komponen di-import dari folder komponen, misalnya import { Button } from "@/components/markas/Button".
-4. Mode gelap aktif saat <html> punya class "dark".`;
+1. Vite: npm install tailwindcss @tailwindcss/vite, then add tailwindcss() to plugins in vite.config.ts.
+   Next.js: npm install tailwindcss @tailwindcss/postcss, then postcss.config.mjs with { plugins: { "@tailwindcss/postcss": {} } }.
+2. Save markas.css as ${cssPath} and import it once from the entry (src/main.tsx or app/layout.tsx).
+3. Import components from the components folder, for example import { Button } from "@/components/markas/Button".
+4. Dark mode turns on when <html> has the "dark" class.`;
     case "vue":
-      return `## Setup MarkasUI untuk Vue (Vite atau Nuxt)
+      return `## MarkasUI setup for Vue (Vite or Nuxt)
 
-1. npm install tailwindcss @tailwindcss/vite, lalu tambahkan tailwindcss() ke plugins di vite.config.ts
-   (Nuxt: vite: { plugins: [tailwindcss()] } dan css: ["~/${cssPath}"] di nuxt.config.ts).
-2. Simpan markas.css di ${cssPath} dan import sekali dari src/main.ts (Vite).
-3. Komponen di-import dari folder komponen, misalnya import Button from "@/components/markas/Button.vue".
-4. Mode gelap aktif saat <html> punya class "dark".`;
+1. npm install tailwindcss @tailwindcss/vite, then add tailwindcss() to plugins in vite.config.ts
+   (Nuxt: vite: { plugins: [tailwindcss()] } and css: ["~/${cssPath}"] in nuxt.config.ts).
+2. Save markas.css as ${cssPath} and import it once from src/main.ts (Vite).
+3. Import components from the components folder, for example import Button from "@/components/markas/Button.vue".
+4. Dark mode turns on when <html> has the "dark" class.`;
   }
 }
 

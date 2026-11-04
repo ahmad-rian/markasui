@@ -1,7 +1,7 @@
 {
   "name": "input",
   "title": "Input",
-  "description": "Kolom teks dengan label, petunjuk, dan pesan error yang terhubung lewat ARIA.",
+  "description": "Text field with a label, hint, and error message wired up through ARIA.",
   "category": "form",
   "tags": ["input", "form", "text", "field"],
   "status": "stable",
@@ -15,44 +15,68 @@
       "name": "label",
       "type": "string",
       "default": "-",
-      "description": "Teks label yang terhubung ke input lewat for/id."
+      "description": "Label text, linked to the input through for and id."
     },
     {
       "name": "hint",
       "type": "string",
       "default": "-",
-      "description": "Teks petunjuk di bawah input. Disembunyikan saat ada error."
+      "description": "Hint text below the input. Hidden while an error is shown."
     },
     {
       "name": "error",
       "type": "string",
       "default": "-",
-      "description": "Pesan error. Mengaktifkan aria-invalid dan border danger."
+      "description": "Error message. Turns on aria-invalid and the danger border."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id input. Dibuat otomatis kalau kosong."
+      "default": "auto",
+      "description": "Input id. Generated automatically when empty."
     },
     {
       "name": "type",
       "type": "string",
       "default": "text",
-      "description": "Atribut type native (email, password, dan seterusnya)."
+      "description": "Native type attribute (email, password, and so on)."
     }
   ],
   "a11y": [
-    "Label terhubung ke input lewat atribut for dan id.",
-    "Pesan error dan petunjuk dibacakan screen reader lewat aria-describedby.",
-    "aria-invalid aktif saat prop error terisi."
+    "The label is linked to the input through the for and id attributes.",
+    "Screen readers announce the error and hint through aria-describedby.",
+    "aria-invalid is set when the error prop is filled."
   ],
   "ai": {
-    "whenToUse": "Input teks satu baris di form: nama, email, kata sandi, pencarian.",
+    "whenToUse": "Single-line text fields in forms: name, email, password, search.",
     "rules": [
-      "Selalu isi label, jangan hanya placeholder",
-      "Teruskan pesan validasi server ke prop error"
+      "Always set a label, never rely on the placeholder alone",
+      "Pass server validation messages to the error prop"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Kolom teks dengan label, petunjuk, dan pesan error yang terhubung lewat ARIA.",
+      "props": {
+        "label": "Teks label yang terhubung ke input lewat for/id.",
+        "hint": "Teks petunjuk di bawah input. Disembunyikan saat ada error.",
+        "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
+        "id": "Id input. Dibuat otomatis kalau kosong.",
+        "type": "Atribut type native (email, password, dan seterusnya)."
+      },
+      "a11y": [
+        "Label terhubung ke input lewat atribut for dan id.",
+        "Pesan error dan petunjuk dibacakan screen reader lewat aria-describedby.",
+        "aria-invalid aktif saat prop error terisi."
+      ],
+      "ai": {
+        "whenToUse": "Input teks satu baris di form: nama, email, kata sandi, pencarian.",
+        "rules": [
+          "Selalu isi label, jangan hanya placeholder",
+          "Teruskan pesan validasi server ke prop error"
+        ]
+      }
+    }
+  }
 }

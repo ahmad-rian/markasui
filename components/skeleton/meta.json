@@ -1,41 +1,72 @@
 {
   "name": "skeleton",
   "title": "Skeleton",
-  "description": "Placeholder berdenyut untuk konten yang sedang dimuat, ukurannya diatur lewat class.",
+  "description": "Pulsing placeholder for content that is loading, sized through classes.",
   "category": "feedback",
   "tags": ["skeleton", "loading", "placeholder", "shimmer"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "skeleton.blade.php", "deps": [] },
-    "react": { "file": "Skeleton.tsx", "deps": [] },
-    "vue": { "file": "Skeleton.vue", "deps": [] }
+    "blade": {
+      "file": "skeleton.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Skeleton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Skeleton.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "shape",
       "type": "'rect' | 'circle'",
       "default": "rect",
-      "description": "Sudut membulat 6px atau lingkaran penuh untuk avatar."
+      "description": "6px rounded corners, or a full circle for avatars."
     },
     {
       "name": "class",
       "type": "string",
       "default": "-",
-      "description": "Ukuran placeholder, misalnya h-4 w-1/2 atau size-12."
+      "description": "Placeholder size, for example h-4 w-1/2 or size-12."
     }
   ],
   "a11y": [
-    "Setiap skeleton aria-hidden, jadi pembaca layar tidak membacakan kotak kosong.",
-    "Bungkus grup skeleton dengan role status dan teks sr-only seperti Memuat profil.",
-    "Animasi denyut dimatikan saat prefers-reduced-motion."
+    "Every skeleton is aria-hidden, so screen readers do not announce empty boxes.",
+    "Wrap a group of skeletons in role status with sr-only text such as Loading profile.",
+    "The pulse animation is turned off under prefers-reduced-motion."
   ],
   "ai": {
-    "whenToUse": "Menahan tempat konten yang sedang dimuat agar layout tidak bergeser.",
+    "whenToUse": "Holding the place of loading content so the layout does not shift.",
     "rules": [
-      "Bentuk dan ukuran skeleton meniru konten aslinya",
-      "Pakai shape circle untuk avatar, bukan class rounded-full",
-      "Tambahkan teks sr-only di pembungkus agar status memuat tetap terbaca"
+      "Match the shape and size of the real content",
+      "Use shape circle for avatars, not the rounded-full class",
+      "Add sr-only text to the wrapper so the loading state is announced"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Placeholder berdenyut untuk konten yang sedang dimuat, ukurannya diatur lewat class.",
+      "props": {
+        "shape": "Sudut membulat 6px atau lingkaran penuh untuk avatar.",
+        "class": "Ukuran placeholder, misalnya h-4 w-1/2 atau size-12."
+      },
+      "a11y": [
+        "Setiap skeleton aria-hidden, jadi pembaca layar tidak membacakan kotak kosong.",
+        "Bungkus grup skeleton dengan role status dan teks sr-only seperti Memuat profil.",
+        "Animasi denyut dimatikan saat prefers-reduced-motion."
+      ],
+      "ai": {
+        "whenToUse": "Menahan tempat konten yang sedang dimuat agar layout tidak bergeser.",
+        "rules": [
+          "Bentuk dan ukuran skeleton meniru konten aslinya",
+          "Pakai shape circle untuk avatar, bukan class rounded-full",
+          "Tambahkan teks sr-only di pembungkus agar status memuat tetap terbaca"
+        ]
+      }
+    }
+  }
 }

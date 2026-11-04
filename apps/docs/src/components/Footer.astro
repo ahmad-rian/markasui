@@ -1,15 +1,18 @@
 ---
 import { SITE } from "../lib/site";
+import { getLocale, localePath, t } from "../lib/i18n";
+const locale = getLocale(Astro.url);
+const strings = t(locale);
 const link = "text-muted transition-colors hover:text-ink";
 ---
 
 <footer class="border-t border-line">
   <div class="mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-    <p class="text-muted">Dibuat oleh {SITE.author}, {SITE.city}</p>
-    <nav aria-label="Footer" class="flex flex-wrap gap-x-6 gap-y-2">
+    <p class="text-muted">{strings.footer.madeBy}</p>
+    <nav aria-label={strings.nav.footer} class="flex flex-wrap gap-x-6 gap-y-2">
       <a href={SITE.repo} class={link}>GitHub</a>
-      <a href="/docs/introduction" class={link}>Docs</a>
-      <a href={`${SITE.repo}/blob/main/LICENSE`} class={link}>Lisensi MIT</a>
+      <a href={localePath(locale, "/docs/introduction")} class={link}>Docs</a>
+      <a href={`${SITE.repo}/blob/main/LICENSE`} class={link}>{strings.footer.license}</a>
       <a href="/llms.txt" class={link}>llms.txt</a>
     </nav>
   </div>

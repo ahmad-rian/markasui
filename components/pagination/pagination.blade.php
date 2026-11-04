@@ -3,6 +3,9 @@
     'total' => 1,
     'href' => '?page={page}',
     'siblings' => 1,
+    'navLabel' => 'Pagination',
+    'previousLabel' => 'Previous',
+    'nextLabel' => 'Next',
 ])
 
 @php
@@ -43,18 +46,18 @@
     $hrefFor = fn (int $target): string => $safeHref(str_replace('{page}', (string) $target, (string) $href));
 @endphp
 
-<nav {{ $attributes->merge(['aria-label' => 'Navigasi halaman'])->class([$root]) }}>
+<nav {{ $attributes->merge(['aria-label' => $navLabel])->class([$root]) }}>
     <ul class="{{ $list }}">
         <li>
             @if ($current > 1)
                 <a href="{{ $hrefFor($current - 1) }}" rel="prev" class="{{ $link }}">
                     <svg class="{{ $icon }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-                    <span class="{{ $label }}">Sebelumnya</span>
+                    <span class="{{ $label }}">{{ $previousLabel }}</span>
                 </a>
             @else
                 <span aria-disabled="true" class="{{ $link }}">
                     <svg class="{{ $icon }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-                    <span class="{{ $label }}">Sebelumnya</span>
+                    <span class="{{ $label }}">{{ $previousLabel }}</span>
                 </span>
             @endif
         </li>
@@ -75,12 +78,12 @@
         <li>
             @if ($current < $total)
                 <a href="{{ $hrefFor($current + 1) }}" rel="next" class="{{ $link }}">
-                    <span class="{{ $label }}">Berikutnya</span>
+                    <span class="{{ $label }}">{{ $nextLabel }}</span>
                     <svg class="{{ $icon }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
                 </a>
             @else
                 <span aria-disabled="true" class="{{ $link }}">
-                    <span class="{{ $label }}">Berikutnya</span>
+                    <span class="{{ $label }}">{{ $nextLabel }}</span>
                     <svg class="{{ $icon }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
                 </span>
             @endif

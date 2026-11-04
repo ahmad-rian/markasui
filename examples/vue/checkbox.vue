@@ -2,23 +2,23 @@
 import { ref } from "vue";
 import Checkbox from "../../components/checkbox/Checkbox.vue";
 
-const syarat = ref(true);
-const kabar = ref(false);
+const terms = ref(true);
+const updates = ref(false);
 </script>
 
 <template>
   <div class="grid gap-4">
     <Checkbox
-      v-model="syarat"
-      name="syarat"
-      label="Saya setuju dengan syarat layanan"
+      v-model="terms"
+      name="terms"
+      label="I agree to the terms of service"
     />
     <Checkbox
-      v-model="kabar"
-      name="kabar"
-      label="Kirimi saya kabar terbaru"
-      description="Paling banyak satu email per bulan."
+      v-model="updates"
+      name="updates"
+      label="Send me product updates"
+      description="At most one email per month."
     />
-    <Checkbox name="arsip" label="Arsipkan otomatis" disabled />
+    <Checkbox name="archive" label="Archive automatically" disabled />
   </div>
 </template>

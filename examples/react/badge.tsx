@@ -3,11 +3,11 @@ import { Badge } from "../../components/badge/Badge";
 export default function BadgeFixture() {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Badge>Draf</Badge>
-      <Badge variant="primary">Baru</Badge>
-      <Badge variant="success">Aktif</Badge>
-      <Badge variant="warning">Tertunda</Badge>
-      <Badge variant="danger">Gagal</Badge>
+      <Badge>Draft</Badge>
+      <Badge variant="primary">New</Badge>
+      <Badge variant="success">Active</Badge>
+      <Badge variant="warning">Pending</Badge>
+      <Badge variant="danger">Failed</Badge>
     </div>
   );
 }

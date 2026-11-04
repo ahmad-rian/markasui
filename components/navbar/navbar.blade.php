@@ -1,5 +1,8 @@
 @props([
     'links' => [],
+    'menuLabel' => 'Menu',
+    'navLabel' => 'Main',
+    'mobileNavLabel' => 'Main mobile',
 ])
 
 @php
@@ -36,7 +39,7 @@
         @isset($brand)
             <div class="{{ $brandClass }}">{{ $brand }}</div>
         @endisset
-        <nav aria-label="Navigasi utama" class="{{ $desktopNav }}">
+        <nav aria-label="{{ $navLabel }}" class="{{ $desktopNav }}">
             @foreach ($links as $item)
                 @php $active = ! empty($item['active']); @endphp
                 <a
@@ -52,7 +55,7 @@
             <button
                 type="button"
                 x-ref="toggle"
-                aria-label="Menu"
+                aria-label="{{ $menuLabel }}"
                 aria-expanded="false"
                 aria-controls="{{ $menuId }}"
                 data-state="closed"
@@ -74,7 +77,7 @@
         :hidden="! open"
         class="{{ $panel }}"
     >
-        <nav aria-label="Navigasi utama seluler" class="{{ $panelList }}">
+        <nav aria-label="{{ $mobileNavLabel }}" class="{{ $panelList }}">
             @foreach ($links as $item)
                 @php $active = ! empty($item['active']); @endphp
                 <a

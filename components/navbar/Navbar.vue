@@ -7,8 +7,17 @@ const props = withDefaults(
   defineProps<{
     links?: NavbarLink[];
     id?: string;
+    menuLabel?: string;
+    navLabel?: string;
+    mobileNavLabel?: string;
   }>(),
-  { links: () => [], id: undefined },
+  {
+    links: () => [],
+    id: undefined,
+    menuLabel: "Menu",
+    navLabel: "Main",
+    mobileNavLabel: "Main mobile",
+  },
 );
 
 const root = "@container w-full border-b border-line bg-surface";
@@ -54,7 +63,7 @@ function onEscape() {
   <header :id="navbarId" :class="root" @keydown.escape="onEscape">
     <div :class="bar">
       <div v-if="$slots.brand" :class="brandClass"><slot name="brand" /></div>
-      <nav aria-label="Navigasi utama" :class="desktopNav">
+      <nav :aria-label="props.navLabel" :class="desktopNav">
         <a
           v-for="(item, index) in props.links"
           :key="index"
@@ -70,7 +79,7 @@ function onEscape() {
         <button
           ref="toggleButton"
           type="button"
-          aria-label="Menu"
+          :aria-label="props.menuLabel"
           :aria-expanded="open ? 'true' : 'false'"
           :aria-controls="menuId"
           :data-state="open ? 'open' : 'closed'"
@@ -110,7 +119,7 @@ function onEscape() {
       :hidden="!open"
       :class="panel"
     >
-      <nav aria-label="Navigasi utama seluler" :class="panelList">
+      <nav :aria-label="props.mobileNavLabel" :class="panelList">
         <a
           v-for="(item, index) in props.links"
           :key="index"

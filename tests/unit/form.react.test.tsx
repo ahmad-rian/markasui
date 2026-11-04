@@ -8,73 +8,73 @@ import { Switch } from "../../components/switch/Switch";
 import { Textarea } from "../../components/textarea/Textarea";
 
 const options = [
-  { value: "gratis", label: "Gratis", description: "Untuk proyek pribadi." },
+  { value: "free", label: "Free", description: "For personal projects." },
   { value: "pro", label: "Pro" },
 ];
 
 describe("React Textarea", () => {
-  it("default 4 baris dan menghubungkan label serta petunjuk", () => {
-    render(<Textarea id="bio" label="Bio" hint="Maksimal 200 karakter." />);
+  it("defaults to 4 rows and links the label and hint", () => {
+    render(<Textarea id="bio" label="Bio" hint="Up to 200 characters." />);
     const textarea = screen.getByLabelText("Bio");
     expect(textarea.tagName).toBe("TEXTAREA");
     expect(textarea).toHaveAttribute("rows", "4");
-    expect(textarea).toHaveAccessibleDescription("Maksimal 200 karakter.");
+    expect(textarea).toHaveAccessibleDescription("Up to 200 characters.");
     expect(textarea).not.toHaveAttribute("aria-invalid");
   });
 
-  it("error menggantikan petunjuk, rows bisa diubah, class user di akhir", () => {
+  it("error replaces the hint, rows is configurable, user class comes last", () => {
     render(
       <Textarea
-        label="Alamat"
-        hint="Petunjuk"
-        error="Wajib diisi"
+        label="Address"
+        hint="Hint"
+        error="Required"
         rows={2}
         className="font-mono"
       />,
     );
-    const textarea = screen.getByLabelText("Alamat");
+    const textarea = screen.getByLabelText("Address");
     expect(textarea).toHaveAttribute("rows", "2");
     expect(textarea).toHaveAttribute("aria-invalid", "true");
-    expect(textarea).toHaveAccessibleDescription("Wajib diisi");
-    expect(screen.queryByText("Petunjuk")).toBeNull();
+    expect(textarea).toHaveAccessibleDescription("Required");
+    expect(screen.queryByText("Hint")).toBeNull();
     expect(textarea.className.endsWith("font-mono")).toBe(true);
     expect(textarea.id).not.toBe("");
   });
 });
 
 describe("React Select", () => {
-  it("merender option dari children dan nilai awal", () => {
+  it("renders options from children with an initial value", () => {
     render(
-      <Select label="Kota" hint="Pilih kota." defaultValue="bandung">
+      <Select label="City" hint="Choose a city." defaultValue="bandung">
         <option value="jakarta">Jakarta</option>
         <option value="bandung">Bandung</option>
       </Select>,
     );
-    const select = screen.getByLabelText("Kota");
+    const select = screen.getByLabelText("City");
     expect(select).toHaveValue("bandung");
     expect(screen.getAllByRole("option")).toHaveLength(2);
-    expect(select).toHaveAccessibleDescription("Pilih kota.");
+    expect(select).toHaveAccessibleDescription("Choose a city.");
     expect(select.nextElementSibling).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("error mengaktifkan aria-invalid dan class user di akhir", async () => {
+  it("error sets aria-invalid and user class comes last", async () => {
     const onChange = vi.fn();
     render(
       <Select
-        id="peran"
-        label="Peran"
-        error="Wajib dipilih"
+        id="role"
+        label="Role"
+        error="Required"
         className="w-40"
         onChange={onChange}
       >
-        <option value="">Pilih</option>
+        <option value="">Choose</option>
         <option value="admin">Admin</option>
       </Select>,
     );
-    const select = screen.getByLabelText("Peran");
-    expect(select).toHaveAttribute("id", "peran");
+    const select = screen.getByLabelText("Role");
+    expect(select).toHaveAttribute("id", "role");
     expect(select).toHaveAttribute("aria-invalid", "true");
-    expect(select).toHaveAccessibleDescription("Wajib dipilih");
+    expect(select).toHaveAccessibleDescription("Required");
     expect(select.className.endsWith("w-40")).toBe(true);
     await userEvent.selectOptions(select, "admin");
     expect(onChange).toHaveBeenCalled();
@@ -83,26 +83,26 @@ describe("React Select", () => {
 });
 
 describe("React Checkbox", () => {
-  it("label dan deskripsi terhubung, klik label mencentang", async () => {
+  it("links label and description, clicking the label checks it", async () => {
     render(
       <Checkbox
-        label="Kirimi kabar"
-        description="Satu email per bulan."
+        label="Send updates"
+        description="One email per month."
         className="mt-1"
       />,
     );
-    const checkbox = screen.getByRole("checkbox", { name: "Kirimi kabar" });
-    expect(checkbox).toHaveAccessibleDescription("Satu email per bulan.");
+    const checkbox = screen.getByRole("checkbox", { name: "Send updates" });
+    expect(checkbox).toHaveAccessibleDescription("One email per month.");
     expect(checkbox).not.toBeChecked();
-    await userEvent.click(screen.getByText("Kirimi kabar"));
+    await userEvent.click(screen.getByText("Send updates"));
     expect(checkbox).toBeChecked();
     expect(checkbox.className.endsWith("mt-1")).toBe(true);
   });
 
-  it("type selalu checkbox dan disabled tidak bisa dicentang", async () => {
-    render(<Checkbox id="arsip" label="Arsip" disabled defaultChecked />);
-    const checkbox = screen.getByRole("checkbox", { name: "Arsip" });
-    expect(checkbox).toHaveAttribute("id", "arsip");
+  it("type is always checkbox and disabled cannot be toggled", async () => {
+    render(<Checkbox id="archive" label="Archive" disabled defaultChecked />);
+    const checkbox = screen.getByRole("checkbox", { name: "Archive" });
+    expect(checkbox).toHaveAttribute("id", "archive");
     expect(checkbox).toHaveAttribute("type", "checkbox");
     expect(checkbox).not.toHaveAttribute("aria-describedby");
     await userEvent.click(checkbox);
@@ -111,18 +111,18 @@ describe("React Checkbox", () => {
 });
 
 describe("React Switch", () => {
-  it("role switch, onCheckedChange dan onChange dipanggil", async () => {
+  it("has role switch and calls onCheckedChange and onChange", async () => {
     const onCheckedChange = vi.fn();
     const onChange = vi.fn();
     render(
       <Switch
-        label="Notifikasi"
+        label="Notifications"
         onCheckedChange={onCheckedChange}
         onChange={onChange}
         className="ml-2"
       />,
     );
-    const toggle = screen.getByRole("switch", { name: "Notifikasi" });
+    const toggle = screen.getByRole("switch", { name: "Notifications" });
     expect(toggle).toHaveAttribute("type", "checkbox");
     expect(toggle).not.toBeChecked();
     await userEvent.click(toggle);
@@ -132,7 +132,7 @@ describe("React Switch", () => {
     expect(toggle.className.endsWith("ml-2")).toBe(true);
   });
 
-  it("checked terkontrol dan id dari user", () => {
+  it("supports controlled checked and a user id", () => {
     render(<Switch id="beta" label="Beta" checked onCheckedChange={vi.fn()} />);
     const toggle = screen.getByRole("switch", { name: "Beta" });
     expect(toggle).toHaveAttribute("id", "beta");
@@ -141,38 +141,38 @@ describe("React Switch", () => {
 });
 
 describe("React RadioGroup", () => {
-  it("fieldset dengan legend, defaultValue, dan deskripsi opsi", async () => {
+  it("renders a fieldset with legend, defaultValue, and option descriptions", async () => {
     const onValueChange = vi.fn();
     render(
       <RadioGroup
-        name="paket"
-        label="Paket"
+        name="plan"
+        label="Plan"
         options={options}
         defaultValue="pro"
         onValueChange={onValueChange}
         className="mt-4"
       />,
     );
-    const group = screen.getByRole("group", { name: "Paket" });
+    const group = screen.getByRole("group", { name: "Plan" });
     expect(group.tagName).toBe("FIELDSET");
     expect(group.className.endsWith("mt-4")).toBe(true);
     expect(screen.getByRole("radio", { name: "Pro" })).toBeChecked();
-    const gratis = screen.getByRole("radio", { name: "Gratis" });
-    expect(gratis).toHaveAttribute("name", "paket");
-    expect(gratis).toHaveAccessibleDescription("Untuk proyek pribadi.");
-    await userEvent.click(gratis);
-    expect(gratis).toBeChecked();
-    expect(onValueChange).toHaveBeenCalledWith("gratis");
+    const free = screen.getByRole("radio", { name: "Free" });
+    expect(free).toHaveAttribute("name", "plan");
+    expect(free).toHaveAccessibleDescription("For personal projects.");
+    await userEvent.click(free);
+    expect(free).toBeChecked();
+    expect(onValueChange).toHaveBeenCalledWith("free");
   });
 
-  it("value terkontrol dan orientasi horizontal", async () => {
+  it("supports a controlled value and horizontal orientation", async () => {
     const onValueChange = vi.fn();
     render(
       <RadioGroup
         id="g"
-        name="tagihan"
+        name="billing"
         options={options}
-        value="gratis"
+        value="free"
         orientation="horizontal"
         onValueChange={onValueChange}
       />,
@@ -180,10 +180,10 @@ describe("React RadioGroup", () => {
     const pro = screen.getByRole("radio", { name: "Pro" });
     expect(pro).toHaveAttribute("id", "g-pro");
     expect(pro).not.toHaveAttribute("aria-describedby");
-    expect(screen.getByRole("radio", { name: "Gratis" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
     expect(pro.closest("fieldset")?.firstElementChild).toHaveClass("flex");
     await userEvent.click(pro);
     expect(onValueChange).toHaveBeenCalledWith("pro");
-    expect(screen.getByRole("radio", { name: "Gratis" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
   });
 });

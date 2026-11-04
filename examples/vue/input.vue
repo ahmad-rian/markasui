@@ -3,24 +3,24 @@ import { ref } from "vue";
 import Input from "../../components/input/Input.vue";
 
 const email = ref("budi@");
-const kode = ref("MARKAS-2026");
+const code = ref("MARKAS-2026");
 </script>
 
 <template>
   <div class="grid gap-4">
     <Input
-      name="nama"
-      label="Nama lengkap"
+      name="name"
+      label="Full name"
       placeholder="Budi Santoso"
-      hint="Sesuai KTP."
+      hint="As shown on your ID"
     />
     <Input
       v-model="email"
       name="email"
       type="email"
       label="Email"
-      error="Format email belum benar."
+      error="Enter a valid email address"
     />
-    <Input v-model="kode" name="kode" label="Kode undangan" disabled />
+    <Input v-model="code" name="code" label="Invite code" disabled />
   </div>
 </template>

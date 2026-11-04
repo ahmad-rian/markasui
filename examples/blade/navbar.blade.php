@@ -1,10 +1,10 @@
 <x-markas.navbar :links="[
-    ['label' => 'Beranda', 'href' => '/', 'active' => true],
-    ['label' => 'Komponen', 'href' => '/komponen'],
-    ['label' => 'Dokumentasi', 'href' => '/dokumentasi'],
+    ['label' => 'Home', 'href' => '/', 'active' => true],
+    ['label' => 'Components', 'href' => '/components'],
+    ['label' => 'Docs', 'href' => '/docs'],
 ]">
     <x-slot:brand>MarkasUI</x-slot:brand>
     <x-slot:actions>
-        <x-markas.button size="sm">Masuk</x-markas.button>
+        <x-markas.button size="sm">Sign in</x-markas.button>
     </x-slot:actions>
 </x-markas.navbar>

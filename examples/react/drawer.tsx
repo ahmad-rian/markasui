@@ -4,20 +4,20 @@ import { Drawer } from "../../components/drawer/Drawer";
 export default function DrawerFixture() {
   return (
     <Drawer
-      title="Filter produk"
-      trigger={<Button variant="secondary">Buka filter</Button>}
+      title="Filter products"
+      trigger={<Button variant="secondary">Open filters</Button>}
       footer={
         <>
-          <Button variant="secondary" type="submit" value="batal">
-            Batal
+          <Button variant="secondary" type="submit" value="cancel">
+            Cancel
           </Button>
-          <Button type="submit" value="terapkan">
-            Terapkan
+          <Button type="submit" value="apply">
+            Apply
           </Button>
         </>
       }
     >
-      Pilih kategori dan rentang harga untuk menyaring daftar produk.
+      Choose a category and price range to filter the product list.
     </Drawer>
   );
 }

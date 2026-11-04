@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DocsMarkdown.astro
 title: Instalasi
 description: Siapkan Tailwind CSS v4 dan markas.css di Laravel, React, atau Vue.
 ---

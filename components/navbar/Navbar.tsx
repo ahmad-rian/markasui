@@ -47,6 +47,12 @@ export type NavbarProps = ComponentProps<"header"> & {
   links?: NavbarLink[];
   brand?: ReactNode;
   actions?: ReactNode;
+  /** Accessible label of the mobile menu button. */
+  menuLabel?: string;
+  /** Accessible label of the desktop nav element. */
+  navLabel?: string;
+  /** Accessible label of the mobile nav element. */
+  mobileNavLabel?: string;
 };
 
 function NavLinks({ links }: { links: NavbarLink[] }) {
@@ -67,6 +73,9 @@ export function Navbar({
   links = [],
   brand,
   actions,
+  menuLabel = "Menu",
+  navLabel = "Main",
+  mobileNavLabel = "Main mobile",
   id,
   className,
   onKeyDown,
@@ -95,7 +104,7 @@ export function Navbar({
     >
       <div className={bar}>
         {brand && <div className={brandClass}>{brand}</div>}
-        <nav aria-label="Navigasi utama" className={desktopNav}>
+        <nav aria-label={navLabel} className={desktopNav}>
           <NavLinks links={links} />
         </nav>
         <div className={actionsClass}>
@@ -103,7 +112,7 @@ export function Navbar({
           <button
             ref={toggleRef}
             type="button"
-            aria-label="Menu"
+            aria-label={menuLabel}
             aria-expanded={open}
             aria-controls={menuId}
             data-state={open ? "open" : "closed"}
@@ -143,7 +152,7 @@ export function Navbar({
         hidden={!open}
         className={panel}
       >
-        <nav aria-label="Navigasi utama seluler" className={panelList}>
+        <nav aria-label={mobileNavLabel} className={panelList}>
           <NavLinks links={links} />
         </nav>
       </div>

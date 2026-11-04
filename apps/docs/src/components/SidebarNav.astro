@@ -1,10 +1,13 @@
 ---
 import FrameworkSwitcher from "./FrameworkSwitcher.astro";
-import { DOCS_NAV } from "../lib/site";
+import { getLocale, localePath, pagePath, t } from "../lib/i18n";
 import { freshness, getComponents, groupByCategory } from "../lib/registry";
+import { docsNav } from "../lib/site";
 
-const path = Astro.url.pathname;
-const groups = groupByCategory(await getComponents());
+const locale = getLocale(Astro.url);
+const strings = t(locale).sidebar;
+const path = pagePath(Astro.url);
+const groups = groupByCategory(await getComponents(), locale);
 const heading = "mb-2 px-3 text-xs font-medium text-muted";
 const link =
   "flex h-8 items-center justify-between gap-2 rounded-lg px-3 text-sm text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink aria-[current=page]:bg-subtle aria-[current=page]:font-medium aria-[current=page]:text-ink";
@@ -13,10 +16,10 @@ const link =
 <div class="grid gap-6">
   <FrameworkSwitcher />
   <section>
-    <h2 class={heading}>Mulai</h2>
+    <h2 class={heading}>{strings.start}</h2>
     <ul class="grid gap-0.5">
       {
-        DOCS_NAV.map((item) => (
+        docsNav(locale).map((item) => (
           <li>
             <a href={item.href} class={link} aria-current={path === item.href ? "page" : undefined}>
               {item.label}
@@ -33,12 +36,12 @@ const link =
         <ul class="grid gap-0.5">
           {group.items.map((item) => {
             const label = freshness(item);
-            const href = `/components/${item.name}`;
+            const href = localePath(locale, `/components/${item.name}`);
             return (
               <li>
                 <a href={href} class={link} aria-current={path === href ? "page" : undefined}>
                   {item.title}
-                  {label && <span class="text-xs text-primary">{label === "baru" ? "Baru" : "Diperbarui"}</span>}
+                  {label && <span class="text-xs text-primary">{label === "new" ? strings.fresh : strings.updated}</span>}
                 </a>
               </li>
             );

@@ -2,11 +2,11 @@
 
 ```blade
 <x-markas.radio-group
-    name="paket"
-    label="Paket langganan"
-    :value="old('paket', 'pro')"
+    name="plan"
+    label="Subscription plan"
+    :value="old('plan', 'pro')"
     :options="[
-        ['value' => 'gratis', 'label' => 'Gratis', 'description' => 'Untuk proyek pribadi.'],
+        ['value' => 'free', 'label' => 'Free', 'description' => 'For personal projects.'],
         ['value' => 'pro', 'label' => 'Pro'],
     ]"
 />
@@ -18,12 +18,12 @@
 import { RadioGroup } from "@/components/markas/RadioGroup";
 
 <RadioGroup
-  name="paket"
-  label="Paket langganan"
+  name="plan"
+  label="Subscription plan"
   defaultValue="pro"
   onValueChange={(value) => console.log(value)}
   options={[
-    { value: "gratis", label: "Gratis", description: "Untuk proyek pribadi." },
+    { value: "free", label: "Free", description: "For personal projects." },
     { value: "pro", label: "Pro" },
   ]}
 />;
@@ -36,28 +36,25 @@ import { RadioGroup } from "@/components/markas/RadioGroup";
 import { ref } from "vue";
 import RadioGroup from "@/components/markas/RadioGroup.vue";
 
-const paket = ref("pro");
+const plan = ref("pro");
 </script>
 
 <template>
   <RadioGroup
-    v-model="paket"
-    name="paket"
-    label="Paket langganan"
+    v-model="plan"
+    name="plan"
+    label="Subscription plan"
     :options="[
-      {
-        value: 'gratis',
-        label: 'Gratis',
-        description: 'Untuk proyek pribadi.',
-      },
+      { value: 'free', label: 'Free', description: 'For personal projects.' },
       { value: 'pro', label: 'Pro' },
     ]"
   />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Atribut tambahan (`class`, `disabled`, `aria-*`) jatuh ke `<fieldset>`. `disabled` di fieldset menonaktifkan semua radio sekaligus.
-- Value opsi dipakai sebagai bagian id, jadi pakai huruf kecil, angka, tanda hubung, atau underscore saja.
-- Pakai `orientation="horizontal"` untuk opsi pendek yang berjajar.
+- Extra attributes (`class`, `disabled`, `aria-*`) fall through to the `<fieldset>`. `disabled` on the fieldset disables every radio at once.
+- Option values are used in ids, so stick to lowercase letters, digits, hyphens, or underscores.
+- Use `orientation="horizontal"` for short options laid out in a row.
+- The component has no built-in text. Translate `label` and each option's `label` and `description` directly.

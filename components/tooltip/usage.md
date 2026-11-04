@@ -1,12 +1,12 @@
 ## Blade
 
 ```blade
-<x-markas.tooltip content="Salin tautan ke papan klip">
-    <x-markas.button variant="secondary">Salin tautan</x-markas.button>
+<x-markas.tooltip content="Copy link to clipboard">
+    <x-markas.button variant="secondary">Copy link</x-markas.button>
 </x-markas.tooltip>
 ```
 
-Butuh Alpine.js.
+Needs Alpine.js.
 
 ## React
 
@@ -14,8 +14,8 @@ Butuh Alpine.js.
 import { Button } from "@/components/markas/Button";
 import { Tooltip } from "@/components/markas/Tooltip";
 
-<Tooltip content="Salin tautan ke papan klip">
-  <Button variant="secondary">Salin tautan</Button>
+<Tooltip content="Copy link to clipboard">
+  <Button variant="secondary">Copy link</Button>
 </Tooltip>;
 ```
 
@@ -23,13 +23,14 @@ import { Tooltip } from "@/components/markas/Tooltip";
 
 ```vue
 <template>
-  <Tooltip content="Salin tautan ke papan klip">
-    <Button variant="secondary">Salin tautan</Button>
+  <Tooltip content="Copy link to clipboard">
+    <Button variant="secondary">Copy link</Button>
   </Tooltip>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Elemen pertama di dalam Tooltip otomatis diberi `aria-describedby` ke tooltip.
-- Pakai `side="bottom"` untuk menampilkan tooltip di bawah pemicu.
+- The first element inside Tooltip automatically gets `aria-describedby` pointing to the tooltip.
+- Use `side="bottom"` to show the tooltip below the trigger.
+- Tooltip has no built-in text. Write `content` in the language of your site.

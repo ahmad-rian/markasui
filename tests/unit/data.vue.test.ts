@@ -7,27 +7,27 @@ import Table from "../../components/table/Table.vue";
 describe("Vue Card", () => {
   it("merender judul, deskripsi, isi, dan footer", () => {
     render(Card, {
-      props: { title: "Paket Pro", description: "Untuk tim kecil." },
+      props: { title: "Pro plan", description: "For small teams." },
       slots: {
-        default: "Isi kartu",
-        footer: '<button type="button">Pilih</button>',
+        default: "Card body",
+        footer: '<button type="button">Choose</button>',
       },
     });
     const card = screen.getByRole("article");
     expect(
-      within(card).getByRole("heading", { level: 3, name: "Paket Pro" }),
+      within(card).getByRole("heading", { level: 3, name: "Pro plan" }),
     ).toBeInTheDocument();
-    expect(within(card).getByText("Untuk tim kecil.")).toHaveClass(
+    expect(within(card).getByText("For small teams.")).toHaveClass(
       "text-muted",
     );
-    expect(within(card).getByText("Isi kartu")).toBeInTheDocument();
-    expect(within(card).getByRole("button", { name: "Pilih" })).toBeVisible();
+    expect(within(card).getByText("Card body")).toBeInTheDocument();
+    expect(within(card).getByRole("button", { name: "Choose" })).toBeVisible();
   });
 
   it("tidak merender bagian kosong dan menggabung class user di akhir", () => {
     render(Card, {
       attrs: { class: "max-w-sm" },
-      slots: { default: "Hanya isi" },
+      slots: { default: "Body only" },
     });
     const card = screen.getByRole("article");
     expect(card.querySelector("header")).toBeNull();
@@ -73,10 +73,10 @@ describe("Vue Avatar", () => {
 
   it("beralih ke inisial saat gambar gagal dimuat", async () => {
     render(Avatar, {
-      props: { name: "Dewi Lestari", src: "/rusak.png", alt: "Foto Dewi" },
+      props: { name: "Dewi Lestari", src: "/broken.png", alt: "Photo of Dewi" },
     });
-    await fireEvent.error(screen.getByRole("img", { name: "Foto Dewi" }));
-    const fallback = screen.getByRole("img", { name: "Foto Dewi" });
+    await fireEvent.error(screen.getByRole("img", { name: "Photo of Dewi" }));
+    const fallback = screen.getByRole("img", { name: "Photo of Dewi" });
     expect(fallback.tagName).toBe("SPAN");
     expect(fallback).toHaveTextContent("DL");
   });
@@ -90,65 +90,73 @@ describe("Vue Avatar", () => {
 
 describe("Vue Table", () => {
   const columns = [
-    { key: "kode", label: "Pesanan" },
+    { key: "code", label: "Order" },
     { key: "total", label: "Total", align: "right" as const },
   ];
   const rows = [
-    { kode: "INV-1", total: "Rp10.000" },
-    { kode: "INV-2", total: null },
+    { code: "INV-1", total: "$10.00" },
+    { code: "INV-2", total: null },
   ];
 
   it("merender region yang bisa difokus, header, dan baris", () => {
     render(Table, {
-      props: { caption: "Pesanan", columns, rows },
+      props: { caption: "Orders", columns, rows },
       attrs: { class: "max-h-80" },
     });
-    const region = screen.getByRole("region", { name: "Pesanan" });
+    const region = screen.getByRole("region", { name: "Orders" });
     expect(region).toHaveAttribute("tabindex", "0");
     expect(region).toHaveClass("overflow-x-auto", "rounded-xl");
     expect(region.className.endsWith("max-h-80")).toBe(true);
 
-    const table = within(region).getByRole("table", { name: "Pesanan" });
+    const table = within(region).getByRole("table", { name: "Orders" });
     const headers = within(table).getAllByRole("columnheader");
     expect(headers.map((th) => th.textContent?.trim())).toEqual([
-      "Pesanan",
+      "Order",
       "Total",
     ]);
     expect(headers[0]).toHaveAttribute("scope", "col");
     expect(headers[1]).toHaveClass("text-right");
     expect(within(table).getAllByRole("row")).toHaveLength(3);
-    expect(within(table).getByText("Rp10.000")).toHaveClass("text-right");
+    expect(within(table).getByText("$10.00")).toHaveClass("text-right");
     expect(table.querySelector("caption")).toHaveClass("sr-only");
   });
 
   it("caption bisa ditampilkan dan label mengganti nama region", () => {
     render(Table, {
       props: {
-        caption: "Pesanan",
+        caption: "Orders",
         showCaption: true,
-        label: "Tabel pesanan",
+        label: "Order table",
         columns,
         rows: [],
       },
     });
     expect(
-      screen.getByRole("region", { name: "Tabel pesanan" }),
+      screen.getByRole("region", { name: "Order table" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText("Pesanan", { selector: "caption" }),
-    ).not.toHaveClass("sr-only");
+    expect(screen.getByText("Orders", { selector: "caption" })).not.toHaveClass(
+      "sr-only",
+    );
   });
 
-  it("tanpa caption dan label, region bernama Tabel", () => {
+  it("tanpa caption dan label, region bernama Table", () => {
     render(Table, { props: { columns, rows } });
-    expect(screen.getByRole("region", { name: "Tabel" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Table" })).toBeInTheDocument();
+  });
+
+  it("label menimpa default Table tanpa caption", () => {
+    render(Table, { props: { label: "Tabel pesanan", columns, rows } });
+    expect(
+      screen.getByRole("region", { name: "Tabel pesanan" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Table" })).toBeNull();
   });
 
   const keyedRows = [
-    { id: 1, kode: "INV-1" },
-    { id: 2, kode: "INV-2" },
+    { id: 1, code: "INV-1" },
+    { id: 2, code: "INV-2" },
   ];
-  const keyedColumns = [{ key: "kode", label: "Pesanan" }];
+  const keyedColumns = [{ key: "code", label: "Order" }];
   const rowOf = (text: string) => screen.getByText(text).closest("tr");
 
   it("rowKey menjaga elemen baris saat data diurutkan ulang", async () => {
@@ -173,11 +181,11 @@ describe("Vue Table", () => {
     render(Table, {
       props: { columns, rows },
       slots: {
-        "cell-kode":
-          '<template #cell-kode="{ row }"><strong>{{ row.kode }}</strong></template>',
+        "cell-code":
+          '<template #cell-code="{ row }"><strong>{{ row.code }}</strong></template>',
       },
     });
     expect(screen.getByText("INV-1").tagName).toBe("STRONG");
-    expect(screen.getByText("Rp10.000").tagName).toBe("TD");
+    expect(screen.getByText("$10.00").tagName).toBe("TD");
   });
 });

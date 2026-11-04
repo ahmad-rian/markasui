@@ -1,7 +1,7 @@
 {
   "name": "card",
   "title": "Card",
-  "description": "Kartu untuk mengelompokkan konten dengan judul, deskripsi, isi, dan footer opsional.",
+  "description": "Card that groups content with an optional title, description, body, and footer.",
   "category": "data",
   "tags": ["card", "kartu", "panel", "container"],
   "status": "stable",
@@ -15,33 +15,56 @@
       "name": "title",
       "type": "string / ReactNode",
       "default": "-",
-      "description": "Judul kartu, dirender sebagai h3."
+      "description": "Card title, rendered as an h3."
     },
     {
       "name": "description",
       "type": "string / ReactNode",
       "default": "-",
-      "description": "Teks pendek di bawah judul."
+      "description": "Short text below the title."
     },
     {
       "name": "footer",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Area aksi di bagian bawah kartu, misalnya tombol."
+      "description": "Action area at the bottom of the card, such as buttons."
     }
   ],
   "a11y": [
-    "Memakai elemen article, jadi kartu terbaca sebagai satu kesatuan konten.",
-    "Judul memakai h3. Sesuaikan struktur heading halaman bila kartu berada di bawah h1 langsung.",
-    "Tanpa JavaScript dan tanpa elemen interaktif bawaan."
+    "Uses the article element, so the card reads as one self-contained piece of content.",
+    "The title is an h3. Adjust the page heading structure if the card sits directly under an h1.",
+    "No JavaScript and no built-in interactive elements."
   ],
   "ai": {
-    "whenToUse": "Mengelompokkan informasi yang saling terkait, misalnya ringkasan paket, profil, atau statistik.",
+    "whenToUse": "Grouping related information, such as a plan summary, a profile, or a statistic.",
     "rules": [
-      "Jangan membuat seluruh kartu bisa diklik, taruh link atau tombol di footer",
-      "Jangan menumpuk Card di dalam Card",
-      "Kartu tidak memakai bayangan, cukup border"
+      "Never make the whole card clickable, put links or buttons in the footer",
+      "Never nest a Card inside another Card",
+      "Cards use a border, not a shadow"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Kartu untuk mengelompokkan konten dengan judul, deskripsi, isi, dan footer opsional.",
+      "props": {
+        "title": "Judul kartu, dirender sebagai h3.",
+        "description": "Teks pendek di bawah judul.",
+        "footer": "Area aksi di bagian bawah kartu, misalnya tombol."
+      },
+      "a11y": [
+        "Memakai elemen article, jadi kartu terbaca sebagai satu kesatuan konten.",
+        "Judul memakai h3. Sesuaikan struktur heading halaman bila kartu berada di bawah h1 langsung.",
+        "Tanpa JavaScript dan tanpa elemen interaktif bawaan."
+      ],
+      "ai": {
+        "whenToUse": "Mengelompokkan informasi yang saling terkait, misalnya ringkasan paket, profil, atau statistik.",
+        "rules": [
+          "Jangan membuat seluruh kartu bisa diklik, taruh link atau tombol di footer",
+          "Jangan menumpuk Card di dalam Card",
+          "Kartu tidak memakai bayangan, cukup border"
+        ]
+      }
+    }
+  }
 }

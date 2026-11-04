@@ -1,7 +1,7 @@
 {
   "name": "avatar",
   "title": "Avatar",
-  "description": "Foto profil bulat dengan tiga ukuran dan inisial nama sebagai fallback saat gambar kosong atau gagal dimuat.",
+  "description": "Round profile photo in three sizes, with name initials as a fallback when the image is empty or fails to load.",
   "category": "data",
   "tags": ["avatar", "profil", "foto", "inisial", "user"],
   "status": "stable",
@@ -15,39 +15,63 @@
       "name": "name",
       "type": "string",
       "default": "-",
-      "description": "Nama orang. Dipakai untuk inisial dan sebagai alt bawaan."
+      "description": "Person's name. Used for the initials and as the default alt."
     },
     {
       "name": "src",
       "type": "string",
       "default": "-",
-      "description": "URL gambar. Kalau kosong atau gagal dimuat, inisial yang tampil."
+      "description": "Image URL. When empty or when it fails to load, the initials are shown."
     },
     {
       "name": "alt",
       "type": "string",
       "default": "name",
-      "description": "Teks alternatif. Isi string kosong bila avatar hanya dekorasi di samping nama yang sudah tertulis."
+      "description": "Alternative text. Pass an empty string when the avatar is decorative next to a name that is already written."
     },
     {
       "name": "size",
       "type": "'sm' | 'md' | 'lg'",
       "default": "md",
-      "description": "Ukuran 32, 40, atau 48 piksel."
+      "description": "Size of 32, 40, or 48 pixels."
     }
   ],
   "a11y": [
-    "Gambar selalu punya alt, bawaannya sama dengan name.",
-    "Inisial fallback memakai role img dan aria-label yang sama dengan alt, jadi screen reader membaca nama, bukan huruf.",
-    "Dengan alt kosong, avatar disembunyikan dari screen reader (aria-hidden)."
+    "The image always has an alt, which defaults to name.",
+    "The initials fallback uses role img and the same aria-label as alt, so screen readers announce the name, not the letters.",
+    "With an empty alt, the avatar is hidden from screen readers (aria-hidden)."
   ],
   "ai": {
-    "whenToUse": "Menampilkan foto atau inisial pengguna di daftar anggota, komentar, dan menu akun.",
+    "whenToUse": "Showing a user's photo or initials in member lists, comments, and account menus.",
     "rules": [
-      "Selalu isi name walau src tersedia, agar fallback dan alt tetap bermakna",
-      "Isi alt kosong bila nama sudah tertulis tepat di sebelah avatar",
-      "Blade butuh Alpine.js hanya untuk fallback saat gambar gagal dimuat"
+      "Always set name even when src is set, so the fallback and alt stay meaningful",
+      "Set an empty alt when the name is written right next to the avatar",
+      "Blade needs Alpine.js only for the fallback when the image fails to load"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Foto profil bulat dengan tiga ukuran dan inisial nama sebagai fallback saat gambar kosong atau gagal dimuat.",
+      "props": {
+        "name": "Nama orang. Dipakai untuk inisial dan sebagai alt bawaan.",
+        "src": "URL gambar. Kalau kosong atau gagal dimuat, inisial yang tampil.",
+        "alt": "Teks alternatif. Isi string kosong bila avatar hanya dekorasi di samping nama yang sudah tertulis.",
+        "size": "Ukuran 32, 40, atau 48 piksel."
+      },
+      "a11y": [
+        "Gambar selalu punya alt, bawaannya sama dengan name.",
+        "Inisial fallback memakai role img dan aria-label yang sama dengan alt, jadi screen reader membaca nama, bukan huruf.",
+        "Dengan alt kosong, avatar disembunyikan dari screen reader (aria-hidden)."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan foto atau inisial pengguna di daftar anggota, komentar, dan menu akun.",
+        "rules": [
+          "Selalu isi name walau src tersedia, agar fallback dan alt tetap bermakna",
+          "Isi alt kosong bila nama sudah tertulis tepat di sebelah avatar",
+          "Blade butuh Alpine.js hanya untuk fallback saat gambar gagal dimuat"
+        ]
+      }
+    }
+  }
 }

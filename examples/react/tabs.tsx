@@ -1,19 +1,23 @@
 import { Tabs } from "../../components/tabs/Tabs";
 
 const items = [
-  { value: "akun", label: "Akun", content: "Ubah nama dan email akun Anda." },
   {
-    value: "sandi",
-    label: "Kata sandi",
-    content: "Ganti kata sandi secara berkala.",
+    value: "account",
+    label: "Account",
+    content: "Change your account name and email.",
   },
   {
-    value: "notifikasi",
-    label: "Notifikasi",
-    content: "Atur email yang ingin Anda terima.",
+    value: "password",
+    label: "Password",
+    content: "Change your password regularly.",
+  },
+  {
+    value: "notifications",
+    label: "Notifications",
+    content: "Choose which emails you want to receive.",
   },
 ];
 
 export default function TabsFixture() {
-  return <Tabs items={items} defaultValue="akun" />;
+  return <Tabs items={items} defaultValue="account" />;
 }

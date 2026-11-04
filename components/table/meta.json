@@ -1,7 +1,7 @@
 {
   "name": "table",
   "title": "Table",
-  "description": "Tabel data dari daftar kolom dan baris, dengan pembungkus yang bisa difokus dan digulir horizontal di layar sempit.",
+  "description": "Data table built from a list of columns and rows, with a focusable wrapper that scrolls horizontally on narrow screens.",
   "category": "data",
   "tags": ["table", "tabel", "data", "grid", "daftar"],
   "status": "stable",
@@ -15,57 +15,84 @@
       "name": "columns",
       "type": "{ key: string, label: string, align?: 'left' | 'center' | 'right' }[]",
       "default": "[]",
-      "description": "Daftar kolom. key menunjuk properti di setiap baris."
+      "description": "List of columns. key points to a property on each row."
     },
     {
       "name": "rows",
       "type": "Record<string, string | number>[]",
       "default": "[]",
-      "description": "Data baris. Di Blade berupa array PHP."
+      "description": "Row data. A PHP array in Blade."
     },
     {
       "name": "caption",
       "type": "string",
       "default": "-",
-      "description": "Judul tabel di elemen caption. Disembunyikan secara visual kecuali show-caption aktif."
+      "description": "Table title in the caption element. Visually hidden unless show-caption is set."
     },
     {
       "name": "showCaption",
       "type": "boolean",
       "default": "false",
-      "description": "Tampilkan caption di atas tabel."
+      "description": "Show the caption above the table."
     },
     {
       "name": "label",
       "type": "string",
-      "default": "caption atau Tabel",
-      "description": "aria-label untuk region pembungkus yang bisa digulir."
+      "default": "caption or Table",
+      "description": "aria-label of the scrollable region wrapper. Falls back to caption, then to Table."
     },
     {
       "name": "rowKey",
       "type": "string",
       "default": "-",
-      "description": "Nama field berisi id unik per baris (misalnya id), dipakai sebagai key React dan Vue agar baris tidak tertukar saat data diurutkan atau dihapus. Tanpa ini key memakai indeks. Blade tidak memakainya."
+      "description": "Name of the field holding a unique id per row (such as id), used as the React and Vue key so rows do not get mixed up when data is sorted or removed. Without it the key is the index. Not used in Blade."
     },
     {
       "name": "renderCell / slot cell-<key>",
       "type": "(row, key) => ReactNode · slot { row }",
       "default": "-",
-      "description": "Isi sel kustom. React lewat renderCell, Vue lewat named slot cell-<key>. Blade hanya teks."
+      "description": "Custom cell content. React uses renderCell, Vue uses the named slot cell-<key>. Blade is text only."
     }
   ],
   "a11y": [
-    "Pembungkus memakai role region, aria-label, dan tabindex 0 agar tabel yang terpotong bisa difokus lalu digulir dengan panah.",
-    "Header kolom memakai th dengan scope col.",
-    "Caption tetap dibacakan screen reader walau disembunyikan secara visual."
+    "The wrapper uses role region, an aria-label, and tabindex 0, so a clipped table can be focused and scrolled with the arrow keys.",
+    "Column headers use th with scope col.",
+    "The caption is still read by screen readers when visually hidden."
   ],
   "ai": {
-    "whenToUse": "Menampilkan data terstruktur yang perlu dibandingkan per kolom, misalnya daftar pesanan atau anggota.",
+    "whenToUse": "Showing structured data that is compared by column, such as a list of orders or members.",
     "rules": [
-      "Selalu isi caption atau label agar region punya nama",
-      "Ratakan kanan kolom angka dan nominal dengan align right",
-      "Untuk sel berisi badge atau tombol pakai renderCell di React dan slot cell-<key> di Vue"
+      "Always set caption or label so the region has a name",
+      "Right-align number and amount columns with align right",
+      "For cells with a badge or button use renderCell in React and the cell-<key> slot in Vue"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Tabel data dari daftar kolom dan baris, dengan pembungkus yang bisa difokus dan digulir horizontal di layar sempit.",
+      "props": {
+        "columns": "Daftar kolom. key menunjuk properti di setiap baris.",
+        "rows": "Data baris. Di Blade berupa array PHP.",
+        "caption": "Judul tabel di elemen caption. Disembunyikan secara visual kecuali show-caption aktif.",
+        "showCaption": "Tampilkan caption di atas tabel.",
+        "label": "aria-label untuk region pembungkus yang bisa digulir. Tanpa label dipakai caption, lalu \"Table\". Isi misalnya \"Tabel pesanan\" untuk situs berbahasa Indonesia.",
+        "rowKey": "Nama field berisi id unik per baris (misalnya id), dipakai sebagai key React dan Vue agar baris tidak tertukar saat data diurutkan atau dihapus. Tanpa ini key memakai indeks. Blade tidak memakainya.",
+        "renderCell / slot cell-<key>": "Isi sel kustom. React lewat renderCell, Vue lewat named slot cell-<key>. Blade hanya teks."
+      },
+      "a11y": [
+        "Pembungkus memakai role region, aria-label, dan tabindex 0 agar tabel yang terpotong bisa difokus lalu digulir dengan panah.",
+        "Header kolom memakai th dengan scope col.",
+        "Caption tetap dibacakan screen reader walau disembunyikan secara visual."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan data terstruktur yang perlu dibandingkan per kolom, misalnya daftar pesanan atau anggota.",
+        "rules": [
+          "Selalu isi caption atau label agar region punya nama",
+          "Ratakan kanan kolom angka dan nominal dengan align right",
+          "Untuk sel berisi badge atau tombol pakai renderCell di React dan slot cell-<key> di Vue"
+        ]
+      }
+    }
+  }
 }

@@ -3,5 +3,5 @@ import Pagination from "../../components/pagination/Pagination.vue";
 </script>
 
 <template>
-  <Pagination :page="5" :total="10" href="?halaman={page}" />
+  <Pagination :page="5" :total="10" href="?p={page}" />
 </template>

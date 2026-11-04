@@ -2,17 +2,17 @@
 
 ```blade
 <x-markas.navbar :links="[
-    ['label' => 'Beranda', 'href' => '/', 'active' => true],
-    ['label' => 'Komponen', 'href' => '/komponen'],
+    ['label' => 'Home', 'href' => '/', 'active' => true],
+    ['label' => 'Components', 'href' => '/components'],
 ]">
     <x-slot:brand>MarkasUI</x-slot:brand>
     <x-slot:actions>
-        <x-markas.button size="sm">Masuk</x-markas.button>
+        <x-markas.button size="sm">Sign in</x-markas.button>
     </x-slot:actions>
 </x-markas.navbar>
 ```
 
-Butuh Alpine.js untuk menu seluler.
+Needs Alpine.js for the mobile menu.
 
 ## React
 
@@ -23,10 +23,10 @@ import { Navbar } from "@/components/markas/Navbar";
 <Navbar
   brand="MarkasUI"
   links={[
-    { label: "Beranda", href: "/", active: true },
-    { label: "Komponen", href: "/komponen" },
+    { label: "Home", href: "/", active: true },
+    { label: "Components", href: "/components" },
   ]}
-  actions={<Button size="sm">Masuk</Button>}
+  actions={<Button size="sm">Sign in</Button>}
 />;
 ```
 
@@ -36,18 +36,19 @@ import { Navbar } from "@/components/markas/Navbar";
 <template>
   <Navbar
     :links="[
-      { label: 'Beranda', href: '/', active: true },
-      { label: 'Komponen', href: '/komponen' },
+      { label: 'Home', href: '/', active: true },
+      { label: 'Components', href: '/components' },
     ]"
   >
     <template #brand>MarkasUI</template>
     <template #actions>
-      <Button size="sm">Masuk</Button>
+      <Button size="sm">Sign in</Button>
     </template>
   </Navbar>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Tata letak mengikuti lebar header lewat container query (`@container` dan `@3xl:`), bukan lebar layar. Menu desktop tampil saat header selebar 48rem atau lebih, di bawah itu muncul tombol menu.
+- The layout follows the header width through a container query (`@container` and `@3xl:`), not the viewport. The desktop menu shows when the header is 48rem wide or more, below that the menu button appears.
+- The menu button is labelled "Menu" and the navs "Main" and "Main mobile". Translate them with `menuLabel`, `navLabel`, and `mobileNavLabel` (Blade: `menu-label`, `nav-label`, `mobile-nav-label`).

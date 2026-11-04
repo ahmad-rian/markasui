@@ -95,9 +95,7 @@ export async function readConfig(cwd: string): Promise<ProjectConfig | null> {
     ) as ProjectConfig;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
-    throw new Error(
-      `${CONFIG_FILE} tidak bisa dibaca: ${(error as Error).message}`,
-    );
+    throw new Error(`Cannot read ${CONFIG_FILE}: ${(error as Error).message}`);
   }
 }
 

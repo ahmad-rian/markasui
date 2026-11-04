@@ -1,5 +1,6 @@
 ---
 import Icon from "../Icon.astro";
+import { getLocale, t } from "../../lib/i18n";
 import ReactPreview from "./ReactPreview";
 import VuePreview from "./VuePreview.vue";
 
@@ -15,6 +16,7 @@ const { name, bare = false, class: className } = Astro.props;
 const bladeFiles = import.meta.glob<string>("../../generated/blade/*.html", { query: "?raw", import: "default", eager: true });
 const bladeHtml = bladeFiles[`../../generated/blade/${name}.html`];
 const pane = "w-full max-w-md";
+const strings = t(getLocale(Astro.url)).component;
 ---
 
 <div
@@ -24,14 +26,14 @@ const pane = "w-full max-w-md";
 >
   {
     !bare && (
-      <button type="button" data-preview-reload aria-label="Muat ulang preview" class="icon-button absolute top-2 right-2 z-10 size-8">
+      <button type="button" data-preview-reload aria-label={strings.reload} class="icon-button absolute top-2 right-2 z-10 size-8">
         <Icon name="reload" />
       </button>
     )
   }
   <div class:list={["flex items-center justify-center", bare ? "px-6 py-8 sm:px-10" : "dot-grid min-h-72 px-4 py-12 sm:px-8"]} data-preview-stage>
     <div data-fw="blade" class={pane}>
-      {bladeHtml ? <Fragment set:html={bladeHtml} /> : <p class="text-sm text-danger">Preview Blade belum dirender. Jalankan pnpm build.</p>}
+      {bladeHtml ? <Fragment set:html={bladeHtml} /> : <p class="text-sm text-danger">{strings.bladeMissing}</p>}
     </div>
     <div data-fw="react" class={pane}>
       <ReactPreview client:visible name={name} />

@@ -1,9 +1,9 @@
 ## Blade
 
 ```blade
-<x-markas.badge>Draf</x-markas.badge>
-<x-markas.badge variant="success">Aktif</x-markas.badge>
-<x-markas.badge variant="danger">Gagal</x-markas.badge>
+<x-markas.badge>Draft</x-markas.badge>
+<x-markas.badge variant="success">Active</x-markas.badge>
+<x-markas.badge variant="danger">Failed</x-markas.badge>
 ```
 
 ## React
@@ -11,9 +11,9 @@
 ```tsx
 import { Badge } from "@/components/markas/Badge";
 
-<Badge>Draf</Badge>
-<Badge variant="success">Aktif</Badge>
-<Badge variant="danger">Gagal</Badge>
+<Badge>Draft</Badge>
+<Badge variant="success">Active</Badge>
+<Badge variant="danger">Failed</Badge>
 ```
 
 ## Vue
@@ -24,12 +24,12 @@ import Badge from "@/components/markas/Badge.vue";
 </script>
 
 <template>
-  <Badge>Draf</Badge>
-  <Badge variant="success">Aktif</Badge>
-  <Badge variant="danger">Gagal</Badge>
+  <Badge>Draft</Badge>
+  <Badge variant="success">Active</Badge>
+  <Badge variant="danger">Failed</Badge>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Teks varian success, warning, dan danger memakai `ink`, warna status dibawa oleh latar, border, dan titik. Warna `success` dan `warning` terang tidak cukup kontras untuk teks kecil.
+- Success, warning, and danger text uses `ink`. The status color comes from the background, border, and dot, because light `success` and `warning` lack enough contrast for small text.

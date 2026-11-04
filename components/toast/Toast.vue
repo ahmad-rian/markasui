@@ -81,6 +81,14 @@ export function toast({
 </script>
 
 <script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    closeLabel?: string;
+    regionLabel?: string;
+  }>(),
+  { closeLabel: "Close", regionLabel: "Notifications" },
+);
+
 const region =
   "pointer-events-none fixed right-4 bottom-4 z-50 flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2";
 const card =
@@ -121,7 +129,12 @@ function onFocusOut(id: number, event: FocusEvent) {
 </script>
 
 <template>
-  <div role="status" aria-live="polite" aria-label="Notifikasi" :class="region">
+  <div
+    role="status"
+    aria-live="polite"
+    :aria-label="props.regionLabel"
+    :class="region"
+  >
     <div
       v-for="item in toasts"
       :key="item.id"
@@ -154,7 +167,7 @@ function onFocusOut(id: number, event: FocusEvent) {
       <button
         type="button"
         :class="close"
-        aria-label="Tutup"
+        :aria-label="props.closeLabel"
         @click="dismissToast(item.id)"
       >
         <svg

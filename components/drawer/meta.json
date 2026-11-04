@@ -1,60 +1,102 @@
 {
   "name": "drawer",
   "title": "Drawer",
-  "description": "Panel samping setinggi layar berbasis elemen dialog native, muncul dari kanan atau kiri.",
+  "description": "Full-height side panel built on the native dialog element, sliding in from the right or left.",
   "category": "overlay",
   "tags": ["drawer", "sheet", "dialog", "panel", "overlay"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "drawer.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Drawer.tsx", "deps": [] },
-    "vue": { "file": "Drawer.vue", "deps": [] }
+    "blade": {
+      "file": "drawer.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Drawer.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Drawer.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "title",
       "type": "string",
       "default": "-",
-      "description": "Judul drawer, dipakai juga sebagai aria-labelledby."
+      "description": "Drawer title, also used for aria-labelledby."
     },
     {
       "name": "side",
       "type": "right | left",
       "default": "right",
-      "description": "Sisi layar tempat drawer muncul."
+      "description": "Side of the screen the drawer appears from."
     },
     {
       "name": "trigger",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Elemen yang membuka drawer saat diklik."
+      "description": "Element that opens the drawer when clicked."
     },
     {
       "name": "footer",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup drawer."
+      "description": "Action area. Wrapped in form method=dialog, so a type=submit button closes the drawer."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id dialog. Bisa dipakai untuk membuka drawer dari luar lewat showModal()."
+      "default": "auto",
+      "description": "Dialog id. Use it to open the drawer from elsewhere with showModal()."
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "description": "Accessible label of the close button."
     }
   ],
   "a11y": [
-    "Memakai dialog dan showModal(), jadi fokus terkunci di dalam drawer dan konten di belakangnya inert.",
-    "Escape menutup drawer dan fokus kembali ke elemen pemicu.",
-    "Klik di luar panel (backdrop) menutup drawer.",
-    "Tombol tutup punya aria-label Tutup."
+    "Uses dialog with showModal(), so focus stays inside and the page behind is inert.",
+    "Escape closes the drawer and returns focus to the trigger.",
+    "Clicking outside the panel (the backdrop) closes the drawer.",
+    "The close button is labelled by closeLabel."
   ],
   "ai": {
-    "whenToUse": "Panel samping untuk filter, detail item, atau form yang lebih panjang tanpa meninggalkan halaman.",
+    "whenToUse": "A side panel for filters, item details, or a longer form without leaving the page.",
     "rules": [
-      "Tombol di footer yang harus menutup drawer wajib type=submit",
-      "Untuk konfirmasi singkat gunakan Modal, bukan Drawer",
-      "Jangan membuka drawer di dalam drawer"
+      "Footer buttons that should close the drawer must be type=submit",
+      "Use Modal for short confirmations, not Drawer",
+      "Never open a drawer inside another drawer"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Panel samping setinggi layar berbasis elemen dialog native, muncul dari kanan atau kiri.",
+      "props": {
+        "title": "Judul drawer, dipakai juga sebagai aria-labelledby.",
+        "side": "Sisi layar tempat drawer muncul.",
+        "trigger": "Elemen yang membuka drawer saat diklik.",
+        "footer": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup drawer.",
+        "id": "Id dialog. Bisa dipakai untuk membuka drawer dari luar lewat showModal().",
+        "closeLabel": "Label aksesibel tombol tutup. Isi \"Tutup\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Memakai dialog dan showModal(), jadi fokus terkunci di dalam drawer dan konten di belakangnya inert.",
+        "Escape menutup drawer dan fokus kembali ke elemen pemicu.",
+        "Klik di luar panel (backdrop) menutup drawer.",
+        "Tombol tutup punya aria-label dari closeLabel (default Close)."
+      ],
+      "ai": {
+        "whenToUse": "Panel samping untuk filter, detail item, atau form yang lebih panjang tanpa meninggalkan halaman.",
+        "rules": [
+          "Tombol di footer yang harus menutup drawer wajib type=submit",
+          "Untuk konfirmasi singkat gunakan Modal, bukan Drawer",
+          "Jangan membuka drawer di dalam drawer"
+        ]
+      }
+    }
+  }
 }

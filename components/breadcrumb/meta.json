@@ -1,34 +1,70 @@
 {
   "name": "breadcrumb",
   "title": "Breadcrumb",
-  "description": "Jejak lokasi halaman dalam hierarki situs, dengan halaman saat ini ditandai aria-current.",
+  "description": "Trail of the current page's location in the site hierarchy, with the current page marked by aria-current.",
   "category": "navigation",
-  "tags": ["breadcrumb", "navigation", "hierarki", "link"],
+  "tags": ["breadcrumb", "navigation", "hierarchy", "link"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "breadcrumb.blade.php", "deps": [] },
-    "react": { "file": "Breadcrumb.tsx", "deps": [] },
-    "vue": { "file": "Breadcrumb.vue", "deps": [] }
+    "blade": {
+      "file": "breadcrumb.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Breadcrumb.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Breadcrumb.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "items",
       "type": "{ label, href? }[]",
       "default": "[]",
-      "description": "Urutan halaman dari akar ke halaman saat ini. Item terakhir dianggap halaman saat ini dan tidak diberi link."
+      "description": "Pages from the root to the current page. The last item is treated as the current page and has no link."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Breadcrumb",
+      "description": "Accessible label of the nav element."
     }
   ],
   "a11y": [
-    "Dibungkus nav dengan aria-label Breadcrumb dan daftar berurutan ol.",
-    "Item terakhir memakai aria-current=page.",
-    "Pemisah chevron diberi aria-hidden sehingga tidak dibacakan."
+    "Wrapped in a nav labelled by navLabel and an ordered list (ol).",
+    "The last item has aria-current=page.",
+    "Chevron separators are aria-hidden, so they are not announced."
   ],
   "ai": {
-    "whenToUse": "Halaman yang berada beberapa tingkat di dalam hierarki, misalnya detail produk di dalam kategori.",
+    "whenToUse": "Pages several levels deep in a hierarchy, such as a product detail inside a category.",
     "rules": [
-      "Item terakhir selalu halaman saat ini, jangan beri href",
-      "Jangan memakai breadcrumb untuk langkah proses atau wizard"
+      "The last item is always the current page, do not give it an href",
+      "Do not use a breadcrumb for process steps or wizards"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Jejak lokasi halaman dalam hierarki situs, dengan halaman saat ini ditandai aria-current.",
+      "props": {
+        "items": "Urutan halaman dari akar ke halaman saat ini. Item terakhir dianggap halaman saat ini dan tidak diberi link.",
+        "navLabel": "Label aksesibel elemen nav. Isi \"Jejak navigasi\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Dibungkus nav dengan label dari navLabel (default Breadcrumb) dan daftar berurutan ol.",
+        "Item terakhir memakai aria-current=page.",
+        "Pemisah chevron diberi aria-hidden sehingga tidak dibacakan."
+      ],
+      "ai": {
+        "whenToUse": "Halaman yang berada beberapa tingkat di dalam hierarki, misalnya detail produk di dalam kategori.",
+        "rules": [
+          "Item terakhir selalu halaman saat ini, jangan beri href",
+          "Jangan memakai breadcrumb untuk langkah proses atau wizard"
+        ]
+      }
+    }
+  }
 }

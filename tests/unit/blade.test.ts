@@ -27,12 +27,12 @@ const PHP_TIMEOUT_MS = 20_000;
 describe("Blade", { timeout: PHP_TIMEOUT_MS }, () => {
   it("tabs memakai slot sesuai key walau key sama dengan variabel internal", () => {
     const html = renderBlade(`
-<x-markas.tabs id="t" :items="['panel' => 'Panel', 'active' => 'Aktif', 'label' => 'Label']">
-    <x-slot:panel>Isi panel</x-slot:panel>
-    <x-slot:active>Isi aktif</x-slot:active>
+<x-markas.tabs id="t" :items="['panel' => 'Panel', 'active' => 'Active', 'label' => 'Label']">
+    <x-slot:panel>Panel content</x-slot:panel>
+    <x-slot:active>Active content</x-slot:active>
 </x-markas.tabs>`);
-    expect(panelText(html, "t-panel-panel")).toBe("Isi panel");
-    expect(panelText(html, "t-panel-active")).toBe("Isi aktif");
+    expect(panelText(html, "t-panel-panel")).toBe("Panel content");
+    expect(panelText(html, "t-panel-active")).toBe("Active content");
     expect(panelText(html, "t-panel-label")).toBe("");
   });
 
@@ -46,7 +46,7 @@ describe("Blade", { timeout: PHP_TIMEOUT_MS }, () => {
 
   it("input mengaktifkan aria-invalid dan aria-describedby saat ada error", () => {
     const html = renderBlade(
-      '<x-markas.input id="e" label="Email" error="Wajib diisi" />',
+      '<x-markas.input id="e" label="Email" error="Required" />',
     );
     expect(html).toContain('aria-invalid="true"');
     expect(html).toContain('aria-describedby="e-error"');
@@ -85,9 +85,19 @@ ${pagination}`);
     );
   });
 
+  it("modal memakai closeLabel untuk tombol tutup, default Close", () => {
+    const html = renderBlade(`
+<section data-case><x-markas.modal title="A">Body</x-markas.modal></section>
+<section data-case><x-markas.modal title="B" close-label="Tutup">Body</x-markas.modal></section>`);
+    const [byDefault, translated] = html.split("<section data-case>").slice(1);
+    expect(byDefault).toContain('aria-label="Close"');
+    expect(translated).toContain('aria-label="Tutup"');
+    expect(translated).not.toContain('aria-label="Close"');
+  });
+
   it("escape teks dari props", () => {
     const html = renderBlade(
-      '<x-markas.modal title="<script>alert(1)</script>">Isi</x-markas.modal>',
+      '<x-markas.modal title="<script>alert(1)</script>">Body</x-markas.modal>',
     );
     expect(html).not.toContain("<script>alert(1)</script>");
     expect(html).toContain("&lt;script&gt;");

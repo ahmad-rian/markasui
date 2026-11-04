@@ -1,8 +1,8 @@
 ## Blade
 
 ```blade
-<x-markas.textarea name="bio" label="Bio singkat" hint="Maksimal 200 karakter." />
-<x-markas.textarea name="alamat" label="Alamat" :rows="2" :value="old('alamat')" :error="$errors->first('alamat')" />
+<x-markas.textarea name="bio" label="Short bio" hint="Up to 200 characters." />
+<x-markas.textarea name="address" label="Address" :rows="2" :value="old('address')" :error="$errors->first('address')" />
 ```
 
 ## React
@@ -10,8 +10,8 @@
 ```tsx
 import { Textarea } from "@/components/markas/Textarea";
 
-<Textarea name="bio" label="Bio singkat" hint="Maksimal 200 karakter." />
-<Textarea name="alamat" label="Alamat" rows={2} error={errors.alamat} />
+<Textarea name="bio" label="Short bio" hint="Up to 200 characters." />
+<Textarea name="address" label="Address" rows={2} error={errors.address} />
 ```
 
 ## Vue
@@ -28,13 +28,14 @@ const bio = ref("");
   <Textarea
     v-model="bio"
     name="bio"
-    label="Bio singkat"
-    hint="Maksimal 200 karakter."
+    label="Short bio"
+    hint="Up to 200 characters."
   />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Atribut tambahan (`name`, `placeholder`, `maxlength`, `class`) diteruskan ke elemen `<textarea>`, bukan ke pembungkusnya.
-- Di Blade, isi awal diberikan lewat prop `value` karena textarea tidak punya atribut value.
+- Extra attributes (`name`, `placeholder`, `maxlength`, `class`) go to the `<textarea>` element, not its wrapper.
+- In Blade, pass the initial content through the `value` prop because textarea has no value attribute.
+- The component has no built-in text. Every visible string comes from your props, so translate `label`, `hint`, and `error` directly.

@@ -1,26 +1,44 @@
+import { localePath, t, type Locale } from "./i18n";
+
 export const SITE = {
   name: "MarkasUI",
-  description: "Markas komponen UI ringan untuk Blade, React, dan Vue.",
   repo: "https://github.com/ahmad-rian/markasui",
-  author: "CV Jenderal Solusi Digital",
-  city: "Purwokerto",
 } as const;
 
-export const NAV = [
-  { href: "/docs/introduction", label: "Docs" },
-  { href: "/components", label: "Komponen" },
-  { href: "/docs/mcp", label: "MCP" },
+export const DOC_SLUGS = [
+  "introduction",
+  "installation",
+  "theming",
+  "cli",
+  "mcp",
+  "skills",
+  "changelog",
 ] as const;
+export type DocSlug = (typeof DOC_SLUGS)[number];
 
-export const DOCS_NAV = [
-  { href: "/docs/introduction", label: "Pengenalan" },
-  { href: "/docs/installation", label: "Instalasi" },
-  { href: "/docs/theming", label: "Theming" },
-  { href: "/docs/cli", label: "CLI" },
-  { href: "/docs/mcp", label: "MCP" },
-  { href: "/docs/skills", label: "Agent Skill" },
-  { href: "/docs/changelog", label: "Changelog" },
-] as const;
+export const nav = (locale: Locale) => {
+  const strings = t(locale).nav;
+  return [
+    {
+      key: "docs",
+      href: localePath(locale, "/docs/introduction"),
+      label: strings.docs,
+    },
+    {
+      key: "components",
+      href: localePath(locale, "/components"),
+      label: strings.components,
+    },
+    { key: "mcp", href: localePath(locale, "/docs/mcp"), label: strings.mcp },
+  ] as const;
+};
+
+export const docsNav = (locale: Locale) =>
+  DOC_SLUGS.map((slug) => ({
+    slug,
+    href: localePath(locale, `/docs/${slug}`),
+    label: t(locale).docsNav[slug],
+  }));
 
 /** Jumlah star diambil saat build. Gagal ambil berarti badge disembunyikan. */
 export async function getGithubStars(): Promise<number | null> {

@@ -1,7 +1,7 @@
 {
   "name": "textarea",
   "title": "Textarea",
-  "description": "Kolom teks beberapa baris dengan label, petunjuk, dan pesan error yang terhubung lewat ARIA.",
+  "description": "Multi-line text field with a label, hint, and error message linked through ARIA.",
   "category": "form",
   "tags": ["textarea", "form", "text", "field", "multiline"],
   "status": "stable",
@@ -15,50 +15,75 @@
       "name": "label",
       "type": "string",
       "default": "-",
-      "description": "Teks label yang terhubung ke textarea lewat for/id."
+      "description": "Label text linked to the textarea through for/id."
     },
     {
       "name": "hint",
       "type": "string",
       "default": "-",
-      "description": "Teks petunjuk di bawah textarea. Disembunyikan saat ada error."
+      "description": "Hint text below the textarea. Hidden while an error is shown."
     },
     {
       "name": "error",
       "type": "string",
       "default": "-",
-      "description": "Pesan error. Mengaktifkan aria-invalid dan border danger."
+      "description": "Error message. Turns on aria-invalid and the danger border."
     },
     {
       "name": "rows",
       "type": "number",
       "default": "4",
-      "description": "Jumlah baris yang terlihat. Pengguna tetap bisa mengubah tinggi secara vertikal."
+      "description": "Number of visible rows. Users can still resize the height vertically."
     },
     {
       "name": "value / defaultValue / v-model",
       "type": "string",
       "default": "-",
-      "description": "Isi awal. Blade memakai prop value, React value atau defaultValue, Vue v-model."
+      "description": "Initial content. Blade uses the value prop, React value or defaultValue, Vue v-model."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id textarea. Dibuat otomatis kalau kosong."
+      "default": "auto",
+      "description": "Textarea id. Generated when empty."
     }
   ],
   "a11y": [
-    "Label terhubung ke textarea lewat atribut for dan id.",
-    "Pesan error dan petunjuk dibacakan screen reader lewat aria-describedby.",
-    "aria-invalid aktif saat prop error terisi."
+    "The label is linked to the textarea through the for and id attributes.",
+    "Error and hint text are announced by screen readers through aria-describedby.",
+    "aria-invalid is set when the error prop is filled."
   ],
   "ai": {
-    "whenToUse": "Isian teks panjang di form: bio, alamat, catatan, pesan.",
+    "whenToUse": "Long text input in a form: bio, address, notes, message.",
     "rules": [
-      "Selalu isi label, jangan hanya placeholder",
-      "Pakai Input untuk teks satu baris"
+      "Always set a label, never rely on placeholder alone",
+      "Use Input for single-line text"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Kolom teks beberapa baris dengan label, petunjuk, dan pesan error yang terhubung lewat ARIA.",
+      "props": {
+        "label": "Teks label yang terhubung ke textarea lewat for/id.",
+        "hint": "Teks petunjuk di bawah textarea. Disembunyikan saat ada error.",
+        "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
+        "rows": "Jumlah baris yang terlihat. Pengguna tetap bisa mengubah tinggi secara vertikal.",
+        "value / defaultValue / v-model": "Isi awal. Blade memakai prop value, React value atau defaultValue, Vue v-model.",
+        "id": "Id textarea. Dibuat otomatis kalau kosong."
+      },
+      "a11y": [
+        "Label terhubung ke textarea lewat atribut for dan id.",
+        "Pesan error dan petunjuk dibacakan screen reader lewat aria-describedby.",
+        "aria-invalid aktif saat prop error terisi."
+      ],
+      "ai": {
+        "whenToUse": "Isian teks panjang di form: bio, alamat, catatan, pesan.",
+        "rules": [
+          "Selalu isi label, jangan hanya placeholder",
+          "Pakai Input untuk teks satu baris"
+        ]
+      }
+    }
+  }
 }

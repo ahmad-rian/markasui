@@ -4,16 +4,16 @@ import Modal from "../../components/modal/Modal.vue";
 </script>
 
 <template>
-  <Modal title="Hapus proyek?">
+  <Modal title="Delete project?">
     <template #trigger>
-      <Button variant="danger">Hapus proyek</Button>
+      <Button variant="danger">Delete project</Button>
     </template>
 
-    Proyek dan semua datanya akan dihapus permanen.
+    The project and all of its data will be deleted permanently.
 
     <template #footer>
-      <Button variant="secondary" type="submit" value="batal">Batal</Button>
-      <Button variant="danger" type="submit" value="hapus">Ya, hapus</Button>
+      <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+      <Button variant="danger" type="submit" value="delete">Delete</Button>
     </template>
   </Modal>
 </template>

@@ -1,7 +1,7 @@
 {
   "name": "select",
   "title": "Select",
-  "description": "Pilihan dropdown memakai select native yang di-styling, lengkap dengan label, petunjuk, dan pesan error.",
+  "description": "Dropdown built on a styled native select, with a label, hint, and error message.",
   "category": "form",
   "tags": ["select", "form", "dropdown", "option", "field"],
   "status": "stable",
@@ -15,50 +15,75 @@
       "name": "label",
       "type": "string",
       "default": "-",
-      "description": "Teks label yang terhubung ke select lewat for/id."
+      "description": "Label text linked to the select through for/id."
     },
     {
       "name": "hint",
       "type": "string",
       "default": "-",
-      "description": "Teks petunjuk di bawah select. Disembunyikan saat ada error."
+      "description": "Hint text below the select. Hidden while an error is shown."
     },
     {
       "name": "error",
       "type": "string",
       "default": "-",
-      "description": "Pesan error. Mengaktifkan aria-invalid dan border danger."
+      "description": "Error message. Turns on aria-invalid and the danger border."
     },
     {
       "name": "slot / children",
       "type": "<option>",
       "default": "-",
-      "description": "Daftar elemen option (dan optgroup) native."
+      "description": "Native option (and optgroup) elements."
     },
     {
       "name": "value / defaultValue / v-model",
       "type": "string",
       "default": "-",
-      "description": "Nilai terpilih. Blade memakai atribut selected di option, React value atau defaultValue, Vue v-model."
+      "description": "Selected value. Blade uses the selected attribute on an option, React value or defaultValue, Vue v-model."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id select. Dibuat otomatis kalau kosong."
+      "default": "auto",
+      "description": "Select id. Generated when empty."
     }
   ],
   "a11y": [
-    "Memakai elemen select native, jadi keyboard dan screen reader bekerja tanpa JavaScript.",
-    "Label terhubung lewat for dan id, petunjuk dan error lewat aria-describedby.",
-    "Ikon panah disembunyikan dari screen reader dan tidak menangkap klik."
+    "Uses the native select element, so keyboard and screen readers work without JavaScript.",
+    "The label is linked through for and id, the hint and error through aria-describedby.",
+    "The arrow icon is hidden from screen readers and does not catch clicks."
   ],
   "ai": {
-    "whenToUse": "Memilih satu nilai dari daftar pendek sampai sedang, misalnya kota, peran, atau negara.",
+    "whenToUse": "Picking one value from a short to medium list, such as a city, role, or country.",
     "rules": [
-      "Untuk dua sampai lima pilihan yang perlu terlihat semua, pakai Radio Group",
-      "Tambahkan option kosong sebagai placeholder kalau pilihan belum wajib terisi"
+      "For two to five options that should all be visible, use Radio Group",
+      "Add an empty option as a placeholder when a choice is not required yet"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Pilihan dropdown memakai select native yang di-styling, lengkap dengan label, petunjuk, dan pesan error.",
+      "props": {
+        "label": "Teks label yang terhubung ke select lewat for/id.",
+        "hint": "Teks petunjuk di bawah select. Disembunyikan saat ada error.",
+        "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
+        "slot / children": "Daftar elemen option (dan optgroup) native.",
+        "value / defaultValue / v-model": "Nilai terpilih. Blade memakai atribut selected di option, React value atau defaultValue, Vue v-model.",
+        "id": "Id select. Dibuat otomatis kalau kosong."
+      },
+      "a11y": [
+        "Memakai elemen select native, jadi keyboard dan screen reader bekerja tanpa JavaScript.",
+        "Label terhubung lewat for dan id, petunjuk dan error lewat aria-describedby.",
+        "Ikon panah disembunyikan dari screen reader dan tidak menangkap klik."
+      ],
+      "ai": {
+        "whenToUse": "Memilih satu nilai dari daftar pendek sampai sedang, misalnya kota, peran, atau negara.",
+        "rules": [
+          "Untuk dua sampai lima pilihan yang perlu terlihat semua, pakai Radio Group",
+          "Tambahkan option kosong sebagai placeholder kalau pilihan belum wajib terisi"
+        ]
+      }
+    }
+  }
 }

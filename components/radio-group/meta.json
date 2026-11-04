@@ -1,7 +1,7 @@
 {
   "name": "radio-group",
   "title": "Radio Group",
-  "description": "Kelompok radio native dalam fieldset dan legend untuk memilih satu dari beberapa opsi.",
+  "description": "Group of native radios inside a fieldset and legend for picking one of several options.",
   "category": "form",
   "tags": ["radio", "radio-group", "form", "fieldset", "option"],
   "status": "stable",
@@ -14,57 +14,83 @@
     {
       "name": "name",
       "type": "string",
-      "default": "wajib",
-      "description": "Atribut name untuk semua radio di grup."
+      "default": "required",
+      "description": "The name attribute shared by every radio in the group."
     },
     {
       "name": "options",
       "type": "{ value, label, description? }[]",
       "default": "[]",
-      "description": "Daftar opsi. Value dipakai juga sebagai bagian id."
+      "description": "List of options. The value is also used as part of the id."
     },
     {
       "name": "label",
       "type": "string",
       "default": "-",
-      "description": "Judul grup, dirender sebagai legend."
+      "description": "Group title, rendered as the legend."
     },
     {
       "name": "value / defaultValue / v-model",
       "type": "string",
       "default": "-",
-      "description": "Opsi terpilih. Blade memakai value, React value atau defaultValue, Vue v-model."
+      "description": "Selected option. Blade uses value, React value or defaultValue, Vue v-model."
     },
     {
       "name": "onValueChange",
       "type": "(value: string) => void",
       "default": "-",
-      "description": "Khusus React. Dipanggil dengan value opsi yang baru dipilih."
+      "description": "React only. Called with the value of the newly selected option."
     },
     {
       "name": "orientation",
       "type": "\"vertical\" | \"horizontal\"",
       "default": "vertical",
-      "description": "Susunan opsi: bertumpuk atau berjajar."
+      "description": "Option layout: stacked or in a row."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id fieldset, juga awalan id tiap radio. Dibuat otomatis kalau kosong."
+      "default": "auto",
+      "description": "Fieldset id, also the prefix of each radio id. Generated when empty."
     }
   ],
   "a11y": [
-    "Memakai fieldset dan legend sehingga judul grup dibacakan saat masuk ke radio.",
-    "Radio native: Tab masuk ke opsi terpilih, panah memindah pilihan.",
-    "Deskripsi opsi dihubungkan ke radio lewat aria-describedby."
+    "Uses fieldset and legend, so the group title is announced when focus enters a radio.",
+    "Native radios: Tab moves to the selected option, arrow keys change the selection.",
+    "Option descriptions are linked to their radio through aria-describedby."
   ],
   "ai": {
-    "whenToUse": "Memilih tepat satu dari dua sampai lima opsi yang perlu terlihat semua, misalnya paket langganan.",
+    "whenToUse": "Picking exactly one of two to five options that should all be visible, such as a subscription plan.",
     "rules": [
-      "Value opsi hanya huruf kecil, angka, tanda hubung, atau underscore karena dipakai sebagai id",
-      "Untuk daftar panjang pakai Select"
+      "Option values may only contain lowercase letters, digits, hyphens, or underscores because they are used in ids",
+      "Use Select for long lists"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Kelompok radio native dalam fieldset dan legend untuk memilih satu dari beberapa opsi.",
+      "props": {
+        "name": "Atribut name untuk semua radio di grup.",
+        "options": "Daftar opsi. Value dipakai juga sebagai bagian id.",
+        "label": "Judul grup, dirender sebagai legend.",
+        "value / defaultValue / v-model": "Opsi terpilih. Blade memakai value, React value atau defaultValue, Vue v-model.",
+        "onValueChange": "Khusus React. Dipanggil dengan value opsi yang baru dipilih.",
+        "orientation": "Susunan opsi: bertumpuk atau berjajar.",
+        "id": "Id fieldset, juga awalan id tiap radio. Dibuat otomatis kalau kosong."
+      },
+      "a11y": [
+        "Memakai fieldset dan legend sehingga judul grup dibacakan saat masuk ke radio.",
+        "Radio native: Tab masuk ke opsi terpilih, panah memindah pilihan.",
+        "Deskripsi opsi dihubungkan ke radio lewat aria-describedby."
+      ],
+      "ai": {
+        "whenToUse": "Memilih tepat satu dari dua sampai lima opsi yang perlu terlihat semua, misalnya paket langganan.",
+        "rules": [
+          "Value opsi hanya huruf kecil, angka, tanda hubung, atau underscore karena dipakai sebagai id",
+          "Untuk daftar panjang pakai Select"
+        ]
+      }
+    }
+  }
 }

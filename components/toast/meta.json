@@ -1,60 +1,109 @@
 {
   "name": "toast",
   "title": "Toast",
-  "description": "Notifikasi singkat di pojok kanan bawah yang hilang sendiri, dipicu lewat fungsi toast() atau event.",
+  "description": "Short notification in the bottom right corner that dismisses itself, triggered with the toast() function or an event.",
   "category": "feedback",
   "tags": ["toast", "notification", "snackbar", "aria-live"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "toast.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Toast.tsx", "deps": [] },
-    "vue": { "file": "Toast.vue", "deps": [] }
+    "blade": {
+      "file": "toast.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Toast.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Toast.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "title",
       "type": "string",
       "default": "-",
-      "description": "Judul toast. Opsi untuk toast() atau detail event markas-toast."
+      "description": "Toast title. Option for toast() or the markas-toast event detail."
     },
     {
       "name": "description",
       "type": "string",
       "default": "-",
-      "description": "Teks pendukung di bawah judul."
+      "description": "Supporting text below the title."
     },
     {
       "name": "variant",
       "type": "'default' | 'success' | 'danger'",
       "default": "default",
-      "description": "Warna border dan ikon."
+      "description": "Border and icon color."
     },
     {
       "name": "duration",
       "type": "number",
       "default": "5000",
-      "description": "Milidetik sebelum toast hilang sendiri. 0 berarti tetap tampil sampai ditutup."
+      "description": "Milliseconds before the toast dismisses itself. 0 keeps it until closed."
     },
     {
       "name": "initial",
       "type": "array",
       "default": "[]",
-      "description": "Khusus Blade: daftar toast yang langsung tampil, misalnya dari flash session."
+      "description": "Blade only: toasts shown right away, for example from a session flash."
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "description": "Accessible label of each toast close button."
+    },
+    {
+      "name": "regionLabel",
+      "type": "string",
+      "default": "Notifications",
+      "description": "Accessible label of the live region."
     }
   ],
   "a11y": [
-    "Region memakai role status dan aria-live polite, jadi toast baru dibacakan tanpa memindahkan fokus.",
-    "Timer berhenti saat toast di-hover atau berisi fokus, lalu lanjut setelah keduanya lepas.",
-    "Tombol tutup punya aria-label Tutup dan bisa dijangkau dengan Tab.",
-    "Animasi masuk dimatikan saat prefers-reduced-motion."
+    "The region uses role status and aria-live polite, so new toasts are announced without moving focus.",
+    "The timer pauses while a toast is hovered or holds focus, and resumes once both are gone.",
+    "The close button is labelled by closeLabel and reachable with Tab.",
+    "The entry animation is turned off under prefers-reduced-motion."
   ],
   "ai": {
-    "whenToUse": "Umpan balik singkat setelah aksi user, misalnya data tersimpan atau gagal terkirim.",
+    "whenToUse": "Short feedback after a user action, such as data saved or failed to send.",
     "rules": [
-      "Pasang satu Toaster saja di layout utama",
-      "Jangan menaruh aksi penting yang hanya ada di toast",
-      "Pakai duration 0 untuk error yang harus dibaca sebelum ditutup"
+      "Mount only one Toaster in the main layout",
+      "Do not put important actions only inside a toast",
+      "Use duration 0 for errors that must be read before closing"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Notifikasi singkat di pojok kanan bawah yang hilang sendiri, dipicu lewat fungsi toast() atau event.",
+      "props": {
+        "title": "Judul toast. Opsi untuk toast() atau detail event markas-toast.",
+        "description": "Teks pendukung di bawah judul.",
+        "variant": "Warna border dan ikon.",
+        "duration": "Milidetik sebelum toast hilang sendiri. 0 berarti tetap tampil sampai ditutup.",
+        "initial": "Khusus Blade: daftar toast yang langsung tampil, misalnya dari flash session.",
+        "closeLabel": "Label aksesibel tombol tutup di setiap toast. Isi \"Tutup\" untuk situs berbahasa Indonesia.",
+        "regionLabel": "Label aksesibel region live. Isi \"Notifikasi\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Region memakai role status dan aria-live polite, jadi toast baru dibacakan tanpa memindahkan fokus.",
+        "Timer berhenti saat toast di-hover atau berisi fokus, lalu lanjut setelah keduanya lepas.",
+        "Tombol tutup punya aria-label dari closeLabel (default Close) dan bisa dijangkau dengan Tab.",
+        "Animasi masuk dimatikan saat prefers-reduced-motion."
+      ],
+      "ai": {
+        "whenToUse": "Umpan balik singkat setelah aksi user, misalnya data tersimpan atau gagal terkirim.",
+        "rules": [
+          "Pasang satu Toaster saja di layout utama",
+          "Jangan menaruh aksi penting yang hanya ada di toast",
+          "Pakai duration 0 untuk error yang harus dibaca sebelum ditutup"
+        ]
+      }
+    }
+  }
 }

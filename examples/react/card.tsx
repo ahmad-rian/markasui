@@ -4,18 +4,18 @@ import { Card } from "../../components/card/Card";
 export default function CardFixture() {
   return (
     <Card
-      title="Paket Pro"
-      description="Untuk tim kecil yang sedang tumbuh."
+      title="Pro plan"
+      description="For small teams that are growing."
       footer={
         <>
-          <Button size="sm">Pilih paket</Button>
+          <Button size="sm">Choose plan</Button>
           <Button variant="ghost" size="sm">
-            Bandingkan
+            Compare
           </Button>
         </>
       }
     >
-      Termasuk 10 anggota tim, penyimpanan 50 GB, dan laporan bulanan.
+      Includes 10 team members, 50 GB of storage, and monthly reports.
     </Card>
   );
 }

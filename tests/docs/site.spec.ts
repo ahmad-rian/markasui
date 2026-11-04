@@ -13,9 +13,13 @@ const componentNames: string[] = JSON.parse(
 
 const PAGES = [
   "/",
+  "/id",
   "/components",
+  "/id/components",
   "/docs/installation",
+  "/id/docs/installation",
   "/docs/theming",
+  "/id/components/modal",
   ...componentNames.map((name) => `/components/${name}`),
 ];
 
@@ -81,23 +85,22 @@ for (const framework of ["blade", "react", "vue"] as const) {
     const stage = pane(page, framework);
     await waitInteractive(page, framework);
 
-    await stage.getByRole("tab", { name: "Kata sandi" }).click();
-    await expect(
-      stage.getByRole("tab", { name: "Kata sandi" }),
-    ).toHaveAttribute("aria-selected", "true");
-
-    await preview(page)
-      .getByRole("button", { name: "Muat ulang preview" })
-      .click();
-    const fresh = pane(page, framework);
-    await waitInteractive(page, framework);
-    await expect(fresh.getByRole("tab", { name: "Akun" })).toHaveAttribute(
+    await stage.getByRole("tab", { name: "Password" }).click();
+    await expect(stage.getByRole("tab", { name: "Password" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await fresh.getByRole("tab", { name: "Notifikasi" }).click();
+
+    await preview(page).getByRole("button", { name: "Reload preview" }).click();
+    const fresh = pane(page, framework);
+    await waitInteractive(page, framework);
+    await expect(fresh.getByRole("tab", { name: "Account" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await fresh.getByRole("tab", { name: "Notifications" }).click();
     await expect(
-      fresh.getByRole("tab", { name: "Notifikasi" }),
+      fresh.getByRole("tab", { name: "Notifications" }),
     ).toHaveAttribute("aria-selected", "true");
   });
 }
@@ -106,14 +109,14 @@ test("modal di preview Blade terbuka dan tertutup", async ({ page }) => {
   await page.goto("/components/modal");
   await page.getByRole("radio", { name: "Blade" }).first().click();
   await pane(page, "blade")
-    .getByRole("button", { name: "Hapus proyek" })
+    .getByRole("button", { name: "Delete project" })
     .click();
   await expect(
-    page.getByRole("dialog", { name: "Hapus proyek?" }),
+    page.getByRole("dialog", { name: "Delete project?" }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(
-    page.getByRole("dialog", { name: "Hapus proyek?" }),
+    page.getByRole("dialog", { name: "Delete project?" }),
   ).toBeHidden();
 });
 
@@ -121,11 +124,11 @@ test("Copy prompt mengikuti framework terpilih", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/components/button");
   await page.getByRole("radio", { name: "React" }).first().click();
-  await page.getByRole("button", { name: "Opsi lain" }).click();
+  await page.getByRole("button", { name: "More options" }).click();
   await page.getByRole("menuitem", { name: "Copy prompt" }).click();
   const prompt = await page.evaluate(() => navigator.clipboard.readText());
   expect(prompt).toContain(
-    "Tambahkan komponen Button dari MarkasUI ke project React saya.",
+    "Add the Button component from MarkasUI to my React project.",
   );
   expect(prompt).toContain("src/components/markas/Button.tsx");
   expect(prompt).toContain("export function Button");
@@ -134,7 +137,7 @@ test("Copy prompt mengikuti framework terpilih", async ({ page, context }) => {
 test("pencarian Ctrl+K menemukan komponen", async ({ page }) => {
   await page.goto("/docs/introduction");
   await page.keyboard.press("Control+k");
-  await page.getByLabel("Kata kunci").fill("accordion");
+  await page.getByLabel("Search query").fill("accordion");
   await expect(page.locator("[data-search-results] a").first()).toHaveAttribute(
     "href",
     /\/components\/accordion/,
@@ -148,13 +151,13 @@ test("filter halaman komponen", async ({ page, request }) => {
   await page.goto("/components");
   await expect(page.locator("[data-card]:visible")).toHaveCount(index.length);
 
-  await page.getByLabel("Cari komponen").fill("accordion");
+  await page.getByLabel("Search components").fill("accordion");
   await expect(page.locator("[data-card]:visible")).toHaveCount(1);
-  await page.getByLabel("Cari komponen").fill("tidak-ada-komponen-ini");
-  await expect(page.getByText("Tidak ada komponen yang cocok.")).toBeVisible();
+  await page.getByLabel("Search components").fill("tidak-ada-komponen-ini");
+  await expect(page.getByText("No matching components.")).toBeVisible();
 
-  await page.getByLabel("Cari komponen").fill("");
-  await page.getByLabel("Kategori").selectOption("form");
+  await page.getByLabel("Search components").fill("");
+  await page.getByLabel("Category").selectOption("form");
   const formCount = index.filter((item) => item.category === "form").length;
   await expect(page.locator("[data-card]:visible")).toHaveCount(formCount);
 });
@@ -175,7 +178,7 @@ test("menu mobile membuka drawer @mobile", async ({ page, isMobile }) => {
   test.skip(!isMobile, "khusus mobile");
   await page.goto("/");
   await page.getByRole("button", { name: "Menu" }).click();
-  const drawer = page.getByRole("dialog", { name: "Navigasi" });
+  const drawer = page.getByRole("dialog", { name: "Navigation" });
   await expect(drawer).toBeVisible();
   await drawer.getByRole("link", { name: "Modal" }).click();
   await expect(page).toHaveURL(/\/components\/modal/);
@@ -191,14 +194,14 @@ test.describe("navigasi SPA", () => {
       () => ((window as unknown as { __spa: number }).__spa = 1),
     );
     await page
-      .getByRole("button", { name: "Ganti tema terang atau gelap" })
+      .getByRole("button", { name: "Toggle light or dark theme" })
       .click();
     const dark = await page.evaluate(() =>
       document.documentElement.classList.contains("dark"),
     );
     await page.getByRole("radio", { name: "Vue" }).first().click();
 
-    await page.getByRole("link", { name: "Lihat komponen" }).click();
+    await page.getByRole("link", { name: "Browse components" }).click();
     await expect(page).toHaveURL(/\/components$/);
     await page.locator('main a[href="/components/tabs"]').first().click();
     await expect(page).toHaveURL(/\/components\/tabs$/);
@@ -220,9 +223,9 @@ test.describe("navigasi SPA", () => {
 
     // Island di halaman baru hydrate dan interaktif.
     await waitInteractive(page, "vue");
-    await pane(page, "vue").getByRole("tab", { name: "Kata sandi" }).click();
+    await pane(page, "vue").getByRole("tab", { name: "Password" }).click();
     await expect(
-      pane(page, "vue").getByRole("tab", { name: "Kata sandi" }),
+      pane(page, "vue").getByRole("tab", { name: "Password" }),
     ).toHaveAttribute("aria-selected", "true");
   });
 
@@ -237,10 +240,10 @@ test.describe("navigasi SPA", () => {
     await expect(page).toHaveURL(/\/components\/modal$/);
     await page.getByRole("radio", { name: "Blade" }).first().click();
     await pane(page, "blade")
-      .getByRole("button", { name: "Hapus proyek" })
+      .getByRole("button", { name: "Delete project" })
       .click();
     await expect(
-      page.getByRole("dialog", { name: "Hapus proyek?" }),
+      page.getByRole("dialog", { name: "Delete project?" }),
     ).toBeVisible();
     expect(
       await page.evaluate(
@@ -256,7 +259,7 @@ test.describe("navigasi SPA", () => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.goto("/");
     await page
-      .getByRole("link", { name: "Komponen", exact: true })
+      .getByRole("link", { name: "Components", exact: true })
       .first()
       .click();
     await page.locator('main a[href="/components/button"]').first().click();
@@ -273,8 +276,71 @@ test.describe("navigasi SPA", () => {
     );
 
     await page.keyboard.press("Control+k");
-    await page.getByLabel("Kata kunci").fill("accordion");
+    await page.getByLabel("Search query").fill("accordion");
     await page.locator("[data-search-results] a").first().click();
     await expect(page).toHaveURL(/\/components\/accordion$/);
+  });
+});
+
+test.describe("bahasa", () => {
+  test("Inggris default, Indonesia di /id, switcher ke halaman yang sama", async ({
+    page,
+  }) => {
+    await page.goto("/components/modal");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Accessibility" }),
+    ).toBeVisible();
+
+    await page.getByRole("link", { name: "Bahasa Indonesia" }).first().click();
+    await expect(page).toHaveURL(/\/id\/components\/modal$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "id");
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Aksesibilitas" }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Dialog modal berbasis elemen dialog native").first(),
+    ).toBeVisible();
+
+    await page.getByRole("link", { name: "English" }).first().click();
+    await expect(page).toHaveURL(/\/components\/modal$/);
+  });
+
+  test("Copy prompt di /id berbahasa Indonesia", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/id/components/button");
+    await page.getByRole("radio", { name: "Vue" }).first().click();
+    await page.getByRole("button", { name: "Opsi lain" }).click();
+    await page.getByRole("menuitem", { name: "Copy prompt" }).click();
+    const prompt = await page.evaluate(() => navigator.clipboard.readText());
+    expect(prompt).toContain(
+      "Tambahkan komponen Button dari MarkasUI ke project Vue saya.",
+    );
+    expect(prompt).toContain("/id/docs/installation");
+  });
+
+  test("docs, Markdown, dan llms.txt tersedia di kedua bahasa", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/id/docs/cli");
+    await expect(
+      page.getByRole("heading", { level: 1, name: "CLI" }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Tambahkan komponen MarkasUI ke project lewat npx markasui.",
+      ),
+    ).toBeVisible();
+
+    expect(
+      await (await request.get("/id/components/modal.md")).text(),
+    ).toContain("## Aksesibilitas");
+    expect(await (await request.get("/components/modal.md")).text()).toContain(
+      "## Accessibility",
+    );
+    expect(await (await request.get("/id/llms.txt")).text()).toContain(
+      "/id/components/modal.md",
+    );
   });
 });

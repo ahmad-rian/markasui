@@ -1,21 +1,21 @@
 ## Blade
 
 ```blade
-<x-markas.avatar name="Budi Santoso" size="sm" />
-<x-markas.avatar name="Siti Aminah" :src="$user->photo_url" />
-<x-markas.avatar name="Dewi Lestari" src="/img/dewi.jpg" size="lg" alt="" />
+<x-markas.avatar name="John Carter" size="sm" />
+<x-markas.avatar name="Sarah Miller" :src="$user->photo_url" />
+<x-markas.avatar name="Emma Wilson" src="/img/emma.jpg" size="lg" alt="" />
 ```
 
-Fallback saat gambar gagal dimuat butuh Alpine.js. Livewire 3 sudah membawa Alpine. Tanpa `src`, inisial dirender tanpa JavaScript.
+The fallback for an image that fails to load needs Alpine.js. Livewire 3 already ships it. Without `src`, the initials render with no JavaScript.
 
 ## React
 
 ```tsx
 import { Avatar } from "@/components/markas/Avatar";
 
-<Avatar name="Budi Santoso" size="sm" />
-<Avatar name="Siti Aminah" src={user.photoUrl} />
-<Avatar name="Dewi Lestari" src="/img/dewi.jpg" size="lg" alt="" />
+<Avatar name="John Carter" size="sm" />
+<Avatar name="Sarah Miller" src={user.photoUrl} />
+<Avatar name="Emma Wilson" src="/img/emma.jpg" size="lg" alt="" />
 ```
 
 ## Vue
@@ -26,14 +26,15 @@ import Avatar from "@/components/markas/Avatar.vue";
 </script>
 
 <template>
-  <Avatar name="Budi Santoso" size="sm" />
-  <Avatar name="Siti Aminah" :src="user.photoUrl" />
-  <Avatar name="Dewi Lestari" src="/img/dewi.jpg" size="lg" alt="" />
+  <Avatar name="John Carter" size="sm" />
+  <Avatar name="Sarah Miller" :src="user.photoUrl" />
+  <Avatar name="Emma Wilson" src="/img/emma.jpg" size="lg" alt="" />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Inisial diambil dari huruf pertama kata pertama dan terakhir: `Budi Santoso` menjadi `BS`, `ani` menjadi `A`. Fungsi `getInitials` diekspor dari versi React dan Vue.
-- Atribut tambahan (`loading`, `width`, `data-*`) jatuh ke `<img>`. Elemen fallback hanya menerima `class`.
-- Di Blade, gambar yang sudah gagal sebelum Alpine aktif tetap terdeteksi lewat `x-init` (memeriksa `complete` dan `naturalWidth`).
+- Initials come from the first letter of the first and last word: `John Carter` becomes `JC`, `ann` becomes `A`. The `getInitials` function is exported from the React and Vue versions.
+- Extra attributes (`loading`, `width`, `data-*`) land on the `<img>`. The fallback element only receives `class`.
+- In Blade, an image that already failed before Alpine starts is still detected through `x-init` (it checks `complete` and `naturalWidth`).
+- Avatar has no built-in text. The accessible name comes from `name` or `alt`, so pass them in your site's language.

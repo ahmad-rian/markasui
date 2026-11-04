@@ -1,13 +1,13 @@
 ## Blade
 
 ```blade
-<x-markas.accordion :items="['pengiriman' => 'Berapa lama pengiriman?', 'retur' => 'Bagaimana cara retur?']" default-value="pengiriman">
-    <x-slot:pengiriman>Pesanan tiba dalam 2 sampai 4 hari kerja.</x-slot:pengiriman>
-    <x-slot:retur>Ajukan retur dalam 7 hari lewat halaman pesanan.</x-slot:retur>
+<x-markas.accordion :items="['shipping' => 'How long does shipping take?', 'returns' => 'How do I return an item?']" default-value="shipping">
+    <x-slot:shipping>Orders arrive in 2 to 4 business days.</x-slot:shipping>
+    <x-slot:returns>Request a return within 7 days from the order page.</x-slot:returns>
 </x-markas.accordion>
 ```
 
-Tidak butuh Alpine.js.
+No Alpine.js needed.
 
 ## React
 
@@ -15,17 +15,17 @@ Tidak butuh Alpine.js.
 import { Accordion } from "@/components/markas/Accordion";
 
 <Accordion
-  defaultValue="pengiriman"
+  defaultValue="shipping"
   items={[
     {
-      value: "pengiriman",
-      title: "Berapa lama pengiriman?",
-      content: "Pesanan tiba dalam 2 sampai 4 hari kerja.",
+      value: "shipping",
+      title: "How long does shipping take?",
+      content: "Orders arrive in 2 to 4 business days.",
     },
     {
-      value: "retur",
-      title: "Bagaimana cara retur?",
-      content: "Ajukan retur dalam 7 hari lewat halaman pesanan.",
+      value: "returns",
+      title: "How do I return an item?",
+      content: "Request a return within 7 days from the order page.",
     },
   ]}
 />;
@@ -36,19 +36,22 @@ import { Accordion } from "@/components/markas/Accordion";
 ```vue
 <template>
   <Accordion
-    default-value="pengiriman"
+    default-value="shipping"
     :items="[
-      { value: 'pengiriman', title: 'Berapa lama pengiriman?' },
-      { value: 'retur', title: 'Bagaimana cara retur?' },
+      { value: 'shipping', title: 'How long does shipping take?' },
+      { value: 'returns', title: 'How do I return an item?' },
     ]"
   >
-    <template #pengiriman>Pesanan tiba dalam 2 sampai 4 hari kerja.</template>
-    <template #retur>Ajukan retur dalam 7 hari lewat halaman pesanan.</template>
+    <template #shipping>Orders arrive in 2 to 4 business days.</template>
+    <template #returns
+      >Request a return within 7 days from the order page.</template
+    >
   </Accordion>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- `type="single"` (default) memberi atribut `name` yang sama ke setiap `details`, sehingga browser menutup bagian lain secara native. Pakai `type="multiple"` agar beberapa bagian bisa terbuka bersamaan.
-- Browser lama yang belum mendukung `details[name]` tetap bisa membuka bagian, hanya tidak eksklusif.
+- `type="single"` (the default) gives every `details` the same `name` attribute, so the browser closes the other sections natively. Use `type="multiple"` to let several sections stay open.
+- Older browsers without `details[name]` support still open sections, they are just not exclusive.
+- The component has no built-in text. Titles and content come from your own data, so write them in any language.

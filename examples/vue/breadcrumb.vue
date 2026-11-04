@@ -2,8 +2,8 @@
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb.vue";
 
 const items = [
-  { label: "Beranda", href: "/" },
-  { label: "Komponen", href: "/komponen" },
+  { label: "Home", href: "/" },
+  { label: "Components", href: "/components" },
   { label: "Breadcrumb" },
 ];
 </script>

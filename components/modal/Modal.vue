@@ -3,10 +3,14 @@ import { computed, ref, useId, useTemplateRef } from "vue";
 
 defineOptions({ inheritAttrs: false });
 
-const props = defineProps<{
-  title: string;
-  id?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    id?: string;
+    closeLabel?: string;
+  }>(),
+  { id: undefined, closeLabel: "Close" },
+);
 
 const dialogClass =
   "m-auto w-full max-w-lg rounded-xl border border-line bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/40";
@@ -50,7 +54,7 @@ function show() {
             {{ props.title }}
           </h2>
           <form method="dialog">
-            <button type="submit" :class="close" aria-label="Tutup">
+            <button type="submit" :class="close" :aria-label="props.closeLabel">
               <svg
                 class="size-4"
                 viewBox="0 0 24 24"

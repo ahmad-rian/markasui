@@ -1,9 +1,13 @@
 <script setup lang="ts">
 export type BreadcrumbItem = { label: string; href?: string };
 
-const props = defineProps<{
-  items: BreadcrumbItem[];
-}>();
+const props = withDefaults(
+  defineProps<{
+    items: BreadcrumbItem[];
+    navLabel?: string;
+  }>(),
+  { navLabel: "Breadcrumb" },
+);
 
 const list = "flex flex-wrap items-center gap-1.5 text-sm text-muted";
 const item = "inline-flex items-center gap-1.5";
@@ -25,7 +29,7 @@ const safeHref = (href: string) => {
 </script>
 
 <template>
-  <nav aria-label="Breadcrumb">
+  <nav :aria-label="props.navLabel">
     <ol :class="list">
       <li v-for="(crumb, index) in props.items" :key="index" :class="item">
         <span

@@ -8,20 +8,20 @@ export default function ToastFixture() {
         <Button
           onClick={() =>
             toast({
-              title: "Perubahan disimpan",
-              description: "Profil Anda sudah diperbarui.",
+              title: "Changes saved",
+              description: "Your profile has been updated",
               variant: "success",
               duration: 0,
             })
           }
         >
-          Tampilkan toast
+          Show toast
         </Button>
         <Button
           variant="secondary"
-          onClick={() => toast({ title: "Draf tersimpan otomatis" })}
+          onClick={() => toast({ title: "Draft saved automatically" })}
         >
-          Toast sementara
+          Temporary toast
         </Button>
       </div>
       <Toaster />

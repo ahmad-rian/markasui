@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DocsMarkdown.astro
 title: CLI
 description: Tambahkan komponen MarkasUI ke project lewat npx markasui.
 ---

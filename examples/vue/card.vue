@@ -4,12 +4,12 @@ import Card from "../../components/card/Card.vue";
 </script>
 
 <template>
-  <Card title="Paket Pro" description="Untuk tim kecil yang sedang tumbuh.">
-    Termasuk 10 anggota tim, penyimpanan 50 GB, dan laporan bulanan.
+  <Card title="Pro plan" description="For small teams that are growing.">
+    Includes 10 team members, 50 GB of storage, and monthly reports.
 
     <template #footer>
-      <Button size="sm">Pilih paket</Button>
-      <Button variant="ghost" size="sm">Bandingkan</Button>
+      <Button size="sm">Choose plan</Button>
+      <Button variant="ghost" size="sm">Compare</Button>
     </template>
   </Card>
 </template>

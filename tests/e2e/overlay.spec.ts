@@ -8,12 +8,12 @@ import {
 } from "./helpers";
 
 const openDropdown = async (page: Page) => {
-  await page.getByRole("button", { name: "Aksi" }).click();
+  await page.getByRole("button", { name: "Actions" }).click();
   await page.getByRole("menu").waitFor();
 };
 
 const openDrawer = async (page: Page) => {
-  await page.getByRole("button", { name: "Buka filter" }).click();
+  await page.getByRole("button", { name: "Open filters" }).click();
   await page.locator("dialog[open]").waitFor();
 };
 
@@ -23,7 +23,7 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "dropdown-menu");
-      const trigger = page.getByRole("button", { name: "Aksi" });
+      const trigger = page.getByRole("button", { name: "Actions" });
       const menu = page.getByRole("menu");
       const item = (name: string) => page.getByRole("menuitem", { name });
       const press = (key: string) => page.keyboard.press(key);
@@ -36,20 +36,20 @@ for (const framework of frameworks) {
       await expect(menu).toBeVisible();
       await expect(trigger).toHaveAttribute("aria-expanded", "true");
       await expect(menu).toHaveAttribute("data-state", "open");
-      await expect(item("Ubah")).toBeFocused();
+      await expect(item("Edit")).toBeFocused();
 
       await press("ArrowDown");
-      await expect(item("Duplikat")).toBeFocused();
+      await expect(item("Duplicate")).toBeFocused();
       await press("ArrowDown");
-      await expect(item("Hapus")).toBeFocused();
+      await expect(item("Delete")).toBeFocused();
       await press("ArrowDown");
-      await expect(item("Ubah")).toBeFocused();
+      await expect(item("Edit")).toBeFocused();
       await press("ArrowUp");
-      await expect(item("Hapus")).toBeFocused();
+      await expect(item("Delete")).toBeFocused();
       await press("Home");
-      await expect(item("Ubah")).toBeFocused();
+      await expect(item("Edit")).toBeFocused();
       await press("End");
-      await expect(item("Hapus")).toBeFocused();
+      await expect(item("Delete")).toBeFocused();
 
       await press("Escape");
       await expect(menu).toBeHidden();
@@ -57,17 +57,17 @@ for (const framework of frameworks) {
       await expect(trigger).toHaveAttribute("aria-expanded", "false");
 
       await press("Space");
-      await expect(item("Ubah")).toBeFocused();
+      await expect(item("Edit")).toBeFocused();
       await press("Escape");
       await expect(trigger).toBeFocused();
 
       await press("ArrowDown");
-      await expect(item("Ubah")).toBeFocused();
+      await expect(item("Edit")).toBeFocused();
       await press("Escape");
       await expect(menu).toBeHidden();
 
       await press("ArrowUp");
-      await expect(item("Hapus")).toBeFocused();
+      await expect(item("Delete")).toBeFocused();
       await press("Escape");
       await expect(trigger).toBeFocused();
     });
@@ -76,7 +76,7 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "dropdown-menu");
-      const trigger = page.getByRole("button", { name: "Aksi" });
+      const trigger = page.getByRole("button", { name: "Actions" });
       const menu = page.getByRole("menu");
 
       await trigger.focus();
@@ -101,7 +101,7 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "dropdown-menu");
-      const trigger = page.getByRole("button", { name: "Aksi" });
+      const trigger = page.getByRole("button", { name: "Actions" });
       const menu = page.getByRole("menu");
       await openDropdown(page);
 
@@ -122,16 +122,16 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "tooltip");
-      const trigger = page.getByRole("button", { name: "Salin tautan" });
+      const trigger = page.getByRole("button", { name: "Copy link" });
       const tooltip = page.getByRole("tooltip");
 
       await expect(tooltip).toBeHidden();
       await page.keyboard.press("Tab");
       await expect(trigger).toBeFocused();
       await expect(tooltip).toBeVisible();
-      await expect(tooltip).toHaveText("Salin tautan ke papan klip");
+      await expect(tooltip).toHaveText("Copy link to clipboard");
       await expect(trigger).toHaveAccessibleDescription(
-        "Salin tautan ke papan klip",
+        "Copy link to clipboard",
       );
 
       const triggerBox = (await trigger.boundingBox())!;
@@ -149,7 +149,7 @@ for (const framework of frameworks) {
       await openFixture(page, framework, "tooltip");
       const tooltip = page.getByRole("tooltip");
 
-      await page.getByRole("button", { name: "Salin tautan" }).hover();
+      await page.getByRole("button", { name: "Copy link" }).hover();
       await expect(tooltip).toBeVisible();
       await page.mouse.move(0, 0);
       await expect(tooltip).toBeHidden();
@@ -159,15 +159,15 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "drawer");
-      const trigger = page.getByRole("button", { name: "Buka filter" });
-      const dialog = page.getByRole("dialog", { name: "Filter produk" });
+      const trigger = page.getByRole("button", { name: "Open filters" });
+      const dialog = page.getByRole("dialog", { name: "Filter products" });
 
       await page.keyboard.press("Tab");
       await expect(trigger).toBeFocused();
       await page.keyboard.press("Enter");
       await expect(dialog).toBeVisible();
       await expect(dialog).toHaveAttribute("data-state", "open");
-      await expect(page.getByRole("button", { name: "Tutup" })).toBeFocused();
+      await expect(page.getByRole("button", { name: "Close" })).toBeFocused();
 
       const box = (await dialog.boundingBox())!;
       const viewport = page.viewportSize()!;
@@ -185,16 +185,16 @@ for (const framework of frameworks) {
 
     test("drawer: tombol footer dan backdrop menutup", async ({ page }) => {
       await openFixture(page, framework, "drawer");
-      const dialog = page.getByRole("dialog", { name: "Filter produk" });
+      const dialog = page.getByRole("dialog", { name: "Filter products" });
 
       await openDrawer(page);
-      await page.getByRole("button", { name: "Terapkan" }).click();
+      await page.getByRole("button", { name: "Apply" }).click();
       await expect(dialog).toBeHidden();
       expect(
         await page
           .locator("dialog")
           .evaluate((el: HTMLDialogElement) => el.returnValue),
-      ).toBe("terapkan");
+      ).toBe("apply");
 
       await openDrawer(page);
       await page.mouse.click(5, 5);
@@ -227,7 +227,7 @@ for (const theme of themes) {
       "tooltip",
       theme,
       async (p) => {
-        await p.getByRole("button", { name: "Salin tautan" }).focus();
+        await p.getByRole("button", { name: "Copy link" }).focus();
         await p.getByRole("tooltip").waitFor();
         return screenshot(p, "page");
       },

@@ -6,21 +6,21 @@ import { add, CliError, init, list, type CommonOptions } from "./commands.ts";
 import { terminalIo } from "./io.ts";
 import { RegistryError } from "./registry.ts";
 
-const HELP = `markasui: tambahkan komponen MarkasUI ke project Anda
+const HELP = `markasui: add MarkasUI components to your project
 
-Pemakaian:
-  npx markasui init                 deteksi framework, buat markas.json, salin markas.css
-  npx markasui add <nama...>        tulis komponen ke folder komponen
-  npx markasui list                 tampilkan semua komponen
+Usage:
+  npx markasui init                 detect the framework, create markas.json, copy markas.css
+  npx markasui add <name...>        write components to the components folder
+  npx markasui list                 list every component
 
-Opsi:
-  --cwd <path>                      folder project (default: folder saat ini)
-  --framework <blade|react|vue>     lewati deteksi otomatis
-  --overwrite                       timpa file yang berbeda tanpa bertanya
-  -y, --yes                         jawab ya untuk semua konfirmasi
-  --registry <url|folder>           registry lain (default https://markasui.pages.dev/r)
-  -h, --help                        bantuan
-  -v, --version                     versi`;
+Options:
+  --cwd <path>                      project folder (default: current folder)
+  --framework <blade|react|vue>     skip framework detection
+  --overwrite                       replace changed files without asking
+  -y, --yes                         answer yes to every prompt
+  --registry <url|folder>           another registry (default https://markasui.pages.dev/r)
+  -h, --help                        show help
+  -v, --version                     show version`;
 
 function version(): string {
   const pkg = JSON.parse(
@@ -65,7 +65,7 @@ async function main(argv: string[]) {
       return list(options, terminalIo);
     default:
       throw new CliError(
-        `Perintah tidak dikenal: "${command}". Lihat npx markasui --help`,
+        `Unknown command: "${command}". See npx markasui --help`,
       );
   }
 }

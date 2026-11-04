@@ -1,10 +1,10 @@
 ## Blade
 
 ```blade
-<x-markas.switch name="notifikasi" label="Notifikasi email" :checked="$user->wants_email" />
+<x-markas.switch name="notifications" label="Email notifications" :checked="$user->wants_email" />
 ```
 
-Tidak butuh Alpine.js.
+No Alpine.js needed.
 
 ## React
 
@@ -12,8 +12,8 @@ Tidak butuh Alpine.js.
 import { Switch } from "@/components/markas/Switch";
 
 <Switch
-  name="notifikasi"
-  label="Notifikasi email"
+  name="notifications"
+  label="Email notifications"
   defaultChecked
   onCheckedChange={(checked) => console.log(checked)}
 />;
@@ -26,15 +26,20 @@ import { Switch } from "@/components/markas/Switch";
 import { ref } from "vue";
 import Switch from "@/components/markas/Switch.vue";
 
-const notifikasi = ref(true);
+const notifications = ref(true);
 </script>
 
 <template>
-  <Switch v-model="notifikasi" name="notifikasi" label="Notifikasi email" />
+  <Switch
+    v-model="notifications"
+    name="notifications"
+    label="Email notifications"
+  />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Switch adalah `<input type="checkbox" role="switch">`, jadi nilainya ikut terkirim bersama form seperti checkbox biasa.
-- Status aktif dibacakan dari `checked` native, sehingga tidak perlu `aria-checked`. Tampilan memakai `checked:` dan `peer-checked:`, bukan `data-state`.
+- Switch is an `<input type="checkbox" role="switch">`, so its value is submitted with the form like a regular checkbox.
+- The on state is announced from the native `checked`, so no `aria-checked` is needed. The look uses `checked:` and `peer-checked:`, not `data-state`.
+- The component has no built-in text. Translate `label` directly.

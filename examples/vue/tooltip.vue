@@ -5,8 +5,8 @@ import Tooltip from "../../components/tooltip/Tooltip.vue";
 
 <template>
   <div class="flex justify-center py-10">
-    <Tooltip content="Salin tautan ke papan klip">
-      <Button variant="secondary">Salin tautan</Button>
+    <Tooltip content="Copy link to clipboard">
+      <Button variant="secondary">Copy link</Button>
     </Tooltip>
   </div>
 </template>

@@ -1,8 +1,8 @@
 ## Blade
 
 ```blade
-<x-markas.checkbox name="syarat" label="Saya setuju dengan syarat layanan" required />
-<x-markas.checkbox name="kabar" label="Kirimi saya kabar terbaru" description="Paling banyak satu email per bulan." :checked="old('kabar')" />
+<x-markas.checkbox name="terms" label="I agree to the terms of service" required />
+<x-markas.checkbox name="updates" label="Send me product updates" description="At most one email per month." :checked="old('updates')" />
 ```
 
 ## React
@@ -10,11 +10,11 @@
 ```tsx
 import { Checkbox } from "@/components/markas/Checkbox";
 
-<Checkbox name="syarat" label="Saya setuju dengan syarat layanan" required />
+<Checkbox name="terms" label="I agree to the terms of service" required />
 <Checkbox
-  name="kabar"
-  label="Kirimi saya kabar terbaru"
-  description="Paling banyak satu email per bulan."
+  name="updates"
+  label="Send me product updates"
+  description="At most one email per month."
   defaultChecked
 />
 ```
@@ -26,20 +26,21 @@ import { Checkbox } from "@/components/markas/Checkbox";
 import { ref } from "vue";
 import Checkbox from "@/components/markas/Checkbox.vue";
 
-const kabar = ref(false);
+const updates = ref(false);
 </script>
 
 <template>
   <Checkbox
-    v-model="kabar"
-    name="kabar"
-    label="Kirimi saya kabar terbaru"
-    description="Paling banyak satu email per bulan."
+    v-model="updates"
+    name="updates"
+    label="Send me product updates"
+    description="At most one email per month."
   />
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Atribut tambahan (`name`, `value`, `required`, `class`) diteruskan ke elemen `<input>`.
-- Tampilan tercentang memakai CSS `:checked` (varian `checked:` dan `peer-checked:`), bukan `data-state`, sehingga tetap benar tanpa JavaScript.
+- Extra attributes (`name`, `value`, `required`, `class`) go to the `<input>` element.
+- The checked look uses CSS `:checked` (the `checked:` and `peer-checked:` variants), not `data-state`, so it stays correct without JavaScript.
+- The component has no built-in text. Translate `label` and `description` directly.

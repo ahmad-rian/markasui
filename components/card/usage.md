@@ -1,11 +1,11 @@
 ## Blade
 
 ```blade
-<x-markas.card title="Paket Pro" description="Untuk tim kecil yang sedang tumbuh.">
-    Termasuk 10 anggota tim dan penyimpanan 50 GB.
+<x-markas.card title="Pro plan" description="For small teams that are growing.">
+    Includes 10 team members and 50 GB of storage.
 
     <x-slot:footer>
-        <x-markas.button size="sm">Pilih paket</x-markas.button>
+        <x-markas.button size="sm">Choose plan</x-markas.button>
     </x-slot:footer>
 </x-markas.card>
 ```
@@ -17,11 +17,11 @@ import { Button } from "@/components/markas/Button";
 import { Card } from "@/components/markas/Card";
 
 <Card
-  title="Paket Pro"
-  description="Untuk tim kecil yang sedang tumbuh."
-  footer={<Button size="sm">Pilih paket</Button>}
+  title="Pro plan"
+  description="For small teams that are growing."
+  footer={<Button size="sm">Choose plan</Button>}
 >
-  Termasuk 10 anggota tim dan penyimpanan 50 GB.
+  Includes 10 team members and 50 GB of storage.
 </Card>;
 ```
 
@@ -29,17 +29,18 @@ import { Card } from "@/components/markas/Card";
 
 ```vue
 <template>
-  <Card title="Paket Pro" description="Untuk tim kecil yang sedang tumbuh.">
-    Termasuk 10 anggota tim dan penyimpanan 50 GB.
+  <Card title="Pro plan" description="For small teams that are growing.">
+    Includes 10 team members and 50 GB of storage.
 
     <template #footer>
-      <Button size="sm">Pilih paket</Button>
+      <Button size="sm">Choose plan</Button>
     </template>
   </Card>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Semua bagian opsional. Bagian yang kosong tidak dirender, jadi jarak antar bagian tetap rapi.
-- Class tambahan (misalnya `max-w-sm`) digabung di akhir dan jatuh ke elemen `<article>`.
+- Every part is optional. Empty parts are not rendered, so the spacing stays even.
+- Extra classes (such as `max-w-sm`) are merged last and land on the `<article>` element.
+- Card has no built-in text. All text comes from your props and slots, so it works in any language as is.

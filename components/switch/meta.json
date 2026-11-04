@@ -1,7 +1,7 @@
 {
   "name": "switch",
   "title": "Switch",
-  "description": "Saklar nyala/mati dari checkbox native dengan role switch, tanpa JavaScript di Blade.",
+  "description": "On/off toggle built on a native checkbox with role switch, no JavaScript needed in Blade.",
   "category": "form",
   "tags": ["switch", "toggle", "form", "boolean"],
   "status": "stable",
@@ -15,44 +15,68 @@
       "name": "label",
       "type": "string",
       "default": "-",
-      "description": "Teks label di samping saklar, terhubung lewat for/id."
+      "description": "Label text next to the switch, linked through for/id."
     },
     {
       "name": "checked / defaultChecked / v-model",
       "type": "boolean",
       "default": "false",
-      "description": "Status nyala. Blade memakai atribut checked, React checked atau defaultChecked, Vue v-model."
+      "description": "On state. Blade uses the checked attribute, React checked or defaultChecked, Vue v-model."
     },
     {
       "name": "onCheckedChange",
       "type": "(checked: boolean) => void",
       "default": "-",
-      "description": "Khusus React. Dipanggil dengan status baru setiap kali saklar berubah."
+      "description": "React only. Called with the new state every time the switch changes."
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "description": "Menonaktifkan saklar dan meredupkan label."
+      "description": "Disables the switch and dims the label."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id input. Dibuat otomatis kalau kosong."
+      "default": "auto",
+      "description": "Input id. Generated when empty."
     }
   ],
   "a11y": [
-    "Input checkbox native dengan role switch, sehingga screen reader membacakan aktif atau nonaktif dari status checked.",
-    "Spasi mengubah status, label yang diklik ikut mengubah status.",
-    "Thumb hanya dekorasi (aria-hidden) dan bergerak lewat CSS peer-checked."
+    "A native checkbox input with role switch, so screen readers announce on or off from the checked state.",
+    "Space toggles the state, and clicking the label toggles it too.",
+    "The thumb is decorative (aria-hidden) and moves through CSS peer-checked."
   ],
   "ai": {
-    "whenToUse": "Pengaturan yang langsung berlaku tanpa tombol simpan, misalnya notifikasi atau mode hemat data.",
+    "whenToUse": "Settings that apply immediately without a save button, such as notifications or data saver mode.",
     "rules": [
-      "Pakai Checkbox kalau perubahan baru berlaku setelah form dikirim",
-      "Label menjelaskan apa yang dinyalakan, bukan status saat ini"
+      "Use Checkbox when the change only applies after the form is submitted",
+      "The label describes what gets turned on, not the current state"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Saklar nyala/mati dari checkbox native dengan role switch, tanpa JavaScript di Blade.",
+      "props": {
+        "label": "Teks label di samping saklar, terhubung lewat for/id.",
+        "checked / defaultChecked / v-model": "Status nyala. Blade memakai atribut checked, React checked atau defaultChecked, Vue v-model.",
+        "onCheckedChange": "Khusus React. Dipanggil dengan status baru setiap kali saklar berubah.",
+        "disabled": "Menonaktifkan saklar dan meredupkan label.",
+        "id": "Id input. Dibuat otomatis kalau kosong."
+      },
+      "a11y": [
+        "Input checkbox native dengan role switch, sehingga screen reader membacakan aktif atau nonaktif dari status checked.",
+        "Spasi mengubah status, label yang diklik ikut mengubah status.",
+        "Thumb hanya dekorasi (aria-hidden) dan bergerak lewat CSS peer-checked."
+      ],
+      "ai": {
+        "whenToUse": "Pengaturan yang langsung berlaku tanpa tombol simpan, misalnya notifikasi atau mode hemat data.",
+        "rules": [
+          "Pakai Checkbox kalau perubahan baru berlaku setelah form dikirim",
+          "Label menjelaskan apa yang dinyalakan, bukan status saat ini"
+        ]
+      }
+    }
+  }
 }

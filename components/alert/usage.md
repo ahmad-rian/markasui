@@ -1,8 +1,8 @@
 ## Blade
 
 ```blade
-<x-markas.alert title="Pembaruan tersedia" role="status">Versi 2.1 bisa dipasang kapan saja.</x-markas.alert>
-<x-markas.alert variant="danger" title="Gagal menyimpan">Periksa koneksi internet lalu coba lagi.</x-markas.alert>
+<x-markas.alert title="Update available" role="status">Version 2.1 can be installed at any time.</x-markas.alert>
+<x-markas.alert variant="danger" title="Could not save">Check your internet connection and try again.</x-markas.alert>
 ```
 
 ## React
@@ -10,11 +10,11 @@
 ```tsx
 import { Alert } from "@/components/markas/Alert";
 
-<Alert title="Pembaruan tersedia" role="status">
-  Versi 2.1 bisa dipasang kapan saja.
+<Alert title="Update available" role="status">
+  Version 2.1 can be installed at any time.
 </Alert>
-<Alert variant="danger" title="Gagal menyimpan">
-  Periksa koneksi internet lalu coba lagi.
+<Alert variant="danger" title="Could not save">
+  Check your internet connection and try again.
 </Alert>
 ```
 
@@ -26,16 +26,16 @@ import Alert from "@/components/markas/Alert.vue";
 </script>
 
 <template>
-  <Alert title="Pembaruan tersedia" role="status">
-    Versi 2.1 bisa dipasang kapan saja.
+  <Alert title="Update available" role="status">
+    Version 2.1 can be installed at any time.
   </Alert>
-  <Alert variant="danger" title="Gagal menyimpan">
-    Periksa koneksi internet lalu coba lagi.
+  <Alert variant="danger" title="Could not save">
+    Check your internet connection and try again.
   </Alert>
 </template>
 ```
 
-## Catatan
+## Notes
 
-- Default `role="alert"` langsung dibacakan pembaca layar. Untuk info yang tidak mendesak, isi `role="status"`.
-- Tanpa JavaScript, jadi versi Blade tidak butuh Alpine.js.
+- The default `role="alert"` is announced by screen readers right away. For non-urgent information, set `role="status"`.
+- No JavaScript, so the Blade version does not need Alpine.js.

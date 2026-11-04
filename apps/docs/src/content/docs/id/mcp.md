@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DocsMarkdown.astro
 title: MCP
 description: Pasang MCP server MarkasUI di Claude Code, Cursor, dan VS Code.
 ---

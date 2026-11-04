@@ -19,14 +19,14 @@ async function fetchJson<T>(registry: string, file: string): Promise<T> {
       response = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
     } catch (error) {
       throw new RegistryError(
-        `Gagal menghubungi registry ${url}: ${(error as Error).message}`,
+        `Cannot reach the registry at ${url}: ${(error as Error).message}`,
       );
     }
     if (response.status === 404)
-      throw new RegistryError(`Tidak ditemukan di registry: ${url}`);
+      throw new RegistryError(`Not found in the registry: ${url}`);
     if (!response.ok)
       throw new RegistryError(
-        `Registry membalas ${response.status} untuk ${url}`,
+        `The registry answered ${response.status} for ${url}`,
       );
     return (await response.json()) as T;
   }
@@ -38,7 +38,7 @@ async function fetchJson<T>(registry: string, file: string): Promise<T> {
     const code = (error as NodeJS.ErrnoException).code;
     throw new RegistryError(
       code === "ENOENT"
-        ? `Tidak ditemukan di registry: ${dir}/${file}`
+        ? `Not found in the registry: ${dir}/${file}`
         : (error as Error).message,
     );
   }
@@ -66,7 +66,7 @@ export function createRegistry(
     component: (name: string) => {
       if (!NAME.test(name))
         return Promise.reject(
-          new RegistryError(`Nama komponen tidak valid: "${name}"`),
+          new RegistryError(`Invalid component name: "${name}"`),
         );
       return cached<RegistryItem>(`${name}.json`);
     },

@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DocsMarkdown.astro
 title: Theming
 description: Daftar token warna MarkasUI dan cara mengganti warna brand.
 ---

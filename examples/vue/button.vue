@@ -5,16 +5,16 @@ import Button from "../../components/button/Button.vue";
 <template>
   <div class="grid gap-4">
     <div class="flex flex-wrap items-center gap-3">
-      <Button>Simpan</Button>
-      <Button variant="secondary">Batal</Button>
-      <Button variant="ghost">Lainnya</Button>
-      <Button variant="danger">Hapus</Button>
+      <Button>Save</Button>
+      <Button variant="secondary">Cancel</Button>
+      <Button variant="ghost">More</Button>
+      <Button variant="danger">Delete</Button>
     </div>
     <div class="flex flex-wrap items-center gap-3">
-      <Button size="sm">Kecil</Button>
-      <Button size="md">Sedang</Button>
-      <Button size="lg">Besar</Button>
-      <Button disabled>Nonaktif</Button>
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+      <Button disabled>Disabled</Button>
     </div>
   </div>
 </template>

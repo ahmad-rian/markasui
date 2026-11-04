@@ -1,54 +1,95 @@
 {
   "name": "modal",
   "title": "Modal",
-  "description": "Dialog modal berbasis elemen dialog native dengan fokus terkunci dan tombol tutup.",
+  "description": "Modal dialog built on the native dialog element, with focus trapping and a close button.",
   "category": "overlay",
   "tags": ["modal", "dialog", "overlay", "popup"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "modal.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Modal.tsx", "deps": [] },
-    "vue": { "file": "Modal.vue", "deps": [] }
+    "blade": {
+      "file": "modal.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Modal.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Modal.vue",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "title",
       "type": "string",
       "default": "-",
-      "description": "Judul dialog, dipakai juga sebagai aria-labelledby."
+      "description": "Dialog title, also used for aria-labelledby."
     },
     {
       "name": "trigger",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Elemen yang membuka modal saat diklik."
+      "description": "Element that opens the modal when clicked."
     },
     {
       "name": "footer",
       "type": "slot / ReactNode",
       "default": "-",
-      "description": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup modal."
+      "description": "Action area. Wrapped in form method=dialog, so a type=submit button closes the modal."
     },
     {
       "name": "id",
       "type": "string",
-      "default": "otomatis",
-      "description": "Id dialog. Bisa dipakai untuk membuka modal dari luar lewat showModal()."
+      "default": "auto",
+      "description": "Dialog id. Use it to open the modal from elsewhere with showModal()."
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "description": "Accessible label of the close button."
     }
   ],
   "a11y": [
-    "Memakai dialog dan showModal(), jadi fokus terkunci di dalam modal dan konten di belakangnya inert.",
-    "Escape menutup modal dan fokus kembali ke elemen pemicu.",
-    "Klik di luar panel (backdrop) menutup modal.",
-    "Tombol tutup punya aria-label Tutup."
+    "Uses dialog with showModal(), so focus stays inside and the page behind is inert.",
+    "Escape closes the modal and returns focus to the trigger.",
+    "Clicking outside the panel (the backdrop) closes the modal.",
+    "The close button is labelled by closeLabel."
   ],
   "ai": {
-    "whenToUse": "Konfirmasi aksi penting atau form singkat yang butuh perhatian penuh user.",
+    "whenToUse": "Confirming an important action or a short form that needs full attention.",
     "rules": [
-      "Tombol di footer yang harus menutup modal wajib type=submit",
-      "Jangan menumpuk modal di dalam modal",
-      "Untuk panel samping gunakan Drawer, bukan Modal"
+      "Footer buttons that should close the modal must be type=submit",
+      "Never nest a modal inside another modal",
+      "Use Drawer for side panels, not Modal"
     ]
   },
-  "addedAt": "2026-11-04"
+  "addedAt": "2026-11-04",
+  "i18n": {
+    "id": {
+      "description": "Dialog modal berbasis elemen dialog native dengan fokus terkunci dan tombol tutup.",
+      "props": {
+        "title": "Judul dialog, dipakai juga sebagai aria-labelledby.",
+        "trigger": "Elemen yang membuka modal saat diklik.",
+        "footer": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup modal.",
+        "id": "Id dialog. Bisa dipakai untuk membuka modal dari luar lewat showModal().",
+        "closeLabel": "Label aksesibel tombol tutup. Isi \"Tutup\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Memakai dialog dan showModal(), jadi fokus terkunci di dalam modal dan konten di belakangnya inert.",
+        "Escape menutup modal dan fokus kembali ke elemen pemicu.",
+        "Klik di luar panel (backdrop) menutup modal.",
+        "Tombol tutup punya aria-label dari closeLabel (default Close)."
+      ],
+      "ai": {
+        "whenToUse": "Konfirmasi aksi penting atau form singkat yang butuh perhatian penuh user.",
+        "rules": [
+          "Tombol di footer yang harus menutup modal wajib type=submit",
+          "Jangan menumpuk modal di dalam modal",
+          "Untuk panel samping gunakan Drawer, bukan Modal"
+        ]
+      }
+    }
+  }
 }

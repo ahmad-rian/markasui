@@ -1,8 +1,8 @@
-<x-markas.card title="Paket Pro" description="Untuk tim kecil yang sedang tumbuh.">
-    Termasuk 10 anggota tim, penyimpanan 50 GB, dan laporan bulanan.
+<x-markas.card title="Pro plan" description="For small teams that are growing.">
+    Includes 10 team members, 50 GB of storage, and monthly reports.
 
     <x-slot:footer>
-        <x-markas.button size="sm">Pilih paket</x-markas.button>
-        <x-markas.button variant="ghost" size="sm">Bandingkan</x-markas.button>
+        <x-markas.button size="sm">Choose plan</x-markas.button>
+        <x-markas.button variant="ghost" size="sm">Compare</x-markas.button>
     </x-slot:footer>
 </x-markas.card>

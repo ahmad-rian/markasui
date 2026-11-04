@@ -4,21 +4,21 @@ export default function InputFixture() {
   return (
     <div className="grid gap-4">
       <Input
-        name="nama"
-        label="Nama lengkap"
+        name="name"
+        label="Full name"
         placeholder="Budi Santoso"
-        hint="Sesuai KTP."
+        hint="As shown on your ID"
       />
       <Input
         name="email"
         type="email"
         label="Email"
         defaultValue="budi@"
-        error="Format email belum benar."
+        error="Enter a valid email address"
       />
       <Input
-        name="kode"
-        label="Kode undangan"
+        name="code"
+        label="Invite code"
         defaultValue="MARKAS-2026"
         disabled
       />

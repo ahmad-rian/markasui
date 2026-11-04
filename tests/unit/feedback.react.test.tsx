@@ -13,17 +13,17 @@ import {
 
 describe("React Alert", () => {
   it("default role alert, varian info, dengan judul dan isi", () => {
-    render(<Alert title="Pembaruan">Versi baru tersedia.</Alert>);
+    render(<Alert title="Update">New version available.</Alert>);
     const alert = screen.getByRole("alert");
     expect(alert).toHaveClass("bg-primary-soft", "border-primary-line");
-    expect(alert).toHaveTextContent("PembaruanVersi baru tersedia.");
+    expect(alert).toHaveTextContent("UpdateNew version available.");
     expect(alert.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
 
   it("menerima role status, varian, dan class user di akhir", () => {
     render(
       <Alert variant="danger" role="status" className="mt-4">
-        Gagal
+        Failed
       </Alert>,
     );
     const alert = screen.getByRole("status");
@@ -36,8 +36,8 @@ describe("React Alert", () => {
 
 describe("React Badge", () => {
   it("default neutral dengan titik aria-hidden", () => {
-    render(<Badge>Draf</Badge>);
-    const badge = screen.getByText("Draf");
+    render(<Badge>Draft</Badge>);
+    const badge = screen.getByText("Draft");
     expect(badge.tagName).toBe("SPAN");
     expect(badge).toHaveClass("rounded-full", "bg-subtle", "text-ink");
     expect(badge.firstElementChild).toHaveAttribute("aria-hidden", "true");
@@ -46,10 +46,10 @@ describe("React Badge", () => {
   it("menerapkan varian dan class user di akhir", () => {
     render(
       <Badge variant="warning" className="ml-2" title="Status">
-        Tertunda
+        Pending
       </Badge>,
     );
-    const badge = screen.getByText("Tertunda");
+    const badge = screen.getByText("Pending");
     expect(badge).toHaveClass("bg-warning/10");
     expect(badge).toHaveAttribute("title", "Status");
     expect(badge.firstElementChild).toHaveClass("bg-warning");
@@ -59,8 +59,8 @@ describe("React Badge", () => {
 
 describe("React Progress", () => {
   it("menghubungkan label, menampilkan persentase, dan default max 100", () => {
-    render(<Progress label="Unggah" value={3} max={4} className="h-3" />);
-    const bar = screen.getByRole("progressbar", { name: "Unggah" });
+    render(<Progress label="Upload" value={3} max={4} className="h-3" />);
+    const bar = screen.getByRole("progressbar", { name: "Upload" });
     expect(bar).toHaveAttribute("value", "3");
     expect(bar).toHaveAttribute("max", "4");
     expect(screen.getByText("75%")).toBeInTheDocument();
@@ -68,19 +68,19 @@ describe("React Progress", () => {
   });
 
   it("tak tentu bila value kosong, tanpa persentase", () => {
-    render(<Progress label="Menyiapkan" id="siap" />);
-    const bar = screen.getByRole("progressbar", { name: "Menyiapkan" });
+    render(<Progress label="Preparing" id="ready" />);
+    const bar = screen.getByRole("progressbar", { name: "Preparing" });
     expect(bar).not.toHaveAttribute("value");
     expect(bar).toHaveAttribute("max", "100");
-    expect(bar).toHaveAttribute("id", "siap");
+    expect(bar).toHaveAttribute("id", "ready");
     expect(screen.queryByText(/%$/)).toBeNull();
   });
 
   it("membatasi persentase 0 sampai 100 dan tanpa label tidak ada header", () => {
-    const { rerender } = render(<Progress label="Lebih" value={150} />);
+    const { rerender } = render(<Progress label="Over" value={150} />);
     expect(screen.getByText("100%")).toBeInTheDocument();
-    rerender(<Progress aria-label="Polos" value={10} />);
-    expect(screen.getByRole("progressbar", { name: "Polos" })).toBeVisible();
+    rerender(<Progress aria-label="Plain" value={10} />);
+    expect(screen.getByRole("progressbar", { name: "Plain" })).toBeVisible();
     expect(screen.queryByText("10%")).toBeNull();
   });
 });
@@ -116,71 +116,80 @@ describe("React Toast", () => {
 
   it("region live kosong dan menerima class user", () => {
     render(<Toaster className="bottom-8" />);
-    const region = screen.getByRole("status", { name: "Notifikasi" });
+    const region = screen.getByRole("status", { name: "Notifications" });
     expect(region).toHaveAttribute("aria-live", "polite");
     expect(region).toBeEmptyDOMElement();
     expect(region.className.endsWith("bottom-8")).toBe(true);
   });
 
-  it("menampilkan judul, deskripsi, varian, lalu tombol Tutup menghapus", () => {
+  it("regionLabel dan closeLabel menimpa label default", () => {
+    render(<Toaster regionLabel="Notifikasi" closeLabel="Tutup" />);
+    show({ title: "Saved", duration: 0 });
+    const region = screen.getByRole("status", { name: "Notifikasi" });
+    expect(region).toHaveTextContent("Saved");
+    expect(screen.getByRole("button", { name: "Tutup" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
+  });
+
+  it("menampilkan judul, deskripsi, varian, lalu tombol Close menghapus", () => {
     render(<Toaster />);
     show({
-      title: "Tersimpan",
-      description: "Data sudah diperbarui.",
+      title: "Saved",
+      description: "Data has been updated.",
       variant: "success",
       duration: 0,
     });
-    const region = screen.getByRole("status", { name: "Notifikasi" });
-    expect(region).toHaveTextContent("TersimpanData sudah diperbarui.");
+    const region = screen.getByRole("status", { name: "Notifications" });
+    expect(region).toHaveTextContent("SavedData has been updated.");
     const card = region.firstElementChild;
     expect(card).toHaveAttribute("data-state", "open");
     expect(card).toHaveClass("border-success/40");
     expect(card?.querySelector("svg")).toHaveClass("text-success");
 
-    fireEvent.click(screen.getByRole("button", { name: "Tutup" }));
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
     expect(region).toBeEmptyDOMElement();
   });
 
   it("varian default tanpa ikon dan hilang setelah 5000ms", () => {
     render(<Toaster />);
-    show({ title: "Draf" });
-    const region = screen.getByRole("status", { name: "Notifikasi" });
+    show({ title: "Draft" });
+    const region = screen.getByRole("status", { name: "Notifications" });
     expect(region.firstElementChild).toHaveClass("border-line");
     expect(region.querySelectorAll("svg")).toHaveLength(1);
 
     act(() => vi.advanceTimersByTime(4999));
-    expect(screen.getByText("Draf")).toBeInTheDocument();
+    expect(screen.getByText("Draft")).toBeInTheDocument();
     act(() => vi.advanceTimersByTime(1));
-    expect(screen.queryByText("Draf")).toBeNull();
+    expect(screen.queryByText("Draft")).toBeNull();
   });
 
   it("duration 0 tidak pernah hilang sendiri", () => {
     render(<Toaster />);
-    show({ title: "Tetap", duration: 0 });
+    show({ title: "Sticky", duration: 0 });
     act(() => vi.advanceTimersByTime(60_000));
-    expect(screen.getByText("Tetap")).toBeInTheDocument();
+    expect(screen.getByText("Sticky")).toBeInTheDocument();
   });
 
   it("timer berhenti saat hover atau fokus dan lanjut dengan sisa waktu", () => {
     render(<Toaster />);
-    show({ title: "Sementara", duration: 1000 });
-    const card = screen.getByText("Sementara").closest("[data-state]")!;
+    show({ title: "Temporary", duration: 1000 });
+    const card = screen.getByText("Temporary").closest("[data-state]")!;
 
     act(() => vi.advanceTimersByTime(400));
     fireEvent.mouseEnter(card);
     act(() => vi.advanceTimersByTime(5000));
-    expect(screen.getByText("Sementara")).toBeInTheDocument();
+    expect(screen.getByText("Temporary")).toBeInTheDocument();
     fireEvent.mouseLeave(card);
 
-    fireEvent.focus(screen.getByRole("button", { name: "Tutup" }));
+    fireEvent.focus(screen.getByRole("button", { name: "Close" }));
     act(() => vi.advanceTimersByTime(5000));
-    expect(screen.getByText("Sementara")).toBeInTheDocument();
-    fireEvent.blur(screen.getByRole("button", { name: "Tutup" }));
+    expect(screen.getByText("Temporary")).toBeInTheDocument();
+    fireEvent.blur(screen.getByRole("button", { name: "Close" }));
 
     act(() => vi.advanceTimersByTime(599));
-    expect(screen.getByText("Sementara")).toBeInTheDocument();
+    expect(screen.getByText("Temporary")).toBeInTheDocument();
     act(() => vi.advanceTimersByTime(1));
-    expect(screen.queryByText("Sementara")).toBeNull();
+    expect(screen.queryByText("Temporary")).toBeNull();
   });
 
   it("di server toast() tidak mengantre apa pun dan mengembalikan 0", () => {
@@ -191,22 +200,22 @@ describe("React Toast", () => {
 
     expect(id).toBe(0);
     expect(vi.getTimerCount()).toBe(0);
-    show({ title: "Klien", duration: 0 });
-    const region = screen.getByRole("status", { name: "Notifikasi" });
+    show({ title: "Client", duration: 0 });
+    const region = screen.getByRole("status", { name: "Notifications" });
     expect(region.children).toHaveLength(1);
-    expect(region).toHaveTextContent("Klien");
+    expect(region).toHaveTextContent("Client");
   });
 
   it("mouseleave tidak melanjutkan timer selama fokus masih di dalam toast", () => {
     render(<Toaster />);
-    show({ title: "Fokus", duration: 1000 });
-    const card = screen.getByText("Fokus").closest("[data-state]")!;
-    const close = screen.getByRole("button", { name: "Tutup" });
+    show({ title: "Focus", duration: 1000 });
+    const card = screen.getByText("Focus").closest("[data-state]")!;
+    const close = screen.getByRole("button", { name: "Close" });
 
     fireEvent.mouseEnter(card);
     close.focus();
     fireEvent.mouseLeave(card);
     act(() => vi.advanceTimersByTime(5000));
-    expect(screen.getByText("Fokus")).toBeInTheDocument();
+    expect(screen.getByText("Focus")).toBeInTheDocument();
   });
 });

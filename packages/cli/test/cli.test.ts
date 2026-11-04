@@ -113,7 +113,7 @@ describe("init", () => {
     expect(
       await readFile(join(dir, "resources/css/markas.css"), "utf8"),
     ).toContain("--markas-primary");
-    expect(output()).toContain("Setup MarkasUI untuk Laravel");
+    expect(output()).toContain("MarkasUI setup for Laravel");
   });
 
   it("--framework mengalahkan deteksi", async () => {
@@ -196,10 +196,10 @@ describe("add", () => {
     const dir = await project("vue");
     await expect(
       add(["../etc"], { cwd: dir, registry }, fakeIo().io),
-    ).rejects.toThrow(/tidak valid/);
+    ).rejects.toThrow(/Invalid component name/);
     await expect(
       add(["tidakada"], { cwd: dir, registry }, fakeIo().io),
-    ).rejects.toThrow(/Tidak ditemukan/);
+    ).rejects.toThrow(/Not found/);
     await expect(add([], { cwd: dir, registry }, fakeIo().io)).rejects.toThrow(
       CliError,
     );
@@ -218,7 +218,7 @@ describe("add", () => {
         { cwd: await project("vue"), registry: evil },
         fakeIo().io,
       ),
-    ).rejects.toThrow(/tidak aman/);
+    ).rejects.toThrow(/Unsafe file name/);
   });
 });
 

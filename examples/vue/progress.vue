@@ -4,8 +4,8 @@ import Progress from "../../components/progress/Progress.vue";
 
 <template>
   <div class="grid gap-5">
-    <Progress label="Mengunggah berkas" :value="60" />
-    <Progress label="Penyimpanan terpakai" :value="3" :max="4" />
-    <Progress label="Menyiapkan laporan" />
+    <Progress label="Uploading file" :value="60" />
+    <Progress label="Storage used" :value="3" :max="4" />
+    <Progress label="Preparing report" />
   </div>
 </template>

@@ -2,16 +2,16 @@
 import Tabs from "../../components/tabs/Tabs.vue";
 
 const items = [
-  { value: "akun", label: "Akun" },
-  { value: "sandi", label: "Kata sandi" },
-  { value: "notifikasi", label: "Notifikasi" },
+  { value: "account", label: "Account" },
+  { value: "password", label: "Password" },
+  { value: "notifications", label: "Notifications" },
 ];
 </script>
 
 <template>
-  <Tabs :items="items" default-value="akun">
-    <template #akun>Ubah nama dan email akun Anda.</template>
-    <template #sandi>Ganti kata sandi secara berkala.</template>
-    <template #notifikasi>Atur email yang ingin Anda terima.</template>
+  <Tabs :items="items" default-value="account">
+    <template #account>Change your account name and email.</template>
+    <template #password>Change your password regularly.</template>
+    <template #notifications>Choose which emails you want to receive.</template>
   </Tabs>
 </template>

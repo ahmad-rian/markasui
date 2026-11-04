@@ -14,12 +14,12 @@ import Toaster, {
 describe("Vue Alert", () => {
   it("default role alert, varian info, dengan judul dan isi", () => {
     render(Alert, {
-      props: { title: "Pembaruan" },
-      slots: { default: "Versi baru tersedia." },
+      props: { title: "Update" },
+      slots: { default: "New version available." },
     });
     const alert = screen.getByRole("alert");
     expect(alert).toHaveClass("bg-primary-soft", "border-primary-line");
-    expect(alert).toHaveTextContent("PembaruanVersi baru tersedia.");
+    expect(alert).toHaveTextContent("UpdateNew version available.");
     expect(alert.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
 
@@ -27,7 +27,7 @@ describe("Vue Alert", () => {
     render(Alert, {
       props: { variant: "warning" },
       attrs: { role: "status", class: "mt-4" },
-      slots: { default: "Kuota hampir habis" },
+      slots: { default: "Quota almost full" },
     });
     const alert = screen.getByRole("status");
     expect(alert).toHaveClass("bg-warning/10", "border-warning/30");
@@ -39,8 +39,8 @@ describe("Vue Alert", () => {
 
 describe("Vue Badge", () => {
   it("default neutral dengan titik aria-hidden", () => {
-    render(Badge, { slots: { default: "Draf" } });
-    const badge = screen.getByText("Draf");
+    render(Badge, { slots: { default: "Draft" } });
+    const badge = screen.getByText("Draft");
     expect(badge).toHaveClass("rounded-full", "bg-subtle", "text-ink");
     expect(badge.firstElementChild).toHaveAttribute("aria-hidden", "true");
   });
@@ -49,9 +49,9 @@ describe("Vue Badge", () => {
     render(Badge, {
       props: { variant: "primary" },
       attrs: { class: "ml-2" },
-      slots: { default: "Baru" },
+      slots: { default: "New" },
     });
-    const badge = screen.getByText("Baru");
+    const badge = screen.getByText("New");
     expect(badge).toHaveClass("bg-primary-soft", "text-primary");
     expect(badge.firstElementChild).toHaveClass("bg-primary");
     expect(badge.className.endsWith("ml-2")).toBe(true);
@@ -61,10 +61,10 @@ describe("Vue Badge", () => {
 describe("Vue Progress", () => {
   it("menghubungkan label, persentase, dan class user ke progress", () => {
     render(Progress, {
-      props: { label: "Unggah", value: 3, max: 4 },
+      props: { label: "Upload", value: 3, max: 4 },
       attrs: { class: "h-3" },
     });
-    const bar = screen.getByRole("progressbar", { name: "Unggah" });
+    const bar = screen.getByRole("progressbar", { name: "Upload" });
     expect(bar).toHaveAttribute("value", "3");
     expect(bar).toHaveAttribute("max", "4");
     expect(screen.getByText("75%")).toBeInTheDocument();
@@ -72,22 +72,22 @@ describe("Vue Progress", () => {
   });
 
   it("tak tentu bila value kosong dan default max 100", () => {
-    render(Progress, { props: { label: "Menyiapkan", id: "siap" } });
-    const bar = screen.getByRole("progressbar", { name: "Menyiapkan" });
+    render(Progress, { props: { label: "Preparing", id: "ready" } });
+    const bar = screen.getByRole("progressbar", { name: "Preparing" });
     expect(bar).not.toHaveAttribute("value");
     expect(bar).toHaveAttribute("max", "100");
-    expect(bar).toHaveAttribute("id", "siap");
+    expect(bar).toHaveAttribute("id", "ready");
     expect(screen.queryByText(/%$/)).toBeNull();
   });
 
   it("membatasi persentase dan tanpa label tidak ada header", () => {
-    render(Progress, { props: { label: "Lebih", value: -5 } });
+    render(Progress, { props: { label: "Over", value: -5 } });
     expect(screen.getByText("0%")).toBeInTheDocument();
     render(Progress, {
       props: { value: 10 },
-      attrs: { "aria-label": "Polos" },
+      attrs: { "aria-label": "Plain" },
     });
-    expect(screen.getByRole("progressbar", { name: "Polos" })).toBeVisible();
+    expect(screen.getByRole("progressbar", { name: "Plain" })).toBeVisible();
     expect(screen.queryByText("10%")).toBeNull();
   });
 });
@@ -127,71 +127,82 @@ describe("Vue Toast", () => {
 
   it("region live kosong dan menerima class user", () => {
     render(Toaster, { attrs: { class: "bottom-8" } });
-    const region = screen.getByRole("status", { name: "Notifikasi" });
+    const region = screen.getByRole("status", { name: "Notifications" });
     expect(region).toHaveAttribute("aria-live", "polite");
     expect(region.querySelector("[data-state]")).toBeNull();
     expect(region.className.endsWith("bottom-8")).toBe(true);
   });
 
-  it("menampilkan judul, deskripsi, varian, lalu tombol Tutup menghapus", async () => {
+  it("regionLabel dan closeLabel menimpa label default", async () => {
+    render(Toaster, {
+      props: { regionLabel: "Notifikasi", closeLabel: "Tutup" },
+    });
+    await show({ title: "Saved", duration: 0 });
+    const region = screen.getByRole("status", { name: "Notifikasi" });
+    expect(region).toHaveTextContent("Saved");
+    expect(screen.getByRole("button", { name: "Tutup" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
+  });
+
+  it("menampilkan judul, deskripsi, varian, lalu tombol Close menghapus", async () => {
     render(Toaster);
     await show({
-      title: "Gagal",
-      description: "Coba lagi.",
+      title: "Failed",
+      description: "Try again.",
       variant: "danger",
       duration: 0,
     });
-    const region = screen.getByRole("status", { name: "Notifikasi" });
-    expect(region).toHaveTextContent("GagalCoba lagi.");
+    const region = screen.getByRole("status", { name: "Notifications" });
+    expect(region).toHaveTextContent("FailedTry again.");
     const card = region.querySelector("[data-state=open]");
     expect(card).toHaveClass("border-danger/40");
     expect(card?.querySelector("svg")).toHaveClass("text-danger");
 
-    await fireEvent.click(screen.getByRole("button", { name: "Tutup" }));
+    await fireEvent.click(screen.getByRole("button", { name: "Close" }));
     expect(region.querySelector("[data-state]")).toBeNull();
   });
 
   it("varian default tanpa ikon dan hilang setelah 5000ms", async () => {
     render(Toaster);
-    await show({ title: "Draf" });
-    const card = screen.getByText("Draf").closest("[data-state]")!;
+    await show({ title: "Draft" });
+    const card = screen.getByText("Draft").closest("[data-state]")!;
     expect(card).toHaveClass("border-line");
     expect(card.querySelectorAll("svg")).toHaveLength(1);
 
     await advance(4999);
-    expect(screen.getByText("Draf")).toBeInTheDocument();
+    expect(screen.getByText("Draft")).toBeInTheDocument();
     await advance(1);
-    expect(screen.queryByText("Draf")).toBeNull();
+    expect(screen.queryByText("Draft")).toBeNull();
   });
 
   it("duration 0 tidak pernah hilang sendiri", async () => {
     render(Toaster);
-    await show({ title: "Tetap", duration: 0 });
+    await show({ title: "Sticky", duration: 0 });
     await advance(60_000);
-    expect(screen.getByText("Tetap")).toBeInTheDocument();
+    expect(screen.getByText("Sticky")).toBeInTheDocument();
   });
 
   it("timer berhenti saat hover atau fokus dan lanjut dengan sisa waktu", async () => {
     render(Toaster);
-    await show({ title: "Sementara", duration: 1000 });
-    const card = screen.getByText("Sementara").closest("[data-state]")!;
-    const close = screen.getByRole("button", { name: "Tutup" });
+    await show({ title: "Temporary", duration: 1000 });
+    const card = screen.getByText("Temporary").closest("[data-state]")!;
+    const close = screen.getByRole("button", { name: "Close" });
 
     await advance(400);
     await fireEvent.mouseEnter(card);
     await advance(5000);
-    expect(screen.getByText("Sementara")).toBeInTheDocument();
+    expect(screen.getByText("Temporary")).toBeInTheDocument();
     await fireEvent.mouseLeave(card);
 
     await fireEvent.focusIn(close);
     await advance(5000);
-    expect(screen.getByText("Sementara")).toBeInTheDocument();
+    expect(screen.getByText("Temporary")).toBeInTheDocument();
     await fireEvent.focusOut(close);
 
     await advance(599);
-    expect(screen.getByText("Sementara")).toBeInTheDocument();
+    expect(screen.getByText("Temporary")).toBeInTheDocument();
     await advance(1);
-    expect(screen.queryByText("Sementara")).toBeNull();
+    expect(screen.queryByText("Temporary")).toBeNull();
   });
 
   it("di server toast() tidak mengantre apa pun dan mengembalikan 0", async () => {
@@ -202,21 +213,21 @@ describe("Vue Toast", () => {
 
     expect(id).toBe(0);
     expect(vi.getTimerCount()).toBe(0);
-    await show({ title: "Klien", duration: 0 });
-    const region = screen.getByRole("status", { name: "Notifikasi" });
+    await show({ title: "Client", duration: 0 });
+    const region = screen.getByRole("status", { name: "Notifications" });
     expect(region.querySelectorAll("[data-state]")).toHaveLength(1);
-    expect(region).toHaveTextContent("Klien");
+    expect(region).toHaveTextContent("Client");
   });
 
   it("mouseleave tidak melanjutkan timer selama fokus masih di dalam toast", async () => {
     render(Toaster);
-    await show({ title: "Fokus", duration: 1000 });
-    const card = screen.getByText("Fokus").closest("[data-state]")!;
+    await show({ title: "Focus", duration: 1000 });
+    const card = screen.getByText("Focus").closest("[data-state]")!;
 
     await fireEvent.mouseEnter(card);
-    screen.getByRole("button", { name: "Tutup" }).focus();
+    screen.getByRole("button", { name: "Close" }).focus();
     await fireEvent.mouseLeave(card);
     await advance(5000);
-    expect(screen.getByText("Fokus")).toBeInTheDocument();
+    expect(screen.getByText("Focus")).toBeInTheDocument();
   });
 });

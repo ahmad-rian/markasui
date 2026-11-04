@@ -8,24 +8,24 @@ for (const framework of frameworks) {
       const tab = (name: string) => page.getByRole("tab", { name });
 
       await page.keyboard.press("Tab");
-      await expect(tab("Akun")).toBeFocused();
-      await expect(tab("Akun")).toHaveAttribute("aria-selected", "true");
+      await expect(tab("Account")).toBeFocused();
+      await expect(tab("Account")).toHaveAttribute("aria-selected", "true");
 
       await page.keyboard.press("ArrowRight");
-      await expect(tab("Kata sandi")).toBeFocused();
-      await expect(tab("Kata sandi")).toHaveAttribute("aria-selected", "true");
+      await expect(tab("Password")).toBeFocused();
+      await expect(tab("Password")).toHaveAttribute("aria-selected", "true");
       await expect(page.getByRole("tabpanel")).toHaveText(
-        "Ganti kata sandi secara berkala.",
+        "Change your password regularly.",
       );
 
       await page.keyboard.press("End");
-      await expect(tab("Notifikasi")).toBeFocused();
+      await expect(tab("Notifications")).toBeFocused();
       await page.keyboard.press("ArrowRight");
-      await expect(tab("Akun")).toBeFocused();
+      await expect(tab("Account")).toBeFocused();
       await page.keyboard.press("ArrowLeft");
-      await expect(tab("Notifikasi")).toBeFocused();
+      await expect(tab("Notifications")).toBeFocused();
       await page.keyboard.press("Home");
-      await expect(tab("Akun")).toBeFocused();
+      await expect(tab("Account")).toBeFocused();
 
       await page.keyboard.press("Tab");
       await expect(page.getByRole("tabpanel")).toBeFocused();
@@ -35,15 +35,15 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "modal");
-      const trigger = page.getByRole("button", { name: "Hapus proyek" });
-      const dialog = page.getByRole("dialog", { name: "Hapus proyek?" });
+      const trigger = page.getByRole("button", { name: "Delete project" });
+      const dialog = page.getByRole("dialog", { name: "Delete project?" });
 
       await page.keyboard.press("Tab");
       await expect(trigger).toBeFocused();
       await page.keyboard.press("Enter");
       await expect(dialog).toBeVisible();
       await expect(dialog).toHaveAttribute("data-state", "open");
-      await expect(page.getByRole("button", { name: "Tutup" })).toBeFocused();
+      await expect(page.getByRole("button", { name: "Close" })).toBeFocused();
 
       await page.keyboard.press("Escape");
       await expect(dialog).toBeHidden();
@@ -56,17 +56,17 @@ for (const framework of frameworks) {
 
     test("modal: tombol footer dan backdrop menutup", async ({ page }) => {
       await openFixture(page, framework, "modal");
-      const trigger = page.getByRole("button", { name: "Hapus proyek" });
-      const dialog = page.getByRole("dialog", { name: "Hapus proyek?" });
+      const trigger = page.getByRole("button", { name: "Delete project" });
+      const dialog = page.getByRole("dialog", { name: "Delete project?" });
 
       await trigger.click();
-      await page.getByRole("button", { name: "Ya, hapus" }).click();
+      await page.getByRole("button", { name: "Delete", exact: true }).click();
       await expect(dialog).toBeHidden();
       expect(
         await page
           .locator("dialog")
           .evaluate((el: HTMLDialogElement) => el.returnValue),
-      ).toBe("hapus");
+      ).toBe("delete");
 
       await trigger.click();
       await expect(dialog).toBeVisible();

@@ -8,11 +8,11 @@ import Switch from "../../components/switch/Switch.vue";
 import Textarea from "../../components/textarea/Textarea.vue";
 
 const options = [
-  { value: "gratis", label: "Gratis", description: "Untuk proyek pribadi." },
+  { value: "free", label: "Free", description: "For personal projects." },
   { value: "pro", label: "Pro" },
 ];
 
-/** Komponen pembungkus dengan v-model dan <output> untuk membaca nilainya. */
+/** Host component with v-model and an <output> to read the value. */
 const withModel = (component: Component, initial: unknown, markup: string) =>
   defineComponent({
     components: { Subject: component },
@@ -21,127 +21,127 @@ const withModel = (component: Component, initial: unknown, markup: string) =>
   });
 
 describe("Vue Textarea", () => {
-  it("default 4 baris, petunjuk, dan class user ke textarea", () => {
+  it("defaults to 4 rows, links the hint, and puts user class on the textarea", () => {
     render(Textarea, {
-      props: { id: "bio", label: "Bio", hint: "Maksimal 200 karakter." },
+      props: { id: "bio", label: "Bio", hint: "Up to 200 characters." },
       attrs: { class: "font-mono", name: "bio" },
     });
     const textarea = screen.getByLabelText("Bio");
     expect(textarea).toHaveAttribute("rows", "4");
     expect(textarea).toHaveAttribute("name", "bio");
-    expect(textarea).toHaveAccessibleDescription("Maksimal 200 karakter.");
+    expect(textarea).toHaveAccessibleDescription("Up to 200 characters.");
     expect(textarea.className.endsWith("font-mono")).toBe(true);
   });
 
-  it("error, rows, dan v-model dua arah", async () => {
+  it("supports error, rows, and two-way v-model", async () => {
     const Host = withModel(
       Textarea,
-      "awal",
-      `<Subject v-model="value" label="Alamat" hint="Petunjuk" error="Wajib diisi" :rows="2" />`,
+      "initial",
+      `<Subject v-model="value" label="Address" hint="Hint" error="Required" :rows="2" />`,
     );
     render(Host);
-    const textarea = screen.getByLabelText("Alamat");
-    expect(textarea).toHaveValue("awal");
+    const textarea = screen.getByLabelText("Address");
+    expect(textarea).toHaveValue("initial");
     expect(textarea).toHaveAttribute("rows", "2");
     expect(textarea).toHaveAttribute("aria-invalid", "true");
-    expect(textarea).toHaveAccessibleDescription("Wajib diisi");
-    expect(screen.queryByText("Petunjuk")).toBeNull();
-    await fireEvent.update(textarea, "baru");
-    expect(screen.getByRole("status")).toHaveTextContent("baru");
+    expect(textarea).toHaveAccessibleDescription("Required");
+    expect(screen.queryByText("Hint")).toBeNull();
+    await fireEvent.update(textarea, "new");
+    expect(screen.getByRole("status")).toHaveTextContent("new");
   });
 });
 
 describe("Vue Select", () => {
-  it("option dari slot, v-model dua arah, ikon tersembunyi", async () => {
+  it("renders options from the slot with two-way v-model and a hidden icon", async () => {
     const Host = withModel(
       Select,
       "bandung",
-      `<Subject v-model="value" label="Kota" hint="Pilih kota." class="w-40"><option value="jakarta">Jakarta</option><option value="bandung">Bandung</option></Subject>`,
+      `<Subject v-model="value" label="City" hint="Choose a city." class="w-40"><option value="jakarta">Jakarta</option><option value="bandung">Bandung</option></Subject>`,
     );
     render(Host);
-    const select = screen.getByLabelText("Kota");
+    const select = screen.getByLabelText("City");
     expect(select).toHaveValue("bandung");
-    expect(select).toHaveAccessibleDescription("Pilih kota.");
+    expect(select).toHaveAccessibleDescription("Choose a city.");
     expect(select.className.endsWith("w-40")).toBe(true);
     expect(select.nextElementSibling).toHaveAttribute("aria-hidden", "true");
     await fireEvent.update(select, "jakarta");
     expect(screen.getByRole("status")).toHaveTextContent("jakarta");
   });
 
-  it("tanpa v-model mengikuti opsi selected atau opsi pertama seperti native", async () => {
+  it("without v-model follows the selected option like native", async () => {
     const { emitted } = render(Select, {
-      props: { label: "Kota" },
+      props: { label: "City" },
       slots: {
         default:
           '<option value="a">A</option><option value="b" selected>B</option>',
       },
     });
     await Promise.resolve();
-    expect(screen.getByLabelText("Kota")).toHaveValue("b");
+    expect(screen.getByLabelText("City")).toHaveValue("b");
     expect(emitted()["update:modelValue"]).toEqual([["b"]]);
   });
 
-  it("tanpa v-model dan tanpa selected memakai opsi pertama", async () => {
+  it("without v-model or selected uses the first option", async () => {
     render(Select, {
-      props: { label: "Negara" },
+      props: { label: "Country" },
       slots: {
         default:
           '<option value="id">Indonesia</option><option value="my">Malaysia</option>',
       },
     });
     await Promise.resolve();
-    expect(screen.getByLabelText("Negara")).toHaveValue("id");
+    expect(screen.getByLabelText("Country")).toHaveValue("id");
   });
 
-  it("error mengaktifkan aria-invalid", () => {
+  it("error sets aria-invalid", () => {
     render(Select, {
-      props: { id: "peran", label: "Peran", error: "Wajib dipilih" },
-      slots: { default: '<option value="">Pilih</option>' },
+      props: { id: "role", label: "Role", error: "Required" },
+      slots: { default: '<option value="">Choose</option>' },
     });
-    const select = screen.getByLabelText("Peran");
-    expect(select).toHaveAttribute("id", "peran");
+    const select = screen.getByLabelText("Role");
+    expect(select).toHaveAttribute("id", "role");
     expect(select).toHaveAttribute("aria-invalid", "true");
-    expect(select).toHaveAccessibleDescription("Wajib dipilih");
+    expect(select).toHaveAccessibleDescription("Required");
   });
 });
 
 describe("Vue Checkbox", () => {
-  it("v-model boolean, deskripsi, dan class user", async () => {
+  it("supports boolean v-model, description, and user class", async () => {
     const Host = withModel(
       Checkbox,
       false,
-      `<Subject v-model="value" label="Kirimi kabar" description="Satu email per bulan." class="mt-1" />`,
+      `<Subject v-model="value" label="Send updates" description="One email per month." class="mt-1" />`,
     );
     render(Host);
-    const checkbox = screen.getByRole("checkbox", { name: "Kirimi kabar" });
-    expect(checkbox).toHaveAccessibleDescription("Satu email per bulan.");
+    const checkbox = screen.getByRole("checkbox", { name: "Send updates" });
+    expect(checkbox).toHaveAccessibleDescription("One email per month.");
     expect(checkbox.className.endsWith("mt-1")).toBe(true);
-    await fireEvent.click(screen.getByText("Kirimi kabar"));
+    await fireEvent.click(screen.getByText("Send updates"));
     expect(checkbox).toBeChecked();
     expect(screen.getByRole("status")).toHaveTextContent("true");
   });
 
-  it("type tetap checkbox dan atribut disabled diteruskan", () => {
+  it("keeps type checkbox and forwards disabled", () => {
     render(Checkbox, {
-      props: { id: "arsip", label: "Arsip" },
+      props: { id: "archive", label: "Archive" },
       attrs: { disabled: true, type: "text" },
     });
-    const checkbox = screen.getByRole("checkbox", { name: "Arsip" });
-    expect(checkbox).toHaveAttribute("id", "arsip");
+    const checkbox = screen.getByRole("checkbox", { name: "Archive" });
+    expect(checkbox).toHaveAttribute("id", "archive");
     expect(checkbox).toBeDisabled();
     expect(checkbox).not.toHaveAttribute("aria-describedby");
   });
 });
 
 describe("Vue Switch", () => {
-  it("role switch dan v-model boolean", async () => {
+  it("has role switch and boolean v-model", async () => {
     const Host = withModel(
       Switch,
       true,
-      `<Subject v-model="value" label="Notifikasi" class="ml-2" />`,
+      `<Subject v-model="value" label="Notifications" class="ml-2" />`,
     );
     render(Host);
-    const toggle = screen.getByRole("switch", { name: "Notifikasi" });
+    const toggle = screen.getByRole("switch", { name: "Notifications" });
     expect(toggle).toHaveAttribute("type", "checkbox");
     expect(toggle).toBeChecked();
     expect(toggle.className.endsWith("ml-2")).toBe(true);
@@ -150,7 +150,7 @@ describe("Vue Switch", () => {
     expect(screen.getByRole("status")).toHaveTextContent("false");
   });
 
-  it("tanpa v-model tetap bisa diubah dan id dari user dipakai", async () => {
+  it("toggles without v-model and uses the user id", async () => {
     render(Switch, { props: { id: "beta", label: "Beta" } });
     const toggle = screen.getByRole("switch", { name: "Beta" });
     expect(toggle).toHaveAttribute("id", "beta");
@@ -160,28 +160,28 @@ describe("Vue Switch", () => {
 });
 
 describe("Vue RadioGroup", () => {
-  it("fieldset dengan legend, v-model, dan deskripsi opsi", async () => {
+  it("renders a fieldset with legend, v-model, and option descriptions", async () => {
     const Host = withModel(
       RadioGroup,
       "pro",
-      `<Subject v-model="value" name="paket" label="Paket" :options="options" class="mt-4" />`,
+      `<Subject v-model="value" name="plan" label="Plan" :options="options" class="mt-4" />`,
     );
     render(Host);
-    const group = screen.getByRole("group", { name: "Paket" });
+    const group = screen.getByRole("group", { name: "Plan" });
     expect(group.tagName).toBe("FIELDSET");
     expect(group.className.endsWith("mt-4")).toBe(true);
     expect(screen.getByRole("radio", { name: "Pro" })).toBeChecked();
-    const gratis = screen.getByRole("radio", { name: "Gratis" });
-    expect(gratis).toHaveAttribute("name", "paket");
-    expect(gratis).toHaveAccessibleDescription("Untuk proyek pribadi.");
-    await fireEvent.click(gratis);
-    expect(gratis).toBeChecked();
-    expect(screen.getByRole("status")).toHaveTextContent("gratis");
+    const free = screen.getByRole("radio", { name: "Free" });
+    expect(free).toHaveAttribute("name", "plan");
+    expect(free).toHaveAccessibleDescription("For personal projects.");
+    await fireEvent.click(free);
+    expect(free).toBeChecked();
+    expect(screen.getByRole("status")).toHaveTextContent("free");
   });
 
-  it("orientasi horizontal dan id dari user", () => {
+  it("supports horizontal orientation and a user id", () => {
     render(RadioGroup, {
-      props: { id: "g", name: "tagihan", options, orientation: "horizontal" },
+      props: { id: "g", name: "billing", options, orientation: "horizontal" },
     });
     const pro = screen.getByRole("radio", { name: "Pro" });
     expect(pro).toHaveAttribute("id", "g-pro");

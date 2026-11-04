@@ -1,5 +1,5 @@
 <div class="grid gap-4">
-    <x-markas.switch name="notifikasi" label="Notifikasi email" checked />
-    <x-markas.switch name="hemat" label="Mode hemat data" />
-    <x-markas.switch name="beta" label="Fitur beta" disabled />
+    <x-markas.switch name="notifications" label="Email notifications" checked />
+    <x-markas.switch name="saver" label="Data saver mode" />
+    <x-markas.switch name="beta" label="Beta features" disabled />
 </div>

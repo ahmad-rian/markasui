@@ -8,11 +8,15 @@ import Pagination, {
 } from "../../components/pagination/Pagination.vue";
 
 const accordionItems = [
-  { value: "a", title: "Satu" },
-  { value: "b", title: "Dua" },
-  { value: "c", title: "Tiga" },
+  { value: "a", title: "One" },
+  { value: "b", title: "Two" },
+  { value: "c", title: "Three" },
 ];
-const accordionSlots = { a: "Isi satu", b: "Isi dua", c: "Isi tiga" };
+const accordionSlots = {
+  a: "Content one",
+  b: "Content two",
+  c: "Content three",
+};
 
 describe("Vue Accordion", () => {
   it("single: name sama, defaultValue terbuka, class user di akhir", () => {
@@ -26,7 +30,7 @@ describe("Vue Accordion", () => {
     expect(name).toBeTruthy();
     expect(details.every((d) => d.getAttribute("name") === name)).toBe(true);
     expect(details.map((d) => d.open)).toEqual([false, true, false]);
-    expect(details[1]).toHaveTextContent("Isi dua");
+    expect(details[1]).toHaveTextContent("Content two");
     expect(
       (container.firstElementChild as HTMLElement).className.endsWith("mt-4"),
     ).toBe(true);
@@ -61,22 +65,22 @@ describe("Vue Breadcrumb", () => {
     const { container } = render(Breadcrumb, {
       props: {
         items: [
-          { label: "Beranda", href: "/" },
-          { label: "Kategori" },
-          { label: "Produk", href: "/produk" },
+          { label: "Home", href: "/" },
+          { label: "Category" },
+          { label: "Product", href: "/product" },
         ],
       },
       attrs: { class: "mb-2" },
     });
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     expect(nav.className).toBe("mb-2");
-    expect(screen.getByRole("link", { name: "Beranda" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
       "href",
       "/",
     );
-    expect(screen.queryByRole("link", { name: "Kategori" })).toBeNull();
-    expect(screen.queryByRole("link", { name: "Produk" })).toBeNull();
-    expect(screen.getByText("Produk")).toHaveAttribute("aria-current", "page");
+    expect(screen.queryByRole("link", { name: "Category" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Product" })).toBeNull();
+    expect(screen.getByText("Product")).toHaveAttribute("aria-current", "page");
     expect(container.querySelectorAll('svg[aria-hidden="true"]')).toHaveLength(
       2,
     );
@@ -105,17 +109,17 @@ describe("Vue Pagination", () => {
       props: { page: 5, total: 10, href: "/p/{page}" },
       attrs: { class: "mt-6" },
     });
-    const nav = screen.getByRole("navigation", { name: "Navigasi halaman" });
+    const nav = screen.getByRole("navigation", { name: "Pagination" });
     expect(nav.className).toBe("@container mt-6");
     expect(screen.getByRole("link", { name: "5" })).toHaveAttribute(
       "aria-current",
       "page",
     );
-    expect(screen.getByRole("link", { name: "Sebelumnya" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Previous" })).toHaveAttribute(
       "rel",
       "prev",
     );
-    expect(screen.getByRole("link", { name: "Berikutnya" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Next" })).toHaveAttribute(
       "href",
       "/p/6",
     );
@@ -123,9 +127,9 @@ describe("Vue Pagination", () => {
 
   it("ujung kiri dan kanan nonaktif saat total 1", () => {
     render(Pagination, { props: { page: 1, total: 1 } });
-    expect(screen.queryByRole("link", { name: "Sebelumnya" })).toBeNull();
-    expect(screen.queryByRole("link", { name: "Berikutnya" })).toBeNull();
-    expect(screen.getByText("Berikutnya").parentElement).toHaveAttribute(
+    expect(screen.queryByRole("link", { name: "Previous" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Next" })).toBeNull();
+    expect(screen.getByText("Next").parentElement).toHaveAttribute(
       "aria-disabled",
       "true",
     );
@@ -138,7 +142,7 @@ describe("Vue Pagination", () => {
 
 describe("Vue Navbar", () => {
   const links = [
-    { label: "Beranda", href: "/", active: true },
+    { label: "Home", href: "/", active: true },
     { label: "Blog", href: "/blog" },
   ];
 
@@ -146,7 +150,7 @@ describe("Vue Navbar", () => {
     render(Navbar, {
       props: { links, id: "nav" },
       attrs: { class: "sticky" },
-      slots: { brand: "Markas", actions: '<a href="/masuk">Masuk</a>' },
+      slots: { brand: "Markas", actions: '<a href="/sign-in">Sign in</a>' },
     });
     const header = screen.getByRole("banner");
     expect(header).toHaveAttribute("id", "nav");
@@ -159,7 +163,7 @@ describe("Vue Navbar", () => {
       "closed",
     );
     expect(screen.getByText("Markas")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Masuk" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sign in" })).toBeInTheDocument();
     expect(document.querySelectorAll('a[aria-current="page"]')).toHaveLength(2);
   });
 
@@ -192,7 +196,7 @@ describe("Vue href aman", () => {
   it("Breadcrumb mengganti skema berbahaya dengan #", () => {
     const items = [
       ...hrefs.map((href, index) => ({ label: `Item ${index}`, href })),
-      { label: "Akhir" },
+      { label: "End" },
     ];
     const { container } = render(Breadcrumb, { props: { items } });
     expect(hrefsOf(container)).toEqual(expected);
@@ -223,5 +227,75 @@ describe("Vue href aman", () => {
       `${href}?p=2`,
       `${href}?p=2`,
     ]);
+  });
+});
+
+describe("Vue label bawaan", () => {
+  it("default Inggris di Breadcrumb, Pagination, dan Navbar", () => {
+    render(Breadcrumb, { props: { items: [{ label: "Home" }] } });
+    render(Pagination, { props: { page: 1, total: 2 } });
+    render(Navbar, { props: { links: [{ label: "Home", href: "/" }] } });
+    for (const name of ["Breadcrumb", "Pagination", "Main"]) {
+      expect(screen.getByRole("navigation", { name })).toBeInTheDocument();
+    }
+    expect(screen.getByText("Previous")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Menu" })).toBeInTheDocument();
+    expect(
+      document.querySelector('nav[aria-label="Main mobile"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("navLabel menimpa label Breadcrumb", () => {
+    render(Breadcrumb, {
+      props: { items: [{ label: "Beranda" }], navLabel: "Jejak" },
+    });
+    expect(
+      screen.getByRole("navigation", { name: "Jejak" }),
+    ).toBeInTheDocument();
+  });
+
+  it("navLabel, previousLabel, dan nextLabel menimpa label Pagination", () => {
+    render(Pagination, {
+      props: {
+        page: 2,
+        total: 3,
+        navLabel: "Navigasi halaman",
+        previousLabel: "Sebelumnya",
+        nextLabel: "Berikutnya",
+      },
+    });
+    expect(
+      screen.getByRole("navigation", { name: "Navigasi halaman" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sebelumnya" })).toHaveAttribute(
+      "rel",
+      "prev",
+    );
+    expect(screen.getByRole("link", { name: "Berikutnya" })).toHaveAttribute(
+      "rel",
+      "next",
+    );
+    expect(screen.queryByText("Previous")).toBeNull();
+  });
+
+  it("menuLabel, navLabel, dan mobileNavLabel menimpa label Navbar", () => {
+    render(Navbar, {
+      props: {
+        links: [{ label: "Beranda", href: "/" }],
+        menuLabel: "Buka menu",
+        navLabel: "Utama",
+        mobileNavLabel: "Utama seluler",
+      },
+    });
+    expect(
+      screen.getByRole("button", { name: "Buka menu" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("navigation", { name: "Utama" }),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('nav[aria-label="Utama seluler"]'),
+    ).toBeInTheDocument();
   });
 });

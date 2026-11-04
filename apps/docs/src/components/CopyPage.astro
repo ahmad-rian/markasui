@@ -1,6 +1,7 @@
 ---
 import type { Framework } from "@markasui/registry/schema";
 import Icon from "./Icon.astro";
+import { getLocale, t } from "../lib/i18n";
 
 interface Props {
   markdown: string;
@@ -9,7 +10,8 @@ interface Props {
 }
 const { markdown, markdownUrl, prompts } = Astro.props;
 const absoluteMd = new URL(markdownUrl, Astro.site).toString();
-const ask = encodeURIComponent(`Baca ${absoluteMd} lalu bantu saya memakai komponen ini di project saya.`);
+const strings = t(getLocale(Astro.url)).copyPage;
+const ask = encodeURIComponent(strings.ask(absoluteMd));
 const item =
   "flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm text-ink transition-colors hover:bg-subtle focus-visible:bg-subtle";
 ---
@@ -23,12 +25,12 @@ const item =
   >
     <Icon name="copy" class="size-3.5 in-data-copied:hidden" />
     <Icon name="check" class="hidden size-3.5 text-primary in-data-copied:block" />
-    Copy page
+    {strings.copy}
   </button>
   <button
     type="button"
     popovertarget="copy-page-menu"
-    aria-label="Opsi lain"
+    aria-label={strings.more}
     class="inline-flex h-8 items-center rounded-r-lg border border-l-0 border-line bg-surface px-2 text-muted hover:bg-subtle hover:text-ink"
   >
     <Icon name="chevronDown" class="size-3.5" />
@@ -41,15 +43,15 @@ const item =
   >
     <button type="button" role="menuitem" data-copy-prompt class={item}>
       <Icon name="message" class="size-4 text-muted" />
-      <span class="in-data-copied:hidden">Copy prompt</span>
-      <span class="hidden in-data-copied:inline">Prompt tersalin</span>
+      <span class="in-data-copied:hidden">{strings.prompt}</span>
+      <span class="hidden in-data-copied:inline">{strings.promptCopied}</span>
     </button>
-    <a role="menuitem" href={markdownUrl} class={item}><Icon name="file" class="size-4 text-muted" />Lihat Markdown</a>
+    <a role="menuitem" href={markdownUrl} class={item}><Icon name="file" class="size-4 text-muted" />{strings.markdown}</a>
     <a role="menuitem" href={`https://claude.ai/new?q=${ask}`} target="_blank" rel="noopener" class={item}>
-      <Icon name="external" class="size-4 text-muted" />Buka di Claude
+      <Icon name="external" class="size-4 text-muted" />{strings.claude}
     </a>
     <a role="menuitem" href={`https://chatgpt.com/?q=${ask}`} target="_blank" rel="noopener" class={item}>
-      <Icon name="external" class="size-4 text-muted" />Buka di ChatGPT
+      <Icon name="external" class="size-4 text-muted" />{strings.chatgpt}
     </a>
   </div>
 </div>
