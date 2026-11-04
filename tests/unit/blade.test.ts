@@ -21,7 +21,10 @@ function renderBlade(source: string): string {
 const panelText = (html: string, id: string) =>
   html.match(new RegExp(`id="${id}"[^>]*>([^<]*)</div>`))?.[1]?.trim();
 
-describe("Blade", () => {
+// Setiap tes menjalankan proses PHP; beri waktu lebih saat mesin sibuk.
+const PHP_TIMEOUT_MS = 20_000;
+
+describe("Blade", { timeout: PHP_TIMEOUT_MS }, () => {
   it("tabs memakai slot sesuai key walau key sama dengan variabel internal", () => {
     const html = renderBlade(`
 <x-markas.tabs id="t" :items="['panel' => 'Panel', 'active' => 'Aktif', 'label' => 'Label']">

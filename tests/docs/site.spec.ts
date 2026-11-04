@@ -63,6 +63,7 @@ for (const framework of ["blade", "react", "vue"] as const) {
       .first()
       .click();
     const stage = pane(page, framework);
+    await waitInteractive(page, framework);
 
     await stage.getByRole("tab", { name: "Kata sandi" }).click();
     await expect(

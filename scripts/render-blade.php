@@ -105,9 +105,11 @@ if (! is_dir($sourceDir)) {
 }
 
 $files = new Filesystem;
-$viewsDir = ROOT.'/.cache/blade/views';
-$cacheDir = ROOT.'/.cache/blade/compiled';
-$files->deleteDirectory(ROOT.'/.cache/blade');
+// Folder kerja unik per proses agar render paralel (tes, CI, playground) tidak saling menghapus.
+$workDir = sys_get_temp_dir().'/markas-blade-'.getmypid().'-'.bin2hex(random_bytes(4));
+$viewsDir = $workDir.'/views';
+$cacheDir = $workDir.'/compiled';
+register_shutdown_function(fn () => $files->deleteDirectory($workDir));
 $files->ensureDirectoryExists($cacheDir);
 $files->ensureDirectoryExists($outDir);
 
