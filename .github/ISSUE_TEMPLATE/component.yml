@@ -1,0 +1,23 @@
+name: Usulan komponen
+description: Usulkan komponen baru
+labels: [komponen]
+body:
+  - type: input
+    id: name
+    attributes: { label: Nama komponen }
+    validations: { required: true }
+  - type: textarea
+    id: use
+    attributes:
+      {
+        label: Kapan dipakai,
+        description: "Contoh halaman atau alur yang membutuhkannya.",
+      }
+    validations: { required: true }
+  - type: textarea
+    id: native
+    attributes:
+      {
+        label: Elemen native yang bisa dipakai,
+        description: "Misalnya dialog, details, Popover API.",
+      }

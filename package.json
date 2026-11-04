@@ -21,7 +21,8 @@
     "build": "pnpm --filter @markasui/docs build",
     "test:docs": "playwright test -c playwright.docs.config.ts",
     "size": "node scripts/check-budget.ts",
-    "thumbs": "node scripts/thumbnails.ts"
+    "thumbs": "node scripts/thumbnails.ts",
+    "build:packages": "pnpm --filter markasui build && pnpm --filter @markasui/mcp build"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

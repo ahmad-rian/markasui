@@ -10,6 +10,8 @@ export default defineConfig({
   root,
   plugins: [tailwindcss(), react(), vue()],
   server: { port: 5173, strictPort: true, fs: { allow: [".."] } },
+  // Pre-bundle di awal agar Vite tidak reload halaman di tengah tes Playwright.
+  optimizeDeps: { include: ["react", "react-dom/client", "react/jsx-runtime", "vue", "alpinejs"] },
   build: {
     rollupOptions: {
       input: {

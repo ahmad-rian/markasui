@@ -1,7 +1,54 @@
 {
   "name": "@markasui/mcp",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "MCP server MarkasUI: cari dan ambil komponen Blade, React, atau Vue untuk agent AI.",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmad-rian/markasui.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://markasui.pages.dev/docs/mcp",
+  "keywords": [
+    "markasui",
+    "mcp",
+    "model-context-protocol",
+    "ui",
+    "blade",
+    "react",
+    "vue"
+  ],
+  "bin": {
+    "markasui-mcp": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "source": "./src/server.ts",
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "@markasui/registry": "workspace:*",
+    "@types/node": "^26.6.6"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "markasui": "workspace:*",
+    "zod": "4.6.7"
+  }
 }

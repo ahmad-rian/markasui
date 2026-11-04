@@ -42,6 +42,10 @@ npx markasui@latest list
 
 Menampilkan semua komponen per kategori.
 
+## Registry lain
+
+CLI mengambil komponen dari `https://markasui.pages.dev/r`. Arahkan ke mirror atau folder lokal dengan `--registry` atau variabel `MARKASUI_REGISTRY`.
+
 ## Opsi
 
 | Opsi                              | Keterangan                                   |
@@ -49,4 +53,5 @@ Menampilkan semua komponen per kategori.
 | `--cwd <path>`                    | Folder project. Default folder saat ini.     |
 | `--framework <blade\|react\|vue>` | Lewati deteksi otomatis.                     |
 | `--overwrite`                     | Timpa file yang sudah ada tanpa konfirmasi.  |
+| `-y`, `--yes`                     | Jawab ya untuk semua konfirmasi.             |
 | `--registry <url>`                | Alamat registry lain, misalnya mirror lokal. |

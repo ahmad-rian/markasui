@@ -16,7 +16,9 @@
       <ul id="links" class="grid gap-2 font-mono text-sm"></ul>
     </main>
     <script type="module">
-      const components = ["button", "input", "modal", "tabs"];
+      const components = Object.keys(
+        import.meta.glob("../examples/react/*.tsx"),
+      ).map((path) => path.split("/").at(-1).replace(".tsx", ""));
       const links = components.flatMap((c) =>
         ["blade", "react", "vue"].map(
           (fw) =>

@@ -4,6 +4,8 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [react(), vue()],
+  // Paket workspace (markasui, @markasui/mcp) diuji dari src/, bukan dist/.
+  resolve: { conditions: ["source"] },
   test: {
     environment: "jsdom",
     include: ["tests/unit/**/*.test.{ts,tsx}", "packages/*/test/**/*.test.ts"],

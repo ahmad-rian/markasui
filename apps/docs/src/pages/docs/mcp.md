@@ -50,6 +50,10 @@ Tambahkan ke `.vscode/mcp.json`:
 | `get_theme`         | tidak ada           | Isi `markas.css` dan daftar token                                 |
 | `get_setup`         | `framework`         | Langkah instalasi Tailwind dan `markas.css`                       |
 
+## Registry lain
+
+Set variabel `MARKASUI_REGISTRY` di konfigurasi MCP untuk memakai mirror atau folder lokal.
+
 ## Contoh prompt
 
 > Buat halaman login Laravel memakai komponen MarkasUI: input email, input kata sandi, dan tombol masuk.

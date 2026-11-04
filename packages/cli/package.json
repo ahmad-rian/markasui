@@ -1,7 +1,48 @@
 {
   "name": "markasui",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "CLI MarkasUI: tambahkan komponen Blade, React, atau Vue ke project Anda.",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmad-rian/markasui.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://markasui.pages.dev",
+  "keywords": [
+    "markasui",
+    "ui",
+    "components",
+    "blade",
+    "laravel",
+    "react",
+    "vue",
+    "tailwind",
+    "cli"
+  ],
+  "bin": {
+    "markasui": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@markasui/registry": "workspace:*"
+  }
 }

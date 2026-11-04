@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    needs: ci
+    runs-on: ubuntu-latest
+    env:
+      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Versi tag harus sama dengan versi paket
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          for pkg in packages/cli packages/mcp; do
+            version=$(node -p "require('./$pkg/package.json').version")
+            [ "$version" = "$tag" ] || { echo "::error::$pkg versi $version, tag $tag"; exit 1; }
+          done
+      - run: pnpm build:packages
+      - name: Lewati publish (secret NPM_TOKEN belum diisi)
+        if: env.HAS_NPM_TOKEN != 'true'
+        run: echo "::notice::Isi secret NPM_TOKEN untuk publish ke npm."
+      - name: Publish ke npm
+        if: env.HAS_NPM_TOKEN == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          pnpm --filter markasui publish --access public --no-git-checks
+          pnpm --filter @markasui/mcp publish --access public --no-git-checks
