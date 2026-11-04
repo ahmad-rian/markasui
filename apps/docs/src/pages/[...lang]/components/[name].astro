@@ -10,7 +10,7 @@ import { buildPrompt, componentMarkdown, splitUsage } from "../../../lib/ai";
 import { FRAMEWORK_LABELS, PACKAGE_MANAGERS, cliCommand, shikiLang } from "../../../lib/frameworks";
 import { LOCALES, localePath, t, toLocale } from "../../../lib/i18n";
 import { renderMarkdown } from "../../../lib/markdown";
-import { categoryLabel, getComponents, localized } from "../../../lib/registry";
+import { getComponents, localized } from "../../../lib/registry";
 
 export async function getStaticPaths() {
   const items = await getComponents();
@@ -41,48 +41,41 @@ const headings = [
   { depth: 2, slug: "props", text: strings.props },
   { depth: 2, slug: "aksesibilitas", text: strings.accessibility },
 ];
-const pager = "icon-button size-8 border border-line bg-surface";
+const pager = "icon-button size-9 bg-subtle text-ink hover:bg-line";
 ---
 
 <Docs title={item.title} description={text.description} headings={headings}>
-  <p class="text-sm text-muted">
-    <a href={localePath(locale, "/components")} class="transition-colors hover:text-ink">{strings.breadcrumb}</a>
-    <span class="px-1.5 text-faint" aria-hidden="true">/</span>
-    {categoryLabel(item.category, locale)}
-  </p>
-  <div class="mt-3 flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
-    <div class="min-w-0 basis-full sm:basis-auto sm:flex-1">
-      <h1 class="text-[32px] leading-tight font-medium tracking-[-0.02em] sm:text-4xl">{item.title}</h1>
-      <p class="mt-3 max-w-2xl text-lg leading-7 text-muted">{text.description}</p>
-    </div>
-    <div class="flex items-center gap-2">
+  <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+    <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{item.title}</h1>
+    <div class="flex items-center gap-2 sm:pt-1">
       <CopyPage markdown={componentMarkdown(item, site, locale)} markdownUrl={localePath(locale, `/components/${item.name}.md`)} prompts={prompts} />
       {
         prev ? (
           <a href={localePath(locale, `/components/${prev.name}`)} class={pager} aria-label={strings.previous(prev.title)}>
-            <Icon name="chevronLeft" />
+            <Icon name="arrowLeft" />
           </a>
         ) : (
           <span class={`${pager} opacity-40`} aria-hidden="true">
-            <Icon name="chevronLeft" />
+            <Icon name="arrowLeft" />
           </span>
         )
       }
       {
         next ? (
           <a href={localePath(locale, `/components/${next.name}`)} class={pager} aria-label={strings.next(next.title)}>
-            <Icon name="chevronRight" />
+            <Icon name="arrowRight" />
           </a>
         ) : (
           <span class={`${pager} opacity-40`} aria-hidden="true">
-            <Icon name="chevronRight" />
+            <Icon name="arrowRight" />
           </span>
         )
       }
     </div>
   </div>
+  <p class="mt-3 max-w-2xl text-[19px] leading-8 text-muted">{text.description}</p>
 
-  <div class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-3">
+  <div class="mt-10 grid grid-cols-[minmax(0,1fr)] gap-4">
     <Preview name={item.name} />
     {
       frameworks.map((fw) => (
@@ -93,17 +86,17 @@ const pager = "icon-button size-8 border border-line bg-surface";
     }
   </div>
 
-  <section class="prose mt-14">
+  <section class="prose mt-16">
     <h2 id="instalasi">{strings.installation}</h2>
   </section>
   <div class="mt-5">
     <Tabs label={strings.installMethod} group="install-method" items={[{ value: "cli", label: strings.cli }, { value: "manual", label: strings.manual }]}>
       <div slot="cli">
-        <Tabs label={strings.packageManager} group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
+        <Tabs label={strings.packageManager} framed group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
           {
             PACKAGE_MANAGERS.map((pm) => (
               <div slot={pm}>
-                <CodeBlock code={cliCommand(pm, `add ${item.name}`)} lang="bash" />
+                <CodeBlock code={cliCommand(pm, `add ${item.name}`)} lang="bash" bare />
               </div>
             ))
           }
@@ -131,7 +124,7 @@ const pager = "icon-button size-8 border border-line bg-surface";
     </Tabs>
   </div>
 
-  <section class="prose mt-14">
+  <section class="prose mt-16">
     <h2 id="pemakaian">{strings.usage}</h2>
     {frameworks.map((fw) => <div data-fw={fw} set:html={usageHtml[fw]} />)}
     {notesHtml && <Fragment set:html={notesHtml} />}

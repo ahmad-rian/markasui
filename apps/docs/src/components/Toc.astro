@@ -1,6 +1,7 @@
 ---
-import { getLocale, t } from "../lib/i18n";
 import type { MarkdownHeading } from "astro";
+import Icon from "./Icon.astro";
+import { getLocale, t } from "../lib/i18n";
 
 interface Props {
   headings: MarkdownHeading[];
@@ -10,14 +11,19 @@ const headings = Astro.props.headings.filter((heading) => heading.depth === 2);
 
 {
   headings.length > 0 && (
-    <nav aria-labelledby="toc-title" class="sticky top-24">
-      <h2 id="toc-title" class="mb-3 text-xs font-medium text-muted">
+    <nav aria-labelledby="toc-title" class="sticky top-24" data-toc>
+      <h2 id="toc-title" class="mb-3 flex items-center gap-2 text-sm text-muted">
+        <Icon name="list" class="size-4" />
         {t(getLocale(Astro.url)).toc}
       </h2>
-      <ul class="grid gap-2 border-l border-line text-sm">
+      <ul class="ml-2 grid border-l border-line text-sm">
         {headings.map((heading) => (
           <li>
-            <a href={`#${heading.slug}`} class="-ml-px block border-l border-transparent pl-3 text-muted transition-colors hover:border-faint hover:text-ink">
+            <a
+              href={`#${heading.slug}`}
+              data-toc-link={heading.slug}
+              class="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-ink/70 transition-colors duration-150 ease-out hover:text-ink data-active:border-ink data-active:text-ink"
+            >
               {heading.text}
             </a>
           </li>
@@ -26,3 +32,29 @@ const headings = Astro.props.headings.filter((heading) => heading.depth === 2);
     </nav>
   )
 }
+
+<script>
+  import { onPageLoad } from "../scripts/lifecycle";
+
+  // Tandai judul yang sedang dibaca. Observer lama diputus setiap pindah halaman.
+  let observer: IntersectionObserver | undefined;
+
+  onPageLoad(() => {
+    observer?.disconnect();
+    const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]")];
+    if (links.length === 0) return;
+    const setActive = (slug: string) => links.forEach((link) => link.toggleAttribute("data-active", link.dataset.tocLink === slug));
+    setActive(links[0]!.dataset.tocLink!);
+    observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-80px 0px -70% 0px" },
+    );
+    links.forEach((link) => {
+      const target = document.getElementById(link.dataset.tocLink!);
+      if (target) observer!.observe(target);
+    });
+  });
+</script>

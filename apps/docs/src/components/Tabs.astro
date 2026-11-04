@@ -7,14 +7,16 @@ interface Props {
   items: { value: string; label: string }[];
   group?: string;
   label: string;
+  /** Tab di dalam bingkai abu-abu, isi panel di kartu putih (gaya blok perintah). */
+  framed?: boolean;
 }
-const { items, group, label } = Astro.props;
+const { items, group, label, framed = false } = Astro.props;
 const id = `tabs-${Math.random().toString(36).slice(2, 8)}`;
 const first = items[0]?.value;
 ---
 
-<div data-docs-tabs data-tabs-group={group}>
-  <div role="tablist" aria-label={label} class="flex gap-5 overflow-x-auto border-b border-line">
+<div data-docs-tabs data-tabs-group={group} class:list={[framed && "frame"]}>
+  <div role="tablist" aria-label={label} class:list={["flex overflow-x-auto", framed ? "h-10 gap-4 px-3" : "gap-5 border-b border-line"]}>
     {
       items.map((item) => (
         <button
@@ -25,7 +27,7 @@ const first = items[0]?.value;
           aria-selected={item.value === first ? "true" : "false"}
           tabindex={item.value === first ? 0 : -1}
           data-value={item.value}
-          class="-mb-px shrink-0 border-b-2 border-transparent pb-2.5 text-sm text-muted transition-colors hover:text-ink aria-selected:border-ink aria-selected:font-medium aria-selected:text-ink"
+          class:list={["shrink-0 border-b-2 border-transparent text-sm text-muted transition-colors hover:text-ink aria-selected:border-ink aria-selected:font-medium aria-selected:text-ink", framed ? "h-full" : "-mb-px pb-2.5"]}
         >
           {item.label}
         </button>
@@ -40,7 +42,7 @@ const first = items[0]?.value;
         aria-labelledby={`${id}-tab-${item.value}`}
         data-value={item.value}
         hidden={item.value !== first}
-        class="pt-4"
+        class:list={[framed ? "frame-panel" : "pt-4"]}
       >
         <slot name={item.value} />
       </div>

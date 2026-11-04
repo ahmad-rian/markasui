@@ -15,7 +15,7 @@ const strings = t(locale);
 const copy = strings.landing;
 const items = await getComponents();
 const groups = groupByCategory(items, locale);
-const sectionTitle = "text-2xl leading-tight font-medium tracking-[-0.02em] sm:text-[28px]";
+const sectionTitle = "text-[26px] leading-tight font-semibold tracking-[-0.025em] sm:text-[30px]";
 const link = "text-primary underline decoration-primary-line underline-offset-4 transition-colors hover:decoration-primary";
 const inlineCode = "font-mono text-sm text-ink";
 const container = "mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:px-8";
@@ -25,7 +25,7 @@ const container = "mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid
   <main id="konten">
     <section class="mx-auto grid max-w-screen-xl items-center gap-12 px-4 pt-12 pb-20 sm:px-6 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:px-8 lg:pt-20 lg:pb-28">
       <div class="min-w-0">
-        <h1 class="max-w-xl text-[40px] leading-[1.06] font-medium tracking-[-0.03em] text-balance sm:text-[52px] xl:text-[56px]">
+        <h1 class="max-w-xl text-[42px] leading-[1.02] font-semibold tracking-[-0.035em] text-balance sm:text-[54px] xl:text-[60px]">
           {copy.title}
         </h1>
         <p class="mt-6 max-w-lg text-lg leading-7 text-muted sm:text-xl sm:leading-8">{copy.subtitle}</p>
@@ -51,11 +51,11 @@ const container = "mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid
           <a href={localePath(locale, "/docs/cli")} class={`mt-5 inline-block text-sm ${link}`}>{copy.installLink}</a>
         </div>
         <div class="min-w-0">
-          <Tabs label={strings.component.packageManager} group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
+          <Tabs label={strings.component.packageManager} framed group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
             {
               PACKAGE_MANAGERS.map((pm) => (
                 <div slot={pm}>
-                  <CodeBlock code={`${cliCommand(pm, "init")}\n${cliCommand(pm, "add button input modal")}`} lang="bash" />
+                  <CodeBlock code={`${cliCommand(pm, "init")}\n${cliCommand(pm, "add button input modal")}`} lang="bash" bare />
                 </div>
               ))
             }

@@ -1,5 +1,7 @@
 ---
+import type { RegistryItem } from "@markasui/registry/schema";
 import FrameworkSwitcher from "./FrameworkSwitcher.astro";
+import Icon from "./Icon.astro";
 import { getLocale, localePath, pagePath, t } from "../lib/i18n";
 import { freshness, getComponents, groupByCategory } from "../lib/registry";
 import { docsNav } from "../lib/site";
@@ -8,44 +10,59 @@ const locale = getLocale(Astro.url);
 const strings = t(locale).sidebar;
 const path = pagePath(Astro.url);
 const groups = groupByCategory(await getComponents(), locale);
-const heading = "mb-2 px-3 text-xs font-medium text-muted";
-const link =
-  "flex h-8 items-center justify-between gap-2 rounded-lg px-3 text-sm text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink aria-[current=page]:bg-subtle aria-[current=page]:font-medium aria-[current=page]:text-ink";
+const GROUP_ICONS: Record<RegistryItem["category"], "form" | "bell" | "layers" | "compass" | "table"> = {
+  form: "form",
+  feedback: "bell",
+  overlay: "layers",
+  navigation: "compass",
+  data: "table",
+};
+
+const sections = [
+  {
+    label: strings.start,
+    icon: "book" as const,
+    links: docsNav(locale).map((item) => ({ href: item.href, label: item.label, tag: null as string | null })),
+  },
+  ...groups.map((group) => ({
+    label: group.label,
+    icon: GROUP_ICONS[group.category],
+    links: group.items.map((item) => {
+      const fresh = freshness(item);
+      return {
+        href: localePath(locale, `/components/${item.name}`),
+        label: item.title,
+        tag: fresh === "new" ? strings.fresh : fresh === "updated" ? strings.updated : null,
+      };
+    }),
+  })),
+];
 ---
 
-<div class="grid gap-6">
+<div class="grid gap-7">
   <FrameworkSwitcher />
-  <section>
-    <h2 class={heading}>{strings.start}</h2>
-    <ul class="grid gap-0.5">
-      {
-        docsNav(locale).map((item) => (
-          <li>
-            <a href={item.href} class={link} aria-current={path === item.href ? "page" : undefined}>
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
   {
-    groups.map((group) => (
+    sections.map((section) => (
       <section>
-        <h2 class={heading}>{group.label}</h2>
-        <ul class="grid gap-0.5">
-          {group.items.map((item) => {
-            const label = freshness(item);
-            const href = localePath(locale, `/components/${item.name}`);
-            return (
-              <li>
-                <a href={href} class={link} aria-current={path === href ? "page" : undefined}>
-                  {item.title}
-                  {label && <span class="text-xs text-primary">{label === "new" ? strings.fresh : strings.updated}</span>}
-                </a>
-              </li>
-            );
-          })}
+        <h2 class="mb-2 flex items-center gap-2.5 text-sm text-muted">
+          <span class="inline-flex size-6 items-center justify-center rounded-md shadow-[0_0_0_1px_var(--color-line)]">
+            <Icon name={section.icon} class="size-3.5" />
+          </span>
+          {section.label}
+        </h2>
+        <ul class="ml-3 grid border-l border-line">
+          {section.links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={path === link.href ? "page" : undefined}
+                class="relative -ml-px flex h-9 items-center justify-between gap-2 border-l-2 border-transparent pr-2 pl-5 text-[15px] text-ink/75 transition-colors duration-150 ease-out hover:text-ink aria-[current=page]:border-ink aria-[current=page]:font-medium aria-[current=page]:text-ink"
+              >
+                {link.label}
+                {link.tag && <span class="font-tag text-[15px] text-muted italic">{link.tag}</span>}
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
     ))

@@ -2,6 +2,7 @@ import { localePath, t, type Locale } from "./i18n";
 
 export const SITE = {
   name: "MarkasUI",
+  version: "0.1",
   repo: "https://github.com/ahmad-rian/markasui",
 } as const;
 
@@ -19,6 +20,7 @@ export type DocSlug = (typeof DOC_SLUGS)[number];
 export const nav = (locale: Locale) => {
   const strings = t(locale).nav;
   return [
+    { key: "home", href: localePath(locale, "/"), label: strings.home },
     {
       key: "docs",
       href: localePath(locale, "/docs/introduction"),

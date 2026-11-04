@@ -14,22 +14,24 @@ interface Props {
   framework?: Framework;
   /** Kode lebih dari 12 baris dipotong dengan tombol "Lihat kode" (PRD bagian 7). */
   collapsible?: boolean;
+  /** Tanpa bingkai, untuk dipasang di dalam panel lain (tab berbingkai, panel hero). */
+  bare?: boolean;
   class?: string;
 }
 
 const COLLAPSE_AFTER_LINES = 12;
-const { code, lang, title, framework, collapsible = false, class: className } = Astro.props;
+const { code, lang, title, framework, collapsible = false, bare = false, class: className } = Astro.props;
 const strings = t(getLocale(Astro.url)).code;
 const trimmed = code.trim();
 const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LINES;
 ---
 
-<div class:list={["group relative overflow-hidden rounded-xl border border-line bg-surface", className]} data-code-block>
+<div class:list={["group relative", !bare && "frame", className]} data-code-block>
   {
     title && (
-      <div class="flex h-10 items-center gap-2 border-b border-line pr-12 pl-4">
+      <div class="flex h-9 items-center gap-2 pr-12 pl-3">
         {framework && <FrameworkIcon framework={framework} brand class="size-3.5" />}
-        <span class="truncate font-mono text-xs text-muted">{title}</span>
+        <span class="truncate font-mono text-[11px] text-muted">{title}</span>
       </div>
     )
   }
@@ -37,30 +39,32 @@ const collapsed = collapsible && trimmed.split("\n").length > COLLAPSE_AFTER_LIN
     type="button"
     data-copy
     aria-label={strings.copy}
-    class:list={["icon-button absolute right-1.5 z-10 size-8 bg-surface", title ? "top-1" : "top-2"]}
+    class:list={["icon-button absolute z-10 size-8 hover:bg-subtle", title ? "top-0.5 right-1" : "top-2.5 right-2.5"]}
   >
     <Icon name="copy" class="size-4 group-data-copied:hidden" />
     <Icon name="check" class="hidden size-4 text-primary group-data-copied:block" />
   </button>
-  <div
-    class:list={[
-      "overflow-x-auto px-4 py-3.5 font-mono text-[13px] leading-6",
-      !title && "pr-12",
-      collapsed && "max-h-80 overflow-y-hidden group-data-expanded:max-h-none",
-    ]}
-    data-code
-  >
-    <Code code={trimmed} lang={lang} themes={{ light: "github-light", dark: "github-dark" }} defaultColor={false} />
+  <div class:list={["relative overflow-hidden", !bare && "frame-panel"]}>
+    <div
+      class:list={[
+        "overflow-x-auto px-4 py-3.5 font-mono text-[12.5px] leading-6",
+        !title && "pr-12",
+        collapsed && "max-h-80 overflow-y-hidden group-data-expanded:max-h-none",
+      ]}
+      data-code
+    >
+      <Code code={trimmed} lang={lang} themes={{ light: "github-light", dark: "github-dark" }} defaultColor={false} />
+    </div>
+    {
+      collapsed && (
+        <div class="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center bg-linear-to-t from-surface via-surface/90 to-transparent pb-4 group-data-expanded:hidden">
+          <button type="button" data-expand class="soft-button h-8">
+            {strings.expand}
+          </button>
+        </div>
+      )
+    }
   </div>
-  {
-    collapsed && (
-      <div class="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center bg-linear-to-t from-surface via-surface/90 to-transparent pb-4 group-data-expanded:hidden">
-        <button type="button" data-expand class="site-button-secondary h-8 px-3">
-          {strings.expand}
-        </button>
-      </div>
-    )
-  }
 </div>
 
 <script>

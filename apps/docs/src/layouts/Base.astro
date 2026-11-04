@@ -5,7 +5,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { LOCALES, getLocale, localePath, pagePath, stripLocale, t } from "../lib/i18n";
 import { SITE } from "../lib/site";
-import sansFont from "../../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url";
+import sansFont from "../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -37,8 +37,8 @@ const path = stripLocale(Astro.url.pathname);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={locale === "id" ? "id_ID" : "en_US"} />
-    <meta name="theme-color" content="#f4f4f1" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0e110e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151915" media="(prefers-color-scheme: dark)" />
     <script is:inline>
       // Tema dan framework dipasang sebelum render pertama, dan dipasang ulang setiap navigasi
       // karena ClientRouter menyalin atribut <html> dari halaman baru.
@@ -62,7 +62,7 @@ const path = stripLocale(Astro.url.pathname);
     </script>
     <ClientRouter fallback="swap" />
   </head>
-  <body class="flex min-h-dvh flex-col bg-canvas font-sans text-ink">
+  <body class="flex min-h-dvh flex-col bg-surface font-sans text-ink">
     <a
       href="#konten"
       class="sr-only rounded-lg bg-primary px-3 py-2 text-sm text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"

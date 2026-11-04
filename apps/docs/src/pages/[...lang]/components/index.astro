@@ -12,14 +12,14 @@ const thumbs = import.meta.glob<string>("../../../../public/thumbs/*.webp", { qu
 const hasThumb = (name: string) => `../../../../public/thumbs/${name}.webp` in thumbs;
 const categories = CATEGORIES.filter((category) => items.some((item) => item.category === category)).map((category) => [category, categoryLabel(category, locale)] as const);
 const control =
-  "h-10 rounded-lg border border-line bg-surface px-3 text-sm text-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  "h-10 rounded-lg bg-subtle px-3 text-sm text-ink transition-colors hover:bg-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 ---
 
 <Base title={strings.title} description={strings.subtitle(items.length)}>
   <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-20 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
     <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <div>
-        <h1 class="text-[32px] leading-tight font-medium tracking-[-0.02em] sm:text-4xl">{strings.title}</h1>
+        <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{strings.title}</h1>
         <p class="mt-3 max-w-xl text-lg leading-7 text-muted">
           {strings.subtitle(items.length)}
         </p>
@@ -56,9 +56,9 @@ const control =
             >
               <a
                 href={localePath(locale, `/components/${item.name}`)}
-                class="group block overflow-hidden rounded-xl border border-line bg-surface transition-colors duration-150 ease-out hover:border-faint"
+                class="frame group block transition-colors duration-150 ease-out hover:bg-line"
               >
-                <div class="aspect-[16/10] overflow-hidden border-b border-line bg-canvas">
+                <div class="frame-panel aspect-[16/10] overflow-hidden">
                   {hasThumb(item.name) ? (
                     <>
                       <img src={`/thumbs/${item.name}.webp`} alt="" width="480" height="300" loading="lazy" decoding="async" class="size-full object-cover dark:hidden" />
@@ -68,7 +68,7 @@ const control =
                     <span class="flex size-full items-center justify-center text-sm text-muted">{item.title}</span>
                   )}
                 </div>
-                <div class="flex items-baseline justify-between gap-3 px-4 py-3.5">
+                <div class="flex items-baseline justify-between gap-3 px-3 pt-3 pb-2">
                   <h2 class="font-medium text-ink">{item.title}</h2>
                   <p class="text-sm text-muted">
                     {label && <span class="mr-2 text-primary">{label === "new" ? t(locale).sidebar.fresh : t(locale).sidebar.updated}</span>}

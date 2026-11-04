@@ -33,15 +33,17 @@ const files: Record<Framework, string> = {
 const frameworks: Framework[] = ["blade", "react", "vue"];
 ---
 
-<div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-overlay">
+<div class="frame shadow-overlay">
+  <div class="frame-panel overflow-hidden">
   <div class="flex h-12 items-center justify-between gap-3 border-b border-line px-2">
     <FrameworkSwitcher variant="compact" label={t(getLocale(Astro.url)).framework.example} />
     <div class="hidden min-w-0 pr-2 sm:block">
       {frameworks.map((fw) => <p data-fw={fw} class="truncate font-mono text-xs text-muted">{files[fw]}</p>)}
     </div>
   </div>
-  <div class="border-b border-line bg-canvas">
+  <div class="dot-grid border-t border-line">
     <Preview name="login-form" bare />
   </div>
-  {frameworks.map((fw) => <div data-fw={fw}><CodeBlock code={snippet[fw]} lang={shikiLang(fw)} class="rounded-none border-0" /></div>)}
+  {frameworks.map((fw) => <div data-fw={fw} class="border-t border-line"><CodeBlock code={snippet[fw]} lang={shikiLang(fw)} bare /></div>)}
+</div>
 </div>

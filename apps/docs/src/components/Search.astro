@@ -9,13 +9,14 @@ const label = t(getLocale(Astro.url)).header.search;
 <button
   type="button"
   data-search-open
-  class="icon-button md:w-56 md:justify-start md:gap-2 md:border md:border-line md:bg-surface md:px-3 md:hover:bg-surface md:hover:text-ink"
+  class="icon-button md:h-9 md:w-64 md:justify-start md:gap-2 md:bg-subtle md:px-3 md:text-muted md:hover:bg-line/70"
 >
-  <Icon name="search" />
-  <span class="sr-only text-sm md:not-sr-only">{label}</span>
-  <kbd aria-hidden="true" class="ml-auto hidden items-center gap-0.5 rounded-md border border-line bg-canvas px-1.5 font-mono text-[11px] leading-5 text-muted md:inline-flex"
-    ><span data-shortcut-mod>Ctrl</span><span>K</span></kbd
-  >
+  <Icon name="search" class="size-4 md:hidden" />
+  <span class="sr-only text-sm md:not-sr-only">{strings.trigger}</span>
+  <span aria-hidden="true" class="ml-auto hidden items-center gap-1 md:inline-flex">
+    <kbd data-shortcut-mod class="inline-flex h-5 min-w-5 px-1 items-center justify-center rounded-md bg-surface font-sans text-[11px] text-muted shadow-[0_0_0_1px_var(--color-line)]">Ctrl</kbd>
+    <kbd class="inline-flex size-5 items-center justify-center rounded-md bg-surface font-sans text-[11px] text-muted shadow-[0_0_0_1px_var(--color-line)]">K</kbd>
+  </span>
 </button>
 
 <dialog
