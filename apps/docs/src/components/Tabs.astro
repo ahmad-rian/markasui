@@ -1,0 +1,106 @@
+---
+/**
+ * Tab statis untuk halaman docs (bukan komponen MarkasUI). Isi setiap panel dikirim lewat slot
+ * bernama sama dengan value. Pilihan disimpan per grup lewat atribut data-tabs-group.
+ */
+interface Props {
+  items: { value: string; label: string }[];
+  group?: string;
+  label: string;
+}
+const { items, group, label } = Astro.props;
+const id = `tabs-${Math.random().toString(36).slice(2, 8)}`;
+const first = items[0]?.value;
+---
+
+<div data-docs-tabs data-tabs-group={group}>
+  <div role="tablist" aria-label={label} class="flex gap-4 border-b border-line">
+    {
+      items.map((item) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${id}-tab-${item.value}`}
+          aria-controls={`${id}-panel-${item.value}`}
+          aria-selected={item.value === first ? "true" : "false"}
+          tabindex={item.value === first ? 0 : -1}
+          data-value={item.value}
+          class="-mb-px border-b-2 border-transparent pb-2 text-sm font-medium text-muted transition-colors hover:text-ink aria-selected:border-primary aria-selected:text-ink"
+        >
+          {item.label}
+        </button>
+      ))
+    }
+  </div>
+  {
+    items.map((item) => (
+      <div
+        role="tabpanel"
+        id={`${id}-panel-${item.value}`}
+        aria-labelledby={`${id}-tab-${item.value}`}
+        data-value={item.value}
+        hidden={item.value !== first}
+        class="pt-4"
+      >
+        <slot name={item.value} />
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const storageKey = (group: string) => `markas-tabs-${group}`;
+
+  function select(root: HTMLElement, value: string, focus = false) {
+    root.querySelectorAll<HTMLElement>(":scope > [role=tablist] > [role=tab]").forEach((tab) => {
+      const selected = tab.dataset.value === value;
+      tab.setAttribute("aria-selected", String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      if (selected && focus) tab.focus();
+    });
+    root.querySelectorAll<HTMLElement>(":scope > [role=tabpanel]").forEach((panel) => {
+      panel.hidden = panel.dataset.value !== value;
+    });
+  }
+
+  function selectGroup(group: string, value: string) {
+    document.querySelectorAll<HTMLElement>(`[data-tabs-group="${group}"]`).forEach((root) => select(root, value));
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-docs-tabs]").forEach((root) => {
+    const group = root.dataset.tabsGroup;
+    const tabs = [...root.querySelectorAll<HTMLElement>(":scope > [role=tablist] > [role=tab]")];
+    if (group) {
+      try {
+        const saved = localStorage.getItem(storageKey(group));
+        if (saved && tabs.some((tab) => tab.dataset.value === saved)) select(root, saved);
+      } catch {
+        // Storage diblok: pakai tab pertama.
+      }
+    }
+
+    const choose = (value: string, focus = false) => {
+      select(root, value, focus);
+      if (!group) return;
+      selectGroup(group, value);
+      try {
+        localStorage.setItem(storageKey(group), value);
+      } catch {
+        // Abaikan.
+      }
+    };
+
+    root.querySelector(":scope > [role=tablist]")?.addEventListener("click", (event) => {
+      const value = (event.target as HTMLElement).closest<HTMLElement>("[role=tab]")?.dataset.value;
+      if (value) choose(value);
+    });
+    root.querySelector(":scope > [role=tablist]")?.addEventListener("keydown", (event) => {
+      const key = (event as KeyboardEvent).key;
+      const index = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+      const next = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: tabs.length - 1 }[key];
+      if (next === undefined) return;
+      event.preventDefault();
+      choose(tabs[(next + tabs.length) % tabs.length]!.dataset.value!, true);
+    });
+  });
+</script>

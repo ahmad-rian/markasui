@@ -15,14 +15,23 @@
     "@tailwindcss/vite": "4.3.4",
     "alpinejs": "3.17.5",
     "astro": "7.4.5",
+    "cookie": "2.0.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "tailwindcss": "4.3.4",
     "vue": "3.5.44"
   },
   "scripts": {
+    "prebuild": "pnpm run generate",
+    "predev": "pnpm run generate",
+    "generate": "node ../../packages/registry/src/build.ts public/r && php ../../scripts/render-blade.php ../../examples/blade src/generated/blade",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "pagefind": "1.6.0",
+    "typescript": "6.0.3"
   }
 }

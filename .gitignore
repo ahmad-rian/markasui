@@ -12,3 +12,7 @@ test-results/
 .cache/
 playground/public/blade/
 apps/docs/public/r/
+apps/docs/src/generated/
+playwright-report-docs/
+apps/docs/public/thumbs/
+.lighthouseci/

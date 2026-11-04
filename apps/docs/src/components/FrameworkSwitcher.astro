@@ -1,0 +1,52 @@
+---
+import { FRAMEWORKS } from "@markasui/registry/schema";
+import { FRAMEWORK_LABELS } from "../lib/frameworks";
+---
+
+<div role="radiogroup" aria-label="Framework" class="grid grid-cols-3 gap-1 rounded-lg bg-subtle p-1" data-framework-switcher>
+  {
+    FRAMEWORKS.map((framework) => (
+      <button
+        type="button"
+        role="radio"
+        data-value={framework}
+        class="h-8 rounded-md text-sm font-medium text-muted transition-colors hover:text-ink aria-checked:bg-surface aria-checked:text-ink"
+      >
+        {FRAMEWORK_LABELS[framework]}
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  import { getFramework, isFramework, setFramework } from "../scripts/prefs";
+
+  function sync() {
+    const current = getFramework();
+    document.querySelectorAll<HTMLElement>("[data-framework-switcher] [role=radio]").forEach((radio) => {
+      const checked = radio.dataset.value === current;
+      radio.setAttribute("aria-checked", String(checked));
+      radio.tabIndex = checked ? 0 : -1;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-framework-switcher]").forEach((group) => {
+    const radios = [...group.querySelectorAll<HTMLElement>("[role=radio]")];
+    group.addEventListener("click", (event) => {
+      const value = (event.target as HTMLElement).closest<HTMLElement>("[role=radio]")?.dataset.value;
+      if (isFramework(value)) setFramework(value);
+    });
+    group.addEventListener("keydown", (event) => {
+      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
+      if (!step) return;
+      event.preventDefault();
+      const index = radios.findIndex((radio) => radio.getAttribute("aria-checked") === "true");
+      const next = radios[(index + step + radios.length) % radios.length]!;
+      if (isFramework(next.dataset.value)) setFramework(next.dataset.value);
+      next.focus();
+    });
+  });
+
+  document.addEventListener("markas:framework", sync);
+  sync();
+</script>

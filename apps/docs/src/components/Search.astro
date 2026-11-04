@@ -1,0 +1,41 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<button
+  type="button"
+  data-search-open
+  class="flex h-9 items-center gap-2 rounded-md border border-line bg-surface px-3 text-sm text-muted transition-colors hover:text-ink sm:w-56"
+>
+  <Icon name="search" />
+  <span class="hidden sm:inline">Cari komponen</span>
+  <kbd class="ml-auto hidden rounded border border-line px-1.5 font-mono text-[10px] text-faint sm:inline">Ctrl K</kbd>
+  <span class="sr-only sm:hidden">Cari</span>
+</button>
+
+<dialog
+  data-search-dialog
+  aria-label="Pencarian"
+  class="mx-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl rounded-xl border border-line bg-surface p-0 text-ink shadow-xl backdrop:bg-ink/40"
+>
+  <form method="dialog" class="flex items-center gap-2 border-b border-line px-4">
+    <Icon name="search" class="size-4 text-faint" />
+    <label for="search-input" class="sr-only">Kata kunci</label>
+    <input
+      id="search-input"
+      data-search-input
+      type="search"
+      autocomplete="off"
+      placeholder="Cari komponen atau docs..."
+      class="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-faint"
+    />
+    <button type="submit" class="rounded border border-line px-1.5 font-mono text-[10px] text-faint">Esc</button>
+  </form>
+  <div data-search-status role="status" class="px-4 py-3 text-sm text-muted">Ketik untuk mencari.</div>
+  <ul data-search-results class="max-h-[50vh] overflow-y-auto px-2 pb-2"></ul>
+</dialog>
+
+<script>
+  import { setupSearch } from "../scripts/search";
+  setupSearch();
+</script>

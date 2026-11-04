@@ -1,0 +1,86 @@
+---
+import type { Framework } from "@markasui/registry/schema";
+import Icon from "./Icon.astro";
+
+interface Props {
+  markdown: string;
+  markdownUrl: string;
+  prompts: Record<Framework, string>;
+}
+const { markdown, markdownUrl, prompts } = Astro.props;
+const absoluteMd = new URL(markdownUrl, Astro.site).toString();
+const ask = encodeURIComponent(`Baca ${absoluteMd} lalu bantu saya memakai komponen ini di project saya.`);
+const item =
+  "flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm text-ink transition-colors hover:bg-subtle focus-visible:bg-subtle";
+---
+
+<div class="flex items-center" data-copy-page>
+  <script type="application/json" data-copy-page-data set:html={JSON.stringify({ markdown, prompts }).replaceAll("<", "\\u003c")} />
+  <button
+    type="button"
+    data-copy-markdown
+    class="inline-flex h-8 items-center gap-1.5 rounded-l-md border border-line bg-surface px-3 text-sm font-medium text-ink hover:bg-subtle"
+  >
+    <Icon name="copy" class="size-3.5 [[data-copied]_&]:hidden" />
+    <Icon name="check" class="hidden size-3.5 text-primary [[data-copied]_&]:block" />
+    Copy page
+  </button>
+  <button
+    type="button"
+    popovertarget="copy-page-menu"
+    aria-label="Opsi lain"
+    class="inline-flex h-8 items-center rounded-r-md border border-l-0 border-line bg-surface px-2 text-muted hover:bg-subtle hover:text-ink"
+  >
+    <Icon name="chevronDown" class="size-3.5" />
+  </button>
+  <div
+    id="copy-page-menu"
+    popover
+    role="menu"
+    class="m-0 w-60 rounded-lg border border-line bg-surface p-1 text-ink shadow-lg [position-area:bottom_span-left] [position-try-fallbacks:flip-block]"
+  >
+    <button type="button" role="menuitem" data-copy-prompt class={item}>
+      <Icon name="sparkle" class="size-4 text-muted" />
+      <span class="[[data-copied]_&]:hidden">Copy prompt</span>
+      <span class="hidden [[data-copied]_&]:inline">Prompt tersalin</span>
+    </button>
+    <a role="menuitem" href={markdownUrl} class={item}><Icon name="file" class="size-4 text-muted" />Lihat Markdown</a>
+    <a role="menuitem" href={`https://claude.ai/new?q=${ask}`} target="_blank" rel="noopener" class={item}>
+      <Icon name="external" class="size-4 text-muted" />Buka di Claude
+    </a>
+    <a role="menuitem" href={`https://chatgpt.com/?q=${ask}`} target="_blank" rel="noopener" class={item}>
+      <Icon name="external" class="size-4 text-muted" />Buka di ChatGPT
+    </a>
+  </div>
+</div>
+
+<script>
+  import { copyText } from "../scripts/clipboard";
+  import { getFramework } from "../scripts/prefs";
+
+  document.querySelectorAll<HTMLElement>("[data-copy-page]").forEach((root) => {
+    const raw = root.querySelector("[data-copy-page-data]")?.textContent;
+    if (!raw) return;
+    const data = JSON.parse(raw) as { markdown: string; prompts: Record<string, string> };
+
+    const markdownButton = root.querySelector<HTMLElement>("[data-copy-markdown]");
+    markdownButton?.addEventListener("click", () => void copyText(data.markdown, markdownButton));
+
+    const promptButton = root.querySelector<HTMLElement>("[data-copy-prompt]");
+    promptButton?.addEventListener("click", () => void copyText(data.prompts[getFramework()] ?? "", promptButton));
+
+    // Navigasi panah di dalam menu (WAI-ARIA menu).
+    const menu = root.querySelector<HTMLElement>("[role=menu]");
+    menu?.addEventListener("toggle", (event) => {
+      if ((event as ToggleEvent).newState === "open") menu.querySelector<HTMLElement>("[role=menuitem]")?.focus();
+    });
+    menu?.addEventListener("keydown", (event) => {
+      const items = [...menu.querySelectorAll<HTMLElement>("[role=menuitem]")];
+      const index = items.indexOf(document.activeElement as HTMLElement);
+      const next = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: items.length - 1 }[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      items[(next + items.length) % items.length]?.focus();
+    });
+  });
+</script>

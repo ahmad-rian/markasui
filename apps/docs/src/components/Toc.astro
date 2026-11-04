@@ -1,0 +1,27 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const headings = Astro.props.headings.filter((heading) => heading.depth === 2);
+---
+
+{
+  headings.length > 0 && (
+    <nav aria-labelledby="toc-title" class="sticky top-24 hidden max-h-[calc(100dvh-8rem)] overflow-y-auto xl:block">
+      <h2 id="toc-title" class="label-mono mb-3">
+        Di halaman ini
+      </h2>
+      <ul class="grid gap-2 text-sm">
+        {headings.map((heading) => (
+          <li>
+            <a href={`#${heading.slug}`} class="text-muted transition-colors hover:text-ink">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

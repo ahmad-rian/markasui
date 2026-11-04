@@ -1,0 +1,57 @@
+---
+import Icon from "../Icon.astro";
+import ReactPreview from "./ReactPreview";
+import VuePreview from "./VuePreview.vue";
+
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+
+// HTML Blade dibuat oleh scripts/render-blade.php (pnpm --filter @markasui/docs prebuild).
+const bladeFiles = import.meta.glob<string>("../../generated/blade/*.html", { query: "?raw", import: "default", eager: true });
+const bladeHtml = bladeFiles[`../../generated/blade/${name}.html`];
+---
+
+<div class="relative overflow-hidden rounded-xl border border-line bg-surface" data-preview data-pagefind-ignore>
+  <div class="absolute top-2 right-2 z-10 flex gap-1">
+    <button
+      type="button"
+      data-preview-reload
+      aria-label="Muat ulang preview"
+      class="inline-flex size-8 items-center justify-center rounded-md text-muted transition-colors hover:bg-subtle hover:text-ink"
+    >
+      <Icon name="reload" />
+    </button>
+  </div>
+  <div class="dot-grid flex min-h-72 items-center justify-center px-6 py-12" data-preview-stage>
+    <div data-fw="blade" class="w-full max-w-md">
+      {
+        bladeHtml ? (
+          <Fragment set:html={bladeHtml} />
+        ) : (
+          <p class="text-sm text-danger">Preview Blade belum dirender. Jalankan pnpm blade:docs.</p>
+        )
+      }
+    </div>
+    <div data-fw="react" class="w-full max-w-md">
+      <ReactPreview client:visible name={name} />
+    </div>
+    <div data-fw="vue" class="w-full max-w-md">
+      <VuePreview client:visible name={name} />
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simpan HTML awal setiap preview sebelum di-hydrate, lalu pasang ulang saat tombol reload ditekan.
+  // astro-island yang dipasang ulang akan hydrate lagi, dan Alpine menginisialisasi ulang DOM Blade baru.
+  document.querySelectorAll<HTMLElement>("[data-preview]").forEach((preview) => {
+    const stage = preview.querySelector<HTMLElement>("[data-preview-stage]");
+    if (!stage) return;
+    const pristine = stage.innerHTML;
+    preview.querySelector("[data-preview-reload]")?.addEventListener("click", () => {
+      stage.innerHTML = pristine;
+    });
+  });
+</script>

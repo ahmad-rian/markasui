@@ -1,0 +1,53 @@
+---
+import FrameworkSwitcher from "./FrameworkSwitcher.astro";
+import { DOCS_NAV } from "../lib/site";
+import { freshness, getComponents, groupByCategory } from "../lib/registry";
+
+const path = Astro.url.pathname;
+const groups = groupByCategory(await getComponents());
+const link =
+  "flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm text-muted transition-colors hover:bg-subtle hover:text-ink aria-[current=page]:bg-subtle aria-[current=page]:font-medium aria-[current=page]:text-ink";
+---
+
+<div class="grid gap-6">
+  <FrameworkSwitcher />
+  <section>
+    <h2 class="label-mono mb-2 px-2">Mulai</h2>
+    <ul class="grid gap-0.5">
+      {
+        DOCS_NAV.map((item) => (
+          <li>
+            <a href={item.href} class={link} aria-current={path === item.href ? "page" : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  {
+    groups.map((group) => (
+      <section>
+        <h2 class="label-mono mb-2 px-2">{group.label}</h2>
+        <ul class="grid gap-0.5">
+          {group.items.map((item) => {
+            const label = freshness(item);
+            const href = `/components/${item.name}`;
+            return (
+              <li>
+                <a href={href} class={link} aria-current={path === href ? "page" : undefined}>
+                  {item.title}
+                  {label && (
+                    <span class="rounded-full border border-primary-line bg-primary-soft px-1.5 font-mono text-[10px] text-primary">
+                      {label}
+                    </span>
+                  )}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))
+  }
+</div>

@@ -1,0 +1,69 @@
+---
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE } from "../lib/site";
+import sansFont from "../../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Halaman dengan preview Blade interaktif memuat Alpine.js. */
+  alpine?: boolean;
+}
+
+const { title, description = SITE.description, alpine = false } = Astro.props;
+const fullTitle = title === SITE.name ? title : `${title} · ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="id" data-framework="blade">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#f4f4f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e110e" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        let framework = null;
+        let theme = null;
+        try {
+          framework = localStorage.getItem("markas-framework");
+          theme = localStorage.getItem("markas-theme");
+        } catch {}
+        if (framework === "blade" || framework === "react" || framework === "vue") root.dataset.framework = framework;
+        const dark = theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+        root.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body class="min-h-dvh bg-canvas font-sans text-ink">
+    <a
+      href="#konten"
+      class="sr-only rounded-md bg-primary px-3 py-2 text-sm text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+      >Lewati ke konten</a
+    >
+    <Header />
+    <slot />
+    <Footer />
+    {
+      alpine && (
+        <script>
+          import { loadAlpineWhenBlade } from "../scripts/alpine";
+          loadAlpineWhenBlade();
+        </script>
+      )
+    }
+  </body>
+</html>

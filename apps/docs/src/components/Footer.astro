@@ -1,0 +1,16 @@
+---
+import { SITE } from "../lib/site";
+const link = "text-muted transition-colors hover:text-ink";
+---
+
+<footer class="border-t border-line">
+  <div class="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between gap-4 px-4 py-8 text-sm sm:px-6">
+    <p class="text-muted">Dibuat oleh {SITE.author}, {SITE.city}.</p>
+    <nav aria-label="Footer" class="flex flex-wrap gap-5">
+      <a href={SITE.repo} class={link}>GitHub</a>
+      <a href="/docs/introduction" class={link}>Docs</a>
+      <a href={`${SITE.repo}/blob/main/LICENSE`} class={link}>Lisensi MIT</a>
+      <a href="/llms.txt" class={link}>llms.txt</a>
+    </nav>
+  </div>
+</footer>

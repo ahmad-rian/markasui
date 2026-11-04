@@ -13,17 +13,20 @@ Library komponen UI open source untuk Blade, React, dan Vue. Spesifikasi lengkap
 
 ## Perintah
 
-- pnpm dev: jalankan website docs
+- pnpm dev: jalankan website docs (http://localhost:4321)
+- pnpm build: build website docs + registry + preview Blade + indeks Pagefind
 - pnpm playground: halaman uji komponen (Blade, React, Vue) di http://localhost:5173
-- pnpm typecheck: vue-tsc untuk file .ts, .tsx, dan .vue
-- pnpm test: Vitest
-- pnpm test:e2e: Playwright (kesamaan tampilan dan axe)
-- pnpm registry: build registry
-- pnpm size: cek budget ukuran
+- pnpm test: Vitest (React, Vue, render Blade, registry)
+- pnpm test:e2e: Playwright komponen (kesamaan tampilan, axe, keyboard)
+- pnpm test:docs: Playwright website (butuh pnpm build dulu)
+- pnpm typecheck: vue-tsc + astro check
+- pnpm registry: build registry ke apps/docs/public/r
+- pnpm thumbs: thumbnail WebP untuk /components
+- pnpm size: cek budget ukuran (butuh pnpm build dulu)
 
 ## Sebelum menyatakan selesai
 
-Jalankan pnpm lint, pnpm typecheck, pnpm test, pnpm test:e2e, dan pnpm size. Semua harus lolos.
+Jalankan pnpm lint, pnpm typecheck, pnpm test, pnpm test:e2e, pnpm build, pnpm test:docs, dan pnpm size. Semua harus lolos.
 
 ## Pola komponen (ditetapkan di Fase 1)
 

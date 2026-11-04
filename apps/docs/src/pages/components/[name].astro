@@ -1,0 +1,145 @@
+---
+import type { Framework } from "@markasui/registry/schema";
+import CodeBlock from "../../components/CodeBlock.astro";
+import CopyPage from "../../components/CopyPage.astro";
+import Icon from "../../components/Icon.astro";
+import Tabs from "../../components/Tabs.astro";
+import Preview from "../../components/preview/Preview.astro";
+import Docs from "../../layouts/Docs.astro";
+import { buildPrompt, componentMarkdown, splitUsage } from "../../lib/ai";
+import { FRAMEWORK_LABELS, PACKAGE_MANAGERS, cliCommand, shikiLang } from "../../lib/frameworks";
+import { renderMarkdown } from "../../lib/markdown";
+import { CATEGORY_LABELS, getComponents } from "../../lib/registry";
+
+export async function getStaticPaths() {
+  const items = await getComponents();
+  return items.map((item, index) => ({
+    params: { name: item.name },
+    props: { item, prev: items[index - 1], next: items[index + 1] },
+  }));
+}
+
+const { item, prev, next } = Astro.props;
+const frameworks: Framework[] = ["blade", "react", "vue"];
+const site = Astro.site!.toString();
+const usage = splitUsage(item.usage);
+const usageHtml = Object.fromEntries(
+  await Promise.all(frameworks.map(async (fw) => [fw, await renderMarkdown(usage[fw])] as const)),
+) as Record<Framework, string>;
+const notesHtml = usage.notes ? await renderMarkdown(usage.notes) : "";
+const prompts = Object.fromEntries(frameworks.map((fw) => [fw, buildPrompt(item, fw, site)])) as Record<Framework, string>;
+const hasBladeInteractivity = item.frameworks.blade.deps.includes("alpinejs");
+
+const headings = [
+  { depth: 2, slug: "instalasi", text: "Instalasi" },
+  { depth: 2, slug: "pemakaian", text: "Pemakaian" },
+  { depth: 2, slug: "props", text: "Props" },
+  { depth: 2, slug: "aksesibilitas", text: "Aksesibilitas" },
+];
+const navButton =
+  "inline-flex size-8 items-center justify-center rounded-md border border-line bg-surface text-muted hover:bg-subtle hover:text-ink";
+---
+
+<Docs title={item.title} description={item.description} headings={headings} alpine={hasBladeInteractivity}>
+  <p class="label-mono mb-3">{CATEGORY_LABELS[item.category]}</p>
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div class="min-w-0">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{item.title}</h1>
+      <p class="mt-3 text-lg text-muted">{item.description}</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <CopyPage markdown={componentMarkdown(item, site)} markdownUrl={`/components/${item.name}.md`} prompts={prompts} />
+      {
+        prev ? (
+          <a href={`/components/${prev.name}`} class={navButton} aria-label={`Sebelumnya: ${prev.title}`}>
+            <Icon name="chevronLeft" />
+          </a>
+        ) : (
+          <span class={`${navButton} opacity-40`} aria-hidden="true"><Icon name="chevronLeft" /></span>
+        )
+      }
+      {
+        next ? (
+          <a href={`/components/${next.name}`} class={navButton} aria-label={`Berikutnya: ${next.title}`}>
+            <Icon name="chevronRight" />
+          </a>
+        ) : (
+          <span class={`${navButton} opacity-40`} aria-hidden="true"><Icon name="chevronRight" /></span>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-4">
+    <Preview name={item.name} />
+    {
+      frameworks.map((fw) => (
+        <div data-fw={fw}>
+          <CodeBlock code={item.frameworks[fw].code} lang={shikiLang(fw)} title={item.frameworks[fw].target} collapsible />
+        </div>
+      ))
+    }
+  </div>
+
+  <section class="prose mt-12">
+    <h2 id="instalasi">Instalasi</h2>
+  </section>
+  <div class="mt-5">
+    <Tabs label="Cara instalasi" group="install-method" items={[{ value: "cli", label: "CLI" }, { value: "manual", label: "Manual" }]}>
+      <div slot="cli">
+        <Tabs label="Package manager" group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
+          {PACKAGE_MANAGERS.map((pm) => <div slot={pm}><CodeBlock code={cliCommand(pm, `add ${item.name}`)} lang="bash" /></div>)}
+        </Tabs>
+      </div>
+      <div slot="manual" class="prose">
+        {
+          frameworks.map((fw) => (
+            <ol data-fw={fw}>
+              <li>Pastikan Tailwind CSS v4 dan <code>markas.css</code> sudah terpasang. Lihat <a href="/docs/installation">Instalasi</a>.</li>
+              {item.frameworks[fw].deps.length > 0 && (
+                <li>
+                  Pasang dependensi: <code>npm install {item.frameworks[fw].deps.join(" ")}</code>
+                </li>
+              )}
+              <li>
+                Salin kode {FRAMEWORK_LABELS[fw]} di atas ke <code>{item.frameworks[fw].target}</code>.
+              </li>
+            </ol>
+          ))
+        }
+      </div>
+    </Tabs>
+  </div>
+
+  <section class="prose mt-12">
+    <h2 id="pemakaian">Pemakaian</h2>
+    {frameworks.map((fw) => <div data-fw={fw} set:html={usageHtml[fw]} />)}
+    {notesHtml && <Fragment set:html={notesHtml} />}
+
+    <h2 id="props">Props</h2>
+    <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Tabel props">
+      <table>
+        <thead>
+          <tr><th>Nama</th><th>Tipe</th><th>Default</th><th>Keterangan</th></tr>
+        </thead>
+        <tbody>
+          {
+            item.props.map((prop) => (
+              <tr>
+                <td><code>{prop.name}</code></td>
+                <td><code>{prop.type}</code></td>
+                <td>{prop.default}</td>
+                <td>{prop.description}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="aksesibilitas">Aksesibilitas</h2>
+    <ul>
+      {item.a11y.map((note) => <li>{note}</li>)}
+    </ul>
+  </section>
+</Docs>

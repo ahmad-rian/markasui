@@ -1,0 +1,114 @@
+---
+import CodeBlock from "../components/CodeBlock.astro";
+import FrameworkSwitcher from "../components/FrameworkSwitcher.astro";
+import Tabs from "../components/Tabs.astro";
+import Preview from "../components/preview/Preview.astro";
+import Base from "../layouts/Base.astro";
+import { PACKAGE_MANAGERS, cliCommand } from "../lib/frameworks";
+import { CATEGORY_LABELS, getComponents, groupByCategory } from "../lib/registry";
+import { SITE } from "../lib/site";
+
+const items = await getComponents();
+const groups = groupByCategory(items);
+const button =
+  "inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+
+const prompt = "Buat halaman login Laravel memakai MarkasUI: input email, input kata sandi dengan pesan error, dan tombol masuk.";
+const result = `<form method="POST" action="{{ route('login') }}" class="grid gap-4">
+    @csrf
+    <x-markas.input name="email" type="email" label="Email" :error="$errors->first('email')" />
+    <x-markas.input name="password" type="password" label="Kata sandi" />
+    <x-markas.button type="submit" class="w-full">Masuk</x-markas.button>
+</form>`;
+---
+
+<Base title={SITE.name} alpine>
+  <main id="konten">
+    <section class="dot-grid border-b border-line">
+      <div class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6 sm:py-28">
+        <p class="label-mono">Open source · Blade · React · Vue</p>
+        <h1 class="mt-6 max-w-3xl text-[40px] leading-[1.05] font-bold tracking-tight sm:text-[64px]">
+          Komponen UI ringan untuk <span class="font-serif font-normal italic">setiap stack.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-muted">
+          Satu desain untuk Blade, React, dan Vue. Tanpa dependensi tambahan, siap disalin, dan siap dipakai agent AI.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/components" class={`${button} bg-primary text-on-primary hover:bg-primary-strong`}>Lihat Komponen</a>
+          <a href="/docs/introduction" class={`${button} border border-line bg-surface text-ink hover:bg-subtle`}>Baca Docs</a>
+        </div>
+        <div class="mt-10 max-w-xl">
+          <Tabs label="Package manager" group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
+            {PACKAGE_MANAGERS.map((pm) => <div slot={pm}><CodeBlock code={cliCommand(pm, "init")} lang="bash" /></div>)}
+          </Tabs>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6" aria-labelledby="demo-title">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <p class="label-mono">Coba langsung</p>
+          <h2 id="demo-title" class="mt-3 text-3xl font-bold tracking-tight">Tampilan sama di tiga framework</h2>
+        </div>
+        <div class="w-full sm:w-72"><FrameworkSwitcher /></div>
+      </div>
+      <div class="mt-8 grid gap-4 lg:grid-cols-2">
+        <Preview name="tabs" />
+        <Preview name="input" />
+      </div>
+    </section>
+
+    <section class="border-y border-line bg-surface" aria-labelledby="ai-title">
+      <div class="mx-auto grid max-w-screen-xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2">
+        <div>
+          <p class="label-mono">Untuk vibe coding</p>
+          <h2 id="ai-title" class="mt-3 text-3xl font-bold tracking-tight">Minta komponen dengan bahasa biasa.</h2>
+          <p class="mt-4 text-muted">
+            MCP server, Agent Skill, Copy Prompt, dan <code class="font-mono text-sm">llms.txt</code> membuat Claude Code,
+            Cursor, dan Codex memakai komponen MarkasUI dengan path dan token yang benar.
+          </p>
+          <figure class="mt-8 rounded-xl border border-line bg-canvas p-5">
+            <figcaption class="label-mono mb-2">Prompt</figcaption>
+            <p class="text-ink">{prompt}</p>
+          </figure>
+          <a href="/docs/mcp" class="mt-6 inline-block text-sm font-medium text-primary underline underline-offset-4">Pasang MCP server</a>
+        </div>
+        <div>
+          <p class="label-mono mb-2">Hasil</p>
+          <CodeBlock code={result} lang="blade" title="resources/views/auth/login.blade.php" />
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-screen-xl px-4 py-20 sm:px-6" aria-labelledby="stats-title">
+      <h2 id="stats-title" class="sr-only">Ringkasan</h2>
+      <dl class="grid gap-8 sm:grid-cols-3">
+        <div>
+          <dt class="label-mono">Komponen</dt>
+          <dd class="mt-2 text-5xl font-bold tracking-tight">{items.length}</dd>
+        </div>
+        <div>
+          <dt class="label-mono">Framework</dt>
+          <dd class="mt-2 text-5xl font-bold tracking-tight">3</dd>
+        </div>
+        <div>
+          <dt class="label-mono">JS per komponen</dt>
+          <dd class="mt-2 text-5xl font-bold tracking-tight">&lt; 3 KB</dd>
+        </div>
+      </dl>
+
+      <div class="mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          groups.map((group) => (
+            <a href="/components" class="rounded-xl border border-line bg-surface p-5 transition-colors hover:border-primary-line">
+              <p class="label-mono">{group.items.length} komponen</p>
+              <p class="mt-2 font-semibold">{CATEGORY_LABELS[group.category]}</p>
+              <p class="mt-1 text-sm text-muted">{group.items.map((item) => item.title).join(", ")}</p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</Base>
