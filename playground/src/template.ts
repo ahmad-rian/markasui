@@ -1,6 +1,6 @@
 // Pratinjau template: /template.html?t=<slug>&fw=blade|react|vue
 const params = new URLSearchParams(location.search);
-const slug = params.get("t") ?? "sales-dashboard";
+const slug = params.get("t") ?? "larisa";
 const framework = params.get("fw") ?? "react";
 const root = document.getElementById("template")!;
 const pascal = slug.replace(/(^|-)([a-z])/g, (_, __, char: string) =>

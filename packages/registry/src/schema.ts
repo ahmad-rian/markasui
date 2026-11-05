@@ -9,6 +9,9 @@ export const CATEGORIES = [
   "overlay",
   "navigation",
   "data",
+  "animation",
+  "background",
+  "button",
 ] as const;
 
 /** Dependensi runtime yang boleh dipakai komponen inti (PRD bagian 10). */

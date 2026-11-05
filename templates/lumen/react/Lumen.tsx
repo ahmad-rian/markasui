@@ -1999,7 +1999,7 @@ const pageViews: Record<PageId, () => ReactNode> = {
   settings: SettingsPage,
 };
 
-export default function CrmCustomer() {
+export default function Lumen() {
   const page = useSyncExternalStore(
     subscribeHash,
     readHash,

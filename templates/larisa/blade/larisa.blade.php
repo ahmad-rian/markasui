@@ -222,7 +222,7 @@
 <div
   class="min-h-dvh bg-canvas text-ink lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]"
   x-data="{
-    ...JSON.parse(document.getElementById('sales-dashboard-data').textContent),
+    ...JSON.parse(document.getElementById('larisa-data').textContent),
     page: 'overview',
     period: 'monthly',
     selectedBar: 5,
@@ -439,7 +439,7 @@
   }"
   x-on:hashchange.window="page = fromHash()"
 >
-  <script type="application/json" id="sales-dashboard-data">{!! json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
+  <script type="application/json" id="larisa-data">{!! json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
   <aside class="sticky top-0 hidden h-dvh flex-col gap-8 border-r border-line bg-surface px-4 py-6 lg:flex">
     <div class="flex items-center gap-2.5 px-3">
       <span class="grid size-8 place-items-center rounded-lg bg-primary text-sm font-semibold text-on-primary" aria-hidden="true">L</span>

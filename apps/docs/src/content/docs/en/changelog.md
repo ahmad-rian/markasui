@@ -12,7 +12,7 @@ First release with 42 components and 2 templates for Blade, React, and Vue.
 - **Overlay:** Modal, Drawer, Dropdown Menu, Tooltip, Alert Dialog, Command Palette, Context Menu, Hover Card, Popover.
 - **Navigation:** Tabs, Accordion, Breadcrumb, Pagination, Navbar, Collapsible, Menubar.
 - **Data:** Card, Avatar, Table, Carousel, Code Block, Kbd, Scroll Area, Separator.
-- **Templates:** Sales Dashboard and CRM Customer, interactive full pages in all three frameworks.
+- **Templates:** Larisa (store dashboard) and Lumen (CRM workspace), interactive full pages in all three frameworks.
 
 Also included:
 

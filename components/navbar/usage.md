@@ -50,5 +50,5 @@ import { Navbar } from "@/components/markas/Navbar";
 
 ## Notes
 
-- The layout follows the header width through a container query (`@container` and `@3xl:`), not the viewport. The desktop menu shows when the header is 48rem wide or more, below that the menu button appears.
+- The layout follows the header width through a container query (`@container` and `@2xl:`), not the viewport. The desktop menu shows when the header is 42rem wide or more, below that the menu button appears.
 - The menu button is labelled "Menu" and the navs "Main" and "Main mobile". Translate them with `menuLabel`, `navLabel`, and `mobileNavLabel` (Blade: `menu-label`, `nav-label`, `mobile-nav-label`).

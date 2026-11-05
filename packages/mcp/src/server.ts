@@ -78,7 +78,7 @@ export function createServer(registry: Registry = createRegistry()) {
         "List every MarkasUI component (name, title, category, description). Optionally filter by category.",
       inputSchema: {
         category: z
-          .enum(["form", "feedback", "overlay", "navigation", "data"])
+          .enum(["form", "feedback", "overlay", "navigation", "data", "animation", "background", "button"])
           .optional(),
       },
     },

@@ -13,15 +13,15 @@ const root = "@container w-full border-b border-line bg-surface";
 const bar = "flex h-14 items-center gap-4 px-4";
 const brandClass =
   "flex shrink-0 items-center gap-2 text-sm font-semibold text-ink";
-const desktopNav = "hidden items-center gap-1 @3xl:flex";
+const desktopNav = "hidden items-center gap-1 @2xl:flex";
 const link =
   "inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=active]:text-ink motion-reduce:transition-none";
 const actionsClass = "ml-auto flex items-center gap-2";
 const toggle =
-  "group inline-flex size-9 shrink-0 items-center justify-center rounded-md text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none @3xl:hidden";
+  "group inline-flex size-9 shrink-0 items-center justify-center rounded-md text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none @2xl:hidden";
 const openIcon = "size-5 group-data-[state=open]:hidden";
 const closeIcon = "hidden size-5 group-data-[state=open]:block";
-const panel = "border-t border-line px-4 py-2 @3xl:hidden";
+const panel = "border-t border-line px-4 py-2 @2xl:hidden";
 const panelList = "grid gap-1";
 const cx = (...c: (string | false | null | undefined)[]) =>
   c.filter(Boolean).join(" ");

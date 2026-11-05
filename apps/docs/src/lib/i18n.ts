@@ -91,6 +91,9 @@ const en = {
     overlay: "Overlay",
     navigation: "Navigation",
     data: "Data",
+    animation: "Animations",
+    background: "Backgrounds",
+    button: "Buttons",
   },
   docsNav: {
     introduction: "Introduction",
@@ -219,6 +222,8 @@ const en = {
       `${n} MarkasUI components make up this template. Open one to see its props and variants.`,
     accent: "Accent color",
     install: "Install",
+    viewCode: "View code",
+    lines: (n: number) => `${n} lines`,
     installText:
       "Add every component this template uses, then copy the page itself from GitHub.",
     source: "View source on GitHub",
@@ -296,6 +301,9 @@ const id: Dictionary = {
     overlay: "Overlay",
     navigation: "Navigasi",
     data: "Data",
+    animation: "Animasi",
+    background: "Latar",
+    button: "Tombol",
   },
   docsNav: {
     introduction: "Pengenalan",
@@ -425,6 +433,8 @@ const id: Dictionary = {
       `Template ini disusun dari ${n} komponen MarkasUI. Buka salah satunya untuk melihat props dan variasinya.`,
     accent: "Warna aksen",
     install: "Instalasi",
+    viewCode: "Lihat kode",
+    lines: (n: number) => `${n} baris`,
     installText:
       "Tambahkan semua komponen yang dipakai template ini, lalu salin halamannya dari GitHub.",
     source: "Lihat source di GitHub",

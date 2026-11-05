@@ -9,13 +9,13 @@
     $root = '@container w-full border-b border-line bg-surface';
     $bar = 'flex h-14 items-center gap-4 px-4';
     $brandClass = 'flex shrink-0 items-center gap-2 text-sm font-semibold text-ink';
-    $desktopNav = 'hidden items-center gap-1 @3xl:flex';
+    $desktopNav = 'hidden items-center gap-1 @2xl:flex';
     $link = 'inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=active]:text-ink motion-reduce:transition-none';
     $actionsClass = 'ml-auto flex items-center gap-2';
-    $toggle = 'group inline-flex size-9 shrink-0 items-center justify-center rounded-md text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none @3xl:hidden';
+    $toggle = 'group inline-flex size-9 shrink-0 items-center justify-center rounded-md text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none @2xl:hidden';
     $openIcon = 'size-5 group-data-[state=open]:hidden';
     $closeIcon = 'hidden size-5 group-data-[state=open]:block';
-    $panel = 'border-t border-line px-4 py-2 @3xl:hidden';
+    $panel = 'border-t border-line px-4 py-2 @2xl:hidden';
     $panelList = 'grid gap-1';
 
     $id = $attributes->get('id') ?? 'markas-navbar-'.\Illuminate\Support\Str::random(8);

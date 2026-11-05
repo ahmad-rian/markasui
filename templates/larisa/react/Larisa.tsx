@@ -1095,7 +1095,7 @@ function useDashboard() {
 
 type Dashboard = ReturnType<typeof useDashboard>;
 
-export default function SalesDashboard() {
+export default function Larisa() {
   const s = useDashboard();
   const {
     page,

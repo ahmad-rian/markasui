@@ -61,7 +61,7 @@
     "The mobile menu button uses aria-expanded and aria-controls pointing to the menu panel.",
     "Escape closes the panel and returns focus to the menu button.",
     "The desktop and mobile menus are each wrapped in a nav with different labels (navLabel and mobileNavLabel).",
-    "The layout follows the header width (container query), the desktop menu shows from 48rem wide."
+    "The layout follows the header width (container query), the desktop menu shows from 42rem wide."
   ],
   "ai": {
     "whenToUse": "Main header at the top of every page of a site or app.",
@@ -86,7 +86,7 @@
         "Tombol menu seluler memakai aria-expanded dan aria-controls yang menunjuk ke panel menu.",
         "Escape menutup panel dan fokus kembali ke tombol menu.",
         "Menu desktop dan seluler masing-masing dibungkus nav dengan label berbeda (navLabel dan mobileNavLabel).",
-        "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 48rem."
+        "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 42rem."
       ],
       "ai": {
         "whenToUse": "Header utama di bagian atas setiap halaman situs atau aplikasi.",

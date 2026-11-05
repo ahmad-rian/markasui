@@ -1,0 +1,16 @@
+---
+import CodeBlock from "../../../../components/CodeBlock.astro";
+import { shikiLang } from "../../../../lib/frameworks";
+import { getTemplates } from "../../../../lib/templates";
+
+/** Potongan HTML kode template, dimuat halaman detail template saat tombol "View code" diklik. */
+export function getStaticPaths() {
+  return getTemplates().flatMap((template) =>
+    (["blade", "react", "vue"] as const).map((fw) => ({ params: { slug: template.name, fw }, props: { source: template.sources[fw], fw } })),
+  );
+}
+
+const { source, fw } = Astro.props;
+---
+
+<CodeBlock code={source.code} lang={shikiLang(fw)} title={source.path} framework={fw} />

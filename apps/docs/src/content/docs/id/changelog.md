@@ -12,7 +12,7 @@ Rilis pertama dengan 42 komponen dan 2 template untuk Blade, React, dan Vue.
 - **Overlay:** Modal, Drawer, Dropdown Menu, Tooltip, Alert Dialog, Command Palette, Context Menu, Hover Card, Popover.
 - **Navigasi:** Tabs, Accordion, Breadcrumb, Pagination, Navbar, Collapsible, Menubar.
 - **Data:** Card, Avatar, Table, Carousel, Code Block, Kbd, Scroll Area, Separator.
-- **Template:** Sales Dashboard dan CRM Customer, halaman lengkap yang interaktif di ketiga framework.
+- **Template:** Larisa (dashboard toko) dan Lumen (ruang kerja CRM), halaman lengkap yang interaktif di ketiga framework.
 
 Juga termasuk:
 

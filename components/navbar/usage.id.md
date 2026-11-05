@@ -58,5 +58,5 @@ import { Navbar } from "@/components/markas/Navbar";
 
 ## Catatan
 
-- Tata letak mengikuti lebar header lewat container query (`@container` dan `@3xl:`), bukan lebar layar. Menu desktop tampil saat header selebar 48rem atau lebih, di bawah itu muncul tombol menu.
+- Tata letak mengikuti lebar header lewat container query (`@container` dan `@2xl:`), bukan lebar layar. Menu desktop tampil saat header selebar 42rem atau lebih, di bawah itu muncul tombol menu.
 - Label bawaan dalam bahasa Inggris: tombol "Menu", nav "Main" dan "Main mobile". Isi `navLabel` dan `mobileNavLabel` (Blade: `nav-label`, `mobile-nav-label`) untuk situs berbahasa Indonesia. `menuLabel` (Blade: `menu-label`) juga bisa diubah, walau "Menu" sudah cocok.

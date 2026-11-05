@@ -21,8 +21,8 @@ const PAGES = [
   "/docs/theming",
   "/id/components/modal",
   "/templates",
-  "/templates/sales-dashboard",
-  "/id/templates/crm-customer",
+  "/templates/larisa",
+  "/id/templates/lumen",
   ...componentNames.map((name) => `/components/${name}`),
 ];
 
@@ -479,7 +479,7 @@ test("posisi gulir sidebar docs tetap setelah pindah halaman", async ({
 });
 
 test("warna aksen template diteruskan ke pratinjau", async ({ page }) => {
-  await page.goto("/templates/sales-dashboard");
+  await page.goto("/templates/larisa");
   const frame = page.frameLocator("[data-template-frame]");
   await expect(frame.locator("body")).toBeVisible();
 
