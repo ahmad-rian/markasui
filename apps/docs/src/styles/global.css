@@ -397,3 +397,50 @@
 @utility soft-button {
   @apply inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-subtle px-3 text-sm font-medium text-ink transition-colors duration-150 ease-out hover:bg-line;
 }
+
+/*
+ * Contoh komponen di panggung preview selalu di tengah. Panel preview selebar max-w-md, jadi deretan
+ * tombol (flex) atau satu elemen inline yang lebih sempit akan menempel ke kiri tanpa aturan ini.
+ */
+[data-preview-stage]
+  > [data-fw]
+  > .flex:not(.flex-col, .justify-between, .justify-end, .justify-start),
+[data-preview-stage]
+  > [data-fw]
+  > astro-island
+  > .flex:not(.flex-col, .justify-between, .justify-end, .justify-start) {
+  justify-content: center;
+}
+/* Satu elemen inline (tombol, badge, link) sebagai akar contoh. astro-island memakai display: contents. */
+[data-preview-stage]
+  > [data-fw]:has(
+    > :is(button, a, span, .contents, .inline-flex, .inline-block, .w-fit)
+  ),
+[data-preview-stage]
+  > [data-fw]:has(
+    > astro-island
+      > :is(button, a, span, .contents, .inline-flex, .inline-block, .w-fit)
+  ) {
+  display: flex;
+  justify-content: center;
+}
+/* Kolom berisi deretan kecil (bukan form) ikut di tengah. */
+[data-preview-stage]
+  > [data-fw]
+  > .flex-col:not(:has(input, textarea, select, table)),
+[data-preview-stage]
+  > [data-fw]
+  > astro-island
+  > .flex-col:not(:has(input, textarea, select, table)) {
+  align-items: center;
+}
+/* Wrapper playground (flex justify-center) tidak boleh menciutkan contoh form: biarkan selebar panel. */
+[data-preview-stage]
+  .flex.justify-center
+  > :has(input:not([type="checkbox"], [type="radio"]), textarea, select),
+[data-preview-stage]
+  .flex.justify-center
+  > astro-island
+  > :has(input:not([type="checkbox"], [type="radio"]), textarea, select) {
+  width: 100%;
+}

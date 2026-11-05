@@ -9,6 +9,7 @@ export const CATEGORIES = [
   "overlay",
   "navigation",
   "data",
+  "markas",
   "animation",
   "background",
   "button",

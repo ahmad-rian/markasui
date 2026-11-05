@@ -1,5 +1,6 @@
 ---
 import type { RegistryItem } from "@markasui/registry/schema";
+import BrandMark from "./BrandMark.astro";
 import FrameworkSwitcher from "./FrameworkSwitcher.astro";
 import Icon from "./Icon.astro";
 import { getLocale, localePath, pagePath, t } from "../lib/i18n";
@@ -12,7 +13,7 @@ const strings = t(locale).sidebar;
 const path = pagePath(Astro.url);
 
 type Link = { href: string; label: string; tag: string | null };
-type IconName = "book" | "layout" | "form" | "bell" | "layers" | "compass" | "table" | "sparkles" | "image" | "pointer";
+type IconName = "brand" | "book" | "layout" | "form" | "bell" | "layers" | "compass" | "table" | "sparkles" | "image" | "pointer";
 type Section = { label: string; icon: IconName; links: Link[] };
 
 const GROUP_ICONS: Record<RegistryItem["category"], IconName> = {
@@ -21,6 +22,7 @@ const GROUP_ICONS: Record<RegistryItem["category"], IconName> = {
   overlay: "layers",
   navigation: "compass",
   data: "table",
+  markas: "brand",
   animation: "sparkles",
   background: "image",
   button: "pointer",
@@ -63,7 +65,7 @@ const sections: Section[] = [
       <section>
         <h2 class="mb-2 flex items-center gap-2.5 text-sm text-muted">
           <span class="inline-flex size-6 items-center justify-center rounded-md shadow-[0_0_0_1px_var(--color-line)]">
-            <Icon name={section.icon} class="size-3.5" />
+            {section.icon === "brand" ? <BrandMark class="size-3.5" /> : <Icon name={section.icon} class="size-3.5" />}
           </span>
           {section.label}
         </h2>

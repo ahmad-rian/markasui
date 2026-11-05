@@ -1,6 +1,11 @@
-import { resolve } from "node:path";
-import { loadComponents } from "@markasui/registry";
-import type { RegistryItem } from "@markasui/registry/schema";
+import { existsSync } from "node:fs";
+import { readdir } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { loadComponent } from "@markasui/registry";
+import {
+  CATEGORIES as SCHEMA_CATEGORIES,
+  type RegistryItem,
+} from "@markasui/registry/schema";
 import { t, type Locale } from "./i18n";
 import { REPO_ROOT } from "./paths";
 
@@ -10,15 +15,38 @@ let cache: Promise<RegistryItem[]> | undefined;
 
 /** Semua komponen, diurutkan A sampai Z. Dibaca sekali per build. */
 export const getComponents = (): Promise<RegistryItem[]> =>
-  (cache ??= loadComponents(componentsDir));
+  (cache ??= loadReadyComponents());
 
-export const CATEGORIES: RegistryItem["category"][] = [
-  "form",
-  "feedback",
-  "overlay",
-  "navigation",
-  "data",
-];
+/**
+ * Komponen yang belum lengkap (sedang dikerjakan) dilewati dengan peringatan agar situs tetap bisa
+ * dibangun. Validasi penuh tetap dijalankan oleh build registry di awal pnpm build.
+ */
+async function loadReadyComponents(): Promise<RegistryItem[]> {
+  const entries = await readdir(componentsDir, { withFileTypes: true });
+  const dirs = entries
+    .filter(
+      (entry) =>
+        entry.isDirectory() &&
+        existsSync(join(componentsDir, entry.name, "meta.json")),
+    )
+    .map((entry) => join(componentsDir, entry.name));
+  const items = await Promise.all(
+    dirs.map((dir) =>
+      loadComponent(dir).catch((error: unknown) => {
+        console.warn(
+          `docs: ${dir} dilewati, ${error instanceof Error ? error.message : error}`,
+        );
+        return null;
+      }),
+    ),
+  );
+  return items
+    .filter((item): item is RegistryItem => item !== null)
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export const CATEGORIES: readonly RegistryItem["category"][] =
+  SCHEMA_CATEGORIES;
 export const categoryLabel = (
   category: RegistryItem["category"],
   locale: Locale,
