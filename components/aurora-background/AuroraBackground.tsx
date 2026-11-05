@@ -1,0 +1,52 @@
+import type { ComponentProps } from "react";
+
+const base = "relative isolate overflow-hidden";
+const layer = "pointer-events-none absolute inset-0 overflow-hidden";
+const glowA =
+  "absolute -inset-1/2 animate-[markas-aurora-a_var(--markas-aurora-speed)_ease-in-out_infinite_alternate] bg-[radial-gradient(30%_34%_at_36%_44%,color-mix(in_oklab,var(--markas-aurora-color)_42%,transparent),transparent),radial-gradient(22%_26%_at_64%_36%,color-mix(in_oklab,var(--color-primary)_14%,transparent),transparent)] motion-reduce:animate-none";
+const glowB =
+  "absolute -inset-1/2 animate-[markas-aurora-b_var(--markas-aurora-speed)_ease-in-out_infinite_alternate] bg-[radial-gradient(26%_22%_at_58%_62%,color-mix(in_oklab,var(--markas-aurora-color)_30%,transparent),transparent),radial-gradient(18%_22%_at_40%_60%,color-mix(in_oklab,var(--color-primary)_10%,transparent),transparent)] motion-reduce:animate-none";
+const content = "relative";
+const colors = {
+  muted: "[--markas-aurora-color:var(--color-muted)]",
+  primary: "[--markas-aurora-color:var(--color-primary)]",
+  success: "[--markas-aurora-color:var(--color-success)]",
+  warning: "[--markas-aurora-color:var(--color-warning)]",
+  danger: "[--markas-aurora-color:var(--color-danger)]",
+};
+const speeds = {
+  slow: "[--markas-aurora-speed:24s]",
+  normal: "[--markas-aurora-speed:14s]",
+  fast: "[--markas-aurora-speed:8s]",
+};
+const keyframes =
+  "@keyframes markas-aurora-a{50%{transform:translate(6%,-4%) rotate(10deg) scale(1.1)}to{transform:translate(-5%,5%) rotate(-8deg)}}@keyframes markas-aurora-b{50%{transform:translate(-7%,3%) rotate(-12deg) scale(1.15)}to{transform:translate(4%,-6%) rotate(9deg)}}";
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+
+export type AuroraBackgroundProps = ComponentProps<"div"> & {
+  color?: keyof typeof colors;
+  speed?: keyof typeof speeds;
+};
+
+export function AuroraBackground({
+  color = "success",
+  speed = "normal",
+  className,
+  children,
+  ...props
+}: AuroraBackgroundProps) {
+  return (
+    <div {...props} className={cx(base, className)}>
+      <style>{keyframes}</style>
+      <div
+        aria-hidden="true"
+        className={cx(layer, colors[color], speeds[speed])}
+      >
+        <div className={glowA} />
+        <div className={glowB} />
+      </div>
+      <div className={content}>{children}</div>
+    </div>
+  );
+}

@@ -1,0 +1,27 @@
+import { Button } from "../../components/button/Button";
+import { DotPattern } from "../../components/dot-pattern/DotPattern";
+
+export default function DotPatternFixture() {
+  return (
+    <DotPattern
+      mask="radial"
+      className="rounded-xl border border-line bg-surface px-6 py-12"
+    >
+      <div className="grid justify-items-center gap-4 text-center">
+        <p className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted">
+          Version 2.0 is out
+        </p>
+        <h2 className="text-2xl font-semibold text-balance text-ink">
+          Build interfaces that feel at home
+        </h2>
+        <p className="max-w-80 text-sm text-muted">
+          Copy the components you need into your project and make them yours.
+        </p>
+        <div className="flex gap-2">
+          <Button>Get started</Button>
+          <Button variant="secondary">View docs</Button>
+        </div>
+      </div>
+    </DotPattern>
+  );
+}

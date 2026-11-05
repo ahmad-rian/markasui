@@ -1,0 +1,100 @@
+{
+  "name": "number-ticker",
+  "title": "Number Ticker",
+  "description": "Number that counts up to its value when it scrolls into view, with thousands separators, decimals, and a prefix or suffix.",
+  "category": "animation",
+  "tags": ["number", "counter", "count up", "stat", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "number-ticker.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "NumberTicker.tsx", "deps": [] },
+    "vue": { "file": "NumberTicker.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "number",
+      "default": "-",
+      "description": "Final number. Changing it later counts from the current number to the new one."
+    },
+    {
+      "name": "from",
+      "type": "number",
+      "default": "0",
+      "description": "Starting number. Set it higher than value to count down."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "2000",
+      "description": "Length of the count in milliseconds."
+    },
+    {
+      "name": "decimals",
+      "type": "number",
+      "default": "0",
+      "description": "Number of decimal places shown."
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "default": "en-US",
+      "description": "Locale for Intl.NumberFormat, such as id-ID for dots as thousands separators."
+    },
+    {
+      "name": "prefix",
+      "type": "string",
+      "default": "''",
+      "description": "Text before the number, such as $."
+    },
+    {
+      "name": "suffix",
+      "type": "string",
+      "default": "''",
+      "description": "Text after the number, such as % or +."
+    }
+  ],
+  "a11y": [
+    "Screen readers get the final value from a visually hidden copy; the counting digits are aria-hidden.",
+    "An invisible copy of the final value reserves the width, so the layout does not shift while counting.",
+    "With reduced motion, the final value is shown right away."
+  ],
+  "ai": {
+    "whenToUse": "Highlighting a statistic on a landing page or a dashboard card when it comes into view.",
+    "rules": [
+      "Put text size and weight on the parent element; the ticker inherits them",
+      "Use prefix and suffix for currency and units instead of writing them next to the component",
+      "Use it for a few key numbers, not for every value in a table",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Angka yang berhitung naik ke nilainya saat masuk layar, dengan pemisah ribuan, desimal, serta prefix atau suffix.",
+      "props": {
+        "value": "Angka akhir. Kalau diubah kemudian, hitungan berjalan dari angka sekarang ke angka baru.",
+        "from": "Angka awal. Isi lebih besar dari value untuk hitung mundur.",
+        "duration": "Lama hitungan dalam milidetik.",
+        "decimals": "Jumlah angka di belakang koma yang ditampilkan.",
+        "locale": "Locale untuk Intl.NumberFormat, misalnya id-ID agar pemisah ribuan memakai titik.",
+        "prefix": "Teks sebelum angka, misalnya Rp.",
+        "suffix": "Teks setelah angka, misalnya % atau +."
+      },
+      "a11y": [
+        "Screen reader membaca nilai akhir dari salinan tersembunyi; digit yang berhitung memakai aria-hidden.",
+        "Salinan nilai akhir yang tidak terlihat menjaga lebar, jadi tata letak tidak bergeser saat berhitung.",
+        "Dengan reduced motion, nilai akhir langsung tampil."
+      ],
+      "ai": {
+        "whenToUse": "Menonjolkan statistik di landing page atau kartu dashboard saat masuk layar.",
+        "rules": [
+          "Atur ukuran dan ketebalan teks di elemen induk; ticker mewarisinya",
+          "Pakai prefix dan suffix untuk mata uang dan satuan, jangan ditulis di samping komponen",
+          "Pakai untuk beberapa angka penting, bukan setiap nilai di tabel",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

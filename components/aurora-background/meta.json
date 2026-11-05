@@ -1,0 +1,70 @@
+{
+  "name": "aurora-background",
+  "title": "Aurora Background",
+  "description": "Soft glowing color fields that drift slowly behind your content, made from primary and an accent token.",
+  "category": "background",
+  "tags": ["background", "aurora", "gradient", "hero", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "aurora-background.blade.php", "deps": [] },
+    "react": { "file": "AuroraBackground.tsx", "deps": [] },
+    "vue": { "file": "AuroraBackground.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "success",
+      "description": "Accent token mixed with primary in the glow."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "How fast the glow drifts: 24s, 14s, or 8s per cycle."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the glow."
+    }
+  ],
+  "a11y": [
+    "The glow layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, the glow stops moving and stays in its starting position.",
+    "The glow is light enough that ink and muted text keep their contrast."
+  ],
+  "ai": {
+    "whenToUse": "A calm, colorful backdrop for a landing hero, pricing CTA, or sign-in screen.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Use one aurora per view; it is meant as the main backdrop",
+      "Use speed=slow behind long text so the motion does not distract"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bidang warna bercahaya yang bergeser pelan di belakang konten, dari token primary dan satu token aksen.",
+      "props": {
+        "color": "Token aksen yang dicampur dengan primary di cahaya.",
+        "speed": "Kecepatan gerak cahaya: 24s, 14s, atau 8s per siklus.",
+        "children / slot": "Konten yang tampil di atas cahaya."
+      },
+      "a11y": [
+        "Lapisan cahaya memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, cahaya berhenti dan tetap di posisi awal.",
+        "Cahaya cukup tipis sehingga teks ink dan muted tetap kontras."
+      ],
+      "ai": {
+        "whenToUse": "Latar tenang dan berwarna untuk hero landing, CTA harga, atau layar masuk.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai satu aurora per tampilan; ini dimaksudkan sebagai latar utama",
+          "Pakai speed=slow di belakang teks panjang supaya gerakan tidak mengganggu"
+        ]
+      }
+    }
+  }
+}

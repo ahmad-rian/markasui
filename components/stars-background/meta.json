@@ -1,0 +1,75 @@
+{
+  "name": "stars-background",
+  "title": "Stars Background",
+  "description": "A field of twinkling stars placed from a fixed seed, so every render looks the same. Best in dark mode.",
+  "category": "background",
+  "tags": ["background", "stars", "space", "dark", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "stars-background.blade.php", "deps": [] },
+    "react": { "file": "StarsBackground.tsx", "deps": [] },
+    "vue": { "file": "StarsBackground.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "count",
+      "type": "number",
+      "default": "80",
+      "description": "Number of stars, up to 400. More stars make a denser sky."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "7",
+      "description": "Whole number that decides star positions. The same seed always gives the same sky."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color of the stars."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the stars."
+    }
+  ],
+  "a11y": [
+    "The star layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, stars stop twinkling and keep their own brightness."
+  ],
+  "ai": {
+    "whenToUse": "A night sky behind a launch hero, event countdown, or waitlist card, especially in dark mode.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Change seed to get a different but stable layout",
+      "Keep count under 200 for cards and small sections"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bidang bintang berkelip yang posisinya dari seed tetap, jadi setiap render terlihat sama. Paling cocok di mode gelap.",
+      "props": {
+        "count": "Jumlah bintang, maksimal 400. Makin banyak, langit makin rapat.",
+        "seed": "Bilangan bulat yang menentukan posisi bintang. Seed sama selalu menghasilkan langit yang sama.",
+        "color": "Warna token bintang.",
+        "children / slot": "Konten yang tampil di atas bintang."
+      },
+      "a11y": [
+        "Lapisan bintang memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, bintang berhenti berkelip dan tetap pada kecerahannya masing-masing."
+      ],
+      "ai": {
+        "whenToUse": "Langit malam di belakang hero peluncuran, hitung mundur acara, atau kartu waitlist, terutama di mode gelap.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Ganti seed untuk tata letak lain yang tetap stabil",
+          "Jaga count di bawah 200 untuk kartu dan section kecil"
+        ]
+      }
+    }
+  }
+}

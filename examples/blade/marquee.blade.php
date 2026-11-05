@@ -1,0 +1,5 @@
+<x-markas.marquee>
+    @foreach (['Laravel', 'React', 'Vue', 'Alpine.js', 'Tailwind CSS', 'Vite'] as $name)
+        <span class="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-medium whitespace-nowrap text-ink">{{ $name }}</span>
+    @endforeach
+</x-markas.marquee>

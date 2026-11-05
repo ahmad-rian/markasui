@@ -1,0 +1,82 @@
+{
+  "name": "dot-pattern",
+  "title": "Dot Pattern",
+  "description": "A grid of small dots behind your content, with an optional radial or linear fade. Pure CSS, no JavaScript.",
+  "category": "background",
+  "tags": ["background", "pattern", "dots", "hero", "decorative"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "dot-pattern.blade.php", "deps": [] },
+    "react": { "file": "DotPattern.tsx", "deps": [] },
+    "vue": { "file": "DotPattern.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "spacing",
+      "type": "number",
+      "default": "16",
+      "description": "Distance between dots in pixels. Smaller values make a denser pattern."
+    },
+    {
+      "name": "dotSize",
+      "type": "number",
+      "default": "1",
+      "description": "Dot radius in pixels."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "muted",
+      "description": "Token color of the dots, already softened with opacity."
+    },
+    {
+      "name": "mask",
+      "type": "none | radial | linear",
+      "default": "none",
+      "description": "Fade the dots toward the edges (radial) or toward the bottom (linear)."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the pattern."
+    }
+  ],
+  "a11y": [
+    "The pattern layer is aria-hidden and ignores pointer events, so only your content is announced and clickable.",
+    "Keep text contrast in mind: put the pattern on bg-surface or bg-canvas and use a mask behind long text."
+  ],
+  "ai": {
+    "whenToUse": "A quiet texture behind a hero, CTA card, empty state, or section without adding images.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Use mask=radial behind centered text so the dots fade out under the heading",
+      "Use spacing between 12 and 28 for most layouts"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Grid titik kecil di belakang konten, dengan pudar radial atau linear opsional. Murni CSS, tanpa JavaScript.",
+      "props": {
+        "spacing": "Jarak antartitik dalam piksel. Nilai lebih kecil membuat pola lebih rapat.",
+        "dotSize": "Jari-jari titik dalam piksel.",
+        "color": "Warna token titik, sudah dilembutkan dengan opacity.",
+        "mask": "Pudarkan titik ke arah tepi (radial) atau ke bawah (linear).",
+        "children / slot": "Konten yang tampil di atas pola."
+      },
+      "a11y": [
+        "Lapisan pola memakai aria-hidden dan mengabaikan pointer, jadi hanya konten yang dibacakan dan bisa diklik.",
+        "Perhatikan kontras teks: pasang pola di bg-surface atau bg-canvas dan pakai mask di belakang teks panjang."
+      ],
+      "ai": {
+        "whenToUse": "Tekstur tenang di belakang hero, kartu CTA, empty state, atau section tanpa gambar.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai mask=radial di belakang teks tengah supaya titik memudar di bawah judul",
+          "Pakai spacing antara 12 dan 28 untuk sebagian besar tata letak"
+        ]
+      }
+    }
+  }
+}

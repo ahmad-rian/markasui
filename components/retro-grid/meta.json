@@ -1,0 +1,75 @@
+{
+  "name": "retro-grid",
+  "title": "Retro Grid",
+  "description": "A 3D perspective grid floor that scrolls toward the viewer, for bold hero and launch sections.",
+  "category": "background",
+  "tags": ["background", "grid", "perspective", "retro", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "retro-grid.blade.php", "deps": [] },
+    "react": { "file": "RetroGrid.tsx", "deps": [] },
+    "vue": { "file": "RetroGrid.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "cellSize",
+      "type": "number",
+      "default": "60",
+      "description": "Size of one grid cell in pixels before perspective. The grid moves one cell per second."
+    },
+    {
+      "name": "angle",
+      "type": "number",
+      "default": "65",
+      "description": "Tilt of the grid floor in degrees. Higher values look flatter."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "muted",
+      "description": "Token color of the grid lines, already softened with opacity."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the grid."
+    }
+  ],
+  "a11y": [
+    "The grid layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, the grid stops moving."
+  ],
+  "ai": {
+    "whenToUse": "A playful, energetic backdrop for a launch hero, 404 page, or event CTA.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Give the component enough height (at least 240px) so the perspective reads",
+      "Keep the heading short; the grid fades in behind the middle of the area"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Lantai grid perspektif 3D yang bergerak ke arah penonton, untuk hero dan section peluncuran yang berani.",
+      "props": {
+        "cellSize": "Ukuran satu sel grid dalam piksel sebelum perspektif. Grid bergerak satu sel per detik.",
+        "angle": "Kemiringan lantai grid dalam derajat. Nilai lebih besar terlihat lebih datar.",
+        "color": "Warna token garis grid, sudah dilembutkan dengan opacity.",
+        "children / slot": "Konten yang tampil di atas grid."
+      },
+      "a11y": [
+        "Lapisan grid memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, grid berhenti bergerak."
+      ],
+      "ai": {
+        "whenToUse": "Latar yang ceria dan energik untuk hero peluncuran, halaman 404, atau CTA acara.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Beri tinggi yang cukup (minimal 240px) supaya perspektif terbaca",
+          "Buat judul singkat; grid muncul di belakang bagian tengah area"
+        ]
+      }
+    }
+  }
+}

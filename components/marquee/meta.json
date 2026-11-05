@@ -1,0 +1,95 @@
+{
+  "name": "marquee",
+  "title": "Marquee",
+  "description": "Endless horizontal or vertical scroll of any content, with faded edges, reverse direction, and a pause on hover or focus.",
+  "category": "animation",
+  "tags": ["marquee", "ticker", "logos", "testimonials", "loop", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "marquee.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Marquee.tsx", "deps": [] },
+    "vue": { "file": "Marquee.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "vertical",
+      "type": "boolean",
+      "default": "false",
+      "description": "Scroll from bottom to top. Give the marquee a height, such as h-64."
+    },
+    {
+      "name": "reverse",
+      "type": "boolean",
+      "default": "false",
+      "description": "Scroll in the opposite direction."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "20",
+      "description": "Seconds for one full loop. Higher is slower."
+    },
+    {
+      "name": "pauseOnHover",
+      "type": "boolean",
+      "default": "true",
+      "description": "Pause while the pointer is over the marquee. Focus inside always pauses it."
+    },
+    {
+      "name": "fade",
+      "type": "boolean",
+      "default": "true",
+      "description": "Fade the content out at both edges with a CSS mask."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Items in one loop, laid out in a row (or column) with a 16px gap."
+    }
+  ],
+  "a11y": [
+    "The content is rendered twice for a seamless loop; the second copy is aria-hidden and inert, so screen readers and the Tab key reach each item once.",
+    "The animation pauses on hover, while focus is inside, and when the marquee is off screen.",
+    "With reduced motion, nothing moves and the first items stay visible.",
+    "Moving content longer than 5 seconds needs a way to stop it (WCAG 2.2.2): keep essential information out of the marquee or offer it elsewhere."
+  ],
+  "ai": {
+    "whenToUse": "Showing logos, testimonials, tags, or a live feed as decorative, continuously moving content.",
+    "rules": [
+      "Pass the items of one loop only; the component duplicates them",
+      "Give a vertical marquee a fixed height",
+      "Do not put the only copy of important information in a marquee",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Konten apa pun yang bergulir tanpa henti secara horizontal atau vertikal, dengan tepi memudar, arah terbalik, dan jeda saat hover atau fokus.",
+      "props": {
+        "vertical": "Bergulir dari bawah ke atas. Beri tinggi pada marquee, misalnya h-64.",
+        "reverse": "Bergulir ke arah sebaliknya.",
+        "duration": "Detik untuk satu putaran penuh. Makin besar makin lambat.",
+        "pauseOnHover": "Berhenti selama kursor berada di atas marquee. Fokus di dalam selalu menghentikannya.",
+        "fade": "Pudarkan konten di kedua tepi dengan CSS mask.",
+        "children / slot": "Item satu putaran, disusun dalam baris (atau kolom) dengan jarak 16px."
+      },
+      "a11y": [
+        "Konten dirender dua kali agar putaran mulus; salinan kedua memakai aria-hidden dan inert, jadi screen reader dan tombol Tab hanya mencapai setiap item sekali.",
+        "Animasi berhenti saat hover, saat fokus berada di dalam, dan saat marquee di luar layar.",
+        "Dengan reduced motion, tidak ada yang bergerak dan item pertama tetap terlihat.",
+        "Konten bergerak lebih dari 5 detik perlu cara untuk menghentikannya (WCAG 2.2.2): jangan taruh informasi penting hanya di marquee."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan logo, testimoni, tag, atau feed sebagai konten dekoratif yang terus bergerak.",
+        "rules": [
+          "Isi item untuk satu putaran saja; komponen menggandakannya",
+          "Beri marquee vertikal tinggi yang tetap",
+          "Jangan menaruh satu-satunya salinan informasi penting di marquee",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

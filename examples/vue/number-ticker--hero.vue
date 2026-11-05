@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import NumberTicker from "../../components/number-ticker/NumberTicker.vue";
+</script>
+
+<template>
+  <div class="py-4 text-center">
+    <p class="text-5xl font-semibold tracking-tight text-ink">
+      <NumberTicker :value="25000" suffix="+" />
+    </p>
+    <p class="mt-2 text-sm text-muted">
+      teams ship their interfaces with MarkasUI
+    </p>
+  </div>
+</template>

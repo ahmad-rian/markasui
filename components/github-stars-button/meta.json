@@ -1,0 +1,95 @@
+{
+  "name": "github-stars-button",
+  "title": "GitHub Stars Button",
+  "description": "Link to a GitHub repository with the GitHub mark and a star count that counts up when it scrolls into view. No fetch.",
+  "category": "button",
+  "tags": ["github", "stars", "social", "link", "button"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "github-stars-button.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "GithubStarsButton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "GithubStarsButton.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "href",
+      "type": "string",
+      "default": "-",
+      "description": "Repository URL. Unsafe schemes such as javascript: become #."
+    },
+    {
+      "name": "stars",
+      "type": "number",
+      "default": "0",
+      "description": "Star count, passed in by you. Shown as 980, 12.5k, or 1.2M."
+    },
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+      "default": "secondary",
+      "description": "Visual style, the same set as Button."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Height 32, 40, or 48px, the same as Button."
+    },
+    {
+      "name": "starsLabel",
+      "type": "string",
+      "default": "{count} stars",
+      "description": "Hidden text for the count. {count} becomes the full number, for example 12,480."
+    }
+  ],
+  "a11y": [
+    "A native a element with a 2px primary focus outline.",
+    "The animated number is aria-hidden, screen readers hear starsLabel with the full count.",
+    "The GitHub mark and star icon are aria-hidden.",
+    "With prefers-reduced-motion the final number shows right away."
+  ],
+  "ai": {
+    "whenToUse": "A star call to action in a landing page header or docs navbar of an open source project.",
+    "rules": [
+      "Pass the star count from your server or build step, the component never fetches",
+      "Without a label give the link an aria-label",
+      "Use one per page, usually in the header"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tautan ke repositori GitHub dengan logo GitHub dan jumlah bintang yang berhitung naik saat terlihat. Tanpa fetch.",
+      "props": {
+        "href": "URL repositori. Skema tidak aman seperti javascript: diganti #.",
+        "stars": "Jumlah bintang yang kamu kirim. Ditampilkan sebagai 980, 12.5k, atau 1.2M.",
+        "variant": "Gaya visual, sama seperti Button.",
+        "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
+        "starsLabel": "Teks tersembunyi untuk jumlah. {count} diganti angka lengkap, misalnya 12,480."
+      },
+      "a11y": [
+        "Elemen a native dengan outline fokus 2px warna primary.",
+        "Angka beranimasi aria-hidden, screen reader mendengar starsLabel dengan angka lengkap.",
+        "Logo GitHub dan ikon bintang aria-hidden.",
+        "Dengan prefers-reduced-motion angka akhir langsung tampil."
+      ],
+      "ai": {
+        "whenToUse": "Ajakan memberi bintang di header landing page atau navbar dokumentasi proyek open source.",
+        "rules": [
+          "Kirim jumlah bintang dari server atau proses build, komponen tidak pernah fetch",
+          "Tanpa label beri tautan aria-label",
+          "Pakai satu per halaman, biasanya di header"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "name": "ripple-background",
+  "title": "Ripple Background",
+  "description": "Concentric circles that pulse outward from the center, great behind a logo, avatar, or status icon.",
+  "category": "background",
+  "tags": ["background", "ripple", "circles", "pulse", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "ripple-background.blade.php", "deps": [] },
+    "react": { "file": "RippleBackground.tsx", "deps": [] },
+    "vue": { "file": "RippleBackground.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "rings",
+      "type": "number",
+      "default": "6",
+      "description": "Number of circles, up to 12."
+    },
+    {
+      "name": "size",
+      "type": "number",
+      "default": "120",
+      "description": "Diameter of the innermost circle in pixels."
+    },
+    {
+      "name": "gap",
+      "type": "number",
+      "default": "64",
+      "description": "How much each circle grows over the previous one, in pixels."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "muted",
+      "description": "Token color of the circles. Outer circles fade automatically."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the circles, usually centered."
+    }
+  ],
+  "a11y": [
+    "The circle layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, the circles stop pulsing.",
+    "If the pulse means something (for example searching), also say so in text."
+  ],
+  "ai": {
+    "whenToUse": "A centered focal point: connecting devices, a live call, an integration hub, or a waiting state.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Center the content so it sits in the middle of the circles",
+      "Match size to the centered element, a little larger than the icon or avatar"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Lingkaran konsentris yang berdenyut dari tengah, cocok di belakang logo, avatar, atau ikon status.",
+      "props": {
+        "rings": "Jumlah lingkaran, maksimal 12.",
+        "size": "Diameter lingkaran paling dalam dalam piksel.",
+        "gap": "Pertambahan diameter tiap lingkaran dari lingkaran sebelumnya, dalam piksel.",
+        "color": "Warna token lingkaran. Lingkaran luar memudar otomatis.",
+        "children / slot": "Konten yang tampil di atas lingkaran, biasanya di tengah."
+      },
+      "a11y": [
+        "Lapisan lingkaran memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, lingkaran berhenti berdenyut.",
+        "Kalau denyut punya arti (misalnya sedang mencari), sampaikan juga lewat teks."
+      ],
+      "ai": {
+        "whenToUse": "Titik fokus di tengah: menghubungkan perangkat, panggilan aktif, hub integrasi, atau keadaan menunggu.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Letakkan konten di tengah supaya berada di pusat lingkaran",
+          "Sesuaikan size dengan elemen tengah, sedikit lebih besar dari ikon atau avatar"
+        ]
+      }
+    }
+  }
+}

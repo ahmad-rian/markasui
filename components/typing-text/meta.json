@@ -1,0 +1,93 @@
+{
+  "name": "typing-text",
+  "title": "Typing Text",
+  "description": "Text that types, pauses, and deletes words from a list in turn, with a blinking cursor. Pauses when off screen.",
+  "category": "animation",
+  "tags": ["typing", "typewriter", "text", "headline", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "typing-text.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "TypingText.tsx", "deps": [] },
+    "vue": { "file": "TypingText.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "words",
+      "type": "string[]",
+      "default": "-",
+      "description": "Words or phrases typed in turn. The first one is shown before the animation starts."
+    },
+    {
+      "name": "typeSpeed",
+      "type": "number",
+      "default": "70",
+      "description": "Milliseconds per typed character."
+    },
+    {
+      "name": "deleteSpeed",
+      "type": "number",
+      "default": "40",
+      "description": "Milliseconds per deleted character."
+    },
+    {
+      "name": "pause",
+      "type": "number",
+      "default": "1800",
+      "description": "Milliseconds a full word stays before it is deleted."
+    },
+    {
+      "name": "loop",
+      "type": "boolean",
+      "default": "true",
+      "description": "Start again after the last word. When false, the last word stays."
+    },
+    {
+      "name": "cursor",
+      "type": "boolean",
+      "default": "true",
+      "description": "Show the blinking cursor after the text."
+    }
+  ],
+  "a11y": [
+    "Screen readers read all words once from a visually hidden copy, joined with commas; the typed text and cursor are aria-hidden.",
+    "The animation pauses when the text is off screen.",
+    "With reduced motion, the first word is shown in full and the cursor does not blink."
+  ],
+  "ai": {
+    "whenToUse": "Rotating a key word in a hero headline or showing a command being typed.",
+    "rules": [
+      "Keep the words short and similar in length to limit layout movement",
+      "Put the static part of the sentence outside the component",
+      "Set loop to false for a single command that should stay on screen",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Teks yang mengetik, berhenti, lalu menghapus kata dari daftar secara bergantian, dengan kursor berkedip. Berhenti saat di luar layar.",
+      "props": {
+        "words": "Kata atau frasa yang diketik bergantian. Kata pertama tampil sebelum animasi dimulai.",
+        "typeSpeed": "Milidetik per huruf yang diketik.",
+        "deleteSpeed": "Milidetik per huruf yang dihapus.",
+        "pause": "Milidetik kata penuh bertahan sebelum dihapus.",
+        "loop": "Ulangi dari awal setelah kata terakhir. Kalau false, kata terakhir tetap tampil.",
+        "cursor": "Tampilkan kursor berkedip setelah teks."
+      },
+      "a11y": [
+        "Screen reader membaca semua kata sekali dari salinan tersembunyi yang dipisah koma; teks yang diketik dan kursor memakai aria-hidden.",
+        "Animasi berhenti saat teks berada di luar layar.",
+        "Dengan reduced motion, kata pertama tampil utuh dan kursor tidak berkedip."
+      ],
+      "ai": {
+        "whenToUse": "Mengganti kata kunci di judul hero secara bergiliran atau menampilkan perintah yang sedang diketik.",
+        "rules": [
+          "Pakai kata pendek dengan panjang mirip agar tata letak tidak banyak bergeser",
+          "Letakkan bagian kalimat yang tetap di luar komponen",
+          "Isi loop false untuk satu perintah yang harus tetap tampil",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "name": "grid-pattern",
+  "title": "Grid Pattern",
+  "description": "Thin grid lines behind your content, with highlighted cells that pulse softly and an optional fade.",
+  "category": "background",
+  "tags": ["background", "pattern", "grid", "hero", "decorative"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "grid-pattern.blade.php", "deps": [] },
+    "react": { "file": "GridPattern.tsx", "deps": [] },
+    "vue": { "file": "GridPattern.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "cellSize",
+      "type": "number",
+      "default": "32",
+      "description": "Width and height of one grid cell in pixels."
+    },
+    {
+      "name": "cells",
+      "type": "[column, row][]",
+      "default": "[]",
+      "description": "Cells to highlight, counted from the top left starting at 0. Highlighted cells pulse one after another."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "muted",
+      "description": "Token color of the lines and highlighted cells, already softened with opacity."
+    },
+    {
+      "name": "mask",
+      "type": "none | radial | linear",
+      "default": "none",
+      "description": "Fade the grid toward the edges (radial) or toward the bottom (linear)."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the grid."
+    }
+  ],
+  "a11y": [
+    "The grid layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, highlighted cells stay still at full strength."
+  ],
+  "ai": {
+    "whenToUse": "A technical, blueprint-like texture behind a hero, feature section, or signup card.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Highlight only a few cells (2 to 6) so the pattern stays calm",
+      "Pick cellSize so the highlighted cells do not sit under the main heading"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Garis grid tipis di belakang konten, dengan sel sorotan yang berdenyut lembut dan pudar opsional.",
+      "props": {
+        "cellSize": "Lebar dan tinggi satu sel grid dalam piksel.",
+        "cells": "Sel yang disorot, dihitung dari kiri atas mulai 0. Sel sorotan berdenyut bergantian.",
+        "color": "Warna token garis dan sel sorotan, sudah dilembutkan dengan opacity.",
+        "mask": "Pudarkan grid ke arah tepi (radial) atau ke bawah (linear).",
+        "children / slot": "Konten yang tampil di atas grid."
+      },
+      "a11y": [
+        "Lapisan grid memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, sel sorotan diam dengan kekuatan penuh."
+      ],
+      "ai": {
+        "whenToUse": "Tekstur teknis mirip cetak biru di belakang hero, section fitur, atau kartu pendaftaran.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Sorot sedikit sel saja (2 sampai 6) supaya pola tetap tenang",
+          "Pilih cellSize supaya sel sorotan tidak berada di bawah judul utama"
+        ]
+      }
+    }
+  }
+}

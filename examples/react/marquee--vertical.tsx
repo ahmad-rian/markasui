@@ -1,0 +1,26 @@
+import { Marquee } from "../../components/marquee/Marquee";
+
+const events = [
+  { who: "Maya Putri", what: "deployed to production", when: "2 min ago" },
+  { who: "Rizal Hakim", what: "opened a pull request", when: "8 min ago" },
+  { who: "Ana Lim", what: "closed 3 issues", when: "15 min ago" },
+  { who: "John Carter", what: "commented on Tabs", when: "21 min ago" },
+];
+
+export default function MarqueeVerticalExample() {
+  return (
+    <Marquee vertical duration={18} className="h-64">
+      {events.map((event) => (
+        <div
+          key={event.who}
+          className="rounded-lg border border-line bg-surface px-4 py-3"
+        >
+          <p className="text-sm text-ink">
+            <span className="font-medium">{event.who}</span> {event.what}
+          </p>
+          <p className="mt-0.5 text-xs text-muted">{event.when}</p>
+        </div>
+      ))}
+    </Marquee>
+  );
+}

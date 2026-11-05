@@ -1,0 +1,70 @@
+{
+  "name": "scroll-progress",
+  "title": "Scroll Progress",
+  "description": "Thin bar at the top of the page or a scrolling container that fills as the reader scrolls.",
+  "category": "animation",
+  "tags": ["scroll", "progress", "reading", "indicator", "bar"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "scroll-progress.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ScrollProgress.tsx", "deps": [] },
+    "vue": { "file": "ScrollProgress.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "target",
+      "type": "'page' | 'parent'",
+      "default": "page",
+      "description": "page fixes the bar to the top of the window and follows the page scroll. parent makes it sticky inside its parent element and follows that element's scroll."
+    },
+    {
+      "name": "color",
+      "type": "'primary' | 'success' | 'warning' | 'danger'",
+      "default": "primary",
+      "description": "Bar color."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "sm",
+      "description": "Bar thickness of 2, 4, or 6 pixels."
+    }
+  ],
+  "a11y": [
+    "The bar is decorative and aria-hidden; the scroll position is already available to assistive technology.",
+    "A scrolling container used with target parent should be focusable (tabindex 0) and named, so keyboard users can scroll it.",
+    "The bar follows the scroll position directly, without animation, so reduced motion needs no special handling."
+  ],
+  "ai": {
+    "whenToUse": "Showing reading progress for a long article, or progress through a long panel, log, or modal body.",
+    "rules": [
+      "Use one page bar per page",
+      "With target parent, place the component as the first child of the element that scrolls",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bar tipis di atas halaman atau kontainer bergulir yang terisi seiring pembaca menggulir.",
+      "props": {
+        "target": "page menempelkan bar di atas jendela dan mengikuti gulir halaman. parent membuatnya sticky di dalam elemen induk dan mengikuti gulir elemen itu.",
+        "color": "Warna bar.",
+        "size": "Tebal bar 2, 4, atau 6 piksel."
+      },
+      "a11y": [
+        "Bar bersifat dekoratif dan memakai aria-hidden; posisi gulir sudah tersedia bagi teknologi bantu.",
+        "Kontainer bergulir untuk target parent sebaiknya bisa difokus (tabindex 0) dan punya nama, agar pengguna keyboard bisa menggulirnya.",
+        "Bar mengikuti posisi gulir secara langsung tanpa animasi, jadi reduced motion tidak butuh penanganan khusus."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan progres baca artikel panjang, atau progres di panel, log, atau isi modal yang panjang.",
+        "rules": [
+          "Pakai satu bar halaman per halaman",
+          "Dengan target parent, letakkan komponen sebagai anak pertama elemen yang bergulir",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

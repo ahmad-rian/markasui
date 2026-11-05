@@ -1,0 +1,8 @@
+<div class="py-4 text-center">
+    <p class="text-5xl font-semibold tracking-tight text-ink">
+        <x-markas.number-ticker :value="25000" suffix="+" />
+    </p>
+    <p class="mt-2 text-sm text-muted">
+        teams ship their interfaces with MarkasUI
+    </p>
+</div>

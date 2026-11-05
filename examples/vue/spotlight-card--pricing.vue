@@ -1,0 +1,44 @@
+<script setup lang="ts">
+import SpotlightCard from "../../components/spotlight-card/SpotlightCard.vue";
+
+const features = ["Unlimited projects", "Preview links", "Priority support"];
+</script>
+
+<template>
+  <SpotlightCard class="mx-auto max-w-xs">
+    <div class="p-6">
+      <p class="text-sm font-medium text-muted">Pro</p>
+      <p class="mt-2 text-ink">
+        <span class="text-4xl font-semibold tracking-tight">$24</span
+        ><span class="text-sm text-muted"> per month</span>
+      </p>
+      <ul class="mt-5 space-y-2 text-sm text-ink">
+        <li
+          v-for="feature in features"
+          :key="feature"
+          class="flex items-center gap-2"
+        >
+          <svg
+            class="size-4 text-success"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m5 12 5 5L20 7" />
+          </svg>
+          {{ feature }}
+        </li>
+      </ul>
+      <button
+        type="button"
+        class="mt-6 h-10 w-full rounded-lg bg-primary text-sm font-medium text-on-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      >
+        Upgrade to Pro
+      </button>
+    </div>
+  </SpotlightCard>
+</template>

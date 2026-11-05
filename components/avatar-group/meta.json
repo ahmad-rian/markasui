@@ -1,0 +1,88 @@
+{
+  "name": "avatar-group",
+  "title": "Avatar Group",
+  "description": "Overlapping stack of avatars that spreads out on hover, shows each name in a tooltip, and collapses extra people into a +N chip.",
+  "category": "animation",
+  "tags": ["avatar", "group", "stack", "team", "members", "tooltip"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "avatar-group.blade.php", "deps": [] },
+    "react": { "file": "AvatarGroup.tsx", "deps": [] },
+    "vue": { "file": "AvatarGroup.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ name: string; src?: string }[]",
+      "default": "[]",
+      "description": "People in the group. Without src, the initials of name are shown."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "4",
+      "description": "Number of avatars shown before the rest collapse into a +N chip."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Avatar size of 32, 40, or 48 pixels. The overlap scales with it."
+    },
+    {
+      "name": "groupLabel",
+      "type": "string",
+      "default": "Members",
+      "description": "Accessible name of the group, such as \"Project members\"."
+    },
+    {
+      "name": "moreLabel",
+      "type": "string",
+      "default": "{count} more",
+      "description": "Hidden text on the +N chip for screen readers. {count} is replaced with the number of hidden people."
+    }
+  ],
+  "a11y": [
+    "The stack is a group with an accessible name from groupLabel.",
+    "Each avatar is an image named after the person (alt or role img with aria-label), so screen readers do not need the tooltip.",
+    "Tooltips and the visible +N are aria-hidden; the chip announces moreLabel instead.",
+    "With reduced motion, the spread and lift happen instantly without a transition."
+  ],
+  "ai": {
+    "whenToUse": "Showing who is on a project, assigned to a task, or reacted to a post, in a compact row.",
+    "rules": [
+      "Pass every person in items and let max decide how many are visible",
+      "Set groupLabel to describe the people, such as \"Assignees\"",
+      "On a surface other than canvas, set the ring color with the --avatar-ring custom property, such as [--avatar-ring:var(--color-surface)]",
+      "Leave room above the group for the tooltip"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tumpukan avatar yang mengembang saat hover, menampilkan nama di tooltip, dan meringkas sisa orang menjadi chip +N.",
+      "props": {
+        "items": "Orang di dalam grup. Tanpa src, inisial name yang tampil.",
+        "max": "Jumlah avatar yang tampil sebelum sisanya diringkas menjadi chip +N.",
+        "size": "Ukuran avatar 32, 40, atau 48 piksel. Tumpukan ikut menyesuaikan.",
+        "groupLabel": "Nama aksesibel grup, misalnya \"Anggota proyek\".",
+        "moreLabel": "Teks tersembunyi di chip +N untuk screen reader. {count} diganti jumlah orang yang tersembunyi."
+      },
+      "a11y": [
+        "Tumpukan berupa group dengan nama aksesibel dari groupLabel.",
+        "Setiap avatar adalah gambar bernama orang itu (alt atau role img dengan aria-label), jadi screen reader tidak butuh tooltip.",
+        "Tooltip dan +N yang terlihat memakai aria-hidden; chip membacakan moreLabel.",
+        "Dengan reduced motion, efek mengembang dan terangkat terjadi seketika tanpa transisi."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan siapa saja di proyek, yang ditugaskan, atau yang memberi reaksi, dalam satu baris ringkas.",
+        "rules": [
+          "Masukkan semua orang ke items dan biarkan max menentukan berapa yang tampil",
+          "Isi groupLabel sesuai isinya, misalnya \"Penanggung jawab\"",
+          "Di atas latar selain canvas, atur warna ring lewat custom property --avatar-ring, misalnya [--avatar-ring:var(--color-surface)]",
+          "Sisakan ruang di atas grup untuk tooltip"
+        ]
+      }
+    }
+  }
+}

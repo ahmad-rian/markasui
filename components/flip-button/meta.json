@@ -1,0 +1,88 @@
+{
+  "name": "flip-button",
+  "title": "Flip Button",
+  "description": "Button that flips like a card on hover and keyboard focus to reveal a second line on the back.",
+  "category": "button",
+  "tags": ["flip", "3d", "hover", "button", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "flip-button.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "FlipButton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "FlipButton.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+      "default": "primary",
+      "description": "Visual style, the same set as Button."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Height 32, 40, or 48px, the same as Button."
+    },
+    {
+      "name": "backLabel",
+      "type": "string (React: ReactNode)",
+      "default": "-",
+      "description": "Text on the back face. Vue and Blade also take a back slot. Falls back to the label."
+    },
+    {
+      "name": "type",
+      "type": "'button' | 'submit' | 'reset'",
+      "default": "button",
+      "description": "Native type attribute."
+    }
+  ],
+  "a11y": [
+    "A native button element, so Enter and Space work and focus shows a 2px primary outline.",
+    "The back face is aria-hidden, so the accessible name is always the front label.",
+    "Keyboard focus flips the button too, so keyboard users see the same back text.",
+    "With prefers-reduced-motion the faces swap without the 3D turn."
+  ],
+  "ai": {
+    "whenToUse": "A call to action whose back adds a reassuring detail, such as file size, price, or time needed.",
+    "rules": [
+      "Put the action on the front, the back only adds detail",
+      "Do not hide required information on the back, touch users may never see it",
+      "Keep both faces about the same length"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tombol yang berputar seperti kartu saat hover dan fokus keyboard untuk menampilkan teks kedua di sisi belakang.",
+      "props": {
+        "variant": "Gaya visual, sama seperti Button.",
+        "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
+        "backLabel": "Teks di sisi belakang. Vue dan Blade juga menerima slot back. Jika kosong memakai label utama.",
+        "type": "Atribut type native."
+      },
+      "a11y": [
+        "Elemen button native, jadi Enter dan Spasi berfungsi dan fokus tampil sebagai outline 2px warna primary.",
+        "Sisi belakang aria-hidden, jadi nama aksesibel selalu label depan.",
+        "Fokus keyboard juga memutar tombol, jadi pengguna keyboard melihat teks belakang yang sama.",
+        "Dengan prefers-reduced-motion sisi berganti tanpa putaran 3D."
+      ],
+      "ai": {
+        "whenToUse": "Ajakan bertindak yang sisi belakangnya menambah detail meyakinkan, seperti ukuran file, harga, atau waktu yang dibutuhkan.",
+        "rules": [
+          "Taruh aksi di depan, sisi belakang hanya menambah detail",
+          "Jangan sembunyikan informasi penting di belakang, pengguna sentuh mungkin tidak pernah melihatnya",
+          "Buat kedua sisi kurang lebih sama panjang"
+        ]
+      }
+    }
+  }
+}

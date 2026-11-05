@@ -1,0 +1,79 @@
+{
+  "name": "ripple-button",
+  "title": "Ripple Button",
+  "description": "Button that sends a ripple out from the click point, or from the center when pressed with the keyboard.",
+  "category": "button",
+  "tags": ["ripple", "material", "click", "button", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "ripple-button.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "RippleButton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "RippleButton.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+      "default": "primary",
+      "description": "Visual style, the same set as Button."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Height 32, 40, or 48px, the same as Button."
+    },
+    {
+      "name": "type",
+      "type": "'button' | 'submit' | 'reset'",
+      "default": "button",
+      "description": "Native type attribute."
+    }
+  ],
+  "a11y": [
+    "A native button element, so Enter and Space work and focus shows a 2px primary outline.",
+    "Ripples live in an aria-hidden layer and are removed when they finish.",
+    "With prefers-reduced-motion no ripple is drawn, the click still works."
+  ],
+  "ai": {
+    "whenToUse": "Actions that benefit from tactile feedback, such as add to cart, subscribe, or a submit button.",
+    "rules": [
+      "Use it like Button, onClick and type behave the same",
+      "Do not mix ripple and plain buttons in the same toolbar",
+      "The ripple takes the text color, so it works on every variant"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tombol yang memancarkan gelombang dari titik klik, atau dari tengah saat ditekan dengan keyboard.",
+      "props": {
+        "variant": "Gaya visual, sama seperti Button.",
+        "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
+        "type": "Atribut type native."
+      },
+      "a11y": [
+        "Elemen button native, jadi Enter dan Spasi berfungsi dan fokus tampil sebagai outline 2px warna primary.",
+        "Gelombang berada di lapisan aria-hidden dan dihapus setelah selesai.",
+        "Dengan prefers-reduced-motion tidak ada gelombang, klik tetap berfungsi."
+      ],
+      "ai": {
+        "whenToUse": "Aksi yang terbantu umpan balik sentuhan, seperti tambah ke keranjang, berlangganan, atau tombol kirim.",
+        "rules": [
+          "Pakai seperti Button, onClick dan type berperilaku sama",
+          "Jangan campur ripple button dan tombol biasa dalam satu toolbar",
+          "Gelombang memakai warna teks, jadi cocok di semua varian"
+        ]
+      }
+    }
+  }
+}

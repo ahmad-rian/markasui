@@ -1,0 +1,96 @@
+{
+  "name": "navigation-menu",
+  "title": "Navigation Menu",
+  "description": "Desktop site navigation with mega menu panels on the Popover API, a sliding active indicator, hover intent, and WAI-ARIA disclosure keyboard support.",
+  "category": "navigation",
+  "tags": [
+    "navigation",
+    "mega menu",
+    "header",
+    "popover",
+    "disclosure",
+    "menu"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "navigation-menu.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "NavigationMenu.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "NavigationMenu.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ label, href?, active?, links?: { label, href, description?, icon? }[], featured?: { title, href, description? } }[]",
+      "default": "[]",
+      "description": "Top-level entries. An entry with links or featured becomes a trigger with a panel; otherwise it renders as a plain link to href. icon is the d attribute of a 24x24 stroked SVG path."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Main",
+      "description": "Accessible name of the nav element (aria-label)."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Nav id. Panels use it with a -panel-<index> suffix."
+    }
+  ],
+  "a11y": [
+    "Follows the WAI-ARIA disclosure navigation pattern: each trigger is a button with aria-expanded and aria-controls pointing at its panel, and plain links stay regular links.",
+    "Enter or Space toggles a panel, Arrow Down opens it and focuses the first link. Tab moves through the panel links in document order.",
+    "Arrow Left and Arrow Right move between top-level items, Home and End jump to the first and last.",
+    "Escape closes the panel and returns focus to its trigger. Moving focus outside the entry or clicking outside closes it too.",
+    "The current page link gets aria-current=page; an active trigger gets aria-current=true. The sliding indicator is decorative and hidden from assistive technology.",
+    "Hover opens a panel only for mouse pointers, after a short delay, so touch and keyboard users are not surprised. Motion is removed under prefers-reduced-motion."
+  ],
+  "ai": {
+    "whenToUse": "Main navigation of a marketing site or docs site on desktop, where top-level sections group several destinations with short descriptions.",
+    "rules": [
+      "Keep top-level labels to one or two words and no more than six entries",
+      "Give each panel link a description of a few words so the panel scans quickly",
+      "Use featured for one highlighted destination per panel, not for every panel",
+      "Pair it with Navbar or Drawer for the mobile menu; this component scrolls horizontally on narrow screens",
+      "Use Menubar for application commands, not Navigation Menu"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Navigasi situs desktop dengan panel mega menu berbasis Popover API, indikator aktif yang meluncur, jeda hover, dan keyboard pola disclosure WAI-ARIA.",
+      "props": {
+        "items": "Entri tingkat atas. Entri dengan links atau featured menjadi pemicu dengan panel; selain itu tampil sebagai link biasa ke href. icon adalah atribut d dari path SVG bergaris 24x24.",
+        "navLabel": "Nama aksesibel elemen nav (aria-label). Default \"Main\", isi misalnya \"Utama\" untuk situs berbahasa Indonesia.",
+        "id": "Id nav. Panel memakai id ini dengan akhiran -panel-<indeks>."
+      },
+      "a11y": [
+        "Mengikuti pola navigasi disclosure WAI-ARIA: setiap pemicu adalah button dengan aria-expanded dan aria-controls ke panelnya, dan link biasa tetap link biasa.",
+        "Enter atau Spasi membuka dan menutup panel, panah bawah membukanya dan memfokuskan link pertama. Tab berpindah antar link panel sesuai urutan dokumen.",
+        "Panah kiri dan kanan berpindah antar item tingkat atas, Home dan End ke item pertama dan terakhir.",
+        "Escape menutup panel dan mengembalikan fokus ke pemicunya. Fokus yang keluar dari entri atau klik di luar juga menutupnya.",
+        "Link halaman saat ini mendapat aria-current=page; pemicu aktif mendapat aria-current=true. Indikator yang meluncur hanya dekorasi dan disembunyikan dari teknologi asistif.",
+        "Hover membuka panel hanya untuk pointer mouse, setelah jeda singkat, supaya pengguna sentuh dan keyboard tidak terkejut. Animasi dimatikan saat prefers-reduced-motion."
+      ],
+      "ai": {
+        "whenToUse": "Navigasi utama situs pemasaran atau situs dokumentasi di desktop, ketika bagian tingkat atas mengelompokkan beberapa tujuan dengan deskripsi singkat.",
+        "rules": [
+          "Label tingkat atas cukup satu atau dua kata dan paling banyak enam entri",
+          "Beri setiap link panel deskripsi beberapa kata supaya panel mudah dipindai",
+          "Pakai featured untuk satu tujuan sorotan per panel, bukan di setiap panel",
+          "Pasangkan dengan Navbar atau Drawer untuk menu mobile; komponen ini bergulir horizontal di layar sempit",
+          "Gunakan Menubar untuk perintah aplikasi, bukan Navigation Menu"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "spotlight-card",
+  "title": "Spotlight Card",
+  "description": "Card with a soft radial light that follows the pointer and a border that glows near it. Lights up on keyboard focus too.",
+  "category": "animation",
+  "tags": ["card", "spotlight", "glow", "hover", "pointer", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "spotlight-card.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "SpotlightCard.tsx", "deps": [] },
+    "vue": { "file": "SpotlightCard.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "color",
+      "type": "'primary' | 'success' | 'warning' | 'danger'",
+      "default": "primary",
+      "description": "Color of the light and the glowing border."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Card content. Add your own padding, such as p-6."
+    }
+  ],
+  "a11y": [
+    "The light and the glowing border are aria-hidden layers that never catch the pointer.",
+    "When focus moves inside the card, the glow appears centered, so keyboard users see the same effect.",
+    "With reduced motion, the glow appears without a fade."
+  ],
+  "ai": {
+    "whenToUse": "Feature, pricing, or status cards on a landing page that should react to the pointer.",
+    "rules": [
+      "Add padding inside the card content, not on the component",
+      "Use a few spotlight cards per section; plain Card is better for dense lists",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kartu dengan sorotan radial lembut yang mengikuti kursor dan border yang menyala di dekatnya. Ikut menyala saat fokus keyboard.",
+      "props": {
+        "color": "Warna sorotan dan border yang menyala.",
+        "children / slot": "Isi kartu. Tambahkan padding sendiri, misalnya p-6."
+      },
+      "a11y": [
+        "Sorotan dan border yang menyala adalah lapisan aria-hidden yang tidak pernah menangkap pointer.",
+        "Saat fokus berpindah ke dalam kartu, cahaya muncul di tengah, jadi pengguna keyboard melihat efek yang sama.",
+        "Dengan reduced motion, cahaya muncul tanpa transisi pudar."
+      ],
+      "ai": {
+        "whenToUse": "Kartu fitur, harga, atau status di landing page yang bereaksi terhadap kursor.",
+        "rules": [
+          "Tambahkan padding di isi kartu, bukan di komponen",
+          "Pakai beberapa spotlight card per bagian; Card biasa lebih cocok untuk daftar padat",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

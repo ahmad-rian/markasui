@@ -1,0 +1,86 @@
+{
+  "name": "shimmer-button",
+  "title": "Shimmer Button",
+  "description": "Button with a soft sheen that sweeps across it on a loop. The loop pauses off screen and stops with reduced motion.",
+  "category": "button",
+  "tags": ["shimmer", "shine", "cta", "button", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "shimmer-button.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ShimmerButton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ShimmerButton.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+      "default": "primary",
+      "description": "Visual style, the same set as Button."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Height 32, 40, or 48px, the same as Button."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "2400",
+      "description": "Length of one shimmer cycle in milliseconds."
+    },
+    {
+      "name": "type",
+      "type": "'button' | 'submit' | 'reset'",
+      "default": "button",
+      "description": "Native type attribute."
+    }
+  ],
+  "a11y": [
+    "A native button element, so Enter and Space work and focus shows a 2px primary outline.",
+    "The sheen is a decorative aria-hidden span, the label is plain text.",
+    "With prefers-reduced-motion the sheen never runs and the button looks like a plain Button."
+  ],
+  "ai": {
+    "whenToUse": "The one call to action on a hero, pricing card, or upgrade banner that should draw the eye.",
+    "rules": [
+      "Use at most one shimmer button per screen",
+      "Keep the label short, the sheen crosses the whole button",
+      "Pair it with a plain ghost or secondary Button for the second action"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tombol dengan kilau lembut yang melintas berulang. Animasi berhenti saat di luar layar dan saat reduced motion aktif.",
+      "props": {
+        "variant": "Gaya visual, sama seperti Button.",
+        "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
+        "duration": "Lama satu siklus kilau dalam milidetik.",
+        "type": "Atribut type native."
+      },
+      "a11y": [
+        "Elemen button native, jadi Enter dan Spasi berfungsi dan fokus tampil sebagai outline 2px warna primary.",
+        "Kilau adalah span dekoratif aria-hidden, labelnya teks biasa.",
+        "Dengan prefers-reduced-motion kilau tidak berjalan dan tombol tampak seperti Button biasa."
+      ],
+      "ai": {
+        "whenToUse": "Satu ajakan utama di hero, kartu harga, atau banner upgrade yang perlu menarik perhatian.",
+        "rules": [
+          "Pakai paling banyak satu shimmer button per layar",
+          "Buat label singkat, kilau melintasi seluruh tombol",
+          "Pasangkan dengan Button ghost atau secondary biasa untuk aksi kedua"
+        ]
+      }
+    }
+  }
+}

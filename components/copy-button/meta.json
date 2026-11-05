@@ -1,0 +1,95 @@
+{
+  "name": "copy-button",
+  "title": "Copy Button",
+  "description": "Copies a string to the clipboard. The copy icon turns into an animated check mark and a live region says Copied.",
+  "category": "button",
+  "tags": ["copy", "clipboard", "button", "code"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "copy-button.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "CopyButton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "CopyButton.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "-",
+      "description": "Text written to the clipboard."
+    },
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+      "default": "primary",
+      "description": "Visual style, the same set as Button."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Height 32, 40, or 48px. Without a label the button is square."
+    },
+    {
+      "name": "copyLabel",
+      "type": "string",
+      "default": "Copy",
+      "description": "Hidden name of an icon-only button."
+    },
+    {
+      "name": "copiedLabel",
+      "type": "string",
+      "default": "Copied",
+      "description": "Announced by the live region after a successful copy."
+    }
+  ],
+  "a11y": [
+    "A native button element, so Enter and Space work and focus shows a 2px primary outline.",
+    "A visually hidden role=status region announces copiedLabel after the copy succeeds.",
+    "Without a label the button is named by copyLabel, and both icons are aria-hidden.",
+    "With prefers-reduced-motion the icon swaps without scaling or drawing."
+  ],
+  "ai": {
+    "whenToUse": "Copying a command, API key, link, or ID that the user will paste somewhere else.",
+    "rules": [
+      "Show the copied value next to the button so users know what they copy",
+      "Give icon-only buttons a specific copyLabel such as Copy command",
+      "Use the ghost or secondary variant inside code blocks and inputs"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Menyalin teks ke clipboard. Ikon salin berganti jadi tanda centang beranimasi dan live region mengumumkan Copied.",
+      "props": {
+        "text": "Teks yang disalin ke clipboard.",
+        "variant": "Gaya visual, sama seperti Button.",
+        "size": "Tinggi 32, 40, atau 48px. Tanpa label tombol berbentuk persegi.",
+        "copyLabel": "Nama tersembunyi untuk tombol yang hanya berisi ikon.",
+        "copiedLabel": "Diumumkan oleh live region setelah berhasil menyalin."
+      },
+      "a11y": [
+        "Elemen button native, jadi Enter dan Spasi berfungsi dan fokus tampil sebagai outline 2px warna primary.",
+        "Region role=status yang tersembunyi mengumumkan copiedLabel setelah penyalinan berhasil.",
+        "Tanpa label, nama tombol diambil dari copyLabel dan kedua ikon aria-hidden.",
+        "Dengan prefers-reduced-motion ikon berganti tanpa efek skala dan gambar garis."
+      ],
+      "ai": {
+        "whenToUse": "Menyalin perintah, API key, tautan, atau ID yang akan ditempel pengguna di tempat lain.",
+        "rules": [
+          "Tampilkan nilai yang disalin di dekat tombol agar pengguna tahu apa yang disalin",
+          "Beri tombol ikon saja copyLabel yang spesifik seperti Copy command",
+          "Pakai varian ghost atau secondary di dalam blok kode dan input"
+        ]
+      }
+    }
+  }
+}

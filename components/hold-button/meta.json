@@ -1,0 +1,95 @@
+{
+  "name": "hold-button",
+  "title": "Hold Button",
+  "description": "Press-and-hold button for risky actions. A fill tracks progress, releasing early cancels, and a complete event fires.",
+  "category": "button",
+  "tags": ["hold", "confirm", "press", "destructive", "button"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "hold-button.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "HoldButton.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "HoldButton.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+      "default": "primary",
+      "description": "Visual style, the same set as Button."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Height 32, 40, or 48px, the same as Button."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "1500",
+      "description": "How long the button must be held, in milliseconds."
+    },
+    {
+      "name": "holdLabel",
+      "type": "string",
+      "default": "Press and hold to confirm",
+      "description": "Hidden hint linked with aria-describedby."
+    },
+    {
+      "name": "onComplete / @complete / x-on:complete",
+      "type": "() => void",
+      "default": "-",
+      "description": "Fires once the hold reaches the full duration. Blade dispatches a complete DOM event."
+    }
+  ],
+  "a11y": [
+    "Holding Space or Enter works like holding the pointer, releasing the key cancels.",
+    "holdLabel is linked with aria-describedby so screen readers explain the gesture.",
+    "The state is exposed as data-state idle, holding, or complete.",
+    "The progress fill keeps running with reduced motion because it carries meaning, it is a linear fill without movement."
+  ],
+  "ai": {
+    "whenToUse": "Confirming a destructive or costly action without opening a dialog, such as delete, publish, or transfer.",
+    "rules": [
+      "Run the action in onComplete, not in onClick",
+      "Say hold in the label, for example Hold to delete",
+      "Keep duration between 1000 and 3000 ms"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tombol tekan dan tahan untuk aksi berisiko. Isian menunjukkan progres, lepas lebih awal membatalkan, lalu event complete dipicu.",
+      "props": {
+        "variant": "Gaya visual, sama seperti Button.",
+        "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
+        "duration": "Lama tombol harus ditahan, dalam milidetik.",
+        "holdLabel": "Petunjuk tersembunyi yang ditautkan lewat aria-describedby.",
+        "onComplete / @complete / x-on:complete": "Dipicu saat tahanan mencapai durasi penuh. Blade mengirim event DOM complete."
+      },
+      "a11y": [
+        "Menahan Spasi atau Enter sama seperti menahan pointer, melepas tombol membatalkan.",
+        "holdLabel ditautkan lewat aria-describedby agar screen reader menjelaskan cara memakainya.",
+        "Keadaan tersedia sebagai data-state idle, holding, atau complete.",
+        "Isian progres tetap berjalan saat reduced motion karena membawa makna, berupa isian linear tanpa gerakan."
+      ],
+      "ai": {
+        "whenToUse": "Mengonfirmasi aksi yang merusak atau mahal tanpa membuka dialog, seperti hapus, terbitkan, atau transfer.",
+        "rules": [
+          "Jalankan aksi di onComplete, bukan di onClick",
+          "Sebut tahan di label, misalnya Hold to delete",
+          "Jaga duration antara 1000 dan 3000 ms"
+        ]
+      }
+    }
+  }
+}
