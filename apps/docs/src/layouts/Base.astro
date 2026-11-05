@@ -11,12 +11,14 @@ import sansFont from "../../node_modules/@fontsource-variable/bricolage-grotesqu
 interface Props {
   title?: string;
   description?: string;
+  /** Tampilkan splash di landing (sekali per sesi). */
+  splash?: boolean;
 }
 
 const locale = getLocale(Astro.url);
 const strings = t(locale);
-const { title, description = strings.meta.description } = Astro.props;
-const fullTitle = title ? `${title} · ${SITE.name}` : strings.meta.title;
+const { title, description = strings.meta.description, splash = false } = Astro.props;
+const fullTitle = title ? `${title} - ${SITE.name}` : strings.meta.title;
 const canonical = new URL(pagePath(Astro.url), Astro.site);
 const path = stripLocale(Astro.url.pathname);
 ---
@@ -61,12 +63,34 @@ const path = stripLocale(Astro.url.pathname);
         document.addEventListener("astro:before-swap", (event) => apply(event.newDocument.documentElement));
       })();
     </script>
+    {
+      splash && (
+        <script is:inline>
+  // Dijalankan sebelum render: tandai <html> agar splash langsung menutupi halaman.
+  (() => {
+    const KEY = "markas-splash";
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(KEY) === "1";
+      sessionStorage.setItem(KEY, "1");
+    } catch {}
+    if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const root = document.documentElement;
+    root.dataset.splash = "";
+    setTimeout(() => {
+      root.dataset.splash = "leaving";
+      setTimeout(() => delete root.dataset.splash, 450);
+    }, 1500);
+  })();
+</script>
+      )
+    }
     <ClientRouter fallback="swap" />
   </head>
   <body class="flex min-h-dvh flex-col bg-surface font-sans text-ink">
     <a
       href="#konten"
-      class="sr-only rounded-lg bg-primary px-3 py-2 text-sm text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+      class="sr-only rounded-lg bg-brand px-3 py-2 text-sm text-on-brand focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
       >{strings.header.skip}</a
     >
     <Header />

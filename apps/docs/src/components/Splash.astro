@@ -1,0 +1,101 @@
+---
+import BrandMark from "./BrandMark.astro";
+
+/**
+ * Splash di landing: logo dan wordmark digambar sebagai garis, lalu memudar ke halaman.
+ * Tampil sekali per sesi browser, tidak tampil saat prefers-reduced-motion.
+ */
+---
+
+<div class="splash" aria-hidden="true" data-splash>
+  <div class="splash-glow"></div>
+  <div class="splash-art">
+    <BrandMark outline class="splash-mark" />
+    <svg class="splash-word-svg" viewBox="0 0 470 110" role="presentation">
+      <text class="splash-word" x="0" y="86">MarkasUI</text>
+    </svg>
+  </div>
+</div>
+
+
+
+<style>
+  .splash {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: none;
+    place-items: center;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    transition: opacity 450ms var(--ease-out-quint);
+  }
+  :global(html[data-splash]) .splash {
+    display: grid;
+  }
+  :global(html[data-splash="leaving"]) .splash {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .splash-glow {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, color-mix(in oklab, var(--color-ink) 9%, transparent), transparent 65%);
+    animation: splash-glow 1.5s var(--ease-out-quint) both;
+  }
+  .splash-art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 32px);
+    width: min(600px, 86vw);
+  }
+  .splash-art :global(.splash-mark) {
+    width: clamp(64px, 14vw, 120px);
+    height: auto;
+    overflow: visible;
+  }
+  .splash-art :global(.splash-mark polygon) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: splash-draw 1s var(--ease-out-quint) 100ms forwards;
+  }
+  .splash-word-svg {
+    flex: 1;
+    overflow: visible;
+  }
+  .splash-word {
+    font-family: var(--font-sans);
+    font-size: 84px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: splash-draw-word 1.2s var(--ease-out-quint) 250ms forwards;
+  }
+  @keyframes splash-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes splash-draw-word {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes splash-glow {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>

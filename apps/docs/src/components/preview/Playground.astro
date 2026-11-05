@@ -1,0 +1,117 @@
+---
+import type { Framework } from "@markasui/registry/schema";
+import CodeBlock from "../CodeBlock.astro";
+import PlaygroundReact from "./PlaygroundReact";
+import PlaygroundVue from "./PlaygroundVue.vue";
+import { shikiLang } from "../../lib/frameworks";
+import { getLocale, t } from "../../lib/i18n";
+import { PLAYGROUNDS, comboKey, combinations, defaults, usageCode } from "../../lib/playgrounds";
+
+interface Props {
+  name: string;
+  title: string;
+}
+const { name, title } = Astro.props;
+const playground = PLAYGROUNDS[name]!;
+const strings = t(getLocale(Astro.url)).component;
+const frameworks: Framework[] = ["blade", "react", "vue"];
+
+const combos = combinations(playground.controls).map((values, index) => ({ index, values, key: comboKey(playground.controls, values), built: playground.build(values) }));
+const defaultKey = comboKey(playground.controls, defaults(playground.controls));
+const initial = combos.find((combo) => combo.key === defaultKey)!;
+
+const bladeFiles = import.meta.glob<string>("../../generated/playground/*.html", { query: "?raw", import: "default", eager: true });
+const bladeHtml = (index: number) => bladeFiles[`../../generated/playground/${name}--${index}.html`] ?? "";
+const data = JSON.stringify(Object.fromEntries(combos.map((combo) => [combo.key, combo.built]))).replaceAll("<", "\\u003c");
+const control = "h-8 rounded-lg bg-surface px-2 text-sm text-ink shadow-[0_0_0_1px_var(--color-line)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+---
+
+<div class="grid gap-4" data-playground={name} data-pagefind-ignore>
+  <script type="application/json" data-playground-data set:html={data} />
+  <div class="frame">
+    <div class="frame-panel grid overflow-hidden lg:grid-cols-[minmax(0,1fr)_17rem]">
+      <div class="relative">
+        <div class="dot-grid flex min-h-80 items-center justify-center px-4 py-14 sm:px-8" data-preview-stage>
+          <div data-fw="blade" class="w-full max-w-md">
+            {
+              combos.map((combo) => (
+                <div data-combo={combo.key} hidden={combo.key !== defaultKey} class="flex justify-center" set:html={bladeHtml(combo.index)} />
+              ))
+            }
+          </div>
+          <div data-fw="react" class="w-full max-w-md">
+            <div class="flex justify-center"><PlaygroundReact client:visible name={name} initial={initial.built} /></div>
+          </div>
+          <div data-fw="vue" class="w-full max-w-md">
+            <div class="flex justify-center"><PlaygroundVue client:visible name={name} initial={initial.built} /></div>
+          </div>
+        </div>
+      </div>
+
+      <form class="m-2 grid content-start gap-1 rounded-xl bg-subtle p-3" data-playground-controls aria-label={strings.controls}>
+        <p class="mb-2 text-sm font-medium text-ink">{title}</p>
+        {
+          playground.controls.map((item) => (
+            <div class="flex h-10 items-center justify-between gap-3">
+              <label for={`pg-${name}-${item.name}`} class="text-sm text-ink/80">
+                {item.name}
+              </label>
+              {item.type === "select" ? (
+                <select id={`pg-${name}-${item.name}`} name={item.name} class={control}>
+                  {item.options.map((option) => (
+                    <option value={option} selected={option === item.default}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  id={`pg-${name}-${item.name}`}
+                  name={item.name}
+                  type="checkbox"
+                  role="switch"
+                  checked={item.default}
+                  class="relative h-5 w-9 cursor-pointer appearance-none rounded-full bg-line transition-colors duration-150 ease-out before:absolute before:top-0.5 before:left-0.5 before:size-4 before:rounded-full before:bg-surface before:shadow before:transition-transform before:duration-150 checked:bg-ink checked:before:translate-x-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                />
+              )}
+            </div>
+          ))
+        }
+      </form>
+    </div>
+  </div>
+
+  {
+    frameworks.map((fw) => (
+      <div data-fw={fw}>
+        {combos.map((combo) => (
+          <div data-combo={combo.key} hidden={combo.key !== defaultKey}>
+            <CodeBlock code={usageCode(name, fw, combo.built, { imports: true })} lang={shikiLang(fw)} />
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  import type { Built } from "../../lib/playgrounds";
+
+  function update(root: HTMLElement, form: HTMLFormElement) {
+    const values = [...form.elements].filter((el): el is HTMLInputElement | HTMLSelectElement => "name" in el && Boolean((el as HTMLInputElement).name));
+    const key = values.map((el) => `${el.name}=${el instanceof HTMLInputElement && el.type === "checkbox" ? String(el.checked) : el.value}`).join("|");
+    root.querySelectorAll<HTMLElement>("[data-combo]").forEach((node) => (node.hidden = node.dataset.combo !== key));
+    const data = JSON.parse(root.querySelector("[data-playground-data]")!.textContent!) as Record<string, Built>;
+    const built = data[key];
+    if (built) document.dispatchEvent(new CustomEvent("markas:playground", { detail: { name: root.dataset.playground, built } }));
+  }
+
+  document.addEventListener("change", (event) => {
+    const form = (event.target as HTMLElement).closest<HTMLFormElement>("[data-playground-controls]");
+    const root = form?.closest<HTMLElement>("[data-playground]");
+    if (form && root) update(root, form);
+  });
+  document.addEventListener("submit", (event) => {
+    if ((event.target as HTMLElement).matches("[data-playground-controls]")) event.preventDefault();
+  });
+</script>

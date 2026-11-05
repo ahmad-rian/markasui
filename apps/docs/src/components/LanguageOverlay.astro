@@ -1,4 +1,5 @@
 ---
+import { BRAND_SHAPES } from "../lib/brand";
 import { FRAMEWORK_ICONS } from "../lib/frameworks";
 import { LOCALES, t } from "../lib/i18n";
 
@@ -31,9 +32,10 @@ const orbits = [
         </g>
       ))
     }
-    <g class="lang-orbit-core">
-      <rect x="-15" y="-15" width="30" height="30" rx="8" class="fill-primary"></rect>
-      <path d="M-7.5 7.2V-2.2l7.5-4.7 7.5 4.7v9.4h-4.7V1.6h-5.6v5.6z" class="fill-on-primary"></path>
+    <g class="lang-orbit-core brand-mark">
+      <g transform="translate(-22 -21.5) scale(0.03)">
+        {BRAND_SHAPES.map((shape) => <polygon points={shape.points} data-tone={shape.tone} />)}
+      </g>
     </g>
   </svg>
   {
@@ -52,7 +54,7 @@ const orbits = [
     ))
   }
   <div class="h-0.5 w-56 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
-    <div class="lang-progress h-full rounded-full bg-primary"></div>
+    <div class="lang-progress h-full rounded-full bg-brand"></div>
   </div>
 </div>
 

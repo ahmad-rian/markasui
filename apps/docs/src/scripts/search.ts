@@ -82,7 +82,7 @@ async function run(query: string) {
         item,
       ) => `<li><a href="${escapeText(item.url.replace(/\.html$/, ""))}" class="block rounded-lg px-3 py-2.5 transition-colors hover:bg-subtle focus-visible:bg-subtle">
         <span class="block text-sm font-medium text-ink">${escapeText(item.meta.title ?? item.url)}</span>
-        <span class="mt-0.5 block text-[13px] leading-5 text-muted [&_mark]:bg-primary-soft [&_mark]:text-ink">${item.excerpt}</span>
+        <span class="mt-0.5 block text-[13px] leading-5 text-muted [&_mark]:bg-brand-soft [&_mark]:text-ink">${item.excerpt}</span>
       </a></li>`,
     )
     .join("");

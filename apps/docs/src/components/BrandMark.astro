@@ -1,0 +1,14 @@
+---
+import { BRAND_SHAPES, BRAND_VIEWBOX } from "../lib/brand";
+
+/** outline: hanya garis, dipakai splash untuk animasi menggambar. */
+interface Props {
+  class?: string;
+  outline?: boolean;
+}
+const { class: className = "size-7", outline = false } = Astro.props;
+---
+
+<svg class:list={["brand-mark shrink-0", outline && "brand-mark-outline", className]} viewBox={BRAND_VIEWBOX} aria-hidden="true">
+  {BRAND_SHAPES.map((shape) => <polygon points={shape.points} data-tone={shape.tone} pathLength="1" />)}
+</svg>

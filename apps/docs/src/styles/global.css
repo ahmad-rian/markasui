@@ -31,6 +31,30 @@
   font-display: swap;
 }
 
+/* Warna brand Jenderal khusus situs docs. Komponen MarkasUI sendiri memakai primary netral. */
+:root {
+  --site-brand: #2e6b3a;
+  --site-brand-strong: #24552e;
+  --site-on-brand: #ffffff;
+  --site-brand-soft: #e7efe5;
+  --site-brand-line: #b9d1b5;
+}
+.dark {
+  --site-brand: #5fa36b;
+  --site-brand-strong: #74b47f;
+  --site-on-brand: #0e110e;
+  --site-brand-soft: #1b2a1d;
+  --site-brand-line: #2f4a33;
+}
+
+@theme inline {
+  --color-brand: var(--site-brand);
+  --color-brand-strong: var(--site-brand-strong);
+  --color-on-brand: var(--site-on-brand);
+  --color-brand-soft: var(--site-brand-soft);
+  --color-brand-line: var(--site-brand-line);
+}
+
 @theme {
   --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Martian Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -53,14 +77,15 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary;
+    @apply outline-brand outline-2 outline-offset-2;
   }
 
   /* Konten per framework: hanya yang cocok dengan pilihan global yang tampil. */
   html[data-framework="blade"] [data-fw]:not([data-fw="blade"]),
   html[data-framework="react"] [data-fw]:not([data-fw="react"]),
   html[data-framework="vue"] [data-fw]:not([data-fw="vue"]) {
-    display: none;
+    /* !important: utility display (flex, grid, block) di elemen yang sama tidak boleh menampilkannya. */
+    display: none !important;
   }
 
   /* Logo framework: warna brand hanya untuk framework yang sedang dipilih. */
@@ -119,7 +144,7 @@
     @apply mt-10 text-lg font-semibold;
   }
   .prose a {
-    @apply text-primary underline decoration-primary-line underline-offset-4 transition-colors hover:decoration-primary;
+    @apply text-brand decoration-brand-line hover:decoration-brand underline underline-offset-4 transition-colors;
   }
   .prose ul {
     @apply list-disc pl-5 marker:text-faint;
@@ -146,7 +171,7 @@
     @apply border-b border-line py-2.5 pr-4 align-top;
   }
   .prose blockquote {
-    @apply border-l-2 border-primary-line pl-4 text-muted;
+    @apply border-brand-line border-l-2 pl-4 text-muted;
   }
 }
 
@@ -155,13 +180,143 @@
   @apply inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition-[color,background-color,border-color,transform] duration-150 ease-out active:scale-[0.98];
 }
 @utility site-button-primary {
-  @apply site-button bg-primary text-on-primary hover:bg-primary-strong;
+  @apply site-button bg-brand text-on-brand hover:bg-brand-strong;
 }
 @utility site-button-secondary {
   @apply site-button border border-line bg-surface text-ink hover:bg-subtle;
 }
 @utility icon-button {
   @apply inline-flex size-9 items-center justify-center rounded-lg text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink;
+}
+
+/* Simbol brand Jenderal. Warna asli logo; di mode gelap abu-abu tua dicerahkan agar tetap terlihat. */
+@layer components {
+  .brand-mark [data-tone="back"] {
+    fill: #e3e3e3;
+  }
+  .brand-mark [data-tone="upper"] {
+    fill: #7a7a7a;
+  }
+  .brand-mark [data-tone="mint"] {
+    fill: #daefe5;
+  }
+  .brand-mark [data-tone="mid"] {
+    fill: #cbcbcb;
+  }
+  .brand-mark [data-tone="dark"] {
+    fill: #525252;
+  }
+  .brand-mark [data-tone="green"] {
+    fill: #49ae7f;
+  }
+  .dark .brand-mark [data-tone="back"] {
+    fill: #3a3f3a;
+  }
+  .dark .brand-mark [data-tone="mid"] {
+    fill: #4a504a;
+  }
+  .dark .brand-mark [data-tone="mint"] {
+    fill: #2b4a3b;
+  }
+  .dark .brand-mark [data-tone="dark"] {
+    fill: #b5bab4;
+  }
+  .brand-mark-outline polygon {
+    fill: none !important;
+    stroke: currentColor;
+    stroke-width: 14;
+    stroke-linejoin: round;
+  }
+}
+
+/* Panel showcase di landing: gradien hijau brand Jenderal sebagai satu-satunya momen berwarna. */
+@layer components {
+  .showcase-bg {
+    background:
+      radial-gradient(
+        55% 70% at 12% 100%,
+        rgb(73 174 127 / 0.32),
+        transparent 70%
+      ),
+      radial-gradient(
+        45% 60% at 88% 10%,
+        rgb(218 239 229 / 0.95),
+        transparent 70%
+      ),
+      radial-gradient(
+        40% 50% at 70% 95%,
+        rgb(46 107 58 / 0.18),
+        transparent 70%
+      ),
+      var(--color-subtle);
+  }
+  .dark .showcase-bg {
+    background:
+      radial-gradient(
+        55% 70% at 12% 100%,
+        rgb(73 174 127 / 0.28),
+        transparent 70%
+      ),
+      radial-gradient(45% 60% at 88% 10%, rgb(43 74 59 / 0.9), transparent 70%),
+      radial-gradient(
+        40% 50% at 70% 95%,
+        rgb(95 163 107 / 0.18),
+        transparent 70%
+      ),
+      var(--color-surface);
+  }
+
+  /* Nomor baris untuk jendela editor. */
+  .code-lines pre code {
+    counter-reset: line;
+  }
+  .code-lines pre .line::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 1.5rem;
+    margin-right: 1rem;
+    text-align: right;
+    color: var(--color-faint);
+  }
+
+  /* Terminal mengetik perintah, lalu hasilnya muncul. */
+  .terminal-type {
+    width: 0;
+    border-right: 2px solid var(--color-ink);
+    animation:
+      terminal-type 2.2s steps(var(--chars)) 0.6s forwards,
+      terminal-caret 0.9s step-end infinite;
+  }
+  .terminal-output {
+    opacity: 0;
+    animation: terminal-output 300ms var(--ease-out-quint) 3s forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .terminal-type {
+      width: auto;
+      animation: none;
+    }
+    .terminal-output {
+      opacity: 1;
+      animation: none;
+    }
+  }
+}
+@keyframes terminal-type {
+  to {
+    width: calc(var(--chars) * 1ch + 2px);
+  }
+}
+@keyframes terminal-caret {
+  50% {
+    border-color: transparent;
+  }
+}
+@keyframes terminal-output {
+  to {
+    opacity: 1;
+  }
 }
 
 /* Overlay ganti bahasa. */

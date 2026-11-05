@@ -178,8 +178,8 @@ describe("registry", () => {
     expect(theme.tokens).toHaveLength(15);
     expect(theme.tokens.find((token) => token.name === "primary")).toEqual({
       name: "primary",
-      light: "#2e6b3a",
-      dark: "#5fa36b",
+      light: "#121412",
+      dark: "#f2f4f1",
     });
   });
 

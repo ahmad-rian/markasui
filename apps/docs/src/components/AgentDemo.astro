@@ -18,7 +18,7 @@ const written = [
 
 <figure class="overflow-hidden rounded-2xl border border-line bg-surface font-mono text-[13px] leading-6">
   <figcaption class="flex h-11 items-center gap-2 border-b border-line px-4 text-xs text-muted">
-    <span class="size-2 rounded-full bg-primary" aria-hidden="true"></span>
+    <span class="size-2 rounded-full bg-brand" aria-hidden="true"></span>
     {strings.caption}
   </figcaption>
   <div class="grid grid-cols-[minmax(0,1fr)] gap-4 p-4 sm:p-5">
@@ -37,7 +37,7 @@ const written = [
       {
         written.map((path) => (
           <li class="flex items-center gap-2 text-muted">
-            <Icon name="check" class="size-3.5 shrink-0 text-primary" />
+            <Icon name="check" class="size-3.5 shrink-0 text-brand" />
             <span class="truncate">{path}</span>
           </li>
         ))

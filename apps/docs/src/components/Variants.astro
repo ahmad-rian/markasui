@@ -1,0 +1,60 @@
+---
+import type { Framework } from "@markasui/registry/schema";
+import CodeBlock from "./CodeBlock.astro";
+import Tabs from "./Tabs.astro";
+import Preview from "./preview/Preview.astro";
+import { shikiLang } from "../lib/frameworks";
+import { getLocale, t } from "../lib/i18n";
+import { VARIANT_TITLES, variantTitle } from "../lib/variants";
+
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+const locale = getLocale(Astro.url);
+const strings = t(locale).component;
+const frameworks: Framework[] = ["blade", "react", "vue"];
+
+const sources = import.meta.glob<string>("../../../../examples/*/*", { query: "?raw", import: "default", eager: true });
+const EXT: Record<Framework, string> = { blade: ".blade.php", react: ".tsx", vue: ".vue" };
+const source = (slug: string, fw: Framework) =>
+  Object.entries(sources)
+    .find(([path]) => path.endsWith(`/examples/${fw}/${slug}${EXT[fw]}`))?.[1]
+    ?.replace(/(["'])\.\.\/\.\.\/components\/[a-z-]+\/([A-Za-z]+(?:\.vue)?)\1/g, "$1@/components/markas/$2$1")
+    .replace(/function \w+Example\(/, "function Example(")
+    .trim() ?? "";
+
+// Urutan: yang terdaftar di VARIANT_TITLES dulu, sisanya alfabetis.
+const known = Object.keys(VARIANT_TITLES);
+const slugs = Object.keys(sources)
+  .map((path) => path.match(/\/examples\/react\/([a-z-]+--[a-z-]+)\.tsx$/)?.[1])
+  .filter((slug): slug is string => Boolean(slug?.startsWith(`${name}--`)))
+  .sort((a, b) => (known.indexOf(a) + 1 || 999) - (known.indexOf(b) + 1 || 999) || a.localeCompare(b));
+---
+
+{
+  slugs.length > 0 && (
+    <div class="grid gap-12">
+      {slugs.map((slug) => {
+        const title = variantTitle(slug, locale);
+        return (
+          <section class="relative" aria-label={title} data-variant={slug}>
+            <h3 class="absolute top-0 left-0 flex h-10 items-center text-lg font-semibold tracking-[-0.01em]">{title}</h3>
+            <Tabs label={strings.viewOrCode(title)} pills items={[{ value: "view", label: strings.view }, { value: "code", label: strings.code }]}>
+              <div slot="view">
+                <Preview name={slug} />
+              </div>
+              <div slot="code">
+                {frameworks.map((fw) => (
+                  <div data-fw={fw}>
+                    <CodeBlock code={source(slug, fw)} lang={shikiLang(fw)} collapsible />
+                  </div>
+                ))}
+              </div>
+            </Tabs>
+          </section>
+        );
+      })}
+    </div>
+  )
+}

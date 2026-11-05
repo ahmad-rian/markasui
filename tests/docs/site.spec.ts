@@ -23,6 +23,14 @@ const PAGES = [
   ...componentNames.map((name) => `/components/${name}`),
 ];
 
+test.beforeEach(async ({ page }, testInfo) => {
+  if (!testInfo.title.includes("splash")) {
+    await page.addInitScript(() =>
+      sessionStorage.setItem("markas-splash", "1"),
+    );
+  }
+});
+
 const preview = (page: Page) => page.locator("[data-preview]").first();
 const pane = (page: Page, framework: string) =>
   preview(page).locator(`[data-fw="${framework}"]`);
@@ -62,7 +70,7 @@ test("switcher framework berlaku global dan tersimpan", async ({ page }) => {
   await expect(pane(page, "vue")).toBeVisible();
   await expect(
     page.locator('[data-fw="vue"] [data-code-block]').first(),
-  ).toContainText("src/components/markas/Tabs.vue");
+  ).toContainText("@/components/markas/Tabs.vue");
 
   await page.goto("/components/button");
   await expect(page.locator("html")).toHaveAttribute("data-framework", "vue");
@@ -425,4 +433,76 @@ test("ganti bahasa menampilkan overlay transisi lalu menutupnya", async ({
   await expect(page).toHaveURL(/\/id\/components\/modal$/);
   await expect(overlay).toBeHidden();
   await expect(page.locator("html")).toHaveAttribute("lang", "id");
+});
+
+test("splash tampil sekali per sesi di landing lalu hilang", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  // Hapus penanda dari beforeEach hanya untuk pemuatan pertama, supaya reload menguji "sekali per sesi".
+  await page.addInitScript(() => {
+    if (!sessionStorage.getItem("markas-splash-test")) {
+      sessionStorage.setItem("markas-splash-test", "1");
+      sessionStorage.removeItem("markas-splash");
+    }
+  });
+  // Splash hanya sekitar 1,9 detik; jangan tunggu event load sebelum memeriksanya.
+  await page.goto("/", { waitUntil: "commit" });
+  const splash = page.locator("div[data-splash]");
+  await expect(splash).toBeVisible();
+  await expect(splash).toBeHidden({ timeout: 4000 });
+  await page.reload();
+  await expect(page.locator("html")).not.toHaveAttribute("data-splash", /.*/);
+});
+
+test.describe("playground props", () => {
+  for (const framework of ["Blade", "React", "Vue"] as const) {
+    test(`Button ${framework}: kontrol mengubah preview dan kode`, async ({
+      page,
+    }) => {
+      await page.goto("/components/button");
+      await page.getByRole("radio", { name: framework }).first().click();
+      const fw = framework.toLowerCase();
+      if (fw !== "blade")
+        await expect(
+          page.locator(`[data-playground] [data-fw="${fw}"] astro-island[ssr]`),
+        ).toHaveCount(0);
+
+      await page.getByLabel("variant", { exact: true }).selectOption("danger");
+      await page.getByLabel("disabled", { exact: true }).check();
+
+      const button = page
+        .locator(`[data-playground] [data-fw="${fw}"] button:visible`)
+        .first();
+      await expect(button).toHaveClass(/bg-danger/);
+      await expect(button).toBeDisabled();
+      const code = page
+        .locator(
+          `[data-playground] [data-fw="${fw}"] [data-combo]:not([hidden]) pre`,
+        )
+        .last();
+      await expect(code).toContainText('variant="danger"');
+      await expect(code).toContainText("disabled");
+    });
+  }
+
+  test("komponen tanpa playground menampilkan kode contoh, source ada di tab Manual", async ({
+    page,
+  }) => {
+    await page.goto("/components/modal");
+    await page.getByRole("radio", { name: "React" }).first().click();
+    await expect(
+      page.locator('[data-fw="react"] [data-code-block]').first(),
+    ).toContainText("export default function ModalExample");
+    await page.getByRole("tab", { name: "Manual" }).click();
+    await expect(
+      page.getByText("src/components/markas/Modal.tsx").first(),
+    ).toBeVisible();
+  });
+});
+
+test("splash tidak tampil saat prefers-reduced-motion", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.removeItem("markas-splash"));
+  await page.goto("/");
+  await expect(page.locator("div[data-splash]")).toBeHidden();
 });

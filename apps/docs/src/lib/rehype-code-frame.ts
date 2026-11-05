@@ -54,7 +54,7 @@ const frame = (pre: Element, copyLabel: string): Element => ({
       },
       children: [
         svg(COPY_PATH, "size-4 group-data-copied:hidden"),
-        svg(CHECK_PATH, "hidden size-4 text-primary group-data-copied:block"),
+        svg(CHECK_PATH, "hidden size-4 text-brand group-data-copied:block"),
       ],
     },
     {

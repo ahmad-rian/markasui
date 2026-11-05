@@ -24,9 +24,10 @@ async function main() {
     ["scripts/render-blade.php", "examples/blade", "playground/public/blade"],
     { cwd: root },
   );
-  const names = (await readdir(join(root, "examples/react"))).map((file) =>
-    file.replace(/\.tsx$/, ""),
-  );
+  // Variasi (<nama>--<variasi>) tidak butuh thumbnail; kartu hanya untuk komponen.
+  const names = (await readdir(join(root, "examples/react")))
+    .filter((file) => !file.includes("--"))
+    .map((file) => file.replace(/\.tsx$/, ""));
 
   const server = await createServer({
     configFile: join(root, "playground/vite.config.ts"),

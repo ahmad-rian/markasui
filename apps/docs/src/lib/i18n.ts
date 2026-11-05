@@ -36,7 +36,7 @@ export const stripLocale = (pathname: string) =>
 
 const en = {
   meta: {
-    title: "MarkasUI: UI components for Blade, React, and Vue",
+    title: "MarkasUI - UI components for Blade, React, and Vue",
     description:
       "Lightweight UI components for Blade, React, and Vue with one shared design.",
   },
@@ -113,10 +113,7 @@ const en = {
     manualSetup: "Make sure Tailwind CSS v4 and markas.css are installed. See",
     manualSetupLink: "Installation",
     manualDeps: "Install the dependency:",
-    manualCopy: (framework: string, target: string) => [
-      `Copy the ${framework} code above to`,
-      target,
-    ],
+    manualCopy: "Copy the component source below to",
     table: {
       label: "Props table",
       name: "Name",
@@ -125,6 +122,12 @@ const en = {
       description: "Description",
     },
     reload: "Reload preview",
+    controls: "Props controls",
+    examples: "Examples",
+    view: "View",
+    code: "Code",
+    viewOrCode: (title: string) => `${title}: view or code`,
+    source: "Component source",
     bladeMissing: "Blade preview is not rendered yet. Run pnpm build.",
   },
   code: { copy: "Copy code", expand: "Show code" },
@@ -177,6 +180,29 @@ const en = {
     componentsTitle: (n: number) => `${n} components`,
     componentsLink: "Browse with previews",
   },
+  home: {
+    badge: "New",
+    badgeText: "MarkasUI 0.1 is out",
+    titleBefore: "Polished",
+    titleAfter: "components, copied in one command.",
+    description:
+      "24 components for Blade, React, and Vue on Tailwind CSS v4. Copy them yourself, or hand them to your agent.",
+    primary: "Browse components",
+    secondary: "Star on GitHub",
+    stack: "Works with",
+    preview: "Preview",
+    terminal: "Terminal",
+    frameworks: "Frameworks",
+    added: (name: string) => `added ${name}`,
+    frameworkMeta: {
+      blade: "Alpine.js · resources/views",
+      react: "React 19 · src/components",
+      vue: "Vue 3 · src/components",
+    },
+    aliveTitle: "Every component, alive.",
+    aliveText:
+      "Real components rendered from the same code you copy, in all three frameworks.",
+  },
   switching: {
     title: "Preparing your experience",
     subtitle: "Switching to English",
@@ -194,7 +220,7 @@ type Dictionary = typeof en;
 
 const id: Dictionary = {
   meta: {
-    title: "MarkasUI: komponen UI untuk Blade, React, dan Vue",
+    title: "MarkasUI - Komponen UI untuk Blade, React, dan Vue",
     description:
       "Komponen UI ringan untuk Blade, React, dan Vue dengan satu desain yang sama.",
   },
@@ -272,10 +298,7 @@ const id: Dictionary = {
       "Pastikan Tailwind CSS v4 dan markas.css sudah terpasang. Lihat",
     manualSetupLink: "Instalasi",
     manualDeps: "Pasang dependensi:",
-    manualCopy: (framework: string, target: string) => [
-      `Salin kode ${framework} di atas ke`,
-      target,
-    ],
+    manualCopy: "Salin source komponen di bawah ini ke",
     table: {
       label: "Tabel props",
       name: "Nama",
@@ -284,6 +307,12 @@ const id: Dictionary = {
       description: "Keterangan",
     },
     reload: "Muat ulang preview",
+    controls: "Pengaturan props",
+    examples: "Contoh",
+    view: "Tampilan",
+    code: "Kode",
+    viewOrCode: (title: string) => `${title}: tampilan atau kode`,
+    source: "Source komponen",
     bladeMissing: "Preview Blade belum dirender. Jalankan pnpm build.",
   },
   code: { copy: "Salin kode", expand: "Lihat kode" },
@@ -335,6 +364,29 @@ const id: Dictionary = {
     },
     componentsTitle: (n: number) => `${n} komponen`,
     componentsLink: "Lihat dengan preview",
+  },
+  home: {
+    badge: "Baru",
+    badgeText: "MarkasUI 0.1 sudah rilis",
+    titleBefore: "Komponen",
+    titleAfter: "yang rapi, disalin dengan satu perintah.",
+    description:
+      "24 komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Salin sendiri, atau serahkan ke agent Anda.",
+    primary: "Lihat komponen",
+    secondary: "Beri bintang di GitHub",
+    stack: "Bekerja dengan",
+    preview: "Preview",
+    terminal: "Terminal",
+    frameworks: "Framework",
+    added: (name: string) => `${name} ditambahkan`,
+    frameworkMeta: {
+      blade: "Alpine.js · resources/views",
+      react: "React 19 · src/components",
+      vue: "Vue 3 · src/components",
+    },
+    aliveTitle: "Setiap komponen, hidup.",
+    aliveText:
+      "Komponen asli yang dirender dari kode yang sama dengan yang Anda salin, di ketiga framework.",
   },
   switching: {
     title: "Menyiapkan tampilan",
