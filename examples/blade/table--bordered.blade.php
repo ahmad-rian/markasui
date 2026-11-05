@@ -1,6 +1,7 @@
 <x-markas.table
     caption="Stock report"
     bordered
+    square
     :columns="[
         ['key' => 'item', 'label' => 'Item'],
         ['key' => 'stock', 'label' => 'In stock', 'align' => 'right'],

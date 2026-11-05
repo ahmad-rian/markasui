@@ -57,6 +57,12 @@
       "description": "Draw lines around every cell, including the header, for a classic grid look. The header gets a stronger bottom line."
     },
     {
+      "name": "square",
+      "type": "boolean",
+      "default": "false",
+      "description": "Square corners with no radius, like a classic spreadsheet table."
+    },
+    {
       "name": "striped",
       "type": "boolean",
       "default": "false",
@@ -114,6 +120,7 @@
         "showCaption": "Tampilkan caption di atas tabel.",
         "label": "aria-label untuk region pembungkus yang bisa digulir. Tanpa label dipakai caption, lalu \"Table\". Isi misalnya \"Tabel pesanan\" untuk situs berbahasa Indonesia.",
         "bordered": "Garis di sekeliling setiap sel, termasuk header, agar tampak seperti grid kotak klasik. Header mendapat garis bawah yang lebih tegas.",
+        "square": "Sudut siku tanpa radius, seperti tabel spreadsheet klasik.",
         "striped": "Beri latar lembut pada baris genap.",
         "size": "Padding sel. sm memakai padding lebih rapat dan teks 13px untuk data padat.",
         "footer": "Satu baris footer opsional di tfoot, berisi nilai per key kolom, misalnya total. Key yang tidak ada menjadi sel kosong.",

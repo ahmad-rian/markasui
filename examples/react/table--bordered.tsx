@@ -28,6 +28,7 @@ export default function TableBorderedExample() {
       columns={columns}
       rows={rows}
       bordered
+      square
       footer={footer}
     />
   );

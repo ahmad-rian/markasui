@@ -200,7 +200,8 @@ export const PLAYGROUNDS: Record<string, Playground> = {
   },
   table: {
     controls: [
-      { name: "bordered", type: "boolean", default: false },
+      { name: "bordered", type: "boolean", default: true },
+      { name: "square", type: "boolean", default: true },
       { name: "striped", type: "boolean", default: false },
       { name: "size", type: "select", options: ["sm", "md"], default: "md" },
     ],
@@ -208,6 +209,7 @@ export const PLAYGROUNDS: Record<string, Playground> = {
       props: {
         caption: "Stock report",
         bordered: on(v.bordered),
+        square: on(v.square),
         striped: on(v.striped),
         size: v.size === "md" ? null : (v.size as string),
         columns: tableColumns,

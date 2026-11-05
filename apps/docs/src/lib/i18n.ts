@@ -230,6 +230,15 @@ const en = {
     source: "View source on GitHub",
     back: "All templates",
   },
+  notFound: {
+    eyebrow: "Error 404",
+    title: "This page wandered off",
+    text: "The address may be mistyped, or the page moved. Try one of these instead.",
+    home: "Back home",
+    components: "Browse components",
+    search: "Search the docs",
+    suggestions: "Did you mean",
+  },
   switching: {
     title: "Preparing your experience",
     subtitle: "Switching to English",
@@ -441,6 +450,15 @@ const id: Dictionary = {
       "Tambahkan semua komponen yang dipakai template ini, lalu salin halamannya dari GitHub.",
     source: "Lihat source di GitHub",
     back: "Semua template",
+  },
+  notFound: {
+    eyebrow: "Error 404",
+    title: "Halaman ini tidak ditemukan",
+    text: "Mungkin alamatnya salah ketik, atau halamannya sudah pindah. Coba salah satu ini.",
+    home: "Kembali ke beranda",
+    components: "Lihat komponen",
+    search: "Cari di docs",
+    suggestions: "Mungkin maksud Anda",
   },
   switching: {
     title: "Menyiapkan tampilan",

@@ -60,6 +60,7 @@ const rows = [
     :columns="columns"
     :rows="rows"
     bordered
+    square
     size="sm"
   />
 </template>

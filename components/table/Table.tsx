@@ -1,13 +1,14 @@
 import type { ComponentProps, ReactNode } from "react";
 
 const wrapper =
-  "overflow-x-auto rounded-xl border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  "overflow-x-auto border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const tableClass = "w-full border-collapse text-sm";
 const captionClasses = {
   hidden: "sr-only",
   visible: "px-4 py-3 text-left font-medium text-ink",
 };
 const headRow = "bg-subtle text-left text-sm font-medium text-muted";
+const rounded = "rounded-xl";
 const borderedHeadRow = "border-b-2 border-line";
 const headCell = "font-medium whitespace-nowrap";
 const rowClass =
@@ -48,6 +49,8 @@ export type TableProps = ComponentProps<"div"> & {
   renderCell?: (row: TableRow, key: string) => ReactNode;
   /** Garis di setiap sel, seperti grid kotak. */
   bordered?: boolean;
+  /** Sudut siku (tanpa radius), seperti tabel klasik. */
+  square?: boolean;
   /** Latar selang-seling di baris genap. */
   striped?: boolean;
   size?: keyof typeof sizes;
@@ -64,6 +67,7 @@ export function Table({
   rowKey,
   renderCell,
   bordered = false,
+  square = false,
   striped = false,
   size = "md",
   footer,
@@ -83,7 +87,7 @@ export function Table({
       tabIndex={0}
       role="region"
       aria-label={label ?? caption ?? "Table"}
-      className={cx(wrapper, className)}
+      className={cx(wrapper, !square && rounded, className)}
       {...props}
     >
       <table className={tableClass}>

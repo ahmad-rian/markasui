@@ -29,6 +29,7 @@ const footer = {
     :columns="columns"
     :rows="rows"
     bordered
+    square
     :footer="footer"
   />
 </template>

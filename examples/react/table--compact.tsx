@@ -59,6 +59,7 @@ export default function TableCompactExample() {
       columns={columns}
       rows={rows}
       bordered
+      square
       size="sm"
     />
   );

@@ -5,19 +5,21 @@
     'showCaption' => false,
     'label' => null,
     'bordered' => false,
+    'square' => false,
     'striped' => false,
     'size' => 'md',
     'footer' => null,
 ])
 
 @php
-    $wrapper = 'overflow-x-auto rounded-xl border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+    $wrapper = 'overflow-x-auto border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
     $tableClass = 'w-full border-collapse text-sm';
     $captionClasses = [
         'hidden' => 'sr-only',
         'visible' => 'px-4 py-3 text-left font-medium text-ink',
     ];
     $headRow = 'bg-subtle text-left text-sm font-medium text-muted';
+    $rounded = 'rounded-xl';
     $borderedHeadRow = 'border-b-2 border-line';
     $headCell = 'font-medium whitespace-nowrap';
     $row = 'border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none';
@@ -44,7 +46,7 @@
     ]));
 @endphp
 
-<div {{ $attributes->merge(['tabindex' => '0', 'role' => 'region', 'aria-label' => $regionLabel])->class([$wrapper]) }}>
+<div {{ $attributes->merge(['tabindex' => '0', 'role' => 'region', 'aria-label' => $regionLabel])->class([$wrapper, $rounded => ! $square]) }}>
     <table class="{{ $tableClass }}">
         @if ($caption)
             <caption class="{{ $captionClasses[$showCaption ? 'visible' : 'hidden'] }}">{{ $caption }}</caption>

@@ -1,6 +1,7 @@
 <x-markas.table
     caption="Recent transactions"
     bordered
+    square
     size="sm"
     :columns="[
         ['key' => 'date', 'label' => 'Date'],

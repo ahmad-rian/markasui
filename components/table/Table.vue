@@ -17,6 +17,8 @@ const props = withDefaults(
     rowKey?: string;
     /** Garis di setiap sel, seperti grid kotak. */
     bordered?: boolean;
+    /** Sudut siku (tanpa radius), seperti tabel klasik. */
+    square?: boolean;
     /** Latar selang-seling di baris genap. */
     striped?: boolean;
     size?: "sm" | "md";
@@ -25,6 +27,7 @@ const props = withDefaults(
   }>(),
   {
     bordered: false,
+    square: false,
     striped: false,
     size: "md",
     footer: undefined,
@@ -38,13 +41,14 @@ const props = withDefaults(
 defineSlots<Record<`cell-${string}`, (props: { row: TableRow }) => unknown>>();
 
 const wrapper =
-  "overflow-x-auto rounded-xl border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  "overflow-x-auto border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const tableClass = "w-full border-collapse text-sm";
 const captionClasses = {
   hidden: "sr-only",
   visible: "px-4 py-3 text-left font-medium text-ink",
 };
 const headRow = "bg-subtle text-left text-sm font-medium text-muted";
+const rounded = "rounded-xl";
 const borderedHeadRow = "border-b-2 border-line";
 const headCell = "font-medium whitespace-nowrap";
 const rowClass =
@@ -76,7 +80,7 @@ const cellClass = (base: string, column: TableColumn) => [
     tabindex="0"
     role="region"
     :aria-label="props.label ?? props.caption ?? 'Table'"
-    :class="wrapper"
+    :class="[wrapper, !props.square && rounded]"
   >
     <table :class="tableClass">
       <caption

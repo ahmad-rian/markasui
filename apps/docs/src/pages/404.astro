@@ -1,0 +1,168 @@
+---
+import Icon from "../components/Icon.astro";
+import Base from "../layouts/Base.astro";
+import { BRAND_SHAPES, BRAND_VIEWBOX } from "../lib/brand";
+import { LOCALES, localePath, t } from "../lib/i18n";
+import { getComponents } from "../lib/registry";
+import { DOC_SLUGS } from "../lib/site";
+
+/**
+ * Satu file 404 untuk kedua bahasa (hosting statis hanya menyajikan /404.html).
+ * Teks Indonesia dipilih di browser dari awalan /id pada alamat yang diminta.
+ */
+const components = (await getComponents()).map((item) => ({ path: `/components/${item.name}`, title: item.title }));
+const docs = DOC_SLUGS.map((slug) => ({ path: `/docs/${slug}`, title: t("en").docsNav[slug] }));
+const pages = [...components, ...docs, { path: "/templates", title: "Templates" }];
+const copy = Object.fromEntries(LOCALES.map((locale) => [locale, t(locale).notFound]));
+---
+
+<Base title={copy.en.title}>
+  <main id="konten" class="relative isolate overflow-hidden">
+    <div class="not-found-grid" aria-hidden="true"></div>
+    <div class="mx-auto flex min-h-[calc(100dvh-12rem)] max-w-3xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6">
+      <div class="relative flex items-center justify-center" aria-hidden="true">
+        <span class="not-found-code">4</span>
+        <svg viewBox={BRAND_VIEWBOX} class="brand-mark not-found-mark">
+          {BRAND_SHAPES.map((shape, index) => <polygon points={shape.points} data-tone={shape.tone} style={`--i:${index}`} />)}
+        </svg>
+        <span class="not-found-code">4</span>
+      </div>
+
+      {
+        LOCALES.map((locale) => (
+          <div data-not-found-lang={locale} hidden={locale !== "en"} class="mt-8 grid justify-items-center">
+            <p class="font-mono text-xs text-muted">{copy[locale].eyebrow}</p>
+            <h1 class="mt-3 text-[32px] leading-tight font-semibold tracking-[-0.03em] text-balance sm:text-[44px]">{copy[locale].title}</h1>
+            <p class="mt-4 max-w-md text-lg leading-8 text-muted">{copy[locale].text}</p>
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+              <a href={localePath(locale, "/")} class="site-button bg-ink text-surface hover:bg-ink/85">
+                <Icon name="arrowLeft" class="size-4" />
+                {copy[locale].home}
+              </a>
+              <a href={localePath(locale, "/components")} class="site-button bg-subtle text-ink hover:bg-line">
+                {copy[locale].components}
+              </a>
+              <button type="button" data-search-open class="site-button border border-line bg-surface text-ink hover:bg-subtle">
+                <Icon name="search" class="size-4" />
+                {copy[locale].search}
+              </button>
+            </div>
+            <div data-suggestions hidden class="mt-12 w-full max-w-md text-left">
+              <p class="text-sm text-muted">{copy[locale].suggestions}</p>
+              <ul class="mt-3 grid gap-2" data-suggestion-list></ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+  <script type="application/json" data-not-found-pages set:html={JSON.stringify(pages)} />
+</Base>
+
+<script>
+  import { onPageLoad } from "../scripts/lifecycle";
+
+  type Page = { path: string; title: string };
+
+  /** Jarak edit sederhana untuk menebak halaman yang dimaksud dari alamat yang salah ketik. */
+  function distance(a: string, b: string): number {
+    const row = Array.from({ length: b.length + 1 }, (_, index) => index);
+    for (let i = 1; i <= a.length; i++) {
+      let previous = row[0]!;
+      row[0] = i;
+      for (let j = 1; j <= b.length; j++) {
+        const current = row[j]!;
+        row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, previous + (a[i - 1] === b[j - 1] ? 0 : 1));
+        previous = current;
+      }
+    }
+    return row[b.length]!;
+  }
+
+  const MAX_SUGGESTIONS = 3;
+
+  onPageLoad(() => {
+    const root = document.querySelector("[data-not-found-pages]");
+    if (!root) return;
+    const isId = /^\/id(\/|$)/.test(location.pathname);
+    const locale = isId ? "id" : "en";
+    document.documentElement.lang = locale;
+    const block = document.querySelector<HTMLElement>(`[data-not-found-lang="${locale}"]`);
+    document.querySelectorAll<HTMLElement>("[data-not-found-lang]").forEach((element) => (element.hidden = element !== block));
+    if (!block) return;
+
+    const pages = JSON.parse(root.textContent ?? "[]") as Page[];
+    const slug = location.pathname.replace(/\.html$/, "").replace(/\/$/, "").split("/").pop()?.toLowerCase() ?? "";
+    if (!slug || slug === "404" || slug === "id") return;
+    const ranked = pages
+      .map((page) => ({ page, score: distance(slug, page.path.split("/").pop()!) }))
+      .filter(({ score }) => score <= Math.max(2, Math.floor(slug.length / 3)))
+      .sort((a, b) => a.score - b.score)
+      .slice(0, MAX_SUGGESTIONS);
+    if (ranked.length === 0) return;
+
+    const list = block.querySelector<HTMLElement>("[data-suggestion-list]")!;
+    list.replaceChildren(
+      ...ranked.map(({ page }) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = (isId ? "/id" : "") + page.path;
+        link.className = "flex items-center justify-between gap-4 rounded-lg border border-line px-4 py-3 text-sm transition-colors hover:bg-subtle";
+        const title = document.createElement("span");
+        title.className = "font-medium text-ink";
+        title.textContent = page.title;
+        const path = document.createElement("span");
+        path.className = "font-mono text-xs text-muted";
+        path.textContent = link.pathname;
+        link.append(title, path);
+        item.append(link);
+        return item;
+      }),
+    );
+    block.querySelector<HTMLElement>("[data-suggestions]")!.hidden = false;
+  });
+</script>
+
+<style>
+  .not-found-grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.5;
+    mask-image: radial-gradient(ellipse 55% 55% at 50% 40%, #000 20%, transparent 75%);
+  }
+
+  .not-found-code {
+    font-size: clamp(96px, 22vw, 184px);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    color: var(--color-ink);
+  }
+
+  /* Tanda Jenderal menggantikan angka 0, bilahnya meluncur masuk seperti splash. */
+  .not-found-mark {
+    width: clamp(88px, 19vw, 160px);
+    margin-inline: clamp(4px, 1.5vw, 16px);
+    overflow: visible;
+  }
+  .not-found-mark polygon {
+    animation: not-found-bar 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i) * 60ms);
+  }
+  @keyframes not-found-bar {
+    from {
+      opacity: 0;
+      transform: translate(-220px, 110px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .not-found-mark polygon {
+      animation: none;
+    }
+  }
+</style>
