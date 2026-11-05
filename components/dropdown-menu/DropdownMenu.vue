@@ -82,7 +82,7 @@ function followViewport(update: () => void) {
 const generatedId = useId();
 const menuId = computed(() => props.id ?? generatedId);
 const triggerEl = useTemplateRef<HTMLButtonElement>("trigger");
-const menuEl = useTemplateRef<HTMLDivElement>("menu");
+const menuEl = useTemplateRef<HTMLDivElement>("menuRef");
 const open = ref(false);
 const state = computed(() => (open.value ? "open" : "closed"));
 let focusTarget: FocusTarget = "first";
@@ -199,7 +199,7 @@ function onMenuKeydown(event: KeyboardEvent) {
     </button>
     <div
       :id="menuId"
-      ref="menu"
+      ref="menuRef"
       popover="auto"
       role="menu"
       :aria-labelledby="`${menuId}-trigger`"

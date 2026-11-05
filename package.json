@@ -10,7 +10,7 @@
   },
   "scripts": {
     "playground": "pnpm blade:playground && vite playground",
-    "blade:playground": "php scripts/render-blade.php examples/blade playground/public/blade",
+    "blade:playground": "php scripts/render-blade.php examples/blade playground/public/blade && node scripts/render-templates.ts playground/public/templates",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "lint": "eslint . && prettier --check . && composer lint",

@@ -1,0 +1,97 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import Icon from "../../../components/Icon.astro";
+import FrameworkSwitcher from "../../../components/FrameworkSwitcher.astro";
+import Base from "../../../layouts/Base.astro";
+import { shikiLang } from "../../../lib/frameworks";
+import { LOCALES, localePath, t, toLocale } from "../../../lib/i18n";
+import { getComponents } from "../../../lib/registry";
+import { getTemplates } from "../../../lib/templates";
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((locale) =>
+    getTemplates().map((template) => ({ params: { lang: locale === "en" ? undefined : locale, slug: template.name }, props: { template } })),
+  );
+}
+
+const { template } = Astro.props;
+const locale = toLocale(Astro.params.lang);
+const strings = t(locale).templates;
+const titles = new Map((await getComponents()).map((item) => [item.name, item.title]));
+const frameworks = ["blade", "react", "vue"] as const;
+---
+
+<Base title={template.title} description={template.description[locale]}>
+  <main id="konten" class="mx-auto max-w-screen-2xl px-4 pt-8 pb-24 sm:px-6 sm:pt-10 lg:px-10" data-pagefind-body>
+    <a href={localePath(locale, "/templates")} class="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-ink">
+      <Icon name="arrowLeft" class="size-4" />
+      {strings.back}
+    </a>
+    <div class="mt-4 flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
+      <div class="max-w-2xl">
+        <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{template.title}</h1>
+        <p class="mt-3 text-lg leading-8 text-muted">{template.description[locale]}</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="w-72"><FrameworkSwitcher /></div>
+        <a href={`/demo/templates/${template.name}/blade`} data-template-open class="soft-button" target="_blank" rel="noopener">
+          {strings.open}
+          <Icon name="external" />
+        </a>
+      </div>
+    </div>
+
+    <section class="mt-8" aria-labelledby="preview">
+      <h2 id="preview" class="sr-only">{strings.preview}</h2>
+      <div class="frame">
+        <div class="frame-panel overflow-hidden">
+          <iframe
+            data-template-frame={template.name}
+            src={`/demo/templates/${template.name}/blade`}
+            title={`${template.title}: ${strings.preview}`}
+            class="h-[min(900px,85dvh)] w-full border-0"
+            loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto mt-16 grid max-w-4xl grid-cols-[minmax(0,1fr)]">
+      <section class="prose">
+        <h2 id="code">{strings.code}</h2>
+      </section>
+      <div class="mt-5 grid grid-cols-[minmax(0,1fr)]">
+        {
+          frameworks.map((fw) => (
+            <div data-fw={fw}>
+              <CodeBlock code={template.sources[fw].code} lang={shikiLang(fw)} title={template.sources[fw].path} framework={fw} collapsible />
+            </div>
+          ))
+        }
+      </div>
+
+      <section class="prose mt-16">
+        <h2 id="components">{strings.components}</h2>
+        <ul>
+          {template.components.map((name) => <li><a href={localePath(locale, `/components/${name}`)}>{titles.get(name) ?? name}</a></li>)}
+        </ul>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import { onPageLoad } from "../../../scripts/lifecycle";
+  import { getFramework } from "../../../scripts/prefs";
+
+  // Iframe dan tombol layar penuh mengikuti framework yang dipilih.
+  function sync() {
+    const framework = getFramework();
+    document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => {
+      const src = `/demo/templates/${frame.dataset.templateFrame}/${framework}`;
+      if (!frame.src.endsWith(src)) frame.src = src;
+      document.querySelectorAll<HTMLAnchorElement>("[data-template-open]").forEach((link) => (link.href = src));
+    });
+  }
+  onPageLoad(sync);
+  document.addEventListener("markas:framework", sync);
+</script>

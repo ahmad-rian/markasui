@@ -1,0 +1,84 @@
+{
+  "name": "toggle-group",
+  "title": "Toggle Group",
+  "description": "Segmented group of toggle buttons with single or multiple selection and arrow key navigation between items.",
+  "category": "form",
+  "tags": ["toggle", "group", "segmented", "toolbar"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "toggle-group.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ToggleGroup.tsx", "deps": [] },
+    "vue": { "file": "ToggleGroup.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ value, label, ariaLabel? }[]",
+      "default": "[]",
+      "description": "Buttons in the group. ariaLabel is required when the label is only an icon. Blade and Vue can replace a label through a slot named after its value."
+    },
+    {
+      "name": "type",
+      "type": "'single' | 'multiple'",
+      "default": "'single'",
+      "description": "Single allows one pressed item, or none. Multiple allows any number."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "string | string[]",
+      "default": "-",
+      "description": "Pressed items. A string for single (empty when none) and an array for multiple. Blade uses value, React value or defaultValue, Vue v-model or defaultValue."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string | string[]) => void",
+      "default": "-",
+      "description": "React only. Called with the new value on every change, in item order for multiple."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Accessible name of the group, set as aria-label."
+    }
+  ],
+  "a11y": [
+    "The container has role group and an aria-label from label, each item is a button with aria-pressed.",
+    "Tab reaches the group once. Left and Right arrows move focus between items (roving tabindex), Space and Enter press the focused item.",
+    "Icon-only items need ariaLabel so every button has a name."
+  ],
+  "ai": {
+    "whenToUse": "Switching a view or setting between a few short options, such as day/week/month, list/grid, or text alignment and formatting in a toolbar.",
+    "rules": [
+      "Keep it to two to five short items, use Select for longer lists",
+      "Use Tabs when each option shows its own panel of content",
+      "Always pass label so the group has a name"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Grup tombol toggle bersegmen dengan pilihan tunggal atau ganda dan navigasi tombol panah antar item.",
+      "props": {
+        "items": "Tombol di dalam grup. ariaLabel wajib kalau label hanya ikon. Blade dan Vue bisa mengganti label lewat slot bernama sesuai value.",
+        "type": "Single mengizinkan satu item ditekan, atau tidak ada. Multiple mengizinkan berapa pun.",
+        "value / defaultValue / v-model": "Item yang ditekan. String untuk single (kosong kalau tidak ada) dan array untuk multiple. Blade memakai value, React value atau defaultValue, Vue v-model atau defaultValue.",
+        "onValueChange": "Khusus React. Dipanggil dengan nilai baru setiap kali berubah, urut sesuai item untuk multiple.",
+        "label": "Nama aksesibel grup, dipasang sebagai aria-label."
+      },
+      "a11y": [
+        "Wadah memiliki role group dan aria-label dari label, setiap item adalah button dengan aria-pressed.",
+        "Tab masuk ke grup sekali. Panah kiri dan kanan memindah fokus antar item (roving tabindex), Spasi dan Enter menekan item yang difokus.",
+        "Item berisi ikon saja wajib diberi ariaLabel agar setiap tombol punya nama."
+      ],
+      "ai": {
+        "whenToUse": "Mengganti tampilan atau pengaturan di antara beberapa opsi pendek, misalnya hari/minggu/bulan, daftar/grid, atau perataan dan format teks di toolbar.",
+        "rules": [
+          "Batasi dua sampai lima item pendek, pakai Select untuk daftar panjang",
+          "Pakai Tabs kalau setiap opsi menampilkan panel kontennya sendiri",
+          "Selalu isi label agar grup punya nama"
+        ]
+      }
+    }
+  }
+}

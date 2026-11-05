@@ -31,6 +31,11 @@ export const nav = (locale: Locale) => {
       href: localePath(locale, "/components"),
       label: strings.components,
     },
+    {
+      key: "templates",
+      href: localePath(locale, "/templates"),
+      label: strings.templates,
+    },
     { key: "mcp", href: localePath(locale, "/docs/mcp"), label: strings.mcp },
   ] as const;
 };

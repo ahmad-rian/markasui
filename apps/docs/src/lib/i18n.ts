@@ -44,6 +44,7 @@ const en = {
     home: "Home",
     docs: "Docs",
     components: "Components",
+    templates: "Templates",
     mcp: "MCP",
     main: "Main",
     mainMobile: "Main mobile",
@@ -185,8 +186,8 @@ const en = {
     badgeText: "MarkasUI 0.1 is out",
     titleBefore: "Polished",
     titleAfter: "components, copied in one command.",
-    description:
-      "24 components for Blade, React, and Vue on Tailwind CSS v4. Copy them yourself, or hand them to your agent.",
+    description: (n: number) =>
+      `${n} components for Blade, React, and Vue on Tailwind CSS v4. Copy them yourself, or hand them to your agent.`,
     primary: "Browse components",
     secondary: "Star on GitHub",
     stack: "Works with",
@@ -202,6 +203,16 @@ const en = {
     aliveTitle: "Every component, alive.",
     aliveText:
       "Real components rendered from the same code you copy, in all three frameworks.",
+  },
+  templates: {
+    title: "Templates",
+    subtitle:
+      "Complete pages built from MarkasUI components, in Blade, React, and Vue. Try them right here.",
+    open: "Open full page",
+    preview: "Live preview",
+    code: "Code",
+    components: "Components used",
+    back: "All templates",
   },
   switching: {
     title: "Preparing your experience",
@@ -228,6 +239,7 @@ const id: Dictionary = {
     home: "Beranda",
     docs: "Docs",
     components: "Komponen",
+    templates: "Template",
     mcp: "MCP",
     main: "Utama",
     mainMobile: "Utama seluler",
@@ -370,8 +382,8 @@ const id: Dictionary = {
     badgeText: "MarkasUI 0.1 sudah rilis",
     titleBefore: "Komponen",
     titleAfter: "yang rapi, disalin dengan satu perintah.",
-    description:
-      "24 komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Salin sendiri, atau serahkan ke agent Anda.",
+    description: (n: number) =>
+      `${n} komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Salin sendiri, atau serahkan ke agent Anda.`,
     primary: "Lihat komponen",
     secondary: "Beri bintang di GitHub",
     stack: "Bekerja dengan",
@@ -387,6 +399,16 @@ const id: Dictionary = {
     aliveTitle: "Setiap komponen, hidup.",
     aliveText:
       "Komponen asli yang dirender dari kode yang sama dengan yang Anda salin, di ketiga framework.",
+  },
+  templates: {
+    title: "Template",
+    subtitle:
+      "Halaman lengkap yang disusun dari komponen MarkasUI, dalam Blade, React, dan Vue. Coba langsung di sini.",
+    open: "Buka layar penuh",
+    preview: "Pratinjau langsung",
+    code: "Kode",
+    components: "Komponen yang dipakai",
+    back: "Semua template",
   },
   switching: {
     title: "Menyiapkan tampilan",

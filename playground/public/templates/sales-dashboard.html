@@ -1,0 +1,1024 @@
+<div
+    class="min-h-dvh bg-canvas text-ink lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]"
+    x-data="{
+        data: JSON.parse('{\u0022weekly\u0022:{\u0022label\u0022:\u0022Weekly\u0022,\u0022subtitle\u0022:\u0022Here is how your store performed this week.\u0022,\u0022compare\u0022:\u0022last week\u0022,\u0022stats\u0022:{\u0022profit\u0022:{\u0022value\u0022:\u0022Rp 62.4M\u0022,\u0022change\u0022:\u0022+8.1%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u0022Rp 57.7M\u0022},\u0022orders\u0022:{\u0022value\u0022:\u00221,284\u0022,\u0022change\u0022:\u0022+5.1%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u00221,222\u0022},\u0022organic\u0022:{\u0022value\u0022:\u0022Rp 18.9M\u0022,\u0022change\u0022:\u0022-2.6%\u0022,\u0022up\u0022:false,\u0022previous\u0022:\u0022Rp 19.4M\u0022},\u0022margin\u0022:{\u0022value\u0022:\u002241.2%\u0022,\u0022change\u0022:\u0022+1.3%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u002239.9%\u0022}},\u0022spark\u0022:{\u0022line\u0022:\u0022M0 32L20 23.4L40 26.6L60 14.8L80 8.3L100 11.5L120 4\u0022,\u0022area\u0022:\u0022M0 32L20 23.4L40 26.6L60 14.8L80 8.3L100 11.5L120 4L120 40L0 40Z\u0022,\u0022summary\u0022:\u0022Gross margin trend this week, from 38.6% to 41.2%\u0022},\u0022chart\u0022:{\u0022caption\u0022:\u0022Daily profit this week\u0022,\u0022summary\u0022:\u0022Daily profit this week, lowest Rp 7.4M on Wed and highest Rp 13.1M on Fri\u0022,\u0022bars\u0022:[{\u0022label\u0022:\u0022Mon\u0022,\u0022value\u0022:\u0022Rp 8.2M\u0022,\u0022short\u0022:\u00228.2M\u0022,\u0022height\u0022:63},{\u0022label\u0022:\u0022Tue\u0022,\u0022value\u0022:\u0022Rp 9.6M\u0022,\u0022short\u0022:\u00229.6M\u0022,\u0022height\u0022:73},{\u0022label\u0022:\u0022Wed\u0022,\u0022value\u0022:\u0022Rp 7.4M\u0022,\u0022short\u0022:\u00227.4M\u0022,\u0022height\u0022:56},{\u0022label\u0022:\u0022Thu\u0022,\u0022value\u0022:\u0022Rp 11.8M\u0022,\u0022short\u0022:\u002211.8M\u0022,\u0022height\u0022:90},{\u0022label\u0022:\u0022Fri\u0022,\u0022value\u0022:\u0022Rp 13.1M\u0022,\u0022short\u0022:\u002213.1M\u0022,\u0022height\u0022:100},{\u0022label\u0022:\u0022Sat\u0022,\u0022value\u0022:\u0022Rp 12.3M\u0022,\u0022short\u0022:\u002212.3M\u0022,\u0022height\u0022:94}]},\u0022activity\u0022:{\u0022caption\u0022:\u0022Order status this week\u0022,\u0022total\u0022:\u00221,284\u0022,\u0022summary\u0022:\u00221,284 orders this week: 318 on process, 74 canceled, 892 delivered\u0022,\u0022segments\u0022:[{\u0022label\u0022:\u0022On process\u0022,\u0022count\u0022:\u0022318\u0022,\u0022share\u0022:25},{\u0022label\u0022:\u0022Canceled\u0022,\u0022count\u0022:\u002274\u0022,\u0022share\u0022:6},{\u0022label\u0022:\u0022Delivered\u0022,\u0022count\u0022:\u0022892\u0022,\u0022share\u0022:69}]},\u0022regions\u0022:{\u0022caption\u0022:\u0022Top provinces this week\u0022,\u0022total\u0022:\u00221,284\u0022,\u0022items\u0022:[{\u0022name\u0022:\u0022DKI Jakarta\u0022,\u0022share\u0022:31},{\u0022name\u0022:\u0022Jawa Barat\u0022,\u0022share\u0022:24},{\u0022name\u0022:\u0022Jawa Timur\u0022,\u0022share\u0022:18},{\u0022name\u0022:\u0022Bali\u0022,\u0022share\u0022:12},{\u0022name\u0022:\u0022Sumatera Utara\u0022,\u0022share\u0022:9}]}},\u0022monthly\u0022:{\u0022label\u0022:\u0022Monthly\u0022,\u0022subtitle\u0022:\u0022Here is how your store performed this month.\u0022,\u0022compare\u0022:\u0022last month\u0022,\u0022stats\u0022:{\u0022profit\u0022:{\u0022value\u0022:\u0022Rp 248.6M\u0022,\u0022change\u0022:\u0022+12.4%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u0022Rp 221.2M\u0022},\u0022orders\u0022:{\u0022value\u0022:\u00225,312\u0022,\u0022change\u0022:\u0022+9.8%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u00224,838\u0022},\u0022organic\u0022:{\u0022value\u0022:\u0022Rp 76.3M\u0022,\u0022change\u0022:\u0022+4.7%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u0022Rp 72.9M\u0022},\u0022margin\u0022:{\u0022value\u0022:\u002242.8%\u0022,\u0022change\u0022:\u0022-0.9%\u0022,\u0022up\u0022:false,\u0022previous\u0022:\u002243.7%\u0022}},\u0022spark\u0022:{\u0022line\u0022:\u0022M0 4L20 7.7L40 20.8L60 11.5L80 24.5L100 32L120 28.3\u0022,\u0022area\u0022:\u0022M0 4L20 7.7L40 20.8L60 11.5L80 24.5L100 32L120 28.3L120 40L0 40Z\u0022,\u0022summary\u0022:\u0022Gross margin trend this month, from 44.1% to 42.8%\u0022},\u0022chart\u0022:{\u0022caption\u0022:\u0022Monthly profit over the last 6 months\u0022,\u0022summary\u0022:\u0022Monthly profit over the last 6 months, rising from Rp 142.8M in Jun to Rp 248.6M in Nov\u0022,\u0022bars\u0022:[{\u0022label\u0022:\u0022Jun\u0022,\u0022value\u0022:\u0022Rp 142.8M\u0022,\u0022short\u0022:\u0022142.8M\u0022,\u0022height\u0022:57},{\u0022label\u0022:\u0022Jul\u0022,\u0022value\u0022:\u0022Rp 176.5M\u0022,\u0022short\u0022:\u0022176.5M\u0022,\u0022height\u0022:71},{\u0022label\u0022:\u0022Aug\u0022,\u0022value\u0022:\u0022Rp 158.2M\u0022,\u0022short\u0022:\u0022158.2M\u0022,\u0022height\u0022:64},{\u0022label\u0022:\u0022Sep\u0022,\u0022value\u0022:\u0022Rp 194.7M\u0022,\u0022short\u0022:\u0022194.7M\u0022,\u0022height\u0022:78},{\u0022label\u0022:\u0022Oct\u0022,\u0022value\u0022:\u0022Rp 221.2M\u0022,\u0022short\u0022:\u0022221.2M\u0022,\u0022height\u0022:89},{\u0022label\u0022:\u0022Nov\u0022,\u0022value\u0022:\u0022Rp 248.6M\u0022,\u0022short\u0022:\u0022248.6M\u0022,\u0022height\u0022:100}]},\u0022activity\u0022:{\u0022caption\u0022:\u0022Order status this month\u0022,\u0022total\u0022:\u00225,312\u0022,\u0022summary\u0022:\u00225,312 orders this month: 1,186 on process, 302 canceled, 3,824 delivered\u0022,\u0022segments\u0022:[{\u0022label\u0022:\u0022On process\u0022,\u0022count\u0022:\u00221,186\u0022,\u0022share\u0022:22},{\u0022label\u0022:\u0022Canceled\u0022,\u0022count\u0022:\u0022302\u0022,\u0022share\u0022:6},{\u0022label\u0022:\u0022Delivered\u0022,\u0022count\u0022:\u00223,824\u0022,\u0022share\u0022:72}]},\u0022regions\u0022:{\u0022caption\u0022:\u0022Top provinces this month\u0022,\u0022total\u0022:\u00225,312\u0022,\u0022items\u0022:[{\u0022name\u0022:\u0022DKI Jakarta\u0022,\u0022share\u0022:32},{\u0022name\u0022:\u0022Jawa Barat\u0022,\u0022share\u0022:23},{\u0022name\u0022:\u0022Jawa Timur\u0022,\u0022share\u0022:19},{\u0022name\u0022:\u0022Bali\u0022,\u0022share\u0022:11},{\u0022name\u0022:\u0022Sumatera Utara\u0022,\u0022share\u0022:9}]}},\u0022yearly\u0022:{\u0022label\u0022:\u0022Yearly\u0022,\u0022subtitle\u0022:\u0022Here is how your store performed this year.\u0022,\u0022compare\u0022:\u0022last year\u0022,\u0022stats\u0022:{\u0022profit\u0022:{\u0022value\u0022:\u0022Rp 2.86B\u0022,\u0022change\u0022:\u0022+18.7%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u0022Rp 2.41B\u0022},\u0022orders\u0022:{\u0022value\u0022:\u002261,940\u0022,\u0022change\u0022:\u0022+14.2%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u002254,238\u0022},\u0022organic\u0022:{\u0022value\u0022:\u0022Rp 884.1M\u0022,\u0022change\u0022:\u0022+21.3%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u0022Rp 728.9M\u0022},\u0022margin\u0022:{\u0022value\u0022:\u002241.9%\u0022,\u0022change\u0022:\u0022+2.1%\u0022,\u0022up\u0022:true,\u0022previous\u0022:\u002239.8%\u0022}},\u0022spark\u0022:{\u0022line\u0022:\u0022M0 32L20 27.6L40 21.2L60 23.6L80 14.3L100 10.4L120 4\u0022,\u0022area\u0022:\u0022M0 32L20 27.6L40 21.2L60 23.6L80 14.3L100 10.4L120 4L120 40L0 40Z\u0022,\u0022summary\u0022:\u0022Gross margin trend this year, from 36.2% to 41.9%\u0022},\u0022chart\u0022:{\u0022caption\u0022:\u0022Yearly profit since 2021\u0022,\u0022summary\u0022:\u0022Yearly profit since 2021, rising from Rp 1.38B in 2021 to Rp 2.86B in 2026\u0022,\u0022bars\u0022:[{\u0022label\u0022:\u00222021\u0022,\u0022value\u0022:\u0022Rp 1.38B\u0022,\u0022short\u0022:\u00221.38B\u0022,\u0022height\u0022:48},{\u0022label\u0022:\u00222022\u0022,\u0022value\u0022:\u0022Rp 1.62B\u0022,\u0022short\u0022:\u00221.62B\u0022,\u0022height\u0022:57},{\u0022label\u0022:\u00222023\u0022,\u0022value\u0022:\u0022Rp 1.94B\u0022,\u0022short\u0022:\u00221.94B\u0022,\u0022height\u0022:68},{\u0022label\u0022:\u00222024\u0022,\u0022value\u0022:\u0022Rp 2.18B\u0022,\u0022short\u0022:\u00222.18B\u0022,\u0022height\u0022:76},{\u0022label\u0022:\u00222025\u0022,\u0022value\u0022:\u0022Rp 2.41B\u0022,\u0022short\u0022:\u00222.41B\u0022,\u0022height\u0022:84},{\u0022label\u0022:\u00222026\u0022,\u0022value\u0022:\u0022Rp 2.86B\u0022,\u0022short\u0022:\u00222.86B\u0022,\u0022height\u0022:100}]},\u0022activity\u0022:{\u0022caption\u0022:\u0022Order status this year\u0022,\u0022total\u0022:\u002261,940\u0022,\u0022summary\u0022:\u002261,940 orders this year: 12,388 on process, 3,097 canceled, 46,455 delivered\u0022,\u0022segments\u0022:[{\u0022label\u0022:\u0022On process\u0022,\u0022count\u0022:\u002212,388\u0022,\u0022share\u0022:20},{\u0022label\u0022:\u0022Canceled\u0022,\u0022count\u0022:\u00223,097\u0022,\u0022share\u0022:5},{\u0022label\u0022:\u0022Delivered\u0022,\u0022count\u0022:\u002246,455\u0022,\u0022share\u0022:75}]},\u0022regions\u0022:{\u0022caption\u0022:\u0022Top provinces this year\u0022,\u0022total\u0022:\u002261,940\u0022,\u0022items\u0022:[{\u0022name\u0022:\u0022DKI Jakarta\u0022,\u0022share\u0022:30},{\u0022name\u0022:\u0022Jawa Barat\u0022,\u0022share\u0022:25},{\u0022name\u0022:\u0022Jawa Timur\u0022,\u0022share\u0022:18},{\u0022name\u0022:\u0022Bali\u0022,\u0022share\u0022:12},{\u0022name\u0022:\u0022Sumatera Utara\u0022,\u0022share\u0022:10}]}}}'),
+        sellers: JSON.parse('[{\u0022name\u0022:\u0022Dewi Lestari\u0022,\u0022product\u0022:\u0022Wireless Earbuds Pro\u0022,\u0022category\u0022:\u0022electronics\u0022,\u0022change\u0022:12.4,\u0022changeLabel\u0022:\u0022+12.4%\u0022,\u0022total\u0022:48.2,\u0022totalLabel\u0022:\u0022Rp 48.2M\u0022},{\u0022name\u0022:\u0022Budi Santoso\u0022,\u0022product\u0022:\u0022Batik Shirt Premium\u0022,\u0022category\u0022:\u0022fashion\u0022,\u0022change\u0022:8.1,\u0022changeLabel\u0022:\u0022+8.1%\u0022,\u0022total\u0022:36.7,\u0022totalLabel\u0022:\u0022Rp 36.7M\u0022},{\u0022name\u0022:\u0022Siti Rahmawati\u0022,\u0022product\u0022:\u0022Ceramic Dinner Set\u0022,\u0022category\u0022:\u0022home\u0022,\u0022change\u0022:-3.2,\u0022changeLabel\u0022:\u0022-3.2%\u0022,\u0022total\u0022:29.4,\u0022totalLabel\u0022:\u0022Rp 29.4M\u0022},{\u0022name\u0022:\u0022Agus Wijaya\u0022,\u0022product\u0022:\u0022Smartwatch Series 5\u0022,\u0022category\u0022:\u0022electronics\u0022,\u0022change\u0022:15.6,\u0022changeLabel\u0022:\u0022+15.6%\u0022,\u0022total\u0022:27.9,\u0022totalLabel\u0022:\u0022Rp 27.9M\u0022},{\u0022name\u0022:\u0022Putri Anggraini\u0022,\u0022product\u0022:\u0022Vitamin C Serum\u0022,\u0022category\u0022:\u0022beauty\u0022,\u0022change\u0022:6.3,\u0022changeLabel\u0022:\u0022+6.3%\u0022,\u0022total\u0022:21.5,\u0022totalLabel\u0022:\u0022Rp 21.5M\u0022},{\u0022name\u0022:\u0022Rizky Hidayat\u0022,\u0022product\u0022:\u0022Linen Throw Pillow\u0022,\u0022category\u0022:\u0022home\u0022,\u0022change\u0022:-1.8,\u0022changeLabel\u0022:\u0022-1.8%\u0022,\u0022total\u0022:14.6,\u0022totalLabel\u0022:\u0022Rp 14.6M\u0022}]'),
+        ranges: JSON.parse('[{\u0022value\u0022:\u0022last-7\u0022,\u0022label\u0022:\u0022Last 7 days\u0022},{\u0022value\u0022:\u0022last-30\u0022,\u0022label\u0022:\u0022Last 30 days\u0022},{\u0022value\u0022:\u0022last-90\u0022,\u0022label\u0022:\u0022Last 90 days\u0022},{\u0022value\u0022:\u0022ytd\u0022,\u0022label\u0022:\u0022Year to date\u0022}]'),
+        categories: JSON.parse('[{\u0022value\u0022:\u0022all\u0022,\u0022label\u0022:\u0022All categories\u0022},{\u0022value\u0022:\u0022electronics\u0022,\u0022label\u0022:\u0022Electronics\u0022},{\u0022value\u0022:\u0022fashion\u0022,\u0022label\u0022:\u0022Fashion\u0022},{\u0022value\u0022:\u0022home\u0022,\u0022label\u0022:\u0022Home and living\u0022},{\u0022value\u0022:\u0022beauty\u0022,\u0022label\u0022:\u0022Beauty\u0022}]'),
+        sortIcons: JSON.parse('{\u0022sort\u0022:\u0022m8 9 4-4 4 4M16 15l-4 4-4-4\u0022,\u0022asc\u0022:\u0022m8 14 4-4 4 4\u0022,\u0022desc\u0022:\u0022m8 10 4 4 4-4\u0022}'),
+        active: 'overview',
+        period: 'monthly',
+        selectedBar: 5,
+        query: '',
+        sortKey: 'total',
+        sortDir: 'desc',
+        draftRange: 'last-30',
+        draftCategory: 'all',
+        appliedRange: 'last-30',
+        appliedCategory: 'all',
+        current() {
+            return this.data[this.period];
+        },
+        barAt(index) {
+            return this.current().chart.bars[index];
+        },
+        selected() {
+            const bars = this.current().chart.bars;
+            return bars[this.selectedBar] ?? bars[bars.length - 1];
+        },
+        labelOf(list, value) {
+            return list.find((entry) => entry.value === value)?.label ?? '';
+        },
+        
+        dash(index) {
+            const segments = this.current().activity.segments;
+            const start = segments.slice(0, index).reduce((sum, s) => sum + s.share, 0);
+            const length = Math.max((segments[index]?.share ?? 0) - 1, 0);
+            return { dasharray: `${length} 100`, dashoffset: `${-start}` };
+        },
+        changePeriod(value) {
+            if (!(value in this.data)) return;
+            this.period = value;
+            this.selectedBar = 5;
+        },
+        matches(index) {
+            const seller = this.sellers[index];
+            const needle = this.query.trim().toLowerCase();
+            const inCategory = this.appliedCategory === 'all' || seller.category === this.appliedCategory;
+            return inCategory && (needle === '' || seller.name.toLowerCase().includes(needle) || seller.product.toLowerCase().includes(needle));
+        },
+        visibleCount() {
+            return this.sellers.filter((_, index) => this.matches(index)).length;
+        },
+        sortBy(key, numeric) {
+            if (key === this.sortKey) {
+                this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortKey = key;
+                this.sortDir = numeric ? 'desc' : 'asc';
+            }
+            this.reorder();
+        },
+        
+        reorder() {
+            const body = this.$refs.sellers;
+            const dir = this.sortDir === 'asc' ? 1 : -1;
+            const valueOf = (row) => this.sellers[row.dataset.seller][this.sortKey];
+            const compare = (a, b) => {
+                const x = valueOf(a);
+                const y = valueOf(b);
+                return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * dir;
+            };
+            [...body.querySelectorAll('tr[data-seller]')].sort(compare).forEach((row) => body.appendChild(row));
+            body.appendChild(this.$refs.empty);
+        },
+        ariaSort(key) {
+            if (key !== this.sortKey) return null;
+            return this.sortDir === 'asc' ? 'ascending' : 'descending';
+        },
+        sortIcon(key) {
+            if (key !== this.sortKey) return this.sortIcons.sort;
+            return this.sortDir === 'asc' ? this.sortIcons.asc : this.sortIcons.desc;
+        },
+        notify(detail) {
+            this.$dispatch('markas-toast', detail);
+        },
+        openFilters() {
+            this.draftRange = this.appliedRange;
+            this.draftCategory = this.appliedCategory;
+        },
+        applyFilters() {
+            this.appliedRange = this.draftRange;
+            this.appliedCategory = this.draftCategory;
+            this.notify({ title: 'Filters applied', description: `${this.labelOf(this.ranges, this.draftRange)}, ${this.labelOf(this.categories, this.draftCategory)}` });
+        },
+        resetFilters() {
+            this.draftRange = 'last-30';
+            this.draftCategory = 'all';
+            this.appliedRange = 'last-30';
+            this.appliedCategory = 'all';
+            this.notify({ title: 'Filters reset' });
+        },
+        exportReport() {
+            this.notify({ title: 'Report exported', description: `${this.current().label} sales report saved as CSV.`, variant: 'success' });
+        },
+        showNotifications() {
+            this.notify({ title: '3 new notifications', description: 'Dewi Lestari reached Rp 48.2M in sales.' });
+        },
+        showHelp() {
+            this.notify({ title: 'Help center', description: 'Email support@larisa.id or chat with us from 08.00 to 20.00 WIB.' });
+        },
+        signOut() {
+            this.notify({ title: 'Signed out', description: 'This is a demo, your session is still active.' });
+        },
+    }"
+>
+    <aside class="sticky top-0 hidden h-dvh flex-col gap-8 border-r border-line bg-surface px-4 py-6 lg:flex">
+        <div class="flex items-center gap-2.5 px-3">
+            <span class="grid size-8 place-items-center rounded-lg bg-primary text-sm font-semibold text-on-primary" aria-hidden="true">L</span>
+            <span class="text-lg font-semibold tracking-tight">Larisa</span>
+        </div>
+        <nav aria-label="Main navigation" class="grid flex-1 content-start gap-6">
+                            <div class="grid gap-2">
+                    <p class="px-3 text-xs font-medium text-faint">Main menu</p>
+                    <ul class="grid gap-1">
+                                                    <li>
+                                <button
+                                    type="button"
+                                    class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                    :class="active === 'overview' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                    :aria-current="active === 'overview' ? 'page' : null"
+                                    @click="active = 'overview'"
+                                ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" /></svg>Business overview</button>
+                            </li>
+                                                    <li>
+                                <button
+                                    type="button"
+                                    class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                    :class="active === 'analytics' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                    :aria-current="active === 'analytics' ? 'page' : null"
+                                    @click="active = 'analytics'"
+                                ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18M7 16v-5M12 16V7M17 16v-8" /></svg>Analytics</button>
+                            </li>
+                                                    <li>
+                                <button
+                                    type="button"
+                                    class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                    :class="active === 'customers' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                    :aria-current="active === 'customers' ? 'page' : null"
+                                    @click="active = 'customers'"
+                                ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM21 19v-1a4 4 0 0 0-3-3.9M16 5.1a3 3 0 0 1 0 5.8" /></svg>Customers</button>
+                            </li>
+                                                    <li>
+                                <button
+                                    type="button"
+                                    class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                    :class="active === 'integrations' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                    :aria-current="active === 'integrations' ? 'page' : null"
+                                    @click="active = 'integrations'"
+                                ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 13l9 5 9-5" /></svg>Integrations</button>
+                            </li>
+                                            </ul>
+                </div>
+                            <div class="grid gap-2">
+                    <p class="px-3 text-xs font-medium text-faint">Settings</p>
+                    <ul class="grid gap-1">
+                                                    <li>
+                                <button
+                                    type="button"
+                                    class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                    :class="active === 'messages' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                    :aria-current="active === 'messages' ? 'page' : null"
+                                    @click="active = 'messages'"
+                                ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z" /></svg>Messages</button>
+                            </li>
+                                                    <li>
+                                <button
+                                    type="button"
+                                    class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                    :class="active === 'reviews' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                    :aria-current="active === 'reviews' ? 'page' : null"
+                                    @click="active = 'reviews'"
+                                ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z" /></svg>Reviews</button>
+                            </li>
+                                            </ul>
+                </div>
+                    </nav>
+        <div class="grid gap-1 border-t border-line pt-4">
+            <button type="button" class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none text-muted hover:bg-subtle hover:text-ink" @click="showHelp()"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01" /></svg>Help center</button>
+            <button type="button" class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none text-muted hover:bg-subtle hover:text-ink" @click="signOut()"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3M16 16l4-4-4-4M20 12H10" /></svg>Log out</button>
+        </div>
+    </aside>
+
+    <div class="flex min-w-0 flex-col">
+        <header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-line bg-surface px-4 sm:px-6 lg:px-8">
+            <div class="contents" x-data="{ open: false }">
+            <div class="contents" @click="$refs.dialog.showModal(); open = true"><button type="button" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none lg:hidden" aria-label="Open menu"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></button></div>
+        <dialog
+        x-ref="dialog"
+        :data-state="open ? 'open' : 'closed'"
+        @close="open = false"
+        @click.self="$refs.dialog.close()"
+        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-auto left-0 border-r starting:open:-translate-x-full" id="markas-drawer-bcp6guFi" aria-labelledby="markas-drawer-bcp6guFi-title" data-state="closed"
+    >
+        <div class="flex h-full flex-col gap-4 p-6">
+            <div class="flex items-start justify-between gap-4">
+                <h2 id="markas-drawer-bcp6guFi-title" class="text-lg font-semibold text-ink">Menu</h2>
+                <form method="dialog">
+                    <button type="submit" class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                    </button>
+                </form>
+            </div>
+            <div class="flex-1 overflow-y-auto text-sm text-muted"><form method="dialog" class="grid gap-6">
+                    <nav aria-label="Mobile navigation" class="grid gap-6">
+                                                    <div class="grid gap-2">
+                                <p class="px-3 text-xs font-medium text-faint">Main menu</p>
+                                <ul class="grid gap-1">
+                                                                            <li>
+                                            <button
+                                                type="submit"
+                                                class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                                :class="active === 'overview' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                                :aria-current="active === 'overview' ? 'page' : null"
+                                                @click="active = 'overview'"
+                                            ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" /></svg>Business overview</button>
+                                        </li>
+                                                                            <li>
+                                            <button
+                                                type="submit"
+                                                class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                                :class="active === 'analytics' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                                :aria-current="active === 'analytics' ? 'page' : null"
+                                                @click="active = 'analytics'"
+                                            ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18M7 16v-5M12 16V7M17 16v-8" /></svg>Analytics</button>
+                                        </li>
+                                                                            <li>
+                                            <button
+                                                type="submit"
+                                                class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                                :class="active === 'customers' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                                :aria-current="active === 'customers' ? 'page' : null"
+                                                @click="active = 'customers'"
+                                            ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM21 19v-1a4 4 0 0 0-3-3.9M16 5.1a3 3 0 0 1 0 5.8" /></svg>Customers</button>
+                                        </li>
+                                                                            <li>
+                                            <button
+                                                type="submit"
+                                                class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                                :class="active === 'integrations' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                                :aria-current="active === 'integrations' ? 'page' : null"
+                                                @click="active = 'integrations'"
+                                            ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 13l9 5 9-5" /></svg>Integrations</button>
+                                        </li>
+                                                                    </ul>
+                            </div>
+                                                    <div class="grid gap-2">
+                                <p class="px-3 text-xs font-medium text-faint">Settings</p>
+                                <ul class="grid gap-1">
+                                                                            <li>
+                                            <button
+                                                type="submit"
+                                                class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                                :class="active === 'messages' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                                :aria-current="active === 'messages' ? 'page' : null"
+                                                @click="active = 'messages'"
+                                            ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z" /></svg>Messages</button>
+                                        </li>
+                                                                            <li>
+                                            <button
+                                                type="submit"
+                                                class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                                                :class="active === 'reviews' ? 'bg-primary-soft text-ink' : 'text-muted hover:bg-subtle hover:text-ink'"
+                                                :aria-current="active === 'reviews' ? 'page' : null"
+                                                @click="active = 'reviews'"
+                                            ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z" /></svg>Reviews</button>
+                                        </li>
+                                                                    </ul>
+                            </div>
+                                            </nav>
+                </form></div>
+                    </div>
+    </dialog>
+</div>
+            <div class="relative min-w-0 flex-1 sm:max-w-sm">
+                <div class="grid gap-1.5">
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none pl-9!" id="markas-input-6CZhVt2f" type="search" aria-label="Search sellers" placeholder="Search sellers or products" x-model="query" />
+    </div>
+                <svg class="pointer-events-none absolute bottom-3 left-3 size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.3-4.3M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z" /></svg>
+            </div>
+            <div class="ml-auto flex items-center gap-3">
+                <button type="button" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Notifications, 3 unread" @click="showNotifications()">
+                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+                    <span class="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full border-2 border-surface bg-danger text-[10px] font-semibold text-on-primary" aria-hidden="true">3</span>
+                </button>
+                <span class="hidden h-8 w-px bg-line sm:block" aria-hidden="true"></span>
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-10 text-sm" role="img" aria-label="Rizky Pratama">RP</span>
+                    <div class="hidden leading-tight md:grid">
+                        <span class="text-sm font-medium text-ink">Rizky Pratama</span>
+                        <span class="text-xs text-muted">rizky@larisa.id</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid min-w-0 gap-6 p-4 sm:p-6 lg:p-8">
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <div class="grid gap-1">
+                    <h1 class="text-2xl font-semibold tracking-tight text-ink">Dashboard</h1>
+                    <p class="text-sm text-muted" x-text="current().subtitle">Here is how your store performed this month.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block" x-on:markas-select="changePeriod($event.detail)"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-rOkuiLAe-trigger"
+        popovertarget="markas-dropdown-menu-rOkuiLAe"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-rOkuiLAe"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v4M17 3v4M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" /></svg>
+                            <span class="sr-only">Period: </span>
+                            <span x-text="current().label">Monthly</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-rOkuiLAe"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-rOkuiLAe-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('weekly')">Weekly</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('monthly')">Monthly</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('yearly')">Yearly</button>
+                                        </div>
+</div>
+                    <div class="contents" x-data="{ open: false }">
+            <div class="contents" @click="$refs.dialog.showModal(); open = true"><button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm" type="button" x-on:click="openFilters()">
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" /></svg>
+                                Filter
+</button></div>
+        <dialog
+        x-ref="dialog"
+        :data-state="open ? 'open' : 'closed'"
+        @close="open = false"
+        @click.self="$refs.dialog.close()"
+        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-0 left-auto border-l starting:open:translate-x-full" id="markas-drawer-0PG2DjmE" aria-labelledby="markas-drawer-0PG2DjmE-title" data-state="closed"
+    >
+        <div class="flex h-full flex-col gap-4 p-6">
+            <div class="flex items-start justify-between gap-4">
+                <h2 id="markas-drawer-0PG2DjmE-title" class="text-lg font-semibold text-ink">Filter report</h2>
+                <form method="dialog">
+                    <button type="submit" class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                    </button>
+                </form>
+            </div>
+            <div class="flex-1 overflow-y-auto text-sm text-muted"><div class="grid gap-5">
+                            <p>Narrow down the best sellers table by date range and product category.</p>
+                            <div class="grid gap-1.5">
+            <label for="markas-select-JKnG1xXM" class="text-sm font-medium text-ink">Date range</label>
+        <div class="relative">
+        <select class="h-10 w-full cursor-pointer appearance-none rounded-md border border-line bg-surface pr-9 pl-3 text-sm text-ink transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-select-JKnG1xXM" x-model="draftRange">
+            <option value="last-7" >Last 7 days</option>
+                                                                    <option value="last-30" selected>Last 30 days</option>
+                                                                    <option value="last-90" >Last 90 days</option>
+                                                                    <option value="ytd" >Year to date</option>
+        </select>
+        <svg class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+    </div>
+    </div>
+                            <div class="grid gap-1.5">
+            <label for="markas-select-C1A0h6fI" class="text-sm font-medium text-ink">Category</label>
+        <div class="relative">
+        <select class="h-10 w-full cursor-pointer appearance-none rounded-md border border-line bg-surface pr-9 pl-3 text-sm text-ink transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-select-C1A0h6fI" x-model="draftCategory">
+            <option value="all" selected>All categories</option>
+                                                                    <option value="electronics" >Electronics</option>
+                                                                    <option value="fashion" >Fashion</option>
+                                                                    <option value="home" >Home and living</option>
+                                                                    <option value="beauty" >Beauty</option>
+        </select>
+        <svg class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+    </div>
+    </div>
+                        </div></div>
+                            <form method="dialog" class="flex flex-wrap justify-end gap-2"><button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm" type="submit" value="reset" x-on:click="resetFilters()">
+    Reset
+</button>
+                            <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm" type="submit" value="apply" x-on:click="applyFilters()">
+    Apply filters
+</button></form>
+                    </div>
+    </dialog>
+</div>
+                    <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm" type="button" x-on:click="exportReport()">
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14" /></svg>
+                        Export
+</button>
+                </div>
+            </div>
+
+            <section aria-labelledby="metrics-title">
+                <h2 id="metrics-title" class="sr-only">Key metrics</h2>
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                                                                    <article class="grid gap-4 rounded-xl border p-5 border-primary bg-primary text-on-primary">
+                            <div class="flex items-center justify-between gap-3">
+                                <h3 class="text-sm font-medium text-on-primary/75">Total profit</h3>
+                                <span class="grid size-9 place-items-center rounded-lg bg-on-primary/10"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v3h-3a2 2 0 0 0 0 4h3v3a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V6" /></svg></span>
+                            </div>
+                            <div class="flex items-end justify-between gap-3">
+                                <p class="text-2xl font-semibold tracking-tight tabular-nums" x-text="current().stats.profit.value">Rp 248.6M</p>
+                                                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-xs">
+                                <span class="inline-flex rounded-full bg-surface">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink" x-show="current().stats.profit.up"><span x-text="current().stats.profit.change"></span></span>
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-danger/30 bg-danger/10 text-ink" x-show="! current().stats.profit.up"><span x-text="current().stats.profit.change"></span></span>
+                                </span>
+                                <span class="text-on-primary/75" x-text="`vs ${ current().stats.profit.previous } ${current().compare}`"></span>
+                            </div>
+                        </article>
+                                                                    <article class="grid gap-4 rounded-xl border p-5 border-line bg-surface text-ink">
+                            <div class="flex items-center justify-between gap-3">
+                                <h3 class="text-sm font-medium text-muted">Total orders</h3>
+                                <span class="grid size-9 place-items-center rounded-lg bg-subtle"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l1 13H5L6 7ZM9 7V6a3 3 0 0 1 6 0v1" /></svg></span>
+                            </div>
+                            <div class="flex items-end justify-between gap-3">
+                                <p class="text-2xl font-semibold tracking-tight tabular-nums" x-text="current().stats.orders.value">5,312</p>
+                                                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-xs">
+                                <span class="inline-flex rounded-full bg-surface">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink" x-show="current().stats.orders.up"><span x-text="current().stats.orders.change"></span></span>
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-danger/30 bg-danger/10 text-ink" x-show="! current().stats.orders.up"><span x-text="current().stats.orders.change"></span></span>
+                                </span>
+                                <span class="text-muted" x-text="`vs ${ current().stats.orders.previous } ${current().compare}`"></span>
+                            </div>
+                        </article>
+                                                                    <article class="grid gap-4 rounded-xl border p-5 border-line bg-surface text-ink">
+                            <div class="flex items-center justify-between gap-3">
+                                <h3 class="text-sm font-medium text-muted">Organic sales</h3>
+                                <span class="grid size-9 place-items-center rounded-lg bg-subtle"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 6-6 4 4 8-8M15 7h6v6" /></svg></span>
+                            </div>
+                            <div class="flex items-end justify-between gap-3">
+                                <p class="text-2xl font-semibold tracking-tight tabular-nums" x-text="current().stats.organic.value">Rp 76.3M</p>
+                                                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-xs">
+                                <span class="inline-flex rounded-full bg-surface">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink" x-show="current().stats.organic.up"><span x-text="current().stats.organic.change"></span></span>
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-danger/30 bg-danger/10 text-ink" x-show="! current().stats.organic.up"><span x-text="current().stats.organic.change"></span></span>
+                                </span>
+                                <span class="text-muted" x-text="`vs ${ current().stats.organic.previous } ${current().compare}`"></span>
+                            </div>
+                        </article>
+                                                                    <article class="grid gap-4 rounded-xl border p-5 border-line bg-surface text-ink">
+                            <div class="flex items-center justify-between gap-3">
+                                <h3 class="text-sm font-medium text-muted">Gross margin</h3>
+                                <span class="grid size-9 place-items-center rounded-lg bg-subtle"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5 5 19M7.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM16.5 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" /></svg></span>
+                            </div>
+                            <div class="flex items-end justify-between gap-3">
+                                <p class="text-2xl font-semibold tracking-tight tabular-nums" x-text="current().stats.margin.value">42.8%</p>
+                                                                    <svg class="h-10 w-24 shrink-0 text-primary" viewBox="0 0 120 40" preserveAspectRatio="none" role="img" aria-label="Gross margin trend this month, from 44.1% to 42.8%" :aria-label="current().spark.summary">
+                                        <path d="M0 4L20 7.7L40 20.8L60 11.5L80 24.5L100 32L120 28.3L120 40L0 40Z" :d="current().spark.area" class="fill-primary/10" />
+                                        <path d="M0 4L20 7.7L40 20.8L60 11.5L80 24.5L100 32L120 28.3" :d="current().spark.line" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                                    </svg>
+                                                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-xs">
+                                <span class="inline-flex rounded-full bg-surface">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink" x-show="current().stats.margin.up"><span x-text="current().stats.margin.change"></span></span>
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-danger/30 bg-danger/10 text-ink" x-show="! current().stats.margin.up"><span x-text="current().stats.margin.change"></span></span>
+                                </span>
+                                <span class="text-muted" x-text="`vs ${ current().stats.margin.previous } ${current().compare}`"></span>
+                            </div>
+                        </article>
+                                    </div>
+            </section>
+
+            <div class="grid gap-4 xl:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
+                <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="report-title">
+                <div class="text-sm text-ink"><div class="grid gap-6">
+                        <div class="flex flex-wrap items-start justify-between gap-4">
+                            <div class="grid gap-1">
+                                <h2 id="report-title" class="text-base font-semibold text-ink">Sales report</h2>
+                                <p class="text-sm text-muted" x-text="current().chart.caption"></p>
+                            </div>
+                            <div class="grid justify-items-end gap-0.5 text-right" aria-live="polite">
+                                <p class="text-xs text-muted" x-text="selected().label"></p>
+                                <p class="text-lg font-semibold tabular-nums" x-text="selected().value"></p>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-x-0 top-12 bottom-6 flex flex-col justify-between" aria-hidden="true">
+                                <span class="border-t border-dashed border-line"></span>
+                                <span class="border-t border-dashed border-line"></span>
+                                <span class="border-t border-dashed border-line"></span>
+                                <span class="border-t border-line"></span>
+                            </div>
+                            <div role="group" :aria-label="current().chart.summary" class="relative grid grid-cols-6 gap-3 sm:gap-5">
+                                                                    <button
+                                        type="button"
+                                        class="group flex h-64 min-w-0 flex-col items-center justify-end gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        :aria-pressed="selectedBar === 0 ? 'true' : 'false'"
+                                        @click="selectedBar = 0"
+                                    >
+                                        <span class="text-xs tabular-nums" :class="selectedBar === 0 ? 'font-semibold text-ink' : 'hidden text-muted sm:block'" x-text="barAt(0).short"></span>
+                                        <span
+                                            class="w-full max-w-14 rounded-t-md transition-colors duration-150 ease-out motion-reduce:transition-none"
+                                            :class="selectedBar === 0 ? 'bg-primary' : 'bg-primary/15 group-hover:bg-primary/25'"
+                                            :style="`height: ${(barAt(0).height * 184) / 100}px`"
+                                        ></span>
+                                        <span class="text-xs" :class="selectedBar === 0 ? 'font-medium text-ink' : 'text-muted'" x-text="barAt(0).label"></span>
+                                    </button>
+                                                                    <button
+                                        type="button"
+                                        class="group flex h-64 min-w-0 flex-col items-center justify-end gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        :aria-pressed="selectedBar === 1 ? 'true' : 'false'"
+                                        @click="selectedBar = 1"
+                                    >
+                                        <span class="text-xs tabular-nums" :class="selectedBar === 1 ? 'font-semibold text-ink' : 'hidden text-muted sm:block'" x-text="barAt(1).short"></span>
+                                        <span
+                                            class="w-full max-w-14 rounded-t-md transition-colors duration-150 ease-out motion-reduce:transition-none"
+                                            :class="selectedBar === 1 ? 'bg-primary' : 'bg-primary/15 group-hover:bg-primary/25'"
+                                            :style="`height: ${(barAt(1).height * 184) / 100}px`"
+                                        ></span>
+                                        <span class="text-xs" :class="selectedBar === 1 ? 'font-medium text-ink' : 'text-muted'" x-text="barAt(1).label"></span>
+                                    </button>
+                                                                    <button
+                                        type="button"
+                                        class="group flex h-64 min-w-0 flex-col items-center justify-end gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        :aria-pressed="selectedBar === 2 ? 'true' : 'false'"
+                                        @click="selectedBar = 2"
+                                    >
+                                        <span class="text-xs tabular-nums" :class="selectedBar === 2 ? 'font-semibold text-ink' : 'hidden text-muted sm:block'" x-text="barAt(2).short"></span>
+                                        <span
+                                            class="w-full max-w-14 rounded-t-md transition-colors duration-150 ease-out motion-reduce:transition-none"
+                                            :class="selectedBar === 2 ? 'bg-primary' : 'bg-primary/15 group-hover:bg-primary/25'"
+                                            :style="`height: ${(barAt(2).height * 184) / 100}px`"
+                                        ></span>
+                                        <span class="text-xs" :class="selectedBar === 2 ? 'font-medium text-ink' : 'text-muted'" x-text="barAt(2).label"></span>
+                                    </button>
+                                                                    <button
+                                        type="button"
+                                        class="group flex h-64 min-w-0 flex-col items-center justify-end gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        :aria-pressed="selectedBar === 3 ? 'true' : 'false'"
+                                        @click="selectedBar = 3"
+                                    >
+                                        <span class="text-xs tabular-nums" :class="selectedBar === 3 ? 'font-semibold text-ink' : 'hidden text-muted sm:block'" x-text="barAt(3).short"></span>
+                                        <span
+                                            class="w-full max-w-14 rounded-t-md transition-colors duration-150 ease-out motion-reduce:transition-none"
+                                            :class="selectedBar === 3 ? 'bg-primary' : 'bg-primary/15 group-hover:bg-primary/25'"
+                                            :style="`height: ${(barAt(3).height * 184) / 100}px`"
+                                        ></span>
+                                        <span class="text-xs" :class="selectedBar === 3 ? 'font-medium text-ink' : 'text-muted'" x-text="barAt(3).label"></span>
+                                    </button>
+                                                                    <button
+                                        type="button"
+                                        class="group flex h-64 min-w-0 flex-col items-center justify-end gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        :aria-pressed="selectedBar === 4 ? 'true' : 'false'"
+                                        @click="selectedBar = 4"
+                                    >
+                                        <span class="text-xs tabular-nums" :class="selectedBar === 4 ? 'font-semibold text-ink' : 'hidden text-muted sm:block'" x-text="barAt(4).short"></span>
+                                        <span
+                                            class="w-full max-w-14 rounded-t-md transition-colors duration-150 ease-out motion-reduce:transition-none"
+                                            :class="selectedBar === 4 ? 'bg-primary' : 'bg-primary/15 group-hover:bg-primary/25'"
+                                            :style="`height: ${(barAt(4).height * 184) / 100}px`"
+                                        ></span>
+                                        <span class="text-xs" :class="selectedBar === 4 ? 'font-medium text-ink' : 'text-muted'" x-text="barAt(4).label"></span>
+                                    </button>
+                                                                    <button
+                                        type="button"
+                                        class="group flex h-64 min-w-0 flex-col items-center justify-end gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        :aria-pressed="selectedBar === 5 ? 'true' : 'false'"
+                                        @click="selectedBar = 5"
+                                    >
+                                        <span class="text-xs tabular-nums" :class="selectedBar === 5 ? 'font-semibold text-ink' : 'hidden text-muted sm:block'" x-text="barAt(5).short"></span>
+                                        <span
+                                            class="w-full max-w-14 rounded-t-md transition-colors duration-150 ease-out motion-reduce:transition-none"
+                                            :class="selectedBar === 5 ? 'bg-primary' : 'bg-primary/15 group-hover:bg-primary/25'"
+                                            :style="`height: ${(barAt(5).height * 184) / 100}px`"
+                                        ></span>
+                                        <span class="text-xs" :class="selectedBar === 5 ? 'font-medium text-ink' : 'text-muted'" x-text="barAt(5).label"></span>
+                                    </button>
+                                                            </div>
+                        </div>
+                    </div></div>
+        </article>
+
+                <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="activity-title">
+                <div class="text-sm text-ink"><div class="grid gap-6">
+                        <div class="grid gap-1">
+                            <h2 id="activity-title" class="text-base font-semibold text-ink">Sales activity</h2>
+                            <p class="text-sm text-muted" x-text="current().activity.caption"></p>
+                        </div>
+                        <div class="relative mx-auto w-full max-w-72">
+                            <svg viewBox="0 0 200 110" class="w-full" role="img" aria-label="5,312 orders this month: 1,186 on process, 302 canceled, 3,824 delivered" :aria-label="current().activity.summary">
+                                <path d="M20 100A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke-width="20" class="stroke-subtle" />
+                                                                    <path d="M20 100A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke-width="20" :stroke-dasharray="dash(0).dasharray" :stroke-dashoffset="dash(0).dashoffset" class="stroke-primary/40" />
+                                                                    <path d="M20 100A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke-width="20" :stroke-dasharray="dash(1).dasharray" :stroke-dashoffset="dash(1).dashoffset" class="stroke-danger" />
+                                                                    <path d="M20 100A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke-width="20" :stroke-dasharray="dash(2).dasharray" :stroke-dashoffset="dash(2).dashoffset" class="stroke-primary" />
+                                                            </svg>
+                            <div class="absolute inset-x-0 bottom-0 grid justify-items-center gap-0.5">
+                                <p class="text-2xl font-semibold tracking-tight tabular-nums" x-text="current().activity.total"></p>
+                                <p class="text-xs text-muted">Total orders</p>
+                            </div>
+                        </div>
+                        <ul class="grid gap-3">
+                                                                                            <li class="flex items-center justify-between gap-3">
+                                    <span class="flex items-center gap-2">
+                                        <span class="size-2.5 rounded-full bg-primary/40" aria-hidden="true"></span>
+                                        <span x-text="current().activity.segments[0].label"></span>
+                                    </span>
+                                    <span class="flex items-center gap-2 tabular-nums">
+                                        <span class="font-medium text-ink" x-text="current().activity.segments[0].count"></span>
+                                        <span class="w-10 text-right text-muted" x-text="`${ current().activity.segments[0].share }%`"></span>
+                                    </span>
+                                </li>
+                                                                                            <li class="flex items-center justify-between gap-3">
+                                    <span class="flex items-center gap-2">
+                                        <span class="size-2.5 rounded-full bg-danger" aria-hidden="true"></span>
+                                        <span x-text="current().activity.segments[1].label"></span>
+                                    </span>
+                                    <span class="flex items-center gap-2 tabular-nums">
+                                        <span class="font-medium text-ink" x-text="current().activity.segments[1].count"></span>
+                                        <span class="w-10 text-right text-muted" x-text="`${ current().activity.segments[1].share }%`"></span>
+                                    </span>
+                                </li>
+                                                                                            <li class="flex items-center justify-between gap-3">
+                                    <span class="flex items-center gap-2">
+                                        <span class="size-2.5 rounded-full bg-primary" aria-hidden="true"></span>
+                                        <span x-text="current().activity.segments[2].label"></span>
+                                    </span>
+                                    <span class="flex items-center gap-2 tabular-nums">
+                                        <span class="font-medium text-ink" x-text="current().activity.segments[2].count"></span>
+                                        <span class="w-10 text-right text-muted" x-text="`${ current().activity.segments[2].share }%`"></span>
+                                    </span>
+                                </li>
+                                                    </ul>
+                    </div></div>
+        </article>
+            </div>
+
+            <div class="grid gap-4 xl:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
+                <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink min-w-0" aria-labelledby="sellers-title">
+                <div class="text-sm text-ink"><div class="grid gap-5">
+                        <div class="grid gap-1">
+                            <h2 id="sellers-title" class="text-base font-semibold text-ink">Best sellers</h2>
+                            <p class="text-sm text-muted" x-text="`${labelOf(ranges, appliedRange)}, ${labelOf(categories, appliedCategory)}`"></p>
+                        </div>
+                        <div role="region" aria-label="Best sellers" tabindex="0" class="overflow-x-auto rounded-lg border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                            <table class="w-full border-collapse text-sm">
+                                <thead>
+                                    <tr class="bg-subtle text-left text-muted">
+                                                                                    <th scope="col" class="px-4 py-2.5 font-medium whitespace-nowrap text-left" :aria-sort="ariaSort('name')">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                                    :class="sortKey === 'name' && 'text-ink'"
+                                                    @click="sortBy('name', false)"
+                                                >Seller<svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="sortIcon('name')" /></svg></button>
+                                            </th>
+                                                                                    <th scope="col" class="px-4 py-2.5 font-medium whitespace-nowrap text-left" :aria-sort="ariaSort('product')">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                                    :class="sortKey === 'product' && 'text-ink'"
+                                                    @click="sortBy('product', false)"
+                                                >Product<svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="sortIcon('product')" /></svg></button>
+                                            </th>
+                                                                                    <th scope="col" class="px-4 py-2.5 font-medium whitespace-nowrap text-right" :aria-sort="ariaSort('change')">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                                    :class="sortKey === 'change' && 'text-ink'"
+                                                    @click="sortBy('change', true)"
+                                                >Change<svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="sortIcon('change')" /></svg></button>
+                                            </th>
+                                                                                    <th scope="col" class="px-4 py-2.5 font-medium whitespace-nowrap text-right" :aria-sort="ariaSort('total')">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                                    :class="sortKey === 'total' && 'text-ink'"
+                                                    @click="sortBy('total', true)"
+                                                >Total<svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="sortIcon('total')" /></svg></button>
+                                            </th>
+                                                                            </tr>
+                                </thead>
+                                <tbody x-ref="sellers">
+                                                                            <tr data-seller="0" x-show="matches(0)" class="border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs" role="img" aria-label="Dewi Lestari">DL</span>
+                                                    <span class="font-medium whitespace-nowrap text-ink">Dewi Lestari</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <div class="grid">
+                                                    <span class="whitespace-nowrap text-ink">Wireless Earbuds Pro</span>
+                                                    <span class="text-xs text-muted">Electronics</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-right">
+                                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span>+12.4%</span></span>
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-medium whitespace-nowrap text-ink tabular-nums">Rp 48.2M</td>
+                                        </tr>
+                                                                            <tr data-seller="1" x-show="matches(1)" class="border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs" role="img" aria-label="Budi Santoso">BS</span>
+                                                    <span class="font-medium whitespace-nowrap text-ink">Budi Santoso</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <div class="grid">
+                                                    <span class="whitespace-nowrap text-ink">Batik Shirt Premium</span>
+                                                    <span class="text-xs text-muted">Fashion</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-right">
+                                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span>+8.1%</span></span>
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-medium whitespace-nowrap text-ink tabular-nums">Rp 36.7M</td>
+                                        </tr>
+                                                                            <tr data-seller="2" x-show="matches(2)" class="border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs" role="img" aria-label="Siti Rahmawati">SR</span>
+                                                    <span class="font-medium whitespace-nowrap text-ink">Siti Rahmawati</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <div class="grid">
+                                                    <span class="whitespace-nowrap text-ink">Ceramic Dinner Set</span>
+                                                    <span class="text-xs text-muted">Home and living</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-right">
+                                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-danger/30 bg-danger/10 text-ink"><span>-3.2%</span></span>
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-medium whitespace-nowrap text-ink tabular-nums">Rp 29.4M</td>
+                                        </tr>
+                                                                            <tr data-seller="3" x-show="matches(3)" class="border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs" role="img" aria-label="Agus Wijaya">AW</span>
+                                                    <span class="font-medium whitespace-nowrap text-ink">Agus Wijaya</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <div class="grid">
+                                                    <span class="whitespace-nowrap text-ink">Smartwatch Series 5</span>
+                                                    <span class="text-xs text-muted">Electronics</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-right">
+                                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span>+15.6%</span></span>
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-medium whitespace-nowrap text-ink tabular-nums">Rp 27.9M</td>
+                                        </tr>
+                                                                            <tr data-seller="4" x-show="matches(4)" class="border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs" role="img" aria-label="Putri Anggraini">PA</span>
+                                                    <span class="font-medium whitespace-nowrap text-ink">Putri Anggraini</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <div class="grid">
+                                                    <span class="whitespace-nowrap text-ink">Vitamin C Serum</span>
+                                                    <span class="text-xs text-muted">Beauty</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-right">
+                                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span>+6.3%</span></span>
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-medium whitespace-nowrap text-ink tabular-nums">Rp 21.5M</td>
+                                        </tr>
+                                                                            <tr data-seller="5" x-show="matches(5)" class="border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs" role="img" aria-label="Rizky Hidayat">RH</span>
+                                                    <span class="font-medium whitespace-nowrap text-ink">Rizky Hidayat</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <div class="grid">
+                                                    <span class="whitespace-nowrap text-ink">Linen Throw Pillow</span>
+                                                    <span class="text-xs text-muted">Home and living</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-right">
+                                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-danger/30 bg-danger/10 text-ink"><span>-1.8%</span></span>
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-medium whitespace-nowrap text-ink tabular-nums">Rp 14.6M</td>
+                                        </tr>
+                                                                        <tr x-ref="empty" x-show="visibleCount() === 0" style="display: none" class="border-t border-line">
+                                        <td colspan="4" class="px-4 py-8 text-center text-muted">No sellers match your filters.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div></div>
+        </article>
+
+                <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="regions-title">
+                <div class="text-sm text-ink"><div class="grid gap-5">
+                        <div class="grid gap-1">
+                            <h2 id="regions-title" class="text-base font-semibold text-ink">Orders by region</h2>
+                            <p class="text-sm text-muted" x-text="current().regions.caption"></p>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <p class="text-3xl font-semibold tracking-tight tabular-nums" x-text="current().regions.total"></p>
+                            <p class="text-sm text-muted">orders from 34 provinces</p>
+                        </div>
+                        <ul class="grid gap-4">
+                                                                                            <li class="grid gap-2">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <span class="font-medium text-ink" x-text="current().regions.items[0].name">DKI Jakarta</span>
+                                        <span class="text-muted tabular-nums" x-text="`${ current().regions.items[0].share }%`"></span>
+                                    </div>
+                                    <div class="grid gap-1.5">
+        <progress class="block h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-subtle [&amp;::-webkit-progress-bar]:bg-subtle [&amp;::-webkit-progress-value]:rounded-full [&amp;::-webkit-progress-value]:bg-primary [&amp;::-webkit-progress-value]:transition-[width] [&amp;::-webkit-progress-value]:duration-200 [&amp;::-webkit-progress-value]:ease-out [&amp;::-moz-progress-bar]:rounded-full [&amp;::-moz-progress-bar]:bg-primary indeterminate:animate-pulse indeterminate:bg-primary/30 indeterminate:[&amp;::-webkit-progress-bar]:bg-primary/30 motion-reduce:animate-none motion-reduce:[&amp;::-webkit-progress-value]:transition-none h-1.5!" id="markas-progress-vEbpkW0m" value="32" max="100" aria-label="DKI Jakarta share of orders" x-bind:value="current().regions.items[0].share" x-bind:aria-label="`${ current().regions.items[0].name } share of orders`"></progress>
+</div>
+                                </li>
+                                                                                            <li class="grid gap-2">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <span class="font-medium text-ink" x-text="current().regions.items[1].name">Jawa Barat</span>
+                                        <span class="text-muted tabular-nums" x-text="`${ current().regions.items[1].share }%`"></span>
+                                    </div>
+                                    <div class="grid gap-1.5">
+        <progress class="block h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-subtle [&amp;::-webkit-progress-bar]:bg-subtle [&amp;::-webkit-progress-value]:rounded-full [&amp;::-webkit-progress-value]:bg-primary [&amp;::-webkit-progress-value]:transition-[width] [&amp;::-webkit-progress-value]:duration-200 [&amp;::-webkit-progress-value]:ease-out [&amp;::-moz-progress-bar]:rounded-full [&amp;::-moz-progress-bar]:bg-primary indeterminate:animate-pulse indeterminate:bg-primary/30 indeterminate:[&amp;::-webkit-progress-bar]:bg-primary/30 motion-reduce:animate-none motion-reduce:[&amp;::-webkit-progress-value]:transition-none h-1.5!" id="markas-progress-WKvS9K1X" value="23" max="100" aria-label="Jawa Barat share of orders" x-bind:value="current().regions.items[1].share" x-bind:aria-label="`${ current().regions.items[1].name } share of orders`"></progress>
+</div>
+                                </li>
+                                                                                            <li class="grid gap-2">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <span class="font-medium text-ink" x-text="current().regions.items[2].name">Jawa Timur</span>
+                                        <span class="text-muted tabular-nums" x-text="`${ current().regions.items[2].share }%`"></span>
+                                    </div>
+                                    <div class="grid gap-1.5">
+        <progress class="block h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-subtle [&amp;::-webkit-progress-bar]:bg-subtle [&amp;::-webkit-progress-value]:rounded-full [&amp;::-webkit-progress-value]:bg-primary [&amp;::-webkit-progress-value]:transition-[width] [&amp;::-webkit-progress-value]:duration-200 [&amp;::-webkit-progress-value]:ease-out [&amp;::-moz-progress-bar]:rounded-full [&amp;::-moz-progress-bar]:bg-primary indeterminate:animate-pulse indeterminate:bg-primary/30 indeterminate:[&amp;::-webkit-progress-bar]:bg-primary/30 motion-reduce:animate-none motion-reduce:[&amp;::-webkit-progress-value]:transition-none h-1.5!" id="markas-progress-XZvxi8wE" value="19" max="100" aria-label="Jawa Timur share of orders" x-bind:value="current().regions.items[2].share" x-bind:aria-label="`${ current().regions.items[2].name } share of orders`"></progress>
+</div>
+                                </li>
+                                                                                            <li class="grid gap-2">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <span class="font-medium text-ink" x-text="current().regions.items[3].name">Bali</span>
+                                        <span class="text-muted tabular-nums" x-text="`${ current().regions.items[3].share }%`"></span>
+                                    </div>
+                                    <div class="grid gap-1.5">
+        <progress class="block h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-subtle [&amp;::-webkit-progress-bar]:bg-subtle [&amp;::-webkit-progress-value]:rounded-full [&amp;::-webkit-progress-value]:bg-primary [&amp;::-webkit-progress-value]:transition-[width] [&amp;::-webkit-progress-value]:duration-200 [&amp;::-webkit-progress-value]:ease-out [&amp;::-moz-progress-bar]:rounded-full [&amp;::-moz-progress-bar]:bg-primary indeterminate:animate-pulse indeterminate:bg-primary/30 indeterminate:[&amp;::-webkit-progress-bar]:bg-primary/30 motion-reduce:animate-none motion-reduce:[&amp;::-webkit-progress-value]:transition-none h-1.5!" id="markas-progress-JQ4MC8WD" value="11" max="100" aria-label="Bali share of orders" x-bind:value="current().regions.items[3].share" x-bind:aria-label="`${ current().regions.items[3].name } share of orders`"></progress>
+</div>
+                                </li>
+                                                                                            <li class="grid gap-2">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <span class="font-medium text-ink" x-text="current().regions.items[4].name">Sumatera Utara</span>
+                                        <span class="text-muted tabular-nums" x-text="`${ current().regions.items[4].share }%`"></span>
+                                    </div>
+                                    <div class="grid gap-1.5">
+        <progress class="block h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-subtle [&amp;::-webkit-progress-bar]:bg-subtle [&amp;::-webkit-progress-value]:rounded-full [&amp;::-webkit-progress-value]:bg-primary [&amp;::-webkit-progress-value]:transition-[width] [&amp;::-webkit-progress-value]:duration-200 [&amp;::-webkit-progress-value]:ease-out [&amp;::-moz-progress-bar]:rounded-full [&amp;::-moz-progress-bar]:bg-primary indeterminate:animate-pulse indeterminate:bg-primary/30 indeterminate:[&amp;::-webkit-progress-bar]:bg-primary/30 motion-reduce:animate-none motion-reduce:[&amp;::-webkit-progress-value]:transition-none h-1.5!" id="markas-progress-WPnkyAW1" value="9" max="100" aria-label="Sumatera Utara share of orders" x-bind:value="current().regions.items[4].share" x-bind:aria-label="`${ current().regions.items[4].name } share of orders`"></progress>
+</div>
+                                </li>
+                                                    </ul>
+                    </div></div>
+        </article>
+            </div>
+        </main>
+    </div>
+    <div
+    x-data="{
+        toasts: [],
+        timers: {},
+        nextId: 0,
+        variants: JSON.parse('{\u0022default\u0022:\u0022border-line\u0022,\u0022success\u0022:\u0022border-success\\\/40\u0022,\u0022danger\u0022:\u0022border-danger\\\/40\u0022}'),
+        iconVariants: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022text-success\u0022,\u0022danger\u0022:\u0022text-danger\u0022}'),
+        icons: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8.5 12l2.5 2.5 4.5-5\u0022,\u0022danger\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15 9l-6 6M9 9l6 6\u0022}'),
+        add(detail) {
+            const variant = detail.variant in this.variants ? detail.variant : 'default';
+            const duration = Number.isFinite(detail.duration) ? detail.duration : 5000;
+            const id = ++this.nextId;
+            this.toasts = [...this.toasts, { id, title: String(detail.title ?? ''), description: detail.description ?? '', variant }];
+            if (duration > 0) this.start(id, duration);
+        },
+        start(id, ms) {
+            this.timers[id] = { handle: setTimeout(() => this.dismiss(id), ms), remaining: ms, startedAt: Date.now() };
+        },
+        dismiss(id) {
+            clearTimeout(this.timers[id]?.handle);
+            delete this.timers[id];
+            this.toasts = this.toasts.filter((item) => item.id !== id);
+        },
+        pause(id) {
+            const timer = this.timers[id];
+            if (!timer?.handle) return;
+            clearTimeout(timer.handle);
+            this.timers[id] = { remaining: timer.remaining - (Date.now() - timer.startedAt), startedAt: 0 };
+        },
+        resume(id) {
+            const timer = this.timers[id];
+            if (!timer || timer.handle) return;
+            this.start(id, Math.max(timer.remaining, 0));
+        },
+    }"
+    x-init="[].forEach((detail) => add(detail))"
+    x-on:markas-toast.window="add($event.detail ?? {})"
+    class="pointer-events-none fixed right-4 bottom-4 z-50 flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2" role="status" aria-live="polite" aria-label="Notifications"
+>
+    <template x-for="item in toasts" :key="item.id">
+        <div
+            data-state="open"
+            class="pointer-events-auto flex items-start gap-3 rounded-lg border bg-surface p-4 text-sm text-ink shadow-overlay transition-[opacity,translate] duration-200 ease-out starting:translate-y-2 starting:opacity-0 motion-reduce:transition-none"
+            :class="variants[item.variant]"
+            x-on:mouseenter="pause(item.id)"
+            x-on:mouseleave="if (! $el.contains(document.activeElement)) resume(item.id)"
+            x-on:focusin="pause(item.id)"
+            x-on:focusout="if (! $el.contains($event.relatedTarget) && ! $el.matches(':hover')) resume(item.id)"
+        >
+            <template x-if="icons[item.variant]">
+                <svg class="mt-0.5 size-4 shrink-0" :class="iconVariants[item.variant]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.variant]" /></svg>
+            </template>
+            <div class="grid flex-1 gap-1">
+                <p class="font-semibold" x-text="item.title"></p>
+                <template x-if="item.description">
+                    <p class="text-muted" x-text="item.description"></p>
+                </template>
+            </div>
+            <button type="button" class="-mt-1 -mr-1 inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close" x-on:click="dismiss(item.id)">
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+            </button>
+        </div>
+    </template>
+</div>
+</div>

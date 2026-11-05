@@ -1,0 +1,88 @@
+{
+  "name": "menubar",
+  "title": "Menubar",
+  "description": "Horizontal bar of menus like a desktop app, built on the Popover API, with keyboard support following the WAI-ARIA Menubar pattern.",
+  "category": "navigation",
+  "tags": ["menubar", "menu", "popover", "toolbar", "navigation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "menubar.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Menubar.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Menubar.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "menus",
+      "type": "{ label, items: ({ label, value?, href?, danger?, disabled? } | { separator: true })[] }[]",
+      "default": "[]",
+      "description": "Menus in the bar. Each menu has a label and items in the same shape as Dropdown Menu items."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Menu",
+      "description": "Accessible name of the bar (aria-label)."
+    },
+    {
+      "name": "onSelect / @select / markas-select",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Called when an item is selected, with the item value (or label when value is empty). Blade dispatches a markas-select event."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Bar id. Triggers and menus use it with -trigger-<index> and -menu-<index> suffixes."
+    }
+  ],
+  "a11y": [
+    "The bar uses role=menubar with an aria-label; each top-level button is a menuitem with aria-haspopup=menu, aria-expanded, and aria-controls.",
+    "Only one top-level item is in the tab order (roving tabindex). Arrow Left and Arrow Right move between them, Home and End jump to the ends.",
+    "Enter, Space, or Arrow Down opens a menu and focuses the first item; Arrow Up focuses the last item. Arrow Up and Arrow Down move inside the menu, skipping disabled items.",
+    "With a menu open, Arrow Left and Arrow Right close it and open the neighboring menu. Escape closes the menu and returns focus to its top-level item."
+  ],
+  "ai": {
+    "whenToUse": "Application-style command menus such as File, Edit, and View in an editor or admin tool.",
+    "rules": [
+      "Use it for app commands, not for site navigation with a few links; use Navbar for that",
+      "Keep top-level labels to one short word each",
+      "Put destructive actions last in their menu with danger: true and a separator before them"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bar horizontal berisi beberapa menu seperti aplikasi desktop, berbasis Popover API, dengan keyboard sesuai pola WAI-ARIA Menubar.",
+      "props": {
+        "menus": "Daftar menu di bar. Setiap menu punya label dan item dengan bentuk sama seperti item Dropdown Menu.",
+        "label": "Nama aksesibel bar (aria-label). Default \"Menu\", isi misalnya \"Menu aplikasi\" untuk situs berbahasa Indonesia.",
+        "onSelect / @select / markas-select": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select.",
+        "id": "Id bar. Pemicu dan menu memakai id ini dengan akhiran -trigger-<indeks> dan -menu-<indeks>."
+      },
+      "a11y": [
+        "Bar memakai role=menubar dengan aria-label; setiap tombol tingkat atas adalah menuitem dengan aria-haspopup=menu, aria-expanded, dan aria-controls.",
+        "Hanya satu item tingkat atas yang masuk urutan Tab (roving tabindex). Panah kiri dan kanan berpindah di antaranya, Home dan End ke ujung.",
+        "Enter, Spasi, atau panah bawah membuka menu dan memfokuskan item pertama; panah atas memfokuskan item terakhir. Panah atas dan bawah berpindah di dalam menu, melewati item nonaktif.",
+        "Saat menu terbuka, panah kiri dan kanan menutupnya lalu membuka menu di sebelahnya. Escape menutup menu dan mengembalikan fokus ke item tingkat atasnya."
+      ],
+      "ai": {
+        "whenToUse": "Menu perintah gaya aplikasi seperti File, Edit, dan View di editor atau alat admin.",
+        "rules": [
+          "Pakai untuk perintah aplikasi, bukan navigasi situs dengan sedikit link; gunakan Navbar untuk itu",
+          "Label tingkat atas cukup satu kata pendek",
+          "Letakkan aksi berbahaya di akhir menunya dengan danger: true dan separator sebelumnya"
+        ]
+      }
+    }
+  }
+}

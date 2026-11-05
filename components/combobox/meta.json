@@ -1,0 +1,114 @@
+{
+  "name": "combobox",
+  "title": "Combobox",
+  "description": "Text input with a filtered suggestion list in a popover, following the WAI-ARIA Combobox pattern with list autocomplete.",
+  "category": "form",
+  "tags": ["combobox", "autocomplete", "search", "select", "listbox", "form"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "combobox.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Combobox.tsx", "deps": [] },
+    "vue": { "file": "Combobox.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "options",
+      "type": "{ value: string, label: string }[]",
+      "default": "[]",
+      "description": "Suggestions. Typing filters them by label, case insensitive."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Label text, linked to the input and used to name the listbox."
+    },
+    {
+      "name": "hint",
+      "type": "string",
+      "default": "-",
+      "description": "Hint text below the input. Hidden while an error is shown."
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "default": "-",
+      "description": "Error message. Turns on aria-invalid and the danger border."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "-",
+      "description": "Name of the hidden input that holds the selected value for form submit."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "string",
+      "default": "\"\"",
+      "description": "Selected option value. React accepts value with onValueChange or defaultValue; Vue uses v-model; Blade uses value."
+    },
+    {
+      "name": "onValueChange / markas-change",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Called when the selected value changes, with an empty string when cleared (React). Blade dispatches a markas-change event."
+    },
+    {
+      "name": "emptyLabel",
+      "type": "string",
+      "default": "No results",
+      "description": "Text shown when no option matches."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Input id. The listbox and options use it as a prefix."
+    }
+  ],
+  "a11y": [
+    "The input has role=combobox, aria-autocomplete=list, aria-expanded, and aria-controls pointing to the role=listbox.",
+    "Arrow Down and Arrow Up open the list and move through matching options (wrapping at the ends); aria-activedescendant follows the highlighted option so focus stays in the input.",
+    "Enter selects the highlighted option and closes the list. Escape closes the list; a second Escape clears the input.",
+    "Clicking an option selects it. Leaving the input closes the list."
+  ],
+  "ai": {
+    "whenToUse": "Picking one value from a long list where typing to search is faster than scrolling: countries, cities, users, tags.",
+    "rules": [
+      "Use Select for short lists of fewer than about 10 options",
+      "Set name so the selected value, not the visible label, is submitted",
+      "Typing clears the selected value until an option is chosen again; validate the value, not the text"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Input teks dengan daftar saran terfilter di popover, mengikuti pola WAI-ARIA Combobox dengan autocomplete list.",
+      "props": {
+        "options": "Daftar saran. Mengetik memfilter berdasarkan label, tanpa membedakan huruf besar kecil.",
+        "label": "Teks label, terhubung ke input dan dipakai sebagai nama listbox.",
+        "hint": "Teks petunjuk di bawah input. Disembunyikan saat ada error.",
+        "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
+        "name": "Nama input tersembunyi yang berisi value terpilih untuk submit form.",
+        "value / defaultValue / v-model": "Value opsi terpilih. React menerima value dengan onValueChange atau defaultValue; Vue memakai v-model; Blade memakai value.",
+        "onValueChange / markas-change": "Dipanggil saat value terpilih berubah, berisi string kosong saat dikosongkan (React). Blade memancarkan event markas-change.",
+        "emptyLabel": "Teks saat tidak ada opsi yang cocok. Isi misalnya \"Tidak ada hasil\".",
+        "id": "Id input. Listbox dan opsi memakainya sebagai awalan."
+      },
+      "a11y": [
+        "Input memakai role=combobox, aria-autocomplete=list, aria-expanded, dan aria-controls ke role=listbox.",
+        "Panah bawah dan atas membuka daftar dan berpindah di antara opsi yang cocok (berputar di ujung); aria-activedescendant mengikuti opsi yang disorot sehingga fokus tetap di input.",
+        "Enter memilih opsi yang disorot dan menutup daftar. Escape menutup daftar; Escape kedua mengosongkan input.",
+        "Klik opsi memilihnya. Meninggalkan input menutup daftar."
+      ],
+      "ai": {
+        "whenToUse": "Memilih satu nilai dari daftar panjang saat mengetik untuk mencari lebih cepat daripada menggulir: negara, kota, pengguna, tag.",
+        "rules": [
+          "Pakai Select untuk daftar pendek di bawah sekitar 10 opsi",
+          "Isi name agar value terpilih, bukan label yang tampil, yang terkirim",
+          "Mengetik mengosongkan value terpilih sampai opsi dipilih lagi; validasi value-nya, bukan teksnya"
+        ]
+      }
+    }
+  }
+}

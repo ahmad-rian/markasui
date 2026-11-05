@@ -1,0 +1,79 @@
+{
+  "name": "collapsible",
+  "title": "Collapsible",
+  "description": "A single section that opens and closes, built on native details and summary without JavaScript. Good for show more content.",
+  "category": "navigation",
+  "tags": ["collapsible", "details", "disclosure", "show more", "toggle"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "collapsible.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Collapsible.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Collapsible.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "string / slot / ReactNode",
+      "default": "-",
+      "description": "Text of the summary row. Blade and Vue also accept a title slot for rich content."
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "false",
+      "description": "Starts the section open."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content shown when the section is open."
+    }
+  ],
+  "a11y": [
+    "Uses native details and summary, so the summary is a focusable disclosure button announced as expanded or collapsed.",
+    "Enter and Space toggle the section; no JavaScript is needed.",
+    "The chevron icon is decorative and hidden from assistive technology."
+  ],
+  "ai": {
+    "whenToUse": "Hide secondary content behind one toggle, such as show more details, advanced settings, or a long description.",
+    "rules": [
+      "Use one Collapsible per independent section; use Accordion for a list of related sections",
+      "Write the title as a clear label of the hidden content, not just \"More\"",
+      "Do not hide required form fields or critical warnings inside a closed Collapsible"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Satu bagian yang bisa dibuka dan ditutup memakai details dan summary native tanpa JavaScript. Cocok untuk konten tampilkan lebih banyak.",
+      "props": {
+        "title": "Teks baris ringkasan. Blade dan Vue juga menerima slot title untuk isi kaya.",
+        "open": "Bagian dimulai dalam keadaan terbuka.",
+        "children / slot": "Isi yang tampil saat bagian terbuka."
+      },
+      "a11y": [
+        "Memakai details dan summary native, jadi summary adalah tombol disclosure yang bisa difokus dan diumumkan terbuka atau tertutup.",
+        "Enter dan Spasi membuka atau menutup bagian; tidak butuh JavaScript.",
+        "Ikon chevron bersifat dekoratif dan disembunyikan dari teknologi bantu."
+      ],
+      "ai": {
+        "whenToUse": "Menyembunyikan konten sekunder di balik satu tombol, misalnya detail tambahan, pengaturan lanjutan, atau deskripsi panjang.",
+        "rules": [
+          "Pakai satu Collapsible per bagian mandiri; pakai Accordion untuk daftar bagian yang saling terkait",
+          "Tulis judul sebagai label jelas dari isi yang tersembunyi, bukan sekadar \"Lainnya\"",
+          "Jangan menyembunyikan field form wajib atau peringatan penting di dalam Collapsible yang tertutup"
+        ]
+      }
+    }
+  }
+}

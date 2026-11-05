@@ -1,0 +1,4 @@
+<div class="grid gap-3">
+    <x-markas.label class="flex items-start gap-3 rounded-lg border border-line bg-surface p-4 has-checked:border-primary has-checked:bg-primary-soft"><input type="checkbox" name="backups" checked class="mt-0.5 size-4 shrink-0 accent-primary" /><span class="grid gap-0.5"><span>Daily backups</span><span class="font-normal text-muted">Keep 30 days of snapshots for every project.</span></span></x-markas.label>
+    <x-markas.label class="flex items-start gap-3 rounded-lg border border-line bg-surface p-4 has-checked:border-primary has-checked:bg-primary-soft"><input type="checkbox" name="audit_log" class="mt-0.5 size-4 shrink-0 accent-primary" /><span class="grid gap-0.5"><span>Audit log</span><span class="font-normal text-muted">Record every sign-in and permission change.</span></span></x-markas.label>
+</div>

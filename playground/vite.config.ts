@@ -27,6 +27,7 @@ export default defineConfig({
         react: `${root}react.html`,
         vue: `${root}vue.html`,
         blade: `${root}blade.html`,
+        template: `${root}template.html`,
       },
     },
   },

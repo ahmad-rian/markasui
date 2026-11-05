@@ -1,0 +1,84 @@
+{
+  "name": "toggle",
+  "title": "Toggle",
+  "description": "Two-state button with aria-pressed for options like bold or bookmark, in default and outline variants and three sizes.",
+  "category": "form",
+  "tags": ["toggle", "button", "pressed", "toolbar"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "toggle.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Toggle.tsx", "deps": [] },
+    "vue": { "file": "Toggle.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "'default' | 'outline'",
+      "default": "'default'",
+      "description": "Look of the toggle. Outline adds a border and a surface background."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "'md'",
+      "description": "Height 32, 36, or 40px. The minimum width matches the height for icon-only toggles."
+    },
+    {
+      "name": "pressed / defaultPressed / v-model",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pressed state. Blade uses pressed, React pressed or defaultPressed, Vue v-model or defaultPressed."
+    },
+    {
+      "name": "onPressedChange",
+      "type": "(pressed: boolean) => void",
+      "default": "-",
+      "description": "React only. Called with the new state on every click."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the toggle."
+    }
+  ],
+  "a11y": [
+    "A native button with aria-pressed, so screen readers announce it as a toggle button that is pressed or not pressed.",
+    "Space and Enter toggle the state natively.",
+    "An icon-only toggle needs aria-label, and the icon gets aria-hidden."
+  ],
+  "ai": {
+    "whenToUse": "A single on/off option that acts like a button, such as bold in a toolbar, mute, or bookmark.",
+    "rules": [
+      "Use Switch for settings in a form and Checkbox for values that are submitted",
+      "Keep the label the same in both states, the pressed style shows the state",
+      "Use Toggle group for a set of related toggles"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tombol dua keadaan dengan aria-pressed untuk opsi seperti tebal atau tandai, dalam varian default dan outline serta tiga ukuran.",
+      "props": {
+        "variant": "Tampilan toggle. Outline menambahkan border dan latar surface.",
+        "size": "Tinggi 32, 36, atau 40px. Lebar minimum sama dengan tinggi untuk toggle berisi ikon saja.",
+        "pressed / defaultPressed / v-model": "Keadaan ditekan. Blade memakai pressed, React pressed atau defaultPressed, Vue v-model atau defaultPressed.",
+        "onPressedChange": "Khusus React. Dipanggil dengan keadaan baru setiap kali diklik.",
+        "disabled": "Menonaktifkan toggle."
+      },
+      "a11y": [
+        "Button native dengan aria-pressed, sehingga screen reader membacakannya sebagai tombol toggle yang ditekan atau tidak.",
+        "Spasi dan Enter mengubah keadaan secara native.",
+        "Toggle yang hanya berisi ikon wajib diberi aria-label, dan ikonnya aria-hidden."
+      ],
+      "ai": {
+        "whenToUse": "Satu opsi nyala/mati yang berperilaku seperti tombol, misalnya tebal di toolbar, bisukan, atau tandai.",
+        "rules": [
+          "Pakai Switch untuk pengaturan di form dan Checkbox untuk nilai yang dikirim",
+          "Label tetap sama di kedua keadaan, gaya ditekan yang menunjukkan keadaan",
+          "Pakai Toggle group untuk sekumpulan toggle yang saling terkait"
+        ]
+      }
+    }
+  }
+}

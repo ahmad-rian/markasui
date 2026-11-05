@@ -1,0 +1,112 @@
+{
+  "name": "slider",
+  "title": "Slider",
+  "description": "Range slider built on a native input type range, with a primary fill, a round thumb, and the current value shown next to the label.",
+  "category": "form",
+  "tags": ["slider", "range", "form", "number"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "slider.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Slider.tsx", "deps": [] },
+    "vue": { "file": "Slider.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Label text above the slider, linked through for/id. Without it, pass aria-label."
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "default": "0",
+      "description": "Lowest value."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "100",
+      "description": "Highest value."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "default": "1",
+      "description": "Increment used by dragging and the arrow keys."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "number",
+      "default": "min",
+      "description": "Current value. Blade uses value, React value or defaultValue, Vue v-model or defaultValue."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: number) => void",
+      "default": "-",
+      "description": "React only. Called with the new number on every input."
+    },
+    {
+      "name": "showValue",
+      "type": "boolean",
+      "default": "true",
+      "description": "Shows the current value on the right of the label with tabular numbers."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the slider and dims the label."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Input id. Generated when empty."
+    }
+  ],
+  "a11y": [
+    "A native input type range, so screen readers announce the role slider and the current value.",
+    "Arrow keys, Page Up, Page Down, Home, and End change the value natively.",
+    "The visible value is aria-hidden because the slider already announces it."
+  ],
+  "ai": {
+    "whenToUse": "Picking an approximate number in a known range where the exact value matters less than the position, such as volume, brightness, or a price limit.",
+    "rules": [
+      "Use Input type number when users need to type an exact value",
+      "Always give a label, or aria-label when the label is not visible",
+      "Keep the step coarse enough to reach every value with the keyboard"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Slider rentang dari input type range native, dengan isian primary, thumb bulat, dan nilai saat ini di samping label.",
+      "props": {
+        "label": "Teks label di atas slider, terhubung lewat for/id. Tanpa label, isi aria-label.",
+        "min": "Nilai terendah.",
+        "max": "Nilai tertinggi.",
+        "step": "Kenaikan nilai saat digeser dan saat memakai tombol panah.",
+        "value / defaultValue / v-model": "Nilai saat ini. Blade memakai value, React value atau defaultValue, Vue v-model atau defaultValue.",
+        "onValueChange": "Khusus React. Dipanggil dengan angka baru setiap kali digeser.",
+        "showValue": "Menampilkan nilai saat ini di kanan label dengan angka tabular.",
+        "disabled": "Menonaktifkan slider dan meredupkan label.",
+        "id": "Id input. Dibuat otomatis kalau kosong."
+      },
+      "a11y": [
+        "Input type range native, sehingga screen reader membacakan peran slider dan nilainya.",
+        "Tombol panah, Page Up, Page Down, Home, dan End mengubah nilai secara native.",
+        "Nilai yang tampil diberi aria-hidden karena slider sudah membacakannya."
+      ],
+      "ai": {
+        "whenToUse": "Memilih angka perkiraan dalam rentang yang diketahui, saat posisi lebih penting dari nilai persis, misalnya volume, kecerahan, atau batas harga.",
+        "rules": [
+          "Pakai Input type number kalau pengguna perlu mengetik nilai persis",
+          "Selalu beri label, atau aria-label kalau label tidak terlihat",
+          "Pilih step yang cukup kasar agar semua nilai bisa dicapai dengan keyboard"
+        ]
+      }
+    }
+  }
+}

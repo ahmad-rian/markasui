@@ -1,0 +1,2734 @@
+<div
+    class="min-h-dvh bg-canvas text-ink"
+    x-data="{
+        activeTop: 'customers',
+        activeRail: 'contacts',
+        sort: 'newest',
+        selectedDeal: 'd1',
+        info: JSON.parse('{\u0022firstName\u0022:\u0022Rina\u0022,\u0022lastName\u0022:\u0022Kusuma\u0022,\u0022email\u0022:\u0022rina.kusuma@nusalog.co.id\u0022,\u0022phone\u0022:\u0022+62 812 3456 7890\u0022,\u0022source\u0022:\u0022Referral\u0022,\u0022lastContacted\u0022:\u0022Nov 3, 2026\u0022}'),
+        draft: JSON.parse('{\u0022firstName\u0022:\u0022Rina\u0022,\u0022lastName\u0022:\u0022Kusuma\u0022,\u0022email\u0022:\u0022rina.kusuma@nusalog.co.id\u0022,\u0022phone\u0022:\u0022+62 812 3456 7890\u0022,\u0022source\u0022:\u0022Referral\u0022,\u0022lastContacted\u0022:\u0022Nov 3, 2026\u0022}'),
+        view: { year: 2026, month: 10 },
+        selectedDate: '2026-11-05',
+        today: '2026-11-05',
+        deals: JSON.parse('[{\u0022id\u0022:\u0022d1\u0022,\u0022date\u0022:\u00222026-10-28\u0022,\u0022title\u0022:\u0022Cloud migration package\u0022,\u0022value\u0022:185000000,\u0022stage\u0022:\u0022Negotiation\u0022,\u0022team\u0022:[\u0022Budi Santoso\u0022,\u0022Sari Wulandari\u0022,\u0022Agus Pratama\u0022],\u0022highlight\u0022:true},{\u0022id\u0022:\u0022d2\u0022,\u0022date\u0022:\u00222026-10-21\u0022,\u0022title\u0022:\u0022Annual support renewal\u0022,\u0022value\u0022:96400000,\u0022stage\u0022:\u0022Won\u0022,\u0022team\u0022:[\u0022Dewi Lestari\u0022,\u0022Budi Santoso\u0022],\u0022highlight\u0022:false},{\u0022id\u0022:\u0022d3\u0022,\u0022date\u0022:\u00222026-10-14\u0022,\u0022title\u0022:\u0022Data warehouse audit\u0022,\u0022value\u0022:42750000,\u0022stage\u0022:\u0022Proposal\u0022,\u0022team\u0022:[\u0022Agus Pratama\u0022,\u0022Fajar Nugroho\u0022,\u0022Sari Wulandari\u0022],\u0022highlight\u0022:false},{\u0022id\u0022:\u0022d4\u0022,\u0022date\u0022:\u00222026-10-02\u0022,\u0022title\u0022:\u0022POS terminal rollout\u0022,\u0022value\u0022:128900000,\u0022stage\u0022:\u0022Won\u0022,\u0022team\u0022:[\u0022Fajar Nugroho\u0022,\u0022Dewi Lestari\u0022],\u0022highlight\u0022:false},{\u0022id\u0022:\u0022d5\u0022,\u0022date\u0022:\u00222026-09-23\u0022,\u0022title\u0022:\u0022Security awareness training\u0022,\u0022value\u0022:18500000,\u0022stage\u0022:\u0022Lost\u0022,\u0022team\u0022:[\u0022Sari Wulandari\u0022],\u0022highlight\u0022:false},{\u0022id\u0022:\u0022d6\u0022,\u0022date\u0022:\u00222026-09-11\u0022,\u0022title\u0022:\u0022Fleet tracking pilot\u0022,\u0022value\u0022:64200000,\u0022stage\u0022:\u0022Won\u0022,\u0022team\u0022:[\u0022Budi Santoso\u0022,\u0022Agus Pratama\u0022,\u0022Dewi Lestari\u0022],\u0022highlight\u0022:false}]'),
+        sortOptions: JSON.parse('[{\u0022label\u0022:\u0022Newest first\u0022,\u0022value\u0022:\u0022newest\u0022},{\u0022label\u0022:\u0022Oldest first\u0022,\u0022value\u0022:\u0022oldest\u0022},{\u0022label\u0022:\u0022Highest value\u0022,\u0022value\u0022:\u0022high\u0022},{\u0022label\u0022:\u0022Lowest value\u0022,\u0022value\u0022:\u0022low\u0022}]'),
+        dealMenuToasts: JSON.parse('{\u0022view\u0022:\u0022Opening deal details\u0022,\u0022duplicate\u0022:\u0022Deal duplicated\u0022,\u0022archive\u0022:\u0022Deal archived\u0022}'),
+        tasks: JSON.parse('{\u00222026-10-28\u0022:[{\u0022time\u0022:\u002210:00\u0022,\u0022title\u0022:\u0022Kickoff meeting\u0022,\u0022kind\u0022:\u0022Meeting\u0022}],\u00222026-11-03\u0022:[{\u0022time\u0022:\u002209:30\u0022,\u0022title\u0022:\u0022Discovery call recap\u0022,\u0022kind\u0022:\u0022Call\u0022}],\u00222026-11-05\u0022:[{\u0022time\u0022:\u002210:00\u0022,\u0022title\u0022:\u0022Send revised proposal\u0022,\u0022kind\u0022:\u0022Email\u0022},{\u0022time\u0022:\u002214:30\u0022,\u0022title\u0022:\u0022Pricing review with finance\u0022,\u0022kind\u0022:\u0022Meeting\u0022}],\u00222026-11-09\u0022:[{\u0022time\u0022:\u002211:00\u0022,\u0022title\u0022:\u0022Contract draft review\u0022,\u0022kind\u0022:\u0022Meeting\u0022}],\u00222026-11-12\u0022:[{\u0022time\u0022:\u002215:00\u0022,\u0022title\u0022:\u0022Quarterly business review\u0022,\u0022kind\u0022:\u0022Meeting\u0022}],\u00222026-11-18\u0022:[{\u0022time\u0022:\u002209:00\u0022,\u0022title\u0022:\u0022Onsite demo in Surabaya\u0022,\u0022kind\u0022:\u0022Visit\u0022}],\u00222026-11-26\u0022:[{\u0022time\u0022:\u002213:00\u0022,\u0022title\u0022:\u0022Renewal sign-off\u0022,\u0022kind\u0022:\u0022Call\u0022}],\u00222026-12-02\u0022:[{\u0022time\u0022:\u002210:00\u0022,\u0022title\u0022:\u0022Implementation planning\u0022,\u0022kind\u0022:\u0022Meeting\u0022}]}'),
+        monthNames: JSON.parse('[\u0022January\u0022,\u0022February\u0022,\u0022March\u0022,\u0022April\u0022,\u0022May\u0022,\u0022June\u0022,\u0022July\u0022,\u0022August\u0022,\u0022September\u0022,\u0022October\u0022,\u0022November\u0022,\u0022December\u0022]'),
+        weekdayNames: JSON.parse('[\u0022Sunday\u0022,\u0022Monday\u0022,\u0022Tuesday\u0022,\u0022Wednesday\u0022,\u0022Thursday\u0022,\u0022Friday\u0022,\u0022Saturday\u0022]'),
+        cls: JSON.parse('{\u0022pillActive\u0022:\u0022bg-primary text-on-primary\u0022,\u0022pillIdle\u0022:\u0022text-muted hover:bg-surface hover:text-ink\u0022,\u0022railActive\u0022:\u0022bg-primary text-on-primary\u0022,\u0022railIdle\u0022:\u0022text-muted hover:bg-subtle hover:text-ink\u0022,\u0022menuItemActive\u0022:\u0022bg-primary text-on-primary\u0022,\u0022menuItemIdle\u0022:\u0022text-ink hover:bg-subtle\u0022,\u0022dealSelected\u0022:\u0022ring-2 ring-primary ring-offset-2 ring-offset-surface\u0022,\u0022daySelected\u0022:\u0022bg-primary font-semibold text-on-primary\u0022,\u0022dayToday\u0022:\u0022font-semibold text-ink ring-1 ring-primary-line hover:bg-subtle\u0022,\u0022dayIdle\u0022:\u0022text-ink hover:bg-subtle\u0022}'),
+        get sortLabel() {
+            return this.sortOptions.find((option) => option.value === this.sort)?.label;
+        },
+        get customerName() {
+            return this.info.firstName + ' ' + this.info.lastName;
+        },
+        
+        get cells() {
+            const offset = (new Date(this.view.year, this.view.month, 1).getDay() + 6) % 7;
+            const days = new Date(this.view.year, this.view.month + 1, 0).getDate();
+            return [...Array(offset).fill(null), ...Array.from({ length: days }, (_, index) => index + 1)];
+        },
+        get selectedTasks() {
+            return this.tasks[this.selectedDate] ?? [];
+        },
+        notify(title, description, variant = 'default') {
+            this.$dispatch('markas-toast', { title, description, variant });
+        },
+        
+        applySort(value) {
+            const sorters = {
+                newest: (a, b) => b.date.localeCompare(a.date),
+                oldest: (a, b) => a.date.localeCompare(b.date),
+                high: (a, b) => b.value - a.value,
+                low: (a, b) => a.value - b.value,
+            };
+            this.sort = value;
+            const list = this.$refs.deals;
+            [...this.deals].sort(sorters[value]).forEach((deal) => list.append(list.querySelector(`[data-deal='${deal.id}']`)));
+        },
+        dealAction(value, title) {
+            this.notify(this.dealMenuToasts[value] ?? value, title);
+        },
+        shiftMonth(step) {
+            const next = new Date(this.view.year, this.view.month + step, 1);
+            this.view = { year: next.getFullYear(), month: next.getMonth() };
+        },
+        dayIso(day) {
+            const pad = (value) => String(value).padStart(2, '0');
+            return `${this.view.year}-${pad(this.view.month + 1)}-${pad(day)}`;
+        },
+        dayLabel(day) {
+            const count = this.tasks[this.dayIso(day)]?.length ?? 0;
+            return `${this.monthNames[this.view.month]} ${day}, ${count} ${count === 1 ? 'task' : 'tasks'}`;
+        },
+        dayClass(day) {
+            const iso = this.dayIso(day);
+            if (iso === this.selectedDate) return this.cls.daySelected;
+            return iso === this.today ? this.cls.dayToday : this.cls.dayIdle;
+        },
+        longDate(iso) {
+            const [year, month, day] = iso.split('-').map(Number);
+            const weekday = this.weekdayNames[new Date(year, month - 1, day).getDay()];
+            return `${weekday}, ${this.monthNames[month - 1]} ${day}`;
+        },
+        onDrawerClose(dialog) {
+            if (dialog.returnValue === 'save') {
+                this.info = { ...this.draft };
+                this.notify('Customer details saved', this.draft.firstName + ' ' + this.draft.lastName, 'success');
+            }
+            dialog.returnValue = '';
+        },
+    }"
+>
+    <header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-line bg-surface px-4 lg:px-6">
+        <div class="contents" x-data="{ open: false }">
+            <div class="contents" @click="$refs.dialog.showModal(); open = true"><button type="button" aria-label="Open menu" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:hidden"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></button></div>
+        <dialog
+        x-ref="dialog"
+        :data-state="open ? 'open' : 'closed'"
+        @close="open = false"
+        @click.self="$refs.dialog.close()"
+        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-auto left-0 border-r starting:open:-translate-x-full" id="markas-drawer-CaXjvizG" aria-labelledby="markas-drawer-CaXjvizG-title" data-state="closed"
+    >
+        <div class="flex h-full flex-col gap-4 p-6">
+            <div class="flex items-start justify-between gap-4">
+                <h2 id="markas-drawer-CaXjvizG-title" class="text-lg font-semibold text-ink">Menu</h2>
+                <form method="dialog">
+                    <button type="submit" class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                    </button>
+                </form>
+            </div>
+            <div class="flex-1 overflow-y-auto text-sm text-muted"><form method="dialog" class="grid gap-6">
+                <div class="grid gap-1">
+                    <p class="px-3 text-xs font-medium text-muted">Pages</p>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeTop === 'deals' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeTop === 'deals' ? 'page' : null"
+                            @click="activeTop = 'deals'"
+                        >Deals</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeTop === 'customers' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeTop === 'customers' ? 'page' : null"
+                            @click="activeTop = 'customers'"
+                        >Customers</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeTop === 'finance' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeTop === 'finance' ? 'page' : null"
+                            @click="activeTop = 'finance'"
+                        >Finance</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeTop === 'growth' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeTop === 'growth' ? 'page' : null"
+                            @click="activeTop = 'growth'"
+                        >Growth</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeTop === 'projects' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeTop === 'projects' ? 'page' : null"
+                            @click="activeTop = 'projects'"
+                        >Projects</button>
+                                    </div>
+                <div class="grid gap-1">
+                    <p class="px-3 text-xs font-medium text-muted">Workspace</p>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'overview' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeRail === 'overview' ? 'page' : null"
+                            @click="activeRail = 'overview'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" /></svg>Overview</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'contacts' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeRail === 'contacts' ? 'page' : null"
+                            @click="activeRail = 'contacts'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>Contacts</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'calendar' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeRail === 'calendar' ? 'page' : null"
+                            @click="activeRail = 'calendar'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2" /></svg>Calendar</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'reports' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeRail === 'reports' ? 'page' : null"
+                            @click="activeRail = 'reports'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M8 17v-5M13 17V8M18 17v-3" /></svg>Reports</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'documents' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeRail === 'documents' ? 'page' : null"
+                            @click="activeRail = 'documents'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" /></svg>Documents</button>
+                                            <button
+                            type="submit"
+                            class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'settings' ? cls.menuItemActive : cls.menuItemIdle"
+                            :aria-current="activeRail === 'settings' ? 'page' : null"
+                            @click="activeRail = 'settings'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" /></svg>Settings</button>
+                                    </div>
+            </form></div>
+                    </div>
+    </dialog>
+</div>
+        <div class="flex min-w-0 items-center gap-3">
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-on-primary" aria-hidden="true">L</span>
+            <div class="min-w-0 leading-tight">
+                <p class="flex items-center gap-1.5 text-base font-semibold tracking-tight">Lumen<span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span></p>
+                <p class="truncate text-xs text-muted">Sales workspace</p>
+            </div>
+        </div>
+        <nav aria-label="Main" class="mx-auto hidden items-center gap-1 rounded-full border border-line bg-canvas p-1 lg:flex">
+                            <button
+                    type="button"
+                    class="inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    :class="activeTop === 'deals' ? cls.pillActive : cls.pillIdle"
+                    :aria-current="activeTop === 'deals' ? 'page' : null"
+                    @click="activeTop = 'deals'"
+                >Deals</button>
+                            <button
+                    type="button"
+                    class="inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    :class="activeTop === 'customers' ? cls.pillActive : cls.pillIdle"
+                    :aria-current="activeTop === 'customers' ? 'page' : null"
+                    @click="activeTop = 'customers'"
+                >Customers</button>
+                            <button
+                    type="button"
+                    class="inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    :class="activeTop === 'finance' ? cls.pillActive : cls.pillIdle"
+                    :aria-current="activeTop === 'finance' ? 'page' : null"
+                    @click="activeTop = 'finance'"
+                >Finance</button>
+                            <button
+                    type="button"
+                    class="inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    :class="activeTop === 'growth' ? cls.pillActive : cls.pillIdle"
+                    :aria-current="activeTop === 'growth' ? 'page' : null"
+                    @click="activeTop = 'growth'"
+                >Growth</button>
+                            <button
+                    type="button"
+                    class="inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    :class="activeTop === 'projects' ? cls.pillActive : cls.pillIdle"
+                    :aria-current="activeTop === 'projects' ? 'page' : null"
+                    @click="activeTop = 'projects'"
+                >Projects</button>
+                    </nav>
+        <div class="ml-auto flex items-center gap-2 lg:ml-0">
+            <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-aKj4mM2j')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-aKj4mM2j'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'bottom' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button type="button" aria-label="Messages" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" @click="notify('No new messages', 'Inbox is up to date')"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-aKj4mM2j"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Messages</span></span>
+            <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-otgYgNfT')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-otgYgNfT'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'bottom' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button type="button" aria-label="Notifications, 3 unread" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" @click="notify('3 unread notifications', 'Rina Kusuma replied to your proposal')"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg><span class="absolute top-2 right-2.5 size-2 rounded-full bg-danger ring-2 ring-surface" aria-hidden="true"></span></button><span
+        x-ref="tip"
+        id="markas-tooltip-otgYgNfT"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Notifications</span></span>
+            <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-10 text-sm ml-1" role="img" aria-label="Andi Wijaya">AW</span>
+        </div>
+    </header>
+
+    <div class="flex">
+        <div class="hidden w-18 shrink-0 border-r border-line bg-surface lg:block">
+            <nav aria-label="Workspace" class="sticky top-16 flex h-[calc(100dvh-4rem)] flex-col items-center gap-2 py-4">
+                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-SCrPicAV')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-SCrPicAV'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                            type="button"
+                            aria-label="Overview"
+                            class="inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'overview' ? cls.railActive : cls.railIdle"
+                            :aria-current="activeRail === 'overview' ? 'page' : null"
+                            @click="activeRail = 'overview'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-SCrPicAV"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Overview</span></span>
+                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-JfrMdVwt')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-JfrMdVwt'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                            type="button"
+                            aria-label="Contacts"
+                            class="inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'contacts' ? cls.railActive : cls.railIdle"
+                            :aria-current="activeRail === 'contacts' ? 'page' : null"
+                            @click="activeRail = 'contacts'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-JfrMdVwt"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Contacts</span></span>
+                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-zns5BuT5')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-zns5BuT5'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                            type="button"
+                            aria-label="Calendar"
+                            class="inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'calendar' ? cls.railActive : cls.railIdle"
+                            :aria-current="activeRail === 'calendar' ? 'page' : null"
+                            @click="activeRail = 'calendar'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-zns5BuT5"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Calendar</span></span>
+                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-bzUMLrIV')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-bzUMLrIV'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                            type="button"
+                            aria-label="Reports"
+                            class="inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'reports' ? cls.railActive : cls.railIdle"
+                            :aria-current="activeRail === 'reports' ? 'page' : null"
+                            @click="activeRail = 'reports'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M8 17v-5M13 17V8M18 17v-3" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-bzUMLrIV"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Reports</span></span>
+                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-FfY51AxL')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-FfY51AxL'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                            type="button"
+                            aria-label="Documents"
+                            class="inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'documents' ? cls.railActive : cls.railIdle"
+                            :aria-current="activeRail === 'documents' ? 'page' : null"
+                            @click="activeRail = 'documents'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-FfY51AxL"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Documents</span></span>
+                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-ZfZiMIWU')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-ZfZiMIWU'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex mt-auto"
+><button
+                            type="button"
+                            aria-label="Settings"
+                            class="inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            :class="activeRail === 'settings' ? cls.railActive : cls.railIdle"
+                            :aria-current="activeRail === 'settings' ? 'page' : null"
+                            @click="activeRail = 'settings'"
+                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-ZfZiMIWU"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Settings</span></span>
+                            </nav>
+        </div>
+
+        <main class="min-w-0 flex-1 p-4 lg:p-6">
+            <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                <div class="flex items-center gap-3">
+                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-QRhZ15uN')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-QRhZ15uN'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button type="button" aria-label="Back to customers" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" @click="notify('Back to customer list')"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-QRhZ15uN"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Back to customers</span></span>
+                    <div class="min-w-0">
+                        <h1 class="text-2xl font-semibold tracking-tight">Customer information</h1>
+                        <p class="text-sm text-muted">Customers / <span x-text="customerName">Rina Kusuma</span></p>
+                    </div>
+                </div>
+                <dl class="grid gap-3 sm:grid-cols-3">
+                                            <div class="rounded-xl border border-line bg-surface px-4 py-3">
+                            <dt class="text-xs text-muted">Deals value this month</dt>
+                            <dd class="mt-1 flex flex-wrap items-center gap-2">
+                                <span class="text-lg font-semibold tabular-nums tracking-tight">Rp 482.500.000</span>
+                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span class="size-1.5 shrink-0 rounded-full bg-success" aria-hidden="true"></span>+12.4%</span>
+                            </dd>
+                        </div>
+                                            <div class="rounded-xl border border-line bg-surface px-4 py-3">
+                            <dt class="text-xs text-muted">New customers this week</dt>
+                            <dd class="mt-1 flex flex-wrap items-center gap-2">
+                                <span class="text-lg font-semibold tabular-nums tracking-tight">38</span>
+                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span class="size-1.5 shrink-0 rounded-full bg-success" aria-hidden="true"></span>+6</span>
+                            </dd>
+                        </div>
+                                            <div class="rounded-xl border border-line bg-surface px-4 py-3">
+                            <dt class="text-xs text-muted">New tasks</dt>
+                            <dd class="mt-1 flex flex-wrap items-center gap-2">
+                                <span class="text-lg font-semibold tabular-nums tracking-tight">14</span>
+                                <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-warning/30 bg-warning/10 text-ink"><span class="size-1.5 shrink-0 rounded-full bg-warning" aria-hidden="true"></span>5 due today</span>
+                            </dd>
+                        </div>
+                                    </dl>
+            </div>
+
+            <div class="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+                <div class="flex min-w-0 flex-col gap-6">
+                    <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="crm-history-title">
+                <div class="text-sm text-ink"><div class="grid gap-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div>
+                                    <h2 id="crm-history-title" class="text-base font-semibold">Interaction history</h2>
+                                    <p class="text-sm text-muted">6 deals with <span x-text="info.firstName">Rina</span> this quarter</p>
+                                </div>
+                                <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block" x-on:markas-select="applySort($event.detail)"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-SBYDTe1n-trigger"
+        popovertarget="markas-dropdown-menu-SBYDTe1n"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-SBYDTe1n"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><span class="text-muted">Sort:</span><span x-text="sortLabel">Newest first</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-SBYDTe1n"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-SBYDTe1n-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('newest')">Newest first</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('oldest')">Oldest first</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('high')">Highest value</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('low')">Lowest value</button>
+                                        </div>
+</div>
+                            </div>
+                            <ul role="list" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" x-ref="deals">
+                                                                                                        <li
+                                        data-deal="d1"
+                                        class="relative flex min-h-48 flex-col gap-3 rounded-2xl border p-4 transition-shadow duration-150 border-ink bg-ink text-canvas"
+                                        :class="selectedDeal === 'd1' && cls.dealSelected"
+                                    >
+                                        <div class="flex items-start justify-between gap-2">
+                                            <time datetime="2026-10-28" class="text-xs font-medium text-canvas/75">Oct 28, 2026</time>
+                                            <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block relative z-10 -mt-1 -mr-1 [&amp;&gt;button]:size-8 [&amp;&gt;button]:rounded-full [&amp;&gt;button]:border-0 [&amp;&gt;button]:bg-transparent [&amp;&gt;button]:px-0 [&amp;&gt;button]:text-current [&amp;&gt;button]:hover:bg-current/10 [&amp;&gt;button&gt;svg:last-child]:hidden" x-on:markas-select="dealAction($event.detail, 'Cloud migration package')"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-ySCKL4fV-trigger"
+        popovertarget="markas-dropdown-menu-ySCKL4fV"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-ySCKL4fV"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Cloud migration package</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-ySCKL4fV"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-ySCKL4fV-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('view')">View details</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('duplicate')">Duplicate deal</button>
+                                                                <div role="separator" class="my-1 h-px bg-line"></div>
+                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-danger hover:bg-danger/10 focus:bg-danger/10" @click="select('archive')">Archive</button>
+                                        </div>
+</div>
+                                        </div>
+                                        <h3 class="text-sm leading-snug font-semibold">
+                                            <button
+                                                type="button"
+                                                aria-pressed="true"
+                                                :aria-pressed="selectedDeal === 'd1' ? 'true' : 'false'"
+                                                class="text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary"
+                                                @click="selectedDeal = 'd1'"
+                                            >Cloud migration package</button>
+                                        </h3>
+                                        <p class="mt-auto text-xl font-semibold tabular-nums tracking-tight">Rp 185.000.000</p>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex -space-x-1">
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-ink" role="img" aria-label="Budi Santoso">BS</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-ink" role="img" aria-label="Sari Wulandari">SW</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-ink" role="img" aria-label="Agus Pratama">AP</span>
+                                                                                            </div>
+                                            <span class="text-xs font-medium text-canvas/75">Negotiation</span>
+                                        </div>
+                                    </li>
+                                                                                                        <li
+                                        data-deal="d2"
+                                        class="relative flex min-h-48 flex-col gap-3 rounded-2xl border p-4 transition-shadow duration-150 border-line bg-surface text-ink hover:border-primary-line"
+                                        :class="selectedDeal === 'd2' && cls.dealSelected"
+                                    >
+                                        <div class="flex items-start justify-between gap-2">
+                                            <time datetime="2026-10-21" class="text-xs font-medium text-muted">Oct 21, 2026</time>
+                                            <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block relative z-10 -mt-1 -mr-1 [&amp;&gt;button]:size-8 [&amp;&gt;button]:rounded-full [&amp;&gt;button]:border-0 [&amp;&gt;button]:bg-transparent [&amp;&gt;button]:px-0 [&amp;&gt;button]:text-current [&amp;&gt;button]:hover:bg-current/10 [&amp;&gt;button&gt;svg:last-child]:hidden" x-on:markas-select="dealAction($event.detail, 'Annual support renewal')"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-yGNKbsdw-trigger"
+        popovertarget="markas-dropdown-menu-yGNKbsdw"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-yGNKbsdw"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Annual support renewal</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-yGNKbsdw"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-yGNKbsdw-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('view')">View details</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('duplicate')">Duplicate deal</button>
+                                                                <div role="separator" class="my-1 h-px bg-line"></div>
+                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-danger hover:bg-danger/10 focus:bg-danger/10" @click="select('archive')">Archive</button>
+                                        </div>
+</div>
+                                        </div>
+                                        <h3 class="text-sm leading-snug font-semibold">
+                                            <button
+                                                type="button"
+                                                aria-pressed="false"
+                                                :aria-pressed="selectedDeal === 'd2' ? 'true' : 'false'"
+                                                class="text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary"
+                                                @click="selectedDeal = 'd2'"
+                                            >Annual support renewal</button>
+                                        </h3>
+                                        <p class="mt-auto text-xl font-semibold tabular-nums tracking-tight">Rp 96.400.000</p>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex -space-x-1">
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Dewi Lestari">DL</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Budi Santoso">BS</span>
+                                                                                            </div>
+                                            <span class="text-xs font-medium text-muted">Won</span>
+                                        </div>
+                                    </li>
+                                                                                                        <li
+                                        data-deal="d3"
+                                        class="relative flex min-h-48 flex-col gap-3 rounded-2xl border p-4 transition-shadow duration-150 border-line bg-surface text-ink hover:border-primary-line"
+                                        :class="selectedDeal === 'd3' && cls.dealSelected"
+                                    >
+                                        <div class="flex items-start justify-between gap-2">
+                                            <time datetime="2026-10-14" class="text-xs font-medium text-muted">Oct 14, 2026</time>
+                                            <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block relative z-10 -mt-1 -mr-1 [&amp;&gt;button]:size-8 [&amp;&gt;button]:rounded-full [&amp;&gt;button]:border-0 [&amp;&gt;button]:bg-transparent [&amp;&gt;button]:px-0 [&amp;&gt;button]:text-current [&amp;&gt;button]:hover:bg-current/10 [&amp;&gt;button&gt;svg:last-child]:hidden" x-on:markas-select="dealAction($event.detail, 'Data warehouse audit')"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-CdPdSpcZ-trigger"
+        popovertarget="markas-dropdown-menu-CdPdSpcZ"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-CdPdSpcZ"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Data warehouse audit</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-CdPdSpcZ"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-CdPdSpcZ-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('view')">View details</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('duplicate')">Duplicate deal</button>
+                                                                <div role="separator" class="my-1 h-px bg-line"></div>
+                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-danger hover:bg-danger/10 focus:bg-danger/10" @click="select('archive')">Archive</button>
+                                        </div>
+</div>
+                                        </div>
+                                        <h3 class="text-sm leading-snug font-semibold">
+                                            <button
+                                                type="button"
+                                                aria-pressed="false"
+                                                :aria-pressed="selectedDeal === 'd3' ? 'true' : 'false'"
+                                                class="text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary"
+                                                @click="selectedDeal = 'd3'"
+                                            >Data warehouse audit</button>
+                                        </h3>
+                                        <p class="mt-auto text-xl font-semibold tabular-nums tracking-tight">Rp 42.750.000</p>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex -space-x-1">
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Agus Pratama">AP</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Fajar Nugroho">FN</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Sari Wulandari">SW</span>
+                                                                                            </div>
+                                            <span class="text-xs font-medium text-muted">Proposal</span>
+                                        </div>
+                                    </li>
+                                                                                                        <li
+                                        data-deal="d4"
+                                        class="relative flex min-h-48 flex-col gap-3 rounded-2xl border p-4 transition-shadow duration-150 border-line bg-surface text-ink hover:border-primary-line"
+                                        :class="selectedDeal === 'd4' && cls.dealSelected"
+                                    >
+                                        <div class="flex items-start justify-between gap-2">
+                                            <time datetime="2026-10-02" class="text-xs font-medium text-muted">Oct 2, 2026</time>
+                                            <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block relative z-10 -mt-1 -mr-1 [&amp;&gt;button]:size-8 [&amp;&gt;button]:rounded-full [&amp;&gt;button]:border-0 [&amp;&gt;button]:bg-transparent [&amp;&gt;button]:px-0 [&amp;&gt;button]:text-current [&amp;&gt;button]:hover:bg-current/10 [&amp;&gt;button&gt;svg:last-child]:hidden" x-on:markas-select="dealAction($event.detail, 'POS terminal rollout')"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-IavamEUi-trigger"
+        popovertarget="markas-dropdown-menu-IavamEUi"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-IavamEUi"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for POS terminal rollout</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-IavamEUi"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-IavamEUi-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('view')">View details</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('duplicate')">Duplicate deal</button>
+                                                                <div role="separator" class="my-1 h-px bg-line"></div>
+                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-danger hover:bg-danger/10 focus:bg-danger/10" @click="select('archive')">Archive</button>
+                                        </div>
+</div>
+                                        </div>
+                                        <h3 class="text-sm leading-snug font-semibold">
+                                            <button
+                                                type="button"
+                                                aria-pressed="false"
+                                                :aria-pressed="selectedDeal === 'd4' ? 'true' : 'false'"
+                                                class="text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary"
+                                                @click="selectedDeal = 'd4'"
+                                            >POS terminal rollout</button>
+                                        </h3>
+                                        <p class="mt-auto text-xl font-semibold tabular-nums tracking-tight">Rp 128.900.000</p>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex -space-x-1">
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Fajar Nugroho">FN</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Dewi Lestari">DL</span>
+                                                                                            </div>
+                                            <span class="text-xs font-medium text-muted">Won</span>
+                                        </div>
+                                    </li>
+                                                                                                        <li
+                                        data-deal="d5"
+                                        class="relative flex min-h-48 flex-col gap-3 rounded-2xl border p-4 transition-shadow duration-150 border-line bg-surface text-ink hover:border-primary-line"
+                                        :class="selectedDeal === 'd5' && cls.dealSelected"
+                                    >
+                                        <div class="flex items-start justify-between gap-2">
+                                            <time datetime="2026-09-23" class="text-xs font-medium text-muted">Sep 23, 2026</time>
+                                            <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block relative z-10 -mt-1 -mr-1 [&amp;&gt;button]:size-8 [&amp;&gt;button]:rounded-full [&amp;&gt;button]:border-0 [&amp;&gt;button]:bg-transparent [&amp;&gt;button]:px-0 [&amp;&gt;button]:text-current [&amp;&gt;button]:hover:bg-current/10 [&amp;&gt;button&gt;svg:last-child]:hidden" x-on:markas-select="dealAction($event.detail, 'Security awareness training')"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-BUw7BG4O-trigger"
+        popovertarget="markas-dropdown-menu-BUw7BG4O"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-BUw7BG4O"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Security awareness training</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-BUw7BG4O"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-BUw7BG4O-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('view')">View details</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('duplicate')">Duplicate deal</button>
+                                                                <div role="separator" class="my-1 h-px bg-line"></div>
+                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-danger hover:bg-danger/10 focus:bg-danger/10" @click="select('archive')">Archive</button>
+                                        </div>
+</div>
+                                        </div>
+                                        <h3 class="text-sm leading-snug font-semibold">
+                                            <button
+                                                type="button"
+                                                aria-pressed="false"
+                                                :aria-pressed="selectedDeal === 'd5' ? 'true' : 'false'"
+                                                class="text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary"
+                                                @click="selectedDeal = 'd5'"
+                                            >Security awareness training</button>
+                                        </h3>
+                                        <p class="mt-auto text-xl font-semibold tabular-nums tracking-tight">Rp 18.500.000</p>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex -space-x-1">
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Sari Wulandari">SW</span>
+                                                                                            </div>
+                                            <span class="text-xs font-medium text-muted">Lost</span>
+                                        </div>
+                                    </li>
+                                                                                                        <li
+                                        data-deal="d6"
+                                        class="relative flex min-h-48 flex-col gap-3 rounded-2xl border p-4 transition-shadow duration-150 border-line bg-surface text-ink hover:border-primary-line"
+                                        :class="selectedDeal === 'd6' && cls.dealSelected"
+                                    >
+                                        <div class="flex items-start justify-between gap-2">
+                                            <time datetime="2026-09-11" class="text-xs font-medium text-muted">Sep 11, 2026</time>
+                                            <div
+    x-data="{
+        open: false,
+        focusTarget: 'first',
+        menuItems() {
+            return Array.from(this.$refs.menu.querySelectorAll('[role=menuitem]:not(:disabled)'));
+        },
+        focusItem(index) {
+            const list = this.menuItems();
+            if (list.length === 0) return;
+            list[(index + list.length) % list.length].focus();
+        },
+        focusEdge(target) {
+            this.focusItem(target === 'first' ? 0 : -1);
+        },
+        
+        place() {
+            const gap = 4;
+            const anchor = this.$refs.trigger.getBoundingClientRect();
+            const { width, height } = this.$refs.menu.getBoundingClientRect();
+            const below = anchor.bottom + gap;
+            const above = anchor.top - gap - height;
+            const fitsBelow = below + height <= window.innerHeight;
+            this.$refs.menu.style.top = (fitsBelow || above < 0 ? below : above) + 'px';
+            this.$refs.menu.style.left = Math.max(gap, Math.min(anchor.left, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        close() {
+            this.$refs.menu.hidePopover();
+            this.$refs.trigger.focus();
+        },
+        select(value) {
+            this.$dispatch('markas-select', value);
+            this.close();
+        },
+        
+        onBeforeToggle(event) {
+            this.open = event.newState === 'open';
+        },
+        onToggle(event) {
+            if (event.newState !== 'open') return this.unfollow?.();
+            this.place();
+            this.follow();
+            this.focusEdge(this.focusTarget);
+            this.focusTarget = 'first';
+        },
+        onTriggerKeydown(event) {
+            const target = { ArrowDown: 'first', ArrowUp: 'last' }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            if (this.open) return this.focusEdge(target);
+            this.focusTarget = target;
+            this.$refs.menu.showPopover();
+        },
+        onMenuKeydown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                return this.close();
+            }
+            if (event.key === 'Tab') return this.$refs.menu.hidePopover();
+            const index = this.menuItems().indexOf(document.activeElement);
+            const target = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: -1 }[event.key];
+            if (target === undefined) return;
+            event.preventDefault();
+            this.focusItem(target);
+        },
+    }"
+    class="inline-block relative z-10 -mt-1 -mr-1 [&amp;&gt;button]:size-8 [&amp;&gt;button]:rounded-full [&amp;&gt;button]:border-0 [&amp;&gt;button]:bg-transparent [&amp;&gt;button]:px-0 [&amp;&gt;button]:text-current [&amp;&gt;button]:hover:bg-current/10 [&amp;&gt;button&gt;svg:last-child]:hidden" x-on:markas-select="dealAction($event.detail, 'Fleet tracking pilot')"
+>
+    <button
+        x-ref="trigger"
+        type="button"
+        id="markas-dropdown-menu-X2mecKyO-trigger"
+        popovertarget="markas-dropdown-menu-X2mecKyO"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="markas-dropdown-menu-X2mecKyO"
+        data-state="closed"
+        :aria-expanded="open ? 'true' : 'false'"
+        :data-state="open ? 'open' : 'closed'"
+        @keydown="onTriggerKeydown($event)"
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none"
+    ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Fleet tracking pilot</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+    <div
+        x-ref="menu"
+        id="markas-dropdown-menu-X2mecKyO"
+        popover="auto"
+        role="menu"
+        aria-labelledby="markas-dropdown-menu-X2mecKyO-trigger"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @beforetoggle="onBeforeToggle($event)"
+        @toggle="onToggle($event)"
+        @keydown="onMenuKeydown($event)"
+        class="inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay"
+    >
+                                                                        <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('view')">View details</button>
+                                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-ink hover:bg-subtle focus:bg-subtle" @click="select('duplicate')">Duplicate deal</button>
+                                                                <div role="separator" class="my-1 h-px bg-line"></div>
+                                                                                    <button type="button" role="menuitem" tabindex="-1"  class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none text-danger hover:bg-danger/10 focus:bg-danger/10" @click="select('archive')">Archive</button>
+                                        </div>
+</div>
+                                        </div>
+                                        <h3 class="text-sm leading-snug font-semibold">
+                                            <button
+                                                type="button"
+                                                aria-pressed="false"
+                                                :aria-pressed="selectedDeal === 'd6' ? 'true' : 'false'"
+                                                class="text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary"
+                                                @click="selectedDeal = 'd6'"
+                                            >Fleet tracking pilot</button>
+                                        </h3>
+                                        <p class="mt-auto text-xl font-semibold tabular-nums tracking-tight">Rp 64.200.000</p>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex -space-x-1">
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Budi Santoso">BS</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Agus Pratama">AP</span>
+                                                                                                    <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-8 text-xs ring-2 ring-surface" role="img" aria-label="Dewi Lestari">DL</span>
+                                                                                            </div>
+                                            <span class="text-xs font-medium text-muted">Won</span>
+                                        </div>
+                                    </li>
+                                                            </ul>
+                        </div></div>
+        </article>
+
+                    <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink flex-1 content-start" aria-labelledby="crm-tasks-title">
+                <div class="text-sm text-ink"><div class="grid gap-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div>
+                                    <h2 id="crm-tasks-title" class="text-base font-semibold">Tasks schedule</h2>
+                                    <p class="text-sm text-muted">Follow-ups planned with <span x-text="info.firstName">Rina</span></p>
+                                </div>
+                                <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-8 rounded-md px-3 text-sm" type="button" x-on:click="notify('Task added', longDate(selectedDate), 'success')">
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                                    New task
+</button>
+                            </div>
+                            <div class="grid gap-6 md:grid-cols-[minmax(0,1fr)_280px]">
+                                <div class="grid content-start gap-3">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <h3 class="text-sm font-semibold" aria-live="polite" x-text="monthNames[view.month] + ' ' + view.year">November 2026</h3>
+                                        <div class="flex gap-1">
+                                            <button type="button" aria-label="Previous month" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary size-8" @click="shiftMonth(-1)"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg></button>
+                                            <button type="button" aria-label="Next month" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary size-8" @click="shiftMonth(1)"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg></button>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-7 gap-y-1 text-center">
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">Mo</span>
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">Tu</span>
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">We</span>
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">Th</span>
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">Fr</span>
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">Sa</span>
+                                                                                    <span aria-hidden="true" class="py-1 text-xs font-medium text-muted">Su</span>
+                                                                                <template x-for="(day, index) in cells" :key="view.year + '-' + view.month + '-' + index">
+                                            <span :class="day !== null && 'flex justify-center'">
+                                                <template x-if="day !== null">
+                                                    <button
+                                                        type="button"
+                                                        class="relative inline-flex size-10 items-center justify-center rounded-full text-sm tabular-nums transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                                        :class="dayClass(day)"
+                                                        :aria-pressed="dayIso(day) === selectedDate ? 'true' : 'false'"
+                                                        :aria-label="dayLabel(day)"
+                                                        @click="selectedDate = dayIso(day)"
+                                                    >
+                                                        <span x-text="day"></span>
+                                                        <template x-if="tasks[dayIso(day)]">
+                                                            <span
+                                                                aria-hidden="true"
+                                                                class="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full"
+                                                                :class="dayIso(day) === selectedDate ? 'bg-on-primary' : 'bg-success'"
+                                                            ></span>
+                                                        </template>
+                                                    </button>
+                                                </template>
+                                            </span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="grid content-start gap-3 border-line md:border-l md:pl-6">
+                                    <h3 class="text-sm font-semibold" x-text="longDate(selectedDate)">Thursday, November 5</h3>
+                                    <ul role="list" class="grid gap-2" x-show="selectedTasks.length > 0">
+                                        <template x-for="task in selectedTasks" :key="task.time + task.title">
+                                            <li class="flex gap-3 rounded-xl border border-line p-3">
+                                                <span class="w-12 shrink-0 text-xs font-medium tabular-nums text-muted" x-text="task.time"></span>
+                                                <span class="grid gap-0.5">
+                                                    <span class="text-sm font-medium" x-text="task.title"></span>
+                                                    <span class="text-xs text-muted" x-text="task.kind"></span>
+                                                </span>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                    <p class="rounded-xl border border-dashed border-line p-4 text-sm text-muted" style="display: none" x-show="selectedTasks.length === 0">No tasks on this day.</p>
+                                </div>
+                            </div>
+                        </div></div>
+        </article>
+                </div>
+
+                <div class="flex min-w-0 flex-col gap-6">
+                    <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="crm-profile-name">
+                <div class="text-sm text-ink"><div class="grid justify-items-center gap-4 text-center">
+                            <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full align-middle bg-primary-soft font-medium text-primary select-none size-12 text-base size-16! text-xl!" role="img" aria-label="Rina Kusuma">RK</span>
+                            <div class="grid gap-1">
+                                <h2 id="crm-profile-name" class="text-lg font-semibold" x-text="customerName">Rina Kusuma</h2>
+                                <p class="text-sm text-muted">Head of Procurement</p>
+                                <p class="flex items-center justify-center gap-2 text-sm font-medium">PT Nusantara Logistik<span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap border-success/30 bg-success/10 text-ink"><span class="size-1.5 shrink-0 rounded-full bg-success" aria-hidden="true"></span>Key account</span>
+</p>
+                            </div>
+                            <div class="flex justify-center gap-3">
+                                                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-XiLqoa3E')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-XiLqoa3E'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                                            type="button"
+                                            aria-label="Send email"
+                                            class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                            @click="notify('Send email', customerName + ', PT Nusantara Logistik')"
+                                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2M22 6l-10 7L2 6" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-XiLqoa3E"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Send email</span></span>
+                                                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-HfqjwcmM')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-HfqjwcmM'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                                            type="button"
+                                            aria-label="Call customer"
+                                            class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                            @click="notify('Call customer', customerName + ', PT Nusantara Logistik')"
+                                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-HfqjwcmM"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Call customer</span></span>
+                                                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-9omCY0Ys')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-9omCY0Ys'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                                            type="button"
+                                            aria-label="Start chat"
+                                            class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                            @click="notify('Start chat', customerName + ', PT Nusantara Logistik')"
+                                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-9omCY0Ys"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Start chat</span></span>
+                                                                    <span
+    x-data="{
+        open: false,
+        timer: null,
+        show() {
+            clearTimeout(this.timer);
+            this.$refs.tip.showPopover();
+        },
+        showLater() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.show(), 300);
+        },
+        hide() {
+            clearTimeout(this.timer);
+            this.$refs.tip.hidePopover();
+        },
+        describe() {
+            const trigger = this.$root.firstElementChild;
+            const described = trigger?.getAttribute('aria-describedby') ?? '';
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-MQWUzhLj')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-MQWUzhLj'].filter(Boolean).join(' '));
+            }
+        },
+        
+        place() {
+            const gap = 6;
+            const anchor = this.$root.getBoundingClientRect();
+            const { width, height } = this.$refs.tip.getBoundingClientRect();
+            const above = anchor.top - gap - height;
+            const below = anchor.bottom + gap;
+            const fitsAbove = above >= 0;
+            const fitsBelow = below + height <= window.innerHeight;
+            const onTop = 'top' === 'top' ? fitsAbove || ! fitsBelow : ! fitsBelow && fitsAbove;
+            this.$refs.tip.style.top = (onTop ? above : below) + 'px';
+            this.$refs.tip.style.left = Math.max(gap, Math.min(anchor.left + anchor.width / 2 - width / 2, window.innerWidth - width - gap)) + 'px';
+        },
+        unfollow: null,
+        
+        follow() {
+            this.unfollow?.();
+            const update = () => this.place();
+            const scrollOptions = { capture: true, passive: true };
+            window.addEventListener('scroll', update, scrollOptions);
+            window.addEventListener('resize', update, { passive: true });
+            this.unfollow = () => {
+                window.removeEventListener('scroll', update, scrollOptions);
+                window.removeEventListener('resize', update);
+                this.unfollow = null;
+            };
+        },
+        destroy() {
+            this.unfollow?.();
+        },
+        onToggle(event) {
+            this.open = event.newState === 'open';
+            if (! this.open) return this.unfollow?.();
+            this.place();
+            this.follow();
+        },
+    }"
+    x-init="describe()"
+    @mouseenter="showLater()"
+    @mouseleave="hide()"
+    @focusin="show()"
+    @focusout="hide()"
+    @keydown.escape.window="hide()"
+    class="inline-flex"
+><button
+                                            type="button"
+                                            aria-label="Schedule meeting"
+                                            class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                            @click="notify('Schedule meeting', customerName + ', PT Nusantara Logistik')"
+                                        ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20" /></svg></button><span
+        x-ref="tip"
+        id="markas-tooltip-MQWUzhLj"
+        popover="manual"
+        role="tooltip"
+        data-state="closed"
+        :data-state="open ? 'open' : 'closed'"
+        @toggle="onToggle($event)"
+        class="inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay"
+    >Schedule meeting</span></span>
+                                                            </div>
+                        </div></div>
+        </article>
+
+                    <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="crm-details-title">
+                <div class="text-sm text-ink"><div class="grid gap-2">
+                            <div class="flex items-center justify-between gap-3">
+                                <h2 id="crm-details-title" class="text-base font-semibold">Detailed information</h2>
+                                <div class="contents" x-data="{ open: false }">
+            <div class="contents" @click="$refs.dialog.showModal(); open = true"><button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-8 rounded-md px-3 text-sm" type="button" x-on:click="draft = { ...info }">
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>
+                                            Edit
+</button></div>
+        <dialog
+        x-ref="dialog"
+        :data-state="open ? 'open' : 'closed'"
+        @close="open = false"
+        @click.self="$refs.dialog.close()"
+        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-0 left-auto border-l starting:open:translate-x-full" id="markas-drawer-P9m9Ldul" aria-labelledby="markas-drawer-P9m9Ldul-title" data-state="closed" x-on:close="onDrawerClose($event.currentTarget)"
+    >
+        <div class="flex h-full flex-col gap-4 p-6">
+            <div class="flex items-start justify-between gap-4">
+                <h2 id="markas-drawer-P9m9Ldul-title" class="text-lg font-semibold text-ink">Edit customer details</h2>
+                <form method="dialog">
+                    <button type="submit" class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                    </button>
+                </form>
+            </div>
+            <div class="flex-1 overflow-y-auto text-sm text-muted"><div class="grid gap-4">
+                                                                                    <div class="grid gap-1.5">
+            <label for="markas-input-cN3sUcKW" class="text-sm font-medium text-ink">First name</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-cN3sUcKW" type="text" name="firstName" value="Rina" x-model="draft.firstName" />
+    </div>
+                                                                                    <div class="grid gap-1.5">
+            <label for="markas-input-mfsZfJK4" class="text-sm font-medium text-ink">Last name</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-mfsZfJK4" type="text" name="lastName" value="Kusuma" x-model="draft.lastName" />
+    </div>
+                                                                                    <div class="grid gap-1.5">
+            <label for="markas-input-gqhv2V6e" class="text-sm font-medium text-ink">Email</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-gqhv2V6e" type="email" name="email" value="rina.kusuma@nusalog.co.id" x-model="draft.email" />
+    </div>
+                                                                                    <div class="grid gap-1.5">
+            <label for="markas-input-9qr5xp9e" class="text-sm font-medium text-ink">Phone</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-9qr5xp9e" type="tel" name="phone" value="+62 812 3456 7890" x-model="draft.phone" />
+    </div>
+                                                                                    <div class="grid gap-1.5">
+            <label for="markas-input-YLPGGQ5V" class="text-sm font-medium text-ink">Source</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-YLPGGQ5V" type="text" name="source" value="Referral" x-model="draft.source" />
+    </div>
+                                                                            </div></div>
+                            <form method="dialog" class="flex flex-wrap justify-end gap-2"><button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm" type="submit" value="cancel">
+    Cancel
+</button>
+                                        <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm" type="submit" value="save">
+    Save changes
+</button></form>
+                    </div>
+    </dialog>
+</div>
+                            </div>
+                            <dl class="divide-y divide-line">
+                                                                    <div class="flex items-center justify-between gap-4 py-3">
+                                        <dt class="shrink-0 text-muted">First name</dt>
+                                        <dd data-field="firstName" class="min-w-0 truncate text-right font-medium" x-text="info.firstName">Rina</dd>
+                                    </div>
+                                                                    <div class="flex items-center justify-between gap-4 py-3">
+                                        <dt class="shrink-0 text-muted">Last name</dt>
+                                        <dd data-field="lastName" class="min-w-0 truncate text-right font-medium" x-text="info.lastName">Kusuma</dd>
+                                    </div>
+                                                                    <div class="flex items-center justify-between gap-4 py-3">
+                                        <dt class="shrink-0 text-muted">Email</dt>
+                                        <dd data-field="email" class="min-w-0 truncate text-right font-medium" x-text="info.email">rina.kusuma@nusalog.co.id</dd>
+                                    </div>
+                                                                    <div class="flex items-center justify-between gap-4 py-3">
+                                        <dt class="shrink-0 text-muted">Phone</dt>
+                                        <dd data-field="phone" class="min-w-0 truncate text-right font-medium" x-text="info.phone">+62 812 3456 7890</dd>
+                                    </div>
+                                                                    <div class="flex items-center justify-between gap-4 py-3">
+                                        <dt class="shrink-0 text-muted">Source</dt>
+                                        <dd data-field="source" class="min-w-0 truncate text-right font-medium" x-text="info.source">Referral</dd>
+                                    </div>
+                                                                    <div class="flex items-center justify-between gap-4 py-3">
+                                        <dt class="shrink-0 text-muted">Last contacted</dt>
+                                        <dd data-field="lastContacted" class="min-w-0 truncate text-right font-medium" x-text="info.lastContacted">Nov 3, 2026</dd>
+                                    </div>
+                                                            </dl>
+                        </div></div>
+        </article>
+
+                    <article class="grid gap-4 rounded-xl border border-line bg-surface p-6 text-ink" aria-labelledby="crm-funnel-title">
+                <div class="text-sm text-ink"><div class="grid gap-4">
+                            <div>
+                                <h2 id="crm-funnel-title" class="text-base font-semibold">Stage funnel</h2>
+                                <p class="text-sm text-muted">Open pipeline by stage</p>
+                            </div>
+                            <div
+    x-data="{
+        active: 'weighted',
+        keys: JSON.parse('[\u0022weighted\u0022,\u0022total\u0022]'),
+        focusTab(key) {
+            this.active = key;
+            this.$nextTick(() => document.getElementById('markas-tabs-TXO7btkx' + '-tab-' + key).focus());
+        },
+        move(step) {
+            const index = this.keys.indexOf(this.active);
+            this.focusTab(this.keys[(index + step + this.keys.length) % this.keys.length]);
+        },
+    }"
+    class="w-full" id="markas-tabs-TXO7btkx"
+>
+    <div
+        role="tablist"
+        aria-orientation="horizontal"
+        class="inline-flex items-center gap-1 rounded-lg bg-subtle p-1"
+        @keydown.right.prevent="move(1)"
+        @keydown.left.prevent="move(-1)"
+        @keydown.home.prevent="focusTab(keys[0])"
+        @keydown.end.prevent="focusTab(keys[keys.length - 1])"
+    >
+                                <button
+                type="button"
+                role="tab"
+                id="markas-tabs-TXO7btkx-tab-weighted"
+                aria-controls="markas-tabs-TXO7btkx-panel-weighted"
+                aria-selected="true"
+                tabindex="0"
+                data-state="active"
+                :aria-selected="active === 'weighted' ? 'true' : 'false'"
+                :tabindex="active === 'weighted' ? 0 : -1"
+                :data-state="active === 'weighted' ? 'active' : 'inactive'"
+                @click="active = 'weighted'"
+                class="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap text-muted transition-colors duration-150 ease-out hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=active]:bg-surface data-[state=active]:text-ink motion-reduce:transition-none"
+            >Weighted</button>
+                                <button
+                type="button"
+                role="tab"
+                id="markas-tabs-TXO7btkx-tab-total"
+                aria-controls="markas-tabs-TXO7btkx-panel-total"
+                aria-selected="false"
+                tabindex="-1"
+                data-state="inactive"
+                :aria-selected="active === 'total' ? 'true' : 'false'"
+                :tabindex="active === 'total' ? 0 : -1"
+                :data-state="active === 'total' ? 'active' : 'inactive'"
+                @click="active = 'total'"
+                class="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap text-muted transition-colors duration-150 ease-out hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=active]:bg-surface data-[state=active]:text-ink motion-reduce:transition-none"
+            >Total</button>
+            </div>
+                    <div
+            role="tabpanel"
+            id="markas-tabs-TXO7btkx-panel-weighted"
+            aria-labelledby="markas-tabs-TXO7btkx-tab-weighted"
+            tabindex="0"
+            data-state="active"
+                        :hidden="active !== 'weighted'"
+            :data-state="active === 'weighted' ? 'active' : 'inactive'"
+            class="mt-4 rounded-md text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        ><div class="grid gap-4">
+                                            <div>
+                                                <p class="text-2xl font-semibold tabular-nums tracking-tight">Rp 592.900.000</p>
+                                                <p class="text-xs text-muted">Weighted pipeline value</p>
+                                            </div>
+                                            <ol class="grid gap-3" aria-label="Weighted pipeline value by stage">
+                                                                                                    <li class="grid gap-1.5">
+                                                        <div class="flex items-baseline justify-between gap-3">
+                                                            <span class="font-medium">Qualification<span class="ml-2 text-xs font-normal text-muted">12 deals</span></span>
+                                                            <span class="font-semibold tabular-nums">Rp 312.400.000</span>
+                                                        </div>
+                                                        <div class="h-6 rounded-md bg-subtle">
+                                                            <div class="mx-auto h-6 rounded-md bg-primary" style="width: 100%"></div>
+                                                        </div>
+                                                    </li>
+                                                                                                    <li class="grid gap-1.5">
+                                                        <div class="flex items-baseline justify-between gap-3">
+                                                            <span class="font-medium">Proposal sent<span class="ml-2 text-xs font-normal text-muted">7 deals</span></span>
+                                                            <span class="font-semibold tabular-nums">Rp 186.000.000</span>
+                                                        </div>
+                                                        <div class="h-6 rounded-md bg-subtle">
+                                                            <div class="mx-auto h-6 rounded-md bg-primary/70" style="width: 60%"></div>
+                                                        </div>
+                                                    </li>
+                                                                                                    <li class="grid gap-1.5">
+                                                        <div class="flex items-baseline justify-between gap-3">
+                                                            <span class="font-medium">Negotiation<span class="ml-2 text-xs font-normal text-muted">4 deals</span></span>
+                                                            <span class="font-semibold tabular-nums">Rp 94.500.000</span>
+                                                        </div>
+                                                        <div class="h-6 rounded-md bg-subtle">
+                                                            <div class="mx-auto h-6 rounded-md bg-primary/40" style="width: 30%"></div>
+                                                        </div>
+                                                    </li>
+                                                                                            </ol>
+                                        </div></div>
+                    <div
+            role="tabpanel"
+            id="markas-tabs-TXO7btkx-panel-total"
+            aria-labelledby="markas-tabs-TXO7btkx-tab-total"
+            tabindex="0"
+            data-state="inactive"
+             hidden             :hidden="active !== 'total'"
+            :data-state="active === 'total' ? 'active' : 'inactive'"
+            class="mt-4 rounded-md text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        ><div class="grid gap-4">
+                                            <div>
+                                                <p class="text-2xl font-semibold tabular-nums tracking-tight">Rp 1.069.800.000</p>
+                                                <p class="text-xs text-muted">Total pipeline value</p>
+                                            </div>
+                                            <ol class="grid gap-3" aria-label="Total pipeline value by stage">
+                                                                                                    <li class="grid gap-1.5">
+                                                        <div class="flex items-baseline justify-between gap-3">
+                                                            <span class="font-medium">Qualification<span class="ml-2 text-xs font-normal text-muted">12 deals</span></span>
+                                                            <span class="font-semibold tabular-nums">Rp 624.800.000</span>
+                                                        </div>
+                                                        <div class="h-6 rounded-md bg-subtle">
+                                                            <div class="mx-auto h-6 rounded-md bg-primary" style="width: 100%"></div>
+                                                        </div>
+                                                    </li>
+                                                                                                    <li class="grid gap-1.5">
+                                                        <div class="flex items-baseline justify-between gap-3">
+                                                            <span class="font-medium">Proposal sent<span class="ml-2 text-xs font-normal text-muted">7 deals</span></span>
+                                                            <span class="font-semibold tabular-nums">Rp 310.000.000</span>
+                                                        </div>
+                                                        <div class="h-6 rounded-md bg-subtle">
+                                                            <div class="mx-auto h-6 rounded-md bg-primary/70" style="width: 50%"></div>
+                                                        </div>
+                                                    </li>
+                                                                                                    <li class="grid gap-1.5">
+                                                        <div class="flex items-baseline justify-between gap-3">
+                                                            <span class="font-medium">Negotiation<span class="ml-2 text-xs font-normal text-muted">4 deals</span></span>
+                                                            <span class="font-semibold tabular-nums">Rp 135.000.000</span>
+                                                        </div>
+                                                        <div class="h-6 rounded-md bg-subtle">
+                                                            <div class="mx-auto h-6 rounded-md bg-primary/40" style="width: 22%"></div>
+                                                        </div>
+                                                    </li>
+                                                                                            </ol>
+                                        </div></div>
+    </div>
+                        </div></div>
+        </article>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div
+    x-data="{
+        toasts: [],
+        timers: {},
+        nextId: 0,
+        variants: JSON.parse('{\u0022default\u0022:\u0022border-line\u0022,\u0022success\u0022:\u0022border-success\\\/40\u0022,\u0022danger\u0022:\u0022border-danger\\\/40\u0022}'),
+        iconVariants: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022text-success\u0022,\u0022danger\u0022:\u0022text-danger\u0022}'),
+        icons: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8.5 12l2.5 2.5 4.5-5\u0022,\u0022danger\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15 9l-6 6M9 9l6 6\u0022}'),
+        add(detail) {
+            const variant = detail.variant in this.variants ? detail.variant : 'default';
+            const duration = Number.isFinite(detail.duration) ? detail.duration : 5000;
+            const id = ++this.nextId;
+            this.toasts = [...this.toasts, { id, title: String(detail.title ?? ''), description: detail.description ?? '', variant }];
+            if (duration > 0) this.start(id, duration);
+        },
+        start(id, ms) {
+            this.timers[id] = { handle: setTimeout(() => this.dismiss(id), ms), remaining: ms, startedAt: Date.now() };
+        },
+        dismiss(id) {
+            clearTimeout(this.timers[id]?.handle);
+            delete this.timers[id];
+            this.toasts = this.toasts.filter((item) => item.id !== id);
+        },
+        pause(id) {
+            const timer = this.timers[id];
+            if (!timer?.handle) return;
+            clearTimeout(timer.handle);
+            this.timers[id] = { remaining: timer.remaining - (Date.now() - timer.startedAt), startedAt: 0 };
+        },
+        resume(id) {
+            const timer = this.timers[id];
+            if (!timer || timer.handle) return;
+            this.start(id, Math.max(timer.remaining, 0));
+        },
+    }"
+    x-init="[].forEach((detail) => add(detail))"
+    x-on:markas-toast.window="add($event.detail ?? {})"
+    class="pointer-events-none fixed right-4 bottom-4 z-50 flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2" role="status" aria-live="polite" aria-label="Notifications"
+>
+    <template x-for="item in toasts" :key="item.id">
+        <div
+            data-state="open"
+            class="pointer-events-auto flex items-start gap-3 rounded-lg border bg-surface p-4 text-sm text-ink shadow-overlay transition-[opacity,translate] duration-200 ease-out starting:translate-y-2 starting:opacity-0 motion-reduce:transition-none"
+            :class="variants[item.variant]"
+            x-on:mouseenter="pause(item.id)"
+            x-on:mouseleave="if (! $el.contains(document.activeElement)) resume(item.id)"
+            x-on:focusin="pause(item.id)"
+            x-on:focusout="if (! $el.contains($event.relatedTarget) && ! $el.matches(':hover')) resume(item.id)"
+        >
+            <template x-if="icons[item.variant]">
+                <svg class="mt-0.5 size-4 shrink-0" :class="iconVariants[item.variant]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.variant]" /></svg>
+            </template>
+            <div class="grid flex-1 gap-1">
+                <p class="font-semibold" x-text="item.title"></p>
+                <template x-if="item.description">
+                    <p class="text-muted" x-text="item.description"></p>
+                </template>
+            </div>
+            <button type="button" class="-mt-1 -mr-1 inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close" x-on:click="dismiss(item.id)">
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+            </button>
+        </div>
+    </template>
+</div>
+</div>

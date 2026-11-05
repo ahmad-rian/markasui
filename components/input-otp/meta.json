@@ -1,0 +1,100 @@
+{
+  "name": "input-otp",
+  "title": "Input OTP",
+  "description": "One-time code input split into single-digit boxes, with auto advance, paste support, and one hidden field for form submit.",
+  "category": "form",
+  "tags": ["otp", "verification", "code", "pin", "2fa", "form"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "input-otp.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "InputOTP.tsx", "deps": [] },
+    "vue": { "file": "InputOTP.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "length",
+      "type": "number",
+      "default": "6",
+      "description": "Number of digit boxes."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Group label, rendered as the fieldset legend."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "-",
+      "description": "Name of the hidden input that holds the full code for form submit."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "string",
+      "default": "\"\"",
+      "description": "The code. React accepts value with onValueChange or defaultValue; Vue uses v-model; Blade uses value."
+    },
+    {
+      "name": "onValueChange / markas-change",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Called on every change with the joined code (React). Blade dispatches a markas-change event."
+    },
+    {
+      "name": "onComplete / @complete / markas-complete",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Called once every box is filled, with the full code. Blade dispatches a markas-complete event."
+    },
+    {
+      "name": "digitLabel",
+      "type": "string",
+      "default": "Digit {index} of {length}",
+      "description": "aria-label of each box. {index} and {length} are replaced with numbers."
+    }
+  ],
+  "a11y": [
+    "Boxes sit in a fieldset whose legend is the label prop, and each box has an aria-label such as \"Digit 1 of 6\".",
+    "Typing a digit moves focus to the next box; Backspace clears and moves back; Arrow Left, Arrow Right, Home, and End move between boxes.",
+    "Pasting a code fills all boxes. The first box uses autocomplete=one-time-code so phones can suggest SMS codes.",
+    "Boxes use inputmode=numeric for a number keyboard and accept digits only."
+  ],
+  "ai": {
+    "whenToUse": "Verification codes sent by SMS or email, two-factor authentication, and short numeric PINs.",
+    "rules": [
+      "Set name so the joined code is submitted with the form",
+      "Use onComplete or markas-complete to submit automatically once the code is full",
+      "Translate digitLabel together with label for non-English sites"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Input kode sekali pakai yang dipecah menjadi kotak satu digit, dengan maju otomatis, dukungan tempel, dan satu input tersembunyi untuk submit form.",
+      "props": {
+        "length": "Jumlah kotak digit.",
+        "label": "Label grup, dirender sebagai legend fieldset.",
+        "name": "Nama input tersembunyi yang berisi kode lengkap untuk submit form.",
+        "value / defaultValue / v-model": "Kode. React menerima value dengan onValueChange atau defaultValue; Vue memakai v-model; Blade memakai value.",
+        "onValueChange / markas-change": "Dipanggil setiap perubahan dengan kode gabungan (React). Blade memancarkan event markas-change.",
+        "onComplete / @complete / markas-complete": "Dipanggil sekali saat semua kotak terisi, dengan kode lengkap. Blade memancarkan event markas-complete.",
+        "digitLabel": "aria-label tiap kotak. {index} dan {length} diganti angka. Isi misalnya \"Digit {index} dari {length}\"."
+      },
+      "a11y": [
+        "Kotak berada di fieldset dengan legend dari prop label, dan tiap kotak punya aria-label seperti \"Digit 1 of 6\".",
+        "Mengetik digit memindah fokus ke kotak berikutnya; Backspace mengosongkan lalu mundur; panah kiri, panah kanan, Home, dan End berpindah kotak.",
+        "Menempel kode mengisi semua kotak. Kotak pertama memakai autocomplete=one-time-code agar ponsel bisa menyarankan kode SMS.",
+        "Kotak memakai inputmode=numeric untuk keyboard angka dan hanya menerima digit."
+      ],
+      "ai": {
+        "whenToUse": "Kode verifikasi lewat SMS atau email, autentikasi dua faktor, dan PIN angka pendek.",
+        "rules": [
+          "Isi name agar kode gabungan ikut terkirim bersama form",
+          "Pakai onComplete atau markas-complete untuk submit otomatis saat kode lengkap",
+          "Terjemahkan digitLabel bersama label untuk situs berbahasa selain Inggris"
+        ]
+      }
+    }
+  }
+}

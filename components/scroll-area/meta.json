@@ -1,0 +1,70 @@
+{
+  "name": "scroll-area",
+  "title": "Scroll Area",
+  "description": "Scrollable container with a thin token-styled scrollbar that keyboard users can focus and scroll. No JavaScript.",
+  "category": "data",
+  "tags": ["scroll", "overflow", "scrollbar", "container"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "scroll-area.blade.php", "deps": [] },
+    "react": { "file": "ScrollArea.tsx", "deps": [] },
+    "vue": { "file": "ScrollArea.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "orientation",
+      "type": "\"vertical\" | \"horizontal\" | \"both\"",
+      "default": "\"vertical\"",
+      "description": "Direction the content can scroll. The other direction is clipped unless you pick both."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Scrollable content",
+      "description": "Accessible name of the region. Describe the content, for example Releases."
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "default": "-",
+      "description": "Set the size limit here, for example max-h-64 or max-w-sm, plus any border or background."
+    }
+  ],
+  "a11y": [
+    "Uses role=region with aria-label so screen reader users can find and identify the scrollable area.",
+    "Has tabindex=0, so keyboard users can focus it and scroll with the arrow keys, Page Up, and Page Down.",
+    "Shows a visible focus outline and keeps the native scrollbar, only thinner and in token colors."
+  ],
+  "ai": {
+    "whenToUse": "Long content inside a fixed-size box, such as a list of releases, a notification panel, or a wide schedule.",
+    "rules": [
+      "Always set a max height or max width through class, otherwise nothing scrolls",
+      "Give every scroll area a label that describes its content",
+      "Do not nest scroll areas that scroll in the same direction"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kontainer bergulir dengan scrollbar tipis berwarna token yang bisa difokus dan digulir lewat keyboard. Tanpa JavaScript.",
+      "props": {
+        "orientation": "Arah konten bisa digulir. Arah lainnya dipotong kecuali memilih both.",
+        "label": "Nama aksesibel region. Jelaskan isinya, misalnya Rilis.",
+        "class": "Atur batas ukuran di sini, misalnya max-h-64 atau max-w-sm, beserta border atau latar."
+      },
+      "a11y": [
+        "Memakai role=region dengan aria-label sehingga pengguna pembaca layar bisa menemukan dan mengenali area bergulir.",
+        "Punya tabindex=0, jadi pengguna keyboard bisa memfokusnya lalu menggulir dengan panah, Page Up, dan Page Down.",
+        "Menampilkan outline fokus yang jelas dan tetap memakai scrollbar native, hanya lebih tipis dan berwarna token."
+      ],
+      "ai": {
+        "whenToUse": "Konten panjang di dalam kotak berukuran tetap, seperti daftar rilis, panel notifikasi, atau jadwal yang lebar.",
+        "rules": [
+          "Selalu atur tinggi atau lebar maksimum lewat class, kalau tidak tidak ada yang tergulir",
+          "Beri setiap scroll area label yang menjelaskan isinya",
+          "Jangan menumpuk scroll area yang bergulir ke arah yang sama"
+        ]
+      }
+    }
+  }
+}

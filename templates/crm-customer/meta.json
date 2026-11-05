@@ -1,0 +1,21 @@
+{
+  "name": "crm-customer",
+  "title": "CRM Customer",
+  "description": {
+    "en": "Customer profile workspace with interaction history, contact details, a monthly task calendar, and a stage funnel.",
+    "id": "Ruang kerja profil pelanggan dengan riwayat interaksi, detail kontak, kalender tugas bulanan, dan funnel tahapan."
+  },
+  "components": [
+    "avatar",
+    "badge",
+    "button",
+    "card",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "tabs",
+    "toast",
+    "tooltip"
+  ],
+  "addedAt": "2026-11-05"
+}

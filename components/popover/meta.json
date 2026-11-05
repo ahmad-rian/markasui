@@ -1,0 +1,93 @@
+{
+  "name": "popover",
+  "title": "Popover",
+  "description": "Non-modal floating panel built on the Popover API for small forms and extra details, anchored to a trigger button.",
+  "category": "overlay",
+  "tags": ["popover", "floating", "panel", "overlay"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "popover.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Popover.tsx", "deps": [] },
+    "vue": { "file": "Popover.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Open",
+      "description": "Text of the trigger button."
+    },
+    {
+      "name": "trigger",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Custom trigger button content, replaces label. Add sr-only text when it only holds an icon."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Panel content, such as a short form or details."
+    },
+    {
+      "name": "side",
+      "type": "top | bottom",
+      "default": "bottom",
+      "description": "Side of the trigger to show the panel on. Flips to the other side when it does not fit on screen."
+    },
+    {
+      "name": "align",
+      "type": "start | center | end",
+      "default": "start",
+      "description": "Horizontal alignment of the panel against the trigger."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Panel id. The trigger button uses this id with a -trigger suffix."
+    }
+  ],
+  "a11y": [
+    "The trigger button uses aria-haspopup=dialog, aria-expanded, and aria-controls pointing to the role=dialog panel, which is labelled by the trigger.",
+    "Enter or Space on the trigger opens the panel and moves focus to its first focusable element.",
+    "Escape closes the panel and returns focus to the trigger.",
+    "Clicking outside closes the panel (Popover API light dismiss). Focus returns to the trigger unless it already moved to another element."
+  ],
+  "ai": {
+    "whenToUse": "Showing a small form or extra details next to a button without leaving the page, such as share options, filters, or quick settings.",
+    "rules": [
+      "Keep the content short; use Modal or Drawer for long forms",
+      "Use Dropdown Menu for a list of actions and Tooltip for short hints",
+      "Add sr-only text to the trigger slot when the trigger only shows an icon"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Panel mengambang non-modal berbasis Popover API untuk form kecil dan detail tambahan, menempel pada tombol pemicu.",
+      "props": {
+        "label": "Teks tombol pemicu. Default \"Open\", isi misalnya \"Bagikan\" untuk situs berbahasa Indonesia.",
+        "trigger": "Isi tombol pemicu kustom, menggantikan label. Tambahkan teks sr-only bila isinya hanya ikon.",
+        "children / slot": "Isi panel, misalnya form singkat atau detail.",
+        "side": "Sisi pemicu tempat panel muncul. Pindah ke sisi lain bila tidak muat di layar.",
+        "align": "Perataan horizontal panel terhadap pemicu.",
+        "id": "Id panel. Tombol pemicu memakai id ini dengan akhiran -trigger."
+      },
+      "a11y": [
+        "Tombol pemicu memakai aria-haspopup=dialog, aria-expanded, dan aria-controls ke panel role=dialog yang diberi nama dari pemicu.",
+        "Enter atau Spasi pada pemicu membuka panel dan memindahkan fokus ke elemen fokus pertama di dalamnya.",
+        "Escape menutup panel dan mengembalikan fokus ke pemicu.",
+        "Klik di luar menutup panel (light dismiss Popover API). Fokus kembali ke pemicu kecuali sudah pindah ke elemen lain."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan form kecil atau detail tambahan di samping tombol tanpa pindah halaman, misalnya opsi berbagi, filter, atau pengaturan cepat.",
+        "rules": [
+          "Jaga isi tetap singkat; gunakan Modal atau Drawer untuk form panjang",
+          "Gunakan Dropdown Menu untuk daftar aksi dan Tooltip untuk petunjuk singkat",
+          "Tambahkan teks sr-only di slot trigger bila pemicu hanya berisi ikon"
+        ]
+      }
+    }
+  }
+}

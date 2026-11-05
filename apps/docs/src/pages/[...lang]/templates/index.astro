@@ -1,0 +1,42 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { localeParams, localePath, t, toLocale } from "../../../lib/i18n";
+import { getTemplates } from "../../../lib/templates";
+
+export const getStaticPaths = localeParams;
+
+const locale = toLocale(Astro.params.lang);
+const strings = t(locale).templates;
+const templates = getTemplates();
+---
+
+<Base title={strings.title} description={strings.subtitle}>
+  <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-24 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
+    <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{strings.title}</h1>
+    <p class="mt-3 max-w-2xl text-lg leading-8 text-muted">{strings.subtitle}</p>
+    <ul class="mt-10 grid gap-6 md:grid-cols-2">
+      {
+        templates.map((template) => (
+          <li>
+            <a href={localePath(locale, `/templates/${template.name}`)} class="frame group block transition-colors hover:bg-line">
+              <div class="frame-panel relative aspect-[16/10] overflow-hidden">
+                <iframe
+                  src={`/demo/templates/${template.name}/react`}
+                  title={template.title}
+                  loading="lazy"
+                  tabindex="-1"
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-0 left-0 h-[900px] w-[1440px] origin-top-left scale-[0.4] border-0 sm:scale-[0.42] lg:scale-[0.41]"
+                />
+              </div>
+              <div class="px-3 pt-3 pb-2">
+                <h2 class="font-medium text-ink">{template.title}</h2>
+                <p class="mt-1 text-sm text-muted">{template.description[locale]}</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Base>

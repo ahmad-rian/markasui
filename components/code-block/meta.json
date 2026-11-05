@@ -1,0 +1,84 @@
+{
+  "name": "code-block",
+  "title": "Code Block",
+  "description": "Monospace code block with an optional file name, line numbers, and a copy button. Plain text, no syntax highlighting.",
+  "category": "data",
+  "tags": ["code", "snippet", "pre", "copy", "clipboard"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "code-block.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "CodeBlock.tsx", "deps": [] },
+    "vue": { "file": "CodeBlock.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "code",
+      "type": "string",
+      "default": "-",
+      "description": "The code to show and copy. Passed as a string so all three frameworks render the same lines."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "-",
+      "description": "Optional file name or caption shown in the header."
+    },
+    {
+      "name": "showLineNumbers",
+      "type": "boolean",
+      "default": "false",
+      "description": "Show line numbers. They are hidden from screen readers and not selectable."
+    },
+    {
+      "name": "copyLabel",
+      "type": "string",
+      "default": "Copy code",
+      "description": "Text of the copy button."
+    },
+    {
+      "name": "copiedLabel",
+      "type": "string",
+      "default": "Copied",
+      "description": "Text shown for two seconds after the code is copied."
+    }
+  ],
+  "a11y": [
+    "The pre element has tabindex=0, so keyboard users can focus it and scroll long lines horizontally.",
+    "The copy button is a native button with visible text, and the copied message is announced through aria-live.",
+    "Line numbers are aria-hidden so screen readers read only the code."
+  ],
+  "ai": {
+    "whenToUse": "Showing a snippet, command, or config file that users read or copy inside your app, such as API keys setup or install steps.",
+    "rules": [
+      "Pass the code through the code prop as a string, never as children or a slot",
+      "Use title for the file name or Terminal, not for a sentence",
+      "Do not use Code block for inline code, use a code element in the text"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Blok kode monospace dengan nama file opsional, nomor baris, dan tombol salin. Teks polos tanpa pewarnaan sintaks.",
+      "props": {
+        "code": "Kode yang ditampilkan dan disalin. Dikirim sebagai string agar ketiga framework merender baris yang sama.",
+        "title": "Nama file atau keterangan opsional di header.",
+        "showLineNumbers": "Tampilkan nomor baris. Nomor disembunyikan dari pembaca layar dan tidak ikut terseleksi.",
+        "copyLabel": "Teks tombol salin. Isi \"Salin kode\" untuk situs berbahasa Indonesia.",
+        "copiedLabel": "Teks yang tampil dua detik setelah kode tersalin. Isi \"Tersalin\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Elemen pre punya tabindex=0, jadi pengguna keyboard bisa memfokusnya dan menggulir baris panjang secara horizontal.",
+        "Tombol salin adalah button native dengan teks terlihat, dan pesan tersalin diumumkan lewat aria-live.",
+        "Nomor baris memakai aria-hidden sehingga pembaca layar hanya membaca kodenya."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan potongan kode, perintah, atau file konfigurasi yang dibaca atau disalin user di aplikasi, seperti setup API key atau langkah instalasi.",
+        "rules": [
+          "Kirim kode lewat prop code sebagai string, jangan lewat children atau slot",
+          "Pakai title untuk nama file atau Terminal, bukan untuk kalimat",
+          "Jangan memakai Code block untuk kode inline, gunakan elemen code di dalam teks"
+        ]
+      }
+    }
+  }
+}

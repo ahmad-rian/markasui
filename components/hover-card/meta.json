@@ -1,0 +1,72 @@
+{
+  "name": "hover-card",
+  "title": "Hover Card",
+  "description": "Preview card built on the Popover API, shown when a link is hovered or focused, for profiles, repositories, and other previews.",
+  "category": "overlay",
+  "tags": ["hover card", "preview", "popover", "overlay"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "hover-card.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "HoverCard.tsx", "deps": [] },
+    "vue": { "file": "HoverCard.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "A single focusable trigger element, usually a link."
+    },
+    {
+      "name": "content",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Card content. Blade and Vue use the content slot, React uses the content prop."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Card element id, used for the trigger aria-describedby."
+    }
+  ],
+  "a11y": [
+    "The trigger automatically gets aria-describedby pointing to the card, so screen readers announce the preview.",
+    "Shows on hover after 400ms and right away when the trigger receives keyboard focus.",
+    "Moving the mouse away, moving focus outside the trigger and card, or pressing Escape hides the card.",
+    "The card is a preview only: the trigger link must lead to the same information."
+  ],
+  "ai": {
+    "whenToUse": "Previewing what is behind a link, such as a user profile, a repository, or a document, without leaving the page.",
+    "rules": [
+      "The trigger must be a single focusable element, usually a link to the full page",
+      "Never put information or actions that exist only inside the card",
+      "Use Tooltip for short text hints and Popover for content the user clicks to open"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kartu pratinjau berbasis Popover API yang muncul saat link di-hover atau difokus, untuk profil, repositori, dan pratinjau lain.",
+      "props": {
+        "children / slot": "Satu elemen pemicu yang bisa difokus, biasanya link.",
+        "content": "Isi kartu. Blade dan Vue memakai slot content, React memakai prop content.",
+        "id": "Id elemen kartu, dipakai untuk aria-describedby pemicu."
+      },
+      "a11y": [
+        "Pemicu otomatis mendapat aria-describedby ke kartu, jadi pembaca layar mengumumkan pratinjaunya.",
+        "Muncul saat hover setelah 400ms dan langsung saat pemicu mendapat fokus keyboard.",
+        "Mouse keluar, fokus pindah ke luar pemicu dan kartu, atau Escape menyembunyikan kartu.",
+        "Kartu hanya pratinjau: link pemicu harus menuju informasi yang sama."
+      ],
+      "ai": {
+        "whenToUse": "Pratinjau isi di balik sebuah link, misalnya profil user, repositori, atau dokumen, tanpa pindah halaman.",
+        "rules": [
+          "Pemicu harus satu elemen yang bisa difokus, biasanya link ke halaman lengkap",
+          "Jangan menaruh informasi atau aksi yang hanya ada di dalam kartu",
+          "Gunakan Tooltip untuk petunjuk teks singkat dan Popover untuk konten yang dibuka dengan klik"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "name": "context-menu",
+  "title": "Context Menu",
+  "description": "Menu opened by right-clicking an area or pressing Shift+F10, shown at the pointer through the Popover API with WAI-ARIA Menu keyboard support.",
+  "category": "overlay",
+  "tags": [
+    "context menu",
+    "right click",
+    "menu",
+    "popover",
+    "actions",
+    "overlay"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "context-menu.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ContextMenu.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ContextMenu.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ label, value?, href?, danger?, disabled? }[] or { separator: true }",
+      "default": "[]",
+      "description": "Menu items. Items with href render as links, separators render as a dividing line."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content of the trigger area. Right-clicking anywhere in it opens the menu."
+    },
+    {
+      "name": "menuLabel",
+      "type": "string",
+      "default": "Context menu",
+      "description": "Accessible name of the menu panel."
+    },
+    {
+      "name": "hintLabel",
+      "type": "string",
+      "default": "Press Shift+F10 to open the context menu",
+      "description": "Screen reader hint linked to the trigger area with aria-describedby."
+    },
+    {
+      "name": "onSelect / @select / markas-select",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Called when an item is selected, with the item value (or label when value is empty). Blade dispatches a markas-select event."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Menu panel id. The hint uses this id with a -hint suffix."
+    }
+  ],
+  "a11y": [
+    "The trigger area is focusable (tabindex=0) and described by a hidden hint that explains Shift+F10.",
+    "Right-click opens the menu at the pointer; Shift+F10 or the ContextMenu key opens it at the top left corner of the area. The first item receives focus.",
+    "Arrow Up and Arrow Down move between items (wrapping at the ends), Home and End jump to the first and last item, disabled items are skipped.",
+    "Escape closes the menu and returns focus to the area, Tab closes it. Clicking outside closes the menu (Popover API light dismiss)."
+  ],
+  "ai": {
+    "whenToUse": "Secondary actions on an object people right-click, such as a file, canvas, table row, or image, where a visible menu button would add clutter.",
+    "rules": [
+      "Always offer the same actions somewhere visible too; a context menu is a shortcut, not the only path",
+      "Put destructive actions last with danger: true and separate them with a separator",
+      "Give the area visible text or an aria-label so focus on it makes sense"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Menu yang terbuka saat area diklik kanan atau Shift+F10 ditekan, tampil di posisi kursor lewat Popover API dengan keyboard sesuai WAI-ARIA Menu.",
+      "props": {
+        "items": "Daftar item menu. Item dengan href dirender sebagai link, separator menjadi garis pemisah.",
+        "children / slot": "Isi area pemicu. Klik kanan di mana saja di dalamnya membuka menu.",
+        "menuLabel": "Nama aksesibel panel menu. Default \"Context menu\", isi misalnya \"Menu konteks\".",
+        "hintLabel": "Petunjuk pembaca layar yang ditautkan ke area lewat aria-describedby. Isi misalnya \"Tekan Shift+F10 untuk membuka menu konteks\".",
+        "onSelect / @select / markas-select": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select.",
+        "id": "Id panel menu. Petunjuk memakai id ini dengan akhiran -hint."
+      },
+      "a11y": [
+        "Area pemicu bisa difokus (tabindex=0) dan dideskripsikan oleh petunjuk tersembunyi tentang Shift+F10.",
+        "Klik kanan membuka menu di posisi kursor; Shift+F10 atau tombol ContextMenu membukanya di sudut kiri atas area. Item pertama menerima fokus.",
+        "Panah atas dan bawah berpindah item (berputar di ujung), Home dan End ke item pertama dan terakhir, item nonaktif dilewati.",
+        "Escape menutup menu dan mengembalikan fokus ke area, Tab menutupnya. Klik di luar menutup menu (light dismiss Popover API)."
+      ],
+      "ai": {
+        "whenToUse": "Aksi sekunder pada objek yang biasa diklik kanan, misalnya file, kanvas, baris tabel, atau gambar, saat tombol menu yang terlihat akan membuat ramai.",
+        "rules": [
+          "Selalu sediakan aksi yang sama di tempat yang terlihat juga; menu konteks adalah jalan pintas, bukan satu-satunya jalan",
+          "Letakkan aksi berbahaya di akhir dengan danger: true dan pisahkan dengan separator",
+          "Beri area teks yang terlihat atau aria-label supaya fokus di sana bermakna"
+        ]
+      }
+    }
+  }
+}

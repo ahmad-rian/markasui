@@ -37,6 +37,7 @@ Agent Skill ada di [`skills/markasui`](skills/markasui/SKILL.md).
 apps/docs/          website docs (Astro)
 components/<nama>/  sumber tunggal tiap komponen: Blade, React, Vue, meta.json, usage.md
 examples/           contoh identik per framework, dipakai playground, tes, dan preview docs
+templates/<slug>/   template halaman penuh (Blade, React, Vue) yang disusun dari komponen
 packages/theme/     markas.css (token warna)
 packages/registry/  build registry JSON dengan validasi Zod
 packages/cli/       paket npm "markasui"

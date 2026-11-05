@@ -1,0 +1,86 @@
+{
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Keycap for keyboard shortcuts using the native kbd element, in two sizes, with key combinations rendered as separate keys.",
+  "category": "data",
+  "tags": ["kbd", "keyboard", "shortcut", "hotkey", "keycap"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "kbd.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Kbd.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Kbd.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "default": "md",
+      "description": "Keycap height and text size. Use sm inside buttons and inputs."
+    },
+    {
+      "name": "keys",
+      "type": "string[]",
+      "default": "[]",
+      "description": "Key combination. Each key renders as its own keycap inside an outer kbd. Replaces the slot or children."
+    },
+    {
+      "name": "separator",
+      "type": "string",
+      "default": "+",
+      "description": "Muted text between the keys of a combination, such as \"then\" for a key sequence."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content of a single keycap when keys is empty."
+    }
+  ],
+  "a11y": [
+    "Uses the native kbd element; a combination nests one kbd per key inside an outer kbd, as the HTML spec recommends.",
+    "The separator is plain text, so screen readers announce combinations such as \"Ctrl + K\".",
+    "Set aria-hidden on the keycap when the shortcut is only a visual hint inside a control that already has a name."
+  ],
+  "ai": {
+    "whenToUse": "Showing a keyboard shortcut in help text, menus, tooltips, buttons, or a shortcut reference list.",
+    "rules": [
+      "Use keys for combinations instead of writing \"+\" by hand",
+      "Write key names the way they appear on the keyboard, such as Ctrl, Shift, Enter, and Esc",
+      "Do not make a keycap clickable; use Button for actions"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Keycap untuk shortcut keyboard memakai elemen kbd native, dua ukuran, dengan kombinasi tombol dirender sebagai keycap terpisah.",
+      "props": {
+        "size": "Tinggi keycap dan ukuran teks. Pakai sm di dalam tombol dan input.",
+        "keys": "Kombinasi tombol. Setiap tombol dirender sebagai keycap sendiri di dalam kbd luar. Menggantikan slot atau children.",
+        "separator": "Teks muted di antara tombol pada kombinasi, misalnya \"lalu\" untuk urutan tombol.",
+        "children / slot": "Isi satu keycap bila keys kosong."
+      },
+      "a11y": [
+        "Memakai elemen kbd native; kombinasi menyusun satu kbd per tombol di dalam kbd luar, sesuai anjuran spesifikasi HTML.",
+        "Pemisah berupa teks biasa sehingga pembaca layar membacakan kombinasi seperti \"Ctrl + K\".",
+        "Pasang aria-hidden pada keycap bila shortcut hanya petunjuk visual di dalam kontrol yang sudah punya nama."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan shortcut keyboard di teks bantuan, menu, tooltip, tombol, atau daftar shortcut.",
+        "rules": [
+          "Pakai keys untuk kombinasi, jangan menulis \"+\" manual",
+          "Tulis nama tombol seperti tertera di keyboard, misalnya Ctrl, Shift, Enter, dan Esc",
+          "Jangan membuat keycap bisa diklik; pakai Button untuk aksi"
+        ]
+      }
+    }
+  }
+}

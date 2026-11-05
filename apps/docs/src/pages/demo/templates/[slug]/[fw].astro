@@ -1,0 +1,48 @@
+---
+import "../../../../styles/global.css";
+import TemplateReact from "../../../../components/templates/TemplateReact";
+import TemplateVue from "../../../../components/templates/TemplateVue.vue";
+import { getTemplates } from "../../../../lib/templates";
+
+/** Halaman demo layar penuh tanpa chrome situs, dipakai iframe di halaman detail template. */
+export function getStaticPaths() {
+  return getTemplates().flatMap((template) =>
+    (["blade", "react", "vue"] as const).map((fw) => ({ params: { slug: template.name, fw }, props: { template } })),
+  );
+}
+
+const { template } = Astro.props;
+const { fw } = Astro.params;
+const bladeFiles = import.meta.glob<string>("../../../../generated/templates/*.html", { query: "?raw", import: "default", eager: true });
+const bladeHtml = bladeFiles[`../../../../generated/templates/${template.name}.html`] ?? "";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{template.title} - MarkasUI</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      try {
+        const theme = new URLSearchParams(location.search).get("theme") ?? localStorage.getItem("markas-theme");
+        document.documentElement.classList.toggle("dark", theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+      } catch {}
+    </script>
+  </head>
+  <body class="min-h-dvh bg-canvas font-sans text-ink">
+    {fw === "blade" && <Fragment set:html={bladeHtml} />}
+    {fw === "react" && <TemplateReact client:load name={template.name} />}
+    {fw === "vue" && <TemplateVue client:load name={template.name} />}
+    {
+      fw === "blade" && (
+        <script>
+          import Alpine from "alpinejs";
+          Alpine.start();
+        </script>
+      )
+    }
+  </body>
+</html>

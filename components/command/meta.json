@@ -1,0 +1,131 @@
+{
+  "name": "command",
+  "title": "Command Palette",
+  "description": "Searchable list of commands in a modal dialog, filtered as you type, with arrow key navigation and an optional Ctrl+K or Cmd+K shortcut.",
+  "category": "overlay",
+  "tags": [
+    "command",
+    "command palette",
+    "search",
+    "combobox",
+    "dialog",
+    "shortcut",
+    "overlay"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "command.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Command.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Command.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ group, label, value?, href?, shortcut? }[]",
+      "default": "[]",
+      "description": "Commands. Items are grouped by group in order of first appearance. Items with href render as links."
+    },
+    {
+      "name": "trigger",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Element that opens the palette on click, usually a button."
+    },
+    {
+      "name": "hotkey",
+      "type": "boolean",
+      "default": "false",
+      "description": "Ctrl+K or Cmd+K anywhere on the page opens and closes the palette."
+    },
+    {
+      "name": "placeholderLabel",
+      "type": "string",
+      "default": "Type a command or search...",
+      "description": "Placeholder of the search field."
+    },
+    {
+      "name": "emptyLabel",
+      "type": "string",
+      "default": "No results found.",
+      "description": "Message shown when no command matches the search."
+    },
+    {
+      "name": "searchLabel",
+      "type": "string",
+      "default": "Search commands",
+      "description": "Accessible name of the search field."
+    },
+    {
+      "name": "dialogLabel",
+      "type": "string",
+      "default": "Command palette",
+      "description": "Accessible name of the dialog and the result list."
+    },
+    {
+      "name": "onSelect / @select / markas-select",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Called when a command is chosen, with its value (or label when value is empty). Blade dispatches a markas-select event."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Dialog id. The list and options use it as a prefix."
+    }
+  ],
+  "a11y": [
+    "Native modal dialog: focus moves to the search field on open, stays inside the dialog, and returns to the trigger on close.",
+    "The search field is a combobox with aria-controls pointing to the role=listbox result list and aria-activedescendant on the highlighted option.",
+    "Arrow Down and Arrow Up move the highlight (wrapping at the ends), Enter runs the highlighted command, Escape closes the dialog.",
+    "Options are grouped with role=group labelled by the group heading; the empty message replaces the list when nothing matches."
+  ],
+  "ai": {
+    "whenToUse": "A global launcher for navigation and actions in an app with many pages or commands, opened with a button or Ctrl+K.",
+    "rules": [
+      "Keep labels short and start with a verb for actions, for example Create project",
+      "Group commands by purpose, such as Navigation, Actions, and Settings",
+      "Show shortcut only for shortcuts that really work in the app"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Daftar perintah yang bisa dicari di dalam dialog modal, tersaring saat mengetik, dengan navigasi panah dan pintasan Ctrl+K atau Cmd+K opsional.",
+      "props": {
+        "items": "Daftar perintah. Item dikelompokkan per group sesuai urutan kemunculan pertama. Item dengan href dirender sebagai link.",
+        "trigger": "Elemen yang membuka palet saat diklik, biasanya tombol.",
+        "hotkey": "Ctrl+K atau Cmd+K di mana saja pada halaman membuka dan menutup palet.",
+        "placeholderLabel": "Placeholder kolom pencarian. Default \"Type a command or search...\", isi misalnya \"Ketik perintah atau cari...\".",
+        "emptyLabel": "Pesan saat tidak ada perintah yang cocok. Default \"No results found.\", isi misalnya \"Tidak ada hasil.\".",
+        "searchLabel": "Nama aksesibel kolom pencarian. Isi misalnya \"Cari perintah\".",
+        "dialogLabel": "Nama aksesibel dialog dan daftar hasil. Isi misalnya \"Palet perintah\".",
+        "onSelect / @select / markas-select": "Dipanggil saat perintah dipilih dengan value-nya (atau label bila value kosong). Blade memancarkan event markas-select.",
+        "id": "Id dialog. Daftar dan opsi memakainya sebagai awalan."
+      },
+      "a11y": [
+        "Dialog modal native: fokus pindah ke kolom pencarian saat dibuka, tertahan di dalam dialog, dan kembali ke pemicu saat ditutup.",
+        "Kolom pencarian adalah combobox dengan aria-controls ke daftar hasil role=listbox dan aria-activedescendant ke opsi yang disorot.",
+        "Panah bawah dan atas memindah sorotan (berputar di ujung), Enter menjalankan perintah yang disorot, Escape menutup dialog.",
+        "Opsi dikelompokkan dengan role=group berlabel judul grup; pesan kosong menggantikan daftar saat tidak ada yang cocok."
+      ],
+      "ai": {
+        "whenToUse": "Peluncur global untuk navigasi dan aksi di aplikasi dengan banyak halaman atau perintah, dibuka dengan tombol atau Ctrl+K.",
+        "rules": [
+          "Buat label singkat dan awali dengan kata kerja untuk aksi, misalnya Buat proyek",
+          "Kelompokkan perintah menurut tujuan, misalnya Navigasi, Aksi, dan Pengaturan",
+          "Tampilkan shortcut hanya untuk pintasan yang benar-benar berfungsi di aplikasi"
+        ]
+      }
+    }
+  }
+}

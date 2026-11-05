@@ -60,7 +60,7 @@ function followViewport(update: () => void) {
 
 const generatedId = useId();
 const tooltipId = computed(() => props.id ?? generatedId);
-const rootEl = useTemplateRef<HTMLSpanElement>("root");
+const rootEl = useTemplateRef<HTMLSpanElement>("rootRef");
 const tipEl = useTemplateRef<HTMLSpanElement>("tip");
 const open = ref(false);
 let timer: ReturnType<typeof setTimeout> | undefined;
@@ -123,7 +123,7 @@ onBeforeUnmount(() => {
 
 <template>
   <span
-    ref="root"
+    ref="rootRef"
     :class="root"
     @mouseenter="showLater"
     @mouseleave="hide"

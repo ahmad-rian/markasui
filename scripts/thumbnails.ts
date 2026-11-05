@@ -5,7 +5,7 @@
 import { execFileSync } from "node:child_process";
 import { mkdir, readdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { chromium } from "@playwright/test";
+import { chromium, type Page } from "@playwright/test";
 import sharp from "sharp";
 import { createServer } from "vite";
 
@@ -14,6 +14,26 @@ const HEIGHT = 300;
 const MAX_BYTES = 30 * 1024;
 const QUALITY = 80;
 const BACKGROUND = { light: "#f4f4f1", dark: "#0e110e" } as const;
+
+/** Komponen overlay difoto dalam keadaan terbuka supaya kartunya tidak hanya berisi tombol pemicu. */
+const OPEN_ACTIONS: Record<string, (page: Page) => Promise<void>> = {
+  modal: (page) => page.getByRole("button").first().click(),
+  "alert-dialog": (page) => page.getByRole("button").first().click(),
+  command: (page) => page.getByRole("button").first().click(),
+  popover: (page) => page.getByRole("button").first().click(),
+  "dropdown-menu": (page) => page.getByRole("button").first().click(),
+  menubar: (page) => page.getByRole("menuitem").first().click(),
+  "hover-card": (page) => page.getByRole("link").first().hover(),
+  "context-menu": (page) =>
+    page
+      .getByRole("group")
+      .first()
+      .click({ button: "right", position: { x: 24, y: 16 } }),
+  combobox: (page) => page.getByRole("combobox").first().click(),
+};
+const DIALOGS = new Set(["modal", "alert-dialog", "command"]);
+const OPEN_DELAY = 400;
+const TRIM_PADDING = { top: 120, bottom: 120, left: 160, right: 160 };
 
 const root = resolve(import.meta.dirname, "..");
 const outDir = join(root, "apps/docs/public/thumbs");
@@ -50,18 +70,7 @@ async function main() {
           `http://localhost:5199/react.html?c=${name}&theme=${theme}`,
         );
         await page.locator("body[data-ready=true]").waitFor();
-        let png: Buffer;
-        if (name === "modal") {
-          await page.getByRole("button").first().click();
-          await page.locator("dialog[open]").waitFor();
-          png = await page
-            .locator("dialog[open]")
-            .screenshot({ animations: "disabled", caret: "hide" });
-        } else {
-          png = await page
-            .locator("#fixture")
-            .screenshot({ animations: "disabled", caret: "hide" });
-        }
+        const png = await capture(page, name, theme);
 
         const file = join(
           outDir,
@@ -89,6 +98,25 @@ async function main() {
     await browser.close();
     await server.close();
   }
+}
+
+async function capture(
+  page: Page,
+  name: string,
+  theme: keyof typeof BACKGROUND,
+): Promise<Buffer> {
+  const options = { animations: "disabled", caret: "hide" } as const;
+  const open = OPEN_ACTIONS[name];
+  if (!open) return page.locator("#fixture").screenshot(options);
+  await open(page);
+  await page.waitForTimeout(OPEN_DELAY);
+  if (DIALOGS.has(name))
+    return page.locator("dialog[open]").screenshot(options);
+  // Menu dan popover ada di top layer, jadi foto seluruh layar lalu potong ruang kosongnya.
+  return sharp(await page.screenshot(options))
+    .trim({ threshold: 4 })
+    .extend({ ...TRIM_PADDING, background: BACKGROUND[theme] })
+    .toBuffer();
 }
 
 main().catch((error) => {

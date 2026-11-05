@@ -1,0 +1,111 @@
+{
+  "name": "carousel",
+  "title": "Carousel",
+  "description": "Row of slides built on CSS scroll snap, with previous and next buttons, optional dots, and arrow key navigation. No autoplay.",
+  "category": "data",
+  "tags": ["carousel", "slider", "slides", "gallery", "scroll-snap"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "carousel.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Carousel.tsx", "deps": [] },
+    "vue": { "file": "Carousel.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "slides",
+      "type": "Blade: named slots · React: children · Vue: default slot",
+      "default": "-",
+      "description": "Each named slot (Blade) or each child element (React and Vue) becomes one slide, in order."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Carousel",
+      "description": "Accessible name of the carousel region. Describe the content, for example Product tour."
+    },
+    {
+      "name": "perView",
+      "type": "1 | 2 | 3",
+      "default": "1",
+      "description": "Number of slides visible at once. Buttons still move one slide at a time."
+    },
+    {
+      "name": "showDots",
+      "type": "boolean",
+      "default": "false",
+      "description": "Show one dot per slide that jumps to that slide. Best with perView 1."
+    },
+    {
+      "name": "previousLabel",
+      "type": "string",
+      "default": "Previous slide",
+      "description": "Accessible label of the previous button."
+    },
+    {
+      "name": "nextLabel",
+      "type": "string",
+      "default": "Next slide",
+      "description": "Accessible label of the next button."
+    },
+    {
+      "name": "slideLabel",
+      "type": "string",
+      "default": "{index} of {total}",
+      "description": "Accessible label of each slide. {index} and {total} are replaced with numbers."
+    },
+    {
+      "name": "dotLabel",
+      "type": "string",
+      "default": "Go to slide {index}",
+      "description": "Accessible label of each dot. {index} and {total} are replaced with numbers."
+    }
+  ],
+  "a11y": [
+    "The root is a region with aria-roledescription=carousel and the label prop as its name.",
+    "Each slide is a group with aria-roledescription=slide and a label such as 2 of 4.",
+    "Left and right arrow keys move one slide while focus is anywhere inside the carousel, and the scroll viewport itself is focusable.",
+    "Previous and next are native buttons that become disabled at the ends, and the active dot has aria-current=true.",
+    "Nothing moves on its own, so there is no pause control to manage. Scrolling is instant when reduced motion is on."
+  ],
+  "ai": {
+    "whenToUse": "A small set of peer items that do not all need to be visible at once, such as onboarding steps, testimonials, or product photos.",
+    "rules": [
+      "Each slide must be a single root element",
+      "Keep important content out of carousels, since many users never scroll past the first slide",
+      "Use perView 2 or 3 for product cards and leave showDots off in that case",
+      "Do not add autoplay"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Deretan slide berbasis CSS scroll snap dengan tombol sebelumnya dan berikutnya, titik opsional, dan navigasi panah. Tanpa autoplay.",
+      "props": {
+        "slides": "Setiap named slot (Blade) atau setiap elemen anak (React dan Vue) menjadi satu slide, sesuai urutan.",
+        "label": "Nama aksesibel region carousel. Jelaskan isinya, misalnya Tur produk.",
+        "perView": "Jumlah slide yang terlihat sekaligus. Tombol tetap bergeser satu slide.",
+        "showDots": "Tampilkan satu titik per slide untuk melompat ke slide itu. Paling cocok dengan perView 1.",
+        "previousLabel": "Label aksesibel tombol sebelumnya. Isi \"Slide sebelumnya\" untuk situs berbahasa Indonesia.",
+        "nextLabel": "Label aksesibel tombol berikutnya. Isi \"Slide berikutnya\" untuk situs berbahasa Indonesia.",
+        "slideLabel": "Label aksesibel tiap slide. {index} dan {total} diganti angka, misalnya \"{index} dari {total}\".",
+        "dotLabel": "Label aksesibel tiap titik. {index} dan {total} diganti angka, misalnya \"Ke slide {index}\"."
+      },
+      "a11y": [
+        "Root adalah region dengan aria-roledescription=carousel dan prop label sebagai namanya.",
+        "Setiap slide adalah group dengan aria-roledescription=slide dan label seperti 2 of 4.",
+        "Panah kiri dan kanan bergeser satu slide selama fokus ada di dalam carousel, dan viewport gulirnya sendiri bisa difokus.",
+        "Tombol sebelumnya dan berikutnya adalah button native yang nonaktif di ujung, dan titik aktif punya aria-current=true.",
+        "Tidak ada yang bergerak sendiri, jadi tidak perlu kontrol jeda. Gulir langsung tanpa animasi saat reduced motion aktif."
+      ],
+      "ai": {
+        "whenToUse": "Sekumpulan kecil item setara yang tidak perlu terlihat sekaligus, seperti langkah onboarding, testimoni, atau foto produk.",
+        "rules": [
+          "Setiap slide harus satu elemen root",
+          "Jangan taruh konten penting di carousel, karena banyak user tidak menggulir melewati slide pertama",
+          "Pakai perView 2 atau 3 untuk kartu produk dan matikan showDots",
+          "Jangan menambah autoplay"
+        ]
+      }
+    }
+  }
+}

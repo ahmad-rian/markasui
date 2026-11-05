@@ -1,0 +1,19 @@
+<script setup lang="ts">
+import Button from "../../components/button/Button.vue";
+import Popover from "../../components/popover/Popover.vue";
+</script>
+
+<template>
+  <div class="flex justify-center pt-40">
+    <Popover label="Set status" side="top" align="center">
+      <div class="grid gap-2">
+        <p class="font-medium text-ink">Your status</p>
+        <p class="text-muted">Teammates see your status next to your name.</p>
+        <div class="flex gap-2">
+          <Button size="sm" variant="secondary">Busy</Button>
+          <Button size="sm" variant="secondary">Away</Button>
+        </div>
+      </div>
+    </Popover>
+  </div>
+</template>

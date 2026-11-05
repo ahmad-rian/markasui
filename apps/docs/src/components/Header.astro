@@ -11,14 +11,14 @@ const locale = getLocale(Astro.url);
 const strings = t(locale);
 const stars = await getGithubStars();
 const path = stripLocale(Astro.url.pathname);
-const isActive = (key: string) =>
-  key === "home"
-    ? path === "/"
-    : key === "components"
-      ? path.startsWith("/components")
-      : key === "mcp"
-        ? path === "/docs/mcp"
-        : path.startsWith("/docs") && path !== "/docs/mcp";
+const ACTIVE: Record<string, (path: string) => boolean> = {
+  home: (p) => p === "/",
+  components: (p) => p.startsWith("/components"),
+  templates: (p) => p.startsWith("/templates"),
+  mcp: (p) => p === "/docs/mcp",
+  docs: (p) => p.startsWith("/docs") && p !== "/docs/mcp",
+};
+const isActive = (key: string) => ACTIVE[key]?.(path) ?? false;
 const items = nav(locale);
 const navLink =
   "rounded-md text-[15px] text-ink/80 transition-colors hover:text-ink aria-[current=page]:font-medium aria-[current=page]:text-ink";

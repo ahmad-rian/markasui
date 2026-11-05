@@ -38,6 +38,7 @@ The Agent Skill lives in [`skills/markasui`](skills/markasui/SKILL.md).
 apps/docs/          docs site (Astro), English at / and Indonesian at /id
 components/<name>/  single source per component: Blade, React, Vue, meta.json, usage.md, usage.id.md
 examples/           identical examples per framework, used by the playground, tests, and docs previews
+templates/<slug>/   full-page templates (Blade, React, Vue) built from the components
 packages/theme/     markas.css (color tokens)
 packages/registry/  registry JSON build with Zod validation
 packages/cli/       the "markasui" npm package

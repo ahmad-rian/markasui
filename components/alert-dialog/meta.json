@@ -1,0 +1,114 @@
+{
+  "name": "alert-dialog",
+  "title": "Alert Dialog",
+  "description": "Modal confirmation built on the native dialog element. It needs an explicit cancel or action choice and never closes on a backdrop click.",
+  "category": "overlay",
+  "tags": ["alert", "dialog", "confirm", "modal", "overlay"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "alert-dialog.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "AlertDialog.tsx", "deps": [] },
+    "vue": { "file": "AlertDialog.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "-",
+      "description": "Dialog title, used for aria-labelledby."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Short explanation of the consequence, used for aria-describedby."
+    },
+    {
+      "name": "trigger",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Element that opens the dialog when clicked."
+    },
+    {
+      "name": "variant",
+      "type": "default | danger",
+      "default": "default",
+      "description": "Color of the action button. Use danger for destructive or irreversible actions."
+    },
+    {
+      "name": "cancelLabel",
+      "type": "string",
+      "default": "Cancel",
+      "description": "Text of the cancel button."
+    },
+    {
+      "name": "actionLabel",
+      "type": "string",
+      "default": "Continue",
+      "description": "Text of the action button."
+    },
+    {
+      "name": "onAction / @action / markas-action",
+      "type": "() => void",
+      "default": "-",
+      "description": "Called when the action button is chosen. Blade dispatches a markas-action event."
+    },
+    {
+      "name": "onCancel / @cancel / markas-cancel",
+      "type": "() => void",
+      "default": "-",
+      "description": "Called when the dialog closes through the cancel button or Escape. Blade dispatches a markas-cancel event."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Dialog id. Use it to open the dialog from elsewhere with showModal()."
+    }
+  ],
+  "a11y": [
+    "Uses dialog with role=alertdialog and showModal(), so focus stays inside and the page behind is inert.",
+    "The title is linked with aria-labelledby and the explanation with aria-describedby.",
+    "Focus starts on the cancel button, so pressing Enter by accident never runs the action.",
+    "Escape closes the dialog and counts as cancel. Clicking the backdrop does nothing."
+  ],
+  "ai": {
+    "whenToUse": "Confirming a destructive or irreversible action, such as deleting data, signing out everywhere, or discarding unsaved changes.",
+    "rules": [
+      "Write the title as a question and name the action in actionLabel, for example Delete account",
+      "Use variant danger only when the action destroys data or cannot be undone",
+      "Keep the body to one or two sentences, use Modal for forms or longer content"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Konfirmasi modal berbasis elemen dialog native. Wajib memilih batal atau aksi, tidak tertutup saat backdrop diklik.",
+      "props": {
+        "title": "Judul dialog, dipakai sebagai aria-labelledby.",
+        "children / slot": "Penjelasan singkat akibat aksi, dipakai sebagai aria-describedby.",
+        "trigger": "Elemen yang membuka dialog saat diklik.",
+        "variant": "Warna tombol aksi. Pakai danger untuk aksi yang merusak atau tidak bisa dibatalkan.",
+        "cancelLabel": "Teks tombol batal. Isi \"Batal\" untuk situs berbahasa Indonesia.",
+        "actionLabel": "Teks tombol aksi. Isi \"Lanjutkan\" atau nama aksinya untuk situs berbahasa Indonesia.",
+        "onAction / @action / markas-action": "Dipanggil saat tombol aksi dipilih. Blade memancarkan event markas-action.",
+        "onCancel / @cancel / markas-cancel": "Dipanggil saat dialog ditutup lewat tombol batal atau Escape. Blade memancarkan event markas-cancel.",
+        "id": "Id dialog. Bisa dipakai untuk membuka dialog dari luar lewat showModal()."
+      },
+      "a11y": [
+        "Memakai dialog dengan role=alertdialog dan showModal(), jadi fokus terkunci di dalam dan halaman di belakangnya inert.",
+        "Judul terhubung lewat aria-labelledby dan penjelasan lewat aria-describedby.",
+        "Fokus awal ada di tombol batal, jadi Enter yang tidak sengaja tidak menjalankan aksi.",
+        "Escape menutup dialog dan dihitung sebagai batal. Klik backdrop tidak melakukan apa pun."
+      ],
+      "ai": {
+        "whenToUse": "Konfirmasi aksi yang merusak atau tidak bisa dibatalkan, misalnya menghapus data, keluar dari semua perangkat, atau membuang perubahan yang belum disimpan.",
+        "rules": [
+          "Tulis judul sebagai pertanyaan dan sebut aksinya di actionLabel, misalnya Hapus akun",
+          "Pakai variant danger hanya bila aksi menghapus data atau tidak bisa dibatalkan",
+          "Isi cukup satu atau dua kalimat, gunakan Modal untuk form atau konten panjang"
+        ]
+      }
+    }
+  }
+}

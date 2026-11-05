@@ -1,0 +1,21 @@
+{
+  "name": "sales-dashboard",
+  "title": "Sales Dashboard",
+  "description": {
+    "en": "Store sales overview with a sidebar, metric cards, a bar chart, an order status gauge, a sortable best sellers table, and orders by region, switchable by week, month, or year.",
+    "id": "Ringkasan penjualan toko dengan sidebar, kartu metrik, grafik batang, gauge status pesanan, tabel penjual terlaris yang bisa diurutkan, dan pesanan per wilayah, bisa diganti per minggu, bulan, atau tahun."
+  },
+  "components": [
+    "avatar",
+    "badge",
+    "button",
+    "card",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "progress",
+    "select",
+    "toast"
+  ],
+  "addedAt": "2026-11-05"
+}

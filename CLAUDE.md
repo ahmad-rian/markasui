@@ -39,3 +39,12 @@ Jalankan pnpm lint, pnpm typecheck, pnpm test, pnpm test:e2e, pnpm build, pnpm t
 - React: `useId` aman di Server Component. `"use client"` hanya untuk komponen dengan state, ref, atau event handler.
 - Vue: atribut native (`type`, `aria-*`) lewat fallthrough tidak dicek vue-tsc, beda dengan React yang memperluas `ComponentProps`. Uji perilaku atribut penting di tests/unit.
 - Renderer Blade: `php scripts/render-blade.php <folder-sumber> <folder-output>`.
+- Variasi contoh: `examples/<fw>/<nama>--<variasi>.*` (otomatis masuk tes e2e dan galeri docs), judulnya di `apps/docs/src/lib/variants/<nama>.ts`.
+- Kontrol props di docs: `apps/docs/src/lib/playgrounds.ts`. Kombinasi Blade dirender saat build oleh `apps/docs/scripts/playgrounds.ts`.
+- Vue: nama template ref jangan sama dengan konstanta class (`ref="panelRef"` untuk `const panel = "..."`), atau Vue memberi peringatan.
+
+## Template
+
+- `templates/<slug>/` berisi meta.json, `blade/<slug>.blade.php`, `react/<Pascal>.tsx`, `vue/<Pascal>.vue`, disusun dari komponen MarkasUI.
+- Ketiga versi harus identik secara visual (uji di `tests/e2e/template-<slug>.spec.ts`) dan semua interaksinya jalan.
+- Blade dirender oleh `scripts/render-templates.ts`. Halaman docs: /templates, /templates/<slug>, /demo/templates/<slug>/<fw>.

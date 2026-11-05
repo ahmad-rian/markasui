@@ -20,6 +20,9 @@ const PAGES = [
   "/id/docs/installation",
   "/docs/theming",
   "/id/components/modal",
+  "/templates",
+  "/templates/sales-dashboard",
+  "/id/templates/crm-customer",
   ...componentNames.map((name) => `/components/${name}`),
 ];
 

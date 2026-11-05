@@ -5,13 +5,14 @@ description: MarkasUI release history.
 
 ## 0.1.0 (unreleased)
 
-First release with 24 components for Blade, React, and Vue.
+First release with 42 components and 2 templates for Blade, React, and Vue.
 
-- **Form:** Button, Input, Textarea, Select, Checkbox, Radio Group, Switch.
+- **Form:** Button, Input, Textarea, Select, Checkbox, Radio Group, Switch, Combobox, Input OTP, Label, Slider, Toggle, Toggle Group.
 - **Feedback:** Alert, Badge, Toast, Progress, Skeleton.
-- **Overlay:** Modal, Drawer, Dropdown Menu, Tooltip.
-- **Navigation:** Tabs, Accordion, Breadcrumb, Pagination, Navbar.
-- **Data:** Card, Avatar, Table.
+- **Overlay:** Modal, Drawer, Dropdown Menu, Tooltip, Alert Dialog, Command Palette, Context Menu, Hover Card, Popover.
+- **Navigation:** Tabs, Accordion, Breadcrumb, Pagination, Navbar, Collapsible, Menubar.
+- **Data:** Card, Avatar, Table, Carousel, Code Block, Kbd, Scroll Area, Separator.
+- **Templates:** Sales Dashboard and CRM Customer, interactive full pages in all three frameworks.
 
 Also included:
 

@@ -53,7 +53,7 @@ const container = "mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid
           </div>
         </div>
         <div class="min-w-0 lg:pb-2">
-          <p class="text-lg leading-8 text-muted">{home.description}</p>
+          <p class="text-lg leading-8 text-muted">{home.description(items.length)}</p>
           <p class="mt-6 text-xs text-muted">{home.stack}</p>
           <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-3 text-sm text-ink/80">
             {

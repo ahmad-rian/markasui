@@ -1,0 +1,79 @@
+{
+  "name": "separator",
+  "title": "Separator",
+  "description": "Horizontal or vertical dividing line, decorative by default, with an optional label in the middle such as \"or\".",
+  "category": "data",
+  "tags": ["separator", "divider", "hr", "line", "rule"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "separator.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Separator.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Separator.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "default": "horizontal",
+      "description": "Direction of the line. A vertical separator stretches to the height of its flex parent."
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "default": "true",
+      "description": "Purely visual line with role=none. Set to false when the line separates meaningful sections, which adds role=separator and aria-orientation."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Short text in the middle of the line, such as \"or\"."
+    }
+  ],
+  "a11y": [
+    "Decorative separators use role=none so screen readers skip them.",
+    "With decorative=false the element gets role=separator and aria-orientation; a label also becomes its aria-label.",
+    "The label text uses muted, which meets AA contrast in light and dark mode."
+  ],
+  "ai": {
+    "whenToUse": "Dividing groups of content in a card, menu, toolbar, or form, such as the \"or\" between social sign-in and email sign-in.",
+    "rules": [
+      "Keep it decorative unless the line marks a real boundary between sections",
+      "Use a vertical separator only inside a flex row so it can stretch",
+      "Keep the label to one or two words"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Garis pemisah horizontal atau vertikal, dekoratif secara default, dengan label opsional di tengah garis seperti \"atau\".",
+      "props": {
+        "orientation": "Arah garis. Separator vertikal merentang setinggi induk flex-nya.",
+        "decorative": "Garis visual saja dengan role=none. Isi false bila garis memisahkan bagian yang bermakna, sehingga memakai role=separator dan aria-orientation.",
+        "label": "Teks singkat di tengah garis, misalnya \"atau\"."
+      },
+      "a11y": [
+        "Separator dekoratif memakai role=none sehingga dilewati pembaca layar.",
+        "Dengan decorative=false elemen memakai role=separator dan aria-orientation; label juga menjadi aria-label-nya.",
+        "Teks label memakai muted yang memenuhi kontras AA di mode terang dan gelap."
+      ],
+      "ai": {
+        "whenToUse": "Memisahkan kelompok konten di kartu, menu, toolbar, atau form, misalnya \"atau\" di antara login sosial dan login email.",
+        "rules": [
+          "Biarkan dekoratif kecuali garis menandai batas nyata antarbagian",
+          "Pakai separator vertikal hanya di dalam baris flex agar bisa merentang",
+          "Label cukup satu atau dua kata"
+        ]
+      }
+    }
+  }
+}
