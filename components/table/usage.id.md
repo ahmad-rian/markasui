@@ -62,3 +62,5 @@ import { Table } from "@/components/markas/Table";
 - Sel tidak memotong baris (`whitespace-nowrap`). Di layar sempit tabel digulir horizontal di dalam pembungkusnya.
 - Isi `rowKey` (React dan Vue, misalnya `rowKey="id"`) dengan nama field berisi id unik per baris saat baris bisa diurutkan, disaring, atau dihapus. Tanpa `rowKey`, key memakai indeks baris. Blade tidak membutuhkannya.
 - Nama region diambil dari `label`, lalu `caption`, lalu "Table" (default bahasa Inggris). Isi `label` atau `caption` dalam Bahasa Indonesia, misalnya `label="Tabel pesanan"`.
+- Tambahkan `bordered` untuk grid kotak dengan garis di setiap sel, `striped` untuk latar baris selang-seling, dan `size="sm"` untuk padding lebih rapat dengan teks 13px di tabel padat.
+- Kirim baris total lewat `footer`, objek (array PHP di Blade) dengan key per kolom, misalnya `:footer="['item' => 'Total', 'value' => '$4,578.00']"` di Blade atau `footer={{ item: "Total", value: "$4,578.00" }}` di React. Hasilnya satu baris di `tfoot` dengan perataan sama seperti kolomnya.

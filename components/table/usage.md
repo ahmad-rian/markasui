@@ -59,3 +59,5 @@ import { Table } from "@/components/markas/Table";
 - Cells do not wrap (`whitespace-nowrap`). On narrow screens the table scrolls horizontally inside its wrapper.
 - Set `rowKey` (React and Vue, such as `rowKey="id"`) to a field with a unique id per row when rows can be sorted, filtered, or removed. Without `rowKey`, the key is the row index. Blade does not need it.
 - The region is named by `label`, then `caption`, then "Table". Set `label` or `caption` in your site's language.
+- Add `bordered` for a classic grid with lines around every cell, `striped` for alternating row backgrounds, and `size="sm"` for tighter padding with 13px text in dense tables.
+- Pass totals through `footer`, an object (a PHP array in Blade) keyed by column, such as `:footer="['item' => 'Total', 'value' => '$4,578.00']"` in Blade or `footer={{ item: "Total", value: "$4,578.00" }}` in React. It renders one row in `tfoot` with the same alignment as each column.

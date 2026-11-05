@@ -1,14 +1,23 @@
 {
   "name": "table",
   "title": "Table",
-  "description": "Data table built from a list of columns and rows, with a focusable wrapper that scrolls horizontally on narrow screens.",
+  "description": "Data table built from columns and rows, with optional cell borders, striped rows, compact size, and a footer row. Scrolls horizontally on narrow screens.",
   "category": "data",
-  "tags": ["table", "tabel", "data", "grid", "daftar"],
+  "tags": ["table", "tabel", "data", "grid", "daftar", "bordered", "striped"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "table.blade.php", "deps": [] },
-    "react": { "file": "Table.tsx", "deps": [] },
-    "vue": { "file": "Table.vue", "deps": [] }
+    "blade": {
+      "file": "table.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Table.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Table.vue",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -42,6 +51,30 @@
       "description": "aria-label of the scrollable region wrapper. Falls back to caption, then to Table."
     },
     {
+      "name": "bordered",
+      "type": "boolean",
+      "default": "false",
+      "description": "Draw lines around every cell, including the header, for a classic grid look. The header gets a stronger bottom line."
+    },
+    {
+      "name": "striped",
+      "type": "boolean",
+      "default": "false",
+      "description": "Give even rows a subtle background."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "default": "md",
+      "description": "Cell padding. sm uses tighter padding and 13px text for dense data."
+    },
+    {
+      "name": "footer",
+      "type": "Record<string, string | number>",
+      "default": "-",
+      "description": "Optional single footer row in tfoot, with a value per column key, such as totals. Missing keys render as empty cells."
+    },
+    {
       "name": "rowKey",
       "type": "string",
       "default": "-",
@@ -57,40 +90,50 @@
   "a11y": [
     "The wrapper uses role region, an aria-label, and tabindex 0, so a clipped table can be focused and scrolled with the arrow keys.",
     "Column headers use th with scope col.",
-    "The caption is still read by screen readers when visually hidden."
+    "The caption is still read by screen readers when visually hidden.",
+    "The footer row is rendered inside tfoot, so screen readers announce it as the table footer."
   ],
   "ai": {
     "whenToUse": "Showing structured data that is compared by column, such as a list of orders or members.",
     "rules": [
       "Always set caption or label so the region has a name",
       "Right-align number and amount columns with align right",
-      "For cells with a badge or button use renderCell in React and the cell-<key> slot in Vue"
+      "For cells with a badge or button use renderCell in React and the cell-<key> slot in Vue",
+      "Use bordered with a footer for reports and totals, size sm for dense data",
+      "Pass the totals row through footer instead of adding it to rows"
     ]
   },
   "addedAt": "2026-11-04",
   "i18n": {
     "id": {
-      "description": "Tabel data dari daftar kolom dan baris, dengan pembungkus yang bisa difokus dan digulir horizontal di layar sempit.",
+      "description": "Tabel data dari kolom dan baris, dengan opsi garis tiap sel, baris selang-seling, ukuran ringkas, dan baris footer. Digulir horizontal di layar sempit.",
       "props": {
         "columns": "Daftar kolom. key menunjuk properti di setiap baris.",
         "rows": "Data baris. Di Blade berupa array PHP.",
         "caption": "Judul tabel di elemen caption. Disembunyikan secara visual kecuali show-caption aktif.",
         "showCaption": "Tampilkan caption di atas tabel.",
         "label": "aria-label untuk region pembungkus yang bisa digulir. Tanpa label dipakai caption, lalu \"Table\". Isi misalnya \"Tabel pesanan\" untuk situs berbahasa Indonesia.",
+        "bordered": "Garis di sekeliling setiap sel, termasuk header, agar tampak seperti grid kotak klasik. Header mendapat garis bawah yang lebih tegas.",
+        "striped": "Beri latar lembut pada baris genap.",
+        "size": "Padding sel. sm memakai padding lebih rapat dan teks 13px untuk data padat.",
+        "footer": "Satu baris footer opsional di tfoot, berisi nilai per key kolom, misalnya total. Key yang tidak ada menjadi sel kosong.",
         "rowKey": "Nama field berisi id unik per baris (misalnya id), dipakai sebagai key React dan Vue agar baris tidak tertukar saat data diurutkan atau dihapus. Tanpa ini key memakai indeks. Blade tidak memakainya.",
         "renderCell / slot cell-<key>": "Isi sel kustom. React lewat renderCell, Vue lewat named slot cell-<key>. Blade hanya teks."
       },
       "a11y": [
         "Pembungkus memakai role region, aria-label, dan tabindex 0 agar tabel yang terpotong bisa difokus lalu digulir dengan panah.",
         "Header kolom memakai th dengan scope col.",
-        "Caption tetap dibacakan screen reader walau disembunyikan secara visual."
+        "Caption tetap dibacakan screen reader walau disembunyikan secara visual.",
+        "Baris footer dirender di dalam tfoot sehingga screen reader membacakannya sebagai footer tabel."
       ],
       "ai": {
         "whenToUse": "Menampilkan data terstruktur yang perlu dibandingkan per kolom, misalnya daftar pesanan atau anggota.",
         "rules": [
           "Selalu isi caption atau label agar region punya nama",
           "Ratakan kanan kolom angka dan nominal dengan align right",
-          "Untuk sel berisi badge atau tombol pakai renderCell di React dan slot cell-<key> di Vue"
+          "Untuk sel berisi badge atau tombol pakai renderCell di React dan slot cell-<key> di Vue",
+          "Pakai bordered dengan footer untuk laporan dan total, size sm untuk data padat",
+          "Kirim baris total lewat footer, bukan ditambahkan ke rows"
         ]
       }
     }

@@ -8,10 +8,18 @@ const captionClasses = {
   visible: "px-4 py-3 text-left font-medium text-ink",
 };
 const headRow = "bg-subtle text-left text-sm font-medium text-muted";
-const headCell = "px-4 py-3 font-medium whitespace-nowrap";
+const borderedHeadRow = "border-b-2 border-line";
+const headCell = "font-medium whitespace-nowrap";
 const rowClass =
   "border-t border-line transition-colors duration-150 ease-out hover:bg-subtle/50 motion-reduce:transition-none";
-const cell = "px-4 py-3 whitespace-nowrap text-ink";
+const stripedRow = "even:bg-subtle/40";
+const footRow = "border-t-2 border-line bg-subtle font-medium";
+const cell = "whitespace-nowrap text-ink";
+const borderedCell = "border-l border-line first:border-l-0";
+const sizes = {
+  sm: "px-3 py-2 text-[13px]",
+  md: "px-4 py-3",
+};
 const aligns = {
   left: "text-left",
   center: "text-center",
@@ -38,6 +46,13 @@ export type TableProps = ComponentProps<"div"> & {
   rowKey?: string;
   /** Isi sel kustom. Kembalikan undefined untuk memakai nilai teks bawaan. */
   renderCell?: (row: TableRow, key: string) => ReactNode;
+  /** Garis di setiap sel, seperti grid kotak. */
+  bordered?: boolean;
+  /** Latar selang-seling di baris genap. */
+  striped?: boolean;
+  size?: keyof typeof sizes;
+  /** Satu baris tfoot opsional, nilai per key kolom (misalnya total). */
+  footer?: TableRow;
 };
 
 export function Table({
@@ -48,9 +63,21 @@ export function Table({
   label,
   rowKey,
   renderCell,
+  bordered = false,
+  striped = false,
+  size = "md",
+  footer,
   className,
   ...props
 }: TableProps) {
+  const cellClass = (base: string, column: TableColumn) =>
+    cx(
+      base,
+      sizes[size] ?? sizes.md,
+      bordered && borderedCell,
+      aligns[column.align ?? "left"],
+    );
+
   return (
     <div
       tabIndex={0}
@@ -68,12 +95,12 @@ export function Table({
           </caption>
         )}
         <thead>
-          <tr className={headRow}>
+          <tr className={cx(headRow, bordered && borderedHeadRow)}>
             {columns.map((column) => (
               <th
                 key={column.key}
                 scope="col"
-                className={cx(headCell, aligns[column.align ?? "left"])}
+                className={cellClass(headCell, column)}
               >
                 {column.label}
               </th>
@@ -84,19 +111,27 @@ export function Table({
           {rows.map((row, index) => (
             <tr
               key={rowKey === undefined ? index : String(row[rowKey])}
-              className={rowClass}
+              className={cx(rowClass, striped && stripedRow)}
             >
               {columns.map((column) => (
-                <td
-                  key={column.key}
-                  className={cx(cell, aligns[column.align ?? "left"])}
-                >
+                <td key={column.key} className={cellClass(cell, column)}>
                   {renderCell?.(row, column.key) ?? row[column.key] ?? ""}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
+        {footer && (
+          <tfoot>
+            <tr className={footRow}>
+              {columns.map((column) => (
+                <td key={column.key} className={cellClass(cell, column)}>
+                  {footer[column.key] ?? ""}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );

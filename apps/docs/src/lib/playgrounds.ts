@@ -5,6 +5,8 @@
  */
 export type Framework = "blade" | "react" | "vue";
 export type Scalar = string | number | boolean | null;
+/** Nilai prop data (array atau objek), mis. columns dan rows di Table. */
+export type Data = Scalar | Data[] | { [key: string]: Data };
 
 export type Control =
   | {
@@ -17,7 +19,7 @@ export type Control =
 
 export type Values = Record<string, string | boolean>;
 export type Built = {
-  props: Record<string, Scalar>;
+  props: Record<string, Data>;
   children?: string;
   /** Prop boolean yang default-nya true: nilai false tetap ditulis di kode (mis. dot={false}). */
   keepFalse?: string[];
@@ -32,6 +34,12 @@ export type Playground = {
 export const MAX_COMBINATIONS = 32;
 
 const on = (value: string | boolean | undefined) => value === true;
+
+const tableColumns: Data[] = [
+  { key: "item", label: "Item" },
+  { key: "stock", label: "In stock", align: "right" },
+  { key: "value", label: "Value", align: "right" },
+];
 
 export const PLAYGROUNDS: Record<string, Playground> = {
   button: {
@@ -190,6 +198,28 @@ export const PLAYGROUNDS: Record<string, Playground> = {
       },
     }),
   },
+  table: {
+    controls: [
+      { name: "bordered", type: "boolean", default: false },
+      { name: "striped", type: "boolean", default: false },
+      { name: "size", type: "select", options: ["sm", "md"], default: "md" },
+    ],
+    build: (v) => ({
+      props: {
+        caption: "Stock report",
+        bordered: on(v.bordered),
+        striped: on(v.striped),
+        size: v.size === "md" ? null : (v.size as string),
+        columns: tableColumns,
+        rows: [
+          { item: "Paper A4", stock: 420, value: "$1,890.00" },
+          { item: "Stapler", stock: 86, value: "$688.00" },
+          { item: "Sticky notes", stock: 640, value: "$960.00" },
+        ],
+        footer: { item: "Total", stock: 1146, value: "$3,538.00" },
+      },
+    }),
+  },
   pagination: {
     controls: [
       { name: "page", type: "select", options: ["1", "5", "10"], default: "5" },
@@ -224,12 +254,37 @@ const kebab = (name: string) =>
 const pascal = (name: string) =>
   name.replace(/(^|-)([a-z])/g, (_, __, char: string) => char.toUpperCase());
 
+/** Literal array/objek: JS (React, Vue) atau array PHP (Blade). Elemen array tingkat atas per baris. */
+function literal(framework: Framework, value: Data, depth = 0): string {
+  const quote = framework === "react" ? '"' : "'";
+  if (typeof value === "string") return `${quote}${value}${quote}`;
+  if (value === null || typeof value !== "object") return String(value);
+  if (Array.isArray(value)) {
+    const items = value.map((item) => literal(framework, item, depth + 1));
+    return depth === 0
+      ? `[\n${items.map((item) => `    ${item},`).join("\n")}\n  ]`
+      : `[${items.join(", ")}]`;
+  }
+  const pairs = Object.entries(value).map(([key, item]) =>
+    framework === "blade"
+      ? `'${key}' => ${literal(framework, item, depth + 1)}`
+      : `${key}: ${literal(framework, item, depth + 1)}`,
+  );
+  return framework === "blade"
+    ? `[${pairs.join(", ")}]`
+    : `{ ${pairs.join(", ")} }`;
+}
+
 function attribute(
   framework: Framework,
   name: string,
-  value: Scalar,
+  value: Data,
   keepFalse: boolean,
 ): string | null {
+  if (value !== null && typeof value === "object")
+    return framework === "react"
+      ? `${name}={${literal(framework, value)}}`
+      : `:${kebab(name)}="${literal(framework, value)}"`;
   if (value === null || (value === false && !keepFalse)) return null;
   if (value === false)
     return framework === "react"

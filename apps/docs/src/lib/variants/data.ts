@@ -14,4 +14,10 @@ export default {
   "table--numeric": { en: "Numeric columns", id: "Kolom angka" },
   "table--caption": { en: "Visible caption", id: "Caption terlihat" },
   "table--empty": { en: "Empty state", id: "Keadaan kosong" },
+  "table--bordered": {
+    en: "Bordered grid with totals",
+    id: "Grid bergaris dengan total",
+  },
+  "table--striped": { en: "Striped rows", id: "Baris selang-seling" },
+  "table--compact": { en: "Compact", id: "Ringkas" },
 } satisfies VariantTitles;
