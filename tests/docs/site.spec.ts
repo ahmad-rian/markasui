@@ -438,6 +438,63 @@ test("ganti bahasa menampilkan overlay transisi lalu menutupnya", async ({
   await expect(page.locator("html")).toHaveAttribute("lang", "id");
 });
 
+test("ganti bahasa di landing memindah status aktif switcher", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const switcher = page.locator("header a[data-lang-switch]:visible");
+  await expect(switcher.filter({ hasText: "en" })).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
+
+  await page.getByRole("link", { name: "Bahasa Indonesia" }).first().click();
+  await expect(page).toHaveURL(/\/id$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "id");
+  await expect(switcher.filter({ hasText: "id" })).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Komponen rapi",
+  );
+});
+
+test("posisi gulir sidebar docs tetap setelah pindah halaman", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "sidebar docs hanya tampil di desktop");
+  await page.goto("/components/button");
+  const sidebar = page.locator("[data-docs-sidebar]");
+  const link = sidebar.getByRole("link", { name: "Tooltip", exact: true });
+  await link.scrollIntoViewIfNeeded();
+  const before = await sidebar.evaluate((element) => element.scrollTop);
+  expect(before).toBeGreaterThan(0);
+  await link.click();
+  await expect(page).toHaveURL(/\/components\/tooltip$/);
+  await expect
+    .poll(() => sidebar.evaluate((element) => element.scrollTop))
+    .toBe(before);
+});
+
+test("warna aksen template diteruskan ke pratinjau", async ({ page }) => {
+  await page.goto("/templates/sales-dashboard");
+  const frame = page.frameLocator("[data-template-frame]");
+  await expect(frame.locator("body")).toBeVisible();
+
+  await page.getByRole("radio", { name: "Blue" }).click();
+  await expect(page.getByRole("radio", { name: "Blue" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await expect(frame.locator("html")).toHaveAttribute("data-accent", "blue");
+  await expect(page.locator("[data-template-open]")).toHaveAttribute(
+    "href",
+    /accent=blue/,
+  );
+});
+
 test("splash tampil sekali per sesi di landing lalu hilang", async ({
   page,
 }) => {

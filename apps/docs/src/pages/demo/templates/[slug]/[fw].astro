@@ -2,6 +2,7 @@
 import "../../../../styles/global.css";
 import TemplateReact from "../../../../components/templates/TemplateReact";
 import TemplateVue from "../../../../components/templates/TemplateVue.vue";
+import { accentCss } from "../../../../lib/accents";
 import { getTemplates } from "../../../../lib/templates";
 
 /** Halaman demo layar penuh tanpa chrome situs, dipakai iframe di halaman detail template. */
@@ -29,8 +30,18 @@ const bladeHtml = bladeFiles[`../../../../generated/templates/${template.name}.h
       try {
         const theme = new URLSearchParams(location.search).get("theme") ?? localStorage.getItem("markas-theme");
         document.documentElement.classList.toggle("dark", theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+        const accent = new URLSearchParams(location.search).get("accent");
+        if (accent) document.documentElement.dataset.accent = accent;
       } catch {}
+      // Halaman detail template mengirim warna aksen dan tema tanpa memuat ulang iframe.
+      addEventListener("message", (event) => {
+        if (event.origin !== location.origin || typeof event.data !== "object" || !event.data) return;
+        const root = document.documentElement;
+        if (event.data.type === "markas:accent" && typeof event.data.accent === "string") root.dataset.accent = event.data.accent;
+        if (event.data.type === "markas:theme") root.classList.toggle("dark", event.data.theme === "dark");
+      });
     </script>
+    <style set:html={accentCss()}></style>
   </head>
   <body class="min-h-dvh bg-canvas font-sans text-ink">
     {fw === "blade" && <Fragment set:html={bladeHtml} />}

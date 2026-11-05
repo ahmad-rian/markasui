@@ -9,24 +9,30 @@ interface Props {
   title: string;
   description?: string;
   headings?: MarkdownHeading[];
+  /** Konten selebar mungkin tanpa daftar isi, untuk pratinjau besar seperti template. */
+  wide?: boolean;
 }
-const { title, description, headings = [] } = Astro.props;
+const { title, description, headings = [], wide = false } = Astro.props;
 ---
 
 <Base title={title} description={description}>
   <div class="mx-auto flex max-w-screen-2xl gap-10 px-4 sm:px-6 lg:px-10 xl:gap-16">
-    <aside class="sticky top-16 hidden h-[calc(100dvh-4rem)] w-64 shrink-0 overflow-y-auto pt-6 pb-10 pr-2 lg:block" aria-label={t(getLocale(Astro.url)).sidebar.label}>
+    <aside data-docs-sidebar class="sticky top-16 hidden h-[calc(100dvh-4rem)] w-64 shrink-0 overflow-y-auto pt-6 pb-10 pr-2 lg:block" aria-label={t(getLocale(Astro.url)).sidebar.label}>
       <SidebarNav />
     </aside>
 
     <main id="konten" class="min-w-0 flex-1 pt-8 pb-24 sm:pt-10" data-pagefind-body>
-      <div class="mx-auto max-w-3xl min-w-0">
+      <div class:list={["mx-auto min-w-0", !wide && "max-w-3xl"]}>
         <slot />
       </div>
     </main>
 
-    <aside class="hidden w-56 shrink-0 pt-10 xl:block">
-      <Toc headings={headings} />
-    </aside>
+    {
+      !wide && (
+        <aside class="hidden w-56 shrink-0 pt-10 xl:block">
+          <Toc headings={headings} />
+        </aside>
+      )
+    }
   </div>
 </Base>

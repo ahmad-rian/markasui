@@ -1,33 +1,32 @@
 ---
-import type { RegistryItem } from "@markasui/registry/schema";
 import FrameworkSwitcher from "./FrameworkSwitcher.astro";
 import Icon from "./Icon.astro";
 import { getLocale, localePath, pagePath, t } from "../lib/i18n";
-import { freshness, getComponents, groupByCategory } from "../lib/registry";
+import { freshness, getComponents } from "../lib/registry";
 import { docsNav } from "../lib/site";
+import { getTemplates } from "../lib/templates";
 
 const locale = getLocale(Astro.url);
 const strings = t(locale).sidebar;
 const path = pagePath(Astro.url);
-const groups = groupByCategory(await getComponents(), locale);
-const GROUP_ICONS: Record<RegistryItem["category"], "form" | "bell" | "layers" | "compass" | "table"> = {
-  form: "form",
-  feedback: "bell",
-  overlay: "layers",
-  navigation: "compass",
-  data: "table",
-};
 
-const sections = [
+type Link = { href: string; label: string; tag: string | null };
+type Section = { label: string; icon: "book" | "grid" | "layout"; links: Link[] };
+
+const guide = docsNav(locale).map((item) => ({ href: item.href, label: item.label, tag: null }));
+// Halaman ikhtisar ikut di Panduan, setelah Instalasi (seperti Animate UI).
+const overviews: Link[] = [
+  { href: localePath(locale, "/components"), label: strings.components, tag: null },
+  { href: localePath(locale, "/templates"), label: strings.templates, tag: null },
+];
+const components = [...(await getComponents())].sort((a, b) => a.title.localeCompare(b.title));
+
+const sections: Section[] = [
+  { label: strings.start, icon: "book", links: [...guide.slice(0, 2), ...overviews, ...guide.slice(2)] },
   {
-    label: strings.start,
-    icon: "book" as const,
-    links: docsNav(locale).map((item) => ({ href: item.href, label: item.label, tag: null as string | null })),
-  },
-  ...groups.map((group) => ({
-    label: group.label,
-    icon: GROUP_ICONS[group.category],
-    links: group.items.map((item) => {
+    label: strings.components,
+    icon: "grid",
+    links: components.map((item) => {
       const fresh = freshness(item);
       return {
         href: localePath(locale, `/components/${item.name}`),
@@ -35,7 +34,12 @@ const sections = [
         tag: fresh === "new" ? strings.fresh : fresh === "updated" ? strings.updated : null,
       };
     }),
-  })),
+  },
+  {
+    label: strings.templates,
+    icon: "layout",
+    links: getTemplates().map((template) => ({ href: localePath(locale, `/templates/${template.name}`), label: template.title, tag: null })),
+  },
 ];
 ---
 

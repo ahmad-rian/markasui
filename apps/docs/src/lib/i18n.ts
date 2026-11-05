@@ -74,6 +74,8 @@ const en = {
   sidebar: {
     label: "Docs navigation",
     start: "Guide",
+    components: "Components",
+    templates: "Templates",
     fresh: "new",
     updated: "updated",
   },
@@ -184,8 +186,9 @@ const en = {
   home: {
     badge: "New",
     badgeText: "MarkasUI 0.1 is out",
-    titleBefore: "Polished",
-    titleAfter: "components, copied in one command.",
+    titleBefore: "Polished components for",
+    titleAfter: "copied in one command.",
+    copyCommand: "Copy install command",
     description: (n: number) =>
       `${n} components for Blade, React, and Vue on Tailwind CSS v4. Copy them yourself, or hand them to your agent.`,
     primary: "Browse components",
@@ -212,6 +215,13 @@ const en = {
     preview: "Live preview",
     code: "Code",
     components: "Components used",
+    componentsText: (n: number) =>
+      `${n} MarkasUI components make up this template. Open one to see its props and variants.`,
+    accent: "Accent color",
+    install: "Install",
+    installText:
+      "Add every component this template uses, then copy the page itself from GitHub.",
+    source: "View source on GitHub",
     back: "All templates",
   },
   switching: {
@@ -269,6 +279,8 @@ const id: Dictionary = {
   sidebar: {
     label: "Navigasi docs",
     start: "Panduan",
+    components: "Komponen",
+    templates: "Template",
     fresh: "baru",
     updated: "diperbarui",
   },
@@ -380,8 +392,9 @@ const id: Dictionary = {
   home: {
     badge: "Baru",
     badgeText: "MarkasUI 0.1 sudah rilis",
-    titleBefore: "Komponen",
-    titleAfter: "yang rapi, disalin dengan satu perintah.",
+    titleBefore: "Komponen rapi untuk",
+    titleAfter: "disalin dengan satu perintah.",
+    copyCommand: "Salin perintah instalasi",
     description: (n: number) =>
       `${n} komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Salin sendiri, atau serahkan ke agent Anda.`,
     primary: "Lihat komponen",
@@ -408,6 +421,13 @@ const id: Dictionary = {
     preview: "Pratinjau langsung",
     code: "Kode",
     components: "Komponen yang dipakai",
+    componentsText: (n: number) =>
+      `Template ini disusun dari ${n} komponen MarkasUI. Buka salah satunya untuk melihat props dan variasinya.`,
+    accent: "Warna aksen",
+    install: "Instalasi",
+    installText:
+      "Tambahkan semua komponen yang dipakai template ini, lalu salin halamannya dari GitHub.",
+    source: "Lihat source di GitHub",
     back: "Semua template",
   },
   switching: {
@@ -428,4 +448,4 @@ export const t = (locale: Locale): Dictionary => dictionaries[locale];
 
 /** Locale dari URL halaman. */
 export const getLocale = (url: URL): Locale =>
-  /^\/id(\/|$)/.test(url.pathname) ? "id" : "en";
+  /^\/id(\/|\.html$|$)/.test(url.pathname) ? "id" : "en";

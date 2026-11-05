@@ -20,6 +20,7 @@ const OPEN_ACTIONS: Record<string, (page: Page) => Promise<void>> = {
   modal: (page) => page.getByRole("button").first().click(),
   "alert-dialog": (page) => page.getByRole("button").first().click(),
   command: (page) => page.getByRole("button").first().click(),
+  drawer: (page) => page.getByRole("button").first().click(),
   popover: (page) => page.getByRole("button").first().click(),
   "dropdown-menu": (page) => page.getByRole("button").first().click(),
   menubar: (page) => page.getByRole("menuitem").first().click(),
@@ -31,7 +32,7 @@ const OPEN_ACTIONS: Record<string, (page: Page) => Promise<void>> = {
       .click({ button: "right", position: { x: 24, y: 16 } }),
   combobox: (page) => page.getByRole("combobox").first().click(),
 };
-const DIALOGS = new Set(["modal", "alert-dialog", "command"]);
+const DIALOGS = new Set(["modal", "alert-dialog", "command", "drawer"]);
 const OPEN_DELAY = 400;
 const TRIM_PADDING = { top: 120, bottom: 120, left: 160, right: 160 };
 
