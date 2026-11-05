@@ -2,20 +2,25 @@
   "name": "crm-customer",
   "title": "CRM Customer",
   "description": {
-    "en": "Customer profile workspace with interaction history, contact details, a monthly task calendar, and a stage funnel.",
-    "id": "Ruang kerja profil pelanggan dengan riwayat interaksi, detail kontak, kalender tugas bulanan, dan funnel tahapan."
+    "en": "Complete CRM workspace with ten pages: home with tasks and monthly target, selectable customer profiles, a deals pipeline board, finance with sortable invoices, growth funnel by period, projects with a detail drawer, a month calendar with new events, reports, files, and settings.",
+    "id": "Ruang kerja CRM lengkap dengan sepuluh halaman: beranda berisi tugas dan target bulanan, profil pelanggan yang bisa dipilih, papan pipeline deal, keuangan dengan invoice yang bisa diurutkan, funnel pertumbuhan per periode, proyek dengan drawer detail, kalender bulanan dengan agenda baru, laporan, berkas, dan pengaturan."
   },
   "components": [
     "avatar",
     "badge",
     "button",
     "card",
+    "checkbox",
     "drawer",
     "dropdown-menu",
     "input",
+    "modal",
+    "progress",
+    "select",
+    "switch",
     "tabs",
     "toast",
-    "tooltip"
+    "toggle-group"
   ],
   "addedAt": "2026-11-05"
 }
