@@ -98,8 +98,18 @@ const path = stripLocale(Astro.url.pathname);
     <Footer />
     <LanguageOverlay />
     <script>
+      // Satu bundle untuk semua skrip situs: lebih sedikit request saat halaman dimuat.
+      // preview dulu: HTML asli preview disimpan sebelum Alpine mengubah DOM.
+      import "../scripts/preview";
       import "../scripts/alpine";
       import "../scripts/code";
+      import "../scripts/tabs";
+      import "../scripts/framework-switcher";
+      import "../scripts/toc";
+      import "../scripts/header";
+      import "../scripts/language-overlay";
+      import "../scripts/copy-page";
+      import "../scripts/search";
     </script>
   </body>
 </html>

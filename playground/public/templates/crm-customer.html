@@ -89,11 +89,11 @@
         :data-state="open ? 'open' : 'closed'"
         @close="open = false"
         @click.self="$refs.dialog.close()"
-        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-auto left-0 border-r starting:open:-translate-x-full" id="markas-drawer-CaXjvizG" aria-labelledby="markas-drawer-CaXjvizG-title" data-state="closed"
+        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-auto left-0 border-r starting:open:-translate-x-full" id="markas-drawer-o7KidB0c" aria-labelledby="markas-drawer-o7KidB0c-title" data-state="closed"
     >
         <div class="flex h-full flex-col gap-4 p-6">
             <div class="flex items-start justify-between gap-4">
-                <h2 id="markas-drawer-CaXjvizG-title" class="text-lg font-semibold text-ink">Menu</h2>
+                <h2 id="markas-drawer-o7KidB0c-title" class="text-lg font-semibold text-ink">Menu</h2>
                 <form method="dialog">
                     <button type="submit" class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close">
                         <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -252,8 +252,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-aKj4mM2j')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-aKj4mM2j'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-PbFQHQGP')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-PbFQHQGP'].filter(Boolean).join(' '));
             }
         },
         
@@ -302,7 +302,7 @@
     class="inline-flex"
 ><button type="button" aria-label="Messages" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" @click="notify('No new messages', 'Inbox is up to date')"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-aKj4mM2j"
+        id="markas-tooltip-PbFQHQGP"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -329,8 +329,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-otgYgNfT')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-otgYgNfT'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-fzjnU9vv')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-fzjnU9vv'].filter(Boolean).join(' '));
             }
         },
         
@@ -379,7 +379,7 @@
     class="inline-flex"
 ><button type="button" aria-label="Notifications, 3 unread" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" @click="notify('3 unread notifications', 'Rina Kusuma replied to your proposal')"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg><span class="absolute top-2 right-2.5 size-2 rounded-full bg-danger ring-2 ring-surface" aria-hidden="true"></span></button><span
         x-ref="tip"
-        id="markas-tooltip-otgYgNfT"
+        id="markas-tooltip-fzjnU9vv"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -413,8 +413,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-SCrPicAV')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-SCrPicAV'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-QABwz9ei')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-QABwz9ei'].filter(Boolean).join(' '));
             }
         },
         
@@ -470,7 +470,7 @@
                             @click="activeRail = 'overview'"
                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-SCrPicAV"
+        id="markas-tooltip-QABwz9ei"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -497,8 +497,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-JfrMdVwt')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-JfrMdVwt'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-ZgNWuEyF')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-ZgNWuEyF'].filter(Boolean).join(' '));
             }
         },
         
@@ -554,7 +554,7 @@
                             @click="activeRail = 'contacts'"
                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-JfrMdVwt"
+        id="markas-tooltip-ZgNWuEyF"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -581,8 +581,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-zns5BuT5')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-zns5BuT5'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-iHQalMUE')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-iHQalMUE'].filter(Boolean).join(' '));
             }
         },
         
@@ -638,7 +638,7 @@
                             @click="activeRail = 'calendar'"
                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-zns5BuT5"
+        id="markas-tooltip-iHQalMUE"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -665,8 +665,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-bzUMLrIV')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-bzUMLrIV'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-lnjBgRDc')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-lnjBgRDc'].filter(Boolean).join(' '));
             }
         },
         
@@ -722,7 +722,7 @@
                             @click="activeRail = 'reports'"
                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M8 17v-5M13 17V8M18 17v-3" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-bzUMLrIV"
+        id="markas-tooltip-lnjBgRDc"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -749,8 +749,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-FfY51AxL')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-FfY51AxL'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-2tHcZ5Mg')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-2tHcZ5Mg'].filter(Boolean).join(' '));
             }
         },
         
@@ -806,7 +806,7 @@
                             @click="activeRail = 'documents'"
                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-FfY51AxL"
+        id="markas-tooltip-2tHcZ5Mg"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -833,8 +833,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-ZfZiMIWU')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-ZfZiMIWU'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-oidJ8Cr6')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-oidJ8Cr6'].filter(Boolean).join(' '));
             }
         },
         
@@ -890,7 +890,7 @@
                             @click="activeRail = 'settings'"
                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-ZfZiMIWU"
+        id="markas-tooltip-oidJ8Cr6"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -923,8 +923,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-QRhZ15uN')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-QRhZ15uN'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-mTccNpYw')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-mTccNpYw'].filter(Boolean).join(' '));
             }
         },
         
@@ -973,7 +973,7 @@
     class="inline-flex"
 ><button type="button" aria-label="Back to customers" class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" @click="notify('Back to customer list')"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-QRhZ15uN"
+        id="markas-tooltip-mTccNpYw"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -1108,11 +1108,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-SBYDTe1n-trigger"
-        popovertarget="markas-dropdown-menu-SBYDTe1n"
+        id="markas-dropdown-menu-W0dL1SQF-trigger"
+        popovertarget="markas-dropdown-menu-W0dL1SQF"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-SBYDTe1n"
+        aria-controls="markas-dropdown-menu-W0dL1SQF"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1121,10 +1121,10 @@
     ><span class="text-muted">Sort:</span><span x-text="sortLabel">Newest first</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-SBYDTe1n"
+        id="markas-dropdown-menu-W0dL1SQF"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-SBYDTe1n-trigger"
+        aria-labelledby="markas-dropdown-menu-W0dL1SQF-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -1235,11 +1235,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-ySCKL4fV-trigger"
-        popovertarget="markas-dropdown-menu-ySCKL4fV"
+        id="markas-dropdown-menu-55rRodpZ-trigger"
+        popovertarget="markas-dropdown-menu-55rRodpZ"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-ySCKL4fV"
+        aria-controls="markas-dropdown-menu-55rRodpZ"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1248,10 +1248,10 @@
     ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Cloud migration package</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-ySCKL4fV"
+        id="markas-dropdown-menu-55rRodpZ"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-ySCKL4fV-trigger"
+        aria-labelledby="markas-dropdown-menu-55rRodpZ-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -1380,11 +1380,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-yGNKbsdw-trigger"
-        popovertarget="markas-dropdown-menu-yGNKbsdw"
+        id="markas-dropdown-menu-yL5fZ8rF-trigger"
+        popovertarget="markas-dropdown-menu-yL5fZ8rF"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-yGNKbsdw"
+        aria-controls="markas-dropdown-menu-yL5fZ8rF"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1393,10 +1393,10 @@
     ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Annual support renewal</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-yGNKbsdw"
+        id="markas-dropdown-menu-yL5fZ8rF"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-yGNKbsdw-trigger"
+        aria-labelledby="markas-dropdown-menu-yL5fZ8rF-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -1524,11 +1524,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-CdPdSpcZ-trigger"
-        popovertarget="markas-dropdown-menu-CdPdSpcZ"
+        id="markas-dropdown-menu-3RQWN68b-trigger"
+        popovertarget="markas-dropdown-menu-3RQWN68b"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-CdPdSpcZ"
+        aria-controls="markas-dropdown-menu-3RQWN68b"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1537,10 +1537,10 @@
     ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Data warehouse audit</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-CdPdSpcZ"
+        id="markas-dropdown-menu-3RQWN68b"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-CdPdSpcZ-trigger"
+        aria-labelledby="markas-dropdown-menu-3RQWN68b-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -1669,11 +1669,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-IavamEUi-trigger"
-        popovertarget="markas-dropdown-menu-IavamEUi"
+        id="markas-dropdown-menu-teNgiWkS-trigger"
+        popovertarget="markas-dropdown-menu-teNgiWkS"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-IavamEUi"
+        aria-controls="markas-dropdown-menu-teNgiWkS"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1682,10 +1682,10 @@
     ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for POS terminal rollout</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-IavamEUi"
+        id="markas-dropdown-menu-teNgiWkS"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-IavamEUi-trigger"
+        aria-labelledby="markas-dropdown-menu-teNgiWkS-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -1813,11 +1813,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-BUw7BG4O-trigger"
-        popovertarget="markas-dropdown-menu-BUw7BG4O"
+        id="markas-dropdown-menu-KBP25EuU-trigger"
+        popovertarget="markas-dropdown-menu-KBP25EuU"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-BUw7BG4O"
+        aria-controls="markas-dropdown-menu-KBP25EuU"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1826,10 +1826,10 @@
     ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Security awareness training</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-BUw7BG4O"
+        id="markas-dropdown-menu-KBP25EuU"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-BUw7BG4O-trigger"
+        aria-labelledby="markas-dropdown-menu-KBP25EuU-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -1956,11 +1956,11 @@
     <button
         x-ref="trigger"
         type="button"
-        id="markas-dropdown-menu-X2mecKyO-trigger"
-        popovertarget="markas-dropdown-menu-X2mecKyO"
+        id="markas-dropdown-menu-5LerDbXl-trigger"
+        popovertarget="markas-dropdown-menu-5LerDbXl"
         aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="markas-dropdown-menu-X2mecKyO"
+        aria-controls="markas-dropdown-menu-5LerDbXl"
         data-state="closed"
         :aria-expanded="open ? 'true' : 'false'"
         :data-state="open ? 'open' : 'closed'"
@@ -1969,10 +1969,10 @@
     ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2" /></svg><span class="sr-only">Actions for Fleet tracking pilot</span><svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     <div
         x-ref="menu"
-        id="markas-dropdown-menu-X2mecKyO"
+        id="markas-dropdown-menu-5LerDbXl"
         popover="auto"
         role="menu"
-        aria-labelledby="markas-dropdown-menu-X2mecKyO-trigger"
+        aria-labelledby="markas-dropdown-menu-5LerDbXl-trigger"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"
@@ -2114,8 +2114,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-XiLqoa3E')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-XiLqoa3E'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-tOCdgWk3')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-tOCdgWk3'].filter(Boolean).join(' '));
             }
         },
         
@@ -2169,7 +2169,7 @@
                                             @click="notify('Send email', customerName + ', PT Nusantara Logistik')"
                                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2M22 6l-10 7L2 6" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-XiLqoa3E"
+        id="markas-tooltip-tOCdgWk3"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -2196,8 +2196,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-HfqjwcmM')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-HfqjwcmM'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-opmcSlmR')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-opmcSlmR'].filter(Boolean).join(' '));
             }
         },
         
@@ -2251,7 +2251,7 @@
                                             @click="notify('Call customer', customerName + ', PT Nusantara Logistik')"
                                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-HfqjwcmM"
+        id="markas-tooltip-opmcSlmR"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -2278,8 +2278,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-9omCY0Ys')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-9omCY0Ys'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-Z7BOGd0i')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-Z7BOGd0i'].filter(Boolean).join(' '));
             }
         },
         
@@ -2333,7 +2333,7 @@
                                             @click="notify('Start chat', customerName + ', PT Nusantara Logistik')"
                                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-9omCY0Ys"
+        id="markas-tooltip-Z7BOGd0i"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -2360,8 +2360,8 @@
         describe() {
             const trigger = this.$root.firstElementChild;
             const described = trigger?.getAttribute('aria-describedby') ?? '';
-            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-MQWUzhLj')) {
-                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-MQWUzhLj'].filter(Boolean).join(' '));
+            if (trigger && trigger !== this.$refs.tip && !described.split(' ').includes('markas-tooltip-xrevXOWS')) {
+                trigger.setAttribute('aria-describedby', [described, 'markas-tooltip-xrevXOWS'].filter(Boolean).join(' '));
             }
         },
         
@@ -2415,7 +2415,7 @@
                                             @click="notify('Schedule meeting', customerName + ', PT Nusantara Logistik')"
                                         ><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20" /></svg></button><span
         x-ref="tip"
-        id="markas-tooltip-MQWUzhLj"
+        id="markas-tooltip-xrevXOWS"
         popover="manual"
         role="tooltip"
         data-state="closed"
@@ -2441,11 +2441,11 @@
         :data-state="open ? 'open' : 'closed'"
         @close="open = false"
         @click.self="$refs.dialog.close()"
-        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-0 left-auto border-l starting:open:translate-x-full" id="markas-drawer-P9m9Ldul" aria-labelledby="markas-drawer-P9m9Ldul-title" data-state="closed" x-on:close="onDrawerClose($event.currentTarget)"
+        class="fixed inset-y-0 m-0 h-dvh max-h-dvh w-full max-w-sm border-line bg-surface p-0 text-ink shadow-overlay transition-transform duration-200 ease-out backdrop:bg-ink/40 motion-reduce:transition-none right-0 left-auto border-l starting:open:translate-x-full" id="markas-drawer-MMhNAMUT" aria-labelledby="markas-drawer-MMhNAMUT-title" data-state="closed" x-on:close="onDrawerClose($event.currentTarget)"
     >
         <div class="flex h-full flex-col gap-4 p-6">
             <div class="flex items-start justify-between gap-4">
-                <h2 id="markas-drawer-P9m9Ldul-title" class="text-lg font-semibold text-ink">Edit customer details</h2>
+                <h2 id="markas-drawer-MMhNAMUT-title" class="text-lg font-semibold text-ink">Edit customer details</h2>
                 <form method="dialog">
                     <button type="submit" class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close">
                         <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -2454,24 +2454,24 @@
             </div>
             <div class="flex-1 overflow-y-auto text-sm text-muted"><div class="grid gap-4">
                                                                                     <div class="grid gap-1.5">
-            <label for="markas-input-cN3sUcKW" class="text-sm font-medium text-ink">First name</label>
-        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-cN3sUcKW" type="text" name="firstName" value="Rina" x-model="draft.firstName" />
+            <label for="markas-input-MXE4IURd" class="text-sm font-medium text-ink">First name</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-MXE4IURd" type="text" name="firstName" value="Rina" x-model="draft.firstName" />
     </div>
                                                                                     <div class="grid gap-1.5">
-            <label for="markas-input-mfsZfJK4" class="text-sm font-medium text-ink">Last name</label>
-        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-mfsZfJK4" type="text" name="lastName" value="Kusuma" x-model="draft.lastName" />
+            <label for="markas-input-nrhGdTRi" class="text-sm font-medium text-ink">Last name</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-nrhGdTRi" type="text" name="lastName" value="Kusuma" x-model="draft.lastName" />
     </div>
                                                                                     <div class="grid gap-1.5">
-            <label for="markas-input-gqhv2V6e" class="text-sm font-medium text-ink">Email</label>
-        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-gqhv2V6e" type="email" name="email" value="rina.kusuma@nusalog.co.id" x-model="draft.email" />
+            <label for="markas-input-K24dGCmY" class="text-sm font-medium text-ink">Email</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-K24dGCmY" type="email" name="email" value="rina.kusuma@nusalog.co.id" x-model="draft.email" />
     </div>
                                                                                     <div class="grid gap-1.5">
-            <label for="markas-input-9qr5xp9e" class="text-sm font-medium text-ink">Phone</label>
-        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-9qr5xp9e" type="tel" name="phone" value="+62 812 3456 7890" x-model="draft.phone" />
+            <label for="markas-input-85HlbraT" class="text-sm font-medium text-ink">Phone</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-85HlbraT" type="tel" name="phone" value="+62 812 3456 7890" x-model="draft.phone" />
     </div>
                                                                                     <div class="grid gap-1.5">
-            <label for="markas-input-YLPGGQ5V" class="text-sm font-medium text-ink">Source</label>
-        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-YLPGGQ5V" type="text" name="source" value="Referral" x-model="draft.source" />
+            <label for="markas-input-dS1dhm1S" class="text-sm font-medium text-ink">Source</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-dS1dhm1S" type="text" name="source" value="Referral" x-model="draft.source" />
     </div>
                                                                             </div></div>
                             <form method="dialog" class="flex flex-wrap justify-end gap-2"><button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm" type="submit" value="cancel">
@@ -2525,14 +2525,14 @@
         keys: JSON.parse('[\u0022weighted\u0022,\u0022total\u0022]'),
         focusTab(key) {
             this.active = key;
-            this.$nextTick(() => document.getElementById('markas-tabs-TXO7btkx' + '-tab-' + key).focus());
+            this.$nextTick(() => document.getElementById('markas-tabs-RvnfYzwk' + '-tab-' + key).focus());
         },
         move(step) {
             const index = this.keys.indexOf(this.active);
             this.focusTab(this.keys[(index + step + this.keys.length) % this.keys.length]);
         },
     }"
-    class="w-full" id="markas-tabs-TXO7btkx"
+    class="w-full" id="markas-tabs-RvnfYzwk"
 >
     <div
         role="tablist"
@@ -2546,8 +2546,8 @@
                                 <button
                 type="button"
                 role="tab"
-                id="markas-tabs-TXO7btkx-tab-weighted"
-                aria-controls="markas-tabs-TXO7btkx-panel-weighted"
+                id="markas-tabs-RvnfYzwk-tab-weighted"
+                aria-controls="markas-tabs-RvnfYzwk-panel-weighted"
                 aria-selected="true"
                 tabindex="0"
                 data-state="active"
@@ -2560,8 +2560,8 @@
                                 <button
                 type="button"
                 role="tab"
-                id="markas-tabs-TXO7btkx-tab-total"
-                aria-controls="markas-tabs-TXO7btkx-panel-total"
+                id="markas-tabs-RvnfYzwk-tab-total"
+                aria-controls="markas-tabs-RvnfYzwk-panel-total"
                 aria-selected="false"
                 tabindex="-1"
                 data-state="inactive"
@@ -2574,8 +2574,8 @@
             </div>
                     <div
             role="tabpanel"
-            id="markas-tabs-TXO7btkx-panel-weighted"
-            aria-labelledby="markas-tabs-TXO7btkx-tab-weighted"
+            id="markas-tabs-RvnfYzwk-panel-weighted"
+            aria-labelledby="markas-tabs-RvnfYzwk-tab-weighted"
             tabindex="0"
             data-state="active"
                         :hidden="active !== 'weighted'"
@@ -2618,8 +2618,8 @@
                                         </div></div>
                     <div
             role="tabpanel"
-            id="markas-tabs-TXO7btkx-panel-total"
-            aria-labelledby="markas-tabs-TXO7btkx-tab-total"
+            id="markas-tabs-RvnfYzwk-panel-total"
+            aria-labelledby="markas-tabs-RvnfYzwk-tab-total"
             tabindex="0"
             data-state="inactive"
              hidden             :hidden="active !== 'total'"
