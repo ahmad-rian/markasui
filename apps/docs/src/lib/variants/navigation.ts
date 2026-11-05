@@ -16,7 +16,4 @@ export default {
   "pagination--end": { en: "Last page", id: "Halaman terakhir" },
   "pagination--few-pages": { en: "Few pages", id: "Sedikit halaman" },
   "pagination--table-footer": { en: "Table footer", id: "Kaki tabel" },
-  "navbar--logo": { en: "With logo", id: "Dengan logo" },
-  "navbar--actions": { en: "With actions", id: "Dengan aksi" },
-  "navbar--cta": { en: "With call to action", id: "Dengan ajakan" },
 } satisfies VariantTitles;

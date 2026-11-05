@@ -115,13 +115,20 @@ async function main() {
     BUDGET.pageJs,
   );
 
+  // Hanya CSS yang ditautkan halaman. Pagefind membuat CSS UI bawaannya, tapi situs memakai UI sendiri.
+  const linkedCss = new Set<string>();
+  for (const page of pages) {
+    const html = await readFile(page, "utf8");
+    for (const match of html.matchAll(
+      /<link[^>]+rel="stylesheet"[^>]+href="([^"]+\.css)"/g,
+    ))
+      linkedCss.add(join(dist, match[1]!.replace(/^\//, "")));
+  }
   const css = await Promise.all(
-    files
-      .filter((f) => f.endsWith(".css"))
-      .map(async (f) => gzip(await readFile(f))),
+    [...linkedCss].map(async (f) => gzip(await readFile(f))),
   );
   check(
-    "CSS seluruh situs",
+    "CSS yang dimuat situs",
     css.reduce((a, b) => a + b, 0),
     BUDGET.css,
   );

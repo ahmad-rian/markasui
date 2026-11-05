@@ -1,0 +1,81 @@
+{
+  "name": "dock",
+  "title": "Dock",
+  "description": "macOS style dock. Icons grow smoothly toward the pointer or focus, show a label above, mark open items with a dot, and bounce on launch.",
+  "category": "markas",
+  "tags": ["dock", "toolbar", "launcher", "magnify", "macos"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "dock.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Dock.tsx", "deps": [] },
+    "vue": { "file": "Dock.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "({ label: string; icon: string; value?: string; href?: string; active?: boolean } | { separator: true })[]",
+      "default": "[]",
+      "description": "Dock items in order. icon is the d attribute of a 24x24 stroked SVG path. { separator: true } draws a divider. Items with href render as links."
+    },
+    {
+      "name": "magnification",
+      "type": "number",
+      "default": "1.6",
+      "description": "How large the item under the pointer or focus grows. Neighbours within 140px grow less. 1 turns it off."
+    },
+    {
+      "name": "onItemSelect / @select / x-on:select",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Fires when an item is pressed, with its value or label. Blade dispatches a select DOM event with the value as detail."
+    },
+    {
+      "name": "dockLabel",
+      "type": "string",
+      "default": "Dock",
+      "description": "Accessible name of the toolbar."
+    }
+  ],
+  "a11y": [
+    "The dock is a toolbar named by dockLabel. Only one item is in the tab order and Arrow Left, Arrow Right, Home, and End move between items (roving tabindex).",
+    "The label inside each item is its accessible name and appears as a tooltip on hover and keyboard focus.",
+    "Items with a dot carry aria-current=\"true\". Separators use role=\"separator\".",
+    "With reduced motion the magnification and launch bounce are off, items keep their base size."
+  ],
+  "ai": {
+    "whenToUse": "A playful launcher or quick-action bar for portfolios, desktop-like apps, or canvas editors.",
+    "rules": [
+      "Keep labels to one or two words",
+      "Mark open apps or the current page with active",
+      "Group related items with a separator item",
+      "Lower magnification to about 1.3 for work tools that are used all day"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Dock ala macOS. Ikon membesar halus mengikuti kursor atau fokus, label muncul di atas, item terbuka bertitik, dan memantul saat dibuka.",
+      "props": {
+        "items": "Item dock berurutan. icon adalah atribut d path SVG 24x24 bergaris. { separator: true } menggambar pemisah. Item dengan href menjadi link.",
+        "magnification": "Seberapa besar item di bawah kursor atau fokus membesar. Tetangga dalam 140px membesar lebih sedikit. 1 mematikannya.",
+        "onItemSelect / @select / x-on:select": "Dipicu saat item ditekan, dengan value atau label-nya. Blade mengirim event DOM select dengan value sebagai detail.",
+        "dockLabel": "Nama aksesibel toolbar."
+      },
+      "a11y": [
+        "Dock adalah toolbar bernama dockLabel. Hanya satu item di urutan tab, Panah Kiri, Panah Kanan, Home, dan End berpindah antar item (roving tabindex).",
+        "Label di dalam setiap item menjadi nama aksesibelnya dan tampil sebagai tooltip saat hover dan fokus keyboard.",
+        "Item bertitik memakai aria-current=\"true\". Pemisah memakai role=\"separator\".",
+        "Dengan reduced motion, pembesaran dan pantulan mati, item tetap di ukuran dasar."
+      ],
+      "ai": {
+        "whenToUse": "Peluncur atau bar aksi cepat yang playful untuk portofolio, aplikasi bergaya desktop, atau editor kanvas.",
+        "rules": [
+          "Jaga label satu atau dua kata",
+          "Tandai aplikasi terbuka atau halaman saat ini dengan active",
+          "Kelompokkan item terkait dengan item separator",
+          "Turunkan magnification ke sekitar 1.3 untuk alat kerja yang dipakai seharian"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "name": "pinned-list",
+  "title": "Pinned List",
+  "description": "List where any row can be pinned. Pinned rows glide into a Pinned group at the top with a FLIP animation and glide back when unpinned.",
+  "category": "markas",
+  "tags": ["pin", "favorites", "list", "reorder", "flip"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "pinned-list.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "PinnedList.tsx", "deps": [] },
+    "vue": { "file": "PinnedList.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ value: string; label: string; description?: string; meta?: string; icon?: string }[]",
+      "default": "[]",
+      "description": "Rows in their natural order. icon is the d attribute of a 24x24 stroked SVG path, meta is short text on the right."
+    },
+    {
+      "name": "pinned / v-model:pinned",
+      "type": "string[]",
+      "default": "-",
+      "description": "Controlled pinned values in React (with onPinnedChange) and Vue (v-model:pinned)."
+    },
+    {
+      "name": "defaultPinned",
+      "type": "string[]",
+      "default": "[]",
+      "description": "Values pinned on first render."
+    },
+    {
+      "name": "onPinnedChange / x-on:change",
+      "type": "(pinned: string[]) => void",
+      "default": "-",
+      "description": "Fires after a pin or unpin with the new list. Blade dispatches a change DOM event with the list as detail."
+    },
+    {
+      "name": "pinLabel",
+      "type": "string",
+      "default": "Pin {label}",
+      "description": "Accessible name of each pin button. It stays the same while pinned, aria-pressed carries the state."
+    },
+    {
+      "name": "unpinLabel",
+      "type": "string",
+      "default": "Unpin {label}",
+      "description": "Hover hint (title) of the pin button while the row is pinned."
+    },
+    {
+      "name": "pinnedLabel",
+      "type": "string",
+      "default": "Pinned",
+      "description": "Heading and list name of the pinned group."
+    },
+    {
+      "name": "allLabel",
+      "type": "string",
+      "default": "All",
+      "description": "Heading and list name of the other rows."
+    },
+    {
+      "name": "pinnedMessage",
+      "type": "string",
+      "default": "{label} pinned",
+      "description": "Announced in the live region after pinning."
+    },
+    {
+      "name": "unpinnedMessage",
+      "type": "string",
+      "default": "{label} unpinned",
+      "description": "Announced in the live region after unpinning."
+    }
+  ],
+  "a11y": [
+    "Each pin button is a toggle button with aria-pressed and a fixed name from pinLabel.",
+    "Both groups are lists named by pinnedLabel and allLabel. An empty group is hidden.",
+    "Focus follows the moved row to its pin button, and a status live region announces pinnedMessage or unpinnedMessage.",
+    "With reduced motion rows jump to their new place without the FLIP glide."
+  ],
+  "ai": {
+    "whenToUse": "Lists where people keep a few favorites at the top, such as channels, saved searches, documents, or cities.",
+    "rules": [
+      "Give every item a stable value",
+      "Keep items in their natural order, the component sorts pinned rows itself",
+      "Store the pinned list from onPinnedChange so it survives reloads",
+      "Keep meta short, such as a time or a count"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Daftar yang barisnya bisa disematkan. Baris tersemat meluncur ke grup Pinned di atas dengan animasi FLIP dan kembali saat dilepas.",
+      "props": {
+        "items": "Baris dalam urutan aslinya. icon adalah atribut d path SVG 24x24 bergaris, meta teks pendek di kanan.",
+        "pinned / v-model:pinned": "Nilai tersemat yang dikendalikan di React (dengan onPinnedChange) dan Vue (v-model:pinned).",
+        "defaultPinned": "Nilai yang tersemat saat render pertama.",
+        "onPinnedChange / x-on:change": "Dipicu setelah sematkan atau lepas dengan daftar baru. Blade mengirim event DOM change dengan daftar sebagai detail.",
+        "pinLabel": "Nama aksesibel tiap tombol pin. Tetap sama saat tersemat, aria-pressed membawa keadaannya.",
+        "unpinLabel": "Petunjuk hover (title) tombol pin saat baris tersemat.",
+        "pinnedLabel": "Judul dan nama daftar grup tersemat.",
+        "allLabel": "Judul dan nama daftar baris lainnya.",
+        "pinnedMessage": "Diumumkan di live region setelah menyematkan.",
+        "unpinnedMessage": "Diumumkan di live region setelah melepas sematan."
+      },
+      "a11y": [
+        "Setiap tombol pin adalah toggle button dengan aria-pressed dan nama tetap dari pinLabel.",
+        "Kedua grup adalah list bernama pinnedLabel dan allLabel. Grup kosong disembunyikan.",
+        "Fokus mengikuti baris yang pindah ke tombol pin-nya, dan live region status mengumumkan pinnedMessage atau unpinnedMessage.",
+        "Dengan reduced motion, baris langsung pindah tanpa luncuran FLIP."
+      ],
+      "ai": {
+        "whenToUse": "Daftar tempat orang menyimpan beberapa favorit di atas, seperti channel, pencarian tersimpan, dokumen, atau kota.",
+        "rules": [
+          "Beri setiap item value yang stabil",
+          "Biarkan item dalam urutan aslinya, komponen mengurutkan baris tersemat sendiri",
+          "Simpan daftar tersemat dari onPinnedChange agar bertahan saat reload",
+          "Jaga meta tetap pendek, misalnya waktu atau jumlah"
+        ]
+      }
+    }
+  }
+}

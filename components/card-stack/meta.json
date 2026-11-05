@@ -1,0 +1,97 @@
+{
+  "name": "card-stack",
+  "title": "Card Stack",
+  "description": "Layered stack of cards. Swipe, arrow keys, or buttons throw the top card away and the next one rises. Loops, with a position indicator.",
+  "category": "markas",
+  "tags": ["stack", "cards", "swipe", "testimonials", "carousel", "drag"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "card-stack.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "CardStack.tsx", "deps": [] },
+    "vue": { "file": "CardStack.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "cards",
+      "type": "Blade: named slots · React: children · Vue: default slot",
+      "default": "-",
+      "description": "Each named slot (Blade) or each child element (React and Vue) becomes one card, in order. The stack sizes itself to the tallest card."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Card stack",
+      "description": "Accessible name of the stack region. Describe the content, for example Customer testimonials."
+    },
+    {
+      "name": "prevLabel",
+      "type": "string",
+      "default": "Previous card",
+      "description": "Accessible name of the previous button."
+    },
+    {
+      "name": "nextLabel",
+      "type": "string",
+      "default": "Next card",
+      "description": "Accessible name of the next button."
+    },
+    {
+      "name": "cardLabel",
+      "type": "string",
+      "default": "{index} of {total}",
+      "description": "Name of each card and the position text announced after every move. Accepts {index} and {total}."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Id of the region. The card list gets the same id with a -cards suffix."
+    }
+  ],
+  "a11y": [
+    "The stack is a region with aria-roledescription carousel and each card is a group named by cardLabel.",
+    "Left and Right arrow keys move back and forward anywhere inside the stack, and the stack itself is focusable.",
+    "Cards behind the top one are inert, so Tab never lands inside a hidden card.",
+    "A polite live region announces the new position after each move.",
+    "With reduced motion the cards swap instantly without the throw and rise animations."
+  ],
+  "ai": {
+    "whenToUse": "Showing a short set of equal-weight cards one at a time in a playful way: testimonials, feature highlights, tips, or profiles.",
+    "rules": [
+      "Keep it to 3 to 7 cards with similar height",
+      "Give label a description of the content",
+      "Do not put the only copy of important actions on cards behind the top one",
+      "Use Carousel instead when people need to see several items at once"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tumpukan kartu bertingkat. Geser, tombol panah, atau tombol navigasi membuang kartu teratas lalu kartu berikutnya naik. Berputar, dengan indikator posisi.",
+      "props": {
+        "cards": "Setiap named slot (Blade) atau setiap elemen anak (React dan Vue) menjadi satu kartu, sesuai urutan. Tinggi tumpukan mengikuti kartu tertinggi.",
+        "label": "Nama aksesibel region tumpukan. Jelaskan isinya, misalnya Testimoni pelanggan.",
+        "prevLabel": "Nama aksesibel tombol sebelumnya.",
+        "nextLabel": "Nama aksesibel tombol berikutnya.",
+        "cardLabel": "Nama setiap kartu dan teks posisi yang diumumkan setelah setiap perpindahan. Menerima {index} dan {total}.",
+        "id": "Id region. Daftar kartu memakai id yang sama dengan akhiran -cards."
+      },
+      "a11y": [
+        "Tumpukan adalah region dengan aria-roledescription carousel dan setiap kartu adalah group yang dinamai cardLabel.",
+        "Tombol panah kiri dan kanan bergerak mundur dan maju di mana pun di dalam tumpukan, dan tumpukan itu sendiri bisa difokus.",
+        "Kartu di belakang kartu teratas bersifat inert, jadi Tab tidak pernah masuk ke kartu yang tersembunyi.",
+        "Live region polite mengumumkan posisi baru setelah setiap perpindahan.",
+        "Saat reduced motion kartu berganti seketika tanpa animasi lempar dan naik."
+      ],
+      "ai": {
+        "whenToUse": "Menampilkan sedikit kartu yang setara satu per satu dengan cara yang menyenangkan: testimoni, sorotan fitur, tips, atau profil.",
+        "rules": [
+          "Batasi 3 sampai 7 kartu dengan tinggi yang mirip",
+          "Isi label dengan deskripsi konten",
+          "Jangan menaruh satu-satunya aksi penting di kartu yang ada di belakang",
+          "Pakai Carousel bila orang perlu melihat beberapa item sekaligus"
+        ]
+      }
+    }
+  }
+}

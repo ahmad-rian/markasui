@@ -1,0 +1,123 @@
+{
+  "name": "bottom-navigation",
+  "title": "Bottom Navigation",
+  "description": "Mobile app style bottom bar. A pill glides to the selected item, its label rises in, and the bar can shrink to icons while content scrolls.",
+  "category": "markas",
+  "tags": ["bottom navigation", "tab bar", "mobile", "nav", "app bar"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "bottom-navigation.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "BottomNavigation.tsx", "deps": [] },
+    "vue": { "file": "BottomNavigation.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ value: string; label: string; icon: string; href?: string; badge?: number | string }[]",
+      "default": "[]",
+      "description": "Destinations. icon is the d attribute of a 24x24 stroked SVG path. Items with href render as links, the rest as buttons."
+    },
+    {
+      "name": "value / v-model",
+      "type": "string",
+      "default": "-",
+      "description": "Controlled selected item in React (with onValueChange) and Vue (v-model)."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "first item",
+      "description": "Item selected on first render."
+    },
+    {
+      "name": "onValueChange / x-on:change",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Fires when an item is picked. Blade dispatches a change DOM event with the value as detail."
+    },
+    {
+      "name": "shrinkOnScroll",
+      "type": "boolean",
+      "default": "false",
+      "description": "Collapse to icons while the content around the bar (its parent element or the page) scrolls down, expand again on scroll up."
+    },
+    {
+      "name": "action / #action / x-slot:action",
+      "type": "ReactNode | slot",
+      "default": "-",
+      "description": "Icon for a round action button next to the bar. The button only renders when this is set."
+    },
+    {
+      "name": "onAction / @action / x-on:action",
+      "type": "() => void",
+      "default": "-",
+      "description": "Fires when the action button is pressed."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Main",
+      "description": "Accessible name of the nav element."
+    },
+    {
+      "name": "actionLabel",
+      "type": "string",
+      "default": "Create",
+      "description": "Accessible name of the action button."
+    },
+    {
+      "name": "badgeLabel",
+      "type": "string",
+      "default": "{count} new",
+      "description": "Hidden text read after an item with a badge. {count} is replaced by the badge."
+    }
+  ],
+  "a11y": [
+    "The bar is a nav landmark named by navLabel, with a list of links or buttons in tab order.",
+    "The selected item has aria-current=\"page\". Every label stays in the accessible name even while it is visually hidden.",
+    "Badges are hidden from screen readers and read through badgeLabel instead.",
+    "With reduced motion the pill and labels change without movement."
+  ],
+  "ai": {
+    "whenToUse": "Primary navigation between three to five top-level views on mobile layouts or app-like web views.",
+    "rules": [
+      "Use three to five items with short one-word labels",
+      "Give every item a value and an icon path",
+      "Turn on shrinkOnScroll when the bar floats over scrolling content",
+      "Use the action button for the single most common task, such as New transfer"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bar bawah gaya aplikasi mobile. Pill meluncur ke item terpilih, labelnya muncul, dan bar bisa menciut jadi ikon saat konten discroll.",
+      "props": {
+        "items": "Daftar tujuan. icon adalah atribut d path SVG 24x24 bergaris. Item dengan href menjadi link, sisanya tombol.",
+        "value / v-model": "Item terpilih yang dikendalikan di React (dengan onValueChange) dan Vue (v-model).",
+        "defaultValue": "Item terpilih saat render pertama.",
+        "onValueChange / x-on:change": "Dipicu saat item dipilih. Blade mengirim event DOM change dengan value sebagai detail.",
+        "shrinkOnScroll": "Menciut jadi ikon saat konten di sekitar bar (elemen induk atau halaman) discroll turun, kembali saat scroll naik.",
+        "action / #action / x-slot:action": "Ikon untuk tombol aksi bulat di samping bar. Tombol hanya muncul bila ini diisi.",
+        "onAction / @action / x-on:action": "Dipicu saat tombol aksi ditekan.",
+        "navLabel": "Nama aksesibel elemen nav.",
+        "actionLabel": "Nama aksesibel tombol aksi.",
+        "badgeLabel": "Teks tersembunyi yang dibacakan setelah item ber-badge. {count} diganti isi badge."
+      },
+      "a11y": [
+        "Bar adalah landmark nav bernama navLabel, berisi daftar link atau tombol sesuai urutan tab.",
+        "Item terpilih memakai aria-current=\"page\". Setiap label tetap menjadi nama aksesibel walau sedang disembunyikan secara visual.",
+        "Badge disembunyikan dari screen reader dan dibacakan lewat badgeLabel.",
+        "Dengan reduced motion, pill dan label berganti tanpa gerakan."
+      ],
+      "ai": {
+        "whenToUse": "Navigasi utama antara tiga sampai lima tampilan utama di tata letak mobile atau web bergaya aplikasi.",
+        "rules": [
+          "Pakai tiga sampai lima item dengan label pendek satu kata",
+          "Beri setiap item value dan path ikon",
+          "Nyalakan shrinkOnScroll bila bar melayang di atas konten yang discroll",
+          "Pakai tombol aksi untuk satu tugas paling sering, misalnya Transfer baru"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "name": "sidebar",
+  "title": "Sidebar",
+  "description": "App sidebar with grouped links, a sliding active indicator, collapsible sub-items, an icon rail mode, and an off-canvas dialog on narrow layouts.",
+  "category": "navigation",
+  "tags": ["sidebar", "navigation", "dashboard", "app shell", "rail", "drawer"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "sidebar.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Sidebar.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Sidebar.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "sections",
+      "type": "{ title?, items: { label, href?, icon?, badge?, active?, disabled?, open?, children? }[] }[]",
+      "default": "[]",
+      "description": "Link groups. icon is an SVG path (d) for a 24px stroke icon. Items with children become toggle buttons."
+    },
+    {
+      "name": "header",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Brand or workspace at the top. In rail mode only the first 32px stay visible."
+    },
+    {
+      "name": "footer",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "User profile at the bottom."
+    },
+    {
+      "name": "children",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Page content shown next to the sidebar."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"floating\"",
+      "default": "default",
+      "description": "default sits flush with a right border, floating is an inset rounded panel."
+    },
+    {
+      "name": "breakpoint",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "md",
+      "description": "Container width from which the sidebar shows next to the content: 24rem, 42rem, or 56rem. Below it a button opens it as a dialog."
+    },
+    {
+      "name": "collapsed",
+      "type": "boolean",
+      "default": "-",
+      "description": "Icon rail mode. React: controlled with onCollapsedChange. Vue: v-model:collapsed, or a plain value for the uncontrolled initial state. Blade: initial state, changes dispatch markas-collapsed-change."
+    },
+    {
+      "name": "defaultCollapsed",
+      "type": "boolean",
+      "default": "false",
+      "description": "Initial rail mode when uncontrolled (React only)."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Sidebar",
+      "description": "Accessible label of the nav and the mobile dialog."
+    },
+    {
+      "name": "collapseLabel",
+      "type": "string",
+      "default": "Collapse sidebar",
+      "description": "Accessible label of the rail toggle while expanded."
+    },
+    {
+      "name": "expandLabel",
+      "type": "string",
+      "default": "Expand sidebar",
+      "description": "Accessible label of the rail toggle while collapsed."
+    },
+    {
+      "name": "openLabel",
+      "type": "string",
+      "default": "Open sidebar",
+      "description": "Accessible label of the button that opens the mobile dialog."
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close sidebar",
+      "description": "Accessible label of the close button in the mobile dialog."
+    }
+  ],
+  "a11y": [
+    "Links sit in a nav labelled by navLabel, the current page gets aria-current=page, and each titled group is a list labelled by its title.",
+    "Items with sub-items are disclosure buttons with aria-expanded and aria-controls, closed sub-items are hidden from focus.",
+    "The rail toggle uses aria-expanded and aria-controls pointing to the sidebar. In rail mode labels stay readable by screen readers and show as tooltips on hover and focus.",
+    "On narrow layouts the sidebar opens in a native modal dialog: Escape or the backdrop closes it and focus returns to the open button.",
+    "Disabled items are links without href and with aria-disabled=true."
+  ],
+  "ai": {
+    "whenToUse": "Main navigation of an app or dashboard with many destinations, grouped by area.",
+    "rules": [
+      "Mark exactly one page with active, sub-item groups that contain it open on their own",
+      "Give every top-level item an icon so the rail mode stays usable",
+      "Put the page content inside the component so the off-canvas mode and container query work"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Sidebar aplikasi dengan grup link, indikator aktif yang meluncur, sub-item yang bisa dibuka, mode rail ikon, dan dialog off-canvas di tata letak sempit.",
+      "props": {
+        "sections": "Grup link. icon berisi path SVG (d) untuk ikon garis 24px. Item dengan children menjadi tombol buka/tutup.",
+        "header": "Brand atau workspace di atas. Di mode rail hanya 32px pertama yang terlihat.",
+        "footer": "Profil pengguna di bawah.",
+        "children": "Isi halaman yang tampil di samping sidebar.",
+        "variant": "default menempel dengan border kanan, floating berupa panel membulat yang mengambang.",
+        "breakpoint": "Lebar kontainer mulai sidebar tampil di samping konten: 24rem, 42rem, atau 56rem. Di bawahnya tombol membuka sidebar sebagai dialog.",
+        "collapsed": "Mode rail ikon. React: terkontrol bersama onCollapsedChange. Vue: v-model:collapsed, atau nilai biasa untuk keadaan awal tidak terkontrol. Blade: keadaan awal, perubahan mengirim event markas-collapsed-change.",
+        "defaultCollapsed": "Mode rail awal saat tidak terkontrol (hanya React).",
+        "navLabel": "Label aksesibel nav dan dialog seluler. Isi \"Sidebar\" atau \"Navigasi samping\" untuk situs berbahasa Indonesia.",
+        "collapseLabel": "Label aksesibel tombol rail saat sidebar terbentang. Isi \"Ciutkan sidebar\".",
+        "expandLabel": "Label aksesibel tombol rail saat sidebar diciutkan. Isi \"Bentangkan sidebar\".",
+        "openLabel": "Label aksesibel tombol yang membuka dialog seluler. Isi \"Buka sidebar\".",
+        "closeLabel": "Label aksesibel tombol tutup di dialog seluler. Isi \"Tutup sidebar\"."
+      },
+      "a11y": [
+        "Link berada di nav berlabel navLabel, halaman saat ini diberi aria-current=page, dan setiap grup berjudul adalah list berlabel judulnya.",
+        "Item dengan sub-item adalah tombol disclosure dengan aria-expanded dan aria-controls, sub-item yang tertutup tidak bisa difokus.",
+        "Tombol rail memakai aria-expanded dan aria-controls yang menunjuk ke sidebar. Di mode rail label tetap terbaca pembaca layar dan tampil sebagai tooltip saat hover dan fokus.",
+        "Di tata letak sempit sidebar terbuka di dialog modal native: Escape atau backdrop menutupnya dan fokus kembali ke tombol pembuka.",
+        "Item nonaktif adalah link tanpa href dengan aria-disabled=true."
+      ],
+      "ai": {
+        "whenToUse": "Navigasi utama aplikasi atau dashboard dengan banyak tujuan yang dikelompokkan per area.",
+        "rules": [
+          "Tandai tepat satu halaman dengan active, grup sub-item yang memuatnya terbuka sendiri",
+          "Beri ikon pada setiap item tingkat atas agar mode rail tetap bisa dipakai",
+          "Taruh isi halaman di dalam komponen agar mode off-canvas dan container query berjalan"
+        ]
+      }
+    }
+  }
+}

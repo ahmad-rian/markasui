@@ -16,7 +16,7 @@ const { name, bare = false, class: className } = Astro.props;
 const bladeFiles = import.meta.glob<string>("../../generated/blade/*.html", { query: "?raw", import: "default", eager: true });
 const bladeHtml = bladeFiles[`../../generated/blade/${name}.html`];
 /** Komponen selebar halaman (navigasi situs) butuh panggung penuh supaya tampil versi desktop. */
-const WIDE = ["navbar", "navigation-menu"];
+const WIDE = ["navbar", "navigation-menu", "sidebar"];
 const isWide = WIDE.some((wide) => name === wide || name.startsWith(`${wide}--`));
 const pane = isWide ? "w-full" : "w-full max-w-md";
 const strings = t(getLocale(Astro.url)).component;

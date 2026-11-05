@@ -1,0 +1,130 @@
+{
+  "name": "currency-input",
+  "title": "Currency Input",
+  "description": "Money field that formats as you type (Rp 12.500.000), keeps the caret in place, and posts the plain number. Optional quick amount chips.",
+  "category": "markas",
+  "tags": ["currency", "money", "rupiah", "idr", "amount", "input", "form"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "currency-input.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "CurrencyInput.tsx", "deps": [] },
+    "vue": { "file": "CurrencyInput.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "-",
+      "description": "Label text, linked to the field through for and id."
+    },
+    {
+      "name": "hint",
+      "type": "string",
+      "default": "-",
+      "description": "Hint below the field. Hidden while an error is shown."
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "default": "-",
+      "description": "Error message. Turns on aria-invalid and the danger border."
+    },
+    {
+      "name": "currency",
+      "type": "'IDR' | 'USD'",
+      "default": "IDR",
+      "description": "IDR shows Rp with dot thousands and no decimals. USD shows $ with comma thousands and up to two decimals."
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "default": "-",
+      "description": "Lowest value. The amount is clamped on blur and when a chip is picked."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "-",
+      "description": "Highest value. The amount is clamped on blur and when a chip is picked."
+    },
+    {
+      "name": "value / defaultValue / v-model",
+      "type": "number | null",
+      "default": "null",
+      "description": "Starting amount. Blade uses value, React uses defaultValue with onValueChange, Vue uses v-model."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "-",
+      "description": "Name of a hidden input that submits the plain number, for example 12500000. The visible field has no name."
+    },
+    {
+      "name": "presets",
+      "type": "number[]",
+      "default": "[]",
+      "description": "Quick amount chips shown below the field, labelled short (50rb, 1jt, $1K). Picking one counts the digits to the new amount."
+    },
+    {
+      "name": "presetsLabel",
+      "type": "string",
+      "default": "Quick amounts",
+      "description": "Accessible name of the chip group."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Id of the visible field. Generated automatically when empty."
+    }
+  ],
+  "a11y": [
+    "The label is linked to the field, and the currency symbol, hint, and error are read through aria-describedby.",
+    "The field uses inputmode numeric or decimal so phones show a number keypad.",
+    "Chips are toggle buttons in a labelled group; the chip that matches the amount has aria-pressed true.",
+    "With reduced motion picking a chip sets the amount instantly instead of counting."
+  ],
+  "ai": {
+    "whenToUse": "Entering an amount of money: top-ups, transfers, prices, budgets, donations. Default to IDR for Indonesian products.",
+    "rules": [
+      "Read the plain number from the hidden input (name) or onValueChange, never parse the visible text",
+      "Always set a label, and put limits in hint, for example Minimum Rp10.000",
+      "Keep presets to 3 to 6 common amounts",
+      "Validate min and max on the server as well"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kolom uang yang memformat saat mengetik (Rp 12.500.000), menjaga posisi kursor, dan mengirim angka murni. Opsional chip nominal cepat.",
+      "props": {
+        "label": "Teks label, terhubung ke kolom lewat for dan id.",
+        "hint": "Petunjuk di bawah kolom. Disembunyikan saat error tampil.",
+        "error": "Pesan error. Menyalakan aria-invalid dan border danger.",
+        "currency": "IDR menampilkan Rp dengan pemisah ribuan titik tanpa desimal. USD menampilkan $ dengan pemisah ribuan koma dan maksimal dua desimal.",
+        "min": "Nilai terendah. Nominal dibatasi saat blur dan saat chip dipilih.",
+        "max": "Nilai tertinggi. Nominal dibatasi saat blur dan saat chip dipilih.",
+        "value / defaultValue / v-model": "Nominal awal. Blade memakai value, React memakai defaultValue dengan onValueChange, Vue memakai v-model.",
+        "name": "Nama input tersembunyi yang mengirim angka murni, misalnya 12500000. Kolom yang terlihat tidak punya name.",
+        "presets": "Chip nominal cepat di bawah kolom, berlabel singkat (50rb, 1jt, $1K). Memilih chip menghitung angka menuju nominal baru.",
+        "presetsLabel": "Nama aksesibel grup chip.",
+        "id": "Id kolom yang terlihat. Dibuat otomatis bila kosong."
+      },
+      "a11y": [
+        "Label terhubung ke kolom, dan simbol mata uang, petunjuk, serta error dibacakan lewat aria-describedby.",
+        "Kolom memakai inputmode numeric atau decimal sehingga ponsel menampilkan keypad angka.",
+        "Chip adalah tombol toggle dalam grup berlabel; chip yang cocok dengan nominal punya aria-pressed true.",
+        "Saat reduced motion memilih chip langsung mengisi nominal tanpa animasi hitung."
+      ],
+      "ai": {
+        "whenToUse": "Mengisi nominal uang: top-up, transfer, harga, anggaran, donasi. Pakai IDR sebagai default untuk produk Indonesia.",
+        "rules": [
+          "Ambil angka murni dari input tersembunyi (name) atau onValueChange, jangan mengurai teks yang terlihat",
+          "Selalu isi label, dan tulis batas di hint, misalnya Minimum Rp10.000",
+          "Batasi presets 3 sampai 6 nominal yang umum",
+          "Validasi min dan max juga di server"
+        ]
+      }
+    }
+  }
+}

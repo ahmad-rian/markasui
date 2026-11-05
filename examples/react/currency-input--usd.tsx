@@ -1,0 +1,15 @@
+import { CurrencyInput } from "../../components/currency-input/CurrencyInput";
+
+export default function CurrencyInputUsdExample() {
+  return (
+    <CurrencyInput
+      label="Monthly budget"
+      name="budget"
+      currency="USD"
+      hint="Billed in US dollars at the end of each month"
+      defaultValue={1250.5}
+      presets={[100, 500, 1000, 5000]}
+      presetsLabel="Suggested budgets"
+    />
+  );
+}

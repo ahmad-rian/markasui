@@ -1,9 +1,17 @@
 {
   "name": "navbar",
   "title": "Navbar",
-  "description": "Site header with a brand, menu links, an actions area, and a mobile menu opened by a toggle button.",
+  "description": "Site header with a brand, links, dropdown menus, a sliding hover pill, an actions area, and a mobile menu with collapsible groups.",
   "category": "navigation",
-  "tags": ["navbar", "header", "menu", "navigation", "mobile"],
+  "tags": [
+    "navbar",
+    "header",
+    "menu",
+    "navigation",
+    "dropdown",
+    "mobile",
+    "sticky"
+  ],
   "status": "stable",
   "frameworks": {
     "blade": {
@@ -22,9 +30,9 @@
   "props": [
     {
       "name": "links",
-      "type": "{ label, href, active? }[]",
+      "type": "{ label, href?, active?, children?: { label, href, description?, icon? }[] }[]",
       "default": "[]",
-      "description": "Main menu. Links with active get aria-current=page."
+      "description": "Main menu. Links with active get aria-current=page. An item with children becomes a dropdown trigger; icon is an SVG path (d) for a 24px stroke icon."
     },
     {
       "name": "brand",
@@ -37,6 +45,18 @@
       "type": "slot / ReactNode",
       "default": "-",
       "description": "Right-hand area, such as a Sign in button."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"floating\" | \"blur\"",
+      "default": "\"default\"",
+      "description": "default: hairline bottom border. floating: rounded, bordered bar with a soft shadow. blur: translucent background with backdrop blur for content scrolling underneath."
+    },
+    {
+      "name": "sticky",
+      "type": "boolean",
+      "default": "false",
+      "description": "Keeps the header at the top while the page scrolls (floating leaves a small gap)."
     },
     {
       "name": "menuLabel",
@@ -59,40 +79,54 @@
   ],
   "a11y": [
     "The mobile menu button uses aria-expanded and aria-controls pointing to the menu panel.",
-    "Escape closes the panel and returns focus to the menu button.",
+    "Escape closes the mobile panel and returns focus to the menu button.",
     "The desktop and mobile menus are each wrapped in a nav with different labels (navLabel and mobileNavLabel).",
-    "The layout follows the header width (container query), the desktop menu shows from 42rem wide."
+    "The layout follows the header width (container query), the desktop menu shows from 42rem wide.",
+    "Dropdowns follow the WAI-ARIA disclosure navigation pattern: a button with aria-expanded and aria-controls opens a native popover. Click, Enter, Space, and ArrowDown open it, ArrowDown also focuses the first link, Escape closes it and returns focus to the button.",
+    "Hover opens a dropdown after 120ms and closes it 180ms after the mouse leaves; touch and pen ignore hover.",
+    "On mobile, items with children become details and summary groups that open with Enter or Space.",
+    "Animations are disabled with prefers-reduced-motion."
   ],
   "ai": {
-    "whenToUse": "Main header at the top of every page of a site or app.",
+    "whenToUse": "Main header at the top of every page of a site or app, including marketing sites with product and resource dropdowns.",
     "rules": [
       "Mark the current page with active",
-      "Keep the number of main links small, move the rest to the footer or a dropdown"
+      "Keep the number of main links small, group related pages under children",
+      "Give every dropdown child a short description when the label alone is ambiguous",
+      "Use variant blur with sticky only over content that scrolls under the header"
     ]
   },
   "addedAt": "2026-11-04",
   "i18n": {
     "id": {
-      "description": "Header situs dengan brand, menu link, area aksi, dan menu seluler yang bisa dibuka lewat tombol.",
+      "description": "Header situs dengan brand, link, menu dropdown, pill hover yang meluncur, area aksi, dan menu seluler dengan grup yang bisa dibuka.",
       "props": {
-        "links": "Menu utama. Link dengan active diberi aria-current=page.",
+        "links": "Menu utama. Link dengan active diberi aria-current=page. Item dengan children menjadi pemicu dropdown; icon adalah path SVG (d) untuk ikon garis 24px.",
         "brand": "Logo atau nama situs di kiri.",
         "actions": "Area kanan, misalnya tombol Masuk.",
+        "variant": "default: garis bawah tipis. floating: bar membulat berborder dengan bayangan halus. blur: latar semi transparan dengan backdrop blur untuk konten yang tergulir di bawahnya.",
+        "sticky": "Header tetap di atas saat halaman digulir (floating menyisakan jarak kecil).",
         "menuLabel": "Label aksesibel tombol menu seluler. Default \"Menu\" sudah cocok untuk Bahasa Indonesia.",
         "navLabel": "Label aksesibel nav desktop. Isi \"Utama\" untuk situs berbahasa Indonesia.",
         "mobileNavLabel": "Label aksesibel nav seluler. Isi \"Utama seluler\" untuk situs berbahasa Indonesia."
       },
       "a11y": [
         "Tombol menu seluler memakai aria-expanded dan aria-controls yang menunjuk ke panel menu.",
-        "Escape menutup panel dan fokus kembali ke tombol menu.",
+        "Escape menutup panel seluler dan fokus kembali ke tombol menu.",
         "Menu desktop dan seluler masing-masing dibungkus nav dengan label berbeda (navLabel dan mobileNavLabel).",
-        "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 42rem."
+        "Tata letak mengikuti lebar header (container query), menu desktop tampil mulai lebar 42rem.",
+        "Dropdown mengikuti pola WAI-ARIA disclosure navigation: tombol dengan aria-expanded dan aria-controls membuka popover native. Klik, Enter, Spasi, dan ArrowDown membukanya, ArrowDown juga memfokuskan link pertama, Escape menutupnya dan mengembalikan fokus ke tombol.",
+        "Hover membuka dropdown setelah 120ms dan menutupnya 180ms setelah mouse pergi; sentuhan dan pena mengabaikan hover.",
+        "Di seluler, item dengan children menjadi grup details dan summary yang dibuka dengan Enter atau Spasi.",
+        "Animasi dimatikan dengan prefers-reduced-motion."
       ],
       "ai": {
-        "whenToUse": "Header utama di bagian atas setiap halaman situs atau aplikasi.",
+        "whenToUse": "Header utama di bagian atas setiap halaman situs atau aplikasi, termasuk situs pemasaran dengan dropdown produk dan sumber daya.",
         "rules": [
           "Tandai halaman saat ini dengan active",
-          "Jaga jumlah link utama sedikit, sisanya taruh di footer atau dropdown"
+          "Jaga jumlah link utama sedikit, kelompokkan halaman terkait di children",
+          "Beri deskripsi singkat pada setiap child dropdown bila labelnya saja kurang jelas",
+          "Pakai variant blur dengan sticky hanya di atas konten yang tergulir di bawah header"
         ]
       }
     }

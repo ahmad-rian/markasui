@@ -1,0 +1,102 @@
+{
+  "name": "expandable-card",
+  "title": "Expandable Card",
+  "description": "Compact card that grows into a centered detail view built on a native dialog, then shrinks back into place on close.",
+  "category": "markas",
+  "tags": ["card", "expand", "dialog", "flip", "product", "detail"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "expandable-card.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ExpandableCard.tsx", "deps": [] },
+    "vue": { "file": "ExpandableCard.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "-",
+      "description": "Card title. Also the heading and accessible name of the open view."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "-",
+      "description": "Short summary. Clamped to two lines on the card, shown in full when open."
+    },
+    {
+      "name": "media",
+      "type": "Blade: named slot · React: ReactNode · Vue: #media slot",
+      "default": "-",
+      "description": "Image or illustration. Rendered 112px tall on the card and 192px tall in the open view."
+    },
+    {
+      "name": "children",
+      "type": "Blade: default slot · React: children · Vue: default slot",
+      "default": "-",
+      "description": "Extra detail shown only in the open view."
+    },
+    {
+      "name": "footer",
+      "type": "Blade: named slot · React: ReactNode · Vue: #footer slot",
+      "default": "-",
+      "description": "Actions at the bottom of the open view, for example Add to cart."
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "description": "Accessible name of the close button."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "Id of the card button. The dialog uses the same id with a -dialog suffix."
+    }
+  ],
+  "a11y": [
+    "The card is a real button with aria-haspopup dialog, so Enter and Space open it.",
+    "The detail view is a native modal dialog labelled by its heading. Focus moves inside and the page behind is inert.",
+    "Escape, a backdrop click, or the close button closes it, and focus returns to the card.",
+    "With reduced motion the dialog opens and closes instantly without the grow and shrink animation."
+  ],
+  "ai": {
+    "whenToUse": "Grids of products, articles, projects, or people where a short summary is enough at first and details open on demand without leaving the page.",
+    "rules": [
+      "Place several cards in a grid, the component renders one card",
+      "Keep the card text short; put specs, long text, and actions in children and footer",
+      "Do not put links or buttons in title, description, or media, the whole card is a button",
+      "Use a page route instead when the detail needs its own URL"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kartu ringkas yang tumbuh menjadi tampilan detail di tengah layar berbasis dialog native, lalu menyusut kembali ke tempatnya saat ditutup.",
+      "props": {
+        "title": "Judul kartu. Juga menjadi heading dan nama aksesibel tampilan detail.",
+        "description": "Ringkasan singkat. Dipotong dua baris di kartu, tampil utuh saat terbuka.",
+        "media": "Gambar atau ilustrasi. Tinggi 112px di kartu dan 192px di tampilan detail.",
+        "children": "Detail tambahan yang hanya tampil saat terbuka.",
+        "footer": "Aksi di bagian bawah tampilan detail, misalnya Tambah ke keranjang.",
+        "closeLabel": "Nama aksesibel tombol tutup.",
+        "id": "Id tombol kartu. Dialog memakai id yang sama dengan akhiran -dialog."
+      },
+      "a11y": [
+        "Kartu adalah tombol asli dengan aria-haspopup dialog, jadi Enter dan Spasi membukanya.",
+        "Tampilan detail adalah dialog modal native yang dinamai oleh heading-nya. Fokus pindah ke dalam dan halaman di belakang menjadi inert.",
+        "Escape, klik backdrop, atau tombol tutup menutupnya, lalu fokus kembali ke kartu.",
+        "Saat reduced motion dialog terbuka dan tertutup seketika tanpa animasi tumbuh dan menyusut."
+      ],
+      "ai": {
+        "whenToUse": "Grid produk, artikel, proyek, atau orang yang cukup menampilkan ringkasan dulu dan membuka detail sesuai kebutuhan tanpa pindah halaman.",
+        "rules": [
+          "Susun beberapa kartu dalam grid, komponen ini merender satu kartu",
+          "Buat teks kartu singkat; taruh spesifikasi, teks panjang, dan aksi di children dan footer",
+          "Jangan menaruh tautan atau tombol di title, description, atau media, seluruh kartu adalah tombol",
+          "Pakai halaman tersendiri bila detail butuh URL sendiri"
+        ]
+      }
+    }
+  }
+}
