@@ -95,6 +95,17 @@ ${pagination}`);
     expect(translated).not.toContain('aria-label="Close"');
   });
 
+  it('badge tanpa dot lewat :dot="false"', () => {
+    expect(
+      renderBlade('<x-markas.badge variant="success">Paid</x-markas.badge>'),
+    ).toContain('aria-hidden="true"');
+    expect(
+      renderBlade(
+        '<x-markas.badge variant="success" :dot="false">Paid</x-markas.badge>',
+      ),
+    ).not.toContain('aria-hidden="true"');
+  });
+
   it("escape teks dari props", () => {
     const html = renderBlade(
       '<x-markas.modal title="<script>alert(1)</script>">Body</x-markas.modal>',

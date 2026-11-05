@@ -38,6 +38,24 @@ describe("Vue Alert", () => {
 });
 
 describe("Vue Badge", () => {
+  it("dot default tampil dan bisa dimatikan", () => {
+    const withDot = render(Badge, {
+      props: { variant: "success" },
+      slots: { default: "Paid" },
+    });
+    expect(
+      withDot.container.querySelectorAll('[aria-hidden="true"]'),
+    ).toHaveLength(1);
+    withDot.unmount();
+    const noDot = render(Badge, {
+      props: { variant: "success", dot: false },
+      slots: { default: "Paid" },
+    });
+    expect(
+      noDot.container.querySelectorAll('[aria-hidden="true"]'),
+    ).toHaveLength(0);
+  });
+
   it("default neutral dengan titik aria-hidden", () => {
     render(Badge, { slots: { default: "Draft" } });
     const badge = screen.getByText("Draft");

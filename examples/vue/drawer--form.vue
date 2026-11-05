@@ -1,0 +1,39 @@
+<script setup lang="ts">
+import Button from "../../components/button/Button.vue";
+import Drawer from "../../components/drawer/Drawer.vue";
+import Input from "../../components/input/Input.vue";
+</script>
+
+<template>
+  <div class="flex justify-center">
+    <Drawer title="Edit profile">
+      <template #trigger>
+        <Button>Edit profile</Button>
+      </template>
+
+      <div class="grid gap-4">
+        <Input
+          name="profile-name"
+          label="Display name"
+          placeholder="Budi Santoso"
+        />
+        <Input
+          name="profile-role"
+          label="Job title"
+          placeholder="Product designer"
+        />
+        <Input
+          name="profile-website"
+          type="url"
+          label="Website"
+          placeholder="https://example.com"
+        />
+      </div>
+
+      <template #footer>
+        <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+        <Button type="submit" value="save">Save changes</Button>
+      </template>
+    </Drawer>
+  </div>
+</template>

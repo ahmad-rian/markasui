@@ -1,0 +1,11 @@
+<x-markas.radio-group
+    name="plan"
+    label="Plan"
+    value="team"
+    class="*:*:rounded-lg *:*:border *:*:border-line *:*:bg-surface *:*:p-4 *:*:transition-colors *:*:duration-150 *:*:ease-out *:*:has-checked:border-primary *:*:has-checked:bg-primary-soft *:*:motion-reduce:transition-none"
+    :options="[
+        ['value' => 'starter', 'label' => 'Starter', 'description' => '1 project and 2 GB storage. Free forever.'],
+        ['value' => 'team', 'label' => 'Team', 'description' => 'Unlimited projects and 100 GB storage. $29 per month.'],
+        ['value' => 'enterprise', 'label' => 'Enterprise', 'description' => 'SSO, audit logs, and a dedicated manager.'],
+    ]"
+/>

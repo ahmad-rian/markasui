@@ -1,0 +1,10 @@
+<div class="grid gap-4">
+    <div class="grid gap-2">
+        <x-markas.progress :value="40" aria-label="Checkout progress" />
+        <p class="text-sm text-muted">Step 2 of 5: Shipping address</p>
+    </div>
+    <div class="grid gap-2">
+        <x-markas.progress :value="90" aria-label="Storage used" />
+        <p class="text-sm text-muted">9 GB of 10 GB used</p>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="flex justify-center">
+    <x-markas.dropdown-menu
+        :items="[
+            ['label' => 'Document', 'value' => 'document'],
+            ['label' => 'Spreadsheet', 'value' => 'spreadsheet'],
+            ['label' => 'Folder', 'value' => 'folder'],
+        ]"
+    >
+        <x-slot:trigger>
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            New
+        </x-slot:trigger>
+    </x-markas.dropdown-menu>
+</div>

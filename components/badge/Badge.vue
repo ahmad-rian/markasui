@@ -2,8 +2,9 @@
 const props = withDefaults(
   defineProps<{
     variant?: "neutral" | "primary" | "success" | "warning" | "danger";
+    dot?: boolean;
   }>(),
-  { variant: "neutral" },
+  { variant: "neutral", dot: true },
 );
 
 const base =
@@ -27,6 +28,9 @@ const dots = {
 
 <template>
   <span :class="[base, variants[props.variant]]"
-    ><span :class="[dotBase, dots[props.variant]]" aria-hidden="true" /><slot
+    ><span
+      v-if="props.dot"
+      :class="[dotBase, dots[props.variant]]"
+      aria-hidden="true" /><slot
   /></span>
 </template>

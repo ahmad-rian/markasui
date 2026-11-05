@@ -506,3 +506,24 @@ test("splash tidak tampil saat prefers-reduced-motion", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("div[data-splash]")).toBeHidden();
 });
+
+test("tidak ada overflow horizontal di layar sempit, termasuk tab Manual @mobile", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "khusus mobile");
+  test.setTimeout(120_000);
+  const offenders: string[] = [];
+  for (const path of PAGES.flatMap((p) =>
+    p.startsWith("/components/") ? [p, `/id${p}`] : [p],
+  )) {
+    await page.goto(path);
+    const manual = page.getByRole("tab", { name: "Manual" });
+    if (await manual.count()) await manual.first().click();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - innerWidth,
+    );
+    if (overflow > 0) offenders.push(`${path}: ${overflow}px`);
+  }
+  expect(offenders).toEqual([]);
+});

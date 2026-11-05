@@ -1,0 +1,26 @@
+import { Select } from "../../components/select/Select";
+
+export default function SelectGroupsExample() {
+  return (
+    <Select
+      name="timezone"
+      label="Time zone"
+      hint="Meeting times are shown in this time zone."
+      defaultValue="asia-jakarta"
+    >
+      <optgroup label="Asia">
+        <option value="asia-jakarta">Jakarta (GMT+7)</option>
+        <option value="asia-singapore">Singapore (GMT+8)</option>
+        <option value="asia-tokyo">Tokyo (GMT+9)</option>
+      </optgroup>
+      <optgroup label="Europe">
+        <option value="europe-london">London (GMT+0)</option>
+        <option value="europe-berlin">Berlin (GMT+1)</option>
+      </optgroup>
+      <optgroup label="Americas">
+        <option value="america-new-york">New York (GMT-5)</option>
+        <option value="america-los-angeles">Los Angeles (GMT-8)</option>
+      </optgroup>
+    </Select>
+  );
+}

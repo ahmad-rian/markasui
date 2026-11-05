@@ -25,6 +25,12 @@
       "type": "'neutral' | 'primary' | 'success' | 'warning' | 'danger'",
       "default": "neutral",
       "description": "Background, border, and status dot color."
+    },
+    {
+      "name": "dot",
+      "type": "boolean",
+      "default": "true",
+      "description": "Colored dot before the text. Turn it off for badges with an icon or a count."
     }
   ],
   "a11y": [
@@ -45,7 +51,8 @@
     "id": {
       "description": "Label status kecil berbentuk pil dengan titik warna untuk neutral, primary, success, warning, dan danger.",
       "props": {
-        "variant": "Warna latar, border, dan titik status."
+        "variant": "Warna latar, border, dan titik status.",
+        "dot": "Titik warna di depan teks. Matikan untuk badge berikon atau berisi angka."
       },
       "a11y": [
         "Elemen span biasa tanpa role, teks badge dibaca apa adanya.",

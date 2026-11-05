@@ -1,0 +1,41 @@
+import { Accordion } from "../../components/accordion/Accordion";
+
+const items = [
+  {
+    value: "trial",
+    title: "Is there a free trial?",
+    content: "Yes. Every plan starts with a 14 day trial, no card required.",
+  },
+  {
+    value: "cancel",
+    title: "Can I cancel at any time?",
+    content: "Yes. Your plan stays active until the end of the billing period.",
+  },
+  {
+    value: "team",
+    title: "Can I invite my team?",
+    content:
+      "Invite as many members as your plan allows from the team settings.",
+  },
+  {
+    value: "data",
+    title: "Where is my data stored?",
+    content: "Data is stored in Jakarta and backed up every day.",
+  },
+];
+
+export default function AccordionFaqExample() {
+  return (
+    <div className="grid gap-4">
+      <div className="grid gap-1">
+        <h2 className="text-base font-semibold text-ink">
+          Frequently asked questions
+        </h2>
+        <p className="text-sm text-muted">
+          Still have questions? Contact our support team.
+        </p>
+      </div>
+      <Accordion items={items} />
+    </div>
+  );
+}

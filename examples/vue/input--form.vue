@@ -1,0 +1,34 @@
+<script setup lang="ts">
+import Button from "../../components/button/Button.vue";
+import Input from "../../components/input/Input.vue";
+</script>
+
+<template>
+  <form class="grid gap-4 rounded-lg border border-line bg-surface p-6">
+    <div class="grid gap-1">
+      <p class="text-base font-semibold text-ink">Create an account</p>
+      <p class="text-sm text-muted">
+        Start your free 14-day trial. No card required.
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <Input name="first_name" label="First name" autocomplete="given-name" />
+      <Input name="last_name" label="Last name" autocomplete="family-name" />
+    </div>
+    <Input
+      name="email"
+      type="email"
+      label="Work email"
+      placeholder="you@company.com"
+      autocomplete="email"
+    />
+    <Input
+      name="password"
+      type="password"
+      label="Password"
+      hint="At least 8 characters."
+      autocomplete="new-password"
+    />
+    <Button type="submit" class="w-full">Create account</Button>
+  </form>
+</template>

@@ -157,6 +157,8 @@
   }
   .prose :not(pre) > code {
     @apply rounded-md bg-subtle px-1.5 py-0.5 font-mono text-[12.5px];
+    /* Path panjang (resources/views/...) boleh patah agar tidak melebarkan halaman di layar sempit. */
+    overflow-wrap: anywhere;
   }
   .prose [data-code-block] {
     @apply my-6;
@@ -338,13 +340,20 @@
     opacity: 1;
   }
 }
-@keyframes lang-core {
-  0%,
-  100% {
-    transform: scale(1);
+/* Logo Jenderal di overlay: tiap bilah meluncur masuk searah kemiringannya, bergantian, lalu keluar. */
+@keyframes lang-bar {
+  0% {
+    opacity: 0;
+    transform: translate(-320px, 156px);
   }
-  50% {
-    transform: scale(1.06);
+  28%,
+  72% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(320px, -156px);
   }
 }
 @layer components {
@@ -363,14 +372,16 @@
   .lang-dots > span:nth-child(3) {
     animation-delay: 0.3s;
   }
-  .lang-orbit-core {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: lang-core 1.8s ease-in-out infinite;
+  .lang-logo {
+    overflow: visible;
+  }
+  .lang-logo polygon {
+    animation: lang-bar 1.6s var(--ease-out-quint) infinite;
+    animation-delay: calc(var(--i) * 90ms);
   }
   @media (prefers-reduced-motion: reduce) {
-    .lang-orbit-dot {
-      display: none;
+    .lang-logo polygon {
+      animation: none;
     }
   }
 }

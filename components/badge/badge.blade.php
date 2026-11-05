@@ -1,5 +1,6 @@
 @props([
     'variant' => 'neutral',
+    'dot' => true,
 ])
 
 @php
@@ -21,4 +22,4 @@
     ];
 @endphp
 
-<span {{ $attributes->class([$base, $variants[$variant]]) }}><span class="{{ $dotBase }} {{ $dots[$variant] }}" aria-hidden="true"></span>{{ $slot }}</span>
+<span {{ $attributes->class([$base, $variants[$variant]]) }}>@if ($dot)<span class="{{ $dotBase }} {{ $dots[$variant] }}" aria-hidden="true"></span>@endif{{ $slot }}</span>

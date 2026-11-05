@@ -22,17 +22,22 @@ const cx = (...c: (string | false | null | undefined)[]) =>
 
 export type BadgeProps = ComponentProps<"span"> & {
   variant?: keyof typeof variants;
+  /** Titik warna di depan teks. Matikan untuk badge berikon atau angka. */
+  dot?: boolean;
 };
 
 export function Badge({
   variant = "neutral",
+  dot = true,
   className,
   children,
   ...props
 }: BadgeProps) {
   return (
     <span className={cx(base, variants[variant], className)} {...props}>
-      <span className={cx(dotBase, dots[variant])} aria-hidden="true" />
+      {dot && (
+        <span className={cx(dotBase, dots[variant])} aria-hidden="true" />
+      )}
       {children}
     </span>
   );

@@ -1,16 +1,19 @@
 import type { Locale } from "./i18n";
 
+export type VariantTitles = Record<string, Record<Locale, string>>;
+
 /**
- * Judul galeri variasi. Kunci = nama file contoh tanpa ekstensi (examples/<fw>/<komponen>--<variasi>.*).
- * Variasi tanpa judul di sini tetap tampil dengan judul dari slug-nya.
+ * Judul galeri variasi per kategori di lib/variants/<kategori>.ts. Kunci = nama file contoh tanpa
+ * ekstensi (examples/<fw>/<komponen>--<variasi>.*). Urutan kunci menentukan urutan tampil.
  */
-export const VARIANT_TITLES: Record<string, Record<Locale, string>> = {
-  "button--variants": { en: "Variants", id: "Varian" },
-  "button--sizes": { en: "Sizes", id: "Ukuran" },
-  "button--icons": { en: "With icons", id: "Dengan ikon" },
-  "button--states": { en: "States", id: "Status" },
-  "button--full-width": { en: "Full width", id: "Lebar penuh" },
-};
+const modules = import.meta.glob<{ default: VariantTitles }>(
+  "./variants/*.ts",
+  { eager: true },
+);
+export const VARIANT_TITLES: VariantTitles = Object.assign(
+  {},
+  ...Object.values(modules).map((module) => module.default),
+);
 
 export function variantTitle(slug: string, locale: Locale): string {
   const known = VARIANT_TITLES[slug]?.[locale];

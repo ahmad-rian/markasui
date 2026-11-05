@@ -139,10 +139,10 @@ const example = (fw: Framework) =>
           }
         </Tabs>
       </div>
-      <div slot="manual" class="grid gap-5">
+      <div slot="manual" class="grid grid-cols-[minmax(0,1fr)] gap-5">
         {
           frameworks.map((fw) => (
-            <div data-fw={fw} class="grid gap-5">
+            <div data-fw={fw} class="grid grid-cols-[minmax(0,1fr)] gap-5">
               <ol class="prose">
                 <li>
                   {strings.manualSetup} <a href={localePath(locale, "/docs/installation")}>{strings.manualSetupLink}</a>.

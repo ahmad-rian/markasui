@@ -16,7 +16,12 @@ export type Control =
   | { name: string; type: "boolean"; default: boolean };
 
 export type Values = Record<string, string | boolean>;
-export type Built = { props: Record<string, Scalar>; children?: string };
+export type Built = {
+  props: Record<string, Scalar>;
+  children?: string;
+  /** Prop boolean yang default-nya true: nilai false tetap ditulis di kode (mis. dot={false}). */
+  keepFalse?: string[];
+};
 
 export type Playground = {
   controls: Control[];
@@ -62,10 +67,12 @@ export const PLAYGROUNDS: Record<string, Playground> = {
         options: ["neutral", "primary", "success", "warning", "danger"],
         default: "neutral",
       },
+      { name: "dot", type: "boolean", default: true },
     ],
     build: (v) => ({
-      props: { variant: v.variant as string },
+      props: { variant: v.variant as string, dot: on(v.dot) },
       children: "Badge",
+      keepFalse: ["dot"],
     }),
   },
   alert: {
@@ -221,8 +228,13 @@ function attribute(
   framework: Framework,
   name: string,
   value: Scalar,
+  keepFalse: boolean,
 ): string | null {
-  if (value === null || value === false) return null;
+  if (value === null || (value === false && !keepFalse)) return null;
+  if (value === false)
+    return framework === "react"
+      ? `${name}={false}`
+      : `:${kebab(name)}="false"`;
   if (framework === "react") {
     const prop = name === "class" ? "className" : name;
     if (value === true) return prop;
@@ -246,7 +258,9 @@ export function usageCode(
 ): string {
   const tag = framework === "blade" ? `x-markas.${name}` : pascal(name);
   const attrs = Object.entries(built.props)
-    .map(([key, value]) => attribute(framework, key, value))
+    .map(([key, value]) =>
+      attribute(framework, key, value, built.keepFalse?.includes(key) ?? false),
+    )
     .filter((attr): attr is string => attr !== null);
   const open =
     attrs.length > 3

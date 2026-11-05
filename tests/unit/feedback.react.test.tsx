@@ -35,6 +35,20 @@ describe("React Alert", () => {
 });
 
 describe("React Badge", () => {
+  it("dot default tampil dan bisa dimatikan", () => {
+    const { container, rerender } = render(
+      <Badge variant="success">Paid</Badge>,
+    );
+    expect(container.querySelectorAll('[aria-hidden="true"]')).toHaveLength(1);
+    rerender(
+      <Badge variant="success" dot={false}>
+        Paid
+      </Badge>,
+    );
+    expect(container.querySelectorAll('[aria-hidden="true"]')).toHaveLength(0);
+    expect(screen.getByText("Paid")).toBeInTheDocument();
+  });
+
   it("default neutral dengan titik aria-hidden", () => {
     render(<Badge>Draft</Badge>);
     const badge = screen.getByText("Draft");

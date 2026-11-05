@@ -26,10 +26,10 @@ const data = JSON.stringify(Object.fromEntries(combos.map((combo) => [combo.key,
 const control = "h-8 rounded-lg bg-surface px-2 text-sm text-ink shadow-[0_0_0_1px_var(--color-line)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 ---
 
-<div class="grid gap-4" data-playground={name} data-pagefind-ignore>
+<div class="grid grid-cols-[minmax(0,1fr)] gap-4" data-playground={name} data-pagefind-ignore>
   <script type="application/json" data-playground-data set:html={data} />
   <div class="frame">
-    <div class="frame-panel grid overflow-hidden lg:grid-cols-[minmax(0,1fr)_17rem]">
+    <div class="frame-panel grid grid-cols-[minmax(0,1fr)] overflow-hidden lg:grid-cols-[minmax(0,1fr)_17rem]">
       <div class="relative">
         <div class="dot-grid flex min-h-80 items-center justify-center px-4 py-14 sm:px-8" data-preview-stage>
           <div data-fw="blade" class="w-full max-w-md">

@@ -17,7 +17,7 @@ const id = `tabs-${Math.random().toString(36).slice(2, 8)}`;
 const first = items[0]?.value;
 ---
 
-<div data-docs-tabs data-tabs-group={group} class:list={[framed && "frame"]}>
+<div data-docs-tabs data-tabs-group={group} class:list={["min-w-0", framed && "frame"]}>
   <div role="tablist" aria-label={label} class:list={[
       "flex overflow-x-auto",
       pills ? "ml-auto w-fit gap-1 rounded-lg bg-subtle p-1" : framed ? "h-10 gap-4 px-3" : "gap-5 border-b border-line",
@@ -53,7 +53,7 @@ const first = items[0]?.value;
         aria-labelledby={`${id}-tab-${item.value}`}
         data-value={item.value}
         hidden={item.value !== first}
-        class:list={[framed ? "frame-panel" : pills ? "pt-3" : "pt-4"]}
+        class:list={["min-w-0", framed ? "frame-panel" : pills ? "pt-3" : "pt-4"]}
       >
         <slot name={item.value} />
       </div>
