@@ -1,16 +1,14 @@
 ---
-import FrameworkSwitcher from "../FrameworkSwitcher.astro";
 import ReactPreview from "../preview/ReactPreview";
 import VuePreview from "../preview/VuePreview.vue";
-import { getLocale, localePath, t } from "../../lib/i18n";
+import { getLocale, localePath } from "../../lib/i18n";
 
 /**
- * Dinding komponen hidup di hero landing. Setiap sel memakai fixture examples/ yang sama dengan
+ * Dinding komponen hidup di landing (framework dipilih lewat pill di hero). Setiap sel memakai fixture examples/ yang sama dengan
  * halaman komponen: HTML Blade statis (Alpine) plus island React dan Vue yang hanya hydrate saat
  * framework itu dipilih (pane lain display: none, jadi client:visible tidak terpicu).
  */
 const locale = getLocale(Astro.url);
-const strings = t(locale).home;
 const bladeFiles = import.meta.glob<string>("../../generated/blade/*.html", { query: "?raw", import: "default", eager: true });
 const blade = (fixture: string) => {
   const html = bladeFiles[`../../generated/blade/${fixture}.html`];
@@ -37,15 +35,7 @@ const pane = "w-full max-w-md";
 ---
 
 <div data-pagefind-ignore>
-  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-    <div class="w-full sm:w-72">
-      <FrameworkSwitcher label={strings.wallLabel} />
-    </div>
-    <p class="max-w-md text-sm text-muted sm:text-right">
-      {strings.wallNote[0]} <code class="font-mono text-xs text-ink">add</code>{strings.wallNote[1]}
-    </p>
-  </div>
-  <div class="frame mt-3 grid gap-1 sm:grid-cols-2 lg:auto-rows-[minmax(176px,auto)] lg:grid-cols-12">
+  <div class="frame grid gap-1 sm:grid-cols-2 lg:auto-rows-[minmax(176px,auto)] lg:grid-cols-12">
     {
       tiles.map((item) => (
         <section class:list={[tile, item.span]} aria-label={item.title}>

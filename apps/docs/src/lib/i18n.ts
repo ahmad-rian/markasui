@@ -163,13 +163,6 @@ const en = {
     empty: "No matching components.",
   },
   landing: {
-    installTitle: "Run init once, then add what you need",
-    installText: [
-      "detects Laravel, React, Next.js, Vue, or Nuxt and copies",
-      "After that,",
-      "writes each component file to the right folder and never overwrites a file you changed.",
-    ],
-    installLink: "All CLI commands",
     agentTitle: "Coding agents install it the way you would",
     agentText:
       "The MCP server hands an agent the code for your project's framework. The Agent Skill and llms.txt give Claude Code, Cursor, or Codex the same paths and tokens.",
@@ -186,16 +179,19 @@ const en = {
     componentsLink: "Browse with previews",
   },
   home: {
-    title: "The same components in Blade, React, and Vue",
+    titleBefore: "Ship",
+    titleAfter: "components",
+    titleEnd: "in one command",
+    titleFrameworks: "Blade, React, and Vue",
     description:
-      "The CLI copies each component into your repo as source. Tailwind classes and variant names match across all three.",
-    primary: "Browse components",
+      "Copy-paste UI components for Blade, React, and Vue on Tailwind CSS v4. Same classes, same variants, and the code lives in your repo.",
+    frameworkLabel: "Framework for the code and previews",
+    start: "Get started",
+    browse: "Browse components",
     copyCommand: "Copy install command",
-    wallLabel: "Framework for the components below",
-    wallNote: [
-      "Each tile runs the code that",
-      " would copy. Switch the framework to render it from the React or Vue source.",
-    ],
+    stackLabel: "Works with",
+    wallTitle: "Every component, alive.",
+    wallText: "Each tile runs the same code the CLI copies into your project.",
     figuresLabel: "MarkasUI in numbers",
     figures: {
       components: "components in the registry",
@@ -379,13 +375,6 @@ const id: Dictionary = {
     empty: "Tidak ada komponen yang cocok.",
   },
   landing: {
-    installTitle: "Jalankan init sekali, lalu add yang Anda perlukan",
-    installText: [
-      "mengenali project Laravel, React, Next.js, Vue, atau Nuxt, lalu menyalin",
-      "Setelah itu,",
-      "menulis setiap file komponen ke folder yang tepat dan tidak pernah menimpa file yang sudah Anda ubah.",
-    ],
-    installLink: "Semua perintah CLI",
     agentTitle: "Agent AI memasangnya dengan cara yang sama seperti Anda",
     agentText:
       "MCP server memberi agent kode untuk framework project Anda. Agent Skill dan llms.txt memberi Claude Code, Cursor, atau Codex path dan token yang sama.",
@@ -402,16 +391,20 @@ const id: Dictionary = {
     componentsLink: "Lihat dengan preview",
   },
   home: {
-    title: "Komponen yang sama di Blade, React, dan Vue",
+    titleBefore: "Pasang komponen",
+    titleAfter: "",
+    titleEnd: "dengan satu perintah",
+    titleFrameworks: "Blade, React, dan Vue",
     description:
-      "CLI menyalin setiap komponen ke repo Anda sebagai source. Class Tailwind dan nama varian sama di ketiganya.",
-    primary: "Lihat komponen",
+      "Komponen UI siap salin untuk Blade, React, dan Vue di atas Tailwind CSS v4. Class dan varian sama, dan kodenya tinggal di repo Anda.",
+    frameworkLabel: "Framework untuk kode dan preview",
+    start: "Mulai",
+    browse: "Lihat komponen",
     copyCommand: "Salin perintah instalasi",
-    wallLabel: "Framework untuk komponen di bawah",
-    wallNote: [
-      "Setiap kotak menjalankan kode yang akan disalin oleh",
-      ". Ganti framework untuk merendernya dari source React atau Vue.",
-    ],
+    stackLabel: "Bekerja dengan",
+    wallTitle: "Setiap komponen, hidup.",
+    wallText:
+      "Setiap kotak menjalankan kode yang sama dengan yang disalin CLI ke project Anda.",
     figuresLabel: "MarkasUI dalam angka",
     figures: {
       components: "komponen di registry",

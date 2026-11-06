@@ -1,13 +1,14 @@
 ---
+import { FRAMEWORKS } from "@markasui/registry/schema";
 import AgentDemo from "../../components/AgentDemo.astro";
-import CodeBlock from "../../components/CodeBlock.astro";
+import FrameworkIcon from "../../components/FrameworkIcon.astro";
+import FrameworkSwitcher from "../../components/FrameworkSwitcher.astro";
 import Icon from "../../components/Icon.astro";
 import Splash from "../../components/Splash.astro";
-import Tabs from "../../components/Tabs.astro";
 import LiveWall from "../../components/landing/LiveWall.astro";
 import TemplateWall from "../../components/landing/TemplateWall.astro";
 import Base from "../../layouts/Base.astro";
-import { PACKAGE_MANAGERS, cliCommand } from "../../lib/frameworks";
+import { FRAMEWORK_LABELS, PACKAGE_MANAGERS, STACK, cliCommand } from "../../lib/frameworks";
 import { localeParams, localePath, t, toLocale } from "../../lib/i18n";
 import { getComponents, groupByCategory } from "../../lib/registry";
 import { getTemplates } from "../../lib/templates";
@@ -30,110 +31,152 @@ const figures = [
 
 const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
 const section = `${shell} py-20 sm:py-28`;
-const sectionTitle = "text-[32px] leading-[1.1] font-medium tracking-[-0.03em] text-balance sm:text-[44px]";
-const lead = "mt-4 max-w-md text-[17px] leading-7 text-muted";
+const heading = "mx-auto max-w-2xl text-center";
+const sectionTitle = "text-[32px] leading-[1.1] font-semibold tracking-[-0.035em] text-balance sm:text-[44px]";
+const lead = "mx-auto mt-4 max-w-xl text-[17px] leading-7 text-pretty text-muted";
 const link = "text-brand underline decoration-brand-line underline-offset-4 transition-colors hover:decoration-brand";
-const inlineCode = "font-mono text-sm text-ink";
-const split = "grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16";
+const pmTab =
+  "h-7 rounded-md px-2.5 text-[13px] text-muted transition-colors duration-150 ease-out hover:text-ink aria-selected:bg-subtle aria-selected:text-ink";
+const pmId = (pm: string) => `hero-pm-${pm}`;
 ---
 
 <Base splash>
   <Splash />
   <main id="konten">
-    <section class={`${shell} pt-12 pb-20 sm:pt-20`}>
-      <h1 class="text-[46px] leading-[0.98] font-medium tracking-[-0.045em] text-balance text-ink sm:text-[72px] lg:text-[84px] xl:text-[104px]">
-        {home.title}
-      </h1>
-      <div class="mt-8 flex flex-col gap-8 lg:mt-10 lg:flex-row lg:items-end lg:justify-between">
-        <p class="max-w-xl text-lg leading-8 text-muted sm:text-xl">{home.description}</p>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a href={localePath(locale, "/components")} class="site-button h-12 bg-ink px-5 text-surface hover:bg-ink/85">
-            {home.primary}
-            <Icon name="arrowRight" class="size-4" />
-          </a>
-          <div data-code-block class="flex h-12 items-center gap-3 rounded-lg pr-1.5 pl-4 font-mono text-[13px] text-ink shadow-[0_0_0_1px_var(--color-line)]">
-            <span class="text-muted select-none" aria-hidden="true">$</span>
-            <pre class="flex-1 text-left">npx markasui@latest init</pre>
-            <button type="button" data-copy aria-label={home.copyCommand} class="icon-button size-9">
-              <Icon name="copy" class="size-4 in-data-copied:hidden" />
-              <Icon name="check" class="hidden size-4 text-brand in-data-copied:block" />
-            </button>
-          </div>
-        </div>
+    <section class={`${shell} flex flex-col items-center pt-12 pb-20 text-center sm:pt-24 sm:pb-32`}>
+      <div class="w-fit [&_[role=radio]]:px-3">
+        <FrameworkSwitcher label={home.frameworkLabel} />
       </div>
-      <div class="mt-12 lg:mt-16">
-        <LiveWall />
+
+      <h1 class="mt-10 text-[38px] leading-[1.08] font-semibold tracking-[-0.04em] text-balance text-ink sm:text-[56px] lg:text-[68px]">
+        {home.titleBefore}{" "}
+        <span class="hero-rotator" data-hero-rotator aria-hidden="true">
+          {
+            FRAMEWORKS.map((fw) => (
+              <span class="hero-word" data-word={fw}>
+                <FrameworkIcon framework={fw} brand class="size-[0.78em]" />
+                {FRAMEWORK_LABELS[fw]}
+              </span>
+            ))
+          }
+        </span>
+        <span class="sr-only">{home.titleFrameworks}</span>
+        {home.titleAfter && ` ${home.titleAfter}`}
+        <br class="hidden sm:block" />
+        {" "}{home.titleEnd}
+      </h1>
+
+      <p class="mt-6 max-w-[42rem] text-base leading-7 text-balance text-muted sm:text-lg sm:leading-8">{home.description}</p>
+
+      <div data-docs-tabs data-tabs-group="package-manager" class="mt-10 w-full max-w-[520px] text-left">
+        <div role="tablist" aria-label={strings.component.packageManager} class="flex gap-1">
+          {
+            PACKAGE_MANAGERS.map((pm, index) => (
+              <button
+                type="button"
+                role="tab"
+                id={`${pmId(pm)}-tab`}
+                aria-controls={pmId(pm)}
+                aria-selected={index === 0 ? "true" : "false"}
+                tabindex={index === 0 ? 0 : -1}
+                data-value={pm}
+                class={pmTab}
+              >
+                {pm}
+              </button>
+            ))
+          }
+        </div>
+        {
+          PACKAGE_MANAGERS.map((pm, index) => (
+            <div role="tabpanel" id={pmId(pm)} aria-labelledby={`${pmId(pm)}-tab`} data-value={pm} hidden={index !== 0} class="mt-2">
+              <div data-code-block class="flex h-12 items-center gap-3 rounded-xl border border-line bg-surface pr-1.5 pl-4 font-mono text-[13px] text-ink">
+                <span class="text-faint select-none" aria-hidden="true">$</span>
+                <pre class="min-w-0 flex-1 overflow-x-auto">{cliCommand(pm, "init")}</pre>
+                <button type="button" data-copy aria-label={home.copyCommand} class="icon-button size-9">
+                  <Icon name="copy" class="size-4 in-data-copied:hidden" />
+                  <Icon name="check" class="hidden size-4 text-brand in-data-copied:block" />
+                </button>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-8 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
+        <a href={localePath(locale, "/docs/introduction")} class="site-button bg-ink text-surface hover:bg-ink/85">
+          {home.start}
+          <Icon name="arrowRight" class="size-4" />
+        </a>
+        <a href={localePath(locale, "/components")} class="site-button bg-subtle text-ink hover:bg-line">{home.browse}</a>
+      </div>
+
+      <ul aria-label={home.stackLabel} class="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted">
+        {
+          STACK.map((item) => (
+            <li class="flex items-center gap-2">
+              <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
+                <path d={item.path} />
+              </svg>
+              {item.name}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="border-t border-line" aria-labelledby="wall-title">
+      <div class={section}>
+        <div class={heading}>
+          <h2 id="wall-title" class={sectionTitle}>{home.wallTitle}</h2>
+          <p class={lead}>{home.wallText}</p>
+        </div>
+        <div class="mt-12 sm:mt-16">
+          <LiveWall />
+        </div>
       </div>
     </section>
 
     <section class="border-y border-line" aria-label={home.figuresLabel}>
       <div class={shell}>
-      <dl class="grid grid-cols-2 gap-px bg-line lg:grid-cols-4">
-        {
-          figures.map((figure) => (
-            <div class="flex flex-col-reverse justify-end bg-surface py-8 odd:pr-4 even:pl-4 sm:py-10 sm:odd:pr-6 sm:even:pl-6 lg:px-6 lg:first:pl-0">
-              <dt class="mt-3 max-w-[24ch] text-sm leading-5 text-muted">{figure.label}</dt>
-              <dd class="text-[40px] leading-none font-medium tracking-[-0.03em] text-ink tabular-nums sm:text-[56px]">{figure.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
+        <dl class="grid grid-cols-2 gap-px bg-line lg:grid-cols-4">
+          {
+            figures.map((figure) => (
+              <div class="flex flex-col-reverse items-center justify-end bg-surface px-4 py-10 text-center sm:py-12">
+                <dt class="mt-3 max-w-[24ch] text-sm leading-5 text-muted">{figure.label}</dt>
+                <dd class="text-[40px] leading-none font-semibold tracking-[-0.035em] text-ink tabular-nums sm:text-[52px]">{figure.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
       </div>
     </section>
 
-    <section class={section} aria-labelledby="mulai-title">
-      <div class={split}>
-        <div class="min-w-0">
-          <h2 id="mulai-title" class={sectionTitle}>{copy.installTitle}</h2>
-          <p class={lead}>
-            <code class={inlineCode}>init</code>{" "}{copy.installText[0]}{" "}<code class={inlineCode}>markas.css</code>.{" "}
-            {copy.installText[1]}{" "}<code class={inlineCode}>add</code>{" "}{copy.installText[2]}
-          </p>
-          <a href={localePath(locale, "/docs/cli")} class={`mt-6 inline-block text-sm ${link}`}>{copy.installLink}</a>
-        </div>
-        <div class="min-w-0 lg:self-center">
-          <Tabs label={strings.component.packageManager} framed group="package-manager" items={PACKAGE_MANAGERS.map((pm) => ({ value: pm, label: pm }))}>
-            {
-              PACKAGE_MANAGERS.map((pm) => (
-                <div slot={pm}>
-                  <CodeBlock code={`${cliCommand(pm, "init")}\n${cliCommand(pm, "add button input modal")}`} lang="bash" bare />
-                </div>
-              ))
-            }
-          </Tabs>
-        </div>
-      </div>
-    </section>
-
-    <section class="border-t border-line" aria-labelledby="agent-title">
+    <section aria-labelledby="agent-title">
       <div class={section}>
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-          <div class="min-w-0 lg:pt-2">
-            <h2 id="agent-title" class={sectionTitle}>{copy.agentTitle}</h2>
-            <p class={lead}>{copy.agentText}</p>
-            <ul class="mt-6 grid gap-2 text-sm">
-              <li><a href={localePath(locale, "/docs/mcp")} class={link}>{copy.agentLinks.mcp}</a></li>
-              <li><a href={localePath(locale, "/docs/skills")} class={link}>{copy.agentLinks.skill}</a></li>
-              <li><a href={localePath(locale, "/llms.txt")} class={link}>{copy.agentLinks.llms}</a></li>
-            </ul>
-          </div>
-          <div class="min-w-0 lg:order-first">
-            <AgentDemo />
-          </div>
+        <div class={heading}>
+          <h2 id="agent-title" class={sectionTitle}>{copy.agentTitle}</h2>
+          <p class={lead}>{copy.agentText}</p>
+          <ul class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+            <li><a href={localePath(locale, "/docs/mcp")} class={link}>{copy.agentLinks.mcp}</a></li>
+            <li><a href={localePath(locale, "/docs/skills")} class={link}>{copy.agentLinks.skill}</a></li>
+            <li><a href={localePath(locale, "/llms.txt")} class={link}>{copy.agentLinks.llms}</a></li>
+          </ul>
+        </div>
+        <div class="mx-auto mt-12 max-w-3xl sm:mt-16">
+          <AgentDemo />
         </div>
       </div>
     </section>
 
     <section class="border-t border-line" aria-labelledby="template-title">
       <div class={section}>
-        <div class="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 id="template-title" class={sectionTitle}>{copy.templatesTitle(templates.length)}</h2>
-            <p class={lead}>{copy.templatesText}</p>
-          </div>
-          <a href={localePath(locale, "/templates")} class={`text-sm ${link}`}>{copy.templatesLink}</a>
+        <div class={heading}>
+          <h2 id="template-title" class={sectionTitle}>{copy.templatesTitle(templates.length)}</h2>
+          <p class={lead}>{copy.templatesText}</p>
+          <a href={localePath(locale, "/templates")} class={`mt-6 inline-block text-sm ${link}`}>{copy.templatesLink}</a>
         </div>
-        <div class="mt-12">
+        <div class="mt-12 sm:mt-16">
           <TemplateWall />
         </div>
       </div>
@@ -141,11 +184,11 @@ const split = "grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16"
 
     <section class="border-t border-line" aria-labelledby="komponen-title">
       <div class={section}>
-        <div class="flex flex-wrap items-baseline justify-between gap-4">
+        <div class={heading}>
           <h2 id="komponen-title" class={sectionTitle}>{copy.componentsTitle(items.length)}</h2>
-          <a href={localePath(locale, "/components")} class={`text-sm ${link}`}>{copy.componentsLink}</a>
+          <a href={localePath(locale, "/components")} class={`mt-6 inline-block text-sm ${link}`}>{copy.componentsLink}</a>
         </div>
-        <div class="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+        <div class="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:mt-16 sm:grid-cols-3 lg:grid-cols-5">
           {
             groups.map((group) => (
               <div>
@@ -167,3 +210,93 @@ const split = "grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16"
     </section>
   </main>
 </Base>
+
+<script>
+  import type { Framework } from "@markasui/registry/schema";
+  import { onPageLoad } from "../../scripts/lifecycle";
+  import { getFramework, isFramework } from "../../scripts/prefs";
+
+  // Kata framework di judul berputar sampai pengunjung memilih framework di pill.
+  const ORDER: readonly Framework[] = ["blade", "react", "vue"];
+  const ROTATE_MS = 2400;
+  let timer: ReturnType<typeof setInterval> | undefined;
+
+  const rotator = () => document.querySelector<HTMLElement>("[data-hero-rotator]");
+  const stop = () => {
+    clearInterval(timer);
+    timer = undefined;
+  };
+
+  function show(root: HTMLElement, next: Framework) {
+    const previous = root.dataset.active;
+    if (previous === next) return;
+    root.querySelectorAll<HTMLElement>("[data-word]").forEach((word) => {
+      word.toggleAttribute("data-leaving", word.dataset.word === previous);
+    });
+    root.dataset.active = next;
+  }
+
+  onPageLoad(() => {
+    stop();
+    const root = rotator();
+    if (!root) return;
+    root.dataset.active = getFramework();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    timer = setInterval(() => {
+      const index = ORDER.indexOf(root.dataset.active as Framework);
+      show(root, ORDER[(index + 1) % ORDER.length]!);
+    }, ROTATE_MS);
+  });
+
+  document.addEventListener("markas:framework", (event) => {
+    stop();
+    const root = rotator();
+    const framework = (event as CustomEvent<unknown>).detail;
+    if (root && isFramework(framework)) show(root, framework);
+  });
+  document.addEventListener("astro:before-swap", stop);
+</script>
+
+<style>
+  /*
+   * Ketiga kata ditumpuk di satu sel grid, jadi lebarnya selalu selebar kata terpanjang dan judul
+   * tidak bergeser saat kata berganti. Tanpa JS, kata yang tampil mengikuti framework terpilih.
+   */
+  .hero-rotator {
+    display: inline-grid;
+    vertical-align: bottom;
+    perspective: 600px;
+    color: var(--color-muted);
+  }
+  .hero-word {
+    grid-area: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.16em;
+    opacity: 0;
+    transform: translateY(0.45em) rotateX(-80deg);
+    transform-origin: 50% 50% -0.3em;
+    transition:
+      opacity 300ms ease-out,
+      transform 600ms var(--ease-out-quint);
+  }
+  .hero-word[data-leaving] {
+    transform: translateY(-0.45em) rotateX(80deg);
+  }
+  :global(html[data-framework="blade"]) .hero-rotator:not([data-active]) [data-word="blade"],
+  :global(html[data-framework="react"]) .hero-rotator:not([data-active]) [data-word="react"],
+  :global(html[data-framework="vue"]) .hero-rotator:not([data-active]) [data-word="vue"],
+  .hero-rotator[data-active="blade"] [data-word="blade"],
+  .hero-rotator[data-active="react"] [data-word="react"],
+  .hero-rotator[data-active="vue"] [data-word="vue"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-word {
+      transition: none;
+    }
+  }
+</style>
