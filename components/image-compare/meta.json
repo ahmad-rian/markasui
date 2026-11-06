@@ -1,0 +1,102 @@
+{
+  "name": "image-compare",
+  "title": "Image Compare",
+  "description": "Before and after view with a divider you drag, click, or move with the keyboard. Horizontal or vertical, and it takes any content, including img.",
+  "category": "markas",
+  "tags": ["compare", "before after", "image", "slider", "photo", "redesign"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "image-compare.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ImageCompare.tsx", "deps": [] },
+    "vue": { "file": "ImageCompare.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "before / after",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "The two views. Before sits on the start side (left or top), after on the end side. Both fill the same box, so give them the same size."
+    },
+    {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "default": "horizontal",
+      "description": "Horizontal splits left and right with a vertical divider. Vertical splits top and bottom."
+    },
+    {
+      "name": "position / defaultPosition / v-model:position",
+      "type": "number",
+      "default": "50",
+      "description": "Starting divider position in percent from the start side. Blade uses position, React uses defaultPosition with onPositionChange, Vue uses v-model:position."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "default": "5",
+      "description": "Percent moved per arrow key press. Page Up and Page Down move 10."
+    },
+    {
+      "name": "beforeLabel",
+      "type": "string",
+      "default": "Before",
+      "description": "Text of the chip on the before side."
+    },
+    {
+      "name": "afterLabel",
+      "type": "string",
+      "default": "After",
+      "description": "Text of the chip on the after side."
+    },
+    {
+      "name": "sliderLabel",
+      "type": "string",
+      "default": "Comparison position",
+      "description": "Accessible name of the divider handle."
+    }
+  ],
+  "a11y": [
+    "The handle is a focusable role slider with aria-valuenow, aria-valuetext in percent, and aria-orientation.",
+    "Arrow keys move by step, Page Up and Page Down by 10, Home and End jump to either edge.",
+    "Pressing anywhere on the image moves the divider there and focuses the handle, so the keyboard can take over.",
+    "The divider glides to a clicked spot; with reduced motion it jumps there instead."
+  ],
+  "ai": {
+    "whenToUse": "Showing a change on the same subject: photo edits, redesigns, renovations, filters, map layers, light and dark themes.",
+    "rules": [
+      "Give both sides the same size and framing, for example img with class size-full object-cover inside a fixed aspect ratio",
+      "Write alt text on both images that names the state, such as Living room before renovation",
+      "Name the whole comparison with aria-label on the component",
+      "Change beforeLabel and afterLabel to the real states, such as Original and Edited"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tampilan sebelum dan sesudah dengan pembatas yang bisa digeser, diklik, atau dipindah lewat keyboard. Horizontal atau vertikal, isi bebas termasuk img.",
+      "props": {
+        "before / after": "Dua tampilan. Before di sisi awal (kiri atau atas), after di sisi akhir. Keduanya mengisi kotak yang sama, jadi beri ukuran yang sama.",
+        "orientation": "Horizontal membagi kiri dan kanan dengan pembatas vertikal. Vertical membagi atas dan bawah.",
+        "position / defaultPosition / v-model:position": "Posisi awal pembatas dalam persen dari sisi awal. Blade memakai position, React memakai defaultPosition dengan onPositionChange, Vue memakai v-model:position.",
+        "step": "Persen yang dipindah per tombol panah. Page Up dan Page Down memindah 10.",
+        "beforeLabel": "Teks chip di sisi before.",
+        "afterLabel": "Teks chip di sisi after.",
+        "sliderLabel": "Nama aksesibel pegangan pembatas."
+      },
+      "a11y": [
+        "Pegangan adalah role slider yang bisa difokus dengan aria-valuenow, aria-valuetext dalam persen, dan aria-orientation.",
+        "Tombol panah memindah sebesar step, Page Up dan Page Down sebesar 10, Home dan End melompat ke tepi.",
+        "Menekan di mana pun pada gambar memindah pembatas ke sana dan memfokus pegangan, sehingga keyboard bisa melanjutkan.",
+        "Pembatas meluncur ke titik yang diklik; dengan reduced motion pembatas langsung melompat."
+      ],
+      "ai": {
+        "whenToUse": "Menunjukkan perubahan pada subjek yang sama: edit foto, desain ulang, renovasi, filter, lapisan peta, tema terang dan gelap.",
+        "rules": [
+          "Beri kedua sisi ukuran dan bingkai yang sama, misalnya img dengan class size-full object-cover di dalam rasio aspek tetap",
+          "Tulis alt pada kedua gambar yang menyebut keadaannya, misalnya Ruang tamu sebelum renovasi",
+          "Beri nama perbandingan dengan aria-label pada komponen",
+          "Ganti beforeLabel dan afterLabel dengan keadaan sebenarnya, misalnya Asli dan Diedit"
+        ]
+      }
+    }
+  }
+}

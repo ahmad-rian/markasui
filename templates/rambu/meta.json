@@ -1,0 +1,19 @@
+{
+  "name": "rambu",
+  "title": "Rambu",
+  "description": {
+    "en": "Ready-made error pages for apps, Laravel first, with road sign illustrations: 404 Not Found with page search and popular links, 403 Forbidden with an access request, 419 Page Expired explaining the CSRF session, 429 Too Many Requests with a live countdown before Try again, 500 Server Error with a copyable reference and a report form, 503 Maintenance with an estimate, progress, and email alerts, and Offline that follows the browser connection.",
+    "id": "Kumpulan halaman error siap pakai untuk aplikasi, terutama Laravel, dengan ilustrasi rambu jalan: 404 Not Found dengan pencarian halaman dan tautan populer, 403 Forbidden dengan permintaan akses, 419 Page Expired yang menjelaskan sesi CSRF, 429 Too Many Requests dengan hitung mundur sebelum Coba lagi, 500 Server Error dengan kode referensi yang bisa disalin dan formulir laporan, 503 Maintenance dengan estimasi, progres, dan notifikasi email, serta Offline yang mengikuti status koneksi browser."
+  },
+  "components": [
+    "badge",
+    "button",
+    "copy-button",
+    "input",
+    "modal",
+    "progress",
+    "textarea",
+    "toast"
+  ],
+  "addedAt": "2026-11-05"
+}

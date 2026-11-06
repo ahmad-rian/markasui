@@ -1,0 +1,55 @@
+import { TiltCard } from "../../components/tilt-card/TiltCard";
+
+const stage = "grid place-items-center py-6";
+const card = "w-72 border border-line bg-surface p-6";
+const head = "flex items-center justify-between";
+const plan = "text-base font-semibold text-ink";
+const badge =
+  "rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-medium text-ink";
+const price = "mt-3 text-3xl font-semibold text-ink";
+const per = "text-sm font-normal text-muted";
+const list = "mt-4 grid gap-2 text-sm text-ink";
+const item = "flex items-center gap-2";
+const check = "size-4 text-success";
+const link =
+  "mt-6 inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary text-sm font-medium text-on-primary transition-colors duration-150 ease-out hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+
+const features = ["Unlimited projects", "Custom domains", "Priority support"];
+
+export default function TiltCardSubtleExample() {
+  return (
+    <div className={stage}>
+      <TiltCard maxAngle={4} glare={false} className={card}>
+        <div className={head}>
+          <p className={plan}>Pro</p>
+          <span className={badge}>Popular</span>
+        </div>
+        <p className={price}>
+          $12 <span className={per}>per month</span>
+        </p>
+        <ul className={list}>
+          {features.map((feature) => (
+            <li key={feature} className={item}>
+              <svg
+                className={check}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 12 5 5 9-10" />
+              </svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+        <a href="#pricing" className={link}>
+          Choose Pro
+        </a>
+      </TiltCard>
+    </div>
+  );
+}

@@ -1,0 +1,187 @@
+{
+  "name": "prompt-input",
+  "title": "Prompt Input",
+  "description": "AI chat composer. The field grows as you type, files attach as chips, Enter sends and Shift+Enter breaks a line, and the send button turns into stop.",
+  "category": "markas",
+  "tags": [
+    "prompt",
+    "ai",
+    "chat",
+    "composer",
+    "textarea",
+    "attachments",
+    "llm"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "prompt-input.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "PromptInput.tsx", "deps": [] },
+    "vue": { "file": "PromptInput.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "value / v-model",
+      "type": "string",
+      "default": "\"\"",
+      "description": "Text in the field. React also takes defaultValue and onValueChange. Cleared after a send."
+    },
+    {
+      "name": "onSend / @send / x-on:send",
+      "type": "(value: { text: string; files: File[] }) => void",
+      "default": "-",
+      "description": "Fires on Enter or the send button when there is text. Blade dispatches a send DOM event with { text, files } as detail."
+    },
+    {
+      "name": "onStop / @stop / x-on:stop",
+      "type": "() => void",
+      "default": "-",
+      "description": "Fires when the stop button is pressed while loading."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "description": "The answer is being generated. The send button becomes a stop button and Enter no longer sends."
+    },
+    {
+      "name": "maxLength",
+      "type": "number",
+      "default": "-",
+      "description": "Character limit on the field. Shows a 12/500 counter that turns red at the limit."
+    },
+    {
+      "name": "maxHeight",
+      "type": "number",
+      "default": "200",
+      "description": "Tallest the field grows, in px, before it scrolls."
+    },
+    {
+      "name": "attachments",
+      "type": "boolean",
+      "default": "true",
+      "description": "Shows the attach button. Picked files appear as chips with a remove button."
+    },
+    {
+      "name": "accept",
+      "type": "string",
+      "default": "-",
+      "description": "File types for the hidden file input, such as image/*,.pdf."
+    },
+    {
+      "name": "models",
+      "type": "(string | { value: string; label: string })[]",
+      "default": "[]",
+      "description": "Options of the small native model picker on the left of the action row. Empty hides it."
+    },
+    {
+      "name": "model / v-model:model",
+      "type": "string",
+      "default": "-",
+      "description": "Selected model. React reports changes with onModelChange, Blade fires the native change event."
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Extra tools after the model picker, such as search or reasoning toggles. Blade and Vue use the actions slot."
+    },
+    {
+      "name": "placeholderLabel",
+      "type": "string",
+      "default": "Ask anything",
+      "description": "Placeholder of the field."
+    },
+    {
+      "name": "inputLabel",
+      "type": "string",
+      "default": "Message",
+      "description": "Accessible name of the field."
+    },
+    {
+      "name": "sendLabel",
+      "type": "string",
+      "default": "Send",
+      "description": "Accessible name of the send button."
+    },
+    {
+      "name": "stopLabel",
+      "type": "string",
+      "default": "Stop",
+      "description": "Accessible name of the button while loading."
+    },
+    {
+      "name": "attachLabel",
+      "type": "string",
+      "default": "Attach files",
+      "description": "Accessible name of the attach button."
+    },
+    {
+      "name": "removeLabel",
+      "type": "string",
+      "default": "Remove {name}",
+      "description": "Accessible name of each chip's remove button. {name} becomes the file name."
+    },
+    {
+      "name": "modelLabel",
+      "type": "string",
+      "default": "Model",
+      "description": "Accessible name of the model picker."
+    }
+  ],
+  "a11y": [
+    "The field is a native textarea named by inputLabel, with a native maxlength. The whole box shows the focus ring while the field has focus.",
+    "Enter sends and Shift+Enter inserts a new line. Enter is ignored while an IME is composing.",
+    "The send button is disabled until there is text. While loading it stays enabled and is named by stopLabel.",
+    "The file input is hidden and opened by the attach button. Each chip has a remove button named with the file name, and removing one moves focus back to the field."
+  ],
+  "ai": {
+    "whenToUse": "The message box of an AI assistant, chatbot, or support chat where people write prompts and attach files.",
+    "rules": [
+      "Set loading while the answer streams and stop the request in onStop",
+      "Keep the model list short, two to four options",
+      "Put it at the bottom of the conversation, below a ChatMessage log",
+      "Translate every label prop when the page is not in English"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kotak tulis chat AI. Kolom tumbuh saat mengetik, berkas terlampir sebagai chip, Enter mengirim, Shift+Enter baris baru, tombol kirim berubah jadi stop.",
+      "props": {
+        "value / v-model": "Teks di kolom. React juga menerima defaultValue dan onValueChange. Dikosongkan setelah mengirim.",
+        "onSend / @send / x-on:send": "Dipicu oleh Enter atau tombol kirim saat ada teks. Blade mengirim event DOM send dengan { text, files } sebagai detail.",
+        "onStop / @stop / x-on:stop": "Dipicu saat tombol stop ditekan ketika loading.",
+        "loading": "Jawaban sedang dibuat. Tombol kirim menjadi tombol stop dan Enter tidak lagi mengirim.",
+        "maxLength": "Batas karakter kolom. Menampilkan penghitung 12/500 yang memerah saat mencapai batas.",
+        "maxHeight": "Tinggi maksimum kolom dalam px sebelum bisa digulir.",
+        "attachments": "Menampilkan tombol lampiran. Berkas terpilih tampil sebagai chip dengan tombol hapus.",
+        "accept": "Jenis berkas untuk input file tersembunyi, misalnya image/*,.pdf.",
+        "models": "Pilihan pemilih model native kecil di kiri baris aksi. Kosong menyembunyikannya.",
+        "model / v-model:model": "Model terpilih. React melaporkan perubahan lewat onModelChange, Blade memicu event change native.",
+        "actions": "Alat tambahan setelah pemilih model, misalnya toggle pencarian atau penalaran. Blade dan Vue memakai slot actions.",
+        "placeholderLabel": "Placeholder kolom. Default \"Ask anything\", isi misalnya \"Tanya apa saja\".",
+        "inputLabel": "Nama aksesibel kolom. Default \"Message\", isi misalnya \"Pesan\".",
+        "sendLabel": "Nama aksesibel tombol kirim. Default \"Send\", isi misalnya \"Kirim\".",
+        "stopLabel": "Nama aksesibel tombol saat loading. Default \"Stop\", isi misalnya \"Hentikan\".",
+        "attachLabel": "Nama aksesibel tombol lampiran. Default \"Attach files\", isi misalnya \"Lampirkan berkas\".",
+        "removeLabel": "Nama aksesibel tombol hapus tiap chip. {name} diganti nama berkas. Default \"Remove {name}\".",
+        "modelLabel": "Nama aksesibel pemilih model. Default \"Model\"."
+      },
+      "a11y": [
+        "Kolom adalah textarea native bernama inputLabel dengan maxlength native. Seluruh kotak menampilkan cincin fokus saat kolom difokus.",
+        "Enter mengirim dan Shift+Enter menyisipkan baris baru. Enter diabaikan selama IME sedang menyusun huruf.",
+        "Tombol kirim nonaktif sampai ada teks. Saat loading tombol tetap aktif dan bernama stopLabel.",
+        "Input file tersembunyi dan dibuka oleh tombol lampiran. Setiap chip punya tombol hapus yang menyebut nama berkas, dan menghapus memindahkan fokus kembali ke kolom."
+      ],
+      "ai": {
+        "whenToUse": "Kotak pesan asisten AI, chatbot, atau chat dukungan tempat orang menulis prompt dan melampirkan berkas.",
+        "rules": [
+          "Set loading selama jawaban mengalir dan hentikan permintaan di onStop",
+          "Jaga daftar model tetap pendek, dua sampai empat pilihan",
+          "Letakkan di bawah percakapan, di bawah log ChatMessage",
+          "Terjemahkan semua prop label bila halaman tidak berbahasa Inggris"
+        ]
+      }
+    }
+  }
+}

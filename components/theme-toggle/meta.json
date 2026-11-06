@@ -1,0 +1,123 @@
+{
+  "name": "theme-toggle",
+  "title": "Theme Toggle",
+  "description": "Light and dark theme switch with six distinct icon animations: rotate, morph, flip, slide, eclipse, and spring.",
+  "category": "markas",
+  "tags": ["theme", "dark mode", "toggle", "icon", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "theme-toggle.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ThemeToggle.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ThemeToggle.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "animation",
+      "type": "'rotate' | 'morph' | 'flip' | 'slide' | 'eclipse' | 'spring'",
+      "default": "rotate",
+      "description": "Icon animation, played on click with the Web Animations API (transform and opacity only, 650ms)."
+    },
+    {
+      "name": "variant",
+      "type": "'ghost' | 'outline' | 'solid'",
+      "default": "ghost",
+      "description": "Visual style."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "description": "Size 32, 40, or 48px, the same heights as Button."
+    },
+    {
+      "name": "theme",
+      "type": "'light' | 'dark'",
+      "default": "-",
+      "description": "Controlled theme in React and Vue: the parent saves it and handles clicks. Blade applies it once on load."
+    },
+    {
+      "name": "storageKey",
+      "type": "string",
+      "default": "markas-theme",
+      "description": "localStorage key that keeps the choice."
+    },
+    {
+      "name": "showText",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows the label as visible text next to the icon. Pair it with short labels such as Dark mode."
+    },
+    {
+      "name": "lightLabel",
+      "type": "string",
+      "default": "Switch to light theme",
+      "description": "Name while the dark theme is on. Visible text with showText."
+    },
+    {
+      "name": "darkLabel",
+      "type": "string",
+      "default": "Switch to dark theme",
+      "description": "Name while the light theme is on. Visible text with showText."
+    },
+    {
+      "name": "onThemeChange",
+      "type": "(theme: 'light' | 'dark') => void",
+      "default": "-",
+      "description": "React callback after a click. Vue emits change. Every version also dispatches markas-theme-change on document."
+    }
+  ],
+  "a11y": [
+    "A native button element, so Enter and Space work and focus shows a 2px primary outline.",
+    "The name says the action, Switch to dark theme or Switch to light theme, and follows the button data-state.",
+    "The icon is aria-hidden, so screen readers only hear the label.",
+    "With prefers-reduced-motion the icon swaps at once, without animation."
+  ],
+  "ai": {
+    "whenToUse": "A light and dark switch in a site header, settings page, or app shell that uses the dark class from markas.css.",
+    "rules": [
+      "Use one storageKey for the whole site so every toggle and the head script agree",
+      "Set the dark class in a small head script before paint to avoid a flash of the wrong theme",
+      "Pick one animation per site and keep it the same in every toggle"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Tombol ganti tema terang dan gelap dengan enam animasi ikon yang berbeda: rotate, morph, flip, slide, eclipse, dan spring.",
+      "props": {
+        "animation": "Animasi ikon, diputar saat klik lewat Web Animations API (hanya transform dan opacity, 650ms).",
+        "variant": "Gaya visual.",
+        "size": "Ukuran 32, 40, atau 48px, sama dengan tinggi Button.",
+        "theme": "Tema terkontrol di React dan Vue: induk yang menyimpan dan menangani klik. Blade menerapkannya sekali saat dimuat.",
+        "storageKey": "Key localStorage untuk menyimpan pilihan.",
+        "showText": "Menampilkan label sebagai teks di samping ikon. Pakai label pendek seperti Mode gelap.",
+        "lightLabel": "Nama tombol saat tema gelap aktif. Menjadi teks terlihat dengan showText.",
+        "darkLabel": "Nama tombol saat tema terang aktif. Menjadi teks terlihat dengan showText.",
+        "onThemeChange": "Callback React setelah klik. Vue memancarkan change. Semua versi juga mengirim markas-theme-change di document."
+      },
+      "a11y": [
+        "Elemen button native, jadi Enter dan Spasi berfungsi dan fokus tampil sebagai outline 2px warna primary.",
+        "Nama tombol menyebut aksinya, Switch to dark theme atau Switch to light theme, dan mengikuti data-state tombol.",
+        "Ikon aria-hidden, jadi screen reader hanya mendengar label.",
+        "Dengan prefers-reduced-motion ikon langsung berganti tanpa animasi."
+      ],
+      "ai": {
+        "whenToUse": "Tombol terang dan gelap di header situs, halaman pengaturan, atau kerangka aplikasi yang memakai class dark dari markas.css.",
+        "rules": [
+          "Pakai satu storageKey untuk seluruh situs agar semua toggle dan script head sepakat",
+          "Pasang class dark lewat script kecil di head sebelum paint agar tidak berkedip tema yang salah",
+          "Pilih satu animasi per situs dan pakai sama di setiap toggle"
+        ]
+      }
+    }
+  }
+}

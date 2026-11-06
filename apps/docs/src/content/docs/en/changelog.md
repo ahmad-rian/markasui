@@ -5,18 +5,18 @@ description: MarkasUI release history.
 
 ## 0.1.0 (unreleased)
 
-First release with 68 components and 2 templates for Blade, React, and Vue.
+First release with 75 components and 5 templates for Blade, React, and Vue.
 
 - **Form:** Button, Input, Textarea, Select, Checkbox, Radio Group, Switch, Combobox, Input OTP, Label, Slider, Toggle, Toggle Group.
 - **Feedback:** Alert, Badge, Toast, Progress, Skeleton.
 - **Overlay:** Modal, Drawer, Dropdown Menu, Tooltip, Alert Dialog, Command Palette, Context Menu, Hover Card, Popover.
 - **Navigation:** Tabs, Accordion, Breadcrumb, Pagination, Navbar, Navigation Menu, Sidebar, Collapsible, Menubar.
 - **Data:** Card, Avatar, Table, Carousel, Code Block, Kbd, Scroll Area, Separator.
-- **MarkasUI:** Bottom Navigation, Card Stack, Currency Input, Dock, Expandable Card, Pinned List.
+- **MarkasUI:** Bottom Navigation, Card Stack, Chat Message, Currency Input, Dock, Dynamic Island, Expandable Card, File Dropzone, Image Compare, Pinned List, Prompt Input, Theme Toggle, Tilt Card.
 - **Animations:** Avatar Group, Marquee, Number Ticker, Scroll Progress, Spotlight Card, Typing Text.
 - **Backgrounds:** Aurora Background, Dot Pattern, Grid Pattern, Retro Grid, Ripple Background, Stars Background.
 - **Buttons:** Copy Button, Flip Button, GitHub Stars Button, Hold Button, Ripple Button, Shimmer Button.
-- **Templates:** Larisa (store dashboard) and Lumen (CRM workspace), interactive full pages in all three frameworks.
+- **Templates:** Larisa (store dashboard), Lumen (CRM workspace), Kirana (colorful customer workspace), Alur (workflow app) and Rambu (error pages: 404, 403, 419, 429, 500, 503, offline), interactive full pages in all three frameworks.
 
 Also included:
 

@@ -1,0 +1,201 @@
+{
+  "name": "chat-message",
+  "title": "Chat Message",
+  "description": "Message in an AI conversation. User bubbles on the right, assistant replies with an avatar, hover actions, a typing indicator, and optional token streaming.",
+  "category": "markas",
+  "tags": [
+    "chat",
+    "message",
+    "ai",
+    "assistant",
+    "bubble",
+    "streaming",
+    "typing"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "chat-message.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ChatMessage.tsx", "deps": [] },
+    "vue": { "file": "ChatMessage.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "from",
+      "type": "\"user\" | \"assistant\"",
+      "default": "assistant",
+      "description": "Who wrote it. User messages are a primary bubble on the right, assistant messages sit on the left with an avatar."
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "default": "\"\"",
+      "description": "Message text. Line breaks are kept. Copy writes this text to the clipboard."
+    },
+    {
+      "name": "variant",
+      "type": "\"plain\" | \"bubble\"",
+      "default": "plain",
+      "description": "Assistant style: plain text, or a soft subtle bubble."
+    },
+    {
+      "name": "time",
+      "type": "string",
+      "default": "-",
+      "description": "Timestamp shown in a time element, next to the name for the assistant and under the bubble for the user."
+    },
+    {
+      "name": "avatar",
+      "type": "string",
+      "default": "-",
+      "description": "Image URL for the assistant avatar. Without it a spark icon is shown."
+    },
+    {
+      "name": "typing",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows three pulsing dots in place of the text, announced as typingLabel."
+    },
+    {
+      "name": "stream",
+      "type": "boolean",
+      "default": "false",
+      "description": "Reveals the text token by token with a caret, like a model streaming. With reduced motion the full text shows at once."
+    },
+    {
+      "name": "streamSpeed",
+      "type": "number",
+      "default": "40",
+      "description": "Pause between streamed tokens in ms."
+    },
+    {
+      "name": "actions",
+      "type": "boolean",
+      "default": "true",
+      "description": "Shows the action row on hover and focus: copy, plus like, dislike, and regenerate for the assistant. Hidden while typing or streaming."
+    },
+    {
+      "name": "onFeedback / @feedback / x-on:feedback",
+      "type": "(value: \"like\" | \"dislike\" | null) => void",
+      "default": "-",
+      "description": "Fires when like or dislike is toggled. Pressing the active one again sends null."
+    },
+    {
+      "name": "onRegenerate / @regenerate / x-on:regenerate",
+      "type": "() => void",
+      "default": "-",
+      "description": "Fires when the regenerate button is pressed."
+    },
+    {
+      "name": "userLabel",
+      "type": "string",
+      "default": "You",
+      "description": "Accessible name of user messages."
+    },
+    {
+      "name": "assistantLabel",
+      "type": "string",
+      "default": "Assistant",
+      "description": "Name shown above assistant messages and their accessible name, such as the product name."
+    },
+    {
+      "name": "typingLabel",
+      "type": "string",
+      "default": "Typing",
+      "description": "Hidden status text while typing is on."
+    },
+    {
+      "name": "actionsLabel",
+      "type": "string",
+      "default": "Message actions",
+      "description": "Accessible name of the action group."
+    },
+    {
+      "name": "copyLabel",
+      "type": "string",
+      "default": "Copy",
+      "description": "Accessible name of the copy button."
+    },
+    {
+      "name": "copiedLabel",
+      "type": "string",
+      "default": "Copied",
+      "description": "Status announced after copying."
+    },
+    {
+      "name": "likeLabel",
+      "type": "string",
+      "default": "Good response",
+      "description": "Accessible name of the like button."
+    },
+    {
+      "name": "dislikeLabel",
+      "type": "string",
+      "default": "Bad response",
+      "description": "Accessible name of the dislike button."
+    },
+    {
+      "name": "regenerateLabel",
+      "type": "string",
+      "default": "Regenerate",
+      "description": "Accessible name of the regenerate button."
+    }
+  ],
+  "a11y": [
+    "Each message is an article named by userLabel or assistantLabel. Put the messages inside an element with role=\"log\" so new ones are announced.",
+    "The actions fade in on hover and on keyboard focus inside the message, and stay visible on touch screens. Like and dislike are toggle buttons with aria-pressed.",
+    "Copying announces copiedLabel through a status region. The typing dots are hidden and announced as typingLabel.",
+    "While streaming, screen readers get the full text at once from a hidden copy. Reduced motion skips the streaming and the pulsing."
+  ],
+  "ai": {
+    "whenToUse": "Conversation views of AI assistants, chatbots, and support chats, together with PromptInput.",
+    "rules": [
+      "Wrap the list of messages in role=\"log\" with an aria-label",
+      "Set assistantLabel to the assistant or product name",
+      "Use typing until the first token arrives, then show the text",
+      "Use stream only for a reveal effect, real streams can update text directly"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Pesan dalam percakapan AI. Gelembung user di kanan, balasan asisten dengan avatar, aksi saat hover, indikator mengetik, dan efek streaming token opsional.",
+      "props": {
+        "from": "Penulis pesan. Pesan user berupa gelembung primary di kanan, pesan asisten di kiri dengan avatar.",
+        "text": "Teks pesan. Baris baru dipertahankan. Copy menyalin teks ini ke clipboard.",
+        "variant": "Gaya asisten: teks polos, atau gelembung halus subtle.",
+        "time": "Waktu dalam elemen time, di samping nama untuk asisten dan di bawah gelembung untuk user.",
+        "avatar": "URL gambar avatar asisten. Tanpa ini tampil ikon kilau.",
+        "typing": "Menampilkan tiga titik berdenyut sebagai ganti teks, diumumkan sebagai typingLabel.",
+        "stream": "Memunculkan teks token demi token dengan kursor, seperti model yang streaming. Dengan reduced motion teks tampil utuh sekaligus.",
+        "streamSpeed": "Jeda antar token dalam ms.",
+        "actions": "Menampilkan baris aksi saat hover dan fokus: copy, plus like, dislike, dan regenerate untuk asisten. Disembunyikan saat mengetik atau streaming.",
+        "onFeedback / @feedback / x-on:feedback": "Dipicu saat like atau dislike diubah. Menekan yang aktif sekali lagi mengirim null.",
+        "onRegenerate / @regenerate / x-on:regenerate": "Dipicu saat tombol regenerate ditekan.",
+        "userLabel": "Nama aksesibel pesan user. Default \"You\", isi misalnya \"Anda\".",
+        "assistantLabel": "Nama di atas pesan asisten sekaligus nama aksesibelnya, misalnya nama produk. Default \"Assistant\", isi misalnya \"Asisten\".",
+        "typingLabel": "Teks status tersembunyi saat typing aktif. Default \"Typing\", isi misalnya \"Sedang mengetik\".",
+        "actionsLabel": "Nama aksesibel grup aksi. Default \"Message actions\", isi misalnya \"Aksi pesan\".",
+        "copyLabel": "Nama aksesibel tombol copy. Default \"Copy\", isi misalnya \"Salin\".",
+        "copiedLabel": "Status yang diumumkan setelah menyalin. Default \"Copied\", isi misalnya \"Tersalin\".",
+        "likeLabel": "Nama aksesibel tombol like. Default \"Good response\", isi misalnya \"Jawaban bagus\".",
+        "dislikeLabel": "Nama aksesibel tombol dislike. Default \"Bad response\", isi misalnya \"Jawaban buruk\".",
+        "regenerateLabel": "Nama aksesibel tombol regenerate. Default \"Regenerate\", isi misalnya \"Buat ulang\"."
+      },
+      "a11y": [
+        "Setiap pesan adalah article bernama userLabel atau assistantLabel. Letakkan pesan di dalam elemen role=\"log\" agar pesan baru diumumkan.",
+        "Aksi muncul saat hover dan saat fokus keyboard di dalam pesan, serta selalu tampil di layar sentuh. Like dan dislike adalah tombol toggle dengan aria-pressed.",
+        "Menyalin mengumumkan copiedLabel lewat region status. Titik mengetik disembunyikan dan diumumkan sebagai typingLabel.",
+        "Saat streaming, pembaca layar mendapat teks utuh sekaligus dari salinan tersembunyi. Reduced motion melewati streaming dan denyut."
+      ],
+      "ai": {
+        "whenToUse": "Tampilan percakapan asisten AI, chatbot, dan chat dukungan, bersama PromptInput.",
+        "rules": [
+          "Bungkus daftar pesan dalam role=\"log\" dengan aria-label",
+          "Isi assistantLabel dengan nama asisten atau produk",
+          "Pakai typing sampai token pertama tiba, lalu tampilkan teks",
+          "Pakai stream hanya untuk efek kemunculan, stream sungguhan cukup memperbarui text"
+        ]
+      }
+    }
+  }
+}

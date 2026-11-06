@@ -1,0 +1,173 @@
+{
+  "name": "file-dropzone",
+  "title": "File Dropzone",
+  "description": "Drag and drop upload area on a native file input. Checks type, size, and count per file, lists files with icons, sizes, progress, and remove.",
+  "category": "markas",
+  "tags": [
+    "upload",
+    "file",
+    "dropzone",
+    "drag and drop",
+    "attachment",
+    "form",
+    "progress"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "file-dropzone.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "FileDropzone.tsx", "deps": [] },
+    "vue": { "file": "FileDropzone.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "name",
+      "type": "string",
+      "default": "-",
+      "description": "Name of the native file input. The valid picked and dropped files post with the form, so use attachments[] with multiple."
+    },
+    {
+      "name": "accept",
+      "type": "string",
+      "default": "-",
+      "description": "Allowed types, as in the accept attribute: .pdf, image/*, or application/zip, comma separated. Other files get the type error."
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "default": "false",
+      "description": "Keeps adding files to the list. Without it a new pick replaces the file."
+    },
+    {
+      "name": "maxSize",
+      "type": "number",
+      "default": "-",
+      "description": "Largest file in bytes, for example 5242880 for 5 MB. Larger files stay in the list with an error and are not posted."
+    },
+    {
+      "name": "maxFiles",
+      "type": "number",
+      "default": "-",
+      "description": "Most valid files kept when multiple is on. Extra files get the too many error."
+    },
+    {
+      "name": "files",
+      "type": "{ name, size, type?, progress?, error? }[]",
+      "default": "[]",
+      "description": "Files already in the list, such as earlier uploads. They are shown but not posted."
+    },
+    {
+      "name": "progress",
+      "type": "Record<string, number>",
+      "default": "{}",
+      "description": "React and Vue: live upload progress by file name, 0 to 100. Blade: dispatch file-progress with { name, progress } on the component."
+    },
+    {
+      "name": "hint",
+      "type": "string",
+      "default": "-",
+      "description": "Small text under the prompt, such as PNG or JPG, up to 5 MB."
+    },
+    {
+      "name": "disabled / required / id",
+      "type": "boolean / boolean / string",
+      "default": "false / false / auto",
+      "description": "Passed to the native file input. Other attributes and class go to the outer element."
+    },
+    {
+      "name": "onFilesChange / @change / files-change",
+      "type": "(files: File[]) => void",
+      "default": "-",
+      "description": "Called with the valid files after every add or remove. Blade dispatches a files-change event."
+    },
+    {
+      "name": "dropLabel",
+      "type": "string",
+      "default": "Drop files here or",
+      "description": "Prompt in the drop area, followed by browseLabel."
+    },
+    {
+      "name": "browseLabel",
+      "type": "string",
+      "default": "browse",
+      "description": "Underlined word after the prompt."
+    },
+    {
+      "name": "removeLabel",
+      "type": "string",
+      "default": "Remove {name}",
+      "description": "Accessible name of each remove button. {name} is the file name."
+    },
+    {
+      "name": "tooLargeLabel",
+      "type": "string",
+      "default": "Larger than {size}",
+      "description": "Error for a file over maxSize. {size} is maxSize formatted, such as 5 MB."
+    },
+    {
+      "name": "typeLabel",
+      "type": "string",
+      "default": "File type not allowed",
+      "description": "Error for a file that does not match accept."
+    },
+    {
+      "name": "tooManyLabel",
+      "type": "string",
+      "default": "Only {max} files allowed",
+      "description": "Error for files past maxFiles. {max} is the limit."
+    }
+  ],
+  "a11y": [
+    "The drop area is a label around a visually hidden native file input, so a click, Enter, or Space opens the file picker and the prompt is its name.",
+    "Keyboard focus on the input outlines the whole drop area.",
+    "Each file error is a role alert, each progress bar is a role progressbar named after the file with aria-valuenow, and each remove button names the file.",
+    "With reduced motion the drop highlight and the icon lift appear without animation."
+  ],
+  "ai": {
+    "whenToUse": "Uploading attachments, images, or documents in a form, or any spot where people drag files from their desktop.",
+    "rules": [
+      "Set accept and maxSize, and repeat them in hint so people know the limits before they pick",
+      "Use name with multiple (attachments[]) for regular form posts, or onFilesChange to upload with fetch",
+      "Validate type and size on the server too; the browser check is a convenience",
+      "Feed upload progress through progress (React, Vue) or the file-progress event (Blade)"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Area unggah drag and drop di atas input file native. Memeriksa jenis, ukuran, dan jumlah file, lalu menampilkan ikon, ukuran, progress, dan tombol hapus.",
+      "props": {
+        "name": "Nama input file native. File valid yang dipilih dan dijatuhkan ikut terkirim bersama form, jadi pakai attachments[] dengan multiple.",
+        "accept": "Jenis yang diizinkan, seperti atribut accept: .pdf, image/*, atau application/zip, dipisah koma. File lain mendapat error jenis.",
+        "multiple": "Terus menambah file ke daftar. Tanpa ini pilihan baru menggantikan file.",
+        "maxSize": "File terbesar dalam byte, misalnya 5242880 untuk 5 MB. File yang lebih besar tetap di daftar dengan error dan tidak dikirim.",
+        "maxFiles": "Jumlah file valid terbanyak saat multiple aktif. File berlebih mendapat error terlalu banyak.",
+        "files": "File yang sudah ada di daftar, misalnya unggahan sebelumnya. Ditampilkan tetapi tidak dikirim.",
+        "progress": "React dan Vue: progress unggah per nama file, 0 sampai 100. Blade: dispatch file-progress dengan { name, progress } pada komponen.",
+        "hint": "Teks kecil di bawah ajakan, misalnya PNG atau JPG, maksimal 5 MB.",
+        "disabled / required / id": "Diteruskan ke input file native. Atribut lain dan class jatuh ke elemen luar.",
+        "onFilesChange / @change / files-change": "Dipanggil dengan file valid setiap kali file ditambah atau dihapus. Blade mengirim event files-change.",
+        "dropLabel": "Ajakan di area jatuh, diikuti browseLabel.",
+        "browseLabel": "Kata bergaris bawah setelah ajakan.",
+        "removeLabel": "Nama aksesibel tiap tombol hapus. {name} adalah nama file.",
+        "tooLargeLabel": "Error untuk file di atas maxSize. {size} adalah maxSize yang sudah diformat, misalnya 5 MB.",
+        "typeLabel": "Error untuk file yang tidak cocok dengan accept.",
+        "tooManyLabel": "Error untuk file yang melewati maxFiles. {max} adalah batasnya."
+      },
+      "a11y": [
+        "Area jatuh adalah label yang membungkus input file native tersembunyi, sehingga klik, Enter, atau Space membuka pemilih file dan ajakannya menjadi nama input.",
+        "Fokus keyboard pada input memberi garis fokus pada seluruh area jatuh.",
+        "Setiap error file adalah role alert, setiap bar progress adalah role progressbar bernama file dengan aria-valuenow, dan setiap tombol hapus menyebut nama file.",
+        "Dengan reduced motion sorotan saat drag dan ikon yang naik tampil tanpa animasi."
+      ],
+      "ai": {
+        "whenToUse": "Mengunggah lampiran, gambar, atau dokumen di form, atau tempat mana pun orang menyeret file dari desktop.",
+        "rules": [
+          "Isi accept dan maxSize, lalu ulangi di hint supaya orang tahu batasnya sebelum memilih",
+          "Pakai name dengan multiple (attachments[]) untuk form biasa, atau onFilesChange untuk mengunggah lewat fetch",
+          "Validasi jenis dan ukuran juga di server; pemeriksaan browser hanya kemudahan",
+          "Kirim progress unggah lewat progress (React, Vue) atau event file-progress (Blade)"
+        ]
+      }
+    }
+  }
+}

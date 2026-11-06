@@ -3,6 +3,7 @@ import AgentDemo from "../../components/AgentDemo.astro";
 import CodeBlock from "../../components/CodeBlock.astro";
 import Collage from "../../components/Collage.astro";
 import FrameworkIcon from "../../components/FrameworkIcon.astro";
+import HeroArt from "../../components/HeroArt.astro";
 import Icon from "../../components/Icon.astro";
 import Showcase from "../../components/Showcase.astro";
 import Splash from "../../components/Splash.astro";
@@ -32,62 +33,67 @@ const container = "mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid
 <Base splash>
   <Splash />
   <main id="konten">
-    <section class="hero relative isolate overflow-hidden">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="mx-auto flex max-w-screen-xl flex-col items-center px-4 pt-14 text-center sm:px-6 sm:pt-20 lg:px-8 lg:pt-24">
-        <a href={localePath(locale, "/docs/changelog")} class="hero-rise inline-flex items-center gap-2 rounded-full border border-line bg-surface py-1 pr-3 pl-1 text-sm text-muted shadow-[0_1px_2px_rgb(0_0_0/0.04)] transition-colors hover:text-ink">
-          <span class="rounded-full bg-brand px-2 py-0.5 text-xs font-medium text-on-brand">{home.badge}</span>
-          {home.badgeText}
-          <Icon name="arrowRight" class="size-3.5" />
-        </a>
-        <h1 class="mt-7 max-w-5xl text-[40px] leading-[1.06] font-semibold tracking-[-0.035em] text-balance sm:text-[56px] lg:text-[66px]">
-          {home.titleBefore}{" "}
-          <span class="hero-rotator" aria-hidden="true">
-            <span class="hero-words">
-              {[...frameworks, frameworks[0]!].map((fw) => (
-                <span class="hero-word">
-                  <FrameworkIcon framework={fw} brand class="size-[0.72em]" />
-                  {FRAMEWORK_LABELS[fw]}
-                </span>
-              ))}
-            </span>
-          </span>
-          <span class="sr-only">Blade, React, Vue</span>
-          <br class="hidden sm:block" />
-          {" "}{home.titleAfter}
-        </h1>
-        <p class="mt-6 max-w-xl text-lg leading-8 text-muted sm:text-xl">{home.description(items.length)}</p>
-        <div class="hero-rise mt-9 flex w-full flex-col items-center justify-center gap-3 [--rise-delay:180ms] sm:w-auto sm:flex-row">
-          <a href={localePath(locale, "/components")} class="site-button w-full bg-ink text-surface hover:bg-ink/85 sm:w-auto">
-            {home.primary}
-            <Icon name="arrowRight" class="size-4" />
+    <section class="hero relative isolate flex min-h-[min(100dvh,860px)] flex-col overflow-hidden">
+      <HeroArt />
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="mx-auto flex w-full max-w-screen-xl flex-1 flex-col px-4 pt-28 pb-[min(52dvh,400px)] sm:px-6 sm:pt-36 lg:justify-center lg:px-8 lg:pt-24 lg:pb-40">
+        <div class="max-w-[620px]">
+          <a href={localePath(locale, "/docs/changelog")} class="hero-rise hero-glass inline-flex items-center gap-2 rounded-full py-1 pr-3 pl-1 text-sm text-ink transition-colors hover:bg-surface/80">
+            <span class="rounded-full bg-ink px-2 py-0.5 text-xs font-medium text-surface">{home.badge}</span>
+            {home.badgeText}
+            <Icon name="arrowRight" class="size-3.5" />
           </a>
-          <div data-code-block class="flex h-11 w-full items-center gap-3 rounded-lg border border-line bg-surface pr-1.5 pl-4 font-mono text-[13px] text-ink sm:w-auto">
-            <span class="text-faint select-none" aria-hidden="true">$</span>
-            <pre class="flex-1 text-left">npx markasui@latest init</pre>
-            <button type="button" data-copy aria-label={home.copyCommand} class="icon-button size-8">
-              <Icon name="copy" class="size-4 in-data-copied:hidden" />
-              <Icon name="check" class="hidden size-4 text-brand in-data-copied:block" />
-            </button>
+          <h1 class="mt-6 text-[40px] leading-[1.06] font-semibold tracking-[-0.035em] text-balance text-ink sm:text-[58px] lg:text-[68px]">
+            {home.titleBefore}{" "}
+            <span class="hero-rotator" aria-hidden="true">
+              <span class="hero-words">
+                {[...frameworks, frameworks[0]!].map((fw) => (
+                  <span class="hero-word">
+                    <FrameworkIcon framework={fw} brand class="size-[0.72em]" />
+                    {FRAMEWORK_LABELS[fw]}
+                  </span>
+                ))}
+              </span>
+            </span>
+            <span class="sr-only">Blade, React, Vue</span>
+            {" "}{home.titleAfter}
+          </h1>
+          <p class="mt-5 max-w-lg text-[17px] leading-7 text-ink/80 sm:text-lg sm:leading-8">{home.description(items.length)}</p>
+          <div class="hero-rise mt-8 flex flex-col gap-3 [--rise-delay:180ms] sm:flex-row sm:items-center">
+            <a href={localePath(locale, "/components")} class="site-button h-12 rounded-full bg-ink px-6 text-surface hover:bg-ink/85">
+              {home.primary}
+              <Icon name="arrowRight" class="size-4" />
+            </a>
+            <div data-code-block class="hero-glass flex h-12 items-center gap-3 rounded-full pr-1.5 pl-5 font-mono text-[13px] text-ink">
+              <span class="text-ink/60 select-none" aria-hidden="true">$</span>
+              <pre class="flex-1 text-left">npx markasui@latest init</pre>
+              <button type="button" data-copy aria-label={home.copyCommand} class="inline-flex size-9 items-center justify-center rounded-full bg-surface/70 text-ink transition-colors hover:bg-surface">
+                <Icon name="copy" class="size-4 in-data-copied:hidden" />
+                <Icon name="check" class="hidden size-4 text-brand in-data-copied:block" />
+              </button>
+            </div>
           </div>
         </div>
-        <div class="hero-rise mt-10 flex flex-col items-center gap-3 [--rise-delay:240ms]">
-          <p class="text-xs text-muted">{home.stack}</p>
-          <ul class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-ink/75">
-            {
-              STACK.map((item) => (
-                <li class="flex items-center gap-2">
-                  <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
-                    <path d={item.path} />
-                  </svg>
-                  {item.name}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
       </div>
-      <div class="hero-rise mx-auto mt-14 max-w-screen-xl px-4 [--rise-delay:300ms] sm:mt-16 sm:px-6 lg:px-8">
+    </section>
+
+    <section class="mx-auto max-w-screen-xl px-4 pt-4 sm:px-6 lg:px-8" aria-label={home.stack}>
+      <div class="flex flex-col items-center gap-3">
+        <p class="text-xs text-muted">{home.stack}</p>
+        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-ink/75">
+          {
+            STACK.map((item) => (
+              <li class="flex items-center gap-2">
+                <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
+                  <path d={item.path} />
+                </svg>
+                {item.name}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="mt-12">
         <Showcase />
       </div>
     </section>
@@ -173,18 +179,29 @@ const container = "mx-auto grid max-w-screen-xl gap-8 px-4 py-20 sm:px-6 lg:grid
 </Base>
 
 <style>
-  .hero-grid {
+  /* Kaca tipis di atas ilustrasi. */
+  .hero-glass {
+    background: color-mix(in oklab, var(--color-surface) 62%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-ink) 10%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Bawah hero melebur ke latar halaman; kiri atas sedikit diterangkan (atau digelapkan) demi kontras teks. */
+  .hero-scrim {
     position: absolute;
-    inset: 0 0 auto;
+    inset: 0;
     z-index: -1;
-    height: 720px;
-    background-image:
-      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
-    background-size: 56px 56px;
-    background-position: center top;
-    opacity: 0.55;
-    mask-image: radial-gradient(ellipse 60% 70% at 50% 0%, #000 30%, transparent 75%);
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, transparent 78%, var(--color-surface)),
+      radial-gradient(ellipse 70% 60% at 18% 42%, color-mix(in oklab, var(--color-surface) 45%, transparent), transparent 70%);
+  }
+  @media (max-width: 1023px) {
+    .hero-scrim {
+      background:
+        linear-gradient(to bottom, transparent 82%, var(--color-surface)),
+        linear-gradient(to bottom, color-mix(in oklab, var(--color-surface) 35%, transparent) 20%, transparent 60%);
+    }
   }
 
   /* Nama framework berganti bergiliran; kata terakhir salinan kata pertama supaya putarannya mulus. */

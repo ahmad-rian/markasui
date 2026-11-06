@@ -1,0 +1,21 @@
+{
+  "name": "kirana",
+  "title": "Kirana",
+  "description": {
+    "en": "Glassy CRM workspace in soft blue with seven pages: customer information with colorful deal cards, a task calendar, a stage funnel and an editable profile, plus home tasks, book summaries, a founders network, finance with sortable invoices, growth by period, and projects.",
+    "id": "Ruang kerja CRM bergaya kaca bernuansa biru lembut dengan tujuh halaman: informasi pelanggan berisi kartu deal berwarna, kalender tugas, funnel tahap, dan profil yang bisa diedit, ditambah tugas beranda, ringkasan buku, jaringan founder, keuangan dengan invoice yang bisa diurutkan, pertumbuhan per periode, dan proyek."
+  },
+  "components": [
+    "avatar",
+    "badge",
+    "button",
+    "checkbox",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "progress",
+    "tabs",
+    "toast"
+  ],
+  "addedAt": "2026-11-05"
+}

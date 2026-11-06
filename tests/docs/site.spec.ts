@@ -456,7 +456,7 @@ test("ganti bahasa di landing memindah status aktif switcher", async ({
     "true",
   );
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Komponen rapi",
+    "Satu perintah",
   );
 });
 

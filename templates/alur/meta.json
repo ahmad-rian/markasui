@@ -1,0 +1,23 @@
+{
+  "name": "alur",
+  "title": "Alur",
+  "description": {
+    "en": "Workflow automation workspace with nine pages: My Workflows with pastel folders, filter pills, search, card menus, favourites, and a detail drawer, plus home, templates, tools, knowledge base, marketplace, notifications, trash, and settings.",
+    "id": "Ruang kerja otomasi alur kerja dengan sembilan halaman: My Workflows berisi folder pastel, filter pill, pencarian, menu kartu, favorit, dan drawer detail, ditambah beranda, template, tools, knowledge base, marketplace, notifikasi, sampah, dan pengaturan."
+  },
+  "components": [
+    "alert-dialog",
+    "badge",
+    "button",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "kbd",
+    "modal",
+    "select",
+    "switch",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-05"
+}

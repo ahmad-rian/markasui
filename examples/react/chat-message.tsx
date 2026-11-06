@@ -1,0 +1,24 @@
+import { ChatMessage } from "../../components/chat-message/ChatMessage";
+
+const log = "grid gap-4";
+const answer =
+  "Sure. Here is a simple layout for it:\nDesign and build, Rp 12.500.000\nVAT 11%, Rp 1.375.000\nTotal due, Rp 13.875.000";
+
+export default function ChatMessageExample() {
+  return (
+    <div role="log" aria-label="Conversation" className={log}>
+      <ChatMessage
+        from="user"
+        text="Can you draft an invoice in Rupiah for a website project?"
+        time="10:24"
+      />
+      <ChatMessage text={answer} time="10:24" assistantLabel="Markas AI" />
+      <ChatMessage
+        from="user"
+        text="Add a 14 day payment term, please."
+        time="10:25"
+      />
+      <ChatMessage typing assistantLabel="Markas AI" />
+    </div>
+  );
+}

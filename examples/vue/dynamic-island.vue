@@ -1,0 +1,119 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import DynamicIsland, {
+  type DynamicIslandState,
+} from "../../components/dynamic-island/DynamicIsland.vue";
+
+const panel = "grid gap-4";
+const stage =
+  "relative h-[220px] overflow-hidden rounded-[2rem] border border-line bg-surface";
+const top = "absolute inset-x-0 top-3";
+const clock = "pt-24 text-center text-5xl font-semibold text-ink tabular-nums";
+const date = "pt-1 text-center text-sm text-muted";
+const controls = "flex justify-center gap-1.5";
+const demoButton =
+  "h-8 rounded-full border border-line bg-surface px-3 text-sm font-medium text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-on-primary motion-reduce:transition-none";
+const timerIcon = "size-4 text-warning";
+const timerText = "text-warning tabular-nums";
+const card = "flex h-full flex-col justify-between";
+const cardHead = "flex items-center gap-3";
+const badge =
+  "grid size-11 place-items-center rounded-full bg-warning/15 text-warning";
+const badgeIcon = "size-5";
+const label = "text-xs text-muted";
+const big = "text-2xl leading-tight font-semibold tabular-nums";
+const actions = "grid grid-cols-2 gap-2";
+const soft =
+  "h-9 rounded-full bg-subtle text-sm font-medium text-ink transition-colors duration-150 ease-out hover:bg-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const stop =
+  "h-9 rounded-full bg-danger/15 text-sm font-medium text-danger transition-colors duration-150 ease-out hover:bg-danger/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+
+const TIMER = "M12 8v5l3 2M9 2h6M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16z";
+const states: { value: DynamicIslandState; label: string }[] = [
+  { value: "idle", label: "Idle" },
+  { value: "compact", label: "Compact" },
+  { value: "expanded", label: "Expanded" },
+];
+
+const island = ref<DynamicIslandState>("compact");
+</script>
+
+<template>
+  <div :class="panel">
+    <div :class="stage">
+      <div :class="top">
+        <DynamicIsland
+          :state="island"
+          :announcements="{
+            compact: 'Focus timer running',
+            expanded: 'Focus timer, 12 minutes 48 seconds left',
+          }"
+        >
+          <template #leading>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              :class="timerIcon"
+            >
+              <path :d="TIMER" />
+            </svg>
+          </template>
+          <template #trailing>
+            <span :class="timerText">12:48</span>
+          </template>
+          <template #expanded>
+            <div :class="card">
+              <div :class="cardHead">
+                <span :class="badge">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    :class="badgeIcon"
+                  >
+                    <path :d="TIMER" />
+                  </svg>
+                </span>
+                <div>
+                  <p :class="label">Focus timer</p>
+                  <p :class="big">12:48</p>
+                </div>
+              </div>
+              <div :class="actions">
+                <button type="button" :class="soft" @click="island = 'compact'">
+                  Minimize
+                </button>
+                <button type="button" :class="stop" @click="island = 'idle'">
+                  End
+                </button>
+              </div>
+            </div>
+          </template>
+        </DynamicIsland>
+      </div>
+      <p :class="clock">9:41</p>
+      <p :class="date">Wednesday, 5 November</p>
+    </div>
+    <div role="group" aria-label="Island state" :class="controls">
+      <button
+        v-for="item in states"
+        :key="item.value"
+        type="button"
+        :aria-pressed="island === item.value"
+        :class="demoButton"
+        @click="island = item.value"
+      >
+        {{ item.label }}
+      </button>
+    </div>
+  </div>
+</template>

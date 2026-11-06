@@ -1,0 +1,109 @@
+{
+  "name": "dynamic-island",
+  "title": "Dynamic Island",
+  "description": "Black pill inspired by the iPhone Dynamic Island. It morphs smoothly between idle, compact, and expanded states while its content crossfades.",
+  "category": "markas",
+  "tags": [
+    "dynamic island",
+    "live activity",
+    "notification",
+    "morph",
+    "pill",
+    "ios"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "dynamic-island.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "DynamicIsland.tsx", "deps": [] },
+    "vue": { "file": "DynamicIsland.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "state",
+      "type": "\"idle\" | \"compact\" | \"expanded\"",
+      "default": "idle",
+      "description": "Current state, controlled by you. Blade also follows a parent value bound with x-model."
+    },
+    {
+      "name": "idle",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content of the small idle pill, usually empty."
+    },
+    {
+      "name": "leading",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Left side of the compact pill, such as an icon or album art."
+    },
+    {
+      "name": "trailing",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Right side of the compact pill, such as a timer or short value."
+    },
+    {
+      "name": "expanded",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content of the large card, with room for text and buttons."
+    },
+    {
+      "name": "announcements",
+      "type": "{ idle?: string; compact?: string; expanded?: string }",
+      "default": "{}",
+      "description": "Text a polite live region reads when the island moves to that state. Only fill the states that matter."
+    },
+    {
+      "name": "islandLabel",
+      "type": "string",
+      "default": "Live activity",
+      "description": "Accessible name of the island region."
+    }
+  ],
+  "a11y": [
+    "The island is a region named by islandLabel. Content of the states that are not shown is inert, so it cannot be focused or read.",
+    "A visually hidden aria-live=\"polite\" paragraph reads the announcement of the current state, so important changes are heard without moving focus.",
+    "Size changes and the crossfade are pure CSS transitions. With reduced motion the island jumps straight to the new size.",
+    "Give icon-only buttons inside the slots an aria-label, and keep the controls that change the state outside the island."
+  ],
+  "ai": {
+    "whenToUse": "A playful status pill for timers, music, calls, uploads, or payments at the top of a mobile layout or app shell.",
+    "rules": [
+      "Keep compact content to an icon on the left and a short value on the right",
+      "Use expanded only for something that needs attention or actions",
+      "Fill announcements for state changes people should hear, such as an incoming call",
+      "Override --island-expanded-width and --island-expanded-height when the card content needs more room"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Pill hitam terinspirasi Dynamic Island iPhone. Memuai mulus antara keadaan idle, compact, dan expanded sambil kontennya crossfade.",
+      "props": {
+        "state": "Keadaan saat ini, dikendalikan dari luar. Blade juga mengikuti nilai induk yang diikat dengan x-model.",
+        "idle": "Isi pill idle kecil, biasanya kosong.",
+        "leading": "Sisi kiri pill compact, misalnya ikon atau sampul album.",
+        "trailing": "Sisi kanan pill compact, misalnya timer atau nilai singkat.",
+        "expanded": "Isi kartu besar, cukup untuk teks dan tombol.",
+        "announcements": "Teks yang dibacakan live region polite saat island pindah ke keadaan itu. Isi hanya keadaan yang penting.",
+        "islandLabel": "Nama aksesibel region island. Default \"Live activity\", isi misalnya \"Aktivitas langsung\"."
+      },
+      "a11y": [
+        "Island adalah region bernama islandLabel. Isi keadaan yang tidak tampil bersifat inert, jadi tidak bisa difokus atau dibaca.",
+        "Paragraf aria-live=\"polite\" tersembunyi membacakan pengumuman keadaan saat ini, jadi perubahan penting terdengar tanpa memindah fokus.",
+        "Perubahan ukuran dan crossfade murni transisi CSS. Dengan reduced motion island langsung melompat ke ukuran baru.",
+        "Beri aria-label pada tombol ikon di dalam slot, dan letakkan kontrol yang mengubah keadaan di luar island."
+      ],
+      "ai": {
+        "whenToUse": "Pill status yang playful untuk timer, musik, panggilan, unggahan, atau pembayaran di atas layout mobile atau kerangka aplikasi.",
+        "rules": [
+          "Jaga isi compact berupa ikon di kiri dan nilai singkat di kanan",
+          "Pakai expanded hanya untuk hal yang butuh perhatian atau aksi",
+          "Isi announcements untuk perubahan yang perlu didengar, misalnya panggilan masuk",
+          "Timpa --island-expanded-width dan --island-expanded-height bila isi kartu butuh ruang lebih"
+        ]
+      }
+    }
+  }
+}

@@ -190,11 +190,11 @@ const en = {
   home: {
     badge: "New",
     badgeText: "MarkasUI 0.1 is out",
-    titleBefore: "Polished components for",
-    titleAfter: "copied in one command.",
+    titleBefore: "One command, and",
+    titleAfter: "falls in line.",
     copyCommand: "Copy install command",
     description: (n: number) =>
-      `${n} components for Blade, React, and Vue on Tailwind CSS v4. Copy them yourself, or hand them to your agent.`,
+      `${n} components for Blade, React, and Vue on Tailwind CSS v4. Same classes and variants in all three, copied into your repo with no package to keep updated.`,
     primary: "Browse components",
     secondary: "Star on GitHub",
     stack: "Works with",
@@ -411,11 +411,11 @@ const id: Dictionary = {
   home: {
     badge: "Baru",
     badgeText: "MarkasUI 0.1 sudah rilis",
-    titleBefore: "Komponen rapi untuk",
-    titleAfter: "disalin dengan satu perintah.",
+    titleBefore: "Satu perintah, dan",
+    titleAfter: "langsung berbaris rapi.",
     copyCommand: "Salin perintah instalasi",
     description: (n: number) =>
-      `${n} komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Salin sendiri, atau serahkan ke agent Anda.`,
+      `${n} komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Class dan varian yang sama di ketiganya, disalin ke repo Anda tanpa paket yang perlu terus diperbarui.`,
     primary: "Lihat komponen",
     secondary: "Beri bintang di GitHub",
     stack: "Bekerja dengan",

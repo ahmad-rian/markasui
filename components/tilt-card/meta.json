@@ -1,0 +1,72 @@
+{
+  "name": "tilt-card",
+  "title": "Tilt Card",
+  "description": "Card that tilts in 3D toward the pointer with a moving glare and optional parallax layers, then eases back. Lifts on keyboard focus.",
+  "category": "markas",
+  "tags": ["card", "tilt", "3d", "parallax", "glare", "hover", "pointer"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "tilt-card.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "TiltCard.tsx", "deps": [] },
+    "vue": { "file": "TiltCard.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "maxAngle",
+      "type": "number",
+      "default": "10",
+      "description": "Largest rotation in degrees, reached when the pointer is at a card edge. 4 to 8 feels subtle, 12 to 15 playful."
+    },
+    {
+      "name": "glare",
+      "type": "boolean",
+      "default": "true",
+      "description": "Shows a soft light that follows the pointer across the card."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Card content. Style the card with your own classes (background, border, padding). Children with data-depth=\"16\" shift up to that many px for parallax."
+    }
+  ],
+  "a11y": [
+    "The tilt, glare, and parallax are visual only; the glare is an aria-hidden layer that never catches the pointer.",
+    "When a link or button inside the card has keyboard focus, the card lifts slightly so the focus is easy to follow.",
+    "With reduced motion the card stays flat and still, with no glare."
+  ],
+  "ai": {
+    "whenToUse": "A few showcase cards that should feel tactile: membership or credit cards, featured products, profile or team cards, pricing highlights.",
+    "rules": [
+      "Use one to three tilt cards per section; plain Card is better for dense grids",
+      "Put background, border, radius, and padding classes on the component itself",
+      "Add data-depth to one or two inner elements, such as an image or a chip, not to text blocks",
+      "Never put the only copy of important information in the glare or depth layers"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kartu yang miring 3D mengikuti kursor dengan kilau yang bergerak dan lapisan parallax opsional, lalu kembali halus. Terangkat saat fokus keyboard.",
+      "props": {
+        "maxAngle": "Rotasi terbesar dalam derajat, tercapai saat kursor di tepi kartu. 4 sampai 8 terasa halus, 12 sampai 15 lebih main-main.",
+        "glare": "Menampilkan cahaya lembut yang mengikuti kursor di atas kartu.",
+        "children / slot": "Isi kartu. Atur tampilan kartu dengan class sendiri (latar, border, padding). Anak dengan data-depth=\"16\" bergeser hingga sebanyak itu px untuk parallax."
+      },
+      "a11y": [
+        "Kemiringan, kilau, dan parallax hanya visual; kilau adalah lapisan aria-hidden yang tidak pernah menangkap pointer.",
+        "Saat tautan atau tombol di dalam kartu mendapat fokus keyboard, kartu sedikit terangkat sehingga fokus mudah diikuti.",
+        "Dengan reduced motion kartu tetap datar dan diam, tanpa kilau."
+      ],
+      "ai": {
+        "whenToUse": "Beberapa kartu unggulan yang harus terasa nyata: kartu member atau kartu kredit, produk unggulan, kartu profil atau tim, sorotan harga.",
+        "rules": [
+          "Pakai satu sampai tiga tilt card per bagian; Card biasa lebih cocok untuk grid padat",
+          "Letakkan class latar, border, radius, dan padding langsung di komponen",
+          "Tambahkan data-depth pada satu atau dua elemen di dalam, misalnya gambar atau chip, bukan pada blok teks",
+          "Jangan menaruh satu-satunya salinan informasi penting di kilau atau lapisan kedalaman"
+        ]
+      }
+    }
+  }
+}
