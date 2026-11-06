@@ -14,34 +14,35 @@ const written = [
   "resources/views/components/markas/button.blade.php",
   "resources/views/auth/login.blade.php",
 ];
+const row = "flex min-w-0 items-center gap-3";
 ---
 
-<figure class="overflow-hidden rounded-2xl border border-line bg-surface font-mono text-[13px] leading-6">
-  <figcaption class="flex h-11 items-center gap-2 border-b border-line px-4 text-xs text-muted">
-    <span class="size-2 rounded-full bg-brand" aria-hidden="true"></span>
-    {strings.caption}
-  </figcaption>
-  <div class="grid grid-cols-[minmax(0,1fr)] gap-4 p-4 sm:p-5">
-    <p class="font-sans text-[15px] leading-6 text-ink">{strings.prompt}</p>
-    <ol class="grid grid-cols-[minmax(0,1fr)] gap-1 text-muted" aria-label={strings.calls}>
-      {
-        calls.map(([tool, args]) => (
-          <li class="flex gap-3">
-            <span class="w-28 shrink-0 text-ink sm:w-32">{tool}</span>
-            <span class="truncate">{args}</span>
-          </li>
-        ))
-      }
-    </ol>
-    <ul class="grid grid-cols-[minmax(0,1fr)] gap-1" aria-label={strings.files}>
-      {
-        written.map((path) => (
-          <li class="flex items-center gap-2 text-muted">
-            <Icon name="check" class="size-3.5 shrink-0 text-brand" />
-            <span class="truncate">{path}</span>
-          </li>
-        ))
-      }
-    </ul>
+<figure class="frame">
+  <figcaption class="flex h-10 items-center px-3 text-xs text-muted">{strings.caption}</figcaption>
+  <div class="frame-panel grid grid-cols-[minmax(0,1fr)] gap-6 p-4 sm:p-6">
+    <p class="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-subtle px-4 py-3 text-[15px] leading-6 text-ink">{strings.prompt}</p>
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-4 font-mono text-xs leading-5">
+      <ol class="grid grid-cols-[minmax(0,1fr)] gap-1.5 text-muted" aria-label={strings.calls}>
+        {
+          calls.map(([tool, args]) => (
+            <li class={row}>
+              <span class="w-28 shrink-0 text-ink">{tool}</span>
+              <span class="truncate">{args}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <ul class="grid grid-cols-[minmax(0,1fr)] gap-1.5 border-t border-line pt-4" aria-label={strings.files}>
+        {
+          written.map((path) => (
+            <li class:list={[row, "text-muted"]}>
+              <Icon name="check" class="size-3.5 shrink-0 text-brand" />
+              <span class="truncate">{path}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <p class="text-[15px] leading-6 text-ink">{strings.reply}</p>
   </div>
 </figure>

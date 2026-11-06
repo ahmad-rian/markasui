@@ -163,53 +163,46 @@ const en = {
     empty: "No matching components.",
   },
   landing: {
-    title: "UI components for Blade, React, and Vue",
-    subtitle:
-      "One design across three frameworks, built on Tailwind CSS v4. Copy the code into your Laravel, React, or Vue project without extra packages.",
-    primary: "Browse components",
-    secondary: "Read the docs",
-    meta: (n: number) => `${n} components · Open source, MIT`,
-    installTitle: "Install from the terminal",
+    installTitle: "Run init once, then add what you need",
     installText: [
       "detects Laravel, React, Next.js, Vue, or Nuxt and copies",
-      "Then",
-      "writes component files to the right folder and never overwrites a file you changed.",
+      "After that,",
+      "writes each component file to the right folder and never overwrites a file you changed.",
     ],
     installLink: "All CLI commands",
-    agentTitle: "Used by AI agents with the right paths and tokens",
+    agentTitle: "Coding agents install it the way you would",
     agentText:
-      "The MCP server fetches code for your project's framework. The Agent Skill, Copy prompt, and llms.txt give Claude Code, Cursor, or Codex the same rules.",
+      "The MCP server hands an agent the code for your project's framework. The Agent Skill and llms.txt give Claude Code, Cursor, or Codex the same paths and tokens.",
     agentLinks: {
       mcp: "Install the MCP server",
       skill: "Agent Skill",
       llms: "llms.txt",
     },
+    templatesTitle: (n: number) => `${n} full pages built from the same parts`,
+    templatesText:
+      "Every template ships in Blade, React, and Vue. Open one and click around.",
+    templatesLink: "All templates",
     componentsTitle: (n: number) => `${n} components`,
     componentsLink: "Browse with previews",
   },
   home: {
-    badge: "New",
-    badgeText: "MarkasUI 0.1 is out",
-    titleBefore: "One command, and",
-    titleAfter: "falls in line.",
-    copyCommand: "Copy install command",
-    description: (n: number) =>
-      `${n} components for Blade, React, and Vue on Tailwind CSS v4. Same classes and variants in all three, copied into your repo with no package to keep updated.`,
+    title: "The same components in Blade, React, and Vue",
+    description:
+      "The CLI copies each component into your repo as source. Tailwind classes and variant names match across all three.",
     primary: "Browse components",
-    secondary: "Star on GitHub",
-    stack: "Works with",
-    preview: "Preview",
-    terminal: "Terminal",
-    frameworks: "Frameworks",
-    added: (name: string) => `added ${name}`,
-    frameworkMeta: {
-      blade: "Alpine.js · resources/views",
-      react: "React 19 · src/components",
-      vue: "Vue 3 · src/components",
+    copyCommand: "Copy install command",
+    wallLabel: "Framework for the components below",
+    wallNote: [
+      "Each tile runs the code that",
+      " would copy. Switch the framework to render it from the React or Vue source.",
+    ],
+    figuresLabel: "MarkasUI in numbers",
+    figures: {
+      components: "components in the registry",
+      frameworks: "frameworks sharing one set of class names",
+      dependencies: "runtime packages besides React, Vue, or Alpine.js",
+      size: "of gzipped JS per component, checked in CI",
     },
-    aliveTitle: "Every component, alive.",
-    aliveText:
-      "Real components rendered from the same code you copy, in all three frameworks.",
   },
   templates: {
     title: "Templates",
@@ -249,6 +242,8 @@ const en = {
       "Build a Laravel login page with MarkasUI, showing validation errors",
     calls: "Tools called",
     files: "Files written",
+    reply:
+      "Added Input and Button, then wrote the login page. Validation errors show under each field.",
   },
 };
 
@@ -384,53 +379,46 @@ const id: Dictionary = {
     empty: "Tidak ada komponen yang cocok.",
   },
   landing: {
-    title: "Komponen UI untuk Blade, React, dan Vue",
-    subtitle:
-      "Satu desain di tiga framework, di atas Tailwind CSS v4. Salin kodenya ke project Laravel, React, atau Vue tanpa paket tambahan.",
-    primary: "Lihat komponen",
-    secondary: "Baca docs",
-    meta: (n: number) => `${n} komponen · Open source, MIT`,
-    installTitle: "Pasang dari terminal",
+    installTitle: "Jalankan init sekali, lalu add yang Anda perlukan",
     installText: [
       "mengenali project Laravel, React, Next.js, Vue, atau Nuxt, lalu menyalin",
-      "Setelah itu",
-      "menulis file komponen ke folder yang tepat dan tidak pernah menimpa file yang sudah Anda ubah.",
+      "Setelah itu,",
+      "menulis setiap file komponen ke folder yang tepat dan tidak pernah menimpa file yang sudah Anda ubah.",
     ],
     installLink: "Semua perintah CLI",
-    agentTitle: "Dipakai agent AI dengan path dan token yang benar",
+    agentTitle: "Agent AI memasangnya dengan cara yang sama seperti Anda",
     agentText:
-      "MCP server mengambil kode untuk framework project Anda. Agent Skill, Copy prompt, dan llms.txt memberi aturan yang sama ke Claude Code, Cursor, atau Codex.",
+      "MCP server memberi agent kode untuk framework project Anda. Agent Skill dan llms.txt memberi Claude Code, Cursor, atau Codex path dan token yang sama.",
     agentLinks: {
       mcp: "Pasang MCP server",
       skill: "Agent Skill",
       llms: "llms.txt",
     },
+    templatesTitle: (n: number) => `${n} halaman utuh dari komponen yang sama`,
+    templatesText:
+      "Setiap template tersedia dalam Blade, React, dan Vue. Buka salah satunya dan coba langsung.",
+    templatesLink: "Semua template",
     componentsTitle: (n: number) => `${n} komponen`,
     componentsLink: "Lihat dengan preview",
   },
   home: {
-    badge: "Baru",
-    badgeText: "MarkasUI 0.1 sudah rilis",
-    titleBefore: "Satu perintah, dan",
-    titleAfter: "langsung berbaris rapi.",
-    copyCommand: "Salin perintah instalasi",
-    description: (n: number) =>
-      `${n} komponen untuk Blade, React, dan Vue di atas Tailwind CSS v4. Class dan varian yang sama di ketiganya, disalin ke repo Anda tanpa paket yang perlu terus diperbarui.`,
+    title: "Komponen yang sama di Blade, React, dan Vue",
+    description:
+      "CLI menyalin setiap komponen ke repo Anda sebagai source. Class Tailwind dan nama varian sama di ketiganya.",
     primary: "Lihat komponen",
-    secondary: "Beri bintang di GitHub",
-    stack: "Bekerja dengan",
-    preview: "Preview",
-    terminal: "Terminal",
-    frameworks: "Framework",
-    added: (name: string) => `${name} ditambahkan`,
-    frameworkMeta: {
-      blade: "Alpine.js · resources/views",
-      react: "React 19 · src/components",
-      vue: "Vue 3 · src/components",
+    copyCommand: "Salin perintah instalasi",
+    wallLabel: "Framework untuk komponen di bawah",
+    wallNote: [
+      "Setiap kotak menjalankan kode yang akan disalin oleh",
+      ". Ganti framework untuk merendernya dari source React atau Vue.",
+    ],
+    figuresLabel: "MarkasUI dalam angka",
+    figures: {
+      components: "komponen di registry",
+      frameworks: "framework dengan nama class yang sama",
+      dependencies: "paket runtime selain React, Vue, atau Alpine.js",
+      size: "JS per komponen setelah gzip, dicek di CI",
     },
-    aliveTitle: "Setiap komponen, hidup.",
-    aliveText:
-      "Komponen asli yang dirender dari kode yang sama dengan yang Anda salin, di ketiga framework.",
   },
   templates: {
     title: "Template",
@@ -470,6 +458,8 @@ const id: Dictionary = {
       "Buat halaman login Laravel memakai MarkasUI, dengan pesan error dari validasi",
     calls: "Tool yang dipanggil",
     files: "File yang ditulis",
+    reply:
+      "Input dan Button sudah ditambahkan, lalu halaman login ditulis. Pesan error validasi tampil di bawah setiap field.",
   },
 };
 
