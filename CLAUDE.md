@@ -1,6 +1,6 @@
 # MarkasUI
 
-Library komponen UI open source untuk Blade, React, dan Vue. Spesifikasi lengkap ada di docs/PRD.md. Keputusan yang mengubah PRD: bahasa default Inggris, desain situs mengikuti panduan unslop (tanpa label kapital mono dan serif miring).
+Library komponen UI open source untuk Blade, React, dan Vue. Spesifikasi lengkap ada di docs/PRD.md. Keputusan yang mengubah PRD: bahasa default Inggris, desain situs mengikuti panduan unslop (tanpa label kapital mono dan serif miring). Pengecualian atas permintaan user: landing page memakai hero gelap berkaca beralur dan satu kata aksen serif miring (Instrument Serif) di judul section; CSS-nya di apps/docs/src/styles/landing.css.
 
 ## Aturan wajib
 
