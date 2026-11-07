@@ -60,6 +60,7 @@ const en = {
     github: "GitHub",
     stars: (count: number) => `GitHub, ${count} stars`,
     language: "Language",
+    getStarted: "Get started",
   },
   search: {
     dialog: "Search",
@@ -163,7 +164,10 @@ const en = {
     empty: "No matching components.",
   },
   landing: {
-    agentTitle: "Coding agents install it the way you would",
+    wallTitle: ["Every component,", "alive."],
+    wallText:
+      "Each tile runs the same code the CLI copies into your project. Switch the framework at the top and the tiles follow.",
+    agentTitle: ["Coding agents install it", "the way you would."],
     agentText:
       "The MCP server hands an agent the code for your project's framework. The Agent Skill and llms.txt give Claude Code, Cursor, or Codex the same paths and tokens.",
     agentLinks: {
@@ -171,34 +175,45 @@ const en = {
       skill: "Agent Skill",
       llms: "llms.txt",
     },
-    templatesTitle: (n: number) => `${n} full pages built from the same parts`,
+    templatesTitle: (n: number) => [`${n} full pages from the`, "same parts."],
     templatesText:
       "Every template ships in Blade, React, and Vue. Open one and click around.",
     templatesLink: "All templates",
-    componentsTitle: (n: number) => `${n} components`,
+    componentsTitle: (n: number) => [`${n} components,`, "one registry."],
+    componentsText:
+      "Grouped the way you look for them. Each page has a live preview, props, and the code for all three frameworks.",
     componentsLink: "Browse with previews",
+    ctaTitle: ["Start with", "one command."],
+    ctaText:
+      "Run init in a Laravel, React, or Vue project, then add components one at a time.",
+    stackLabel: "Works with",
   },
   home: {
     titleBefore: "Ship",
     titleAfter: "components",
-    titleEnd: "in one command",
+    titleEnd: "in one command.",
     titleFrameworks: "Blade, React, and Vue",
     description:
-      "Copy-paste UI components for Blade, React, and Vue on Tailwind CSS v4. Same classes, same variants, and the code lives in your repo.",
+      "Copy-paste UI components on Tailwind CSS v4. The same classes and variants in all three, and the code lives in your repo.",
     frameworkLabel: "Framework for the code and previews",
-    start: "Get started",
     browse: "Browse components",
     copyCommand: "Copy install command",
-    stackLabel: "Works with",
-    wallTitle: "Every component, alive.",
-    wallText: "Each tile runs the same code the CLI copies into your project.",
-    figuresLabel: "MarkasUI in numbers",
-    figures: {
+    statsLabel: "MarkasUI in numbers",
+    stats: {
       components: "components in the registry",
-      frameworks: "frameworks sharing one set of class names",
-      dependencies: "runtime packages besides React, Vue, or Alpine.js",
-      size: "of gzipped JS per component, checked in CI",
+      frameworks: "frameworks, one set of classes",
+      dependencies: "runtime packages beyond React, Vue, or Alpine",
+      size: "of gzipped JS per component",
     },
+    cardBadge: "Try it",
+    featuresLabel: "What you get",
+    features: [
+      ["Copied into your repo", "No package to update or fork"],
+      ["Same classes in 3 frameworks", "Blade, React, and Vue match"],
+      ["WCAG 2.2 AA tested", "axe and keyboard checks in CI"],
+      ["Light and dark tokens", "One CSS file sets every color"],
+      ["Ready for AI agents", "MCP server, Skill, and llms.txt"],
+    ],
   },
   templates: {
     title: "Templates",
@@ -271,6 +286,7 @@ const id: Dictionary = {
     github: "GitHub",
     stars: (count: number) => `GitHub, ${count} bintang`,
     language: "Bahasa",
+    getStarted: "Mulai",
   },
   search: {
     dialog: "Pencarian",
@@ -375,7 +391,10 @@ const id: Dictionary = {
     empty: "Tidak ada komponen yang cocok.",
   },
   landing: {
-    agentTitle: "Agent AI memasangnya dengan cara yang sama seperti Anda",
+    wallTitle: ["Setiap komponen,", "hidup."],
+    wallText:
+      "Setiap kotak menjalankan kode yang sama dengan yang disalin CLI ke project Anda. Ganti framework di atas dan kotaknya ikut berganti.",
+    agentTitle: ["Agent AI memasangnya", "seperti Anda."],
     agentText:
       "MCP server memberi agent kode untuk framework project Anda. Agent Skill dan llms.txt memberi Claude Code, Cursor, atau Codex path dan token yang sama.",
     agentLinks: {
@@ -383,35 +402,48 @@ const id: Dictionary = {
       skill: "Agent Skill",
       llms: "llms.txt",
     },
-    templatesTitle: (n: number) => `${n} halaman utuh dari komponen yang sama`,
+    templatesTitle: (n: number) => [
+      `${n} halaman utuh dari komponen yang`,
+      "sama.",
+    ],
     templatesText:
       "Setiap template tersedia dalam Blade, React, dan Vue. Buka salah satunya dan coba langsung.",
     templatesLink: "Semua template",
-    componentsTitle: (n: number) => `${n} komponen`,
+    componentsTitle: (n: number) => [`${n} komponen,`, "satu registry."],
+    componentsText:
+      "Dikelompokkan sesuai cara Anda mencarinya. Setiap halaman punya preview langsung, props, dan kode untuk ketiga framework.",
     componentsLink: "Lihat dengan preview",
+    ctaTitle: ["Mulai dengan", "satu perintah."],
+    ctaText:
+      "Jalankan init di project Laravel, React, atau Vue, lalu tambahkan komponen satu per satu.",
+    stackLabel: "Bekerja dengan",
   },
   home: {
     titleBefore: "Pasang komponen",
     titleAfter: "",
-    titleEnd: "dengan satu perintah",
+    titleEnd: "dengan satu perintah.",
     titleFrameworks: "Blade, React, dan Vue",
     description:
-      "Komponen UI siap salin untuk Blade, React, dan Vue di atas Tailwind CSS v4. Class dan varian sama, dan kodenya tinggal di repo Anda.",
+      "Komponen UI siap salin di atas Tailwind CSS v4. Class dan varian yang sama di ketiganya, dan kodenya tinggal di repo Anda.",
     frameworkLabel: "Framework untuk kode dan preview",
-    start: "Mulai",
     browse: "Lihat komponen",
     copyCommand: "Salin perintah instalasi",
-    stackLabel: "Bekerja dengan",
-    wallTitle: "Setiap komponen, hidup.",
-    wallText:
-      "Setiap kotak menjalankan kode yang sama dengan yang disalin CLI ke project Anda.",
-    figuresLabel: "MarkasUI dalam angka",
-    figures: {
+    statsLabel: "MarkasUI dalam angka",
+    stats: {
       components: "komponen di registry",
-      frameworks: "framework dengan nama class yang sama",
-      dependencies: "paket runtime selain React, Vue, atau Alpine.js",
-      size: "JS per komponen setelah gzip, dicek di CI",
+      frameworks: "framework, satu set class",
+      dependencies: "paket runtime selain React, Vue, atau Alpine",
+      size: "JS per komponen setelah gzip",
     },
+    cardBadge: "Coba",
+    featuresLabel: "Yang Anda dapat",
+    features: [
+      ["Disalin ke repo Anda", "Tanpa paket untuk diperbarui"],
+      ["Class sama di 3 framework", "Blade, React, dan Vue identik"],
+      ["Diuji WCAG 2.2 AA", "Cek axe dan keyboard di CI"],
+      ["Token terang dan gelap", "Satu file CSS untuk semua warna"],
+      ["Siap untuk agent AI", "MCP server, Skill, dan llms.txt"],
+    ],
   },
   templates: {
     title: "Template",

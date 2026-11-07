@@ -1,20 +1,12 @@
 ---
-import ReactPreview from "../preview/ReactPreview";
-import VuePreview from "../preview/VuePreview.vue";
+import LiveFixture from "./LiveFixture.astro";
 import { getLocale, localePath } from "../../lib/i18n";
 
 /**
- * Dinding komponen hidup di landing (framework dipilih lewat pill di hero). Setiap sel memakai fixture examples/ yang sama dengan
- * halaman komponen: HTML Blade statis (Alpine) plus island React dan Vue yang hanya hydrate saat
- * framework itu dipilih (pane lain display: none, jadi client:visible tidak terpicu).
+ * Dinding komponen hidup di landing (framework dipilih lewat pill di hero). Setiap sel memakai
+ * fixture examples/ yang sama dengan halaman komponen, lewat LiveFixture.
  */
 const locale = getLocale(Astro.url);
-const bladeFiles = import.meta.glob<string>("../../generated/blade/*.html", { query: "?raw", import: "default", eager: true });
-const blade = (fixture: string) => {
-  const html = bladeFiles[`../../generated/blade/${fixture}.html`];
-  if (!html) throw new Error(`HTML Blade untuk ${fixture} belum dirender`);
-  return html;
-};
 
 type Tile = { fixture: string; component: string; title: string; span: string };
 /** Di layar sempit tiga sel kecil disembunyikan supaya dinding tidak terlalu panjang. Grid 12 kolom di desktop; baris minimal 176px, jadi row-span-2 untuk fixture yang tinggi. */
@@ -28,14 +20,13 @@ const tiles: Tile[] = [
   { fixture: "prompt-input", component: "prompt-input", title: "Prompt Input", span: "max-sm:hidden lg:col-span-7" },
   { fixture: "theme-toggle--in-navbar", component: "theme-toggle", title: "Theme Toggle", span: "max-sm:hidden lg:col-span-5" },
 ];
-const tile = "relative flex min-w-0 flex-col rounded-xl bg-surface shadow-[0_0_0_1px_var(--color-line)]";
+const tile = "relative flex min-w-0 flex-col rounded-2xl bg-surface shadow-[0_0_0_1px_var(--markas-line)]";
 const label = "absolute top-3 left-4 z-10 rounded text-xs text-muted transition-colors duration-150 ease-out hover:text-ink";
 const stage = "flex flex-1 items-center justify-center px-4 pt-12 pb-6 sm:px-6";
-const pane = "w-full max-w-md";
 ---
 
 <div data-pagefind-ignore>
-  <div class="frame grid gap-1 sm:grid-cols-2 lg:auto-rows-[minmax(176px,auto)] lg:grid-cols-12">
+  <div class="grid gap-2 sm:grid-cols-2 lg:auto-rows-[minmax(176px,auto)] lg:grid-cols-12">
     {
       tiles.map((item) => (
         <section class:list={[tile, item.span]} aria-label={item.title}>
@@ -43,13 +34,7 @@ const pane = "w-full max-w-md";
             {item.title}
           </a>
           <div class={stage} data-preview-stage>
-            <div data-fw="blade" class={pane} set:html={blade(item.fixture)} />
-            <div data-fw="react" class={pane}>
-              <ReactPreview client:visible name={item.fixture} />
-            </div>
-            <div data-fw="vue" class={pane}>
-              <VuePreview client:visible name={item.fixture} />
-            </div>
+            <LiveFixture fixture={item.fixture} />
           </div>
         </section>
       ))

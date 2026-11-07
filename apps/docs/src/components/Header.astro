@@ -4,9 +4,15 @@ import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Logo from "./Logo.astro";
 import Search from "./Search.astro";
 import SidebarNav from "./SidebarNav.astro";
-import { getLocale, stripLocale, t } from "../lib/i18n";
+import { getLocale, localePath, stripLocale, t } from "../lib/i18n";
 import { SITE, getGithubStars, nav } from "../lib/site";
 
+interface Props {
+  /** hero: bilah kaca gelap di dalam bingkai hero landing (gayanya di halaman landing). */
+  variant?: "default" | "hero";
+}
+const { variant = "default" } = Astro.props;
+const hero = variant === "hero";
 const locale = getLocale(Astro.url);
 const strings = t(locale);
 const stars = await getGithubStars();
@@ -24,36 +30,45 @@ const navLink =
   "rounded-md text-[15px] text-ink/80 transition-colors hover:text-ink aria-[current=page]:font-medium aria-[current=page]:text-ink";
 ---
 
-<header class="sticky top-0 z-40 bg-surface/95 backdrop-blur-sm">
-  <div class="mx-auto flex h-16 max-w-screen-2xl items-center gap-10 px-4 sm:px-6 lg:px-10">
+<header class:list={hero ? "hero-header dark" : "sticky top-0 z-40 bg-surface/95 backdrop-blur-sm"}>
+  <div class:list={["mx-auto flex h-16 items-center", hero ? "hero-bar gap-3" : "max-w-screen-2xl gap-10 px-4 sm:px-6 lg:px-10"]}>
     <Logo />
-    <nav aria-label={strings.nav.main} class="hidden items-center gap-7 md:flex">
+    <nav aria-label={strings.nav.main} class:list={hero ? "hero-nav" : "hidden items-center gap-7 md:flex"}>
       {
         items.map((item) => (
-          <a href={item.href} aria-current={isActive(item.key) ? "page" : undefined} class={navLink}>
+          <a href={item.href} aria-current={isActive(item.key) ? "page" : undefined} class={hero ? undefined : navLink}>
             {item.label}
           </a>
         ))
       }
     </nav>
     <div class="ml-auto flex items-center gap-1.5">
-      <span class="hidden h-8 items-center rounded-lg bg-subtle px-2.5 font-mono text-[11px] text-muted lg:inline-flex">v{SITE.version}</span>
-      <Search />
+      {!hero && <span class="hidden h-8 items-center rounded-lg bg-subtle px-2.5 font-mono text-[11px] text-muted lg:inline-flex">v{SITE.version}</span>}
+      <Search part={hero ? "trigger" : "all"} />
       <div class="hidden sm:block"><LanguageSwitcher /></div>
       <a href={SITE.repo} class="icon-button w-auto gap-1.5 px-2" aria-label={stars === null ? strings.header.github : strings.header.stars(stars)}>
         <Icon name="github" />
         {stars !== null && <span class="hidden font-mono text-xs tabular-nums sm:inline">{new Intl.NumberFormat(locale, { notation: "compact" }).format(stars)}</span>}
       </a>
       <button type="button" class="icon-button" data-theme-toggle aria-label={strings.header.theme}>
-        <Icon name="sun" class="size-4 dark:hidden" />
-        <Icon name="moon" class="hidden size-4 dark:block" />
+        {/* Bilah hero selalu gelap (class dark), jadi ikonnya membaca tema dari <html>, bukan dari varian dark:. */}
+        <Icon name="sun" class={hero ? "size-4 [html.dark_&]:hidden" : "size-4 dark:hidden"} />
+        <Icon name="moon" class={hero ? "hidden size-4 [html.dark_&]:block" : "hidden size-4 dark:block"} />
       </button>
+      {
+        hero && (
+          <a href={localePath(locale, "/docs/introduction")} class="hero-cta">
+            {strings.header.getStarted}
+          </a>
+        )
+      }
       <button type="button" class="icon-button lg:hidden" data-drawer-open aria-label={strings.header.menu} aria-haspopup="dialog">
         <Icon name="menu" />
       </button>
     </div>
   </div>
 </header>
+{hero && <Search part="dialog" />}
 
 <dialog
   data-drawer

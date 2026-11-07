@@ -13,11 +13,13 @@ interface Props {
   description?: string;
   /** Tampilkan splash di landing (sekali per sesi). */
   splash?: boolean;
+  /** Header dan footer versi landing: bilah kaca di dalam bingkai hero dan footer berbingkai gelap. */
+  hero?: boolean;
 }
 
 const locale = getLocale(Astro.url);
 const strings = t(locale);
-const { title, description = strings.meta.description, splash = false } = Astro.props;
+const { title, description = strings.meta.description, splash = false, hero = false } = Astro.props;
 const fullTitle = title ? `${title} - ${SITE.name}` : strings.meta.title;
 const canonical = new URL(pagePath(Astro.url), Astro.site);
 const path = stripLocale(Astro.url.pathname);
@@ -93,9 +95,9 @@ const path = stripLocale(Astro.url.pathname);
       class="sr-only rounded-lg bg-brand px-3 py-2 text-sm text-on-brand focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
       >{strings.header.skip}</a
     >
-    <Header />
+    <Header variant={hero ? "hero" : "default"} />
     <div class="flex-1"><slot /></div>
-    <Footer />
+    <Footer variant={hero ? "landing" : "default"} />
     <LanguageOverlay />
     <script>
       // Satu bundle untuk semua skrip situs: lebih sedikit request saat halaman dimuat.

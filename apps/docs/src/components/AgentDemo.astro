@@ -17,9 +17,12 @@ const written = [
 const row = "flex min-w-0 items-center gap-3";
 ---
 
-<figure class="frame">
-  <figcaption class="flex h-10 items-center px-3 text-xs text-muted">{strings.caption}</figcaption>
-  <div class="frame-panel grid grid-cols-[minmax(0,1fr)] gap-6 p-4 sm:p-6">
+<figure class="lp-term dark">
+  <figcaption class="flex h-11 items-center gap-3 border-b border-line px-4 text-xs text-muted">
+    <span class="lp-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    {strings.caption}
+  </figcaption>
+  <div class="grid grid-cols-[minmax(0,1fr)] gap-6 p-5 sm:p-7">
     <p class="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-subtle px-4 py-3 text-[15px] leading-6 text-ink">{strings.prompt}</p>
     <div class="grid grid-cols-[minmax(0,1fr)] gap-4 font-mono text-xs leading-5">
       <ol class="grid grid-cols-[minmax(0,1fr)] gap-1.5 text-muted" aria-label={strings.calls}>
@@ -43,6 +46,9 @@ const row = "flex min-w-0 items-center gap-3";
         }
       </ul>
     </div>
-    <p class="text-[15px] leading-6 text-ink">{strings.reply}</p>
+    <p class="flex gap-3 text-[15px] leading-6 text-ink">
+      <Icon name="sparkles" class="mt-1 size-4 shrink-0 text-brand" />
+      {strings.reply}
+    </p>
   </div>
 </figure>

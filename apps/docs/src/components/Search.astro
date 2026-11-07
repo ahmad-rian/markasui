@@ -4,8 +4,26 @@ import { getLocale, t } from "../lib/i18n";
 
 const strings = t(getLocale(Astro.url)).search;
 const label = t(getLocale(Astro.url)).header.search;
+
+interface Props {
+  /** Header landing memasang tombol (ikon saja) di bilah gelap dan dialognya di luar, agar dialog tetap mengikuti tema halaman. */
+  part?: "all" | "trigger" | "dialog";
+}
+const { part = "all" } = Astro.props;
+const trigger = part !== "dialog";
+const dialog = part !== "trigger";
+const iconOnly = part === "trigger";
 ---
 
+{
+  trigger && iconOnly && (
+    <button type="button" data-search-open class="icon-button" aria-label={label}>
+      <Icon name="search" class="size-4" />
+    </button>
+  )
+}
+{
+  trigger && !iconOnly && (
 <button
   type="button"
   data-search-open
@@ -18,7 +36,11 @@ const label = t(getLocale(Astro.url)).header.search;
     <kbd class="inline-flex size-5 items-center justify-center rounded-md bg-surface font-sans text-[11px] text-muted shadow-[0_0_0_1px_var(--color-line)]">K</kbd>
   </span>
 </button>
+  )
+}
 
+{
+  dialog && (
 <dialog
   data-search-dialog
   aria-label={strings.dialog}
@@ -41,3 +63,5 @@ const label = t(getLocale(Astro.url)).header.search;
   <div data-search-status role="status" class="px-5 pt-3 pb-2 text-[13px] text-muted">{strings.idle}</div>
   <ul data-search-results class="max-h-[55vh] overflow-y-auto px-2 pb-2"></ul>
 </dialog>
+  )
+}

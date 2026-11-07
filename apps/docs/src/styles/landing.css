@@ -1,0 +1,739 @@
+/*
+ * Gaya landing (hero berbingkai, kaca beralur, header dan footer varian landing). Diimpor hanya oleh
+ * halaman landing, dan disisipkan ke HTML lewat build.assetsInlineLimit di astro.config.mjs.
+ */
+/* Palet landing: satu-satunya tempat warna literal. Bingkai gelap (hero, dinding, footer) sama di kedua tema. */
+:root {
+  --lp-night: #08151a;
+  --lp-navy: #14213d;
+  --lp-teal: #0c3234;
+  --lp-cream: #f4ede0;
+  --lp-coral: #ff6b5b;
+  --lp-dim: rgb(244 237 224 / 0.72);
+  --lp-glass: rgb(255 255 255 / 0.06);
+  --lp-edge: rgb(255 255 255 / 0.13);
+  --lp-hi: rgb(255 255 255 / 0.08);
+  --lp-lo: rgb(0 0 0 / 0.24);
+}
+
+.lp-frame {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 8px;
+  border-radius: 20px;
+  background: var(--lp-night);
+  color: var(--lp-cream);
+}
+.lp-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--lp-edge);
+  pointer-events: none;
+}
+.lp-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 70% at 50% 0%, var(--lp-navy), transparent 70%),
+    linear-gradient(var(--lp-night), var(--lp-teal));
+}
+/*
+ * Lapisan dekorasi selalu menempel di pojok kiri atas bingkai (inset 0) dan cahayanya diletakkan
+ * lewat posisi gradien: kalau tinggi hero berubah saat font dimuat, posisinya tidak bergeser (CLS).
+ */
+.lp-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      42% 38% at 22% 100%,
+      color-mix(in oklab, var(--site-brand) 70%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      30% 34% at 88% 92%,
+      color-mix(in oklab, var(--lp-coral) 55%, transparent),
+      transparent
+    );
+  animation: lp-drift 22s ease-in-out infinite alternate;
+}
+/* Kaca beralur: blur di atas cahaya, lalu tiap alur punya sisi terang dan sisi gelap. */
+.lp-flutes {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--lp-hi) 0,
+    transparent 10px,
+    var(--lp-lo) 26px,
+    var(--lp-hi) 28px
+  );
+}
+/* Berkas cahaya dari bawah: garis vertikal rapat yang memudar ke atas. */
+.lp-beam {
+  position: absolute;
+  z-index: 1;
+  inset: 0 auto 0 50%;
+  width: min(48%, 640px);
+  translate: -50% 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 4px,
+      var(--lp-cream) 6px,
+      transparent 8px 10px
+    ),
+    radial-gradient(34% 70% at 50% 100%, var(--lp-cream), transparent);
+  -webkit-mask: radial-gradient(50% 88% at 50% 100%, black 15%, transparent);
+  mask: radial-gradient(50% 88% at 50% 100%, black 15%, transparent);
+  opacity: 0.6;
+  animation: lp-pulse 7s ease-in-out infinite alternate;
+}
+@keyframes lp-drift {
+  to {
+    transform: translate3d(5%, -4%, 0) scale(1.12);
+  }
+}
+@keyframes lp-pulse {
+  to {
+    opacity: 0.85;
+  }
+}
+html[data-splash] :is(.lp-glow, .lp-beam) {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.lp-glow, .lp-beam) {
+    animation: none;
+  }
+}
+
+/* Header landing: bilah kaca di dalam bingkai hero. */
+.hero-header {
+  position: absolute;
+  inset: 8px 8px auto;
+  z-index: 40;
+  padding-inline: 12px;
+}
+.hero-bar {
+  position: relative;
+}
+.hero-nav {
+  display: none;
+}
+.hero-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding-inline: 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--lp-dim);
+  transition: color 150ms;
+}
+.hero-nav a:hover,
+.hero-nav a[aria-current] {
+  color: var(--lp-cream);
+}
+.hero-nav a[aria-current] {
+  background: var(--lp-glass);
+}
+.hero-nav a[aria-current]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lp-coral);
+}
+.hero-cta {
+  display: none;
+}
+
+/* Hero */
+.lp-hero {
+  display: flex;
+  flex-direction: column;
+  min-height: min(calc(100dvh - 16px), 880px);
+  padding-top: 72px;
+}
+.lp-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  gap: 40px 16px;
+  padding: 32px 20px 48px;
+}
+.lp-center {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.lp-switch [role="radiogroup"],
+.lp-cmd {
+  border-radius: 999px;
+  background: var(--lp-glass);
+  box-shadow: inset 0 0 0 1px var(--lp-edge);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.lp-switch [role="radio"] {
+  border-radius: 999px;
+  padding-inline: 14px;
+  color: var(--lp-dim);
+}
+.lp-switch [aria-checked="true"] {
+  background: var(--lp-edge);
+  color: var(--lp-cream);
+  box-shadow: none;
+}
+.lp-title {
+  margin-top: 28px;
+  font-size: clamp(2.5rem, 0.8rem + 4vw, 4.5rem);
+  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.lp-sub {
+  margin-top: 22px;
+  max-width: 34rem;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--lp-dim);
+  text-wrap: balance;
+}
+.lp-actions {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding-inline: 24px;
+  border-radius: 999px;
+  background: var(--lp-cream);
+  color: var(--lp-night);
+  font-size: 15px;
+  font-weight: 500;
+  transition:
+    opacity 150ms,
+    scale 150ms;
+}
+.lp-btn:hover,
+.hero-cta:hover {
+  opacity: 0.88;
+}
+.lp-btn:active {
+  scale: 0.98;
+}
+.lp-cmd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 6px 0 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.lp-cmd span {
+  color: var(--lp-dim);
+}
+.lp-cmd pre {
+  flex: 1;
+  overflow-x: auto;
+  text-align: left;
+}
+.lp-cmd button {
+  border-radius: 999px;
+}
+.lp-stats {
+  display: grid;
+  gap: 24px;
+}
+.lp-stats div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6px;
+}
+.lp-stats dd {
+  font-size: clamp(2rem, 1.4rem + 1.5vw, 3rem);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.lp-stats dt {
+  max-width: 17ch;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--lp-dim);
+}
+.lp-card {
+  display: none;
+}
+.lp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 10px;
+  font-size: 13px;
+}
+.lp-card-head a {
+  color: var(--lp-dim);
+}
+.lp-card-head a:hover {
+  color: var(--lp-cream);
+}
+.lp-chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--lp-coral);
+  color: var(--lp-night);
+  font-size: 12px;
+  font-weight: 500;
+}
+.lp-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: color-mix(in oklab, var(--lp-night) 55%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.lp-strip li {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 18px 16px;
+  border-top: 1px solid var(--lp-edge);
+  color: var(--lp-dim);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.lp-strip li:nth-child(even) {
+  border-left: 1px solid var(--lp-edge);
+}
+.lp-strip li:last-child {
+  grid-column: 1 / -1;
+}
+.lp-strip li:first-child::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  inset-inline: 16px;
+  height: 2px;
+  background: var(--lp-coral);
+}
+.lp-strip svg {
+  flex-shrink: 0;
+}
+.lp-strip p {
+  display: grid;
+  gap: 2px;
+}
+.lp-strip strong {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lp-cream);
+}
+
+/* Bagian di bawah hero */
+.lp-section {
+  padding-block: 96px;
+}
+.lp-wall {
+  background:
+    radial-gradient(
+      70% 40% at 50% 0%,
+      color-mix(in oklab, var(--site-brand) 24%, transparent),
+      transparent
+    ),
+    var(--lp-night);
+}
+.lp-wall .lp-section {
+  padding-bottom: 16px;
+}
+.lp-head {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 48px;
+}
+.lp-h2 {
+  font-size: clamp(2.25rem, 1.1rem + 3.2vw, 4.25rem);
+  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+/*
+ * Kata aksen memakai Instrument Serif miring, tapi font itu baru dipasang setelah load (data-serif)
+ * supaya unduhannya tidak bersaing dengan LCP. Sebelum itu tampil Bricolage miring.
+ */
+.lp-accent,
+.hero-rotator {
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  color: var(--site-brand);
+}
+html[data-serif] :is(.lp-accent, .hero-rotator) {
+  font-family: var(--font-tag);
+  letter-spacing: -0.02em;
+}
+.dark .lp-accent,
+.hero-rotator {
+  color: color-mix(in oklab, var(--site-brand) 50%, var(--lp-cream));
+}
+.lp-lead {
+  max-width: 36rem;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--markas-muted);
+  text-wrap: pretty;
+}
+.lp-frame .lp-lead {
+  color: var(--lp-dim);
+}
+.lp-more,
+.lp-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  transition:
+    gap 150ms,
+    background-color 150ms;
+}
+.lp-more {
+  margin-top: 16px;
+}
+.lp-more:hover,
+.lp-links a:hover {
+  gap: 10px;
+}
+.lp-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+.lp-links a {
+  height: 40px;
+  padding-inline: 16px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--markas-line);
+}
+.lp-links a:hover {
+  background: var(--markas-subtle);
+}
+.lp-agent {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+.lp-agent .lp-h2 {
+  font-size: clamp(2.25rem, 1.2rem + 2.4vw, 3.5rem);
+}
+.lp-agent .lp-lead {
+  margin-top: 20px;
+}
+.lp-term {
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--lp-night);
+  color: var(--markas-ink);
+  box-shadow:
+    0 0 0 1px var(--markas-line),
+    0 40px 80px -32px color-mix(in oklab, var(--site-brand) 60%, transparent);
+}
+.lp-dots {
+  display: flex;
+  gap: 6px;
+}
+.lp-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--lp-edge);
+}
+.lp-dots i:first-child {
+  background: var(--lp-coral);
+}
+.lp-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px 24px;
+}
+.lp-groups h3 {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--markas-line);
+  font-size: 14px;
+  font-weight: 500;
+}
+.lp-groups h3 span,
+.lp-groups a {
+  color: var(--markas-muted);
+}
+.lp-groups ul {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.lp-groups a {
+  transition: color 150ms;
+}
+.lp-groups a:hover {
+  color: var(--markas-ink);
+}
+
+/* Footer landing */
+.lp-foot-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 96px 20px 64px;
+  text-align: center;
+}
+.lp-foot .lp-lead {
+  margin-top: 20px;
+  text-wrap: balance;
+}
+.lp-stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 28px;
+  margin-top: 48px;
+  font-size: 14px;
+  color: var(--lp-dim);
+}
+.lp-stack li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lp-stack svg {
+  width: 16px;
+  height: 16px;
+}
+.lp-foot-meta {
+  border-top: 1px solid var(--lp-edge);
+}
+
+@media (max-width: 39.99rem) {
+  .lp-actions > * {
+    width: 100%;
+  }
+}
+@media (min-width: 40rem) {
+  .lp-frame {
+    margin: 12px;
+    border-radius: 24px;
+  }
+  .hero-header {
+    inset: 12px 12px auto;
+    padding-inline: 20px;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    margin-left: 6px;
+    padding-inline: 16px;
+    border-radius: 999px;
+    background: var(--lp-cream);
+    color: var(--lp-night);
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 150ms;
+  }
+  .lp-hero {
+    min-height: min(calc(100dvh - 24px), 880px);
+    padding-top: 88px;
+  }
+  .lp-sub {
+    font-size: 18px;
+  }
+  .lp-main {
+    gap: 48px 24px;
+  }
+  .lp-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lp-groups {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 64rem) {
+  .hero-nav {
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    display: flex;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--lp-glass);
+    box-shadow: inset 0 0 0 1px var(--lp-edge);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .lp-strip {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .lp-strip li {
+    padding: 22px 20px;
+  }
+  .lp-strip li + li {
+    border-left: 1px solid var(--lp-edge);
+  }
+  .lp-strip li:last-child {
+    grid-column: auto;
+  }
+  .lp-strip li:first-child::before {
+    inset-inline: 24px;
+  }
+  .lp-section {
+    padding-block: 136px;
+  }
+  .lp-wall .lp-section {
+    padding-bottom: 32px;
+  }
+  .lp-head {
+    grid-template-columns: 7fr 5fr;
+    align-items: end;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+  .lp-agent {
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  .lp-groups {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .lp-foot-cta {
+    padding: 144px 32px 96px;
+  }
+}
+@media (min-width: 80rem) {
+  .lp-main {
+    grid-template-columns: 1fr minmax(0, 52rem) 1fr;
+    gap: 32px;
+    padding: 32px 48px 56px;
+  }
+  .lp-center {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .lp-stats {
+    grid-template-columns: none;
+    grid-row: 1;
+    align-self: end;
+    gap: 36px;
+  }
+  .lp-stats-l {
+    grid-column: 1;
+  }
+  .lp-stats-r {
+    grid-column: 3;
+    justify-self: end;
+    text-align: right;
+  }
+  .lp-stats-r div {
+    align-items: flex-end;
+  }
+}
+/* Kartu kaca hanya saat ada ruang di kanan atas judul. */
+@media (min-width: 80rem) and (min-height: 50rem) {
+  .lp-card {
+    display: block;
+    position: absolute;
+    top: 104px;
+    right: 36px;
+    width: 320px;
+    padding: 12px;
+    border-radius: 22px;
+    background: var(--lp-glass);
+    box-shadow:
+      inset 0 0 0 1px var(--lp-edge),
+      0 24px 60px var(--lp-lo);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    /* Komponen di kartu memakai aksen coral landing lewat token, bukan class baru. */
+    --markas-surface: color-mix(in oklab, var(--lp-night) 60%, transparent);
+    --markas-line: var(--lp-edge);
+    --markas-primary: var(--lp-coral);
+    --markas-on-primary: var(--lp-night);
+    --markas-primary-soft: var(--lp-glass);
+  }
+}
+
+/*
+ * Kata framework di judul: ketiga kata ditumpuk di satu sel grid, jadi lebarnya selalu selebar kata
+ * terpanjang dan judul tidak bergeser saat kata berganti. Tanpa JS, kata yang tampil mengikuti framework terpilih.
+ */
+/* Lebar tetap selebar kata terpanjang dalam Instrument Serif, jadi pergantian font tidak menggeser judul. */
+.hero-rotator {
+  display: inline-grid;
+  width: 2.7em;
+  height: 1.02em;
+  vertical-align: bottom;
+  perspective: 600px;
+}
+.hero-word {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.14em;
+  opacity: 0;
+  transform: translateY(0.45em) rotateX(-80deg);
+  transform-origin: 50% 50% -0.3em;
+  transition:
+    opacity 300ms ease-out,
+    transform 600ms var(--ease-out-quint);
+}
+.hero-word[data-leaving] {
+  transform: translateY(-0.45em) rotateX(80deg);
+}
+html[data-framework="blade"]
+  .hero-rotator:not([data-active])
+  [data-word="blade"],
+html[data-framework="react"]
+  .hero-rotator:not([data-active])
+  [data-word="react"],
+html[data-framework="vue"] .hero-rotator:not([data-active]) [data-word="vue"],
+.hero-rotator[data-active="blade"] [data-word="blade"],
+.hero-rotator[data-active="react"] [data-word="react"],
+.hero-rotator[data-active="vue"] [data-word="vue"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-word {
+    transition: none;
+  }
+}

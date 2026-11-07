@@ -1,13 +1,64 @@
 ---
+import Icon from "./Icon.astro";
 import { SITE } from "../lib/site";
+import { STACK, cliCommand } from "../lib/frameworks";
 import { getLocale, localePath, t } from "../lib/i18n";
+
+interface Props {
+  /** landing: bingkai gelap dengan ajakan mulai (gayanya di halaman landing). */
+  variant?: "default" | "landing";
+}
+const { variant = "default" } = Astro.props;
+const landing = variant === "landing";
 const locale = getLocale(Astro.url);
 const strings = t(locale);
+const copy = strings.landing;
 const link = "text-muted transition-colors hover:text-ink";
+const meta = "mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8";
 ---
 
-<footer class="border-t border-line">
-  <div class="mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+<footer class:list={landing ? "lp-frame lp-foot dark" : "border-t border-line"}>
+  {
+    landing && (
+      <>
+        <div class="lp-bg" aria-hidden="true">
+          <div class="lp-flutes" />
+          <div class="lp-beam" />
+        </div>
+        <div class="lp-foot-cta">
+          <h2 class="lp-h2">
+            {copy.ctaTitle[0]} <em class="lp-accent">{copy.ctaTitle[1]}</em>
+          </h2>
+          <p class="lp-lead">{copy.ctaText}</p>
+          <div class="lp-actions">
+            <a href={localePath(locale, "/docs/introduction")} class="lp-btn">
+              {strings.header.getStarted}
+              <Icon name="arrowRight" class="size-4" />
+            </a>
+            <div data-code-block class="lp-cmd">
+              <span aria-hidden="true">$</span>
+              <pre>{cliCommand("npm", "init")}</pre>
+              <button type="button" data-copy aria-label={strings.home.copyCommand} class="icon-button">
+                <Icon name="copy" class="size-4 in-data-copied:hidden" />
+                <Icon name="check" class="hidden size-4 in-data-copied:block" />
+              </button>
+            </div>
+          </div>
+          <ul aria-label={copy.stackLabel} class="lp-stack">
+            {STACK.map((item) => (
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d={item.path} />
+                </svg>
+                {item.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+    )
+  }
+  <div class:list={[meta, landing && "lp-foot-meta"]}>
     <p class="text-muted">{strings.footer.madeBy}</p>
     <nav aria-label={strings.nav.footer} class="flex flex-wrap gap-x-6 gap-y-2">
       <a href={SITE.repo} class={link}>GitHub</a>

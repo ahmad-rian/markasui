@@ -1,0 +1,26 @@
+---
+import ReactPreview from "../preview/ReactPreview";
+import VuePreview from "../preview/VuePreview.vue";
+
+/**
+ * Satu fixture examples/ dalam tiga pane framework: HTML Blade statis (Alpine) plus island React
+ * dan Vue yang hanya hydrate saat framework itu dipilih (pane lain display: none, jadi
+ * client:visible tidak terpicu).
+ */
+interface Props {
+  fixture: string;
+  class?: string;
+}
+const { fixture, class: paneClass = "w-full max-w-md" } = Astro.props;
+const bladeFiles = import.meta.glob<string>("../../generated/blade/*.html", { query: "?raw", import: "default", eager: true });
+const html = bladeFiles[`../../generated/blade/${fixture}.html`];
+if (!html) throw new Error(`HTML Blade untuk ${fixture} belum dirender`);
+---
+
+<div data-fw="blade" class={paneClass} set:html={html} />
+<div data-fw="react" class={paneClass}>
+  <ReactPreview client:visible name={fixture} />
+</div>
+<div data-fw="vue" class={paneClass}>
+  <VuePreview client:visible name={fixture} />
+</div>
