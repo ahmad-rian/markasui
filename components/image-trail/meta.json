@@ -1,0 +1,100 @@
+{
+  "name": "image-trail",
+  "title": "Image Trail",
+  "description": "Area where images, cards, or emoji pop up along the pointer path and fade, scale, spin, or pile up. Can draw its own trail while on screen.",
+  "category": "markas",
+  "tags": ["trail", "cursor", "pointer", "hero", "images", "playful"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "image-trail.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ImageTrail.tsx", "deps": [] },
+    "vue": { "file": "ImageTrail.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "ReactNode / slot #items",
+      "default": "primary dot",
+      "description": "Elements that appear along the trail, cloned one after another. Images, token color cards, emoji, or initials."
+    },
+    {
+      "name": "variant",
+      "type": "\"fade\" | \"scale\" | \"rotate\" | \"stack\"",
+      "default": "\"fade\"",
+      "description": "fade: appear and fade out. scale: pop in and shrink away. rotate: spin in and drop while fading. stack: pile up like photos until the pointer leaves."
+    },
+    {
+      "name": "threshold",
+      "type": "number",
+      "default": "40",
+      "description": "Distance in px the pointer travels before the next item appears. Larger values give a sparser trail."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "12",
+      "description": "Most items on screen at once. The oldest is removed first, so the DOM stays small."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "800",
+      "description": "Life of one item in ms. In stack, items enter in 40% of this and stay until the pointer leaves."
+    },
+    {
+      "name": "autoplay",
+      "type": "boolean",
+      "default": "false",
+      "description": "Draws a figure-eight trail on its own while the area is on screen, the tab is visible, and the pointer is elsewhere. Handy on touch screens."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content shown above the trail. Lay it out with your own classes on the component (grid, height, padding)."
+    }
+  ],
+  "a11y": [
+    "Trail items are clones inside an aria-hidden layer that never catches the pointer; the source items sit in a hidden element, so screen readers only read the content.",
+    "The trail sits behind the content, so text and buttons stay readable and clickable.",
+    "With reduced motion no trail is drawn and autoplay stays off."
+  ],
+  "ai": {
+    "whenToUse": "A playful hero, promo banner, team section, or call to action where the pointer should leave a visual trail of product shots, colors, emoji, or faces.",
+    "rules": [
+      "Give the component a fixed height and a background so the trail has room",
+      "Keep items small (48 to 96 px) and use 3 to 6 different ones",
+      "Never put information only in the items; repeat it in the content",
+      "Turn on autoplay for touch-first pages, and use one image trail per screen"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Area tempat gambar, kartu, atau emoji muncul di sepanjang jalur kursor lalu memudar, mengecil, berputar, atau menumpuk. Bisa menggambar jejaknya sendiri.",
+      "props": {
+        "items": "Elemen yang muncul di sepanjang jejak, digandakan bergantian. Gambar, kartu warna token, emoji, atau inisial.",
+        "variant": "fade: muncul lalu memudar. scale: membesar lalu mengecil. rotate: berputar masuk lalu jatuh sambil memudar. stack: menumpuk seperti foto sampai kursor keluar.",
+        "threshold": "Jarak dalam px yang ditempuh kursor sebelum elemen berikutnya muncul. Nilai besar membuat jejak lebih jarang.",
+        "max": "Jumlah elemen terbanyak di layar sekaligus. Yang paling lama dihapus lebih dulu, sehingga DOM tetap kecil.",
+        "duration": "Umur satu elemen dalam ms. Pada stack, elemen masuk dalam 40% waktu ini lalu bertahan sampai kursor keluar.",
+        "autoplay": "Menggambar jejak angka delapan sendiri selama area terlihat, tab aktif, dan kursor di tempat lain. Berguna di layar sentuh.",
+        "children / slot": "Konten di atas jejak. Atur tata letaknya dengan class sendiri pada komponen (grid, tinggi, padding)."
+      },
+      "a11y": [
+        "Elemen jejak adalah salinan di dalam lapisan aria-hidden yang tidak menangkap pointer; elemen sumber ada di elemen hidden, jadi pembaca layar hanya membaca konten.",
+        "Jejak berada di belakang konten, sehingga teks dan tombol tetap terbaca dan bisa diklik.",
+        "Dengan reduced motion tidak ada jejak yang digambar dan autoplay tetap mati."
+      ],
+      "ai": {
+        "whenToUse": "Hero, banner promo, bagian tim, atau ajakan bertindak yang ceria, tempat kursor meninggalkan jejak foto produk, warna, emoji, atau wajah.",
+        "rules": [
+          "Beri komponen tinggi tetap dan latar agar jejak punya ruang",
+          "Buat elemen kecil (48 sampai 96 px) dan pakai 3 sampai 6 elemen berbeda",
+          "Jangan menaruh informasi hanya di elemen jejak; ulangi di konten",
+          "Nyalakan autoplay untuk halaman yang banyak dibuka di layar sentuh, dan pakai satu image trail per layar"
+        ]
+      }
+    }
+  }
+}

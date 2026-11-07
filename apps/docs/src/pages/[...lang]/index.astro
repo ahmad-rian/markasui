@@ -45,7 +45,7 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
 <Base splash hero>
   <Splash />
   <main id="konten">
-    <section class="lp-frame lp-hero dark" aria-labelledby="hero-title">
+    <section class="lp-frame lp-hero" aria-labelledby="hero-title">
       <div class="lp-bg" aria-hidden="true">
         <div class="lp-glow"></div>
         <div class="lp-flutes"></div>
@@ -133,7 +133,7 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
       </ul>
     </section>
 
-    <section class="lp-frame lp-wall dark" aria-labelledby="wall-title">
+    <section class="lp-frame lp-wall lp-lazy" aria-labelledby="wall-title">
       <div class={`${shell} lp-section`}>
         <div class="lp-head">
           <h2 id="wall-title" class="lp-h2">{copy.wallTitle[0]} <em class="lp-accent">{copy.wallTitle[1]}</em></h2>
@@ -143,7 +143,7 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
       </div>
     </section>
 
-    <section aria-labelledby="agent-title">
+    <section class="lp-lazy" aria-labelledby="agent-title">
       <div class={`${shell} lp-section lp-agent`}>
         <div>
           <h2 id="agent-title" class="lp-h2">{copy.agentTitle[0]} <em class="lp-accent">{copy.agentTitle[1]}</em></h2>
@@ -158,7 +158,7 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
       </div>
     </section>
 
-    <section aria-labelledby="template-title">
+    <section class="lp-lazy" aria-labelledby="template-title">
       <div class={`${shell} lp-section`}>
         <div class="lp-head">
           <h2 id="template-title" class="lp-h2">{templatesTitle[0]} <em class="lp-accent">{templatesTitle[1]}</em></h2>
@@ -171,7 +171,7 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
       </div>
     </section>
 
-    <section aria-labelledby="komponen-title">
+    <section class="lp-lazy" aria-labelledby="komponen-title">
       <div class={`${shell} lp-section`}>
         <div class="lp-head">
           <h2 id="komponen-title" class="lp-h2">{componentsTitle[0]} <em class="lp-accent">{componentsTitle[1]}</em></h2>
@@ -205,66 +205,5 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
 </Base>
 
 <script>
-  import type { Framework } from "@markasui/registry/schema";
-  import { onPageLoad } from "../../scripts/lifecycle";
-  import { getFramework, isFramework } from "../../scripts/prefs";
-
-  // Kata framework di judul berputar sampai pengunjung memilih framework di pill.
-  const ORDER: readonly Framework[] = ["blade", "react", "vue"];
-  const ROTATE_MS = 2400;
-  let timer: ReturnType<typeof setInterval> | undefined;
-
-  const rotator = () => document.querySelector<HTMLElement>("[data-hero-rotator]");
-  const stop = () => {
-    clearInterval(timer);
-    timer = undefined;
-  };
-
-  function show(root: HTMLElement, next: Framework) {
-    const previous = root.dataset.active;
-    if (previous === next) return;
-    root.querySelectorAll<HTMLElement>("[data-word]").forEach((word) => {
-      word.toggleAttribute("data-leaving", word.dataset.word === previous);
-    });
-    root.dataset.active = next;
-  }
-
-  onPageLoad(() => {
-    stop();
-    const root = rotator();
-    if (!root) return;
-    root.dataset.active = getFramework();
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    timer = setInterval(() => {
-      const index = ORDER.indexOf(root.dataset.active as Framework);
-      show(root, ORDER[(index + 1) % ORDER.length]!);
-    }, ROTATE_MS);
-  });
-
-  document.addEventListener("markas:framework", (event) => {
-    stop();
-    const root = rotator();
-    const framework = (event as CustomEvent<unknown>).detail;
-    if (root && isFramework(framework)) show(root, framework);
-  });
-  document.addEventListener("astro:before-swap", stop);
-
-  // Instrument Serif untuk kata aksen diunduh setelah load, jadi tidak ikut menunda LCP.
-  const SERIF = 'italic 400 1em "Instrument Serif"';
-  const SERIF_DELAY_MS = 300;
-  const enableSerif = () => {
-    document.documentElement.dataset.serif = "";
-  };
-  const loadSerif = () => {
-    document.fonts.load(SERIF).then(enableSerif, (error: unknown) => console.warn("Instrument Serif gagal dimuat", error));
-  };
-  /** Tunggu sampai frame pertama tergambar dan browser senggang, baru unduh font. */
-  const loadSerifLater = () => {
-    requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(loadSerif, SERIF_DELAY_MS)));
-  };
-  onPageLoad(() => {
-    if (document.fonts.check(SERIF)) enableSerif();
-    else if (document.readyState === "complete") loadSerifLater();
-    else addEventListener("load", loadSerifLater, { once: true });
-  });
+  import "../../scripts/landing";
 </script>

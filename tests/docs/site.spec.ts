@@ -49,7 +49,11 @@ async function waitInteractive(page: Page, framework: string) {
 for (const path of PAGES) {
   for (const theme of ["light", "dark"] as const) {
     test(`${path} (${theme}) lolos axe-core @mobile`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: theme });
+      // Tema dipilih eksplisit: tanpa preferensi tersimpan landing gelap dan halaman lain terang.
+      await page.addInitScript(
+        (value) => localStorage.setItem("markas-theme", value),
+        theme,
+      );
       await page.goto(path);
       const { violations } = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
@@ -586,4 +590,119 @@ test("tidak ada overflow horizontal di layar sempit, termasuk tab Manual @mobile
     if (overflow > 0) offenders.push(`${path}: ${overflow}px`);
   }
   expect(offenders).toEqual([]);
+});
+
+test.describe("kata framework di judul landing", () => {
+  const rotator = (page: Page) => page.locator("[data-hero-rotator]");
+  const ROTATION_WAIT_MS = 3000;
+
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+  });
+
+  test("preferensi tersimpan langsung tampil dan tidak berputar", async ({
+    page,
+  }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem("markas-framework", "vue"),
+    );
+    await page.goto("/");
+    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
+    await expect(rotator(page).locator('[data-word="vue"]')).toHaveCSS(
+      "opacity",
+      "1",
+    );
+    await page.waitForTimeout(ROTATION_WAIT_MS);
+    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
+  });
+
+  test("tanpa preferensi berputar, memilih di pill mengganti kata dan menghentikan putaran", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await expect(rotator(page)).toHaveAttribute("data-active", "blade");
+    await expect(rotator(page)).toHaveAttribute("data-active", "react", {
+      timeout: 4000,
+    });
+
+    await page.getByRole("radio", { name: "Vue" }).first().click();
+    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
+    await expect(rotator(page).locator('[data-word="vue"]')).toHaveCSS(
+      "opacity",
+      "1",
+    );
+    await page.waitForTimeout(ROTATION_WAIT_MS);
+    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
+  });
+
+  test("tetap sinkron setelah navigasi SPA", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(
+      () => ((window as unknown as { __spa: number }).__spa = 1),
+    );
+    await page.getByRole("link", { name: "Browse components" }).click();
+    await expect(page).toHaveURL(/\/components$/);
+    await page.locator('main a[href="/components/tabs"]').first().click();
+    await expect(page).toHaveURL(/\/components\/tabs$/);
+    await page.getByRole("radio", { name: "React" }).first().click();
+
+    await page.locator('header a[href="/"]').first().click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(rotator(page)).toHaveAttribute("data-active", "react");
+    await page.waitForTimeout(ROTATION_WAIT_MS);
+    await expect(rotator(page)).toHaveAttribute("data-active", "react");
+    expect(
+      await page.evaluate(
+        () => (window as unknown as { __spa?: number }).__spa,
+      ),
+    ).toBe(1);
+  });
+});
+
+test.describe("tema landing", () => {
+  test("tanpa preferensi landing gelap, halaman lain terang, termasuk lewat navigasi SPA", async ({
+    page,
+  }) => {
+    const html = page.locator("html");
+    await page.goto("/");
+    await expect(html).toHaveClass(/\bdark\b/);
+
+    await page.getByRole("link", { name: "Browse components" }).click();
+    await expect(page).toHaveURL(/\/components$/);
+    await expect(html).not.toHaveClass(/\bdark\b/);
+
+    await page.locator('header a[href="/"]').first().click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(html).toHaveClass(/\bdark\b/);
+
+    await page.goto("/docs/installation");
+    await expect(html).not.toHaveClass(/\bdark\b/);
+  });
+
+  test("pilihan tema tersimpan berlaku juga di landing", async ({ page }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem("markas-theme", "light"),
+    );
+    await page.goto("/");
+    await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+  });
+
+  test("toggle di header mengganti tampilan hero dan tersimpan", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const hero = page.locator(".lp-hero");
+    const background = () =>
+      hero.evaluate((element) => getComputedStyle(element).backgroundColor);
+    const dark = await background();
+
+    await page
+      .getByRole("button", { name: "Toggle light or dark theme" })
+      .click();
+    await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+    await expect.poll(background).not.toBe(dark);
+
+    await page.reload();
+    await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+  });
 });

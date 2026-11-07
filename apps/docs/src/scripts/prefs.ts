@@ -23,6 +23,10 @@ const write = (key: string, value: string) => {
 export const isFramework = (value: unknown): value is Framework =>
   FRAMEWORKS.includes(value as Framework);
 
+/** True kalau pengunjung pernah memilih framework (tersimpan di localStorage). */
+export const hasStoredFramework = (): boolean =>
+  isFramework(read(FRAMEWORK_KEY));
+
 export const getFramework = (): Framework => {
   const current = document.documentElement.dataset.framework;
   if (isFramework(current)) return current;

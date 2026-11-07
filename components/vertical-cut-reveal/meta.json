@@ -1,0 +1,108 @@
+{
+  "name": "vertical-cut-reveal",
+  "title": "Vertical Cut Reveal",
+  "description": "Text that rises from behind a cut line per letter, word, or line when it scrolls into view. Made for hero headings.",
+  "category": "animation",
+  "tags": [
+    "text",
+    "reveal",
+    "headline",
+    "hero",
+    "scroll",
+    "stagger",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "vertical-cut-reveal.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "VerticalCutReveal.tsx", "deps": [] },
+    "vue": { "file": "VerticalCutReveal.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "-",
+      "description": "The text to reveal. A line break (\\n) starts a new line."
+    },
+    {
+      "name": "split",
+      "type": "\"chars\" | \"words\" | \"lines\"",
+      "default": "\"words\"",
+      "description": "Reveal each letter, each word, or each line."
+    },
+    {
+      "name": "direction",
+      "type": "\"up\" | \"down\"",
+      "default": "\"up\"",
+      "description": "Units rise from below the cut or drop from above it."
+    },
+    {
+      "name": "from",
+      "type": "\"first\" | \"last\" | \"center\" | \"random\"",
+      "default": "\"first\"",
+      "description": "Where the stagger starts. random uses a fixed shuffled order."
+    },
+    {
+      "name": "stagger",
+      "type": "number",
+      "default": "60",
+      "description": "Milliseconds between one unit and the next."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "700",
+      "description": "Milliseconds each unit takes to appear."
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "default": "0",
+      "description": "Milliseconds to wait after the text scrolls into view. Use rising delays to reveal a title, then its subtitle."
+    }
+  ],
+  "a11y": [
+    "Screen readers read the full text once from a visually hidden copy; the animated units are aria-hidden.",
+    "The text is rendered in place on the server, so it is readable without JavaScript.",
+    "With reduced motion, the text is shown at once."
+  ],
+  "ai": {
+    "whenToUse": "Hero headings, section titles, and card titles that should appear with intent as they scroll in.",
+    "rules": [
+      "Put the component inside the heading element",
+      "Use split lines with \\n for multi line hero headings",
+      "Use rising delay values to reveal several blocks in order",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Teks yang naik dari balik garis potong per huruf, kata, atau baris saat masuk layar. Dibuat untuk judul hero.",
+      "props": {
+        "text": "Teks yang dimunculkan. Baris baru (\\n) memulai baris berikutnya.",
+        "split": "Munculkan per huruf, per kata, atau per baris.",
+        "direction": "Bagian naik dari bawah garis potong atau turun dari atasnya.",
+        "from": "Titik awal stagger. random memakai urutan acak yang tetap.",
+        "stagger": "Milidetik antara satu bagian dan bagian berikutnya.",
+        "duration": "Milidetik yang dibutuhkan setiap bagian untuk muncul.",
+        "delay": "Milidetik menunggu setelah teks masuk layar. Pakai delay bertingkat untuk memunculkan judul lalu subjudulnya."
+      },
+      "a11y": [
+        "Screen reader membaca teks utuh sekali dari salinan tersembunyi; bagian yang bergerak memakai aria-hidden.",
+        "Teks dirender di tempatnya oleh server sehingga terbaca tanpa JavaScript.",
+        "Dengan reduced motion, teks langsung tampil."
+      ],
+      "ai": {
+        "whenToUse": "Judul hero, judul bagian, dan judul kartu yang perlu muncul dengan tegas saat masuk layar.",
+        "rules": [
+          "Letakkan komponen di dalam elemen heading",
+          "Pakai split lines dengan \\n untuk judul hero beberapa baris",
+          "Pakai delay bertingkat untuk memunculkan beberapa blok berurutan",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

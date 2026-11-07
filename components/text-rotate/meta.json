@@ -1,0 +1,108 @@
+{
+  "name": "text-rotate",
+  "title": "Text Rotate",
+  "description": "Words or phrases that take turns, animating out and in per letter or per word with a stagger from the first, last, center, or a shuffled unit.",
+  "category": "animation",
+  "tags": [
+    "text",
+    "rotate",
+    "words",
+    "headline",
+    "hero",
+    "stagger",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "text-rotate.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "TextRotate.tsx", "deps": [] },
+    "vue": { "file": "TextRotate.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "words",
+      "type": "string[]",
+      "default": "-",
+      "description": "Words or phrases shown in turn. The first one is rendered on the server."
+    },
+    {
+      "name": "split",
+      "type": "\"chars\" | \"words\"",
+      "default": "\"chars\"",
+      "description": "Animate each letter or each word."
+    },
+    {
+      "name": "from",
+      "type": "\"first\" | \"last\" | \"center\" | \"random\"",
+      "default": "\"first\"",
+      "description": "Where the stagger starts. random uses a fixed shuffled order."
+    },
+    {
+      "name": "interval",
+      "type": "number",
+      "default": "2500",
+      "description": "Milliseconds between two words."
+    },
+    {
+      "name": "stagger",
+      "type": "number",
+      "default": "25",
+      "description": "Milliseconds between one unit and the next."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "400",
+      "description": "Milliseconds each unit takes to leave or enter. The width follows over the same time."
+    },
+    {
+      "name": "pauseOnHover",
+      "type": "boolean",
+      "default": "true",
+      "description": "Hold the current word while the pointer is over it."
+    }
+  ],
+  "a11y": [
+    "Screen readers read all words once from a visually hidden copy, joined with commas; the animated units are aria-hidden and nothing is announced on each turn.",
+    "The rotation pauses on hover, when the text is off screen, and when the tab is hidden.",
+    "With reduced motion, the first word stays and does not rotate."
+  ],
+  "ai": {
+    "whenToUse": "Rotating a key word in a hero headline, a hiring badge, or a list of names or products.",
+    "rules": [
+      "Put the static part of the sentence outside the component",
+      "Use split words for phrases of more than one word",
+      "Keep three to five short entries",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kata atau frasa yang bergiliran, keluar dan masuk per huruf atau per kata dengan stagger dari bagian pertama, terakhir, tengah, atau acak.",
+      "props": {
+        "words": "Kata atau frasa yang tampil bergiliran. Yang pertama dirender di server.",
+        "split": "Animasikan setiap huruf atau setiap kata.",
+        "from": "Titik awal stagger. random memakai urutan acak yang tetap.",
+        "interval": "Milidetik di antara dua kata.",
+        "stagger": "Milidetik antara satu bagian dan bagian berikutnya.",
+        "duration": "Milidetik yang dibutuhkan setiap bagian untuk keluar atau masuk. Lebar ikut berubah dalam waktu yang sama.",
+        "pauseOnHover": "Tahan kata yang tampil selama kursor berada di atasnya."
+      },
+      "a11y": [
+        "Screen reader membaca semua kata sekali dari salinan tersembunyi yang dipisah koma; bagian yang bergerak memakai aria-hidden dan tidak ada pengumuman di setiap giliran.",
+        "Putaran berhenti saat hover, saat teks di luar layar, dan saat tab tersembunyi.",
+        "Dengan reduced motion, kata pertama tetap tampil dan tidak berputar."
+      ],
+      "ai": {
+        "whenToUse": "Mengganti kata kunci di judul hero, badge lowongan, atau daftar nama dan produk secara bergiliran.",
+        "rules": [
+          "Letakkan bagian kalimat yang tetap di luar komponen",
+          "Pakai split words untuk frasa lebih dari satu kata",
+          "Pakai tiga sampai lima entri pendek",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

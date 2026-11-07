@@ -5,7 +5,8 @@ import { getTemplates } from "../../lib/templates";
 /**
  * Template sebagai thumbnail live: halaman demo Blade di iframe lazy yang diperkecil.
  * Iframe dibuat 250% / 400% dari sel lalu di-scale 0.4 / 0.25, jadi template dirender di lebar
- * desktop sebenarnya tanpa perlu tahu lebar sel.
+ * desktop sebenarnya tanpa perlu tahu lebar sel. src baru dipasang saat sel mendekati viewport
+ * (skrip di bawah), karena loading="lazy" bawaan browser memuatnya terlalu awal.
  */
 const locale = getLocale(Astro.url);
 const templates = getTemplates();
@@ -22,7 +23,7 @@ const small = "h-[400%] w-[400%] scale-25";
           <div class="frame transition-colors duration-150 ease-out group-hover:bg-line">
             <div class="frame-panel relative aspect-[16/10] overflow-hidden">
               <iframe
-                src={`/demo/templates/${template.name}/blade`}
+                data-lazy-src={`/demo/templates/${template.name}/blade`}
                 title={template.title}
                 loading="lazy"
                 tabindex="-1"
@@ -40,3 +41,27 @@ const small = "h-[400%] w-[400%] scale-25";
     ))
   }
 </ul>
+
+<script>
+  import { onPageLoad } from "../../scripts/lifecycle";
+
+  const MARGIN = "400px 0px";
+  let observer: IntersectionObserver | undefined;
+
+  onPageLoad(() => {
+    observer?.disconnect();
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const frame = entry.target as HTMLIFrameElement;
+          if (!entry.isIntersecting || !frame.dataset.lazySrc) return;
+          frame.src = frame.dataset.lazySrc;
+          delete frame.dataset.lazySrc;
+          observer?.unobserve(frame);
+        });
+      },
+      { rootMargin: MARGIN },
+    );
+    document.querySelectorAll<HTMLIFrameElement>("iframe[data-lazy-src]").forEach((frame) => observer?.observe(frame));
+  });
+</script>

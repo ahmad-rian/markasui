@@ -1,0 +1,94 @@
+{
+  "name": "text-scramble",
+  "title": "Text Scramble",
+  "description": "Text that scrambles into random characters, then decodes letter by letter. Runs on hover, when it scrolls into view, or on mount.",
+  "category": "animation",
+  "tags": [
+    "text",
+    "scramble",
+    "decrypt",
+    "hover",
+    "stats",
+    "headline",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "text-scramble.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "TextScramble.tsx", "deps": [] },
+    "vue": { "file": "TextScramble.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "-",
+      "description": "The final text. It is rendered on the server and is what screen readers hear."
+    },
+    {
+      "name": "trigger",
+      "type": "\"hover\" | \"view\" | \"mount\"",
+      "default": "\"hover\"",
+      "description": "hover runs on hover and focus of the closest link or button, view runs once when the text scrolls into view, mount runs right away."
+    },
+    {
+      "name": "charset",
+      "type": "\"letters\" | \"digits\" | \"symbols\" | \"binary\"",
+      "default": "\"letters\"",
+      "description": "Characters used while scrambling."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "800",
+      "description": "Milliseconds from fully scrambled to fully decoded."
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "default": "0",
+      "description": "Milliseconds to stay scrambled before decoding starts, for view and mount. Use rising delays to decode a row of stats in sequence."
+    }
+  ],
+  "a11y": [
+    "Screen readers hear the final text once from a visually hidden copy; the scrambled layer is aria-hidden.",
+    "An invisible copy of the final text keeps the width fixed, so nothing around it shifts.",
+    "With reduced motion, the final text is shown and never scrambles."
+  ],
+  "ai": {
+    "whenToUse": "Stat numbers that decode as they scroll in, tech flavored headlines, and links that glitch on hover.",
+    "rules": [
+      "Use charset digits for numbers and prices",
+      "Use trigger view with rising delay values for a row of stats",
+      "Keep the text short; long paragraphs are hard to read while scrambling",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Teks yang teracak menjadi karakter acak, lalu terdekripsi huruf demi huruf. Berjalan saat hover, saat masuk layar, atau saat dimuat.",
+      "props": {
+        "text": "Teks akhir. Dirender di server dan inilah yang dibaca screen reader.",
+        "trigger": "hover berjalan saat hover dan fokus pada link atau tombol terdekat, view berjalan sekali saat teks masuk layar, mount langsung berjalan.",
+        "charset": "Karakter yang dipakai saat mengacak.",
+        "duration": "Milidetik dari teracak penuh sampai terbaca penuh.",
+        "delay": "Milidetik teks tetap teracak sebelum dekripsi dimulai, untuk view dan mount. Pakai delay bertingkat agar deretan statistik terbuka berurutan."
+      },
+      "a11y": [
+        "Screen reader membaca teks akhir sekali dari salinan tersembunyi; lapisan acak memakai aria-hidden.",
+        "Salinan teks akhir yang tidak terlihat menjaga lebar tetap sehingga elemen di sekitarnya tidak bergeser.",
+        "Dengan reduced motion, teks akhir langsung tampil dan tidak pernah teracak."
+      ],
+      "ai": {
+        "whenToUse": "Angka statistik yang terdekripsi saat masuk layar, judul bernuansa teknologi, dan link yang berkedip acak saat hover.",
+        "rules": [
+          "Pakai charset digits untuk angka dan harga",
+          "Pakai trigger view dengan delay bertingkat untuk deretan statistik",
+          "Pakai teks pendek; paragraf panjang sulit dibaca saat teracak",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+<div class="flex justify-center">
+    <a href="#" class="inline-flex items-center gap-2 rounded-full border border-line bg-surface py-1 pr-3 pl-1 text-sm text-ink hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+        <span class="rounded-full bg-success/10 px-2 py-0.5 text-xs font-medium">Now hiring</span>
+        <x-markas.text-rotate :words="['designers', 'engineers', 'writers']" from="last" :interval="2000" />
+    </a>
+</div>

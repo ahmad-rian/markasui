@@ -1,0 +1,101 @@
+{
+  "name": "screensaver",
+  "title": "Screensaver",
+  "description": "Area where one or more elements bounce off the walls like an old DVD screensaver, switching color tokens or squashing on each hit.",
+  "category": "markas",
+  "tags": [
+    "screensaver",
+    "bounce",
+    "dvd",
+    "404",
+    "empty state",
+    "playful",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "screensaver.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Screensaver.tsx", "deps": [] },
+    "vue": { "file": "Screensaver.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "speed",
+      "type": "number",
+      "default": "80",
+      "description": "Travel speed in px per second. 40 to 60 feels lazy, 120 and up feels busy."
+    },
+    {
+      "name": "effect",
+      "type": "\"tone\" | \"squash\" | \"none\"",
+      "default": "\"tone\"",
+      "description": "What happens on each wall hit: switch to the next color token, squash and stretch like a rubber ball, or nothing."
+    },
+    {
+      "name": "tones",
+      "type": "(\"primary\" | \"success\" | \"warning\" | \"danger\" | \"ink\" | \"muted\")[]",
+      "default": "[\"primary\", \"success\", \"warning\", \"danger\"]",
+      "description": "Color tokens the tone effect cycles through. Each element starts on its own tone; style the parts that should change with currentColor."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "1",
+      "description": "Changes the starting spots and directions. The same seed always gives the same start."
+    },
+    {
+      "name": "pauseOnHover",
+      "type": "boolean",
+      "default": "true",
+      "description": "Stops the motion while the pointer is over the area."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "The bouncing elements. Each direct child moves on its own. Give the area a height, such as h-44."
+    }
+  ],
+  "a11y": [
+    "Motion runs only while the area is on screen and the tab is visible, and stops while anything inside has keyboard focus.",
+    "Mark a purely decorative area with aria-hidden=\"true\"; text inside a bouncing element is otherwise read as usual.",
+    "With reduced motion each element rests at its seeded spot in its first tone."
+  ],
+  "ai": {
+    "whenToUse": "A light, playful touch in quiet places: a 404 page, an empty state, a waiting or coming soon panel, a presence list.",
+    "rules": [
+      "Give the area a fixed height and a background so the walls are visible",
+      "Keep one to five small elements; large ones hit the walls constantly",
+      "Use tone colors only on icons, dots, or large bold text so contrast stays readable",
+      "Never put the only button or link of a page inside a bouncing element"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Area tempat satu atau beberapa elemen memantul di dinding seperti screensaver DVD lama, berganti token warna atau memipih di setiap benturan.",
+      "props": {
+        "speed": "Kecepatan gerak dalam px per detik. 40 sampai 60 terasa santai, 120 ke atas terasa ramai.",
+        "effect": "Yang terjadi di setiap benturan dinding: pindah ke token warna berikutnya, memipih dan memanjang seperti bola karet, atau tidak ada.",
+        "tones": "Token warna yang diputar oleh efek tone. Setiap elemen mulai dengan tone-nya sendiri; beri gaya currentColor pada bagian yang ikut berubah.",
+        "seed": "Mengubah posisi dan arah awal. Seed yang sama selalu menghasilkan awal yang sama.",
+        "pauseOnHover": "Menghentikan gerakan saat kursor berada di atas area.",
+        "children / slot": "Elemen yang memantul. Setiap anak langsung bergerak sendiri. Beri area tinggi, misalnya h-44."
+      },
+      "a11y": [
+        "Gerakan hanya berjalan saat area terlihat di layar dan tab aktif, dan berhenti saat ada yang memegang fokus keyboard di dalamnya.",
+        "Tandai area yang murni dekoratif dengan aria-hidden=\"true\"; teks di dalam elemen yang memantul tetap dibaca seperti biasa.",
+        "Dengan reduced motion setiap elemen diam di posisi seed dengan tone pertamanya."
+      ],
+      "ai": {
+        "whenToUse": "Sentuhan ringan dan jenaka di tempat yang sepi: halaman 404, empty state, panel menunggu atau segera hadir, daftar yang sedang online.",
+        "rules": [
+          "Beri area tinggi tetap dan latar supaya dindingnya terlihat",
+          "Pakai satu sampai lima elemen kecil; elemen besar terus-menerus membentur dinding",
+          "Pakai warna tone hanya untuk ikon, titik, atau teks tebal besar supaya kontras tetap terbaca",
+          "Jangan menaruh satu-satunya tombol atau tautan halaman di dalam elemen yang memantul"
+        ]
+      }
+    }
+  }
+}

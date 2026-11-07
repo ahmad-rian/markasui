@@ -1,0 +1,82 @@
+{
+  "name": "underline-link",
+  "title": "Underline Link",
+  "description": "A link with an animated underline in five styles, including a hand drawn scribble. Shows on hover, on keyboard focus, and for the current page.",
+  "category": "animation",
+  "tags": [
+    "link",
+    "underline",
+    "hover",
+    "navbar",
+    "footer",
+    "svg",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "underline-link.blade.php", "deps": [] },
+    "react": { "file": "UnderlineLink.tsx", "deps": [] },
+    "vue": { "file": "UnderlineLink.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "href",
+      "type": "string",
+      "default": "-",
+      "description": "Link target. Schemes other than http, https, mailto, and tel are replaced with #."
+    },
+    {
+      "name": "variant",
+      "type": "\"grow-center\" | \"slide\" | \"comes-in-goes-out\" | \"goes-out-comes-in\" | \"scribble\"",
+      "default": "\"grow-center\"",
+      "description": "grow-center grows from the middle, slide grows from and returns to the left, comes-in-goes-out enters from the left and leaves to the right, goes-out-comes-in is visible at rest and redraws itself, scribble draws a hand drawn stroke."
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "default": "false",
+      "description": "Mark the link as the current page with aria-current=\"page\" and keep the line visible."
+    }
+  ],
+  "a11y": [
+    "A native a element; the line and scribble are decorative and aria-hidden.",
+    "The line also appears on keyboard focus, next to a visible focus outline.",
+    "active sets aria-current=\"page\", so the current page is announced, not only drawn.",
+    "With reduced motion, the line appears without a transition."
+  ],
+  "ai": {
+    "whenToUse": "Navbar, footer, and inline article links that need a clear, designed hover and focus state.",
+    "rules": [
+      "The line uses the text color; set the color on the link",
+      "Use active for the current page in a navbar",
+      "Use scribble sparingly, for one or two emphasized links",
+      "No JavaScript; Blade does not need Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Link dengan garis bawah beranimasi dalam lima gaya, termasuk coretan tangan. Tampil saat hover, saat fokus keyboard, dan untuk halaman aktif.",
+      "props": {
+        "href": "Tujuan link. Skema selain http, https, mailto, dan tel diganti #.",
+        "variant": "grow-center tumbuh dari tengah, slide tumbuh dari dan kembali ke kiri, comes-in-goes-out masuk dari kiri dan keluar ke kanan, goes-out-comes-in tampil saat diam lalu menggambar ulang, scribble menggambar coretan tangan.",
+        "active": "Tandai link sebagai halaman aktif dengan aria-current=\"page\" dan garis tetap tampil."
+      },
+      "a11y": [
+        "Elemen a native; garis dan coretan bersifat dekoratif dan memakai aria-hidden.",
+        "Garis juga muncul saat fokus keyboard, berdampingan dengan outline fokus yang terlihat.",
+        "active memasang aria-current=\"page\" sehingga halaman aktif diumumkan, bukan hanya digambar.",
+        "Dengan reduced motion, garis muncul tanpa transisi."
+      ],
+      "ai": {
+        "whenToUse": "Link navbar, footer, dan artikel yang butuh keadaan hover dan fokus yang jelas dan dirancang.",
+        "rules": [
+          "Garis memakai warna teks; atur warna pada link",
+          "Pakai active untuk halaman aktif di navbar",
+          "Pakai scribble secukupnya, untuk satu atau dua link yang ditonjolkan",
+          "Tanpa JavaScript; Blade tidak butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

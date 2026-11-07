@@ -1,0 +1,79 @@
+{
+  "name": "stacking-cards",
+  "title": "Stacking Cards",
+  "description": "Cards that stick and pile up as you scroll, while the covered ones shrink, fan out, or blur. A card with keyboard focus comes back to the front.",
+  "category": "markas",
+  "tags": ["cards", "scroll", "sticky", "stack", "features", "onboarding"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "stacking-cards.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "StackingCards.tsx", "deps": [] },
+    "vue": { "file": "StackingCards.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"scale\" | \"fan\" | \"blur\"",
+      "default": "\"scale\"",
+      "description": "What happens to covered cards. scale: shrink and dim. fan: tilt left and right like a deck. blur: blur and dim."
+    },
+    {
+      "name": "top",
+      "type": "number",
+      "default": "16",
+      "description": "Sticky top of the first card in px, measured from the top of the scrolling area."
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "default": "16",
+      "description": "Extra px each later card sticks below the one before, so the edges of earlier cards peek out. 0 stacks them exactly."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "The cards. Every direct child is one card; give each its own background so it covers the ones below."
+    }
+  ],
+  "a11y": [
+    "Cards stay in normal reading order; the stacking is only visual.",
+    "A card that holds keyboard focus jumps to the front at full size, so focus is never hidden behind later cards.",
+    "With reduced motion the cards still stick but never shrink, tilt, or blur."
+  ],
+  "ai": {
+    "whenToUse": "Scroll stories made of 3 to 6 steps or features: product features, onboarding steps, pricing plans, testimonials, or a short company timeline.",
+    "rules": [
+      "Every direct child is a card, so give each a solid background, a border, and the same height",
+      "Leave scroll room after the stack (padding or another section) so the last card can settle",
+      "Use an article or a list item per card when the cards carry headings",
+      "Keep 3 to 6 cards; more turns the effect into a chore"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Kartu yang menempel dan menumpuk saat discroll, sementara kartu yang tertutup mengecil, menyebar, atau buram. Kartu dengan fokus keyboard kembali ke depan.",
+      "props": {
+        "variant": "Apa yang terjadi pada kartu yang tertutup. scale: mengecil dan meredup. fan: miring kiri dan kanan seperti tumpukan kartu. blur: buram dan meredup.",
+        "top": "Posisi sticky kartu pertama dalam px, diukur dari atas area scroll.",
+        "offset": "Tambahan px tiap kartu berikutnya menempel di bawah kartu sebelumnya, sehingga tepi kartu sebelumnya terlihat. 0 menumpuk tepat.",
+        "children / slot": "Kartu-kartunya. Setiap anak langsung adalah satu kartu; beri masing-masing latar sendiri agar menutupi kartu di bawahnya."
+      },
+      "a11y": [
+        "Kartu tetap dalam urutan baca normal; tumpukan hanya visual.",
+        "Kartu yang memegang fokus keyboard melompat ke depan dalam ukuran penuh, sehingga fokus tidak pernah tersembunyi di balik kartu berikutnya.",
+        "Dengan reduced motion kartu tetap menempel tetapi tidak mengecil, miring, atau buram."
+      ],
+      "ai": {
+        "whenToUse": "Cerita scroll berisi 3 sampai 6 langkah atau fitur: fitur produk, langkah onboarding, paket harga, testimoni, atau linimasa singkat perusahaan.",
+        "rules": [
+          "Setiap anak langsung adalah kartu, jadi beri masing-masing latar solid, border, dan tinggi yang sama",
+          "Sisakan ruang scroll setelah tumpukan (padding atau bagian lain) agar kartu terakhir bisa diam",
+          "Pakai article atau item daftar per kartu bila kartu punya judul",
+          "Cukup 3 sampai 6 kartu; lebih dari itu efeknya melelahkan"
+        ]
+      }
+    }
+  }
+}

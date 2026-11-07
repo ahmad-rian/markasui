@@ -5,7 +5,7 @@ import { STACK, cliCommand } from "../lib/frameworks";
 import { getLocale, localePath, t } from "../lib/i18n";
 
 interface Props {
-  /** landing: bingkai gelap dengan ajakan mulai (gayanya di halaman landing). */
+  /** landing: bingkai mengikuti tema dengan ajakan mulai (gayanya di halaman landing). */
   variant?: "default" | "landing";
 }
 const { variant = "default" } = Astro.props;
@@ -17,7 +17,7 @@ const link = "text-muted transition-colors hover:text-ink";
 const meta = "mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8";
 ---
 
-<footer class:list={landing ? "lp-frame lp-foot dark" : "border-t border-line"}>
+<footer class:list={landing ? "lp-frame lp-foot lp-lazy" : "border-t border-line"}>
   {
     landing && (
       <>

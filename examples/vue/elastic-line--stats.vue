@@ -1,0 +1,27 @@
+<script setup lang="ts">
+import ElasticLine from "../../components/elastic-line/ElasticLine.vue";
+
+const row = "flex rounded-xl border border-line bg-surface py-5";
+const stat = "flex-1 text-center";
+const value = "text-2xl font-semibold text-ink tabular-nums";
+const label = "mt-1 text-sm text-muted";
+</script>
+
+<template>
+  <div :class="row">
+    <div :class="stat">
+      <p :class="value">61</p>
+      <p :class="label">Components</p>
+    </div>
+    <ElasticLine variant="push" orientation="vertical" :reach="12" />
+    <div :class="stat">
+      <p :class="value">3</p>
+      <p :class="label">Frameworks</p>
+    </div>
+    <ElasticLine variant="push" orientation="vertical" :reach="12" />
+    <div :class="stat">
+      <p :class="value">12k</p>
+      <p :class="label">Weekly installs</p>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,86 @@
+{
+  "name": "letter-swap",
+  "title": "Letter Swap",
+  "description": "Text whose letters slide out and back in with a stagger when its link or button is hovered or focused. Forward, ping-pong, or shuffled order.",
+  "category": "animation",
+  "tags": ["text", "hover", "link", "navbar", "button", "stagger", "animation"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "letter-swap.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "LetterSwap.tsx", "deps": [] },
+    "vue": { "file": "LetterSwap.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "-",
+      "description": "The text to animate. Screen readers read it once as a whole."
+    },
+    {
+      "name": "mode",
+      "type": "\"forward\" | \"pingpong\" | \"random\"",
+      "default": "\"forward\"",
+      "description": "forward swaps once per hover in reading order, pingpong swaps in on hover and back out on leave, random swaps once in a fixed shuffled order."
+    },
+    {
+      "name": "direction",
+      "type": "\"up\" | \"down\"",
+      "default": "\"up\"",
+      "description": "Letters leave upward and the copy rises from below, or the reverse."
+    },
+    {
+      "name": "stagger",
+      "type": "number",
+      "default": "30",
+      "description": "Milliseconds between one letter and the next."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "400",
+      "description": "Milliseconds each letter takes to swap."
+    }
+  ],
+  "a11y": [
+    "The whole text sits in a visually hidden copy, so a link or button gets one clean accessible name; the animated letters are aria-hidden.",
+    "The swap also runs on keyboard focus of the closest link, button, label, or element with tabindex.",
+    "With reduced motion, the letters do not move."
+  ],
+  "ai": {
+    "whenToUse": "Short navbar links, button labels, and footer links that need a playful hover without changing the layout.",
+    "rules": [
+      "Put the component inside the link or button; it listens to hover and focus on that element",
+      "Keep the text short, one to three words",
+      "Use pingpong for buttons that stay hovered, forward or random for links",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Teks yang hurufnya bergeser keluar lalu masuk lagi berurutan saat link atau tombolnya di-hover atau difokus. Urutan maju, bolak-balik, atau acak.",
+      "props": {
+        "text": "Teks yang dianimasikan. Screen reader membacanya sekali secara utuh.",
+        "mode": "forward bertukar sekali per hover sesuai urutan baca, pingpong bertukar saat hover dan kembali saat kursor pergi, random bertukar sekali dengan urutan acak yang tetap.",
+        "direction": "Huruf keluar ke atas dan salinannya naik dari bawah, atau sebaliknya.",
+        "stagger": "Milidetik antara satu huruf dan huruf berikutnya.",
+        "duration": "Milidetik yang dibutuhkan setiap huruf untuk bertukar."
+      },
+      "a11y": [
+        "Teks utuh ada di salinan tersembunyi sehingga link atau tombol mendapat satu nama aksesibel yang bersih; huruf yang bergerak memakai aria-hidden.",
+        "Pertukaran juga berjalan saat fokus keyboard pada link, tombol, label, atau elemen ber-tabindex terdekat.",
+        "Dengan reduced motion, huruf tidak bergerak."
+      ],
+      "ai": {
+        "whenToUse": "Link navbar, label tombol, dan link footer pendek yang butuh hover jenaka tanpa mengubah tata letak.",
+        "rules": [
+          "Letakkan komponen di dalam link atau tombol; komponen mendengarkan hover dan fokus elemen itu",
+          "Pakai teks pendek, satu sampai tiga kata",
+          "Pakai pingpong untuk tombol yang lama di-hover, forward atau random untuk link",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

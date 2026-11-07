@@ -3,13 +3,14 @@ import { z } from "zod";
 export const FRAMEWORKS = ["blade", "react", "vue"] as const;
 export type Framework = (typeof FRAMEWORKS)[number];
 
+/** Urutan juga urutan grup di sidebar docs: komponen khas MarkasUI paling atas. */
 export const CATEGORIES = [
+  "markas",
   "form",
   "feedback",
   "overlay",
   "navigation",
   "data",
-  "markas",
   "animation",
   "background",
   "button",

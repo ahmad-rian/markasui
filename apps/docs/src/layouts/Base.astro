@@ -13,7 +13,7 @@ interface Props {
   description?: string;
   /** Tampilkan splash di landing (sekali per sesi). */
   splash?: boolean;
-  /** Header dan footer versi landing: bilah kaca di dalam bingkai hero dan footer berbingkai gelap. */
+  /** Header dan footer versi landing: bilah di dalam bingkai hero dan footer berbingkai. */
   hero?: boolean;
 }
 
@@ -26,7 +26,7 @@ const path = stripLocale(Astro.url.pathname);
 ---
 
 <!doctype html>
-<html lang={locale} data-framework="blade">
+<html lang={locale} data-framework="blade" class={hero ? "dark" : undefined} data-landing={hero ? "" : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,11 +42,12 @@ const path = stripLocale(Astro.url.pathname);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={locale === "id" ? "id_ID" : "en_US"} />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#151915" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content={hero ? "#151915" : "#ffffff"} />
     <script is:inline>
       // Tema dan framework dipasang sebelum render pertama, dan dipasang ulang setiap navigasi
-      // karena ClientRouter menyalin atribut <html> dari halaman baru.
+      // karena ClientRouter menyalin atribut <html> dari halaman baru. Tanpa pilihan tersimpan,
+      // landing (data-landing) gelap dan halaman lain terang; pilihan lewat toggle berlaku di semua halaman.
+      // Saat navigasi, halaman tujuan (newDocument) yang menentukan, jadi tidak ada kilatan tema.
       (() => {
         const read = (key) => {
           try {
@@ -59,7 +60,7 @@ const path = stripLocale(Astro.url.pathname);
           const framework = read("markas-framework");
           if (framework === "blade" || framework === "react" || framework === "vue") root.dataset.framework = framework;
           const theme = read("markas-theme");
-          root.classList.toggle("dark", theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+          root.classList.toggle("dark", theme ? theme === "dark" : root.hasAttribute("data-landing"));
         };
         apply(document.documentElement);
         document.addEventListener("astro:before-swap", (event) => apply(event.newDocument.documentElement));

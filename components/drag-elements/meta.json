@@ -1,0 +1,96 @@
+{
+  "name": "drag-elements",
+  "title": "Drag Elements",
+  "description": "Area of cards or stickers you can drag around with light momentum, kept inside its bounds. Arrow keys move a focused item, Escape puts it back.",
+  "category": "markas",
+  "tags": [
+    "drag",
+    "draggable",
+    "moodboard",
+    "stickers",
+    "momentum",
+    "pointer",
+    "playful"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "drag-elements.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "DragElements.tsx", "deps": [] },
+    "vue": { "file": "DragElements.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "release",
+      "type": "\"inertia\" | \"stay\" | \"return\"",
+      "default": "\"inertia\"",
+      "description": "What an item does when let go: glide on with friction and bounce off the edges, stop where it is, or spring back to its starting spot."
+    },
+    {
+      "name": "rotate",
+      "type": "number",
+      "default": "6",
+      "description": "Largest random tilt in degrees for items without data-rotate. 0 keeps them straight."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "1",
+      "description": "Changes the scattered starting spots. The same seed always gives the same layout."
+    },
+    {
+      "name": "hintLabel",
+      "type": "string",
+      "default": "\"Drag to move, or use the arrow keys. Escape puts it back\"",
+      "description": "Description screen readers announce for each item."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "The items. Each direct child is draggable. data-x and data-y (0 to 100, percent of the area) and data-rotate (deg) on a child set its starting spot instead of the seed."
+    }
+  ],
+  "a11y": [
+    "Each item gets tabindex=\"0\" and a description from hintLabel, so keyboard users can reach and move it.",
+    "Arrow keys move the focused item 10px (Shift for 50px) and Escape returns it to where it started; the item also comes to the front.",
+    "Buttons, links, and fields inside an item keep working: a press on them does not start a drag.",
+    "With reduced motion items still follow the pointer and keys, but there is no glide, spring, or easing."
+  ],
+  "ai": {
+    "whenToUse": "Playful spaces people can rearrange: moodboards, sticker walls, team or plan cards to compare, a hero with things to fiddle with.",
+    "rules": [
+      "Give the area a height, such as h-80, and a background or border so its bounds are visible",
+      "Keep three to eight items; use data-x and data-y when the layout matters",
+      "Add role=\"group\" and an aria-label to the area",
+      "Do not use it for real ordering or sorting; positions are not saved or announced"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Area kartu atau stiker yang bisa diseret dengan momentum ringan di dalam batasnya. Panah menggeser item yang fokus, Escape mengembalikannya.",
+      "props": {
+        "release": "Perilaku item saat dilepas: meluncur dengan gesekan dan memantul di tepi, berhenti di tempat, atau kembali memegas ke posisi awal.",
+        "rotate": "Kemiringan acak terbesar dalam derajat untuk item tanpa data-rotate. 0 membuatnya tegak.",
+        "seed": "Mengubah posisi awal yang tersebar. Seed yang sama selalu menghasilkan tata letak yang sama.",
+        "hintLabel": "Deskripsi yang dibacakan screen reader untuk setiap item.",
+        "children / slot": "Item-itemnya. Setiap anak langsung bisa diseret. data-x dan data-y (0 sampai 100, persen dari area) serta data-rotate (derajat) pada anak menentukan posisi awalnya, bukan seed."
+      },
+      "a11y": [
+        "Setiap item mendapat tabindex=\"0\" dan deskripsi dari hintLabel, sehingga pengguna keyboard bisa menjangkau dan menggesernya.",
+        "Tombol panah menggeser item yang fokus 10px (Shift untuk 50px) dan Escape mengembalikannya ke posisi awal; item juga naik ke depan.",
+        "Tombol, tautan, dan field di dalam item tetap berfungsi: menekannya tidak memulai seret.",
+        "Dengan reduced motion item tetap mengikuti pointer dan tombol, tapi tanpa luncuran, pegas, atau easing."
+      ],
+      "ai": {
+        "whenToUse": "Ruang main-main yang bisa ditata ulang: moodboard, dinding stiker, kartu tim atau paket untuk dibandingkan, hero dengan benda yang bisa dimainkan.",
+        "rules": [
+          "Beri area tinggi, misalnya h-80, dan latar atau border supaya batasnya terlihat",
+          "Pakai tiga sampai delapan item; pakai data-x dan data-y kalau tata letaknya penting",
+          "Tambahkan role=\"group\" dan aria-label pada area",
+          "Jangan dipakai untuk mengurutkan sungguhan; posisi tidak disimpan atau diumumkan"
+        ]
+      }
+    }
+  }
+}

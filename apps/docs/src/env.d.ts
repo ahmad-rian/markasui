@@ -1,4 +1,8 @@
 declare module "alpinejs" {
-  const Alpine: { start(): void };
+  export interface Alpine {
+    start(): void;
+    initTree(element: HTMLElement): void;
+  }
+  const Alpine: Alpine;
   export default Alpine;
 }

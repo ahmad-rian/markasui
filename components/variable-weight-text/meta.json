@@ -1,0 +1,94 @@
+{
+  "name": "variable-weight-text",
+  "title": "Variable Weight Text",
+  "description": "Text whose letters get bolder as the cursor gets closer, using the wght axis of a variable font. Optional wave that breathes when idle.",
+  "category": "animation",
+  "tags": [
+    "text",
+    "variable font",
+    "cursor",
+    "hover",
+    "typography",
+    "wave",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "variable-weight-text.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "VariableWeightText.tsx", "deps": [] },
+    "vue": { "file": "VariableWeightText.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "-",
+      "description": "The text. Screen readers read it once as a whole."
+    },
+    {
+      "name": "radius",
+      "type": "number",
+      "default": "120",
+      "description": "Distance in pixels from the cursor within which letters get bolder."
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "default": "300",
+      "description": "Weight at rest and outside the radius."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "800",
+      "description": "Weight of the letter right under the cursor."
+    },
+    {
+      "name": "wave",
+      "type": "boolean",
+      "default": "false",
+      "description": "When the cursor is away, a weight wave runs through the letters. It stops off screen."
+    }
+  ],
+  "a11y": [
+    "Screen readers read the whole text once from a visually hidden copy; the letter spans are aria-hidden.",
+    "The effect is decorative and needs no interaction; the text stays readable at every weight.",
+    "With reduced motion, the letters stay at the min weight and the wave does not run."
+  ],
+  "ai": {
+    "whenToUse": "Large display words in a hero or footer wordmark that should react to the cursor.",
+    "rules": [
+      "Needs a variable font with a wght axis; with a static font the weight jumps between the available weights",
+      "Use large sizes, text-5xl and up, so the change is visible",
+      "Keep the text short, one to three words",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Teks yang hurufnya makin tebal saat kursor makin dekat, memakai sumbu wght font variabel. Ada gelombang opsional yang bernapas saat diam.",
+      "props": {
+        "text": "Teksnya. Screen reader membacanya sekali secara utuh.",
+        "radius": "Jarak dalam piksel dari kursor tempat huruf menebal.",
+        "min": "Berat saat diam dan di luar radius.",
+        "max": "Berat huruf tepat di bawah kursor.",
+        "wave": "Saat kursor jauh, gelombang berat berjalan melewati huruf. Berhenti saat di luar layar."
+      },
+      "a11y": [
+        "Screen reader membaca teks utuh sekali dari salinan tersembunyi; span huruf memakai aria-hidden.",
+        "Efeknya dekoratif dan tidak butuh interaksi; teks tetap terbaca di setiap berat.",
+        "Dengan reduced motion, huruf tetap di berat min dan gelombang tidak berjalan."
+      ],
+      "ai": {
+        "whenToUse": "Kata display besar di hero atau wordmark footer yang bereaksi terhadap kursor.",
+        "rules": [
+          "Butuh font variabel dengan sumbu wght; dengan font statis, berat melompat di antara berat yang tersedia",
+          "Pakai ukuran besar, text-5xl ke atas, agar perubahannya terlihat",
+          "Pakai teks pendek, satu sampai tiga kata",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}

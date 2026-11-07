@@ -1,0 +1,110 @@
+{
+  "name": "float",
+  "title": "Float",
+  "description": "Wrapper that makes its children drift, bob, orbit, or breathe on their own loops, with optional pointer parallax and a staggered entrance.",
+  "category": "markas",
+  "tags": [
+    "float",
+    "floating",
+    "parallax",
+    "hero",
+    "icons",
+    "ambient",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "float.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Float.tsx", "deps": [] },
+    "vue": { "file": "Float.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "motion",
+      "type": "\"drift\" | \"bob\" | \"orbit\" | \"breathe\"",
+      "default": "\"drift\"",
+      "description": "Path each child follows: a slow figure eight with a slight sway, a rise and fall, a small circle, or a gentle swell."
+    },
+    {
+      "name": "amplitude",
+      "type": "number",
+      "default": "10",
+      "description": "Distance in px each child travels, varied a little per child. For breathe it is also the growth in percent."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "6",
+      "description": "Seconds for one loop, varied a little per child so they never move in step."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "1",
+      "description": "Changes the per-child timing, size, and direction. The same seed always gives the same motion."
+    },
+    {
+      "name": "parallax",
+      "type": "number",
+      "default": "0",
+      "description": "Largest shift in px toward the pointer. Each child moves by its depth: data-depth=\"0.2\" to \"1\", or a seeded depth. 0 turns it off."
+    },
+    {
+      "name": "entrance",
+      "type": "boolean",
+      "default": "false",
+      "description": "Children pop in one after another the first time the group scrolls into view."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "The floating items. Each direct child moves on its own; position them with your own classes, such as absolute top-[12%] left-[10%]."
+    }
+  ],
+  "a11y": [
+    "Floating is decoration only; mark a purely decorative group with aria-hidden=\"true\".",
+    "A child stops moving while it is hovered or holds keyboard focus, so floating buttons and links stay easy to hit.",
+    "All loops pause while the group is off screen.",
+    "With reduced motion nothing moves: no loops, parallax, or entrance."
+  ],
+  "ai": {
+    "whenToUse": "Ambient life around a focal point: icons or logos around a hero heading, a badge on a pricing card, avatars around a community number.",
+    "rules": [
+      "Keep amplitude small (4 to 14) so the motion stays calm",
+      "Float a handful of decorative items, not body text or form fields",
+      "The animation uses transform on each direct child; wrap a child if it needs its own transform utilities",
+      "Use parallax on a hero-sized area, not on small inline groups"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Pembungkus yang membuat anaknya melayang, naik turun, mengorbit, atau bernapas dengan ritme sendiri, dengan parallax kursor dan kemunculan berurutan.",
+      "props": {
+        "motion": "Jalur yang diikuti setiap anak: angka delapan pelan dengan sedikit goyang, naik turun, lingkaran kecil, atau membesar lembut.",
+        "amplitude": "Jarak tempuh setiap anak dalam px, sedikit berbeda per anak. Untuk breathe juga besar pembesaran dalam persen.",
+        "duration": "Detik untuk satu putaran, sedikit berbeda per anak supaya tidak pernah bergerak serempak.",
+        "seed": "Mengubah waktu, ukuran, dan arah per anak. Seed yang sama selalu menghasilkan gerakan yang sama.",
+        "parallax": "Pergeseran terbesar dalam px ke arah kursor. Setiap anak bergerak sesuai kedalamannya: data-depth=\"0.2\" sampai \"1\", atau kedalaman dari seed. 0 mematikannya.",
+        "entrance": "Anak-anak muncul satu per satu saat grup pertama kali masuk layar.",
+        "children / slot": "Item yang melayang. Setiap anak langsung bergerak sendiri; atur posisinya dengan class sendiri, misalnya absolute top-[12%] left-[10%]."
+      },
+      "a11y": [
+        "Gerakan melayang hanya dekorasi; tandai grup yang murni dekoratif dengan aria-hidden=\"true\".",
+        "Anak berhenti bergerak saat disorot kursor atau memegang fokus keyboard, sehingga tombol dan tautan yang melayang tetap mudah dikenai.",
+        "Semua putaran berhenti saat grup di luar layar.",
+        "Dengan reduced motion tidak ada yang bergerak: tanpa putaran, parallax, atau kemunculan."
+      ],
+      "ai": {
+        "whenToUse": "Suasana hidup di sekitar titik fokus: ikon atau logo di sekitar judul hero, badge di kartu harga, avatar di sekitar angka komunitas.",
+        "rules": [
+          "Jaga amplitude tetap kecil (4 sampai 14) supaya gerakannya tenang",
+          "Melayangkan beberapa item dekoratif saja, bukan teks isi atau field form",
+          "Animasi memakai transform pada setiap anak langsung; bungkus anak yang butuh utilitas transform sendiri",
+          "Pakai parallax pada area seukuran hero, bukan grup kecil sebaris"
+        ]
+      }
+    }
+  }
+}

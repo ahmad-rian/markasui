@@ -1,0 +1,79 @@
+{
+  "name": "magnet",
+  "title": "Magnet",
+  "description": "Wrapper that pulls its content toward a nearby mouse, or pushes it away, then springs back. Inner layers can travel further for depth.",
+  "category": "markas",
+  "tags": ["magnet", "magnetic", "button", "cta", "hover", "pointer", "spring"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "magnet.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Magnet.tsx", "deps": [] },
+    "vue": { "file": "Magnet.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "strength",
+      "type": "number",
+      "default": "0.35",
+      "description": "Share of the pointer distance the content follows, from 0 to 1. For repel it sets how far the content is pushed, as a share of radius."
+    },
+    {
+      "name": "radius",
+      "type": "number",
+      "default": "80",
+      "description": "Distance in px beyond the content edges where the pull starts. It grows smoothly as the pointer comes closer."
+    },
+    {
+      "name": "mode",
+      "type": "\"attract\" | \"repel\"",
+      "default": "\"attract\"",
+      "description": "Move toward the pointer, or dodge away from it."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "The content, usually one button, link, or icon. Inner elements with data-depth=\"0.5\" travel that much further, such as the arrow in a button."
+    }
+  ],
+  "a11y": [
+    "The pull is visual only; the button or link inside keeps its role, name, and position in the tab order.",
+    "Keyboard focus inside lifts the content slightly so the focus is easy to follow.",
+    "Touch input is ignored, and with reduced motion the content stays still."
+  ],
+  "ai": {
+    "whenToUse": "One or a few targets that invite a click: a hero or pricing call to action, social icons in a footer, the main action in a navbar.",
+    "rules": [
+      "Wrap a single focused element; do not wrap whole forms or long lists",
+      "Keep strength between 0.2 and 0.5 and radius under about 100 so targets stay easy to hit",
+      "Use repel only on decorative or playful elements, never on a button people need",
+      "Give icon-only links an aria-label"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Pembungkus yang menarik isinya ke arah mouse di dekatnya, atau mendorongnya menjauh, lalu kembali memegas. Lapisan dalam bisa bergerak lebih jauh.",
+      "props": {
+        "strength": "Bagian jarak kursor yang diikuti isi, dari 0 sampai 1. Untuk repel menentukan seberapa jauh isi didorong, sebagai bagian dari radius.",
+        "radius": "Jarak dalam px di luar tepi isi tempat tarikan mulai. Tarikan membesar halus saat kursor mendekat.",
+        "mode": "Bergerak ke arah kursor, atau menghindar darinya.",
+        "children / slot": "Isinya, biasanya satu tombol, tautan, atau ikon. Elemen di dalam dengan data-depth=\"0.5\" bergerak lebih jauh sebanyak itu, misalnya panah di tombol."
+      },
+      "a11y": [
+        "Tarikan hanya visual; tombol atau tautan di dalam tetap punya role, nama, dan urutan tab yang sama.",
+        "Fokus keyboard di dalam membuat isi sedikit terangkat sehingga fokus mudah diikuti.",
+        "Input sentuh diabaikan, dan dengan reduced motion isi tetap diam."
+      ],
+      "ai": {
+        "whenToUse": "Satu atau beberapa target yang mengundang klik: ajakan bertindak di hero atau harga, ikon sosial di footer, aksi utama di navbar.",
+        "rules": [
+          "Bungkus satu elemen yang jadi fokus; jangan membungkus seluruh form atau daftar panjang",
+          "Jaga strength antara 0.2 dan 0.5 dan radius di bawah sekitar 100 supaya target tetap mudah dikenai",
+          "Pakai repel hanya pada elemen dekoratif atau main-main, jangan pada tombol yang dibutuhkan orang",
+          "Beri aria-label pada tautan yang hanya berisi ikon"
+        ]
+      }
+    }
+  }
+}

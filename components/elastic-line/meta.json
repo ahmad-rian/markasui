@@ -1,0 +1,100 @@
+{
+  "name": "elastic-line",
+  "title": "Elastic Line",
+  "description": "SVG line that bends toward, away from, or with the pointer when it comes close, then springs back. Works as a divider or a heading underline.",
+  "category": "markas",
+  "tags": ["line", "divider", "separator", "svg", "spring", "pointer"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "elastic-line.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "ElasticLine.tsx", "deps": [] },
+    "vue": { "file": "ElasticLine.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"pull\" | \"push\" | \"pluck\"",
+      "default": "\"pull\"",
+      "description": "pull: the line bends toward the pointer. push: it bends away like a soft wall. pluck: it follows the pointer once touched, slips free, and vibrates."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "Direction of the line. A vertical line stretches to the height of its flex row."
+    },
+    {
+      "name": "reach",
+      "type": "number",
+      "default": "24",
+      "description": "Px on each side of the line where the pointer bends it. Also the most it can bend. The component is twice this tall (or wide)."
+    },
+    {
+      "name": "color",
+      "type": "\"line\" | \"muted\" | \"ink\" | \"primary\" | \"success\" | \"warning\" | \"danger\"",
+      "default": "\"line\"",
+      "description": "Line color token."
+    },
+    {
+      "name": "strokeWidth",
+      "type": "number",
+      "default": "1.5",
+      "description": "Line width in px. It stays the same however wide the line is."
+    },
+    {
+      "name": "playOnView",
+      "type": "boolean",
+      "default": "false",
+      "description": "Twangs once when the line first scrolls into view."
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides the line from assistive tech, for underlines and ornaments. Otherwise it is announced as a separator."
+    }
+  ],
+  "a11y": [
+    "By default the line has role=\"separator\" with aria-orientation; use decorative for underlines so it is hidden instead.",
+    "The bend is drawn by changing one SVG path; requestAnimationFrame only runs while the pointer is close or the line still moves.",
+    "With reduced motion the line stays straight and never twangs."
+  ],
+  "ai": {
+    "whenToUse": "A divider between sections, a separator between stats or footer links, or an underline under a heading that should feel tactile when the pointer passes.",
+    "rules": [
+      "Use pull for calm dividers, push for hero areas, and pluck for small playful underlines",
+      "Set reach to the space you can spare around the line; the component takes twice that",
+      "Mark underlines and ornaments as decorative",
+      "Put a vertical line inside a flex row so it can stretch"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Garis SVG yang melengkung ke arah, menjauhi, atau ikut kursor saat kursor mendekat, lalu memegas kembali. Cocok sebagai pemisah atau garis bawah judul.",
+      "props": {
+        "variant": "pull: garis melengkung ke arah kursor. push: melengkung menjauh seperti dinding lunak. pluck: mengikuti kursor setelah disentuh, lalu lepas dan bergetar.",
+        "orientation": "Arah garis. Garis vertikal meregang setinggi baris flex-nya.",
+        "reach": "Px di tiap sisi garis tempat kursor melengkungkannya. Juga lengkungan terbesar. Tinggi (atau lebar) komponen dua kali nilai ini.",
+        "color": "Token warna garis.",
+        "strokeWidth": "Tebal garis dalam px. Tetap sama berapa pun lebar garisnya.",
+        "playOnView": "Bergetar sekali saat garis pertama kali masuk layar.",
+        "decorative": "Menyembunyikan garis dari teknologi bantu, untuk garis bawah dan ornamen. Jika tidak, garis diumumkan sebagai pemisah."
+      },
+      "a11y": [
+        "Secara bawaan garis punya role=\"separator\" dengan aria-orientation; pakai decorative untuk garis bawah agar disembunyikan.",
+        "Lengkungan digambar dengan mengubah satu path SVG; requestAnimationFrame hanya berjalan selama kursor dekat atau garis masih bergerak.",
+        "Dengan reduced motion garis tetap lurus dan tidak bergetar."
+      ],
+      "ai": {
+        "whenToUse": "Pemisah antarbagian, pemisah antarangka statistik atau tautan footer, atau garis bawah judul yang terasa nyata saat kursor lewat.",
+        "rules": [
+          "Pakai pull untuk pemisah yang tenang, push untuk area hero, dan pluck untuk garis bawah kecil yang ceria",
+          "Atur reach sesuai ruang di sekitar garis; komponen memakai dua kali nilai itu",
+          "Tandai garis bawah dan ornamen sebagai decorative",
+          "Letakkan garis vertikal di dalam baris flex agar bisa meregang"
+        ]
+      }
+    }
+  }
+}

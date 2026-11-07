@@ -1,0 +1,100 @@
+{
+  "name": "pixel-trail",
+  "title": "Pixel Trail",
+  "description": "Grid of small cells that light up under the pointer and fade out, drawn on one canvas. Keyboard focus lights the cells around the focused element.",
+  "category": "markas",
+  "tags": ["pixel", "grid", "trail", "canvas", "hero", "background", "pointer"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "pixel-trail.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "PixelTrail.tsx", "deps": [] },
+    "vue": { "file": "PixelTrail.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"pixel\" | \"dot\" | \"brush\"",
+      "default": "\"pixel\"",
+      "description": "pixel: square cells. dot: round cells like an LED board. brush: a soft brush that also lights the cells around the pointer."
+    },
+    {
+      "name": "cellSize",
+      "type": "number",
+      "default": "24",
+      "description": "Side of one cell in px."
+    },
+    {
+      "name": "fade",
+      "type": "number",
+      "default": "600",
+      "description": "How long a lit cell takes to fade out, in ms."
+    },
+    {
+      "name": "color",
+      "type": "\"primary\" | \"success\" | \"warning\" | \"danger\" | \"ink\"",
+      "default": "\"primary\"",
+      "description": "Light color token, read from the theme so it follows light and dark mode."
+    },
+    {
+      "name": "showGrid",
+      "type": "boolean",
+      "default": "false",
+      "description": "Draws faint grid lines between the cells."
+    },
+    {
+      "name": "autoplay",
+      "type": "boolean",
+      "default": "false",
+      "description": "Draws a trail on its own while the area is on screen, the tab is visible, and the pointer is elsewhere."
+    },
+    {
+      "name": "children / slot",
+      "type": "ReactNode / slot",
+      "default": "-",
+      "description": "Content shown above the cells. Lay it out with your own classes on the component."
+    }
+  ],
+  "a11y": [
+    "The canvas is aria-hidden and never catches the pointer; content above it stays readable and clickable.",
+    "When an element inside gets keyboard focus, the cells around it light up as an extra focus cue next to the normal focus ring.",
+    "With reduced motion nothing is drawn; the canvas only redraws while some cell is still lit."
+  ],
+  "ai": {
+    "whenToUse": "An interactive hero background, a call to action card, a navbar strip, or a playful sketch area where the pointer should leave a pixel trail.",
+    "rules": [
+      "Give the component a height and a background; the cells sit behind the content",
+      "Use larger cells (20 to 32 px) for big areas and small cells (8 to 12 px) for thin strips",
+      "Keep fade between 400 and 1500 ms so the trail never lingers",
+      "Use one pixel trail per screen and keep content contrast high"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Grid sel kecil yang menyala di bawah kursor lalu memudar, digambar di satu canvas. Fokus keyboard menyalakan sel di sekitar elemen yang difokus.",
+      "props": {
+        "variant": "pixel: sel persegi. dot: sel bulat seperti papan LED. brush: kuas lembut yang juga menyalakan sel di sekitar kursor.",
+        "cellSize": "Sisi satu sel dalam px.",
+        "fade": "Lama sel yang menyala memudar, dalam ms.",
+        "color": "Token warna cahaya, dibaca dari tema sehingga mengikuti mode terang dan gelap.",
+        "showGrid": "Menggambar garis grid tipis di antara sel.",
+        "autoplay": "Menggambar jejak sendiri selama area terlihat, tab aktif, dan kursor di tempat lain.",
+        "children / slot": "Konten di atas sel. Atur tata letaknya dengan class sendiri pada komponen."
+      },
+      "a11y": [
+        "Canvas bersifat aria-hidden dan tidak menangkap pointer; konten di atasnya tetap terbaca dan bisa diklik.",
+        "Saat elemen di dalamnya mendapat fokus keyboard, sel di sekitarnya menyala sebagai penanda fokus tambahan di samping cincin fokus biasa.",
+        "Dengan reduced motion tidak ada yang digambar; canvas hanya menggambar ulang selama masih ada sel yang menyala."
+      ],
+      "ai": {
+        "whenToUse": "Latar hero interaktif, kartu ajakan bertindak, strip navbar, atau area coret-coret yang ceria tempat kursor meninggalkan jejak piksel.",
+        "rules": [
+          "Beri komponen tinggi dan latar; sel berada di belakang konten",
+          "Pakai sel besar (20 sampai 32 px) untuk area luas dan sel kecil (8 sampai 12 px) untuk strip tipis",
+          "Jaga fade antara 400 dan 1500 ms agar jejak tidak tertinggal lama",
+          "Pakai satu pixel trail per layar dan jaga kontras konten tetap tinggi"
+        ]
+      }
+    }
+  }
+}
