@@ -1,28 +1,33 @@
 import type { VariantTitles } from "../variants";
 
 export default {
-  "navbar--floating": { en: "Floating", id: "Mengambang" },
-  "navbar--blur": { en: "Blur over content", id: "Blur di atas konten" },
-  "navbar--with-icons": {
-    en: "Dropdown with icons",
-    id: "Dropdown dengan ikon",
+  "navbar--floating": {
+    en: "Floating glass pill",
+    id: "Pil kaca mengambang",
   },
-  "navbar--logo": { en: "With logo", id: "Dengan logo" },
-  "navbar--actions": { en: "With actions", id: "Dengan aksi" },
-  "navbar--cta": { en: "With call to action", id: "Dengan ajakan" },
-  "navbar--centered-logo": { en: "Centered logo", id: "Logo di tengah" },
   "navbar--announcement": {
     en: "With announcement bar",
     id: "Dengan bar pengumuman",
   },
-  "navbar--search": { en: "With search", id: "Dengan pencarian" },
-  "navbar--dark-glass": {
-    en: "Glass over a dark hero",
-    id: "Kaca di atas hero gelap",
+  "navbar--search": {
+    en: "Command search in the middle",
+    id: "Pencarian perintah di tengah",
   },
-  "navbar--app": { en: "App header", id: "Header aplikasi" },
-  "navbar--sidebar-trigger": {
-    en: "Sidebar trigger",
-    id: "Pemicu sidebar",
+  "navbar--two-tier": {
+    en: "Two tiers with utility bar",
+    id: "Dua tingkat dengan bar utilitas",
+  },
+  "navbar--mega": {
+    en: "Mega menu with featured cards",
+    id: "Mega menu dengan kartu sorotan",
+  },
+  "navbar--app": { en: "Dashboard header", id: "Header dashboard" },
+  "navbar--bottom-tabs": {
+    en: "Mobile with bottom tabs",
+    id: "Seluler dengan tab bawah",
+  },
+  "navbar--hero": {
+    en: "Clear over a hero, solid on scroll",
+    id: "Bening di atas hero, solid saat digulir",
   },
 } satisfies VariantTitles;

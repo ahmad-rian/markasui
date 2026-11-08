@@ -8,7 +8,7 @@ const link =
 const pages = [
   { label: "Docs", href: "/docs" },
   { label: "Templates", href: "/templates" },
-  { label: "GitHub", href: "https://github.com" },
+  { label: "GitHub", href: "https://github.com/markasui/markasui" },
 ];
 
 export default function ElasticLineFooterExample() {
@@ -16,7 +16,7 @@ export default function ElasticLineFooterExample() {
     <footer className={footer}>
       <ElasticLine color="muted" strokeWidth={1} reach={20} />
       <div className={row}>
-        <p>2026 Markas Studio, Bandung</p>
+        <p>2026 MarkasUI, Bandung</p>
         <nav aria-label="Footer">
           <ul className={links}>
             {pages.map((page) => (

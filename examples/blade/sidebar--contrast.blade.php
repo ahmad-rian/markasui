@@ -1,0 +1,82 @@
+@php
+    // Tema gelap di kedua mode, indikator hijau dengan garis kiri, dan teks item aktif berwarna.
+    $shell = 'dark h-[520px] rounded-xl border border-line [&_nav>div>span]:rounded-l-none [&_nav>div>span]:border-l-2 [&_nav>div>span]:border-success [&_nav>div>span]:bg-success/10 [&_a[aria-current=page]]:text-success';
+    $deploys = [
+        ['branch' => 'main', 'commit' => '8f3c2a1', 'time' => '2m ago', 'tone' => 'bg-success'],
+        ['branch' => 'docs/tabs', 'commit' => '41be9d0', 'time' => '1h ago', 'tone' => 'bg-success'],
+        ['branch' => 'fix/modal', 'commit' => 'c07a3e5', 'time' => '3h ago', 'tone' => 'bg-danger'],
+    ];
+@endphp
+<x-markas.sidebar :sections="[
+    [
+        'items' => [
+            [
+                'label' => 'Overview',
+                'href' => '/',
+                'icon' => 'M4 4h6v8H4zm10 0h6v5h-6zM4 16h6v4H4zm10-3h6v7h-6z',
+                'active' => true,
+            ],
+            [
+                'label' => 'Deployments',
+                'href' => '/deployments',
+                'icon' => 'M13 3 4 14h7l-1 7 9-11h-7z',
+                'badge' => 3,
+            ],
+            [
+                'label' => 'Analytics',
+                'href' => '/analytics',
+                'icon' => 'M3 3v18h18M7 15l4-4 3 3 5-6',
+            ],
+            [
+                'label' => 'Logs',
+                'href' => '/logs',
+                'icon' => 'M4 5h16v14H4zm4 5 2 2-2 2m5 0h3',
+            ],
+        ],
+    ],
+    [
+        'title' => 'Project',
+        'items' => [
+            [
+                'label' => 'Domains',
+                'href' => '/domains',
+                'icon' => 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9S9.5 5.5 12 3',
+            ],
+            [
+                'label' => 'Environment',
+                'href' => '/environment',
+                'icon' => 'M15 7a4 4 0 1 1-3.9 5H9v2H7v2H4v-3l5.1-5.1A4 4 0 0 1 15 7m1 0h.01',
+            ],
+            [
+                'label' => 'Settings',
+                'href' => '/settings',
+                'icon' => 'M4 6h9m4 0h3M4 12h3m4 0h9M4 18h11m4 0h1M15 4v4M9 10v4M17 16v4',
+            ],
+        ],
+    ],
+]" breakpoint="sm" :class="$shell">
+    <x-slot:header>
+        <svg class="size-7 shrink-0" viewBox="0 0 1464 1430" aria-hidden="true"><polygon points="354,578 1256,138 1171,430 268,868" class="fill-ink/15" /><polygon points="553,443 1455,3 1370,295 467,733" class="fill-ink/55" /><polygon points="421,762 1325,318 1240,611 336,1050" class="fill-success/35" /><polygon points="265,1073 1169,629 1084,922 180,1362" class="fill-ink/25" /><polygon points="93,965 997,521 912,814 8,1253" class="fill-ink/75" /><polygon points="347,1135 1251,691 1166,984 262,1424" class="fill-success" /></svg>
+        <div class="grid min-w-0 leading-tight"><span class="font-semibold text-ink">MarkasUI</span><span class="flex items-center gap-1.5 text-xs text-muted"><span aria-hidden="true" class="size-1.5 rounded-full bg-success"></span>Production</span></div>
+    </x-slot:header>
+    <x-slot:footer>
+        <span class="grid size-8 shrink-0 place-items-center rounded-full bg-success/15 text-xs font-semibold text-ink">BH</span>
+        <span class="grid min-w-0 leading-tight"><span class="truncate font-medium text-ink">Bayu Hartono</span><span class="truncate text-xs text-muted">Owner</span></span>
+    </x-slot:footer>
+    <div class="flex min-w-0 flex-1 flex-col gap-4 p-5">
+        <div class="grid gap-1">
+            <p class="text-xs text-muted">Overview</p>
+            <p class="text-lg font-semibold tracking-tight text-ink">markasui.com</p>
+        </div>
+        <div class="grid gap-3 rounded-xl border border-line bg-surface p-4">
+            <p class="text-xs font-medium text-faint">Recent deployments</p>
+            @foreach ($deploys as $deploy)
+                <div class="flex items-center gap-2.5">
+                    <span aria-hidden="true" class="size-2 shrink-0 rounded-full {{ $deploy['tone'] }}"></span>
+                    <span class="grid min-w-0 flex-1 leading-tight"><span class="truncate text-sm text-ink">{{ $deploy['branch'] }}</span><span class="font-mono text-xs text-muted">{{ $deploy['commit'] }}</span></span>
+                    <span class="text-xs text-muted">{{ $deploy['time'] }}</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</x-markas.sidebar>

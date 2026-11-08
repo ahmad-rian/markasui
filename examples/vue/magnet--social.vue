@@ -12,7 +12,7 @@ const icon = "size-5";
 
 <template>
   <footer :class="footer">
-    <p :class="text">Follow Markas Studio</p>
+    <p :class="text">Follow MarkasUI</p>
     <div :class="row">
       <Magnet :strength="0.5" :radius="32"
         ><a href="#" aria-label="Email" :class="link"

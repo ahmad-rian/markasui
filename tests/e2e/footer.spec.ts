@@ -8,6 +8,8 @@ const VARIANTS = [
   "footer--big-brand",
   "footer--cta",
   "footer--compact",
+  "footer--sitemap",
+  "footer--minimal-dark",
 ];
 const MOBILE = { width: 390, height: 844 };
 
@@ -20,28 +22,29 @@ const focusedName = (page: Page) =>
 
 for (const framework of frameworks) {
   test.describe(`${framework} footer`, () => {
-    test("footer: Tab berurutan dari link kolom ke legal, sosial, lalu Back to top", async ({
+    test("footer: Tab berurutan dari status ke link kolom, legal, sosial, lalu Back to top", async ({
       page,
     }) => {
       await openFixture(page, framework, "footer");
       const expected = [
-        "Invoicing",
-        "Payroll",
-        "Expenses",
-        "Integrations",
-        "About",
-        "Careers",
-        "Press",
-        "Contact",
+        "All systems normal",
+        "Components",
+        "Templates",
+        "Themes",
+        "Pricing",
         "Docs",
-        "API reference",
         "Changelog",
+        "MCP server",
         "Status",
+        "About",
+        "Blog",
+        "Careers",
+        "Contact",
         "Privacy",
         "Terms",
-        "Cookies",
+        "License",
+        "GitHub",
         "X",
-        "Instagram",
         "LinkedIn",
         "YouTube",
         "Back to top",
@@ -80,7 +83,7 @@ for (const framework of frameworks) {
       ).toBe(false);
       await expect(status).toBeEmpty();
 
-      await page.keyboard.type("ani@rapi.id");
+      await page.keyboard.type("ani@markasui.dev");
       await page.keyboard.press("Tab");
       await expect(
         page.getByRole("button", { name: "Subscribe" }),

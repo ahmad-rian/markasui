@@ -19,11 +19,15 @@ const legal = [{ label: "Privacy", href: "/privacy" }];
 
 describe("Footer (React)", () => {
   it("renders columns with h2 titles inside a labelled nav", () => {
-    render(<Footer brand="Rapi" columns={columns} copyright="© 2026 Rapi" />);
+    render(
+      <Footer brand="MarkasUI" columns={columns} copyright="© 2026 MarkasUI" />,
+    );
     const nav = screen.getByRole("navigation", { name: "Footer" });
     expect(within(nav).getAllByRole("heading", { level: 2 })).toHaveLength(2);
     expect(within(nav).getAllByRole("list")).toHaveLength(2);
-    expect(screen.getByRole("contentinfo")).toHaveTextContent("© 2026 Rapi");
+    expect(screen.getByRole("contentinfo")).toHaveTextContent(
+      "© 2026 MarkasUI",
+    );
   });
 
   it("flattens links into one list for centered, cta, and compact", () => {
@@ -49,7 +53,7 @@ describe("Footer (React)", () => {
     render(
       <Footer
         columns={[{ links: [{ label: "Bad", href: " javascript:alert(1)" }] }]}
-        legal={[{ label: "Mail", href: "mailto:hi@rapi.id" }]}
+        legal={[{ label: "Mail", href: "mailto:hi@markasui.dev" }]}
       />,
     );
     expect(screen.getByRole("link", { name: "Bad" })).toHaveAttribute(
@@ -58,7 +62,7 @@ describe("Footer (React)", () => {
     );
     expect(screen.getByRole("link", { name: "Mail" })).toHaveAttribute(
       "href",
-      "mailto:hi@rapi.id",
+      "mailto:hi@markasui.dev",
     );
   });
 
@@ -79,7 +83,7 @@ describe("Footer (React)", () => {
     const email = screen.getByRole("textbox", { name: "Email address" });
     expect(email).toBeRequired();
     expect(email).toHaveAttribute("type", "email");
-    fireEvent.change(email, { target: { value: "ani@rapi.id" } });
+    fireEvent.change(email, { target: { value: "ani@markasui.dev" } });
     fireEvent.submit(email.closest("form")!);
     expect(status).toHaveTextContent("Thanks for subscribing");
     expect(email).toHaveValue("");
@@ -103,10 +107,10 @@ describe("Footer (React)", () => {
       screen.getByRole("heading", { name: "Start today" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try" })).toBeInTheDocument();
-    rerender(<Footer variant="big-brand" wordmark="Rapi" />);
+    rerender(<Footer variant="big-brand" wordmark="MarkasUI" />);
     const mark = container.querySelector("[aria-hidden=true]") as HTMLElement;
-    expect(mark).toHaveTextContent("Rapi");
-    expect(mark.style.getPropertyValue("--chars")).toBe("4");
+    expect(mark).toHaveTextContent("MarkasUI");
+    expect(mark.style.getPropertyValue("--chars")).toBe("8");
   });
 
   it("lets label props override the English defaults", () => {
@@ -143,7 +147,7 @@ describe("Footer (React)", () => {
       screen.getByRole("link", { name: "Kembali ke atas" }),
     ).toBeInTheDocument();
     const email = screen.getByRole("textbox", { name: "Alamat email" });
-    fireEvent.change(email, { target: { value: "ani@rapi.id" } });
+    fireEvent.change(email, { target: { value: "ani@markasui.dev" } });
     fireEvent.click(screen.getByRole("button", { name: "Langganan" }));
     expect(screen.getByRole("status")).toHaveTextContent("Terima kasih");
   });

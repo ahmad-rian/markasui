@@ -9,7 +9,7 @@ import Sparkles from "../../components/sparkles/Sparkles.vue";
   >
     <Sparkles variant="text" :density="18" size="sm" class="px-6 py-4">
       <h3 class="text-3xl font-semibold tracking-tight text-ink">
-        Meet Markas Pro
+        Meet MarkasUI Pro
       </h3>
     </Sparkles>
     <p class="max-w-72 text-sm text-muted">

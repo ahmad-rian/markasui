@@ -9,7 +9,7 @@ const link =
 const pages = [
   { label: "Docs", href: "/docs" },
   { label: "Templates", href: "/templates" },
-  { label: "GitHub", href: "https://github.com" },
+  { label: "GitHub", href: "https://github.com/markasui/markasui" },
 ];
 </script>
 
@@ -17,7 +17,7 @@ const pages = [
   <footer :class="footer">
     <ElasticLine color="muted" :stroke-width="1" :reach="20" />
     <div :class="row">
-      <p>2026 Markas Studio, Bandung</p>
+      <p>2026 MarkasUI, Bandung</p>
       <nav aria-label="Footer">
         <ul :class="links">
           <li v-for="page in pages" :key="page.label">

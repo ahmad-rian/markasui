@@ -1,5 +1,20 @@
 import { Sidebar } from "../../components/sidebar/Sidebar";
 
+const mark = [
+  { points: "354,578 1256,138 1171,430 268,868", className: "fill-ink/15" },
+  { points: "553,443 1455,3 1370,295 467,733", className: "fill-ink/55" },
+  {
+    points: "421,762 1325,318 1240,611 336,1050",
+    className: "fill-success/35",
+  },
+  { points: "265,1073 1169,629 1084,922 180,1362", className: "fill-ink/25" },
+  { points: "93,965 997,521 912,814 8,1253", className: "fill-ink/75" },
+  {
+    points: "347,1135 1251,691 1166,984 262,1424",
+    className: "fill-success",
+  },
+];
+
 const sections = [
   {
     items: [
@@ -33,8 +48,8 @@ const sections = [
             href: "/projects/mobile",
           },
           {
-            label: "Brand refresh",
-            href: "/projects/brand",
+            label: "Design system",
+            href: "/projects/design-system",
           },
         ],
       },
@@ -57,6 +72,12 @@ const sections = [
   },
 ];
 
+const tasks = [
+  { label: "Hero copy review", tone: "bg-success" },
+  { label: "Pricing page QA", tone: "bg-warning" },
+  { label: "Footer links audit", tone: "bg-faint" },
+];
+
 export default function SidebarFixture() {
   return (
     <Sidebar
@@ -65,31 +86,84 @@ export default function SidebarFixture() {
       className="h-[540px] rounded-xl border border-line"
       header={
         <>
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-on-primary">
-            A
-          </div>
-          <div className="grid leading-tight">
-            <span className="font-semibold text-ink">Acme Inc</span>
-            <span className="text-xs text-muted">Pro plan</span>
+          <svg
+            className="size-7 shrink-0"
+            viewBox="0 0 1464 1430"
+            aria-hidden="true"
+          >
+            {mark.map((shape) => (
+              <polygon
+                key={shape.points}
+                points={shape.points}
+                className={shape.className}
+              />
+            ))}
+          </svg>
+          <div className="grid min-w-0 leading-tight">
+            <span className="font-semibold text-ink">MarkasUI</span>
+            <span className="text-xs text-muted">Pro workspace</span>
           </div>
         </>
       }
       footer={
         <>
-          <div className="flex items-center gap-3">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-subtle text-xs font-semibold text-ink">
-              RS
+          <span className="relative grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft text-xs font-semibold text-ink">
+            RS
+            <span
+              aria-hidden="true"
+              className="absolute -right-0.5 -bottom-0.5 size-2.5 rounded-full border-2 border-surface bg-success"
+            ></span>
+          </span>
+          <span className="grid min-w-0 flex-1 leading-tight">
+            <span className="truncate font-medium text-ink">Rina Saputra</span>
+            <span className="truncate text-xs text-muted">
+              rina@markasui.com
             </span>
-            <span className="grid leading-tight">
-              <span className="font-medium text-ink">Rina Saputra</span>
-              <span className="text-xs text-muted">rina@acme.co</span>
-            </span>
-          </div>
+          </span>
+          <svg
+            className="size-4 shrink-0 text-faint"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m8 9 4-4 4 4m0 6-4 4-4-4" />
+          </svg>
         </>
       }
     >
-      <div className="flex-1 p-4">
-        <div className="h-full rounded-lg border border-dashed border-line"></div>
+      <div className="flex min-w-0 flex-1 flex-col gap-4 p-5">
+        <div className="grid gap-1">
+          <p className="text-xs text-muted">Projects / Website redesign</p>
+          <p className="text-lg font-semibold tracking-tight text-ink">
+            Sprint 14
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-xl border border-line bg-surface p-3">
+            <p className="text-xs text-muted">Open</p>
+            <p className="mt-1 text-xl font-semibold text-ink">24</p>
+          </div>
+          <div className="rounded-xl border border-line bg-surface p-3">
+            <p className="text-xs text-muted">Shipped</p>
+            <p className="mt-1 text-xl font-semibold text-ink">18</p>
+          </div>
+        </div>
+        <div className="grid content-start gap-3 rounded-xl border border-line bg-surface p-4">
+          <p className="text-xs font-medium text-faint">Up next</p>
+          {tasks.map((task) => (
+            <div key={task.label} className="flex items-center gap-2.5">
+              <span
+                aria-hidden="true"
+                className={`size-2 shrink-0 rounded-full ${task.tone}`}
+              ></span>
+              <span className="truncate text-sm text-ink">{task.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </Sidebar>
   );

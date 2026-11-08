@@ -62,7 +62,7 @@ defineSlots<{
 
 const root =
   "@container w-full border-t border-line bg-canvas text-sm text-muted **:focus-visible:outline-2 **:focus-visible:outline-offset-2 **:focus-visible:outline-primary motion-reduce:**:transition-none";
-const wrap = "grid gap-10 px-4 py-12 @2xl:px-8";
+const wrap = "grid gap-12 px-4 py-14 @2xl:px-8";
 const main = "grid gap-10 @3xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]";
 const brandArea = "grid max-w-sm content-start gap-4";
 const bottom =
@@ -75,20 +75,20 @@ const layouts = {
   columns: [wrap, main, brandArea, bottom],
   newsletter: [wrap, main, brandArea, bottom],
   "big-brand": [
-    "grid gap-10 overflow-hidden px-4 pt-12 @2xl:px-8",
+    "grid gap-12 overflow-hidden bg-linear-to-b to-primary-soft px-4 pt-14 @2xl:px-8",
     main,
     brandArea,
     bottom,
   ],
   centered: [
-    "grid justify-items-center gap-8 px-4 py-12 text-center",
+    "grid justify-items-center gap-8 bg-radial-[at_top] from-primary-soft to-70% px-4 py-14 text-center",
     "grid justify-items-center gap-6",
     "grid max-w-md justify-items-center gap-3",
     stack,
   ],
   cta: [wrap, row, contents, bottom],
   compact: [
-    "flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4",
+    "flex flex-wrap items-center gap-x-5 gap-y-2 rounded-3xl border px-5 py-3 shadow-overlay @xl:rounded-full",
     contents,
     contents,
     contents,
@@ -100,7 +100,7 @@ const actionsClass = "flex flex-wrap items-center gap-2";
 const columnsNav =
   "grid grid-cols-2 gap-x-6 gap-y-8 @xl:grid-cols-[repeat(auto-fit,minmax(7rem,1fr))]";
 const columnTitle = "font-medium text-ink";
-const columnList = "mt-4 grid gap-3";
+const columnList = "mt-4 grid gap-2.5";
 const flatList = "flex flex-wrap justify-center gap-x-6 gap-y-2";
 const link =
   "rounded-sm transition-colors duration-150 ease-out hover:text-ink";
@@ -108,30 +108,32 @@ const copyrightClass = "@2xl:mr-auto";
 const legalList = "flex flex-wrap gap-x-4 gap-y-2";
 const socialList = "flex items-center gap-1";
 const socialLink =
-  "inline-flex size-9 items-center justify-center rounded-md transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink";
-const icon = "size-5";
+  "inline-flex size-9 items-center justify-center rounded-full border border-line bg-surface transition-colors duration-150 ease-out hover:border-primary-line hover:text-ink";
+const icon = "size-4";
 const topLink =
-  "inline-flex items-center gap-1.5 rounded-md font-medium text-ink transition-colors duration-150 ease-out hover:text-primary";
-const topIcon = "size-4";
+  "inline-flex h-8 items-center gap-1.5 rounded-full border border-line px-3 font-medium text-ink transition-colors duration-150 ease-out hover:bg-subtle";
 const card =
-  "grid gap-6 rounded-2xl border border-line bg-surface p-6 @3xl:grid-cols-2 @3xl:items-center @3xl:p-8";
-const cardTitle = "text-lg font-semibold text-balance text-ink";
+  "grid gap-6 rounded-3xl border border-line bg-linear-to-br from-surface to-primary-soft p-6 @3xl:grid-cols-2 @3xl:items-center @3xl:p-10";
+const cardTitle = "text-xl font-semibold tracking-tight text-balance text-ink";
 const cardText = "mt-1.5 leading-relaxed";
-const form = "flex flex-wrap gap-2";
+const form = "grid gap-3";
+const field =
+  "flex items-center gap-1 rounded-full border border-line bg-canvas p-1 shadow-xs";
 const input =
-  "h-10 min-w-0 flex-1 basis-48 rounded-lg border border-line bg-canvas px-3 text-ink placeholder:text-faint";
+  "h-10 w-0 flex-1 rounded-full bg-transparent px-4 text-ink placeholder:text-faint";
 const button =
-  "h-10 cursor-pointer rounded-lg bg-primary px-4 font-medium text-on-primary transition-colors duration-150 ease-out hover:bg-primary-strong";
-const status = "basis-full font-medium text-ink empty:sr-only";
+  "h-10 shrink-0 cursor-pointer rounded-full bg-primary px-5 font-medium text-on-primary transition-colors duration-150 ease-out hover:bg-primary-strong";
+const status =
+  "flex items-center gap-2 px-4 font-medium text-ink before:size-1.5 before:rounded-full before:bg-success empty:sr-only";
 const cta =
-  "grid justify-items-start gap-6 rounded-2xl border border-primary-line bg-primary-soft p-6 @2xl:p-10";
+  "dark grid justify-items-start gap-6 rounded-3xl border border-line bg-surface bg-radial-[at_top_right] from-success/30 to-60% p-6 text-muted @2xl:p-12";
 const ctaTitle =
   "max-w-xl text-2xl font-semibold tracking-tight text-balance text-ink @2xl:text-4xl";
 const ctaText = "mt-3 max-w-lg text-base leading-relaxed";
 const wordmarkBox =
   "-mx-4 h-[0.6em] overflow-hidden text-[calc(200cqw/var(--chars))] leading-none select-none @2xl:-mx-8";
 const wordmarkText =
-  "-mt-[0.08em] bg-linear-to-b from-ink/80 to-ink/5 bg-clip-text text-center font-semibold tracking-tighter whitespace-nowrap text-transparent";
+  "-mt-[0.08em] bg-linear-to-b from-ink via-ink/50 bg-clip-text text-center font-semibold tracking-tighter whitespace-nowrap text-transparent";
 
 /** Href berskema selain http, https, mailto, dan tel (misalnya javascript:) diganti "#". Spasi dan karakter kontrol diabaikan seperti di browser. */
 const safeHref = (href = "#") =>
@@ -162,18 +164,20 @@ function subscribe(event: Event) {
       </div>
       <slot name="newsletter">
         <form :class="form" @submit.prevent="subscribe">
-          <input
-            type="email"
-            name="email"
-            required
-            autocomplete="email"
-            :aria-label="props.emailLabel"
-            :placeholder="props.emailLabel"
-            :class="input"
-          />
-          <button type="submit" :class="button">
-            {{ props.subscribeLabel }}
-          </button>
+          <div :class="field">
+            <input
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+              :aria-label="props.emailLabel"
+              :placeholder="props.emailLabel"
+              :class="input"
+            />
+            <button type="submit" :class="button">
+              {{ props.subscribeLabel }}
+            </button>
+          </div>
           <p
             role="status"
             :class="status"
@@ -283,7 +287,7 @@ function subscribe(event: Event) {
       <a v-if="props.backToTop" href="#top" :class="topLink"
         >{{ props.backToTopLabel
         }}<svg
-          :class="topIcon"
+          :class="icon"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

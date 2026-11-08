@@ -51,6 +51,12 @@
     $safeHref = fn (string $href): string => preg_match('/^(?!https?:|mailto:|tel:)[a-z][\w+.\-]*:/i', preg_replace('/[\x00-\x20]/', '', $href)) === 1 ? '#' : $href;
     $svg = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
     $hasBadge = fn (array $entry): bool => isset($entry['badge']) && $entry['badge'] !== '';
+    // Header dan footer dicetak dua kali (aside dan dialog seluler). Id di salinan dialog diberi akhiran -m agar komponen di dalamnya (dropdown, command) tidak bentrok.
+    $mobileCopy = fn ($html): string => preg_replace_callback(
+        '/(?<=\s)(id|for|popovertarget|aria-(?:controls|labelledby|describedby|owns))="([^"]*)"/',
+        fn (array $m): string => $m[1].'="'.implode(' ', array_map(fn (string $ref): string => $ref.'-m', preg_split('/\s+/', trim($m[2])))).'"',
+        (string) $html,
+    );
 
     $id = $attributes->get('id') ?? 'markas-sidebar-'.\Illuminate\Support\Str::random(8);
     $asideId = $id.'-aside';
@@ -106,7 +112,7 @@
                 class="{{ $dialogClass }}"
             >
                 <div class="{{ $headerClass }}">
-                    <div class="{{ $slotClass }}">{{ $header ?? '' }}</div>
+                    <div class="{{ $slotClass }}">{!! $mobileCopy($header ?? '') !!}</div>
                     <form method="dialog">
                         <button type="submit" aria-label="{{ $closeLabel }}" class="{{ $iconButton }}">
                             <svg class="{{ $iconClass }}" {!! $svg !!}><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -203,7 +209,7 @@
                     </div>
                 </nav>
                 @isset($footer)
-                    <div class="{{ $footerClass }}"><div class="{{ $slotClass }}">{{ $footer }}</div></div>
+                    <div class="{{ $footerClass }}"><div class="{{ $slotClass }}">{!! $copy === 'd' ? $footer : $mobileCopy($footer) !!}</div></div>
                 @endisset
         @if ($copy === 'd')
                 <button

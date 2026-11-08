@@ -5,41 +5,20 @@ const columns = [
     title: "Product",
     links: [
       {
-        label: "Invoicing",
-        href: "/invoicing",
+        label: "Components",
+        href: "/components",
       },
       {
-        label: "Payroll",
-        href: "/payroll",
+        label: "Templates",
+        href: "/templates",
       },
       {
-        label: "Expenses",
-        href: "/expenses",
+        label: "Themes",
+        href: "/themes",
       },
       {
-        label: "Integrations",
-        href: "/integrations",
-      },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      {
-        label: "About",
-        href: "/about",
-      },
-      {
-        label: "Careers",
-        href: "/careers",
-      },
-      {
-        label: "Press",
-        href: "/press",
-      },
-      {
-        label: "Contact",
-        href: "/contact",
+        label: "Pricing",
+        href: "/pricing",
       },
     ],
   },
@@ -51,12 +30,12 @@ const columns = [
         href: "/docs",
       },
       {
-        label: "API reference",
-        href: "/api-reference",
-      },
-      {
         label: "Changelog",
         href: "/changelog",
+      },
+      {
+        label: "MCP server",
+        href: "/docs/mcp",
       },
       {
         label: "Status",
@@ -64,18 +43,39 @@ const columns = [
       },
     ],
   },
+  {
+    title: "Company",
+    links: [
+      {
+        label: "About",
+        href: "/about",
+      },
+      {
+        label: "Blog",
+        href: "/blog",
+      },
+      {
+        label: "Careers",
+        href: "/careers",
+      },
+      {
+        label: "Contact",
+        href: "/contact",
+      },
+    ],
+  },
 ];
 
 const socials = [
   {
-    label: "X",
-    href: "https://x.com/rapi",
-    icon: "M4 4l11.7 16H20L8.3 4H4zM4 20l6.8-6.8M13.2 10.8 20 4",
+    label: "GitHub",
+    href: "https://github.com/markasui",
+    icon: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4M9 18c-4.51 2-5-2-7-2",
   },
   {
-    label: "LinkedIn",
-    href: "https://linkedin.com/rapi",
-    icon: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 2a2 2 0 1 0 0 4 2 2 0 1 0 0-4z",
+    label: "X",
+    href: "https://x.com/markasui",
+    icon: "M4 4l11.7 16H20L8.3 4H4zM4 20l6.8-6.8M13.2 10.8 20 4",
   },
 ];
 
@@ -89,8 +89,8 @@ const legal = [
     href: "/terms",
   },
   {
-    label: "Cookies",
-    href: "/cookies",
+    label: "License",
+    href: "/license",
   },
 ];
 
@@ -98,27 +98,46 @@ export default function FooterNewsletterExample() {
   return (
     <Footer
       variant="newsletter"
-      newsletterDescription="Tax deadlines, payroll tips, and product updates. One email a month."
-      copyright="© 2026 PT Rapi Teknologi Indonesia"
-      description="Invoicing, payroll, and tax reports for Indonesian small businesses, in one tidy dashboard."
+      newsletterLabel="Get new components first"
+      newsletterDescription="One short email when new components and templates ship. No spam, unsubscribe anytime."
+      copyright="© 2026 MarkasUI"
+      description="Open source UI components for Blade, React, and Vue, styled with Tailwind CSS."
       columns={columns}
       socials={socials}
       legal={legal}
       brand={
         <>
           <svg
-            className="size-6 text-primary"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            className="size-7 shrink-0"
+            viewBox="0 0 1464 1430"
             aria-hidden="true"
           >
-            <path d="M6 20V4h7a5 5 0 0 1 0 10H6m7 0 5 6" />
+            <polygon
+              className="fill-ink/15"
+              points="354,578 1256,138 1171,430 268,868"
+            />
+            <polygon
+              className="fill-ink/50"
+              points="553,443 1455,3 1370,295 467,733"
+            />
+            <polygon
+              className="fill-success/30"
+              points="421,762 1325,318 1240,611 336,1050"
+            />
+            <polygon
+              className="fill-ink/25"
+              points="265,1073 1169,629 1084,922 180,1362"
+            />
+            <polygon
+              className="fill-ink/75"
+              points="93,965 997,521 912,814 8,1253"
+            />
+            <polygon
+              className="fill-success"
+              points="347,1135 1251,691 1166,984 262,1424"
+            />
           </svg>
-          Rapi
+          MarkasUI
         </>
       }
     />

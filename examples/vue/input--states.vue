@@ -5,7 +5,7 @@ import Input from "../../components/input/Input.vue";
 const username = ref("budi.santoso");
 const email = ref("budi@markas");
 const apiKey = ref("mk_live_4f8a2c91");
-const workspace = ref("Markas Labs");
+const workspace = ref("MarkasUI");
 </script>
 
 <template>

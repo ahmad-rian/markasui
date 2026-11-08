@@ -58,9 +58,9 @@ for (const framework of frameworks) {
       await expect(products).toHaveAttribute("aria-expanded", "false");
 
       await press("ArrowDown");
-      await expect(link(page, "Analytics")).toBeFocused();
+      await expect(link(page, "Components")).toBeFocused();
       await press("Tab");
-      await expect(link(page, "Automation")).toBeFocused();
+      await expect(link(page, "Templates")).toBeFocused();
       await press("Escape");
       await expect(await panelOf(page, "Products")).toBeHidden();
       await expect(products).toBeFocused();
@@ -156,7 +156,7 @@ for (const framework of frameworks) {
       await openFixture(page, framework, "navigation-menu--featured");
       await trigger(page, "Products").focus();
       await page.keyboard.press("ArrowDown");
-      await expect(link(page, "Workflows 2.0")).toBeFocused();
+      await expect(link(page, "MarkasUI 1.0")).toBeFocused();
       await expectNoAxeViolations(page);
     });
 

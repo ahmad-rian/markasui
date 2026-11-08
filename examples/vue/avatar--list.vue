@@ -8,7 +8,7 @@ import Avatar from "../../components/avatar/Avatar.vue";
       <Avatar name="Sarah Miller" size="sm" alt="" />
       <div class="min-w-0 flex-1">
         <p class="text-sm font-medium text-ink">Sarah Miller</p>
-        <p class="text-xs text-muted">sarah@northwind.io</p>
+        <p class="text-xs text-muted">sarah@markasui.com</p>
       </div>
       <span class="text-xs text-muted">Owner</span>
     </li>
@@ -16,7 +16,7 @@ import Avatar from "../../components/avatar/Avatar.vue";
       <Avatar name="Budi Santoso" size="sm" alt="" />
       <div class="min-w-0 flex-1">
         <p class="text-sm font-medium text-ink">Budi Santoso</p>
-        <p class="text-xs text-muted">budi@northwind.io</p>
+        <p class="text-xs text-muted">budi@markasui.com</p>
       </div>
       <span class="text-xs text-muted">Editor</span>
     </li>
@@ -24,7 +24,7 @@ import Avatar from "../../components/avatar/Avatar.vue";
       <Avatar name="Siti Aminah" size="sm" alt="" />
       <div class="min-w-0 flex-1">
         <p class="text-sm font-medium text-ink">Siti Aminah</p>
-        <p class="text-xs text-muted">siti@northwind.io</p>
+        <p class="text-xs text-muted">siti@markasui.com</p>
       </div>
       <span class="text-xs text-muted">Viewer</span>
     </li>

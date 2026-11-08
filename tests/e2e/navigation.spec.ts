@@ -31,13 +31,13 @@ for (const framework of frameworks) {
       await expect(toggle).toHaveAttribute("aria-expanded", "true");
       await expect(panel).toBeVisible();
       await expect(panel).toHaveAttribute("data-state", "open");
-      await expect(panel.getByRole("link", { name: "Home" })).toHaveAttribute(
+      await expect(panel.getByRole("link", { name: "Docs" })).toHaveAttribute(
         "aria-current",
         "page",
       );
 
       await page.keyboard.press("Tab");
-      await expect(panel.getByRole("link", { name: "Home" })).toBeFocused();
+      await expect(panel.getByRole("link", { name: "Docs" })).toBeFocused();
       await page.keyboard.press("Escape");
       await expect(panel).toBeHidden();
       await expect(toggle).toHaveAttribute("aria-expanded", "false");

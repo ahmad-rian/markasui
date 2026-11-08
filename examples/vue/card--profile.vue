@@ -10,7 +10,7 @@ import Card from "../../components/card/Card.vue";
       <Avatar name="Sarah Miller" size="lg" alt="" />
       <div class="grid gap-0.5">
         <h3 class="text-base font-semibold text-ink">Sarah Miller</h3>
-        <p class="text-muted">Product designer at Northwind</p>
+        <p class="text-muted">Product designer at MarkasUI</p>
       </div>
     </div>
     <p class="mt-4 text-muted">

@@ -13,7 +13,7 @@
         ]],
     ]],
 ]" class="h-dvh">
-    <x-slot:header>Acme Inc</x-slot:header>
+    <x-slot:header>MarkasUI</x-slot:header>
     <x-slot:footer>Rina Saputra</x-slot:footer>
 
     <main class="flex-1 p-6">...</main>
@@ -66,7 +66,7 @@ const [collapsed, setCollapsed] = useState(false);
 
 <Sidebar
   sections={sections}
-  header="Acme Inc"
+  header="MarkasUI"
   footer="Rina Saputra"
   collapsed={collapsed}
   onCollapsedChange={setCollapsed}
@@ -89,7 +89,7 @@ const collapsed = ref(false);
 
 <template>
   <Sidebar v-model:collapsed="collapsed" :sections="sections" class="h-dvh">
-    <template #header>Acme Inc</template>
+    <template #header>MarkasUI</template>
     <template #footer>Rina Saputra</template>
     <main class="flex-1 p-6">...</main>
   </Sidebar>
@@ -102,4 +102,6 @@ const collapsed = ref(false);
 - The round button on the sidebar edge switches to a 64px icon rail. Labels then show as tooltips and badges as a dot. The state is uncontrolled by default. Start in rail mode with `defaultCollapsed` in React, or `:collapsed="true"` without `v-model` in Vue and Blade.
 - In rail mode a parent item expands the sidebar and opens its sub-items.
 - The highlight slides to the hovered or focused item and back to the active one. It uses CSS anchor positioning, so it needs no JavaScript; browsers without it still mark the active item with bold text. Sub-item groups that hold the active page start open; set `open` to override.
+- `header` and `footer` render twice: once in the sidebar and once in the mobile dialog. A workspace switcher (DropdownMenu) or a search trigger (Command) works in both copies; in Blade, ids inside the dialog copy get a `-m` suffix so they stay unique.
+- Hide parts of the header or footer in rail mode with `in-data-[state=collapsed]:hidden`, for example an upgrade card.
 - Labels default to English: "Sidebar", "Collapse sidebar", "Expand sidebar", "Open sidebar", and "Close sidebar". Translate them with `navLabel`, `collapseLabel`, `expandLabel`, `openLabel`, and `closeLabel` (Blade: `nav-label`, `collapse-label`, and so on).

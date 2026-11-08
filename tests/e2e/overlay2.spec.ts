@@ -200,7 +200,7 @@ for (const framework of frameworks) {
       const card = page.locator("[popover=manual]");
 
       await expect(card).toBeHidden();
-      await expect(link).toHaveAccessibleDescription(/Markas UI/);
+      await expect(link).toHaveAccessibleDescription(/MarkasUI/);
       await page.keyboard.press("Tab");
       await expect(link).toBeFocused();
       await expect(card).toBeVisible();

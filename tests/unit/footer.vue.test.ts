@@ -20,14 +20,16 @@ const legal = [{ label: "Privacy", href: "/privacy" }];
 describe("Footer (Vue)", () => {
   it("renders columns with h2 titles inside a labelled nav", () => {
     render(Footer, {
-      props: { columns, copyright: "© 2026 Rapi" },
-      slots: { brand: "Rapi" },
+      props: { columns, copyright: "© 2026 MarkasUI" },
+      slots: { brand: "MarkasUI" },
     });
     const nav = screen.getByRole("navigation", { name: "Footer" });
     expect(within(nav).getAllByRole("heading", { level: 2 })).toHaveLength(2);
     expect(within(nav).getAllByRole("list")).toHaveLength(2);
-    expect(screen.getByRole("contentinfo")).toHaveTextContent("© 2026 Rapi");
-    expect(screen.getByText("Rapi")).toBeInTheDocument();
+    expect(screen.getByRole("contentinfo")).toHaveTextContent(
+      "© 2026 MarkasUI",
+    );
+    expect(screen.getByText("MarkasUI")).toBeInTheDocument();
   });
 
   it("flattens links into one list for centered, cta, and compact", () => {
@@ -42,7 +44,7 @@ describe("Footer (Vue)", () => {
 
   it("renders socials once, before the copyright only when centered", () => {
     const { container, unmount } = render(Footer, {
-      props: { variant: "centered", socials, copyright: "© Rapi" },
+      props: { variant: "centered", socials, copyright: "© MarkasUI" },
     });
     expect(screen.getAllByRole("list", { name: "Social media" })).toHaveLength(
       1,
@@ -50,7 +52,7 @@ describe("Footer (Vue)", () => {
     const bottom = container.querySelector("ul[aria-label]")!.parentElement!;
     expect(bottom.firstElementChild!.tagName).toBe("UL");
     unmount();
-    render(Footer, { props: { socials, copyright: "© Rapi" } });
+    render(Footer, { props: { socials, copyright: "© MarkasUI" } });
     const link = screen.getByRole("link", { name: "LinkedIn" });
     expect(link.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
@@ -59,7 +61,7 @@ describe("Footer (Vue)", () => {
     render(Footer, {
       props: {
         columns: [{ links: [{ label: "Bad", href: " javascript:alert(1)" }] }],
-        legal: [{ label: "Mail", href: "mailto:hi@rapi.id" }],
+        legal: [{ label: "Mail", href: "mailto:hi@markasui.dev" }],
       },
     });
     expect(screen.getByRole("link", { name: "Bad" })).toHaveAttribute(
@@ -68,7 +70,7 @@ describe("Footer (Vue)", () => {
     );
     expect(screen.getByRole("link", { name: "Mail" })).toHaveAttribute(
       "href",
-      "mailto:hi@rapi.id",
+      "mailto:hi@markasui.dev",
     );
   });
 
@@ -86,7 +88,7 @@ describe("Footer (Vue)", () => {
     expect(status).toBeEmptyDOMElement();
     const email = screen.getByRole("textbox", { name: "Email address" });
     expect(email).toBeRequired();
-    await fireEvent.update(email, "ani@rapi.id");
+    await fireEvent.update(email, "ani@markasui.dev");
     await fireEvent.submit(email.closest("form")!);
     expect(status).toHaveTextContent("Thanks for subscribing");
     expect(email).toHaveValue("");
@@ -111,11 +113,11 @@ describe("Footer (Vue)", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try" })).toBeInTheDocument();
     const { container } = render(Footer, {
-      props: { variant: "big-brand", wordmark: "Rapi" },
+      props: { variant: "big-brand", wordmark: "MarkasUI" },
     });
     const mark = container.querySelector("[aria-hidden=true]") as HTMLElement;
-    expect(mark).toHaveTextContent("Rapi");
-    expect(mark.style.getPropertyValue("--chars")).toBe("4");
+    expect(mark).toHaveTextContent("MarkasUI");
+    expect(mark.style.getPropertyValue("--chars")).toBe("8");
   });
 
   it("lets label props override the English defaults", async () => {

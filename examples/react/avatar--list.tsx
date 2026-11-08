@@ -7,7 +7,7 @@ export default function AvatarListExample() {
         <Avatar name="Sarah Miller" size="sm" alt="" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-ink">Sarah Miller</p>
-          <p className="text-xs text-muted">sarah@northwind.io</p>
+          <p className="text-xs text-muted">sarah@markasui.com</p>
         </div>
         <span className="text-xs text-muted">Owner</span>
       </li>
@@ -15,7 +15,7 @@ export default function AvatarListExample() {
         <Avatar name="Budi Santoso" size="sm" alt="" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-ink">Budi Santoso</p>
-          <p className="text-xs text-muted">budi@northwind.io</p>
+          <p className="text-xs text-muted">budi@markasui.com</p>
         </div>
         <span className="text-xs text-muted">Editor</span>
       </li>
@@ -23,7 +23,7 @@ export default function AvatarListExample() {
         <Avatar name="Siti Aminah" size="sm" alt="" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-ink">Siti Aminah</p>
-          <p className="text-xs text-muted">siti@northwind.io</p>
+          <p className="text-xs text-muted">siti@markasui.com</p>
         </div>
         <span className="text-xs text-muted">Viewer</span>
       </li>

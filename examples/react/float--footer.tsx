@@ -12,7 +12,7 @@ export default function FloatFooterExample() {
   return (
     <footer className={footer}>
       <p className={text}>
-        <span className={strong}>Markas Studio</span> made in Bandung
+        <span className={strong}>MarkasUI</span> made in Bandung
       </p>
       <Float
         motion="breathe"

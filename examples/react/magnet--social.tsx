@@ -11,7 +11,7 @@ const icon = "size-5";
 export default function MagnetSocialExample() {
   return (
     <footer className={footer}>
-      <p className={text}>Follow Markas Studio</p>
+      <p className={text}>Follow MarkasUI</p>
       <div className={row}>
         <Magnet strength={0.5} radius={32}>
           <a href="#" aria-label="Email" className={link}>

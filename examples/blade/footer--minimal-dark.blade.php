@@ -1,0 +1,6 @@
+<x-markas.footer variant="centered"
+    class="dark rounded-3xl border"
+    copyright="© 2026 MarkasUI. Built in Indonesia."
+    :columns="[['links' => [['label' => 'Docs', 'href' => '/docs'], ['label' => 'Components', 'href' => '/components'], ['label' => 'Templates', 'href' => '/templates'], ['label' => 'GitHub', 'href' => 'https://github.com/markasui']]]]">
+    <x-slot:brand><svg class="size-10 shrink-0" viewBox="0 0 1464 1430" aria-hidden="true"><polygon class="fill-ink/15" points="354,578 1256,138 1171,430 268,868" /><polygon class="fill-ink/50" points="553,443 1455,3 1370,295 467,733" /><polygon class="fill-success/30" points="421,762 1325,318 1240,611 336,1050" /><polygon class="fill-ink/25" points="265,1073 1169,629 1084,922 180,1362" /><polygon class="fill-ink/75" points="93,965 997,521 912,814 8,1253" /><polygon class="fill-success" points="347,1135 1251,691 1166,984 262,1424" /></svg><span class="sr-only">MarkasUI</span></x-slot:brand>
+</x-markas.footer>

@@ -35,8 +35,24 @@
             ],
         ],
     ],
-]" breakpoint="sm" variant="floating" class="h-[440px] rounded-xl border border-line">
-    <x-slot:header><div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-on-primary">A</div><div class="grid leading-tight"><span class="font-semibold text-ink">Acme Inc</span><span class="text-xs text-muted">Pro plan</span></div></x-slot:header>
-    <x-slot:footer><div class="flex items-center gap-3"><span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-subtle text-xs font-semibold text-ink">RS</span><span class="grid leading-tight"><span class="font-medium text-ink">Rina Saputra</span><span class="text-xs text-muted">rina@acme.co</span></span></div></x-slot:footer>
-    <div class="flex-1 p-4"><div class="h-full rounded-lg border border-dashed border-line"></div></div>
+]" breakpoint="sm" variant="floating" class="h-[440px] rounded-xl border border-line [&>aside]:shadow-overlay">
+    <x-slot:header>
+        <svg class="size-7 shrink-0" viewBox="0 0 1464 1430" aria-hidden="true"><polygon points="354,578 1256,138 1171,430 268,868" class="fill-ink/15" /><polygon points="553,443 1455,3 1370,295 467,733" class="fill-ink/55" /><polygon points="421,762 1325,318 1240,611 336,1050" class="fill-success/35" /><polygon points="265,1073 1169,629 1084,922 180,1362" class="fill-ink/25" /><polygon points="93,965 997,521 912,814 8,1253" class="fill-ink/75" /><polygon points="347,1135 1251,691 1166,984 262,1424" class="fill-success" /></svg>
+        <div class="grid min-w-0 leading-tight"><span class="font-semibold text-ink">MarkasUI</span><span class="text-xs text-muted">Team plan</span></div>
+    </x-slot:header>
+    <x-slot:footer>
+        <span class="grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft text-xs font-semibold text-ink">RS</span>
+        <span class="grid min-w-0 leading-tight"><span class="truncate font-medium text-ink">Rina Saputra</span><span class="truncate text-xs text-muted">rina@markasui.com</span></span>
+    </x-slot:footer>
+    <div class="flex min-w-0 flex-1 flex-col gap-3 py-4 pr-4 pl-2">
+        <div class="flex items-start justify-between">
+            <div class="grid gap-1"><p class="text-xs text-muted">Weekly visitors</p><p class="text-xl font-semibold tracking-tight text-ink">12,480</p></div>
+            <span class="rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-ink">+18%</span>
+        </div>
+        <div class="flex flex-1 items-end gap-1.5 rounded-xl border border-line bg-surface p-3">
+            @foreach (['h-[40%] bg-primary/15', 'h-[62%] bg-primary/15', 'h-[48%] bg-primary/15', 'h-[78%] bg-primary/15', 'h-[58%] bg-primary/15', 'h-[70%] bg-primary/15', 'h-[92%] bg-success'] as $bar)
+                <span class="flex-1 rounded-sm {{ $bar }}"></span>
+            @endforeach
+        </div>
+    </div>
 </x-markas.sidebar>

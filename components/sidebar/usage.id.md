@@ -21,7 +21,7 @@
     ]"
     class="h-dvh"
 >
-    <x-slot:header>Acme Inc</x-slot:header>
+    <x-slot:header>MarkasUI</x-slot:header>
     <x-slot:footer>Rina Saputra</x-slot:footer>
 
     <main class="flex-1 p-6">...</main>
@@ -70,7 +70,7 @@ const [collapsed, setCollapsed] = useState(false);
 
 <Sidebar
   sections={sections}
-  header="Acme Inc"
+  header="MarkasUI"
   footer="Rina Saputra"
   collapsed={collapsed}
   onCollapsedChange={setCollapsed}
@@ -107,7 +107,7 @@ const collapsed = ref(false);
     close-label="Tutup sidebar"
     class="h-dvh"
   >
-    <template #header>Acme Inc</template>
+    <template #header>MarkasUI</template>
     <template #footer>Rina Saputra</template>
     <main class="flex-1 p-6">...</main>
   </Sidebar>
@@ -120,4 +120,6 @@ const collapsed = ref(false);
 - Tombol bulat di tepi sidebar mengubahnya jadi rail ikon selebar 64px. Label lalu tampil sebagai tooltip dan badge sebagai titik. Secara default state-nya tidak terkontrol. Mulai dalam mode rail dengan `defaultCollapsed` di React, atau `:collapsed="true"` tanpa `v-model` di Vue dan Blade.
 - Di mode rail, item induk membentangkan sidebar dan membuka sub-itemnya.
 - Sorotan meluncur ke item yang di-hover atau difokus lalu kembali ke item aktif. Sorotan memakai CSS anchor positioning tanpa JavaScript; browser yang belum mendukungnya tetap menandai item aktif dengan teks tebal. Grup sub-item yang memuat halaman aktif terbuka di awal; isi `open` untuk mengubahnya.
+- `header` dan `footer` dirender dua kali: di sidebar dan di dialog seluler. Pemilih workspace (DropdownMenu) atau pemicu pencarian (Command) berfungsi di kedua salinan; di Blade, id di salinan dialog diberi akhiran `-m` agar tetap unik.
+- Sembunyikan bagian header atau footer di mode rail dengan `in-data-[state=collapsed]:hidden`, misalnya kartu upgrade.
 - Label bawaan berbahasa Inggris: "Sidebar", "Collapse sidebar", "Expand sidebar", "Open sidebar", dan "Close sidebar". Terjemahkan lewat `navLabel`, `collapseLabel`, `expandLabel`, `openLabel`, dan `closeLabel` (Blade: `nav-label`, `collapse-label`, dan seterusnya), seperti contoh di atas.

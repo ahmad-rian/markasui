@@ -12,9 +12,7 @@ const icon = "size-5";
 
 <template>
   <footer :class="footer">
-    <p :class="text">
-      <span :class="strong">Markas Studio</span> made in Bandung
-    </p>
+    <p :class="text"><span :class="strong">MarkasUI</span> made in Bandung</p>
     <Float
       motion="breathe"
       :amplitude="12"

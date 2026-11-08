@@ -2,8 +2,8 @@
 
 ```blade
 <x-markas.footer
-    description="Faktur dan penggajian untuk UMKM Indonesia."
-    copyright="© 2026 PT Rapi Teknologi Indonesia"
+    description="Komponen UI untuk Blade, React, dan Vue."
+    copyright="© 2026 MarkasUI"
     nav-label="Navigasi kaki"
     legal-label="Legal"
     social-label="Media sosial"
@@ -11,8 +11,8 @@
     :back-to-top="true"
     :columns="[
         ['title' => 'Produk', 'links' => [
-            ['label' => 'Faktur', 'href' => '/faktur'],
-            ['label' => 'Penggajian', 'href' => '/penggajian'],
+            ['label' => 'Komponen', 'href' => '/komponen'],
+            ['label' => 'Template', 'href' => '/template'],
         ]],
         ['title' => 'Perusahaan', 'links' => [
             ['label' => 'Tentang', 'href' => '/tentang'],
@@ -24,7 +24,7 @@
         ['label' => 'Ketentuan', 'href' => '/ketentuan'],
     ]"
 >
-    <x-slot:brand>Rapi</x-slot:brand>
+    <x-slot:brand>MarkasUI</x-slot:brand>
 </x-markas.footer>
 
 {{-- Kartu newsletter dengan label Indonesia --}}
@@ -34,9 +34,9 @@
     email-label="Alamat email"
     subscribe-label="Langganan"
     success-label="Terima kasih sudah berlangganan"
-    copyright="© 2026 Rapi"
+    copyright="© 2026 MarkasUI"
 >
-    <x-slot:brand>Rapi</x-slot:brand>
+    <x-slot:brand>MarkasUI</x-slot:brand>
 </x-markas.footer>
 ```
 
@@ -48,9 +48,9 @@ Hanya form newsletter bawaan yang butuh Alpine.js. Varian lain murni HTML.
 import { Footer } from "@/components/markas/Footer";
 
 <Footer
-  brand="Rapi"
-  description="Faktur dan penggajian untuk UMKM Indonesia."
-  copyright="© 2026 PT Rapi Teknologi Indonesia"
+  brand="MarkasUI"
+  description="Komponen UI untuk Blade, React, dan Vue."
+  copyright="© 2026 MarkasUI"
   navLabel="Navigasi kaki"
   socialLabel="Media sosial"
   backToTopLabel="Kembali ke atas"
@@ -59,8 +59,8 @@ import { Footer } from "@/components/markas/Footer";
     {
       title: "Produk",
       links: [
-        { label: "Faktur", href: "/faktur" },
-        { label: "Penggajian", href: "/penggajian" },
+        { label: "Komponen", href: "/komponen" },
+        { label: "Template", href: "/template" },
       ],
     },
   ]}
@@ -72,10 +72,10 @@ import { Footer } from "@/components/markas/Footer";
 
 <Footer
   variant="cta"
-  brand="Rapi"
-  heading="Tutup buku dalam hitungan menit"
-  copyright="© 2026 Rapi"
-  actions={<a href="/daftar">Coba gratis</a>}
+  brand="MarkasUI"
+  heading="Rilis antarmuka berikutnya minggu ini"
+  copyright="© 2026 MarkasUI"
+  actions={<a href="/komponen">Lihat komponen</a>}
 />;
 ```
 
@@ -89,8 +89,8 @@ const columns = [
   {
     title: "Produk",
     links: [
-      { label: "Faktur", href: "/faktur" },
-      { label: "Penggajian", href: "/penggajian" },
+      { label: "Komponen", href: "/komponen" },
+      { label: "Template", href: "/template" },
     ],
   },
 ];
@@ -104,10 +104,10 @@ const columns = [
     email-label="Alamat email"
     subscribe-label="Langganan"
     success-label="Terima kasih sudah berlangganan"
-    copyright="© 2026 Rapi"
+    copyright="© 2026 MarkasUI"
     :columns="columns"
   >
-    <template #brand>Rapi</template>
+    <template #brand>MarkasUI</template>
   </Footer>
 </template>
 ```
@@ -119,3 +119,4 @@ const columns = [
 - Di React file ini menjadi Client Component hanya karena state form newsletter. Ukurannya tetap di bawah 3 KB gzip.
 - `backToTop` adalah link biasa ke `#top`, yang oleh browser digulir ke atas halaman tanpa JavaScript.
 - Semua label bawaan berbahasa Inggris. Isi prop `<tujuan>Label` (Blade: `nav-label`, `email-label`, dst.) untuk situs berbahasa Indonesia.
+- Blok `cta` selalu memakai palet gelap (membawa class `dark`), jadi tombol di `actions` otomatis berbalik warna di kedua tema.

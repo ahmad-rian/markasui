@@ -113,4 +113,18 @@ ${pagination}`);
     expect(html).not.toContain("<script>alert(1)</script>");
     expect(html).toContain("&lt;script&gt;");
   });
+
+  it("sidebar memberi akhiran -m pada id di header dan footer salinan dialog", () => {
+    const html = renderBlade(`
+<x-markas.sidebar :sections="[]">
+    <x-slot:header><x-markas.dropdown-menu id="ws" :items="[['label' => 'A']]" /></x-slot:header>
+    <x-slot:footer><label for="f">Me</label><input id="f" data-id="x" /></x-slot:footer>
+</x-markas.sidebar>`);
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(html).toContain('popovertarget="ws-m"');
+    expect(html).toContain('aria-labelledby="ws-trigger-m"');
+    expect(html).toContain('for="f-m"');
+    expect(html).toContain('data-id="x"');
+  });
 });

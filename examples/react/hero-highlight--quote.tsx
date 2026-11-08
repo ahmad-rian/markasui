@@ -9,11 +9,11 @@ export default function HeroHighlightQuoteExample() {
     >
       <figure className="grid gap-4">
         <blockquote className="text-lg leading-relaxed text-ink">
-          We moved our whole support team over in a weekend. Response times
-          dropped by half, and <mark>nobody wants to go back</mark>.
+          We rebuilt our dashboard with MarkasUI in a weekend. Blade and React
+          screens finally match, and <mark>nobody wants to go back</mark>.
         </blockquote>
         <figcaption className="text-sm text-muted">
-          Dana Reyes, Head of Support at Northwind
+          Dana Reyes, Frontend Lead in Jakarta
         </figcaption>
       </figure>
     </HeroHighlight>

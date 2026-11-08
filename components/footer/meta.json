@@ -1,7 +1,7 @@
 {
   "name": "footer",
   "title": "Footer",
-  "description": "Site footer with six layouts: link columns, centered, newsletter card, giant wordmark, closing call to action, and a compact one-line bar.",
+  "description": "Site footer with six layouts: link columns, centered glow, newsletter pill card, giant cropped wordmark, dark glowing call to action, and a floating pill.",
   "category": "navigation",
   "tags": [
     "footer",
@@ -32,7 +32,7 @@
       "name": "variant",
       "type": "\"columns\" | \"centered\" | \"newsletter\" | \"big-brand\" | \"cta\" | \"compact\"",
       "default": "\"columns\"",
-      "description": "columns: brand left, link columns right. centered: minimal stack. newsletter: subscribe card above the columns. big-brand: giant cropped wordmark. cta: large call to action above a small footer. compact: one line for apps."
+      "description": "columns: brand left, link columns right. centered: minimal stack with a soft glow. newsletter: gradient card with a pill email field above the columns. big-brand: giant cropped wordmark over a soft gradient. cta: dark glowing call to action block above a small footer. compact: one line floating pill for apps."
     },
     {
       "name": "brand",
@@ -176,9 +176,9 @@
   "addedAt": "2026-11-05",
   "i18n": {
     "id": {
-      "description": "Footer situs dengan enam tata letak: kolom link, tengah, kartu newsletter, wordmark raksasa, ajakan penutup, dan bar ringkas satu baris.",
+      "description": "Footer situs dengan enam tata letak: kolom link, tengah berpendar, kartu newsletter pil, wordmark raksasa terpotong, ajakan gelap berpendar, dan pil mengambang.",
       "props": {
-        "variant": "columns: brand di kiri, kolom link di kanan. centered: tumpukan minimalis. newsletter: kartu langganan di atas kolom. big-brand: wordmark raksasa terpotong. cta: ajakan besar di atas footer kecil. compact: satu baris untuk aplikasi.",
+        "variant": "columns: brand di kiri, kolom link di kanan. centered: tumpukan minimalis dengan cahaya lembut. newsletter: kartu bergradien dengan kolom email berbentuk pil di atas kolom. big-brand: wordmark raksasa terpotong di atas gradien lembut. cta: blok ajakan gelap berpendar di atas footer kecil. compact: pil satu baris mengambang untuk aplikasi.",
         "brand": "Logo atau nama situs.",
         "description": "Kalimat singkat di bawah brand. Pada varian cta tampil di bawah judul. Disembunyikan pada compact.",
         "columns": "Kelompok link. columns, newsletter, dan big-brand menampilkannya sebagai kolom berjudul; centered, cta, dan compact menampilkan semua link dalam satu deret.",

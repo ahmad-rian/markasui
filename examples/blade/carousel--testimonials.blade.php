@@ -1,8 +1,8 @@
 @php
     $quotes = [
-        ['text' => 'We moved our whole team over in a weekend. Planning meetings are half as long now.', 'name' => 'Dewi Lestari', 'role' => 'Head of Product, Lumen'],
-        ['text' => 'The weekly dashboard replaced three spreadsheets and a lot of status pings.', 'name' => 'Budi Santoso', 'role' => 'Engineering Manager, Arka'],
-        ['text' => 'Simple enough for new hires, flexible enough for our client projects.', 'name' => 'Siti Aminah', 'role' => 'Founder, Studio Rana'],
+        ['text' => 'We moved our admin panel to MarkasUI in a weekend. Design reviews are half as long now.', 'name' => 'Dewi Lestari', 'role' => 'Head of Product, Jakarta'],
+        ['text' => 'One set of tokens for Blade and Vue replaced three style guides and a lot of pixel nudging.', 'name' => 'Budi Santoso', 'role' => 'Engineering Manager, Bandung'],
+        ['text' => 'Simple enough for client handoffs, flexible enough for every brand I work with.', 'name' => 'Siti Aminah', 'role' => 'Freelance developer, Yogyakarta'],
     ];
 @endphp
 

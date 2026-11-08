@@ -7,7 +7,7 @@
 @endphp
 
     <footer class="{{ $footer }}">
-      <p class="{{ $text }}">Follow Markas Studio</p>
+      <p class="{{ $text }}">Follow MarkasUI</p>
       <div class="{{ $row }}">
         <x-markas.magnet :strength="0.5" :radius="32"><a href="#" aria-label="Email" class="{{ $link }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="{{ $icon }}"><path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path></svg></a></x-markas.magnet>
         <x-markas.magnet :strength="0.5" :radius="32"><a href="#" aria-label="Community chat" class="{{ $link }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="{{ $icon }}"><path d="M4 5h16v11H9l-5 4V5Z"></path></svg></a></x-markas.magnet>

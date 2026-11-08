@@ -21,19 +21,9 @@
                 'label' => 'Projects',
                 'icon' => 'M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
                 'children' => [
-                    [
-                        'label' => 'Website redesign',
-                        'href' => '/projects/website',
-                        'active' => true,
-                    ],
-                    [
-                        'label' => 'Mobile app',
-                        'href' => '/projects/mobile',
-                    ],
-                    [
-                        'label' => 'Brand refresh',
-                        'href' => '/projects/brand',
-                    ],
+                    ['label' => 'Website redesign', 'href' => '/projects/website', 'active' => true],
+                    ['label' => 'Mobile app', 'href' => '/projects/mobile'],
+                    ['label' => 'Design system', 'href' => '/projects/design-system'],
                 ],
             ],
             [
@@ -54,7 +44,29 @@
         ],
     ],
 ]" breakpoint="sm" class="h-[540px] rounded-xl border border-line">
-    <x-slot:header><div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-on-primary">A</div><div class="grid leading-tight"><span class="font-semibold text-ink">Acme Inc</span><span class="text-xs text-muted">Pro plan</span></div></x-slot:header>
-    <x-slot:footer><div class="flex items-center gap-3"><span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-subtle text-xs font-semibold text-ink">RS</span><span class="grid leading-tight"><span class="font-medium text-ink">Rina Saputra</span><span class="text-xs text-muted">rina@acme.co</span></span></div></x-slot:footer>
-    <div class="flex-1 p-4"><div class="h-full rounded-lg border border-dashed border-line"></div></div>
+    <x-slot:header>
+        <svg class="size-7 shrink-0" viewBox="0 0 1464 1430" aria-hidden="true"><polygon points="354,578 1256,138 1171,430 268,868" class="fill-ink/15" /><polygon points="553,443 1455,3 1370,295 467,733" class="fill-ink/55" /><polygon points="421,762 1325,318 1240,611 336,1050" class="fill-success/35" /><polygon points="265,1073 1169,629 1084,922 180,1362" class="fill-ink/25" /><polygon points="93,965 997,521 912,814 8,1253" class="fill-ink/75" /><polygon points="347,1135 1251,691 1166,984 262,1424" class="fill-success" /></svg>
+        <div class="grid min-w-0 leading-tight"><span class="font-semibold text-ink">MarkasUI</span><span class="text-xs text-muted">Pro workspace</span></div>
+    </x-slot:header>
+    <x-slot:footer>
+        <span class="relative grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft text-xs font-semibold text-ink">RS<span aria-hidden="true" class="absolute -right-0.5 -bottom-0.5 size-2.5 rounded-full border-2 border-surface bg-success"></span></span>
+        <span class="grid min-w-0 flex-1 leading-tight"><span class="truncate font-medium text-ink">Rina Saputra</span><span class="truncate text-xs text-muted">rina@markasui.com</span></span>
+        <svg class="size-4 shrink-0 text-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 9 4-4 4 4m0 6-4 4-4-4" /></svg>
+    </x-slot:footer>
+    <div class="flex min-w-0 flex-1 flex-col gap-4 p-5">
+        <div class="grid gap-1">
+            <p class="text-xs text-muted">Projects / Website redesign</p>
+            <p class="text-lg font-semibold tracking-tight text-ink">Sprint 14</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl border border-line bg-surface p-3"><p class="text-xs text-muted">Open</p><p class="mt-1 text-xl font-semibold text-ink">24</p></div>
+            <div class="rounded-xl border border-line bg-surface p-3"><p class="text-xs text-muted">Shipped</p><p class="mt-1 text-xl font-semibold text-ink">18</p></div>
+        </div>
+        <div class="grid content-start gap-3 rounded-xl border border-line bg-surface p-4">
+            <p class="text-xs font-medium text-faint">Up next</p>
+            @foreach ([['Hero copy review', 'bg-success'], ['Pricing page QA', 'bg-warning'], ['Footer links audit', 'bg-faint']] as [$label, $tone])
+                <div class="flex items-center gap-2.5"><span aria-hidden="true" class="size-2 shrink-0 rounded-full {{ $tone }}"></span><span class="truncate text-sm text-ink">{{ $label }}</span></div>
+            @endforeach
+        </div>
+    </div>
 </x-markas.sidebar>

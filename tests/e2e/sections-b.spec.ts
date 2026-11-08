@@ -8,12 +8,14 @@ const notFoundFixtures = components.filter((name) =>
   name.startsWith("not-found"),
 );
 const navbarVariations = [
-  "centered-logo",
+  "floating",
   "announcement",
   "search",
-  "dark-glass",
+  "two-tier",
+  "mega",
   "app",
-  "sidebar-trigger",
+  "bottom-tabs",
+  "hero",
 ].map((slug) => `navbar--${slug}`);
 
 const expectNoOverflow = async (page: Page) => {
@@ -87,18 +89,29 @@ for (const framework of frameworks) {
       });
       await dismiss.focus();
       await page.keyboard.press("Enter");
-      await expect(page.getByText("Acme 2.0 is out.")).toBeHidden();
+      await expect(page.getByText("MarkasUI 1.0 is here")).toBeHidden();
     });
 
-    test("navbar--sidebar-trigger: tombol membuka sidebar, Escape menutup", async ({
+    test("navbar--hero: header bening di atas hero dan solid setelah digulir", async ({
       page,
     }) => {
-      await openFixture(page, framework, "navbar--sidebar-trigger");
-      await page.getByRole("button", { name: "Open sidebar" }).click();
-      const dialog = page.getByRole("dialog", { name: "Workspace" });
-      await expect(dialog).toBeVisible();
+      await openFixture(page, framework, "navbar--hero");
+      const header = page.locator("#fixture header");
+      await expect(header).not.toHaveAttribute("data-scrolled", "true");
+      await page
+        .getByRole("region", { name: "Landing page" })
+        .evaluate((element) => element.scrollTo(0, 200));
+      await expect(header).toHaveAttribute("data-scrolled", "true");
+    });
+
+    test("navbar--search: tombol pencarian membuka dialog perintah", async ({
+      page,
+    }) => {
+      await openFixture(page, framework, "navbar--search");
+      await page.getByRole("button", { name: "Search components" }).click();
+      await expect(page.getByRole("dialog")).toBeVisible();
       await page.keyboard.press("Escape");
-      await expect(dialog).toBeHidden();
+      await expect(page.getByRole("dialog")).toBeHidden();
     });
 
     test("navbar--app: menu profil terbuka dengan keyboard", async ({

@@ -13,31 +13,31 @@ const role = "text-sm text-muted";
 const testimonials = [
   {
     quote:
-      "We replaced three internal tools with one dashboard. Onboarding a new hire now takes an afternoon.",
+      "We replaced three internal UI kits with MarkasUI. New hires ship their first screen in an afternoon.",
     name: "Maya Putri",
     initials: "MP",
-    role: "Head of Operations, Kopiloka",
+    role: "Engineering lead, Jakarta",
   },
   {
     quote:
-      "The keyboard shortcuts alone save our support team hours every single week.",
+      "Same class names in Blade and React, so our Laravel pages and the React app finally match.",
     name: "Daniel Reyes",
     initials: "DR",
-    role: "Support Lead, Northwind",
+    role: "Laravel developer, Surabaya",
   },
   {
     quote:
-      "Setup took ten minutes and the docs answered every question we had.",
+      "Copy, paste, adjust the tokens. Setup took ten minutes and the docs answered the rest.",
     name: "Sari Wijaya",
     initials: "SW",
-    role: "CTO, Lumbung",
+    role: "CTO, Bandung",
   },
   {
     quote:
-      "Finally a tool our designers and engineers both enjoy opening on Monday.",
+      "Finally a component library our designers and engineers both enjoy opening on Monday.",
     name: "Tom Becker",
     initials: "TB",
-    role: "Product Manager, Fieldnote",
+    role: "Design engineer, Berlin",
   },
 ];
 </script>

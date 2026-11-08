@@ -25,7 +25,7 @@ export default function InputStatesExample() {
       <Input
         name="workspace"
         label="Workspace"
-        defaultValue="Markas Labs"
+        defaultValue="MarkasUI"
         disabled
       />
     </div>

@@ -1,6 +1,21 @@
 <script setup lang="ts">
 import Sidebar from "../../components/sidebar/Sidebar.vue";
 
+const mark = [
+  { points: "354,578 1256,138 1171,430 268,868", className: "fill-ink/15" },
+  { points: "553,443 1455,3 1370,295 467,733", className: "fill-ink/55" },
+  {
+    points: "421,762 1325,318 1240,611 336,1050",
+    className: "fill-success/35",
+  },
+  { points: "265,1073 1169,629 1084,922 180,1362", className: "fill-ink/25" },
+  { points: "93,965 997,521 912,814 8,1253", className: "fill-ink/75" },
+  {
+    points: "347,1135 1251,691 1166,984 262,1424",
+    className: "fill-success",
+  },
+];
+
 const sections = [
   {
     items: [
@@ -34,8 +49,8 @@ const sections = [
             href: "/projects/mobile",
           },
           {
-            label: "Brand refresh",
-            href: "/projects/brand",
+            label: "Design system",
+            href: "/projects/design-system",
           },
         ],
       },
@@ -57,6 +72,12 @@ const sections = [
     ],
   },
 ];
+
+const tasks = [
+  { label: "Hero copy review", tone: "bg-success" },
+  { label: "Pricing page QA", tone: "bg-warning" },
+  { label: "Footer links audit", tone: "bg-faint" },
+];
 </script>
 
 <template>
@@ -65,30 +86,78 @@ const sections = [
     breakpoint="sm"
     class="h-[540px] rounded-xl border border-line"
   >
-    <template #header
-      ><div
-        class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-on-primary"
-      >
-        A
+    <template #header>
+      <svg class="size-7 shrink-0" viewBox="0 0 1464 1430" aria-hidden="true">
+        <polygon
+          v-for="shape in mark"
+          :key="shape.points"
+          :points="shape.points"
+          :class="shape.className"
+        />
+      </svg>
+      <div class="grid min-w-0 leading-tight">
+        <span class="font-semibold text-ink">MarkasUI</span>
+        <span class="text-xs text-muted">Pro workspace</span>
       </div>
-      <div class="grid leading-tight">
-        <span class="font-semibold text-ink">Acme Inc</span
-        ><span class="text-xs text-muted">Pro plan</span>
-      </div></template
-    >
-    <template #footer
-      ><div class="flex items-center gap-3">
+    </template>
+    <template #footer>
+      <span
+        class="relative grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft text-xs font-semibold text-ink"
+      >
+        RS
         <span
-          class="flex size-8 shrink-0 items-center justify-center rounded-full bg-subtle text-xs font-semibold text-ink"
-          >RS</span
-        ><span class="grid leading-tight"
-          ><span class="font-medium text-ink">Rina Saputra</span
-          ><span class="text-xs text-muted">rina@acme.co</span></span
+          aria-hidden="true"
+          class="absolute -right-0.5 -bottom-0.5 size-2.5 rounded-full border-2 border-surface bg-success"
+        ></span>
+      </span>
+      <span class="grid min-w-0 flex-1 leading-tight">
+        <span class="truncate font-medium text-ink">Rina Saputra</span>
+        <span class="truncate text-xs text-muted">rina@markasui.com</span>
+      </span>
+      <svg
+        class="size-4 shrink-0 text-faint"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m8 9 4-4 4 4m0 6-4 4-4-4" />
+      </svg>
+    </template>
+    <div class="flex min-w-0 flex-1 flex-col gap-4 p-5">
+      <div class="grid gap-1">
+        <p class="text-xs text-muted">Projects / Website redesign</p>
+        <p class="text-lg font-semibold tracking-tight text-ink">Sprint 14</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded-xl border border-line bg-surface p-3">
+          <p class="text-xs text-muted">Open</p>
+          <p class="mt-1 text-xl font-semibold text-ink">24</p>
+        </div>
+        <div class="rounded-xl border border-line bg-surface p-3">
+          <p class="text-xs text-muted">Shipped</p>
+          <p class="mt-1 text-xl font-semibold text-ink">18</p>
+        </div>
+      </div>
+      <div
+        class="grid content-start gap-3 rounded-xl border border-line bg-surface p-4"
+      >
+        <p class="text-xs font-medium text-faint">Up next</p>
+        <div
+          v-for="task in tasks"
+          :key="task.label"
+          class="flex items-center gap-2.5"
         >
-      </div></template
-    >
-    <div class="flex-1 p-4">
-      <div class="h-full rounded-lg border border-dashed border-line"></div>
+          <span
+            aria-hidden="true"
+            :class="`size-2 shrink-0 rounded-full ${task.tone}`"
+          ></span>
+          <span class="truncate text-sm text-ink">{{ task.label }}</span>
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
