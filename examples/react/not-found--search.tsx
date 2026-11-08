@@ -1,0 +1,18 @@
+import { NotFound } from "../../components/not-found/NotFound";
+
+const links = [
+  { label: "Documentation", href: "/docs" },
+  { label: "Components", href: "/components" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Changelog", href: "/changelog" },
+];
+
+export default function NotFoundSearchExample() {
+  return (
+    <NotFound
+      variant="search"
+      description="Try searching for the page, or pick one of the popular pages below."
+      links={links}
+    />
+  );
+}

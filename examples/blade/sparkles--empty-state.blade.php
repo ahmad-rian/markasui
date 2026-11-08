@@ -1,0 +1,7 @@
+<x-markas.sparkles color="success" size="sm" :density="20" :seed="9" class="rounded-xl border border-dashed border-line bg-surface px-6 py-10">
+    <div class="grid justify-items-center gap-3 text-center">
+        <h3 class="text-base font-semibold text-ink">Inbox zero</h3>
+        <p class="max-w-64 text-sm text-muted">Every review is done. New requests will show up here.</p>
+        <x-markas.button variant="secondary" size="sm">View archive</x-markas.button>
+    </div>
+</x-markas.sparkles>

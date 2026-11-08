@@ -1,0 +1,84 @@
+{
+  "name": "background-beams",
+  "title": "Background Beams",
+  "description": "Thin curved light beams that flow, pulse, or fall and splash behind your content. Pure SVG and CSS, no JavaScript.",
+  "category": "background",
+  "tags": ["background", "beams", "light", "svg", "hero", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "background-beams.blade.php", "deps": [] },
+    "react": { "file": "BackgroundBeams.tsx", "deps": [] },
+    "vue": { "file": "BackgroundBeams.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "flow | pulse | collide",
+      "default": "flow",
+      "description": "flow sends a glint along each curve, pulse fades whole curves in and out, collide drops vertical beams that splash at the bottom."
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "default": "8",
+      "description": "Number of beams, up to 16."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "Length of one animation cycle: 12s, 7s, or 4s."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color of the beams."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the beams."
+    }
+  ],
+  "a11y": [
+    "The beam layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, beams stay still in a fixed, readable position.",
+    "Positions come from a formula, so the server and client render the same markup."
+  ],
+  "ai": {
+    "whenToUse": "A hero, launch banner, or feature section that needs a sense of motion without competing with the text.",
+    "rules": [
+      "Set background color, padding, and radius with class on the component",
+      "Use collide with bottom padding so the splashes do not sit under text",
+      "Keep text on solid colors like bg-surface or bg-canvas for contrast"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Berkas cahaya tipis melengkung yang mengalir, berdenyut, atau jatuh dan memercik di belakang konten. Murni SVG dan CSS, tanpa JavaScript.",
+      "props": {
+        "variant": "flow mengalirkan kilau di sepanjang kurva, pulse memudarkan kurva bergantian, collide menjatuhkan berkas vertikal yang memercik di dasar.",
+        "count": "Jumlah berkas, maksimal 16.",
+        "speed": "Panjang satu siklus animasi: 12s, 7s, atau 4s.",
+        "color": "Warna token berkas.",
+        "children / slot": "Konten yang tampil di atas berkas."
+      },
+      "a11y": [
+        "Lapisan berkas memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, berkas diam di posisi tetap yang mudah dibaca.",
+        "Posisi berasal dari rumus, jadi server dan klien merender markup yang sama."
+      ],
+      "ai": {
+        "whenToUse": "Hero, banner peluncuran, atau section fitur yang butuh kesan gerak tanpa bersaing dengan teks.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai collide dengan padding bawah supaya percikan tidak berada di bawah teks",
+          "Letakkan teks di atas warna solid seperti bg-surface atau bg-canvas demi kontras"
+        ]
+      }
+    }
+  }
+}

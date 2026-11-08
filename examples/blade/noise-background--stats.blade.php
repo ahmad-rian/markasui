@@ -1,0 +1,10 @@
+<x-markas.noise-background color="success" intensity="low" size="fine" class="rounded-xl border border-line bg-surface p-6">
+    <dl class="grid grid-cols-3 gap-4 text-center">
+        @foreach ([['12k', 'Teams'], ['99.98%', 'Uptime'], ['4.9', 'Rating']] as [$value, $label])
+            <div class="grid gap-1">
+                <dt class="text-sm text-muted">{{ $label }}</dt>
+                <dd class="text-2xl font-semibold tracking-tight text-ink">{{ $value }}</dd>
+            </div>
+        @endforeach
+    </dl>
+</x-markas.noise-background>

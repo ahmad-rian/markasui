@@ -52,6 +52,11 @@ const headings = [
 const pager = "icon-button size-9 bg-subtle text-ink hover:bg-line";
 const hasPlayground = item.name in PLAYGROUNDS;
 
+/** CSS halaman ini: CSS situs plus class komponen dan contohnya saja (scripts/page-css.ts). */
+const stylesheets = import.meta.glob<string>("../../../generated/css/components/*.css", { query: "?url", import: "default", eager: true });
+const stylesheet = stylesheets[`../../../generated/css/components/${item.name}.css`];
+if (!stylesheet) throw new Error(`CSS untuk ${item.name} belum dibangkitkan (node scripts/page-css.ts)`);
+
 /** Kode contoh dari examples/, ditampilkan di bawah preview untuk komponen tanpa playground. */
 const exampleSources = import.meta.glob<string>("../../../../../../examples/*/*", { query: "?raw", import: "default", eager: true });
 const EXAMPLE_FILES: Record<Framework, string> = { blade: `${item.name}.blade.php`, react: `${item.name}.tsx`, vue: `${item.name}.vue` };
@@ -62,7 +67,7 @@ const example = (fw: Framework) =>
     .trim() ?? "";
 ---
 
-<Docs title={item.title} description={text.description} headings={headings}>
+<Docs title={item.title} description={text.description} headings={headings} stylesheet={stylesheet}>
   <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
     <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{item.title}</h1>
     <div class="flex items-center gap-2 sm:pt-1">

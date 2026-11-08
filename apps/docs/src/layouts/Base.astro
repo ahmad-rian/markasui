@@ -1,6 +1,5 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import LanguageOverlay from "../components/LanguageOverlay.astro";
@@ -15,11 +14,17 @@ interface Props {
   splash?: boolean;
   /** Header dan footer versi landing: bilah di dalam bingkai hero dan footer berbingkai. */
   hero?: boolean;
+  /**
+   * URL stylesheet halaman (dari src/generated/css/ lewat ?url). Tanpa ini, halaman mengimpor sendiri
+   * styles/global.css atau entry CSS lain: Base sengaja tidak mengimpor CSS supaya setiap halaman hanya
+   * memuat class yang ia tampilkan.
+   */
+  stylesheet?: string;
 }
 
 const locale = getLocale(Astro.url);
 const strings = t(locale);
-const { title, description = strings.meta.description, splash = false, hero = false } = Astro.props;
+const { title, description = strings.meta.description, splash = false, hero = false, stylesheet } = Astro.props;
 const fullTitle = title ? `${title} - ${SITE.name}` : strings.meta.title;
 const canonical = new URL(pagePath(Astro.url), Astro.site);
 const path = stripLocale(Astro.url.pathname);
@@ -31,6 +36,7 @@ const path = stripLocale(Astro.url.pathname);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
+    {stylesheet && <link rel="stylesheet" href={stylesheet} />}
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {LOCALES.map((code) => <link rel="alternate" hreflang={code} href={new URL(localePath(code, path), Astro.site)} />)}

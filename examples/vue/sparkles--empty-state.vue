@@ -1,0 +1,22 @@
+<script setup lang="ts">
+import Button from "../../components/button/Button.vue";
+import Sparkles from "../../components/sparkles/Sparkles.vue";
+</script>
+
+<template>
+  <Sparkles
+    color="success"
+    size="sm"
+    :density="20"
+    :seed="9"
+    class="rounded-xl border border-dashed border-line bg-surface px-6 py-10"
+  >
+    <div class="grid justify-items-center gap-3 text-center">
+      <h3 class="text-base font-semibold text-ink">Inbox zero</h3>
+      <p class="max-w-64 text-sm text-muted">
+        Every review is done. New requests will show up here.
+      </p>
+      <Button variant="secondary" size="sm">View archive</Button>
+    </div>
+  </Sparkles>
+</template>

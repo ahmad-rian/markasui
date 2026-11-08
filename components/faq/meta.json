@@ -1,0 +1,121 @@
+{
+  "name": "faq",
+  "title": "FAQ",
+  "description": "Ready made FAQ section on native details and summary, with six layouts, optional search, category tabs, and FAQPage JSON-LD.",
+  "category": "section",
+  "tags": ["faq", "section", "landing", "details", "accordion", "seo"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "faq.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "Faq.tsx", "deps": [] },
+    "vue": { "file": "Faq.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "{ question: string; answer: string; category?: string }[]",
+      "default": "[]",
+      "description": "Questions with plain text answers. category is used by the categories variant."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "''",
+      "description": "Section heading (h2). It also names the section landmark."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "''",
+      "description": "Short text under the heading."
+    },
+    {
+      "name": "variant",
+      "type": "'simple' | 'split' | 'cards' | 'centered' | 'searchable' | 'categories'",
+      "default": "'simple'",
+      "description": "Layout. split puts the heading beside the list on wide containers, cards uses a two column grid, searchable adds a filter box, categories adds tabs."
+    },
+    {
+      "name": "exclusive",
+      "type": "boolean",
+      "default": "false",
+      "description": "Only one question open at a time, through a shared name attribute on details."
+    },
+    {
+      "name": "schema",
+      "type": "boolean",
+      "default": "false",
+      "description": "Render FAQPage JSON-LD for search engines."
+    },
+    {
+      "name": "contact",
+      "type": "Blade: slot or string · React: ReactNode · Vue: slot or string",
+      "default": "-",
+      "description": "Closing line such as \"Still have questions?\" with a link."
+    },
+    {
+      "name": "searchLabel",
+      "type": "string",
+      "default": "'Search questions'",
+      "description": "Label and placeholder of the search box (searchable)."
+    },
+    {
+      "name": "emptyLabel",
+      "type": "string",
+      "default": "'No questions match your search'",
+      "description": "Message announced when the search finds nothing (searchable)."
+    },
+    {
+      "name": "categoriesLabel",
+      "type": "string",
+      "default": "'Question categories'",
+      "description": "Accessible name of the category tab list (categories)."
+    }
+  ],
+  "a11y": [
+    "Questions use native details and summary, so Enter and Space open them without JavaScript.",
+    "The section is labelled by its heading, and the plus icon is aria-hidden.",
+    "The search box has an accessible name and the empty result is announced through a role status region.",
+    "Category tabs follow the WAI-ARIA Tabs pattern: arrow keys, Home, and End move between tabs."
+  ],
+  "ai": {
+    "whenToUse": "A frequently asked questions block on a landing, pricing, or help page.",
+    "rules": [
+      "Keep answers short and plain text; put links in the contact slot",
+      "Use searchable for long lists and categories when questions fall into clear groups",
+      "Enable schema only once per page, on the main FAQ"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Section FAQ siap pakai dari details dan summary native, dengan enam tata letak, pencarian opsional, tab kategori, dan JSON-LD FAQPage.",
+      "props": {
+        "items": "Daftar pertanyaan dengan jawaban teks biasa. category dipakai varian categories.",
+        "title": "Judul section (h2). Juga menjadi nama landmark section.",
+        "description": "Teks singkat di bawah judul.",
+        "variant": "Tata letak. split menaruh judul di samping daftar pada kontainer lebar, cards memakai grid dua kolom, searchable menambah kotak cari, categories menambah tab.",
+        "exclusive": "Hanya satu pertanyaan terbuka, lewat atribut name yang sama di details.",
+        "schema": "Render JSON-LD FAQPage untuk mesin pencari.",
+        "contact": "Kalimat penutup seperti \"Masih punya pertanyaan?\" dengan tautan.",
+        "searchLabel": "Label dan placeholder kotak cari (searchable).",
+        "emptyLabel": "Pesan yang diumumkan saat pencarian tidak menemukan apa pun (searchable).",
+        "categoriesLabel": "Nama aksesibel daftar tab kategori (categories)."
+      },
+      "a11y": [
+        "Pertanyaan memakai details dan summary native, jadi Enter dan Spasi membukanya tanpa JavaScript.",
+        "Section diberi nama dari judulnya, dan ikon plus diberi aria-hidden.",
+        "Kotak cari punya nama aksesibel dan hasil kosong diumumkan lewat region role status.",
+        "Tab kategori mengikuti pola Tabs WAI-ARIA: tombol panah, Home, dan End berpindah antar tab."
+      ],
+      "ai": {
+        "whenToUse": "Blok pertanyaan umum di halaman landing, harga, atau bantuan.",
+        "rules": [
+          "Jawaban singkat dan teks biasa; taruh tautan di slot contact",
+          "Pakai searchable untuk daftar panjang dan categories bila pertanyaan terbagi ke kelompok yang jelas",
+          "Aktifkan schema sekali saja per halaman, di FAQ utama"
+        ]
+      }
+    }
+  }
+}

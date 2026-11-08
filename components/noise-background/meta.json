@@ -1,0 +1,99 @@
+{
+  "name": "noise-background",
+  "title": "Noise Background",
+  "description": "A static grain, film, or paper texture over a soft token gradient that drifts slowly. Pure CSS with one inline SVG noise tile.",
+  "category": "background",
+  "tags": [
+    "background",
+    "noise",
+    "grain",
+    "texture",
+    "film",
+    "paper",
+    "gradient"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "noise-background.blade.php", "deps": [] },
+    "react": { "file": "NoiseBackground.tsx", "deps": [] },
+    "vue": { "file": "NoiseBackground.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "grain | film | paper",
+      "default": "grain",
+      "description": "grain: fine grain. film: grain with a dark vignette at the edges. paper: soft streaky paper fibers."
+    },
+    {
+      "name": "color",
+      "type": "primary | success | warning | danger | muted",
+      "default": "primary",
+      "description": "Token used for the gradient under the texture."
+    },
+    {
+      "name": "intensity",
+      "type": "low | medium | high",
+      "default": "medium",
+      "description": "How visible the texture is."
+    },
+    {
+      "name": "size",
+      "type": "fine | medium | coarse",
+      "default": "medium",
+      "description": "Size of one noise tile: 120px, 200px, or 320px. Larger tiles give coarser grain."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "How fast the gradient drifts: 30s, 18s, or 10s per cycle. The texture itself never moves."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the texture."
+    }
+  ],
+  "a11y": [
+    "The texture layer is aria-hidden and ignores pointer events.",
+    "The grain uses the ink token at low opacity, so ink and muted text keep their contrast.",
+    "With reduced motion, the gradient stops drifting."
+  ],
+  "ai": {
+    "whenToUse": "A tactile backdrop for a hero, editorial section, newsletter signup, or video promo.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Use variant=film on dark sections and variant=paper behind long reading text",
+      "Keep intensity low behind small text"
+    ]
+  },
+  "addedAt": "2026-11-08",
+  "i18n": {
+    "id": {
+      "description": "Tekstur grain, film, atau kertas statis di atas gradien token yang bergeser pelan. Murni CSS dengan satu tile noise SVG inline.",
+      "props": {
+        "variant": "grain: butiran halus. film: butiran dengan vignette gelap di tepi. paper: serat kertas bergaris yang lembut.",
+        "color": "Token untuk gradien di bawah tekstur.",
+        "intensity": "Seberapa terlihat teksturnya.",
+        "size": "Ukuran satu tile noise: 120px, 200px, atau 320px. Tile lebih besar memberi butiran lebih kasar.",
+        "speed": "Kecepatan gradien bergeser: 30s, 18s, atau 10s per siklus. Teksturnya sendiri tidak bergerak.",
+        "children / slot": "Konten yang tampil di atas tekstur."
+      },
+      "a11y": [
+        "Lapisan tekstur memakai aria-hidden dan mengabaikan pointer.",
+        "Butiran memakai token ink dengan opacity rendah, jadi teks ink dan muted tetap kontras.",
+        "Dengan reduced motion, gradien berhenti bergeser."
+      ],
+      "ai": {
+        "whenToUse": "Latar bertekstur untuk hero, section editorial, pendaftaran newsletter, atau promo video.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai variant=film di section gelap dan variant=paper di belakang teks bacaan panjang",
+          "Jaga intensity rendah di belakang teks kecil"
+        ]
+      }
+    }
+  }
+}

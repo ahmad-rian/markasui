@@ -1,0 +1,101 @@
+{
+  "name": "logo-cloud",
+  "title": "Logo cloud",
+  "description": "\"Trusted by\" section with customer logos in five layouts: row, grid, CSS marquee, quote cards, and stats.",
+  "category": "section",
+  "tags": [
+    "logos",
+    "brands",
+    "trusted by",
+    "social proof",
+    "section",
+    "landing",
+    "marquee"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "logo-cloud.blade.php", "deps": [] },
+    "react": { "file": "LogoCloud.tsx", "deps": [] },
+    "vue": { "file": "LogoCloud.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "logos",
+      "type": "{ name: string; href?: string; path?: string; viewBox?: string; wordmark?: boolean; quote?: string; author?: string }[]",
+      "default": "[]",
+      "description": "Logos. path is an SVG path filled with currentColor; the name shows as a wordmark unless wordmark is false. Custom markup: React logo field, Vue logo slot, Blade slot named after the array key."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "''",
+      "description": "Section heading (h2), for example \"Trusted by 2,000+ teams\"."
+    },
+    {
+      "name": "variant",
+      "type": "'row' | 'grid' | 'marquee' | 'cards' | 'stats'",
+      "default": "'row'",
+      "description": "Layout: a wrapping row, a lined grid, an endless CSS marquee, cards with a short quote, or a heading with big numbers beside the logos."
+    },
+    {
+      "name": "grayscale",
+      "type": "boolean",
+      "default": "true",
+      "description": "Muted grayscale logos that turn full colour on hover."
+    },
+    {
+      "name": "stats",
+      "type": "{ value: string; label: string }[]",
+      "default": "[]",
+      "description": "Numbers shown beside the logos (stats)."
+    },
+    {
+      "name": "logosLabel",
+      "type": "string",
+      "default": "'Customer logos'",
+      "description": "Accessible name of the section when there is no title."
+    }
+  ],
+  "a11y": [
+    "Every logo has a name: visible wordmark text, or role img with aria-label when only the SVG is shown.",
+    "The second marquee copy is aria-hidden and inert, so screen readers and the keyboard meet each logo once.",
+    "The marquee pauses on hover and on focus inside, and stops and wraps with reduced motion.",
+    "Linked logos get a visible focus outline and unsafe href schemes are replaced with #."
+  ],
+  "ai": {
+    "whenToUse": "Social proof under a hero or pricing table: brands, partners, or press that use the product.",
+    "rules": [
+      "Only show logos you have permission to use",
+      "Prefer monochrome SVG paths so logos follow the theme",
+      "Use marquee for long lists and grid or row for six logos or fewer"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Section \"Dipercaya oleh\" berisi logo pelanggan dalam lima tata letak: deret, grid, marquee CSS, kartu kutipan, dan angka.",
+      "props": {
+        "logos": "Daftar logo. path adalah path SVG berwarna currentColor; nama tampil sebagai wordmark kecuali wordmark false. Markup sendiri: field logo di React, slot logo di Vue, slot bernama key array di Blade.",
+        "title": "Judul section (h2), misalnya \"Dipercaya 2.000+ tim\".",
+        "variant": "Tata letak: deret yang membungkus, grid bergaris, marquee CSS tanpa ujung, kartu dengan kutipan singkat, atau judul dengan angka besar di samping logo.",
+        "grayscale": "Logo abu redup yang berwarna penuh saat hover.",
+        "stats": "Angka yang tampil di samping logo (stats).",
+        "logosLabel": "Nama aksesibel section bila tidak ada judul."
+      },
+      "a11y": [
+        "Setiap logo punya nama: teks wordmark yang terlihat, atau role img dengan aria-label bila hanya SVG.",
+        "Salinan kedua marquee diberi aria-hidden dan inert, jadi pembaca layar dan keyboard menemui tiap logo sekali.",
+        "Marquee berhenti saat hover dan saat fokus di dalam, serta diam dan membungkus saat reduced motion.",
+        "Logo bertautan punya outline fokus dan skema href berbahaya diganti #."
+      ],
+      "ai": {
+        "whenToUse": "Bukti sosial di bawah hero atau tabel harga: merek, mitra, atau media yang memakai produk.",
+        "rules": [
+          "Hanya tampilkan logo yang sudah diizinkan dipakai",
+          "Utamakan path SVG satu warna supaya logo mengikuti tema",
+          "Pakai marquee untuk daftar panjang dan grid atau row untuk enam logo atau kurang"
+        ]
+      }
+    }
+  }
+}

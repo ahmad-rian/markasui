@@ -115,21 +115,31 @@ async function main() {
     BUDGET.pageJs,
   );
 
-  // Hanya CSS yang ditautkan halaman. Pagefind membuat CSS UI bawaannya, tapi situs memakai UI sendiri.
-  const linkedCss = new Set<string>();
-  for (const page of pages) {
-    const html = await readFile(page, "utf8");
-    for (const match of html.matchAll(
-      /<link[^>]+rel="stylesheet"[^>]+href="([^"]+\.css)"/g,
-    ))
-      linkedCss.add(join(dist, match[1]!.replace(/^\//, "")));
-  }
-  const css = await Promise.all(
-    [...linkedCss].map(async (f) => gzip(await readFile(f))),
+  // CSS yang dimuat satu halaman (stylesheet yang ditautkan + <style> inline), diambil halaman terberat.
+  // Pagefind membuat CSS UI bawaannya, tapi situs memakai UI sendiri, jadi file itu tidak terhitung.
+  const cssSize = new Map<string, number>();
+  const pageCss = await Promise.all(
+    pages.map(async (page) => {
+      const html = await readFile(page, "utf8");
+      let total = 0;
+      for (const match of html.matchAll(
+        /<link[^>]+rel="stylesheet"[^>]+href="([^"]+\.css)"/g,
+      )) {
+        const file = join(dist, match[1]!.replace(/^\//, ""));
+        if (!cssSize.has(file)) cssSize.set(file, gzip(await readFile(file)));
+        total += cssSize.get(file)!;
+      }
+      for (const match of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g))
+        total += gzip(Buffer.from(match[1]!));
+      return [page, total] as const;
+    }),
   );
+  const [heaviestCssPage, heaviestCss] = pageCss.toSorted(
+    (a, b) => b[1] - a[1],
+  )[0]!;
   check(
-    "CSS yang dimuat situs",
-    css.reduce((a, b) => a + b, 0),
+    `CSS halaman (terberat: /${relative(dist, heaviestCssPage)})`,
+    heaviestCss,
     BUDGET.css,
   );
 

@@ -1,0 +1,98 @@
+{
+  "name": "background-boxes",
+  "title": "Background Boxes",
+  "description": "A skewed, flat, or perspective grid of tiles that light up under the cursor and fade back, using only CSS hover.",
+  "category": "background",
+  "tags": ["background", "grid", "boxes", "tiles", "hover", "isometric"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "background-boxes.blade.php", "deps": [] },
+    "react": { "file": "BackgroundBoxes.tsx", "deps": [] },
+    "vue": { "file": "BackgroundBoxes.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "skewed | flat | perspective",
+      "default": "skewed",
+      "description": "skewed tilts the grid like an isometric floor, flat keeps it square, perspective lays it back toward the horizon."
+    },
+    {
+      "name": "rows",
+      "type": "number",
+      "default": "12",
+      "description": "Number of rows, up to 40. The grid stops at 600 tiles."
+    },
+    {
+      "name": "cols",
+      "type": "number",
+      "default": "18",
+      "description": "Number of columns, up to 40."
+    },
+    {
+      "name": "size",
+      "type": "number",
+      "default": "40",
+      "description": "Tile size in pixels."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "Cycle of the few tiles that glow on their own: 9s, 6s, or 3.5s."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color a tile lights up with."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the grid."
+    }
+  ],
+  "a11y": [
+    "The grid is aria-hidden and its tiles are not focusable.",
+    "Content lets the pointer through to the grid, except links, buttons, labels, and form fields, which stay clickable.",
+    "With reduced motion, tiles stop glowing on their own and change color without a fade."
+  ],
+  "ai": {
+    "whenToUse": "A playful hero, feature section, or promo banner where hovering the background is part of the fun.",
+    "rules": [
+      "Set background color, padding, and radius with class on the component",
+      "Put cards or text blocks on bg-surface so they stay readable over lit tiles",
+      "Lower rows and cols on small areas instead of making tiles tiny"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Grid kotak miring, datar, atau berperspektif yang menyala di bawah kursor lalu memudar, hanya dengan CSS hover.",
+      "props": {
+        "variant": "skewed memiringkan grid seperti lantai isometrik, flat membuatnya lurus, perspective merebahkannya ke arah cakrawala.",
+        "rows": "Jumlah baris, maksimal 40. Grid berhenti di 600 kotak.",
+        "cols": "Jumlah kolom, maksimal 40.",
+        "size": "Ukuran kotak dalam piksel.",
+        "speed": "Siklus beberapa kotak yang menyala sendiri: 9s, 6s, atau 3.5s.",
+        "color": "Warna token saat kotak menyala.",
+        "children / slot": "Konten yang tampil di atas grid."
+      },
+      "a11y": [
+        "Grid memakai aria-hidden dan kotaknya tidak bisa difokus.",
+        "Konten meneruskan pointer ke grid, kecuali tautan, tombol, label, dan kolom form yang tetap bisa diklik.",
+        "Dengan reduced motion, kotak berhenti menyala sendiri dan berganti warna tanpa transisi."
+      ],
+      "ai": {
+        "whenToUse": "Hero, section fitur, atau banner promo yang jenaka, di mana hover di latar menjadi bagian keseruan.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Letakkan kartu atau blok teks di atas bg-surface supaya tetap terbaca di atas kotak yang menyala",
+          "Kurangi rows dan cols di area kecil, jangan membuat kotak terlalu kecil"
+        ]
+      }
+    }
+  }
+}

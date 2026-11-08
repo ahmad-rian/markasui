@@ -1,0 +1,12 @@
+<script setup lang="ts">
+import NotFound from "../../components/not-found/NotFound.vue";
+</script>
+
+<template>
+  <NotFound
+    variant="glitch"
+    code="500"
+    title="Something went wrong"
+    description="Our server hit an unexpected error. Please try again in a moment."
+  />
+</template>

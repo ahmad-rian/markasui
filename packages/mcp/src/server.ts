@@ -84,6 +84,7 @@ export function createServer(registry: Registry = createRegistry()) {
             "overlay",
             "navigation",
             "data",
+            "section",
             "markas",
             "animation",
             "background",

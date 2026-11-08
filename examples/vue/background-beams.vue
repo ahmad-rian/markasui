@@ -1,0 +1,18 @@
+<script setup lang="ts">
+import BackgroundBeams from "../../components/background-beams/BackgroundBeams.vue";
+import Button from "../../components/button/Button.vue";
+</script>
+
+<template>
+  <BackgroundBeams class="rounded-xl border border-line bg-surface px-6 py-16">
+    <div class="grid justify-items-center gap-4 text-center">
+      <h2 class="text-4xl font-bold tracking-tight text-ink">
+        Light up your launch
+      </h2>
+      <p class="max-w-72 text-sm text-muted">
+        Release notes, waitlists, and changelogs that people actually read.
+      </p>
+      <Button>Join the waitlist</Button>
+    </div>
+  </BackgroundBeams>
+</template>

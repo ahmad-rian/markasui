@@ -1,0 +1,99 @@
+{
+  "name": "spotlight-beam",
+  "title": "Spotlight Beam",
+  "description": "A large, tilted beam of light that sweeps in once when the section scrolls into view, and can lean toward the pointer.",
+  "category": "background",
+  "tags": [
+    "background",
+    "spotlight",
+    "beam",
+    "light",
+    "hero",
+    "pointer",
+    "animated"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "spotlight-beam.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "SpotlightBeam.tsx", "deps": [] },
+    "vue": { "file": "SpotlightBeam.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "top-left | top-right | center",
+      "default": "top-left",
+      "description": "Where the light comes from: a top corner shining diagonally, or straight down from the top center."
+    },
+    {
+      "name": "color",
+      "type": "primary | success | warning | danger | muted",
+      "default": "primary",
+      "description": "Token used for the beam."
+    },
+    {
+      "name": "intensity",
+      "type": "soft | medium | strong",
+      "default": "medium",
+      "description": "How bright the beam is."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "Length of the entrance: 2.4s, 1.6s, or 0.9s."
+    },
+    {
+      "name": "follow",
+      "type": "boolean",
+      "default": "false",
+      "description": "The light source leans a little toward the pointer while it moves over the section."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the beam."
+    }
+  ],
+  "a11y": [
+    "The beam layer is aria-hidden and ignores pointer events.",
+    "The entrance plays once, the first time the section scrolls into view.",
+    "With reduced motion, the beam shows in place right away and does not follow the pointer."
+  ],
+  "ai": {
+    "whenToUse": "A cinematic backdrop for a hero, sign-in screen, or launch section that needs one strong light source.",
+    "rules": [
+      "Set the background color, padding, and radius with class on the component",
+      "Use intensity=soft on light backgrounds and strong on dark ones",
+      "Use follow only on large sections where the pointer moves a lot"
+    ]
+  },
+  "addedAt": "2026-11-08",
+  "i18n": {
+    "id": {
+      "description": "Berkas cahaya besar dan miring yang masuk sekali saat section masuk layar, dan bisa condong ke arah pointer.",
+      "props": {
+        "variant": "Asal cahaya: sudut atas yang menyorot miring, atau lurus ke bawah dari tengah atas.",
+        "color": "Token untuk berkas cahaya.",
+        "intensity": "Seberapa terang berkas cahaya.",
+        "speed": "Lama animasi masuk: 2.4s, 1.6s, atau 0.9s.",
+        "follow": "Sumber cahaya sedikit condong ke arah pointer saat bergerak di atas section.",
+        "children / slot": "Konten yang tampil di atas berkas cahaya."
+      },
+      "a11y": [
+        "Lapisan cahaya memakai aria-hidden dan mengabaikan pointer.",
+        "Animasi masuk diputar sekali, saat section pertama kali masuk layar.",
+        "Dengan reduced motion, berkas cahaya langsung tampil di tempatnya dan tidak mengikuti pointer."
+      ],
+      "ai": {
+        "whenToUse": "Latar sinematik untuk hero, layar masuk, atau section peluncuran yang butuh satu sumber cahaya kuat.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai intensity=soft di latar terang dan strong di latar gelap",
+          "Pakai follow hanya di section besar tempat pointer banyak bergerak"
+        ]
+      }
+    }
+  }
+}

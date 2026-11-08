@@ -1,0 +1,89 @@
+{
+  "name": "shooting-stars",
+  "title": "Shooting Stars",
+  "description": "A twinkling star field with a shooting star streaking across every few seconds. Night or warm dawn sky, all from token colors.",
+  "category": "background",
+  "tags": ["background", "stars", "shooting star", "night", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "shooting-stars.blade.php", "deps": [] },
+    "react": { "file": "ShootingStars.tsx", "deps": [] },
+    "vue": { "file": "ShootingStars.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "night | dawn",
+      "default": "night",
+      "description": "night: stars across the whole area. dawn: stars in the upper sky with a warm glow rising from the bottom."
+    },
+    {
+      "name": "frequency",
+      "type": "low | normal | high",
+      "default": "normal",
+      "description": "How often a shooting star appears: about every 5, 3, or 1.5 seconds."
+    },
+    {
+      "name": "trailColor",
+      "type": "muted | ink | primary | success | warning | danger",
+      "default": "primary (night), warning (dawn)",
+      "description": "Token color of the shooting star trail. The head always uses ink."
+    },
+    {
+      "name": "stars",
+      "type": "number",
+      "default": "70",
+      "description": "Number of twinkling background stars, up to 300."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "11",
+      "description": "Whole number that decides star and streak positions. The same seed always gives the same sky."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the sky."
+    }
+  ],
+  "a11y": [
+    "The sky layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, stars stop twinkling and shooting stars stay still as short streaks."
+  ],
+  "ai": {
+    "whenToUse": "A night or sunrise sky behind a waitlist, launch hero, event announcement, or sign-in card.",
+    "rules": [
+      "Add the dark class to keep the sky dark in every theme",
+      "Use dawn with warning or danger trails for warm, morning themed pages",
+      "Keep stars under 150 for cards and small sections"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bidang bintang berkelip dengan bintang jatuh yang melesat setiap beberapa detik. Langit malam atau fajar hangat, semua dari warna token.",
+      "props": {
+        "variant": "night: bintang di seluruh area. dawn: bintang di langit atas dengan cahaya hangat naik dari bawah.",
+        "frequency": "Seberapa sering bintang jatuh muncul: kira-kira tiap 5, 3, atau 1,5 detik.",
+        "trailColor": "Warna token ekor bintang jatuh. Kepalanya selalu memakai ink.",
+        "stars": "Jumlah bintang latar yang berkelip, maksimal 300.",
+        "seed": "Bilangan bulat yang menentukan posisi bintang dan lintasan. Seed sama selalu menghasilkan langit yang sama.",
+        "children / slot": "Konten yang tampil di atas langit."
+      },
+      "a11y": [
+        "Lapisan langit memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, bintang berhenti berkelip dan bintang jatuh diam sebagai garis pendek."
+      ],
+      "ai": {
+        "whenToUse": "Langit malam atau fajar di belakang waitlist, hero peluncuran, pengumuman acara, atau kartu masuk.",
+        "rules": [
+          "Tambahkan class dark supaya langit tetap gelap di semua tema",
+          "Pakai dawn dengan ekor warning atau danger untuk halaman bertema pagi yang hangat",
+          "Jaga stars di bawah 150 untuk kartu dan section kecil"
+        ]
+      }
+    }
+  }
+}

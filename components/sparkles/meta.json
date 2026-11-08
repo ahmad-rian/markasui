@@ -1,0 +1,91 @@
+{
+  "name": "sparkles",
+  "title": "Sparkles",
+  "description": "Small four point stars and dots that glint in and out across an area, around a heading, or burst from the center on hover.",
+  "category": "background",
+  "tags": ["background", "sparkles", "particles", "celebration", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "sparkles.blade.php", "deps": [] },
+    "react": { "file": "Sparkles.tsx", "deps": [] },
+    "vue": { "file": "Sparkles.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "field | text | burst",
+      "default": "field",
+      "description": "field: stars and dots across the whole area. text: stars along the edges around a heading. burst: stars fly out from the center on hover or focus."
+    },
+    {
+      "name": "density",
+      "type": "number",
+      "default": "24",
+      "description": "Number of sparkles, up to 120."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg",
+      "default": "md",
+      "description": "Sparkle size range: 4 to 7px, 6 to 11px, or 10 to 17px."
+    },
+    {
+      "name": "color",
+      "type": "muted | ink | primary | success | warning | danger",
+      "default": "warning",
+      "description": "Token color of the sparkles."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "5",
+      "description": "Whole number that decides positions, sizes, and timing. The same seed always gives the same sparkles."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the sparkles."
+    }
+  ],
+  "a11y": [
+    "The sparkle layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, field and text sparkles stay still and burst sparkles stay hidden.",
+    "Burst also plays when a control inside receives keyboard focus, not only on hover."
+  ],
+  "ai": {
+    "whenToUse": "A celebratory touch on a success screen, a launch heading, an upgrade card, or an empty state.",
+    "rules": [
+      "Use text with padding on the component so stars sit around the heading, not on it",
+      "Use burst on cards that hold a call to action",
+      "Keep density under 40 so text stays readable"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Bintang empat sisi dan titik kecil yang berkilau muncul dan memudar di sebuah area, di sekitar judul, atau memancar dari tengah saat hover.",
+      "props": {
+        "variant": "field: bintang dan titik di seluruh area. text: bintang di sepanjang tepi sekitar judul. burst: bintang memancar dari tengah saat hover atau fokus.",
+        "density": "Jumlah kilau, maksimal 120.",
+        "size": "Rentang ukuran kilau: 4 sampai 7px, 6 sampai 11px, atau 10 sampai 17px.",
+        "color": "Warna token kilau.",
+        "seed": "Bilangan bulat yang menentukan posisi, ukuran, dan waktu. Seed sama selalu menghasilkan kilau yang sama.",
+        "children / slot": "Konten yang tampil di atas kilau."
+      },
+      "a11y": [
+        "Lapisan kilau memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, kilau field dan text diam, dan kilau burst tetap tersembunyi.",
+        "Burst juga berjalan saat kontrol di dalamnya mendapat fokus keyboard, bukan hanya saat hover."
+      ],
+      "ai": {
+        "whenToUse": "Sentuhan perayaan di layar sukses, judul peluncuran, kartu upgrade, atau empty state.",
+        "rules": [
+          "Pakai text dengan padding pada komponen supaya bintang berada di sekitar judul, bukan di atasnya",
+          "Pakai burst pada kartu yang berisi ajakan bertindak",
+          "Jaga density di bawah 40 supaya teks tetap terbaca"
+        ]
+      }
+    }
+  }
+}

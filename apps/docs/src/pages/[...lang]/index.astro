@@ -9,9 +9,11 @@ import LiveFixture from "../../components/landing/LiveFixture.astro";
 import LiveWall from "../../components/landing/LiveWall.astro";
 import TemplateWall from "../../components/landing/TemplateWall.astro";
 import Base from "../../layouts/Base.astro";
+import "../../generated/css/landing.css";
 import "../../styles/landing.css";
 import { FRAMEWORK_LABELS, cliCommand } from "../../lib/frameworks";
 import { localeParams, localePath, t, toLocale } from "../../lib/i18n";
+import { HERO_FIXTURE } from "../../lib/landing";
 import { getComponents, groupByCategory } from "../../lib/registry";
 import { getTemplates } from "../../lib/templates";
 
@@ -114,7 +116,7 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
           <span class="lp-chip">{home.cardBadge}</span>
         </p>
         <div class="lp-card-stage" data-preview-stage>
-          <LiveFixture fixture="switch--card" class="w-full" />
+          <LiveFixture fixture={HERO_FIXTURE} class="w-full" />
         </div>
       </div>
 

@@ -11,6 +11,7 @@ export const CATEGORIES = [
   "overlay",
   "navigation",
   "data",
+  "section",
   "animation",
   "background",
   "button",

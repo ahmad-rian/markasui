@@ -1,0 +1,96 @@
+{
+  "name": "meteors",
+  "title": "Meteors",
+  "description": "Diagonal meteors with fading gradient tails that streak across a card or section, placed from a fixed seed.",
+  "category": "background",
+  "tags": ["background", "meteors", "space", "card", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "meteors.blade.php", "deps": [] },
+    "react": { "file": "Meteors.tsx", "deps": [] },
+    "vue": { "file": "Meteors.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "rain | comet",
+      "default": "rain",
+      "description": "rain: many thin meteors with short tails. comet: a few thick glowing meteors with long tails."
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "default": "20 (rain), 6 (comet)",
+      "description": "Number of meteors, up to 60."
+    },
+    {
+      "name": "angle",
+      "type": "number",
+      "default": "35",
+      "description": "Direction of travel in degrees below the horizon, from 0 to 180. 35 falls down and to the right, 90 falls straight down."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "How long each meteor takes to cross. Every meteor gets its own duration within the range."
+    },
+    {
+      "name": "color",
+      "type": "muted | ink | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color of the meteors and their tails."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "default": "3",
+      "description": "Whole number that decides positions, tails, and timing. The same seed always gives the same shower."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the meteors."
+    }
+  ],
+  "a11y": [
+    "The meteor layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, meteors stop at their starting point and stay visible as still streaks."
+  ],
+  "ai": {
+    "whenToUse": "A lively accent inside a feature card, pricing plan, stats section, or 404 page.",
+    "rules": [
+      "Use comet for small cards and rain for wide sections",
+      "Keep count under 30 so the content stays the focus",
+      "Change seed to get a different but stable layout"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Meteor diagonal dengan ekor gradien memudar yang melintas di kartu atau section, posisinya dari seed tetap.",
+      "props": {
+        "variant": "rain: banyak meteor tipis dengan ekor pendek. comet: sedikit meteor tebal bercahaya dengan ekor panjang.",
+        "count": "Jumlah meteor, maksimal 60.",
+        "angle": "Arah lintasan dalam derajat di bawah horizon, 0 sampai 180. 35 jatuh ke kanan bawah, 90 jatuh lurus ke bawah.",
+        "speed": "Lama setiap meteor melintas. Setiap meteor punya durasi sendiri dalam rentang itu.",
+        "color": "Warna token meteor dan ekornya.",
+        "seed": "Bilangan bulat yang menentukan posisi, ekor, dan waktu. Seed sama selalu menghasilkan hujan meteor yang sama.",
+        "children / slot": "Konten yang tampil di atas meteor."
+      },
+      "a11y": [
+        "Lapisan meteor memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, meteor berhenti di titik awal dan tetap terlihat sebagai garis diam."
+      ],
+      "ai": {
+        "whenToUse": "Aksen hidup di dalam kartu fitur, paket harga, section statistik, atau halaman 404.",
+        "rules": [
+          "Pakai comet untuk kartu kecil dan rain untuk section lebar",
+          "Jaga count di bawah 30 supaya konten tetap jadi fokus",
+          "Ganti seed untuk tata letak lain yang tetap stabil"
+        ]
+      }
+    }
+  }
+}

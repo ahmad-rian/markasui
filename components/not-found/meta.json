@@ -1,0 +1,130 @@
+{
+  "name": "not-found",
+  "title": "Not Found",
+  "description": "Ready-made 404 and error page block with six layouts: minimal, split, search with filterable links, glitch, illustrated, and terminal.",
+  "category": "section",
+  "tags": ["404", "error", "not found", "page", "section", "empty state"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "not-found.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "NotFound.tsx", "deps": [] },
+    "vue": { "file": "NotFound.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"minimal\" | \"split\" | \"search\" | \"glitch\" | \"illustrated\" | \"terminal\"",
+      "default": "\"minimal\"",
+      "description": "Layout. minimal: big code above the text. split: text left, geometric SVG right from 36rem wide. search: search box over filterable links. glitch: code with a CSS glitch. illustrated: stacked outline code with a compass. terminal: shell window."
+    },
+    {
+      "name": "code",
+      "type": "string",
+      "default": "\"404\"",
+      "description": "Status code shown in the visual, such as 403 or 500."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "\"Page not found\"",
+      "description": "Heading (h1) that names the problem."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "\"The page you are looking for does not exist or has been moved.\"",
+      "description": "Short explanation under the heading."
+    },
+    {
+      "name": "homeHref",
+      "type": "string",
+      "default": "\"/\"",
+      "description": "Target of the home link, and of the Go back link when there is no history."
+    },
+    {
+      "name": "links",
+      "type": "{ label, href }[]",
+      "default": "[]",
+      "description": "Popular pages. Shown and filtered in the search variant."
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "default": "\"/page\"",
+      "description": "Path typed after cd in the terminal variant."
+    },
+    {
+      "name": "homeLabel",
+      "type": "string",
+      "default": "Back to home",
+      "description": "Text of the home link."
+    },
+    {
+      "name": "backLabel",
+      "type": "string",
+      "default": "Go back",
+      "description": "Text of the link that goes back in history."
+    },
+    {
+      "name": "searchLabel",
+      "type": "string",
+      "default": "Search pages",
+      "description": "Accessible label and placeholder of the search box."
+    },
+    {
+      "name": "emptyLabel",
+      "type": "string",
+      "default": "No pages match your search",
+      "description": "Message announced when the search finds nothing."
+    }
+  ],
+  "a11y": [
+    "The block is a section labelled by its h1 title. The decorative code, illustration, and glitch layers are aria-hidden.",
+    "Go back is a real link to homeHref: with JavaScript and history it calls history.back(), otherwise it simply goes home.",
+    "The search box has an accessible label; the empty result message sits in a role=status live region.",
+    "The glitch layers are hidden and the cursor stops blinking with prefers-reduced-motion."
+  ],
+  "ai": {
+    "whenToUse": "The body of a 404, 403, 500, or maintenance page, or an empty route inside an app.",
+    "rules": [
+      "Use one not-found block per page, it renders an h1",
+      "Pass the real status code and a plain title for errors other than 404",
+      "Give the search variant four to eight popular links",
+      "Keep the description to one or two short sentences"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Blok halaman 404 dan error siap pakai dengan enam tata letak: minimal, terbagi, pencarian dengan tautan tersaring, glitch, berilustrasi, dan terminal.",
+      "props": {
+        "variant": "Tata letak. minimal: kode besar di atas teks. split: teks kiri, SVG geometris kanan mulai lebar 36rem. search: kotak cari di atas tautan yang bisa disaring. glitch: kode dengan efek glitch CSS. illustrated: kode outline bertumpuk dengan kompas. terminal: jendela shell.",
+        "code": "Kode status di visual, misalnya 403 atau 500.",
+        "title": "Judul (h1) yang menyebut masalahnya.",
+        "description": "Penjelasan singkat di bawah judul.",
+        "homeHref": "Tujuan link beranda, juga link Kembali bila tidak ada riwayat.",
+        "links": "Halaman populer. Tampil dan bisa disaring di variant search.",
+        "path": "Path yang diketik setelah cd di variant terminal.",
+        "homeLabel": "Teks link beranda. Isi \"Kembali ke beranda\" untuk situs berbahasa Indonesia.",
+        "backLabel": "Teks link kembali di riwayat. Isi \"Kembali\" untuk situs berbahasa Indonesia.",
+        "searchLabel": "Label aksesibel dan placeholder kotak cari. Isi \"Cari halaman\" untuk situs berbahasa Indonesia.",
+        "emptyLabel": "Pesan yang diumumkan saat pencarian kosong. Isi \"Tidak ada halaman yang cocok\" untuk situs berbahasa Indonesia."
+      },
+      "a11y": [
+        "Blok berupa section yang diberi label oleh judul h1. Kode dekoratif, ilustrasi, dan lapisan glitch memakai aria-hidden.",
+        "Kembali adalah link sungguhan ke homeHref: dengan JavaScript dan riwayat ia memanggil history.back(), selain itu langsung ke beranda.",
+        "Kotak cari punya label aksesibel; pesan hasil kosong ada di live region role=status.",
+        "Lapisan glitch disembunyikan dan kursor berhenti berkedip dengan prefers-reduced-motion."
+      ],
+      "ai": {
+        "whenToUse": "Isi halaman 404, 403, 500, atau pemeliharaan, atau rute kosong di dalam aplikasi.",
+        "rules": [
+          "Pakai satu blok not-found per halaman, blok ini merender h1",
+          "Isi kode status asli dan judul yang jelas untuk error selain 404",
+          "Beri variant search empat sampai delapan tautan populer",
+          "Jaga deskripsi satu atau dua kalimat pendek"
+        ]
+      }
+    }
+  }
+}

@@ -166,7 +166,7 @@ test("filter halaman komponen", async ({ page, request }) => {
   await page.goto("/components");
   await expect(page.locator("[data-card]:visible")).toHaveCount(index.length);
 
-  await page.getByLabel("Search components").fill("accordion");
+  await page.getByLabel("Search components").fill("breadcrumb");
   await expect(page.locator("[data-card]:visible")).toHaveCount(1);
   await page.getByLabel("Search components").fill("tidak-ada-komponen-ini");
   await expect(page.getByText("No matching components.")).toBeVisible();

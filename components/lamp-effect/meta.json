@@ -1,0 +1,92 @@
+{
+  "name": "lamp-effect",
+  "title": "Lamp Effect",
+  "description": "Spotlight that shines down on your content: two cones of light widen from a bright line when the section scrolls into view.",
+  "category": "background",
+  "tags": [
+    "background",
+    "lamp",
+    "spotlight",
+    "light",
+    "hero",
+    "dark",
+    "animated"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "lamp-effect.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "LampEffect.tsx", "deps": [] },
+    "vue": { "file": "LampEffect.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "lamp | stage | halo",
+      "default": "lamp",
+      "description": "lamp: one lamp with a bright line above the content. stage: two lamps shining in from the top corners. halo: a glowing ring rising from the top edge."
+    },
+    {
+      "name": "color",
+      "type": "primary | success | warning | danger | muted",
+      "default": "primary",
+      "description": "Token used for the light, line, and glow."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg",
+      "default": "md",
+      "description": "Width of the lamp and how far the light spreads: 14rem, 20rem, or 28rem."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "Length of the entrance: 2s, 1.2s, or 0.7s."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown under the light."
+    }
+  ],
+  "a11y": [
+    "The light layer is aria-hidden and ignores pointer events.",
+    "The entrance plays once, the first time the section scrolls into view.",
+    "With reduced motion, the light shows at full width right away and never moves."
+  ],
+  "ai": {
+    "whenToUse": "A dramatic backdrop for a dark landing hero, launch announcement, or 404 page.",
+    "rules": [
+      "Add class=\"dark bg-canvas text-ink\" so the section stays dark in every theme",
+      "The lamp line sits 3rem from the top; give the content top padding of at least 8rem for the lamp variant",
+      "Use one lamp per view; it is meant as the main backdrop"
+    ]
+  },
+  "addedAt": "2026-11-08",
+  "i18n": {
+    "id": {
+      "description": "Lampu sorot yang menyinari konten: dua kerucut cahaya melebar dari garis terang saat section masuk layar.",
+      "props": {
+        "variant": "lamp: satu lampu dengan garis terang di atas konten. stage: dua lampu menyorot dari sudut atas. halo: cincin bercahaya yang muncul dari tepi atas.",
+        "color": "Token untuk cahaya, garis, dan pendar.",
+        "size": "Lebar lampu dan sebaran cahaya: 14rem, 20rem, atau 28rem.",
+        "speed": "Lama animasi masuk: 2s, 1.2s, atau 0.7s.",
+        "children / slot": "Konten yang tampil di bawah cahaya."
+      },
+      "a11y": [
+        "Lapisan cahaya memakai aria-hidden dan mengabaikan pointer.",
+        "Animasi masuk diputar sekali, saat section pertama kali masuk layar.",
+        "Dengan reduced motion, cahaya langsung tampil penuh dan tidak bergerak."
+      ],
+      "ai": {
+        "whenToUse": "Latar dramatis untuk hero landing gelap, pengumuman peluncuran, atau halaman 404.",
+        "rules": [
+          "Tambahkan class=\"dark bg-canvas text-ink\" supaya section tetap gelap di semua tema",
+          "Garis lampu berada 3rem dari atas; beri konten padding atas minimal 8rem untuk varian lamp",
+          "Pakai satu lampu per tampilan; ini dimaksudkan sebagai latar utama"
+        ]
+      }
+    }
+  }
+}

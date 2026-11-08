@@ -24,7 +24,7 @@
   "scripts": {
     "prebuild": "pnpm run generate",
     "predev": "pnpm run generate",
-    "generate": "node ../../packages/registry/src/build.ts public/r && php ../../scripts/render-blade.php ../../examples/blade src/generated/blade && node scripts/playgrounds.ts && node ../../scripts/render-templates.ts src/generated/templates",
+    "generate": "node ../../packages/registry/src/build.ts public/r && php ../../scripts/render-blade.php ../../examples/blade src/generated/blade && node scripts/playgrounds.ts && node ../../scripts/render-templates.ts src/generated/templates && node scripts/page-css.ts",
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview"

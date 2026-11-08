@@ -1,0 +1,99 @@
+{
+  "name": "hero-highlight",
+  "title": "Hero Highlight",
+  "description": "Dot or line grid that lights up around the pointer, plus mark text whose highlight draws from left to right when it scrolls into view.",
+  "category": "background",
+  "tags": [
+    "background",
+    "highlight",
+    "mark",
+    "dots",
+    "grid",
+    "pointer",
+    "hero"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "hero-highlight.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "HeroHighlight.tsx", "deps": [] },
+    "vue": { "file": "HeroHighlight.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "dots | grid",
+      "default": "dots",
+      "description": "dots: a dot grid. grid: thin grid lines."
+    },
+    {
+      "name": "color",
+      "type": "primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token for the glowing dots and the mark highlight."
+    },
+    {
+      "name": "spacing",
+      "type": "number",
+      "default": "16",
+      "description": "Distance between dots or lines in px."
+    },
+    {
+      "name": "radius",
+      "type": "number",
+      "default": "160",
+      "description": "Radius in px of the glow around the pointer."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "How long each mark takes to draw: 1.6s, 1s, or 0.6s."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the grid. Wrap words in <mark> to highlight them."
+    }
+  ],
+  "a11y": [
+    "The grid layer is aria-hidden and ignores pointer events.",
+    "Highlights use the native <mark> element, so screen readers can announce them, and text stays ink for contrast.",
+    "With reduced motion, marks are fully highlighted right away and the glow appears without a fade."
+  ],
+  "ai": {
+    "whenToUse": "A hero or feature heading where one phrase should stand out, on a quiet interactive grid.",
+    "rules": [
+      "Wrap one short phrase per heading in <mark>; more than that dilutes it",
+      "Set the background color, padding, and radius with class on the component",
+      "Use variant=grid with a larger spacing such as 32 for feature sections"
+    ]
+  },
+  "addedAt": "2026-11-08",
+  "i18n": {
+    "id": {
+      "description": "Grid titik atau garis yang menyala di sekitar pointer, plus teks mark yang sorotannya tergambar dari kiri ke kanan saat masuk layar.",
+      "props": {
+        "variant": "dots: grid titik. grid: garis grid tipis.",
+        "color": "Token untuk titik yang menyala dan sorotan mark.",
+        "spacing": "Jarak antar titik atau garis dalam px.",
+        "radius": "Radius cahaya di sekitar pointer dalam px.",
+        "speed": "Lama setiap mark tergambar: 1.6s, 1s, atau 0.6s.",
+        "children / slot": "Konten yang tampil di atas grid. Bungkus kata dengan <mark> untuk menyorotnya."
+      },
+      "a11y": [
+        "Lapisan grid memakai aria-hidden dan mengabaikan pointer.",
+        "Sorotan memakai elemen native <mark>, jadi screen reader bisa mengumumkannya, dan teks tetap ink supaya kontras.",
+        "Dengan reduced motion, mark langsung tersorot penuh dan cahaya muncul tanpa fade."
+      ],
+      "ai": {
+        "whenToUse": "Hero atau judul fitur yang satu frasanya perlu menonjol, di atas grid interaktif yang tenang.",
+        "rules": [
+          "Bungkus satu frasa pendek per judul dengan <mark>; lebih dari itu membuatnya kurang menonjol",
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai variant=grid dengan spacing lebih besar seperti 32 untuk section fitur"
+        ]
+      }
+    }
+  }
+}

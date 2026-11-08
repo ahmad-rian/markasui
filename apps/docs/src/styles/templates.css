@@ -1,0 +1,38 @@
+/*
+ * CSS halaman demo template (/demo/templates/<slug>/<fw>): token MarkasUI, class komponen dan template, dan font.
+ * Sengaja tidak memuat global.css agar halaman demo tidak membawa CSS khusus situs docs.
+ */
+@import "../../../../packages/theme/markas.css";
+/* @source komponen yang dipakai template, dibangkitkan oleh scripts/page-css.ts. */
+@import "../generated/css/templates-sources.css";
+
+@source "../../../../templates";
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2")
+    format("woff2-variations");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Martian Mono";
+  src: url("../../node_modules/@fontsource-variable/martian-mono/files/martian-mono-latin-wght-normal.woff2")
+    format("woff2-variations");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Martian Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+}

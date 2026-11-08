@@ -1,8 +1,10 @@
+/*
+ * CSS dasar situs docs: token MarkasUI, font, brand situs, dan markup apps/docs/src (dideteksi otomatis
+ * oleh Tailwind dari root Vite, folder yang di-.gitignore seperti src/generated dilewati). Class komponen
+ * dan contoh tidak ada di sini: halaman yang menampilkannya memakai entry src/generated/css/ dari
+ * scripts/page-css.ts, yang mengimpor file ini plus @source komponen yang tampil.
+ */
 @import "../../../../packages/theme/markas.css";
-
-@source "../../../../components";
-@source "../../../../examples";
-@source "../../../../templates";
 
 @font-face {
   font-family: "Bricolage Grotesque";

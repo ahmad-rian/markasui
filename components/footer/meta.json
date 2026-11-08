@@ -1,0 +1,223 @@
+{
+  "name": "footer",
+  "title": "Footer",
+  "description": "Site footer with six layouts: link columns, centered, newsletter card, giant wordmark, closing call to action, and a compact one-line bar.",
+  "category": "navigation",
+  "tags": [
+    "footer",
+    "navigation",
+    "links",
+    "newsletter",
+    "social",
+    "landing",
+    "layout"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": {
+      "file": "footer.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Footer.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Footer.vue",
+      "deps": []
+    }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"columns\" | \"centered\" | \"newsletter\" | \"big-brand\" | \"cta\" | \"compact\"",
+      "default": "\"columns\"",
+      "description": "columns: brand left, link columns right. centered: minimal stack. newsletter: subscribe card above the columns. big-brand: giant cropped wordmark. cta: large call to action above a small footer. compact: one line for apps."
+    },
+    {
+      "name": "brand",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Logo or site name."
+    },
+    {
+      "name": "description",
+      "type": "string / ReactNode",
+      "default": "-",
+      "description": "Short line under the brand. In the cta variant it sits under the heading instead. Hidden in compact."
+    },
+    {
+      "name": "columns",
+      "type": "{ title?, links: { label, href }[] }[]",
+      "default": "[]",
+      "description": "Link groups. columns, newsletter, and big-brand show them as titled columns; centered, cta, and compact show all links in one row."
+    },
+    {
+      "name": "socials",
+      "type": "{ label, href, icon }[]",
+      "default": "[]",
+      "description": "Social links shown as icon buttons. icon is an SVG path (d) for a 24px stroke icon; label becomes the accessible name."
+    },
+    {
+      "name": "legal",
+      "type": "{ label, href }[]",
+      "default": "[]",
+      "description": "Small links next to the copyright, such as Privacy and Terms."
+    },
+    {
+      "name": "copyright",
+      "type": "string / ReactNode",
+      "default": "-",
+      "description": "Copyright line in the bottom row."
+    },
+    {
+      "name": "heading",
+      "type": "string / ReactNode",
+      "default": "-",
+      "description": "Heading of the call to action block (cta variant)."
+    },
+    {
+      "name": "newsletterDescription",
+      "type": "string / ReactNode",
+      "default": "-",
+      "description": "Text under the newsletter card heading (newsletter variant)."
+    },
+    {
+      "name": "wordmark",
+      "type": "string",
+      "default": "\"\"",
+      "description": "Text of the giant wordmark (big-brand variant). It scales to the footer width and is cropped at the bottom."
+    },
+    {
+      "name": "backToTop",
+      "type": "boolean",
+      "default": "false",
+      "description": "Adds a Back to top link to #top. Works without JavaScript."
+    },
+    {
+      "name": "actions",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Extra content under the description, such as app store badges. In the cta variant: the buttons of the call to action block."
+    },
+    {
+      "name": "newsletter",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Replaces the built-in subscribe form, for example with a form that posts to your email provider."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "Footer",
+      "description": "Accessible label of the link navigation."
+    },
+    {
+      "name": "legalLabel",
+      "type": "string",
+      "default": "Legal",
+      "description": "Accessible label of the legal links navigation."
+    },
+    {
+      "name": "socialLabel",
+      "type": "string",
+      "default": "Social media",
+      "description": "Accessible label of the social links list."
+    },
+    {
+      "name": "newsletterLabel",
+      "type": "string",
+      "default": "Subscribe to our newsletter",
+      "description": "Heading of the newsletter card."
+    },
+    {
+      "name": "emailLabel",
+      "type": "string",
+      "default": "Email address",
+      "description": "Accessible name and placeholder of the email field."
+    },
+    {
+      "name": "subscribeLabel",
+      "type": "string",
+      "default": "Subscribe",
+      "description": "Text of the subscribe button."
+    },
+    {
+      "name": "successLabel",
+      "type": "string",
+      "default": "Thanks for subscribing",
+      "description": "Message announced in a status region after a valid email is submitted."
+    },
+    {
+      "name": "backToTopLabel",
+      "type": "string",
+      "default": "Back to top",
+      "description": "Text of the Back to top link."
+    }
+  ],
+  "a11y": [
+    "Uses a footer element, a nav labelled by navLabel for the links, and a separate nav labelled by legalLabel for legal links.",
+    "Column titles and card headings are h2 elements, and every group of links is a list.",
+    "Social links are icon only, so each gets aria-label from its label and the icon is aria-hidden.",
+    "The subscribe form uses native email validation; the success message is placed in a role=status region so screen readers announce it.",
+    "The giant wordmark is decorative and aria-hidden; the brand slot stays the accessible name.",
+    "User hrefs with unsafe schemes such as javascript: are replaced with #."
+  ],
+  "ai": {
+    "whenToUse": "The bottom of a marketing site, landing page, docs site, or app shell, to group secondary navigation, legal links, and social profiles.",
+    "rules": [
+      "Use columns for sites with many pages, centered or compact when there are only a few links",
+      "Use cta only on landing pages, with at most two buttons in actions",
+      "Keep column titles short nouns and limit each column to about six links",
+      "The built-in newsletter form does not send data; pass the newsletter slot with your own form to actually subscribe people",
+      "Pass a 24px stroke icon path for each social link and a clear label such as LinkedIn"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Footer situs dengan enam tata letak: kolom link, tengah, kartu newsletter, wordmark raksasa, ajakan penutup, dan bar ringkas satu baris.",
+      "props": {
+        "variant": "columns: brand di kiri, kolom link di kanan. centered: tumpukan minimalis. newsletter: kartu langganan di atas kolom. big-brand: wordmark raksasa terpotong. cta: ajakan besar di atas footer kecil. compact: satu baris untuk aplikasi.",
+        "brand": "Logo atau nama situs.",
+        "description": "Kalimat singkat di bawah brand. Pada varian cta tampil di bawah judul. Disembunyikan pada compact.",
+        "columns": "Kelompok link. columns, newsletter, dan big-brand menampilkannya sebagai kolom berjudul; centered, cta, dan compact menampilkan semua link dalam satu deret.",
+        "socials": "Link media sosial berupa tombol ikon. icon adalah path SVG (d) untuk ikon garis 24px; label menjadi nama aksesibel.",
+        "legal": "Link kecil di samping hak cipta, misalnya Privasi dan Ketentuan.",
+        "copyright": "Baris hak cipta di baris bawah.",
+        "heading": "Judul blok ajakan (varian cta).",
+        "newsletterDescription": "Teks di bawah judul kartu newsletter (varian newsletter).",
+        "wordmark": "Teks wordmark raksasa (varian big-brand). Ukurannya mengikuti lebar footer dan terpotong di bawah.",
+        "backToTop": "Menambah link Kembali ke atas menuju #top. Jalan tanpa JavaScript.",
+        "actions": "Konten tambahan di bawah deskripsi, misalnya lencana app store. Pada varian cta: tombol blok ajakan.",
+        "newsletter": "Pengganti form langganan bawaan, misalnya form yang mengirim ke penyedia email Anda.",
+        "navLabel": "Label aksesibel navigasi link. Isi \"Footer\" atau \"Navigasi kaki\" untuk situs berbahasa Indonesia.",
+        "legalLabel": "Label aksesibel navigasi link legal.",
+        "socialLabel": "Label aksesibel daftar link media sosial.",
+        "newsletterLabel": "Judul kartu newsletter.",
+        "emailLabel": "Nama aksesibel dan placeholder kolom email.",
+        "subscribeLabel": "Teks tombol langganan.",
+        "successLabel": "Pesan yang dibacakan lewat region status setelah email valid dikirim.",
+        "backToTopLabel": "Teks link Kembali ke atas."
+      },
+      "a11y": [
+        "Memakai elemen footer, nav berlabel navLabel untuk link, dan nav terpisah berlabel legalLabel untuk link legal.",
+        "Judul kolom dan judul kartu adalah h2, dan setiap kelompok link berupa daftar.",
+        "Link media sosial hanya berupa ikon, jadi masing-masing diberi aria-label dari label dan ikonnya aria-hidden.",
+        "Form langganan memakai validasi email native; pesan sukses ada di region role=status sehingga dibacakan pembaca layar.",
+        "Wordmark raksasa bersifat dekoratif dan aria-hidden; slot brand tetap menjadi nama aksesibel.",
+        "Href dari user dengan skema berbahaya seperti javascript: diganti #."
+      ],
+      "ai": {
+        "whenToUse": "Bagian bawah situs pemasaran, landing page, situs dokumentasi, atau kerangka aplikasi, untuk mengelompokkan navigasi sekunder, link legal, dan profil media sosial.",
+        "rules": [
+          "Pakai columns untuk situs dengan banyak halaman, centered atau compact bila link hanya sedikit",
+          "Pakai cta hanya di landing page, dengan paling banyak dua tombol di actions",
+          "Judul kolom berupa kata benda pendek dan batasi tiap kolom sekitar enam link",
+          "Form newsletter bawaan tidak mengirim data; isi slot newsletter dengan form sendiri untuk benar-benar mendaftarkan pelanggan",
+          "Berikan path ikon garis 24px untuk tiap link sosial dan label yang jelas seperti LinkedIn"
+        ]
+      }
+    }
+  }
+}

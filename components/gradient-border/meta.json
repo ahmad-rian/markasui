@@ -1,0 +1,91 @@
+{
+  "name": "gradient-border",
+  "title": "Gradient Border",
+  "description": "Wraps a card, button, or field in a moving gradient border that spins, shines, or pulses, with an optional soft glow.",
+  "category": "background",
+  "tags": ["border", "gradient", "conic", "glow", "card", "button", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "gradient-border.blade.php", "deps": [] },
+    "react": { "file": "GradientBorder.tsx", "deps": [] },
+    "vue": { "file": "GradientBorder.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "spin | shine | pulse",
+      "default": "spin",
+      "description": "spin rotates a conic gradient around the edge, shine sweeps a glint across, pulse breathes the whole border."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color of the gradient."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "Length of one cycle: 8s, 4s, or 2s."
+    },
+    {
+      "name": "radius",
+      "type": "lg | xl | full",
+      "default": "xl",
+      "description": "Corner radius of the border and the inner surface."
+    },
+    {
+      "name": "glow",
+      "type": "boolean",
+      "default": "false",
+      "description": "Adds a soft blurred copy of the gradient behind the border."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content inside the border, on a bg-surface panel."
+    }
+  ],
+  "a11y": [
+    "The gradient layers are aria-hidden and ignore pointer events.",
+    "With reduced motion, the gradient stays still in a fixed position.",
+    "Focus styles of the content inside are not covered by the border."
+  ],
+  "ai": {
+    "whenToUse": "Highlight one thing on the page: a featured plan, the main call to action, or an AI prompt field.",
+    "rules": [
+      "Use it once or twice per screen so it keeps drawing attention",
+      "Put padding on the content inside, not on the component",
+      "Match radius to the content: full for pill buttons, lg for fields and small buttons"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Membungkus kartu, tombol, atau kolom dengan border gradien bergerak yang berputar, berkilau, atau berdenyut, dengan pendar lembut opsional.",
+      "props": {
+        "variant": "spin memutar gradien conic di sepanjang tepi, shine menyapukan kilau melintas, pulse membuat seluruh border bernapas.",
+        "color": "Warna token gradien.",
+        "speed": "Panjang satu siklus: 8s, 4s, atau 2s.",
+        "radius": "Radius sudut border dan permukaan di dalamnya.",
+        "glow": "Menambahkan salinan gradien yang diburamkan di belakang border.",
+        "children / slot": "Konten di dalam border, di atas panel bg-surface."
+      },
+      "a11y": [
+        "Lapisan gradien memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, gradien diam di posisi tetap.",
+        "Gaya fokus konten di dalamnya tidak tertutup border."
+      ],
+      "ai": {
+        "whenToUse": "Menonjolkan satu hal di halaman: paket unggulan, ajakan utama, atau kolom prompt AI.",
+        "rules": [
+          "Pakai sekali atau dua kali per layar supaya tetap menarik perhatian",
+          "Beri padding pada konten di dalam, bukan pada komponen",
+          "Sesuaikan radius dengan konten: full untuk tombol pil, lg untuk kolom dan tombol kecil"
+        ]
+      }
+    }
+  }
+}

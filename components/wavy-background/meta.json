@@ -1,0 +1,82 @@
+{
+  "name": "wavy-background",
+  "title": "Wavy Background",
+  "description": "Layers of soft token-colored waves that drift sideways behind your content, as filled ocean waves, thin silk lines, or stacked bands.",
+  "category": "background",
+  "tags": ["background", "waves", "svg", "hero", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "wavy-background.blade.php", "deps": [] },
+    "react": { "file": "WavyBackground.tsx", "deps": [] },
+    "vue": { "file": "WavyBackground.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "ocean | silk | layered",
+      "default": "ocean",
+      "description": "ocean: blurred filled waves along the bottom. silk: thin flowing lines through the middle. layered: stacked bands like hills."
+    },
+    {
+      "name": "color",
+      "type": "muted | ink | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color of the waves. Each layer uses its own opacity."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "How fast the waves drift. Back layers always move a little slower than front layers."
+    },
+    {
+      "name": "waves",
+      "type": "number",
+      "default": "4",
+      "description": "Number of wave layers, from 3 to 5."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the waves."
+    }
+  ],
+  "a11y": [
+    "The wave layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, the waves stop and stay in place."
+  ],
+  "ai": {
+    "whenToUse": "A calm, moving backdrop for a hero, newsletter card, sign-in page, or 404 page.",
+    "rules": [
+      "Add bottom padding with class so text does not sit on the densest waves",
+      "Use silk behind forms and dense text, ocean or layered behind short headings",
+      "Set the background color, padding, and radius with class on the component"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Lapisan gelombang lembut berwarna token yang bergeser pelan di belakang konten, berupa ombak terisi, garis sutra tipis, atau pita bertumpuk.",
+      "props": {
+        "variant": "ocean: ombak terisi yang diburamkan di bagian bawah. silk: garis tipis mengalir di tengah. layered: pita bertumpuk seperti bukit.",
+        "color": "Warna token gelombang. Setiap lapis memakai opasitasnya sendiri.",
+        "speed": "Kecepatan gelombang bergeser. Lapis belakang selalu sedikit lebih lambat dari lapis depan.",
+        "waves": "Jumlah lapis gelombang, dari 3 sampai 5.",
+        "children / slot": "Konten yang tampil di atas gelombang."
+      },
+      "a11y": [
+        "Lapisan gelombang memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, gelombang berhenti dan diam di tempat."
+      ],
+      "ai": {
+        "whenToUse": "Latar bergerak yang tenang untuk hero, kartu newsletter, halaman masuk, atau halaman 404.",
+        "rules": [
+          "Tambahkan padding bawah lewat class supaya teks tidak menumpuk di gelombang paling rapat",
+          "Pakai silk di belakang form dan teks padat, ocean atau layered di belakang judul pendek",
+          "Atur warna latar, padding, dan radius lewat class pada komponen"
+        ]
+      }
+    }
+  }
+}

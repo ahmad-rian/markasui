@@ -1,0 +1,84 @@
+{
+  "name": "background-lines",
+  "title": "Background Lines",
+  "description": "SVG lines that draw in and fade out one after another, as waves, rays from a point, or a lattice. Made for hero sections.",
+  "category": "background",
+  "tags": ["background", "lines", "waves", "rays", "svg", "hero", "animated"],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "background-lines.blade.php", "deps": [] },
+    "react": { "file": "BackgroundLines.tsx", "deps": [] },
+    "vue": { "file": "BackgroundLines.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "waves | rays | lattice",
+      "default": "waves",
+      "description": "waves stacks gentle curves, rays fans lines out from the top center, lattice crosses diagonal lines."
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "default": "12",
+      "description": "Number of lines, up to 24."
+    },
+    {
+      "name": "speed",
+      "type": "slow | normal | fast",
+      "default": "normal",
+      "description": "Length of one draw and fade cycle: 12s, 8s, or 5s."
+    },
+    {
+      "name": "color",
+      "type": "muted | primary | success | warning | danger",
+      "default": "primary",
+      "description": "Token color of the lines."
+    },
+    {
+      "name": "children / slot",
+      "type": "slot / ReactNode",
+      "default": "-",
+      "description": "Content shown on top of the lines."
+    }
+  ],
+  "a11y": [
+    "The line layer is aria-hidden and ignores pointer events.",
+    "With reduced motion, every line is shown fully drawn and still.",
+    "Line positions come from a formula, so the server and client render the same markup."
+  ],
+  "ai": {
+    "whenToUse": "A hero, 404 page, or sign-in screen that needs quiet movement behind the headline.",
+    "rules": [
+      "Set background color, padding, and radius with class on the component",
+      "Use muted or a low count behind forms so fields stay easy to read",
+      "Use rays with top padding so the light source sits above the headline"
+    ]
+  },
+  "addedAt": "2026-11-05",
+  "i18n": {
+    "id": {
+      "description": "Garis SVG yang tergambar lalu menghilang bergantian, berupa gelombang, sinar dari satu titik, atau kisi. Dibuat untuk hero.",
+      "props": {
+        "variant": "waves menumpuk kurva lembut, rays memancarkan garis dari tengah atas, lattice menyilangkan garis diagonal.",
+        "count": "Jumlah garis, maksimal 24.",
+        "speed": "Panjang satu siklus gambar dan pudar: 12s, 8s, atau 5s.",
+        "color": "Warna token garis.",
+        "children / slot": "Konten yang tampil di atas garis."
+      },
+      "a11y": [
+        "Lapisan garis memakai aria-hidden dan mengabaikan pointer.",
+        "Dengan reduced motion, semua garis tampil utuh dan diam.",
+        "Posisi garis berasal dari rumus, jadi server dan klien merender markup yang sama."
+      ],
+      "ai": {
+        "whenToUse": "Hero, halaman 404, atau layar masuk yang butuh gerak tenang di belakang judul.",
+        "rules": [
+          "Atur warna latar, padding, dan radius lewat class pada komponen",
+          "Pakai muted atau count kecil di belakang form supaya kolom tetap mudah dibaca",
+          "Pakai rays dengan padding atas supaya sumber cahaya berada di atas judul"
+        ]
+      }
+    }
+  }
+}
