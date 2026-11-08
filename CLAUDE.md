@@ -40,6 +40,7 @@ Jalankan pnpm lint, pnpm typecheck, pnpm test, pnpm test:e2e, pnpm build, pnpm t
 - Vue: atribut native (`type`, `aria-*`) lewat fallthrough tidak dicek vue-tsc, beda dengan React yang memperluas `ComponentProps`. Uji perilaku atribut penting di tests/unit.
 - Renderer Blade: `php scripts/render-blade.php <folder-sumber> <folder-output>`.
 - Variasi contoh: `examples/<fw>/<nama>--<variasi>.*` (otomatis masuk tes e2e dan galeri docs), judulnya di `apps/docs/src/lib/variants/<nama>.ts`.
+- CSS docs dipecah per halaman (budget 30 KB per halaman): global.css hanya CSS situs; class komponen dibangkitkan per komponen oleh `apps/docs/scripts/page-css.ts`, landing memakai daftar di `apps/docs/src/lib/landing.ts`, demo template memakai `templates.css`. Halaman baru wajib mengimpor CSS-nya sendiri (Base tidak mengimpor CSS).
 - Kontrol props di docs: `apps/docs/src/lib/playgrounds.ts`. Kombinasi Blade dirender saat build oleh `apps/docs/scripts/playgrounds.ts`.
 - Vue: nama template ref jangan sama dengan konstanta class (`ref="panelRef"` untuk `const panel = "..."`), atau Vue memberi peringatan.
 
