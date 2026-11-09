@@ -3,8 +3,8 @@
   "title": "Pranata",
   "kind": "page",
   "description": {
-    "en": "Consulting firm welcome page with a rounded boardroom hero, a white navbar with search and mobile menu, hero tabs that swap the story, gray and lime feature cards, practice cards filtered by industry, a stats band, a testimonial slider, and a consultation form with a toast.",
-    "id": "Halaman sambutan firma konsultan dengan hero ruang rapat membulat, navbar putih berisi pencarian dan menu mobile, tab hero yang mengganti cerita, kartu fitur abu dan lime, kartu praktik yang bisa disaring per industri, pita statistik, slider testimoni, dan form konsultasi dengan toast."
+    "en": "Consulting firm welcome page with a deep green editorial hero, a floating growth chart card, service tabs with key numbers, three feature cards with a lime recognition card, practice cards filtered by industry, case studies with big metrics, a testimonial slider, client logos, and a consultation form with a toast.",
+    "id": "Halaman sambutan firma konsultan dengan hero editorial hijau tua, kartu grafik pertumbuhan mengambang, tab layanan dengan angka utama, tiga kartu fitur dengan kartu penghargaan lime, kartu praktik yang bisa disaring per industri, studi kasus dengan metrik besar, slider testimoni, logo klien, dan form konsultasi dengan toast."
   },
   "components": ["button", "input", "select", "textarea", "toast"],
   "addedAt": "2026-11-09"

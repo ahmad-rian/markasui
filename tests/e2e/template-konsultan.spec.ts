@@ -30,7 +30,10 @@ const BLUE = "rgb(29, 78, 216)";
 const toastRegion = (page: Page) =>
   page.getByRole("status", { name: "Notifications" });
 const heading = (page: Page) =>
-  page.getByRole("heading", { level: 1, name: /Your trusted/ });
+  page.getByRole("heading", {
+    level: 1,
+    name: /Clear advice for bold decisions/,
+  });
 
 async function openTemplate(
   page: Page,
@@ -153,6 +156,10 @@ for (const framework of frameworks) {
       await expect(
         page.getByRole("button", { name: "Send request" }),
       ).toHaveCSS("background-color", BLUE);
+      await expect(page.getByRole("tab", { name: /Strategy/ })).toHaveCSS(
+        "border-bottom-color",
+        BLUE,
+      );
       await expectNoAxeViolations(page, "blue");
     });
 
@@ -161,8 +168,9 @@ for (const framework of frameworks) {
       const nav = page.getByRole("navigation", { name: "Main" });
       for (const [name, hash] of [
         ["Services", "#services"],
-        ["Industries", "#industries"],
         ["About", "#about"],
+        ["Industries", "#industries"],
+        ["Cases", "#cases"],
         ["Insight", "#insight"],
         ["Contact us", "#contact"],
       ] as const)
@@ -192,28 +200,49 @@ for (const framework of frameworks) {
       await expect(search).toHaveAttribute("aria-expanded", "false");
     });
 
-    test("tab hero mengganti teks, termasuk lewat panah", async ({ page }) => {
+    test("tab layanan mengganti konten, termasuk lewat panah", async ({
+      page,
+    }) => {
       await openTemplate(page, framework);
       const panel = page.getByRole("tabpanel");
-      await expect(panel).toContainText("Advisors who stay for the long run");
-      const finance = page.getByRole("tab", { name: /Financial services/ });
+      await expect(panel).toContainText(
+        "Growth plans built on real market data",
+      );
+      await expect(panel).toContainText("3.1x");
+      const finance = page.getByRole("tab", { name: /Finance/ });
       await finance.click();
       await expect(finance).toHaveAttribute("aria-selected", "true");
       await expect(panel).toContainText("Sharper decisions for banks");
+      await expect(panel).toContainText("Rp 1,8 T");
+      await expect(panel).toContainText("OJK and Basel compliance");
       await expect(panel).toHaveAttribute(
         "aria-labelledby",
         "konsultan-tab-finance",
       );
       await finance.press("ArrowRight");
-      const investing = page.getByRole("tab", { name: /Investing/ });
-      await expect(investing).toBeFocused();
-      await expect(investing).toHaveAttribute("aria-selected", "true");
-      await expect(panel).toContainText("140 deals reviewed since 2019");
-      await investing.press("ArrowRight");
-      await expect(
-        page.getByRole("tab", { name: /Trusted partner/ }),
-      ).toBeFocused();
+      const transformation = page.getByRole("tab", { name: /Transformation/ });
+      await expect(transformation).toBeFocused();
+      await expect(transformation).toHaveAttribute("aria-selected", "true");
+      await expect(panel).toContainText("18 mo");
+      await transformation.press("ArrowRight");
+      await expect(page.getByRole("tab", { name: /Strategy/ })).toBeFocused();
       await expect(finance).toHaveAttribute("aria-selected", "false");
+    });
+
+    test("kartu hero tidak menimpa headline", async ({ page }) => {
+      for (const width of [1440, 1024, 768, 390]) {
+        await page.setViewportSize({ width, height: 900 });
+        await openTemplate(page, framework);
+        const title = await heading(page).boundingBox();
+        const card = await page
+          .getByText("Assets under advisory")
+          .locator("xpath=ancestor::div[3]")
+          .boundingBox();
+        const apart =
+          card!.x >= title!.x + title!.width ||
+          card!.y >= title!.y + title!.height;
+        expect(apart, `lebar ${width}`).toBe(true);
+      }
     });
 
     test("filter industri menyaring kartu praktik", async ({ page }) => {
@@ -226,6 +255,7 @@ for (const framework of frameworks) {
       await expect(cards).toHaveCount(2);
       await expect(page.getByText("Showing 2 practices")).toBeAttached();
       await expect(cards.first()).toContainText("Risk and compliance");
+      await expect(cards.first()).toContainText("Led by Bima Prasetyo");
       await page.getByRole("button", { name: "Consumer", exact: true }).click();
       await expect(cards).toHaveCount(2);
       await expect(energy).toHaveAttribute("aria-pressed", "false");
@@ -278,7 +308,7 @@ for (const framework of frameworks) {
 
     test("section muncul saat di-scroll", async ({ page }) => {
       await openTemplate(page, framework);
-      const band = page.locator("#about [data-reveal]");
+      const band = page.locator("#cases [data-reveal]").last();
       await expect(band).not.toHaveAttribute("data-in", "");
       await band.scrollIntoViewIfNeeded();
       await expect(band).toHaveAttribute("data-in", "");

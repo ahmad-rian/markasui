@@ -1,11 +1,11 @@
 <div
-class="min-h-dvh bg-canvas p-2 text-ink scroll-smooth sm:p-3 motion-reduce:scroll-auto [--tpl-lime:#d7f35f] [--tpl-lime-ink:#1a2306] [--tpl-night:#10130f] [--tpl-snow:#ffffff] dark:[--tpl-lime:#cdeb55] dark:[--tpl-night:#0b0d0a] [--tpl-wood-1:#9a6743] [--tpl-wood-2:#4a2c1a] [--tpl-wood-3:#b27a52] [--tpl-ceil:#2a211a] [--tpl-glow:#fff3d6] [--tpl-floor:#3b2d24] [--tpl-table:#1d1714] [--tpl-table-2:#5a4536] [--tpl-screen:#1f2a2f] [--tpl-screen-2:#7cc4b6] [--tpl-skin-1:#c99a78] [--tpl-skin-2:#8d5f45] [--tpl-skin-3:#e2b996] [--tpl-shirt-1:#e9e6df] [--tpl-shirt-2:#2e3b4e] [--tpl-shirt-3:#6b7b5c] [--tpl-shirt-4:#a6403a] [--tpl-sand:#e8dccb] [--tpl-sand-3:#5e4a2e] [--tpl-sage:#c7d4c1] [--tpl-sage-3:#3b5237] [--tpl-sky:#c9dbe8] [--tpl-sky-3:#284459] [--tpl-clay:#e6c3ae] [--tpl-clay-3:#713a24] [--tpl-mauve:#d8c6e0] [--tpl-mauve-3:#4b3559] dark:[--tpl-sand:#3a3328] dark:[--tpl-sand-3:#c9b08a] dark:[--tpl-sage:#2f3a2e] dark:[--tpl-sage-3:#a9c2a2] dark:[--tpl-sky:#233441] dark:[--tpl-sky-3:#a3c2d9] dark:[--tpl-clay:#4a3227] dark:[--tpl-clay-3:#e2b39a] dark:[--tpl-mauve:#3a2f42] dark:[--tpl-mauve-3:#cdb4da]"
+class="min-h-dvh bg-canvas p-2 text-ink scroll-smooth sm:p-3 motion-reduce:scroll-auto [--tpl-lime:#d4f25a] [--tpl-lime-ink:#172003] [--tpl-forest:#0f2a1f] [--tpl-forest-2:#173a2b] [--tpl-snow:#ffffff] dark:[--tpl-forest:#0b1f17] dark:[--tpl-forest-2:#123124] [--tpl-sand:#e8dccb] [--tpl-sand-3:#5e4a2e] [--tpl-sage:#c7d4c1] [--tpl-sage-3:#3b5237] [--tpl-sky:#c9dbe8] [--tpl-sky-3:#284459] [--tpl-clay:#e6c3ae] [--tpl-clay-3:#713a24] [--tpl-mauve:#d8c6e0] [--tpl-mauve-3:#4b3559] dark:[--tpl-sand:#3a3328] dark:[--tpl-sand-3:#e0c9a6] dark:[--tpl-sage:#2f3a2e] dark:[--tpl-sage-3:#bcd4b5] dark:[--tpl-sky:#233441] dark:[--tpl-sky-3:#b5d0e4] dark:[--tpl-clay:#4a3227] dark:[--tpl-clay-3:#ecc2aa] dark:[--tpl-mauve:#3a2f42] dark:[--tpl-mauve-3:#dcc6e8]"
 x-data="{
 menuOpen: false,
 searchOpen: false,
 query: '',
 tabIndex: 0,
-tabs: JSON.parse('[{\u0022id\u0022:\u0022partner\u0022,\u0022label\u0022:\u0022Trusted partner\u0022,\u0022title\u0022:\u0022Advisors who stay for the long run\u0022,\u0022text\u0022:\u0022One senior partner leads your account from the first workshop to the board meeting, so nothing gets lost between teams.\u0022,\u0022stat\u0022:\u002292% of clients renew after year one\u0022},{\u0022id\u0022:\u0022finance\u0022,\u0022label\u0022:\u0022Financial services\u0022,\u0022title\u0022:\u0022Sharper decisions for banks and lenders\u0022,\u0022text\u0022:\u0022We help banks, multifinance firms, and fintechs price risk, meet OJK rules, and grow a healthier loan book.\u0022,\u0022stat\u0022:\u0022Rp1.8T in loan portfolios restructured\u0022},{\u0022id\u0022:\u0022invest\u0022,\u0022label\u0022:\u0022Investing\u0022,\u0022title\u0022:\u0022Due diligence you can act on\u0022,\u0022text\u0022:\u0022Our deal team reviews markets, models, and management in weeks, not months, before you commit capital.\u0022,\u0022stat\u0022:\u0022140 deals reviewed since 2019\u0022}]'),
+tabs: JSON.parse('[{\u0022id\u0022:\u0022strategy\u0022,\u0022label\u0022:\u0022Strategy\u0022,\u0022title\u0022:\u0022Growth plans built on real market data\u0022,\u0022text\u0022:\u0022We size the market, test pricing with real customers, and turn the findings into a three year plan your managers can own.\u0022,\u0022points\u0022:[\u0022Market entry and sizing\u0022,\u0022Pricing and portfolio strategy\u0022,\u0022Board and investor roadmaps\u0022],\u0022stats\u0022:[{\u0022value\u0022:\u00223.1x\u0022,\u0022label\u0022:\u0022Average revenue growth over three years\u0022},{\u0022value\u0022:\u002286\u0022,\u0022label\u0022:\u0022Growth plans delivered since 2019\u0022}]},{\u0022id\u0022:\u0022finance\u0022,\u0022label\u0022:\u0022Finance\u0022,\u0022title\u0022:\u0022Sharper decisions for banks and lenders\u0022,\u0022text\u0022:\u0022We help banks, multifinance firms, and fintechs price risk, meet OJK rules, and grow a healthier loan book.\u0022,\u0022points\u0022:[\u0022Credit risk models\u0022,\u0022Capital raising and debt advisory\u0022,\u0022OJK and Basel compliance\u0022],\u0022stats\u0022:[{\u0022value\u0022:\u0022Rp 1,8 T\u0022,\u0022label\u0022:\u0022Loan portfolios restructured\u0022},{\u0022value\u0022:\u0022-34%\u0022,\u0022label\u0022:\u0022Average drop in non-performing loans\u0022}]},{\u0022id\u0022:\u0022transformation\u0022,\u0022label\u0022:\u0022Transformation\u0022,\u0022title\u0022:\u0022Change that sticks after we leave\u0022,\u0022text\u0022:\u0022From operating model to digital roadmap, we name owners, budgets, and dates, then stay until the numbers move.\u0022,\u0022points\u0022:[\u0022Operating model redesign\u0022,\u0022Digital and AI roadmaps\u0022,\u0022Post merger integration\u0022],\u0022stats\u0022:[{\u0022value\u0022:\u0022120+\u0022,\u0022label\u0022:\u0022Transformation programs led\u0022},{\u0022value\u0022:\u002218 mo\u0022,\u0022label\u0022:\u0022Median time to payback\u0022}]}]'),
 industry: 'All',
 quoteIndex: 0,
 quotes: JSON.parse('[{\u0022text\u0022:\u0022Pranata rebuilt our credit model in six weeks. Our non-performing loans fell by a third within the year.\u0022,\u0022name\u0022:\u0022Wulan Sari\u0022,\u0022role\u0022:\u0022CFO, Bank Kertajaya\u0022,\u0022initials\u0022:\u0022WS\u0022,\u0022tone\u0022:\u0022sage\u0022},{\u0022text\u0022:\u0022They challenged every assumption in our plan, then stayed to help us deliver it. That is rare.\u0022,\u0022name\u0022:\u0022Hendra Gunawan\u0022,\u0022role\u0022:\u0022CEO, Nusa Energi\u0022,\u0022initials\u0022:\u0022HG\u0022,\u0022tone\u0022:\u0022sky\u0022},{\u0022text\u0022:\u0022The due diligence report was clear enough for our board and deep enough for our analysts.\u0022,\u0022name\u0022:\u0022Citra Maharani\u0022,\u0022role\u0022:\u0022Partner, Lintas Capital\u0022,\u0022initials\u0022:\u0022CM\u0022,\u0022tone\u0022:\u0022clay\u0022},{\u0022text\u0022:\u0022Our digital roadmap finally has owners, budgets, and dates. Revenue from the app doubled.\u0022,\u0022name\u0022:\u0022Fajar Nugroho\u0022,\u0022role\u0022:\u0022COO, Toko Raya\u0022,\u0022initials\u0022:\u0022FN\u0022,\u0022tone\u0022:\u0022mauve\u0022}]'),
@@ -50,84 +50,40 @@ observer.unobserve(entry.target);
 $el.querySelectorAll('[data-reveal]').forEach((node) => observer.observe(node));
 "
 >
-<section id="top" class="relative isolate flex min-h-[720px] flex-col overflow-hidden rounded-[28px] text-(--tpl-snow) lg:min-h-[780px]" aria-label="Introduction">
-<div class="absolute inset-0 -z-10" role="img" aria-label="Illustration of a boardroom with wooden slat walls, where six people meet around a long table">
-<div class="absolute inset-0 bg-[repeating-linear-gradient(90deg,var(--tpl-wood-1)_0_18px,var(--tpl-wood-2)_18px_21px,var(--tpl-wood-3)_21px_38px,var(--tpl-wood-2)_38px_41px)]"></div>
-<div class="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--tpl-ceil)_70%,transparent),transparent_40%,color-mix(in_oklab,var(--tpl-ceil)_55%,transparent))]"></div>
-<div class="absolute inset-x-0 top-0 h-[14%] bg-(--tpl-ceil)"></div>
-<div class="absolute top-[10%] h-1.5 w-[12%] -translate-x-1/2 rounded-full bg-(--tpl-glow) shadow-[0_0_48px_14px_var(--tpl-glow)]" style="left: 22%"></div>
-<div class="absolute top-[10%] h-1.5 w-[12%] -translate-x-1/2 rounded-full bg-(--tpl-glow) shadow-[0_0_48px_14px_var(--tpl-glow)]" style="left: 50%"></div>
-<div class="absolute top-[10%] h-1.5 w-[12%] -translate-x-1/2 rounded-full bg-(--tpl-glow) shadow-[0_0_48px_14px_var(--tpl-glow)]" style="left: 78%"></div>
-<div class="absolute top-[24%] left-1/2 flex aspect-video w-[30%] max-w-[420px] -translate-x-1/2 items-end gap-[4%] rounded-md border-4 border-(--tpl-table) bg-(--tpl-screen) p-[3%]">
-<div class="flex-1 rounded-t-sm bg-(--tpl-screen-2)" style="height: 38%"></div>
-<div class="flex-1 rounded-t-sm bg-(--tpl-screen-2)" style="height: 54%"></div>
-<div class="flex-1 rounded-t-sm bg-(--tpl-screen-2)" style="height: 46%"></div>
-<div class="flex-1 rounded-t-sm bg-(--tpl-screen-2)" style="height: 70%"></div>
-<div class="flex-1 rounded-t-sm bg-(--tpl-screen-2)" style="height: 62%"></div>
-<div class="flex-1 rounded-t-sm bg-(--tpl-screen-2)" style="height: 88%"></div>
-</div>
-<div class="absolute inset-x-0 bottom-0 h-[30%] bg-(--tpl-floor)"></div>
-<div class="absolute w-[8%] min-w-11 -translate-x-1/2" style="left: 24%; bottom: 27%;">
-<div class="mx-auto aspect-square w-[42%] rounded-full" style="background: var(--tpl-skin-2)"></div>
-<div class="mt-[6%] aspect-[5/4] w-full rounded-t-[48%]" style="background: var(--tpl-shirt-2)"></div>
-</div>
-<div class="absolute w-[8%] min-w-11 -translate-x-1/2" style="left: 36%; bottom: 29%;">
-<div class="mx-auto aspect-square w-[42%] rounded-full" style="background: var(--tpl-skin-1)"></div>
-<div class="mt-[6%] aspect-[5/4] w-full rounded-t-[48%]" style="background: var(--tpl-shirt-1)"></div>
-</div>
-<div class="absolute w-[8%] min-w-11 -translate-x-1/2" style="left: 64%; bottom: 29%;">
-<div class="mx-auto aspect-square w-[42%] rounded-full" style="background: var(--tpl-skin-3)"></div>
-<div class="mt-[6%] aspect-[5/4] w-full rounded-t-[48%]" style="background: var(--tpl-shirt-3)"></div>
-</div>
-<div class="absolute w-[8%] min-w-11 -translate-x-1/2" style="left: 76%; bottom: 27%;">
-<div class="mx-auto aspect-square w-[42%] rounded-full" style="background: var(--tpl-skin-1)"></div>
-<div class="mt-[6%] aspect-[5/4] w-full rounded-t-[48%]" style="background: var(--tpl-shirt-4)"></div>
-</div>
-<div class="absolute bottom-[6%] left-1/2 h-[24%] w-[78%] -translate-x-1/2 bg-[linear-gradient(180deg,var(--tpl-table-2),var(--tpl-table))] [clip-path:polygon(14%_0,86%_0,100%_100%,0_100%)]"></div>
-<div class="absolute w-[8%] min-w-11 -translate-x-1/2" style="left: 6%; bottom: -6%; width: 15%;">
-<div class="mx-auto aspect-square w-[42%] rounded-full" style="background: var(--tpl-skin-3)"></div>
-<div class="mt-[6%] aspect-[5/4] w-full rounded-t-[48%]" style="background: var(--tpl-shirt-1)"></div>
-</div>
-<div class="absolute w-[8%] min-w-11 -translate-x-1/2" style="left: 94%; bottom: -6%; width: 15%;">
-<div class="mx-auto aspect-square w-[42%] rounded-full" style="background: var(--tpl-skin-2)"></div>
-<div class="mt-[6%] aspect-[5/4] w-full rounded-t-[48%]" style="background: var(--tpl-shirt-2)"></div>
-</div>
-</div>
-<div class="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--tpl-night)_45%,transparent),color-mix(in_oklab,var(--tpl-night)_35%,transparent)_45%,color-mix(in_oklab,var(--tpl-night)_92%,transparent))]" aria-hidden="true"></div>
-<header class="relative z-20 p-2 sm:p-3">
-<nav aria-label="Main" class="flex h-16 items-center justify-between gap-3 rounded-2xl bg-surface px-3 text-ink shadow-overlay sm:px-4">
-<a href="#top" class="flex items-center gap-2.5 rounded-lg text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-<span class="flex size-9 items-center justify-center rounded-xl bg-(--tpl-lime) text-(--tpl-lime-ink)" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19V5h7a4.5 4.5 0 0 1 0 9H5M12 14l6 5" /></svg></span>
+<section id="top" class="relative isolate overflow-hidden rounded-[28px] bg-(--tpl-forest) text-(--tpl-snow)" aria-label="Introduction">
+<div class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,color-mix(in_oklab,var(--tpl-snow)_7%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--tpl-snow)_7%,transparent)_1px,transparent_1px)] bg-size-[96px_96px] [mask-image:radial-gradient(ellipse_70%_80%_at_75%_35%,black,transparent)]" aria-hidden="true"></div>
+<div class="pointer-events-none absolute -top-48 -right-40 -z-10 size-[720px] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--tpl-lime)_16%,transparent),transparent)]" aria-hidden="true"></div>
+<header class="relative z-20 mx-auto w-full max-w-[1240px] px-5 pt-5 sm:px-8 lg:px-10">
+<nav aria-label="Main" class="flex items-center justify-between gap-4 border-b border-(--tpl-snow)/15 pb-5">
+<a href="#top" class="flex w-fit items-center gap-2.5 rounded-lg text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">
+<span class="flex size-9 items-center justify-center rounded-xl bg-(--tpl-lime) text-(--tpl-lime-ink)" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 20V4h6a5 5 0 0 1 0 10H7M15 20h2" /></svg></span>
 Pranata
 </a>
-<div class="hidden items-center gap-1 lg:flex">
-<a href="#top" class="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:bg-subtle hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Home</a>
-<a href="#services" class="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:bg-subtle hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Services</a>
-<a href="#industries" class="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:bg-subtle hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Industries</a>
-<a href="#about" class="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:bg-subtle hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">About</a>
-<a href="#insight" class="inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-1.5 text-sm font-medium text-ink transition-colors duration-150 hover:bg-subtle motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-<span class="size-1.5 rounded-full bg-ink" aria-hidden="true"></span>
-Insight
-</a>
+<div class="hidden items-center gap-8 lg:flex">
+<a href="#services" class="rounded-sm text-sm font-medium text-(--tpl-snow)/75 transition-colors duration-150 hover:text-(--tpl-snow) motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Services</a>
+<a href="#about" class="rounded-sm text-sm font-medium text-(--tpl-snow)/75 transition-colors duration-150 hover:text-(--tpl-snow) motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">About</a>
+<a href="#industries" class="rounded-sm text-sm font-medium text-(--tpl-snow)/75 transition-colors duration-150 hover:text-(--tpl-snow) motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Industries</a>
+<a href="#cases" class="rounded-sm text-sm font-medium text-(--tpl-snow)/75 transition-colors duration-150 hover:text-(--tpl-snow) motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Cases</a>
+<a href="#insight" class="rounded-sm text-sm font-medium text-(--tpl-snow)/75 transition-colors duration-150 hover:text-(--tpl-snow) motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Insight</a>
 </div>
 <div class="flex items-center gap-2">
-<button type="button" class="flex size-10 items-center justify-center rounded-full border border-line text-ink transition-colors duration-150 hover:bg-subtle motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Search" aria-expanded="false" x-bind:aria-expanded="searchOpen" aria-controls="konsultan-panel" x-on:click="toggleSearch()">
+<button type="button" class="flex size-10 items-center justify-center rounded-full border border-(--tpl-snow)/20 text-(--tpl-snow) transition-colors duration-150 hover:bg-(--tpl-snow)/10 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)" aria-label="Search" aria-expanded="false" x-bind:aria-expanded="searchOpen" aria-controls="konsultan-panel" x-on:click="toggleSearch()">
 <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 20-4.2-4.2M10.5 17.5a7 7 0 1 1 0-14 7 7 0 0 1 0 14z" x-bind:d="searchOpen ? 'M6 6l12 12M18 6 6 18' : 'm20 20-4.2-4.2M10.5 17.5a7 7 0 1 1 0-14 7 7 0 0 1 0 14z'" /></svg>
 </button>
-<a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-(--tpl-lime) px-5 text-sm font-semibold whitespace-nowrap text-(--tpl-lime-ink) transition-[filter] duration-150 hover:brightness-95 motion-reduce:transition-none hidden h-10 sm:inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Contact us</a>
-<button type="button" class="flex size-10 items-center justify-center rounded-full border border-line text-ink transition-colors duration-150 hover:bg-subtle motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:hidden" aria-label="Menu" aria-expanded="false" x-bind:aria-expanded="menuOpen" aria-controls="konsultan-panel" x-on:click="toggleMenu()">
+<a href="#contact" class="items-center justify-center gap-2 rounded-full bg-(--tpl-lime) text-sm font-semibold whitespace-nowrap text-(--tpl-lime-ink) transition-[filter] duration-150 hover:brightness-95 motion-reduce:transition-none hidden h-10 px-5 sm:inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Contact us</a>
+<button type="button" class="flex size-10 items-center justify-center rounded-full border border-(--tpl-snow)/20 text-(--tpl-snow) transition-colors duration-150 hover:bg-(--tpl-snow)/10 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime) lg:hidden" aria-label="Menu" aria-expanded="false" x-bind:aria-expanded="menuOpen" aria-controls="konsultan-panel" x-on:click="toggleMenu()">
 <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" x-bind:d="menuOpen ? 'M6 6l12 12M18 6 6 18' : 'M4 7h16M4 12h16M4 17h16'" /></svg>
 </button>
 </div>
 </nav>
 <template x-if="menuOpen || searchOpen">
-<div id="konsultan-panel" class="absolute inset-x-2 top-full mt-2 grid gap-3 rounded-2xl bg-surface p-3 text-ink shadow-overlay sm:inset-x-3" x-on:keydown.escape="closePanels()">
+<div id="konsultan-panel" class="absolute inset-x-5 top-full z-30 -mt-2 grid gap-3 rounded-2xl bg-surface p-3 text-ink shadow-overlay sm:inset-x-8 lg:inset-x-10" x-on:keydown.escape="closePanels()">
 <template x-if="menuOpen">
 <ul class="grid gap-1">
-<li><a href="#top" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Home</a></li>
 <li><a href="#services" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Services</a></li>
-<li><a href="#industries" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Industries</a></li>
 <li><a href="#about" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">About</a></li>
+<li><a href="#industries" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Industries</a></li>
+<li><a href="#cases" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Cases</a></li>
 <li><a href="#insight" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Insight</a></li>
 <li><a href="#contact" class="block rounded-xl px-3 py-2.5 text-base font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="closePanels()">Contact us</a></li>
 </ul>
@@ -135,8 +91,8 @@ Insight
 <template x-if="!menuOpen">
 <div class="contents">
 <div class="grid gap-1.5">
-<label for="markas-input-jfcFZ749" class="text-sm font-medium text-ink">Search insights</label>
-<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-jfcFZ749" type="search" placeholder="Try energy or pricing" x-model="query" />
+<label for="markas-input-Fv7fbKGH" class="text-sm font-medium text-ink">Search insights</label>
+<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-Fv7fbKGH" type="search" placeholder="Try energy or pricing" x-model="query" />
 </div>
 <p class="text-sm text-muted" aria-live="polite" x-text="resultCount ? resultCount + ' ' + (resultCount === 1 ? 'article' : 'articles') : 'No articles match your search.'"></p>
 <ul class="grid gap-1">
@@ -170,125 +126,229 @@ Running an AI pilot without the hype
 </div>
 </template>
 </header>
-<div class="relative z-10 flex flex-1 flex-col justify-end gap-8 px-5 pt-10 pb-2 sm:px-8 lg:px-12">
-<div class="grid items-end gap-8 lg:grid-cols-[1.9fr_1fr] lg:gap-12">
-<div class="grid justify-items-start gap-6">
-<p class="inline-flex items-center gap-2 rounded-full border border-(--tpl-snow)/30 bg-(--tpl-snow)/10 px-3 py-1 text-sm backdrop-blur">Advisory firm since 2009</p>
-<h1 class="max-w-4xl text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl lg:text-[76px]">Your trusted<br /><span class="mr-4 inline-block h-[3px] w-14 translate-y-[-0.3em] rounded-full bg-(--tpl-lime) sm:w-24" aria-hidden="true"></span>consulting partner</h1>
-<p class="max-w-xl text-base text-pretty text-(--tpl-snow)/80 sm:text-lg">Strategy, finance, and transformation advice for Indonesian companies that want to grow with confidence.</p>
+<div class="relative z-10 mx-auto grid w-full max-w-[1240px] items-center gap-12 px-5 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-14 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-10 lg:pt-24 lg:pb-24">
+<div class="grid min-w-0 justify-items-start gap-7">
+<p class="inline-flex items-center gap-2 rounded-full border border-(--tpl-snow)/15 bg-(--tpl-snow)/5 px-3 py-1 text-sm text-(--tpl-snow)/85">
+<span class="size-1.5 rounded-full bg-(--tpl-lime)" aria-hidden="true"></span>
+Independent advisory since 2009
+</p>
+<h1 class="max-w-[12ch] text-[44px] leading-[1.02] font-semibold tracking-[-0.035em] text-balance sm:text-6xl lg:text-[64px] xl:text-[84px]">Clear advice for <em class="font-serif font-normal tracking-normal text-(--tpl-lime) italic">bold</em> decisions</h1>
+<p class="max-w-lg text-base leading-relaxed text-pretty text-(--tpl-snow)/75 sm:text-lg">Pranata helps Indonesian boards and founders grow, finance, and transform their companies, with senior partners at the table from day one.</p>
 <div class="flex flex-wrap items-center gap-3">
-<a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-(--tpl-lime) px-5 text-sm font-semibold whitespace-nowrap text-(--tpl-lime-ink) transition-[filter] duration-150 hover:brightness-95 motion-reduce:transition-none h-12 pr-2 pl-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">
+<a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-(--tpl-lime) text-sm font-semibold whitespace-nowrap text-(--tpl-lime-ink) transition-[filter] duration-150 hover:brightness-95 motion-reduce:transition-none h-12 pr-1.5 pl-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">
 Book a consultation
-<span class="flex size-8 items-center justify-center rounded-full bg-(--tpl-lime-ink) text-(--tpl-lime)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></span>
+<span class="flex size-9 items-center justify-center rounded-full bg-(--tpl-lime-ink) text-(--tpl-lime)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></span>
 </a>
-<a href="#services" class="inline-flex h-12 items-center gap-2 rounded-full border border-(--tpl-snow)/40 px-5 text-sm font-medium transition-colors duration-150 hover:bg-(--tpl-snow)/10 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Explore services</a>
+<a href="#services" class="inline-flex h-12 items-center gap-2 rounded-full border border-(--tpl-snow)/25 px-6 text-sm font-medium transition-colors duration-150 hover:bg-(--tpl-snow)/10 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Explore services</a>
+</div>
+<div class="flex w-full max-w-lg flex-wrap items-center gap-x-4 gap-y-2 border-t border-(--tpl-snow)/15 pt-6 text-sm text-(--tpl-snow)/75">
+<div class="flex" aria-hidden="true">
+<span class="-ml-1.5 flex size-9 items-center justify-center rounded-full border-2 border-(--tpl-forest) bg-(--art-1) text-[11px] font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]">WS</span>
+<span class="-ml-1.5 flex size-9 items-center justify-center rounded-full border-2 border-(--tpl-forest) bg-(--art-1) text-[11px] font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-sky)] [--art-3:var(--tpl-sky-3)]">HG</span>
+<span class="-ml-1.5 flex size-9 items-center justify-center rounded-full border-2 border-(--tpl-forest) bg-(--art-1) text-[11px] font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-clay)] [--art-3:var(--tpl-clay-3)]">CM</span>
+</div>
+<div class="flex gap-0.5 text-(--tpl-lime)" role="img" aria-label="Rated 4.9 out of 5">
+<svg class="size-4 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
+<svg class="size-4 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
+<svg class="size-4 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
+<svg class="size-4 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
+<svg class="size-4 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
+</div>
+<p>4.9 from 210 executives</p>
 </div>
 </div>
-<div id="konsultan-tabpanel" role="tabpanel" aria-labelledby="konsultan-tab-partner" x-bind:aria-labelledby="'konsultan-tab-' + tab.id" class="grid gap-3 rounded-3xl border border-(--tpl-snow)/20 bg-(--tpl-snow)/10 p-5 backdrop-blur-md">
-<h2 class="text-xl font-semibold tracking-tight" x-text="tab.title">Advisors who stay for the long run</h2>
-<p class="text-sm text-pretty text-(--tpl-snow)/80" x-text="tab.text">One senior partner leads your account from the first workshop to the board meeting, so nothing gets lost between teams.</p>
-<p class="flex items-center gap-2 border-t border-(--tpl-snow)/20 pt-3 text-sm font-medium">
-<svg class="size-4 text-(--tpl-lime)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
-<span x-text="tab.stat">92% of clients renew after year one</span>
+<div class="relative min-w-0">
+<div class="grid gap-6 rounded-[28px] border border-(--tpl-snow)/10 bg-(--tpl-forest-2) p-5 shadow-overlay sm:p-7">
+<div class="flex flex-wrap items-start justify-between gap-4">
+<div>
+<p class="text-sm text-(--tpl-snow)/70">Assets under advisory</p>
+<p class="mt-1 text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">Rp 2,4 T</p>
+</div>
+<p class="inline-flex items-center gap-1 rounded-full bg-(--tpl-lime) px-2.5 py-1 text-xs font-semibold text-(--tpl-lime-ink)">
+<svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16l5-5 4 4 7-7M15 8h5v5" /></svg>
++23% this year
 </p>
 </div>
+<div data-reveal>
+<svg viewBox="0 0 480 200" class="h-auto w-full overflow-visible" role="img" aria-label="Line chart: assets under advisory grew from Rp 0,9 T in 2021 to Rp 2,4 T in 2026">
+<defs>
+<linearGradient id="konsultan-area" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="var(--tpl-lime)" stop-opacity="0.32" />
+<stop offset="1" stop-color="var(--tpl-lime)" stop-opacity="0" />
+</linearGradient>
+</defs>
+<line x1="0" x2="480" y1="20" y2="20" class="stroke-(--tpl-snow)/10" stroke-dasharray="4 6" />
+<line x1="0" x2="480" y1="73" y2="73" class="stroke-(--tpl-snow)/10" stroke-dasharray="4 6" />
+<line x1="0" x2="480" y1="127" y2="127" class="stroke-(--tpl-snow)/10" stroke-dasharray="4 6" />
+<line x1="0" x2="480" y1="180" y2="180" class="stroke-(--tpl-snow)/10" stroke-dasharray="4 6" />
+<path d="M20 156C49 156 79 140 108 140C137 140 167 128 196 128C225 128 255 100 284 100C313 100 343 72 372 72C401 72 431 36 460 36L460 200L20 200Z" fill="url(#konsultan-area)" class="transition-opacity delay-500 duration-1000 motion-safe:[[data-reveal]:not([data-in])_&amp;]:opacity-0 motion-reduce:transition-none" />
+<path d="M20 156C49 156 79 140 108 140C137 140 167 128 196 128C225 128 255 100 284 100C313 100 343 72 372 72C401 72 431 36 460 36" pathLength="1" stroke-width="3" stroke-linecap="round" class="fill-none stroke-(--tpl-lime) [stroke-dasharray:1] transition-[stroke-dashoffset] duration-[1800ms] ease-out motion-safe:[[data-reveal]:not([data-in])_&amp;]:[stroke-dashoffset:1] motion-reduce:transition-none" />
+<circle cx="460" cy="36" r="14" class="fill-(--tpl-lime)/20" />
+<circle cx="460" cy="36" r="6" class="fill-(--tpl-lime)" />
+</svg>
+<div class="mt-3 flex justify-between text-xs text-(--tpl-snow)/60 tabular-nums" aria-hidden="true">
+<span>2021</span>
+<span>2022</span>
+<span>2023</span>
+<span>2024</span>
+<span>2025</span>
+<span>2026</span>
 </div>
-<div role="tablist" aria-label="Why Pranata" class="grid grid-cols-3 border-t border-(--tpl-snow)/25" x-on:keydown="onTabKey($event)">
-<button id="konsultan-tab-partner" type="button" role="tab" aria-controls="konsultan-tabpanel" class="-mt-px grid gap-1 border-t-2 py-4 pr-3 text-left text-sm font-medium transition-colors duration-150 motion-reduce:transition-none sm:text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)" x-bind:aria-selected="tabIndex === 0 ? 'true' : 'false'" x-bind:tabindex="tabIndex === 0 ? 0 : -1" x-bind:class="tabIndex === 0 ? 'border-(--tpl-lime) text-(--tpl-snow)' : 'border-transparent text-(--tpl-snow)\/65 hover:text-(--tpl-snow)'" x-on:click="tabIndex = 0">
-<span class="text-xs text-(--tpl-snow)/60">01</span>
-Trusted partner
-</button>
-<button id="konsultan-tab-finance" type="button" role="tab" aria-controls="konsultan-tabpanel" class="-mt-px grid gap-1 border-t-2 py-4 pr-3 text-left text-sm font-medium transition-colors duration-150 motion-reduce:transition-none sm:text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)" x-bind:aria-selected="tabIndex === 1 ? 'true' : 'false'" x-bind:tabindex="tabIndex === 1 ? 0 : -1" x-bind:class="tabIndex === 1 ? 'border-(--tpl-lime) text-(--tpl-snow)' : 'border-transparent text-(--tpl-snow)\/65 hover:text-(--tpl-snow)'" x-on:click="tabIndex = 1">
-<span class="text-xs text-(--tpl-snow)/60">02</span>
-Financial services
-</button>
-<button id="konsultan-tab-invest" type="button" role="tab" aria-controls="konsultan-tabpanel" class="-mt-px grid gap-1 border-t-2 py-4 pr-3 text-left text-sm font-medium transition-colors duration-150 motion-reduce:transition-none sm:text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)" x-bind:aria-selected="tabIndex === 2 ? 'true' : 'false'" x-bind:tabindex="tabIndex === 2 ? 0 : -1" x-bind:class="tabIndex === 2 ? 'border-(--tpl-lime) text-(--tpl-snow)' : 'border-transparent text-(--tpl-snow)\/65 hover:text-(--tpl-snow)'" x-on:click="tabIndex = 2">
-<span class="text-xs text-(--tpl-snow)/60">03</span>
-Investing
-</button>
+</div>
+<dl class="grid grid-cols-2 gap-3">
+<div class="rounded-2xl border border-(--tpl-snow)/10 bg-(--tpl-snow)/5 p-4 flex flex-col-reverse">
+<dt class="mt-1 text-sm text-(--tpl-snow)/70">Clients advised</dt>
+<dd class="text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">320+</dd>
+</div>
+<div class="rounded-2xl bg-(--tpl-lime) p-4 text-(--tpl-lime-ink) flex flex-col-reverse">
+<dt class="mt-1 text-sm text-(--tpl-lime-ink)/80">Client retention</dt>
+<dd class="text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">98%</dd>
+</div>
+</dl>
+</div>
 </div>
 </div>
 </section>
 
 <main>
-<section id="services" class="mx-auto w-full max-w-[1320px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-services">
-<div class="mb-10 grid gap-4 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<h2 id="konsultan-services" class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">Advice that moves the numbers, not just the slides</h2>
-<p class="max-w-xl text-base text-pretty text-muted">From the first diagnostic to the final rollout, our partners work inside your team and measure success the way your board does.</p>
+<section id="services" class="mx-auto w-full max-w-[1240px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-services">
+<div class="mb-12 grid gap-5 lg:mb-14 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<div>
+<p class="mb-4 flex items-center gap-2 text-sm font-medium text-muted"><span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>What we do</p>
+<h2 id="konsultan-services" class="text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[56px]">Three practices, one senior team</h2>
 </div>
-<div class="grid gap-4 lg:grid-cols-3">
-<article class="flex min-h-[460px] flex-col gap-5 rounded-[28px] bg-subtle p-5 sm:p-6 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<span class="inline-flex w-fit items-center gap-2 rounded-full bg-surface px-3 py-1 text-xs font-medium">Strategy</span>
-<h3 class="text-xl font-semibold tracking-tight text-balance sm:text-2xl">Growth plans built on real market data</h3>
-<p class="text-sm text-muted">We size the market, test the pricing, and turn it into a three year plan your managers can own.</p>
-<div class="relative mt-auto min-h-[200px] flex-1 overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-sand)] [--art-3:var(--tpl-sand-3)]" role="img" aria-label="A laptop showing a rising bar chart on a desk next to a coffee cup">
-<div class="absolute inset-x-0 bottom-0 h-[14%] bg-(--art-3)/30"></div>
-<div class="absolute bottom-[18%] left-1/2 flex aspect-[16/10] w-[58%] -translate-x-1/2 items-end gap-[5%] rounded-t-lg border-[6px] border-b-0 border-(--art-3) bg-surface px-[6%] pt-[8%]">
-<div class="flex-1 rounded-t bg-(--art-3)" style="height: 30%"></div>
-<div class="flex-1 rounded-t bg-(--art-3)" style="height: 48%"></div>
-<div class="flex-1 rounded-t bg-(--art-3)" style="height: 40%"></div>
-<div class="flex-1 rounded-t bg-(--art-3)" style="height: 66%"></div>
-<div class="flex-1 rounded-t bg-(--art-3)" style="height: 82%"></div>
+<p class="max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg">Every engagement is led by a partner who has run a business, and measured the way your board measures it.</p>
 </div>
-<div class="absolute bottom-[14%] left-1/2 h-[4%] w-[70%] -translate-x-1/2 rounded-b-lg bg-(--art-3)"></div>
-<div class="absolute right-[8%] bottom-[14%] h-[16%] w-[8%] rounded-b-lg bg-surface"></div>
+<div class="transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<div role="tablist" aria-label="Services" class="grid grid-cols-3 border-b border-line" x-on:keydown="onTabKey($event)">
+<button id="konsultan-tab-strategy" type="button" role="tab" aria-controls="konsultan-tabpanel" class="-mb-px flex flex-col items-start gap-1 border-b-2 pt-2 pr-3 pb-4 text-left text-base font-semibold tracking-tight transition-colors duration-150 motion-reduce:transition-none sm:flex-row sm:items-center sm:gap-3 sm:text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:aria-selected="tabIndex === 0 ? 'true' : 'false'" x-bind:tabindex="tabIndex === 0 ? 0 : -1" x-bind:class="tabIndex === 0 ? 'border-primary text-ink' : 'border-transparent text-muted hover:text-ink'" x-on:click="tabIndex = 0">
+<span class="text-sm font-medium text-muted tabular-nums">01</span>
+Strategy
+</button>
+<button id="konsultan-tab-finance" type="button" role="tab" aria-controls="konsultan-tabpanel" class="-mb-px flex flex-col items-start gap-1 border-b-2 pt-2 pr-3 pb-4 text-left text-base font-semibold tracking-tight transition-colors duration-150 motion-reduce:transition-none sm:flex-row sm:items-center sm:gap-3 sm:text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:aria-selected="tabIndex === 1 ? 'true' : 'false'" x-bind:tabindex="tabIndex === 1 ? 0 : -1" x-bind:class="tabIndex === 1 ? 'border-primary text-ink' : 'border-transparent text-muted hover:text-ink'" x-on:click="tabIndex = 1">
+<span class="text-sm font-medium text-muted tabular-nums">02</span>
+Finance
+</button>
+<button id="konsultan-tab-transformation" type="button" role="tab" aria-controls="konsultan-tabpanel" class="-mb-px flex flex-col items-start gap-1 border-b-2 pt-2 pr-3 pb-4 text-left text-base font-semibold tracking-tight transition-colors duration-150 motion-reduce:transition-none sm:flex-row sm:items-center sm:gap-3 sm:text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:aria-selected="tabIndex === 2 ? 'true' : 'false'" x-bind:tabindex="tabIndex === 2 ? 0 : -1" x-bind:class="tabIndex === 2 ? 'border-primary text-ink' : 'border-transparent text-muted hover:text-ink'" x-on:click="tabIndex = 2">
+<span class="text-sm font-medium text-muted tabular-nums">03</span>
+Transformation
+</button>
+</div>
+<div id="konsultan-tabpanel" role="tabpanel" aria-labelledby="konsultan-tab-strategy" x-bind:aria-labelledby="'konsultan-tab-' + tab.id" class="mt-8 grid gap-10 rounded-[28px] border border-line bg-surface p-6 sm:p-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16 lg:p-12">
+<div>
+<h3 class="text-2xl leading-tight font-semibold tracking-tight text-balance sm:text-3xl" x-text="tab.title">Growth plans built on real market data</h3>
+<p class="mt-4 max-w-xl text-base leading-relaxed text-pretty text-muted" x-text="tab.text">We size the market, test pricing with real customers, and turn the findings into a three year plan your managers can own.</p>
+<ul class="mt-8 mb-8 grid gap-3">
+<template x-for="point in tab.points" :key="point">
+<li class="flex items-center gap-3 text-sm font-medium sm:text-base">
+<span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary" aria-hidden="true"><svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg></span>
+<span x-text="point"></span>
+</li>
+</template>
+</ul>
+<a href="#contact" class="inline-flex w-fit items-center gap-2 rounded-full text-sm font-semibold underline decoration-line underline-offset-4 hover:decoration-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+Talk to a partner
+<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+</a>
+</div>
+<dl class="grid content-start gap-8 border-t border-line pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-16">
+<template x-for="stat in tab.stats" :key="stat.label">
+<div class="flex flex-col-reverse">
+<dt class="mt-2 max-w-64 text-sm text-muted" x-text="stat.label"></dt>
+<dd class="text-5xl font-semibold tracking-[-0.03em] tabular-nums sm:text-6xl" x-text="stat.value"></dd>
+</div>
+</template>
+</dl>
+</div>
+</div>
+</section>
+
+<section id="about" class="mx-auto w-full max-w-[1240px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-about">
+<div class="mb-12 grid gap-5 lg:mb-14 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<div>
+<p class="mb-4 flex items-center gap-2 text-sm font-medium text-muted"><span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>About Pranata</p>
+<h2 id="konsultan-about" class="text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[56px]">A firm built around partners, not pyramids</h2>
+</div>
+<p class="max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg">We stay small on purpose. The people who win your trust are the people who do the work.</p>
+</div>
+<div class="grid gap-4 lg:grid-cols-3 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<article class="flex min-h-[520px] flex-col gap-5 rounded-[28px] bg-subtle p-6 sm:p-7">
+<span class="inline-flex w-fit items-center rounded-full bg-surface px-3 py-1 text-xs font-medium">Since 2009</span>
+<h3 class="text-2xl leading-tight font-semibold tracking-tight text-balance">Seventeen years inside Indonesian boardrooms</h3>
+<p class="text-sm text-muted">From a two person office in Jakarta to listed companies, family groups, and state owned enterprises across Asia.</p>
+<div class="mt-auto grid gap-3">
+<div class="flex h-36 items-end gap-2" role="img" aria-label="Bar chart: companies advised each year, rising from 38 in 2021 to 88 in 2026">
+<div class="flex-1 rounded-t-lg bg-ink/15" style="height: 43.181818181818%"></div>
+<div class="flex-1 rounded-t-lg bg-ink/15" style="height: 51.136363636364%"></div>
+<div class="flex-1 rounded-t-lg bg-ink/15" style="height: 61.363636363636%"></div>
+<div class="flex-1 rounded-t-lg bg-ink/15" style="height: 71.590909090909%"></div>
+<div class="flex-1 rounded-t-lg bg-ink/15" style="height: 84.090909090909%"></div>
+<div class="flex-1 rounded-t-lg bg-primary" style="height: 100%"></div>
+</div>
+<div class="flex justify-between gap-2 text-xs text-muted tabular-nums" aria-hidden="true">
+<span>2021</span>
+<span>2022</span>
+<span>2023</span>
+<span>2024</span>
+<span>2025</span>
+<span>2026</span>
+</div>
 </div>
 </article>
-<article class="flex min-h-[460px] flex-col gap-5 rounded-[28px] bg-(--tpl-lime) p-3 text-(--tpl-lime-ink) sm:p-3.5 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<div class="relative min-h-[240px] flex-1 overflow-hidden rounded-[22px] bg-(--art-1) [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]">
-<div class="absolute inset-0" role="img" aria-label="A trophy on a pedestal, framed by an organic lime shape">
-<div class="absolute -top-[18%] -left-[14%] size-[62%] rounded-[58%_42%_63%_37%/49%_56%_44%_51%] bg-(--tpl-lime)"></div>
-<div class="absolute bottom-[34%] left-1/2 h-[32%] w-[26%] -translate-x-1/2 rounded-b-[45%] bg-(--art-3)"></div>
-<div class="absolute bottom-[44%] h-[16%] w-[10%] rounded-full border-[5px] border-(--art-3) left-[30%]"></div>
-<div class="absolute bottom-[44%] h-[16%] w-[10%] rounded-full border-[5px] border-(--art-3) right-[30%]"></div>
-<div class="absolute bottom-[22%] left-1/2 h-[12%] w-[6%] -translate-x-1/2 bg-(--art-3)"></div>
-<div class="absolute bottom-[16%] left-1/2 h-[7%] w-[22%] -translate-x-1/2 rounded-md bg-(--art-3)"></div>
-</div>
+<article class="flex min-h-[520px] flex-col gap-5 rounded-[28px] bg-(--tpl-lime) p-3 text-(--tpl-lime-ink)">
+<div class="relative min-h-[250px] flex-1 overflow-hidden rounded-[22px] bg-(--tpl-forest)">
+<svg class="absolute inset-0 size-full" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<circle cx="300" cy="80" r="150" class="fill-none stroke-(--tpl-lime)/45" />
+<circle cx="300" cy="80" r="105" class="fill-none stroke-(--tpl-lime)/45" />
+<circle cx="300" cy="80" r="60" class="fill-none stroke-(--tpl-lime)/45" />
+<path d="M-20 210c40-70 120-90 170-60s70 90 150 80 110 40 120 90H-20z" class="fill-(--tpl-lime)/25" />
+<path d="M86 64c38-30 104-24 122 22s-12 94-64 104-104-14-104-62 14-44 46-64z" class="fill-(--tpl-lime)" />
+<circle cx="330" cy="200" r="12" class="fill-(--tpl-lime)" />
+</svg>
 <div class="absolute -right-px -bottom-px flex size-[76px] items-end justify-end rounded-tl-[30px] bg-(--tpl-lime) p-2.5">
-<a href="#about" class="flex size-14 items-center justify-center rounded-full bg-(--tpl-lime-ink) text-(--tpl-lime) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Read about our recognition"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+<a href="#cases" class="flex size-14 items-center justify-center rounded-full bg-(--tpl-lime-ink) text-(--tpl-lime) transition-transform duration-200 hover:rotate-45 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="See the work behind our recognition"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
 </div>
 </div>
-<div class="grid gap-3 px-2.5 pb-3">
-<span class="inline-flex w-fit items-center gap-2 rounded-full bg-(--tpl-lime-ink) px-3 py-1 text-xs font-medium text-(--tpl-lime)">Recognition</span>
-<h3 class="text-xl font-semibold tracking-tight text-balance sm:text-2xl">Named a top advisory firm in Southeast Asia</h3>
-<p class="text-5xl font-semibold tracking-tight">No. 4</p>
+<div class="grid gap-3 px-3 pt-1 pb-4">
+<span class="inline-flex w-fit items-center rounded-full bg-(--tpl-lime-ink) px-3 py-1 text-xs font-medium text-(--tpl-lime)">Recognition</span>
+<h3 class="text-2xl leading-tight font-semibold tracking-tight text-balance">Named a top advisory firm in Southeast Asia</h3>
+<p class="text-6xl font-semibold tracking-[-0.03em]">No. 4</p>
 <p class="text-sm text-(--tpl-lime-ink)/80">Asia Business Review ranking, 2026</p>
 </div>
 </article>
-<article class="flex min-h-[460px] flex-col gap-5 rounded-[28px] bg-subtle p-5 sm:p-6 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<span class="inline-flex w-fit items-center gap-2 rounded-full bg-surface px-3 py-1 text-xs font-medium">Our people</span>
-<div class="flex items-center">
-<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]" aria-hidden="true">SA</span>
-<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-sky)] [--art-3:var(--tpl-sky-3)]" aria-hidden="true">BP</span>
-<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-clay)] [--art-3:var(--tpl-clay-3)]" aria-hidden="true">LW</span>
-<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-mauve)] [--art-3:var(--tpl-mauve-3)]" aria-hidden="true">RP</span>
-<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-ink text-xs font-semibold text-canvas" aria-hidden="true">+116</span>
+<article class="flex min-h-[520px] flex-col gap-5 rounded-[28px] bg-subtle p-6 sm:p-7">
+<span class="inline-flex w-fit items-center rounded-full bg-surface px-3 py-1 text-xs font-medium">Our people</span>
+<div class="flex items-center" aria-hidden="true">
+<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]">SA</span>
+<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-sky)] [--art-3:var(--tpl-sky-3)]">BP</span>
+<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-clay)] [--art-3:var(--tpl-clay-3)]">LW</span>
+<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-(--art-1) text-sm font-semibold text-(--art-3) first:ml-0 [--art-1:var(--tpl-mauve)] [--art-3:var(--tpl-mauve-3)]">RP</span>
+<span class="-ml-2 flex size-11 items-center justify-center rounded-full border-2 border-subtle bg-ink text-xs font-semibold text-canvas">+116</span>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-balance sm:text-2xl">Senior partners who have run companies</h3>
+<h3 class="text-2xl leading-tight font-semibold tracking-tight text-balance">Senior partners who have run companies</h3>
 <p class="text-sm text-muted">Former CFOs, bankers, and engineers who sit at your table, not behind a junior team.</p>
 <dl class="mt-auto grid grid-cols-2 gap-2">
-<div class="rounded-2xl bg-surface p-3">
+<div class="flex flex-col-reverse rounded-2xl bg-surface p-4">
 <dt class="text-sm text-muted">Cities across Asia</dt>
-<dd class="text-2xl font-semibold tracking-tight">14</dd>
+<dd class="text-3xl font-semibold tracking-tight">14</dd>
 </div>
-<div class="rounded-2xl bg-surface p-3">
+<div class="flex flex-col-reverse rounded-2xl bg-surface p-4">
 <dt class="text-sm text-muted">Senior partners</dt>
-<dd class="text-2xl font-semibold tracking-tight">120+</dd>
+<dd class="text-3xl font-semibold tracking-tight">120+</dd>
 </div>
 </dl>
-<a href="#industries" class="inline-flex w-fit items-center gap-2 rounded-full text-sm font-semibold underline decoration-line underline-offset-4 hover:decoration-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-Meet the team
-<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-</a>
 </article>
 </div>
 </section>
 
-<section id="industries" class="mx-auto w-full max-w-[1320px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-industries">
-<div class="mb-10 grid gap-4 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<h2 id="konsultan-industries" class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">We champion the bold to achieve the extraordinary</h2>
+<section id="industries" class="mx-auto w-full max-w-[1240px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-industries">
+<div class="mb-12 grid gap-5 lg:mb-14 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<div>
+<p class="mb-4 flex items-center gap-2 text-sm font-medium text-muted"><span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>Practices</p>
+<h2 id="konsultan-industries" class="text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[56px]">We champion the bold to achieve the extraordinary</h2>
+</div>
 <div class="grid gap-5">
-<p class="max-w-xl text-base text-pretty text-muted">Each practice is led by a partner with at least fifteen years in the field. Filter by industry to find the right team.</p>
+<p class="max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg">Each practice is led by a partner with at least fifteen years in the field. Filter by industry to find the right team.</p>
 <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by industry">
 <button type="button" class="h-9 rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-pressed="true" x-bind:aria-pressed="industry === 'All' ? 'true' : 'false'" x-bind:class="industry === 'All' ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-muted hover:text-ink'" x-on:click="industry = 'All'">All</button>
 <button type="button" class="h-9 rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-pressed="false" x-bind:aria-pressed="industry === 'Finance' ? 'true' : 'false'" x-bind:class="industry === 'Finance' ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-muted hover:text-ink'" x-on:click="industry = 'Finance'">Finance</button>
@@ -300,98 +360,116 @@ Meet the team
 </div>
 <p class="sr-only" aria-live="polite" x-text="'Showing ' + shownCount + ' ' + (shownCount === 1 ? 'practice' : 'practices')">Showing 6 practices</p>
 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<li class="group grid gap-4 rounded-[28px] border border-line bg-surface p-3" x-show="industry === 'All' || JSON.parse('[\u0022Finance\u0022]').includes(industry)">
-<div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,var(--color-surface)_0_14%,transparent_15%)] opacity-60"></div>
-<div class="absolute bottom-[38%] left-1/2 size-[26%] -translate-x-1/2 rounded-full bg-(--art-3)"></div>
-<div class="absolute bottom-[-22%] left-1/2 h-[56%] w-[58%] -translate-x-1/2 rounded-t-[50%] bg-(--art-3)"></div>
-<span class="absolute bottom-3 left-3 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold" aria-hidden="true">SA</span>
-<span class="absolute top-3 right-3 flex size-12 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink) transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6" /></svg></span>
+<li class="group flex flex-col gap-6 rounded-[24px] border border-line bg-surface p-6 transition-colors duration-200 hover:border-ink/25 motion-reduce:transition-none sm:p-7" x-show="industry === 'All' || JSON.parse('[\u0022Finance\u0022]').includes(industry)">
+<div class="flex items-start justify-between">
+<span class="flex size-12 items-center justify-center rounded-2xl border border-line bg-canvas text-ink" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6" /></svg></span>
+<svg class="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
 </div>
-<div class="grid gap-2 px-2 pb-2">
-<h3 class="text-lg font-semibold tracking-tight">Corporate finance</h3>
-<p class="text-sm text-muted">Led by Sekar Ayuningtyas</p>
+<div>
+<h3 class="text-xl font-semibold tracking-tight">Corporate finance</h3>
+<p class="mt-2 text-sm leading-relaxed text-pretty text-muted">Valuations, capital structure, and funding plans that hold up in front of investors.</p>
+</div>
+<div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+<p class="flex items-center gap-2.5 text-sm">
+<span class="flex size-8 items-center justify-center rounded-full bg-(--art-1) text-xs font-semibold text-(--art-3) [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]" aria-hidden="true">SA</span>
+Led by Sekar Ayuningtyas
+</p>
 <div class="flex flex-wrap gap-1.5">
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Finance</span>
 </div>
 </div>
 </li>
-<li class="group grid gap-4 rounded-[28px] border border-line bg-surface p-3" x-show="industry === 'All' || JSON.parse('[\u0022Finance\u0022,\u0022Energy\u0022]').includes(industry)">
-<div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-sky)] [--art-3:var(--tpl-sky-3)]">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,var(--color-surface)_0_14%,transparent_15%)] opacity-60"></div>
-<div class="absolute bottom-[38%] left-1/2 size-[26%] -translate-x-1/2 rounded-full bg-(--art-3)"></div>
-<div class="absolute bottom-[-22%] left-1/2 h-[56%] w-[58%] -translate-x-1/2 rounded-t-[50%] bg-(--art-3)"></div>
-<span class="absolute bottom-3 left-3 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold" aria-hidden="true">BP</span>
-<span class="absolute top-3 right-3 flex size-12 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink) transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" /></svg></span>
+<li class="group flex flex-col gap-6 rounded-[24px] border border-line bg-surface p-6 transition-colors duration-200 hover:border-ink/25 motion-reduce:transition-none sm:p-7" x-show="industry === 'All' || JSON.parse('[\u0022Finance\u0022,\u0022Energy\u0022]').includes(industry)">
+<div class="flex items-start justify-between">
+<span class="flex size-12 items-center justify-center rounded-2xl border border-line bg-canvas text-ink" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" /></svg></span>
+<svg class="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
 </div>
-<div class="grid gap-2 px-2 pb-2">
-<h3 class="text-lg font-semibold tracking-tight">Risk and compliance</h3>
-<p class="text-sm text-muted">Led by Bima Prasetyo</p>
+<div>
+<h3 class="text-xl font-semibold tracking-tight">Risk and compliance</h3>
+<p class="mt-2 text-sm leading-relaxed text-pretty text-muted">Credit, market, and climate risk frameworks that satisfy OJK and your board.</p>
+</div>
+<div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+<p class="flex items-center gap-2.5 text-sm">
+<span class="flex size-8 items-center justify-center rounded-full bg-(--art-1) text-xs font-semibold text-(--art-3) [--art-1:var(--tpl-sky)] [--art-3:var(--tpl-sky-3)]" aria-hidden="true">BP</span>
+Led by Bima Prasetyo
+</p>
 <div class="flex flex-wrap gap-1.5">
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Finance</span>
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Energy</span>
 </div>
 </div>
 </li>
-<li class="group grid gap-4 rounded-[28px] border border-line bg-surface p-3" x-show="industry === 'All' || JSON.parse('[\u0022Energy\u0022]').includes(industry)">
-<div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-sand)] [--art-3:var(--tpl-sand-3)]">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,var(--color-surface)_0_14%,transparent_15%)] opacity-60"></div>
-<div class="absolute bottom-[38%] left-1/2 size-[26%] -translate-x-1/2 rounded-full bg-(--art-3)"></div>
-<div class="absolute bottom-[-22%] left-1/2 h-[56%] w-[58%] -translate-x-1/2 rounded-t-[50%] bg-(--art-3)"></div>
-<span class="absolute bottom-3 left-3 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold" aria-hidden="true">LW</span>
-<span class="absolute top-3 right-3 flex size-12 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink) transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z" /></svg></span>
+<li class="group flex flex-col gap-6 rounded-[24px] border border-line bg-surface p-6 transition-colors duration-200 hover:border-ink/25 motion-reduce:transition-none sm:p-7" x-show="industry === 'All' || JSON.parse('[\u0022Energy\u0022]').includes(industry)">
+<div class="flex items-start justify-between">
+<span class="flex size-12 items-center justify-center rounded-2xl border border-line bg-canvas text-ink" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z" /></svg></span>
+<svg class="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
 </div>
-<div class="grid gap-2 px-2 pb-2">
-<h3 class="text-lg font-semibold tracking-tight">Energy transition</h3>
-<p class="text-sm text-muted">Led by Laras Wulandari</p>
+<div>
+<h3 class="text-xl font-semibold tracking-tight">Energy transition</h3>
+<p class="mt-2 text-sm leading-relaxed text-pretty text-muted">Investment cases for renewables, grid upgrades, and decarbonization programs.</p>
+</div>
+<div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+<p class="flex items-center gap-2.5 text-sm">
+<span class="flex size-8 items-center justify-center rounded-full bg-(--art-1) text-xs font-semibold text-(--art-3) [--art-1:var(--tpl-sand)] [--art-3:var(--tpl-sand-3)]" aria-hidden="true">LW</span>
+Led by Laras Wulandari
+</p>
 <div class="flex flex-wrap gap-1.5">
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Energy</span>
 </div>
 </div>
 </li>
-<li class="group grid gap-4 rounded-[28px] border border-line bg-surface p-3" x-show="industry === 'All' || JSON.parse('[\u0022Technology\u0022]').includes(industry)">
-<div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-mauve)] [--art-3:var(--tpl-mauve-3)]">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,var(--color-surface)_0_14%,transparent_15%)] opacity-60"></div>
-<div class="absolute bottom-[38%] left-1/2 size-[26%] -translate-x-1/2 rounded-full bg-(--art-3)"></div>
-<div class="absolute bottom-[-22%] left-1/2 h-[56%] w-[58%] -translate-x-1/2 rounded-t-[50%] bg-(--art-3)"></div>
-<span class="absolute bottom-3 left-3 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold" aria-hidden="true">RP</span>
-<span class="absolute top-3 right-3 flex size-12 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink) transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h8v8H8zM10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3" /></svg></span>
+<li class="group flex flex-col gap-6 rounded-[24px] border border-line bg-surface p-6 transition-colors duration-200 hover:border-ink/25 motion-reduce:transition-none sm:p-7" x-show="industry === 'All' || JSON.parse('[\u0022Technology\u0022]').includes(industry)">
+<div class="flex items-start justify-between">
+<span class="flex size-12 items-center justify-center rounded-2xl border border-line bg-canvas text-ink" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h8v8H8zM10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3" /></svg></span>
+<svg class="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
 </div>
-<div class="grid gap-2 px-2 pb-2">
-<h3 class="text-lg font-semibold tracking-tight">Digital transformation</h3>
-<p class="text-sm text-muted">Led by Raka Pratama</p>
+<div>
+<h3 class="text-xl font-semibold tracking-tight">Digital transformation</h3>
+<p class="mt-2 text-sm leading-relaxed text-pretty text-muted">Roadmaps, platforms, and teams that turn technology spend into revenue.</p>
+</div>
+<div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+<p class="flex items-center gap-2.5 text-sm">
+<span class="flex size-8 items-center justify-center rounded-full bg-(--art-1) text-xs font-semibold text-(--art-3) [--art-1:var(--tpl-mauve)] [--art-3:var(--tpl-mauve-3)]" aria-hidden="true">RP</span>
+Led by Raka Pratama
+</p>
 <div class="flex flex-wrap gap-1.5">
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Technology</span>
 </div>
 </div>
 </li>
-<li class="group grid gap-4 rounded-[28px] border border-line bg-surface p-3" x-show="industry === 'All' || JSON.parse('[\u0022Consumer\u0022]').includes(industry)">
-<div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-clay)] [--art-3:var(--tpl-clay-3)]">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,var(--color-surface)_0_14%,transparent_15%)] opacity-60"></div>
-<div class="absolute bottom-[38%] left-1/2 size-[26%] -translate-x-1/2 rounded-full bg-(--art-3)"></div>
-<div class="absolute bottom-[-22%] left-1/2 h-[56%] w-[58%] -translate-x-1/2 rounded-t-[50%] bg-(--art-3)"></div>
-<span class="absolute bottom-3 left-3 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold" aria-hidden="true">AL</span>
-<span class="absolute top-3 right-3 flex size-12 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink) transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2" /></svg></span>
+<li class="group flex flex-col gap-6 rounded-[24px] border border-line bg-surface p-6 transition-colors duration-200 hover:border-ink/25 motion-reduce:transition-none sm:p-7" x-show="industry === 'All' || JSON.parse('[\u0022Consumer\u0022]').includes(industry)">
+<div class="flex items-start justify-between">
+<span class="flex size-12 items-center justify-center rounded-2xl border border-line bg-canvas text-ink" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2" /></svg></span>
+<svg class="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
 </div>
-<div class="grid gap-2 px-2 pb-2">
-<h3 class="text-lg font-semibold tracking-tight">Consumer growth</h3>
-<p class="text-sm text-muted">Led by Ayu Lestari</p>
+<div>
+<h3 class="text-xl font-semibold tracking-tight">Consumer growth</h3>
+<p class="mt-2 text-sm leading-relaxed text-pretty text-muted">Pricing, channels, and brand portfolios for fast moving consumer companies.</p>
+</div>
+<div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+<p class="flex items-center gap-2.5 text-sm">
+<span class="flex size-8 items-center justify-center rounded-full bg-(--art-1) text-xs font-semibold text-(--art-3) [--art-1:var(--tpl-clay)] [--art-3:var(--tpl-clay-3)]" aria-hidden="true">AL</span>
+Led by Ayu Lestari
+</p>
 <div class="flex flex-wrap gap-1.5">
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Consumer</span>
 </div>
 </div>
 </li>
-<li class="group grid gap-4 rounded-[28px] border border-line bg-surface p-3" x-show="industry === 'All' || JSON.parse('[\u0022Finance\u0022,\u0022Technology\u0022,\u0022Consumer\u0022]').includes(industry)">
-<div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-(--art-1) [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,var(--color-surface)_0_14%,transparent_15%)] opacity-60"></div>
-<div class="absolute bottom-[38%] left-1/2 size-[26%] -translate-x-1/2 rounded-full bg-(--art-3)"></div>
-<div class="absolute bottom-[-22%] left-1/2 h-[56%] w-[58%] -translate-x-1/2 rounded-t-[50%] bg-(--art-3)"></div>
-<span class="absolute bottom-3 left-3 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold" aria-hidden="true">DH</span>
-<span class="absolute top-3 right-3 flex size-12 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink) transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4v5a6 6 0 0 0 6 6h6M18 15l-3-3M18 15l-3 3M6 20v-3" /></svg></span>
+<li class="group flex flex-col gap-6 rounded-[24px] border border-line bg-surface p-6 transition-colors duration-200 hover:border-ink/25 motion-reduce:transition-none sm:p-7" x-show="industry === 'All' || JSON.parse('[\u0022Finance\u0022,\u0022Technology\u0022,\u0022Consumer\u0022]').includes(industry)">
+<div class="flex items-start justify-between">
+<span class="flex size-12 items-center justify-center rounded-2xl border border-line bg-canvas text-ink" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4v5a6 6 0 0 0 6 6h6M18 15l-3-3M18 15l-3 3M6 20v-3" /></svg></span>
+<svg class="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
 </div>
-<div class="grid gap-2 px-2 pb-2">
-<h3 class="text-lg font-semibold tracking-tight">Mergers and acquisitions</h3>
-<p class="text-sm text-muted">Led by Dimas Hartono</p>
+<div>
+<h3 class="text-xl font-semibold tracking-tight">Mergers and acquisitions</h3>
+<p class="mt-2 text-sm leading-relaxed text-pretty text-muted">Due diligence, deal strategy, and integration from term sheet to day 100.</p>
+</div>
+<div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+<p class="flex items-center gap-2.5 text-sm">
+<span class="flex size-8 items-center justify-center rounded-full bg-(--art-1) text-xs font-semibold text-(--art-3) [--art-1:var(--tpl-sage)] [--art-3:var(--tpl-sage-3)]" aria-hidden="true">DH</span>
+Led by Dimas Hartono
+</p>
 <div class="flex flex-wrap gap-1.5">
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Finance</span>
 <span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Technology</span>
@@ -402,41 +480,79 @@ Meet the team
 </ul>
 </section>
 
-<section id="about" class="mx-auto w-full max-w-[1320px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-about">
-<div class="grid gap-10 rounded-[28px] bg-(--tpl-night) p-6 text-(--tpl-snow) sm:p-10 lg:grid-cols-[1fr_1.4fr] lg:p-14 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<div class="grid content-start gap-5">
-<h2 id="konsultan-about" class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">Numbers our clients can take to the bank</h2>
-<p class="max-w-md text-base text-(--tpl-snow)/75">Pranata started in a small Jakarta office in 2009. Today we advise listed companies, family businesses, and state owned enterprises across Asia.</p>
-</div>
-<dl class="grid grid-cols-2 gap-x-6 gap-y-10">
+<section id="cases" class="mx-auto w-full max-w-[1240px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-cases">
+<div class="mb-12 grid gap-5 lg:mb-14 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
 <div>
-<dt class="sr-only">Years advising Indonesian companies</dt>
-<dd class="text-4xl font-semibold tracking-tight text-(--tpl-lime) sm:text-5xl">17</dd>
-<dd class="mt-2 text-sm text-(--tpl-snow)/75" aria-hidden="true">Years advising Indonesian companies</dd>
+<p class="mb-4 flex items-center gap-2 text-sm font-medium text-muted"><span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>Case studies</p>
+<h2 id="konsultan-cases" class="text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[56px]">Results our clients can take to the bank</h2>
 </div>
-<div>
-<dt class="sr-only">Capital raised and advised</dt>
-<dd class="text-4xl font-semibold tracking-tight text-(--tpl-lime) sm:text-5xl">Rp4.2T</dd>
-<dd class="mt-2 text-sm text-(--tpl-snow)/75" aria-hidden="true">Capital raised and advised</dd>
+<p class="max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg">We agree on the number before we start, then report against it every month until it moves.</p>
+</div>
+<div class="grid gap-4 lg:grid-cols-3 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<article class="flex flex-col gap-8 rounded-[28px] border border-line bg-surface p-6 sm:p-8">
+<div class="flex items-center justify-between gap-3 text-sm">
+<h3 class="font-semibold">Bank Kertajaya</h3>
+<span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Finance</span>
 </div>
 <div>
-<dt class="sr-only">Companies served across Asia</dt>
-<dd class="text-4xl font-semibold tracking-tight text-(--tpl-lime) sm:text-5xl">320+</dd>
-<dd class="mt-2 text-sm text-(--tpl-snow)/75" aria-hidden="true">Companies served across Asia</dd>
+<p class="text-6xl font-semibold tracking-[-0.04em] tabular-nums sm:text-7xl">-34%</p>
+<p class="mt-3 flex items-center gap-2.5 text-sm font-medium">
+<span class="h-0.5 w-6 rounded-full bg-primary" aria-hidden="true"></span>
+Non-performing loans in 12 months
+</p>
+</div>
+<p class="text-sm text-muted">Rebuilt the credit scoring model and collections playbook for a regional bank with 1.2 million borrowers.</p>
+<p class="mt-auto flex items-center justify-between gap-3 border-t border-line pt-5 text-sm text-muted">
+<span>Credit risk</span>
+<span>6 weeks</span>
+</p>
+</article>
+<article class="flex flex-col gap-8 rounded-[28px] border border-line bg-surface p-6 sm:p-8">
+<div class="flex items-center justify-between gap-3 text-sm">
+<h3 class="font-semibold">Nusa Energi</h3>
+<span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Energy</span>
 </div>
 <div>
-<dt class="sr-only">Client retention in 2026</dt>
-<dd class="text-4xl font-semibold tracking-tight text-(--tpl-lime) sm:text-5xl">98%</dd>
-<dd class="mt-2 text-sm text-(--tpl-snow)/75" aria-hidden="true">Client retention in 2026</dd>
+<p class="text-6xl font-semibold tracking-[-0.04em] tabular-nums sm:text-7xl">Rp 640 M</p>
+<p class="mt-3 flex items-center gap-2.5 text-sm font-medium">
+<span class="h-0.5 w-6 rounded-full bg-primary" aria-hidden="true"></span>
+Green financing secured
+</p>
 </div>
-</dl>
+<p class="text-sm text-muted">Structured the investment case and lender pitch for 210 MW of new solar capacity in East Java.</p>
+<p class="mt-auto flex items-center justify-between gap-3 border-t border-line pt-5 text-sm text-muted">
+<span>Capital raising</span>
+<span>4 months</span>
+</p>
+</article>
+<article class="flex flex-col gap-8 rounded-[28px] border border-line bg-surface p-6 sm:p-8">
+<div class="flex items-center justify-between gap-3 text-sm">
+<h3 class="font-semibold">Toko Raya</h3>
+<span class="rounded-full bg-subtle px-2.5 py-0.5 text-xs text-muted">Consumer</span>
+</div>
+<div>
+<p class="text-6xl font-semibold tracking-[-0.04em] tabular-nums sm:text-7xl">2.1x</p>
+<p class="mt-3 flex items-center gap-2.5 text-sm font-medium">
+<span class="h-0.5 w-6 rounded-full bg-primary" aria-hidden="true"></span>
+App revenue in one year
+</p>
+</div>
+<p class="text-sm text-muted">Redesigned the loyalty program and pricing tiers across 380 stores and the mobile app.</p>
+<p class="mt-auto flex items-center justify-between gap-3 border-t border-line pt-5 text-sm text-muted">
+<span>Consumer growth</span>
+<span>9 months</span>
+</p>
+</article>
 </div>
 </section>
 
-<section id="insight" class="mx-auto w-full max-w-[1320px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-insight">
-<div class="mb-10 grid gap-4 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<h2 id="konsultan-insight" class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">What leaders say after working with us</h2>
-<p class="max-w-xl text-base text-pretty text-muted">Independent reviews from the executives we advised in the last two years.</p>
+<section id="insight" class="mx-auto w-full max-w-[1240px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-insight">
+<div class="mb-12 grid gap-5 lg:mb-14 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-16 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<div>
+<p class="mb-4 flex items-center gap-2 text-sm font-medium text-muted"><span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>Client voices</p>
+<h2 id="konsultan-insight" class="text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[56px]">What leaders say after working with us</h2>
+</div>
+<p class="max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg">Independent reviews from the executives we advised in the last two years.</p>
 </div>
 <div class="grid gap-4 lg:grid-cols-[1fr_2fr] transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
 <div class="flex flex-col justify-between gap-8 rounded-[28px] bg-(--tpl-lime) p-6 text-(--tpl-lime-ink) sm:p-8">
@@ -448,13 +564,13 @@ Meet the team
 <svg class="size-5 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
 </div>
 <div>
-<p class="text-6xl font-semibold tracking-tight">4.9</p>
+<p class="text-7xl font-semibold tracking-[-0.04em]">4.9</p>
 <p class="text-sm text-(--tpl-lime-ink)/80">Average rating from 210 client reviews</p>
 </div>
 </div>
-<div class="flex flex-col justify-between gap-8 rounded-[28px] bg-subtle p-6 sm:p-10" role="region" aria-roledescription="carousel" aria-label="Client testimonials">
+<div class="flex flex-col justify-between gap-10 rounded-[28px] bg-subtle p-6 sm:p-10" role="region" aria-roledescription="carousel" aria-label="Client testimonials">
 <figure class="grid gap-8" aria-live="polite" aria-roledescription="slide" aria-label="1 of 4" x-bind:aria-label="(quoteIndex + 1) + ' of ' + quotes.length">
-<blockquote class="text-xl leading-snug font-medium tracking-tight text-pretty sm:text-2xl lg:text-3xl" x-text="'“' + quote.text + '”'">“Pranata rebuilt our credit model in six weeks. Our non-performing loans fell by a third within the year.”</blockquote>
+<blockquote class="text-xl leading-snug font-medium tracking-tight text-pretty sm:text-2xl lg:text-[32px]" x-text="'“' + quote.text + '”'">“Pranata rebuilt our credit model in six weeks. Our non-performing loans fell by a third within the year.”</blockquote>
 <figcaption class="flex items-center gap-3">
 <span class="flex size-12 items-center justify-center rounded-full bg-(--art-1) text-sm font-semibold text-(--art-3)" x-bind:class="tones[quote.tone]" aria-hidden="true" x-text="quote.initials">WS</span>
 <span>
@@ -465,10 +581,10 @@ Meet the team
 </figure>
 <div class="flex flex-wrap items-center justify-between gap-4">
 <div class="flex gap-1.5" aria-hidden="true">
-<span class="h-1.5 rounded-full transition-all duration-300" x-bind:class="quoteIndex === 0 ? 'w-6 bg-primary' : 'w-1.5 bg-faint\/40'"></span>
-<span class="h-1.5 rounded-full transition-all duration-300" x-bind:class="quoteIndex === 1 ? 'w-6 bg-primary' : 'w-1.5 bg-faint\/40'"></span>
-<span class="h-1.5 rounded-full transition-all duration-300" x-bind:class="quoteIndex === 2 ? 'w-6 bg-primary' : 'w-1.5 bg-faint\/40'"></span>
-<span class="h-1.5 rounded-full transition-all duration-300" x-bind:class="quoteIndex === 3 ? 'w-6 bg-primary' : 'w-1.5 bg-faint\/40'"></span>
+<span class="h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none" x-bind:class="quoteIndex === 0 ? 'w-6 bg-primary' : 'w-1.5 bg-ink\/25'"></span>
+<span class="h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none" x-bind:class="quoteIndex === 1 ? 'w-6 bg-primary' : 'w-1.5 bg-ink\/25'"></span>
+<span class="h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none" x-bind:class="quoteIndex === 2 ? 'w-6 bg-primary' : 'w-1.5 bg-ink\/25'"></span>
+<span class="h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none" x-bind:class="quoteIndex === 3 ? 'w-6 bg-primary' : 'w-1.5 bg-ink\/25'"></span>
 </div>
 <div class="flex items-center gap-3">
 <button type="button" class="flex size-11 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-canvas motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Previous testimonial" x-on:click="moveQuote(-1)"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg></button>
@@ -478,54 +594,85 @@ Meet the team
 </div>
 </div>
 </div>
+<div class="mt-16 grid gap-6 lg:grid-cols-[200px_1fr] lg:items-center lg:gap-10 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<p class="text-sm text-muted">Trusted by 320+ companies across Asia</p>
+<ul class="grid grid-cols-2 border-t border-l border-line sm:grid-cols-3 lg:grid-cols-6" aria-label="Selected clients">
+<li class="flex h-20 items-center justify-center gap-2 border-r border-b border-line px-3 text-sm font-semibold tracking-tight text-muted">
+<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16z" /></svg>
+Kertajaya
+</li>
+<li class="flex h-20 items-center justify-center gap-2 border-r border-b border-line px-3 text-sm font-semibold tracking-tight text-muted">
+<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5 20 19H4z" /></svg>
+Nusa Energi
+</li>
+<li class="flex h-20 items-center justify-center gap-2 border-r border-b border-line px-3 text-sm font-semibold tracking-tight text-muted">
+<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v14H5z" /></svg>
+Lintas Capital
+</li>
+<li class="flex h-20 items-center justify-center gap-2 border-r border-b border-line px-3 text-sm font-semibold tracking-tight text-muted">
+<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z" /></svg>
+Toko Raya
+</li>
+<li class="flex h-20 items-center justify-center gap-2 border-r border-b border-line px-3 text-sm font-semibold tracking-tight text-muted">
+<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9c3-3 6-3 9 0s6 3 9 0M3 15c3-3 6-3 9 0s6 3 9 0" /></svg>
+Samudra
+</li>
+<li class="flex h-20 items-center justify-center gap-2 border-r border-b border-line px-3 text-sm font-semibold tracking-tight text-muted">
+<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" /></svg>
+Bumi Agro
+</li>
+</ul>
+</div>
 </section>
 
-<section id="contact" class="mx-auto w-full max-w-[1320px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-contact">
-<div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
-<div class="transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
-<h2 id="konsultan-contact" class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">Book a free 30 minute consultation</h2>
-<p class="max-w-xl text-base text-pretty text-muted mt-5">Tell us where you want to be in three years. A partner will call you back within one business day.</p>
-<ul class="mt-8 grid gap-4">
+<section id="contact" class="mx-auto w-full max-w-[1240px] px-3 py-16 sm:px-6 lg:py-24" aria-labelledby="konsultan-contact">
+<div class="relative isolate grid gap-12 overflow-hidden rounded-[28px] bg-(--tpl-forest) p-6 text-(--tpl-snow) sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:p-14 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal>
+<div class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,color-mix(in_oklab,var(--tpl-snow)_7%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--tpl-snow)_7%,transparent)_1px,transparent_1px)] bg-size-[96px_96px] [mask-image:radial-gradient(ellipse_60%_80%_at_0%_0%,black,transparent)]" aria-hidden="true"></div>
+<div>
+<p class="mb-4 flex items-center gap-2 text-sm font-medium text-(--tpl-snow)/75"><span class="size-1.5 rounded-full bg-(--tpl-lime)" aria-hidden="true"></span>Free consultation</p>
+<h2 id="konsultan-contact" class="text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl">Start with a <em class="font-serif font-normal tracking-normal text-(--tpl-lime) italic">30 minute</em> call</h2>
+<p class="mt-5 max-w-md text-base leading-relaxed text-pretty text-(--tpl-snow)/75">Tell us where you want to be in three years. A partner will call you back within one business day.</p>
+<ul class="mt-10 grid gap-5">
 <li class="flex items-start gap-3">
 <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6" /></svg></span>
 <span>
-<span class="text-sm text-muted block">Email</span>
+<span class="block text-sm text-(--tpl-snow)/70">Email</span>
 <span class="font-medium">hello@pranata.id</span>
 </span>
 </li>
 <li class="flex items-start gap-3">
 <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" /></svg></span>
 <span>
-<span class="text-sm text-muted block">Phone</span>
+<span class="block text-sm text-(--tpl-snow)/70">Phone</span>
 <span class="font-medium">+62 21 5080 1188</span>
 </span>
 </li>
 <li class="flex items-start gap-3">
 <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12zM12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" /></svg></span>
 <span>
-<span class="text-sm text-muted block">Office</span>
+<span class="block text-sm text-(--tpl-snow)/70">Office</span>
 <span class="font-medium">Menara Astra, Jl. Jend. Sudirman Kav. 5, Jakarta</span>
 </span>
 </li>
 </ul>
 </div>
-<form class="grid gap-4 rounded-[28px] border border-line bg-surface p-5 sm:grid-cols-2 sm:p-8 transition duration-700 ease-out motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0 motion-reduce:transition-none" data-reveal novalidate aria-label="Consultation request" x-on:submit.prevent="submit()">
+<form class="grid gap-4 rounded-[24px] bg-surface p-5 text-ink sm:grid-cols-2 sm:p-8" novalidate aria-label="Consultation request" x-on:submit.prevent="submit()">
 <div class="grid gap-1.5">
-<label for="markas-input-gyAAJmcC" class="text-sm font-medium text-ink">Full name</label>
-<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-gyAAJmcC" type="text" name="name" autocomplete="name" x-model="form.name" x-bind:aria-invalid="error.field === 'name' ? 'true' : null" x-bind:aria-describedby="error.field === 'name' ? 'konsultan-form-error' : null" />
+<label for="markas-input-g2z6qHCD" class="text-sm font-medium text-ink">Full name</label>
+<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-g2z6qHCD" type="text" name="name" autocomplete="name" x-model="form.name" x-bind:aria-invalid="error.field === 'name' ? 'true' : null" x-bind:aria-describedby="error.field === 'name' ? 'konsultan-form-error' : null" />
 </div>
 <div class="grid gap-1.5">
-<label for="markas-input-snC4mgER" class="text-sm font-medium text-ink">Work email</label>
-<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-snC4mgER" type="email" name="email" autocomplete="email" placeholder="you@company.com" x-model="form.email" x-bind:aria-invalid="error.field === 'email' ? 'true' : null" x-bind:aria-describedby="error.field === 'email' ? 'konsultan-form-error' : null" />
+<label for="markas-input-kz9ip2bk" class="text-sm font-medium text-ink">Work email</label>
+<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-kz9ip2bk" type="email" name="email" autocomplete="email" placeholder="you@company.com" x-model="form.email" x-bind:aria-invalid="error.field === 'email' ? 'true' : null" x-bind:aria-describedby="error.field === 'email' ? 'konsultan-form-error' : null" />
 </div>
 <div class="grid gap-1.5">
-<label for="markas-input-qnjCJS77" class="text-sm font-medium text-ink">Company</label>
-<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-qnjCJS77" type="text" name="company" autocomplete="organization" x-model="form.company" />
+<label for="markas-input-igg8e0U3" class="text-sm font-medium text-ink">Company</label>
+<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-igg8e0U3" type="text" name="company" autocomplete="organization" x-model="form.company" />
 </div>
 <div class="grid gap-1.5">
-<label for="markas-select-TTSDyyjF" class="text-sm font-medium text-ink">Service</label>
+<label for="markas-select-Dmg7zWeK" class="text-sm font-medium text-ink">Service</label>
 <div class="relative">
-<select class="h-10 w-full cursor-pointer appearance-none rounded-md border border-line bg-surface pr-9 pl-3 text-sm text-ink transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-select-TTSDyyjF" name="service" x-model="form.service">
+<select class="h-10 w-full cursor-pointer appearance-none rounded-md border border-line bg-surface pr-9 pl-3 text-sm text-ink transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-select-Dmg7zWeK" name="service" x-model="form.service">
 <option value="">Not sure yet</option>
 <option value="Corporate finance">Corporate finance</option>
 <option value="Risk and compliance">Risk and compliance</option>
@@ -539,8 +686,8 @@ Meet the team
 </div>
 <div class="sm:col-span-2">
 <div class="grid gap-1.5">
-<label for="markas-textarea-K6Blhi3s" class="text-sm font-medium text-ink">What would you like to discuss?</label>
-<textarea class="block w-full resize-y rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-textarea-K6Blhi3s" rows="4" name="message" x-model="form.message"></textarea>
+<label for="markas-textarea-Hbyap9Qc" class="text-sm font-medium text-ink">What would you like to discuss?</label>
+<textarea class="block w-full resize-y rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-textarea-Hbyap9Qc" rows="4" name="message" x-model="form.message"></textarea>
 </div>
 </div>
 <template x-if="error.message">
@@ -557,43 +704,46 @@ Send request
 </section>
 </main>
 
-<footer class="grid gap-12 rounded-[28px] bg-(--tpl-night) px-6 pt-12 pb-6 text-(--tpl-snow) sm:px-10 lg:px-14 lg:pt-16">
-<div class="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-<div class="grid content-start gap-6">
-<p class="max-w-md text-3xl font-semibold tracking-tight text-balance sm:text-4xl">Ready to make your next bold move?</p>
-<a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-(--tpl-lime) px-5 text-sm font-semibold whitespace-nowrap text-(--tpl-lime-ink) transition-[filter] duration-150 hover:brightness-95 motion-reduce:transition-none h-12 w-fit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Contact us</a>
+<footer class="mx-auto w-full max-w-[1240px] px-3 pt-8 pb-8 sm:px-6">
+<div class="grid gap-10 border-b border-line pb-12 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+<div>
+<a href="#top" class="flex w-fit items-center gap-2.5 rounded-lg text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+<span class="flex size-9 items-center justify-center rounded-xl bg-(--tpl-lime) text-(--tpl-lime-ink)" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 20V4h6a5 5 0 0 1 0 10H7M15 20h2" /></svg></span>
+Pranata
+</a>
+<p class="mt-4 max-w-xs text-sm leading-relaxed text-muted">Independent strategy, finance, and transformation advice from Jakarta since 2009.</p>
 </div>
 <nav aria-label="Services">
 <h2 class="text-sm font-semibold">Services</h2>
 <ul class="mt-4 grid gap-2.5">
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Corporate finance</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Risk and compliance</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Energy transition</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Digital transformation</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Strategy</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Finance</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Transformation</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Energy transition</a></li>
 </ul>
 </nav>
 <nav aria-label="Company">
 <h2 class="text-sm font-semibold">Company</h2>
 <ul class="mt-4 grid gap-2.5">
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">About us</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Careers</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Partners</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Press</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">About us</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Careers</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Partners</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Press</a></li>
 </ul>
 </nav>
 <nav aria-label="Insights">
 <h2 class="text-sm font-semibold">Insights</h2>
 <ul class="mt-4 grid gap-2.5">
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Reports</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Events</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Newsletter</a></li>
-<li><a href="#top" class="rounded-sm text-sm text-(--tpl-snow)/70 hover:text-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">Podcast</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Reports</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Events</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Newsletter</a></li>
+<li><a href="#top" class="rounded-sm text-sm text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Podcast</a></li>
 </ul>
 </nav>
 </div>
-<div class="flex flex-wrap items-center justify-between gap-4 border-t border-(--tpl-snow)/15 pt-6 text-sm text-(--tpl-snow)/70">
+<div class="flex flex-wrap items-center justify-between gap-4 pt-6 text-sm text-muted">
 <p>&copy; 2026 Pranata Advisory. Jakarta, Indonesia.</p>
-<p>Built with <a href="https://markasui.pages.dev" class="rounded-sm font-medium text-(--tpl-snow) underline decoration-(--tpl-snow)/40 underline-offset-4 hover:decoration-(--tpl-snow) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime)">MarkasUI</a></p>
+<p>Built with <a href="https://markasui.pages.dev" class="rounded-sm font-medium text-ink underline decoration-line underline-offset-4 hover:decoration-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">MarkasUI</a></p>
 </div>
 </footer>
 <div
