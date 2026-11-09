@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join, resolve } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
@@ -10,6 +10,30 @@ const componentNames: string[] = JSON.parse(
     "utf8",
   ),
 ).map((item: { name: string }) => item.name);
+
+/** Welcome page yang lengkap (meta.json dengan "kind": "page" plus tiga versi), sama dengan lib/templates.ts. */
+const templatesDir = resolve(import.meta.dirname, "../../templates");
+const pascal = (slug: string) =>
+  slug.replace(/(^|-)([a-z])/g, (_, __, char: string) => char.toUpperCase());
+const welcomePages: string[] = readdirSync(templatesDir, {
+  withFileTypes: true,
+})
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .filter((slug) => {
+    const dir = join(templatesDir, slug);
+    const files = [
+      "meta.json",
+      `blade/${slug}.blade.php`,
+      `react/${pascal(slug)}.tsx`,
+      `vue/${pascal(slug)}.vue`,
+    ];
+    if (files.some((file) => !existsSync(join(dir, file)))) return false;
+    return (
+      JSON.parse(readFileSync(join(dir, "meta.json"), "utf8")).kind === "page"
+    );
+  })
+  .sort();
 
 const PAGES = [
   "/",
@@ -23,6 +47,9 @@ const PAGES = [
   "/templates",
   "/templates/larisa",
   "/id/templates/lumen",
+  "/pages",
+  "/id/pages",
+  ...welcomePages.slice(0, 1).map((slug) => `/pages/${slug}`),
   ...componentNames.map((name) => `/components/${name}`),
 ];
 
@@ -497,6 +524,71 @@ test("warna aksen template diteruskan ke pratinjau", async ({ page }) => {
     "href",
     /accent=blue/,
   );
+});
+
+test("/pages menampilkan welcome page saja, /templates hanya dashboard", async ({
+  page,
+}) => {
+  await page.goto("/pages");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pages");
+  const main = page.locator("main");
+  if (welcomePages.length === 0) {
+    await expect(main.locator("[data-template-empty]")).toBeVisible();
+  } else {
+    for (const slug of welcomePages)
+      await expect(main.locator(`a[href="/pages/${slug}"]`)).toBeVisible();
+  }
+
+  await page.goto("/templates");
+  await expect(main.locator("a[href='/templates/larisa']")).toBeVisible();
+  for (const slug of welcomePages)
+    await expect(main.locator(`a[href*="/${slug}"]`)).toHaveCount(0);
+
+  await page.goto("/id/pages");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Halaman");
+});
+
+test("menu Pages di header aktif di /pages dan detailnya", async ({ page }) => {
+  await page.goto("/pages");
+  const active = page.locator("header nav a[aria-current=page]");
+  await expect(active).toHaveText("Pages");
+  await expect(active).toHaveAttribute("href", "/pages");
+
+  await page.goto("/id/pages");
+  await expect(page.locator("header nav a[aria-current=page]")).toHaveText(
+    "Halaman",
+  );
+
+  await page.goto("/templates");
+  await expect(page.locator("header nav a[aria-current=page]")).toHaveText(
+    "Templates",
+  );
+});
+
+test("detail welcome page memuat iframe demo dan tautan lama dialihkan", async ({
+  page,
+}) => {
+  test.skip(welcomePages.length === 0, "belum ada template dengan kind page");
+  const slug = welcomePages[0]!;
+  await page.goto(`/pages/${slug}`);
+  const frame = page.locator(`iframe[data-template-frame="${slug}"]`);
+  await expect(frame).toHaveAttribute(
+    "src",
+    new RegExp(`/demo/templates/${slug}/`),
+  );
+  await expect(
+    page.frameLocator("[data-template-frame]").locator("body"),
+  ).toBeVisible();
+  await expect(page.locator("header nav a[aria-current=page]")).toHaveText(
+    "Pages",
+  );
+  await expect(page.locator("a", { hasText: "All pages" })).toHaveAttribute(
+    "href",
+    "/pages",
+  );
+
+  await page.goto(`/templates/${slug}`);
+  await expect(page).toHaveURL(new RegExp(`/pages/${slug}$`));
 });
 
 test("splash tampil sekali per sesi di landing lalu hilang", async ({

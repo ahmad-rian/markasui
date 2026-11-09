@@ -1,0 +1,266 @@
+const css =
+  "@keyframes markas-burst-spin{to{transform:rotate(360deg)}}@keyframes markas-mascot-bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}";
+
+export default function FooterRetroExample() {
+  return (
+    <footer className="@container w-full overflow-hidden rounded-3xl border border-line bg-[color-mix(in_oklab,var(--color-warning)_9%,var(--color-canvas))] text-sm text-ink **:focus-visible:outline-2 **:focus-visible:outline-offset-2 **:focus-visible:outline-primary">
+      <style>{css}</style>
+      <div className="pt-6">
+        <svg
+          aria-hidden="true"
+          className="block h-3 w-full fill-danger"
+          viewBox="0 0 120 12"
+          preserveAspectRatio="none"
+        >
+          <path d="M0 10q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0V12H0Z" />
+        </svg>
+        <div className="relative bg-danger bg-[linear-gradient(to_right,color-mix(in_oklab,var(--color-on-primary)_16%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-on-primary)_16%,transparent)_1px,transparent_1px)] bg-size-[28px_28px] px-5 pt-10 pb-12 text-on-primary @2xl:px-10">
+          <svg
+            aria-hidden="true"
+            className="absolute -top-5 right-4 size-20 animate-[markas-burst-spin_14s_linear_infinite] motion-reduce:animate-none @2xl:right-10 @2xl:size-28"
+            viewBox="0 0 100 100"
+          >
+            <polygon
+              points="50,2 57.2,13.7 68.4,5.7 70.6,19.2 83.9,16.1 80.8,29.4 94.3,31.6 86.3,42.8 98,50 86.3,57.2 94.3,68.4 80.8,70.6 83.9,83.9 70.6,80.8 68.4,94.3 57.2,86.3 50,98 42.8,86.3 31.6,94.3 29.4,80.8 16.1,83.9 19.2,70.6 5.7,68.4 13.7,57.2 2,50 13.7,42.8 5.7,31.6 19.2,29.4 16.1,16.1 29.4,19.2 31.6,5.7 42.8,13.7"
+              className="fill-primary stroke-canvas"
+              strokeWidth="3"
+              strokeLinejoin="round"
+            />
+            <text
+              x="50"
+              y="57"
+              textAnchor="middle"
+              fontSize="20"
+              fontWeight="900"
+              className="fill-on-primary"
+              style={{ rotate: "-12deg", transformOrigin: "50px 50px" }}
+            >
+              New!
+            </text>
+          </svg>
+          <div className="grid max-w-md justify-items-start gap-5">
+            <h2 className="max-w-[14ch] pr-12 text-3xl leading-[0.95] font-black tracking-tight text-balance @2xl:pr-0 @2xl:text-5xl">
+              Bite-sized UI, served fresh every week.
+            </h2>
+            <p className="max-w-sm text-base leading-relaxed">
+              Thirty minutes, one working prototype. Bring your messiest screen.
+            </p>
+            <a
+              href="/book"
+              className="mt-2 inline-flex h-14 items-center gap-2 rounded-full border-2 border-ink bg-[color-mix(in_oklab,var(--color-warning)_30%,var(--color-canvas))] px-7 text-lg font-bold text-ink shadow-[4px_4px_0_var(--color-ink)] transition-[translate,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_var(--color-ink)] motion-reduce:transition-none dark:bg-warning dark:text-canvas"
+            >
+              Book a call
+              <svg
+                className="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+          <a
+            href="/events"
+            className="group relative mt-10 grid h-20 w-56 place-items-center text-ink transition-[rotate] duration-200 ease-out hover:rotate-0! motion-reduce:transition-none @2xl:absolute @2xl:right-12 @2xl:bottom-14 @2xl:mt-0 dark:text-canvas"
+            style={{ rotate: "7deg" }}
+          >
+            <svg
+              aria-hidden="true"
+              className="absolute inset-0 size-full overflow-visible drop-shadow-[3px_3px_0_var(--color-ink)]"
+              viewBox="0 0 200 80"
+            >
+              <path
+                d="M12 0H188a12 12 0 0 0 12 12V30a10 10 0 0 0 0 20V68a12 12 0 0 0-12 12H12A12 12 0 0 0 0 68V50a10 10 0 0 0 0-20V12A12 12 0 0 0 12 0Z"
+                className="fill-success stroke-ink"
+                strokeWidth="2"
+              />
+              <path
+                d="M150 10v60"
+                className="stroke-ink"
+                strokeWidth="2"
+                strokeDasharray="4 4"
+              />
+            </svg>
+            <span className="relative grid -translate-x-[12%] text-center leading-tight">
+              <span className="text-sm font-black">Reserve your seat</span>
+              <span className="text-xs font-semibold">Fri, 19:00 WIB</span>
+            </span>
+          </a>
+        </div>
+        <svg
+          aria-hidden="true"
+          className="block h-3 w-full rotate-180 fill-danger"
+          viewBox="0 0 120 12"
+          preserveAspectRatio="none"
+        >
+          <path d="M0 10q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0q5 -10 10 0V12H0Z" />
+        </svg>
+      </div>
+      <div className="px-5 pt-8 pb-5 @2xl:px-10">
+        <div
+          aria-hidden="true"
+          className="flex items-end gap-[2cqw] select-none"
+        >
+          <p className="text-[15cqw] leading-[0.8] font-black tracking-tighter">
+            markasui
+          </p>
+          <svg
+            className="mb-[1cqw] w-[11cqw] shrink-0 origin-bottom animate-[markas-mascot-bob_3s_ease-in-out_infinite] motion-reduce:animate-none"
+            viewBox="0 0 100 100"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M30 88v8M70 88v8" className="stroke-ink" strokeWidth="6" />
+            <path
+              d="M50 8c24 0 40 18 40 44s-14 38-40 38-40-12-40-38S26 8 50 8z"
+              className="fill-success stroke-ink"
+              strokeWidth="5"
+            />
+            <circle
+              cx="36"
+              cy="44"
+              r="9"
+              className="fill-canvas stroke-ink"
+              strokeWidth="4"
+            />
+            <circle
+              cx="64"
+              cy="44"
+              r="9"
+              className="fill-canvas stroke-ink"
+              strokeWidth="4"
+            />
+            <circle cx="38" cy="46" r="3.5" className="fill-ink" />
+            <circle cx="66" cy="46" r="3.5" className="fill-ink" />
+            <path
+              d="M40 64c6 6 14 6 20 0"
+              fill="none"
+              className="stroke-ink"
+              strokeWidth="4"
+            />
+            <path d="M50 8V0" className="stroke-ink" strokeWidth="4" />
+            <circle
+              cx="50"
+              cy="0"
+              r="1"
+              className="fill-danger stroke-ink"
+              strokeWidth="4"
+            />
+          </svg>
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t-2 border-ink pt-5">
+          <div className="grid gap-1">
+            <p className="font-semibold">© 2026 MarkasUI. Made in Jakarta.</p>
+            <nav aria-label="Legal">
+              <ul className="flex gap-4 text-xs text-muted">
+                <li>
+                  <a
+                    href="/privacy"
+                    className="rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none"
+                  >
+                    Privacy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/terms"
+                    className="rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none"
+                  >
+                    Terms
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <ul aria-label="Social media" className="flex gap-2.5">
+            <li>
+              <a
+                href="https://github.com/markasui"
+                aria-label="GitHub"
+                className="inline-flex size-10 items-center justify-center rounded-full border-2 border-ink bg-canvas shadow-[3px_3px_0_var(--color-ink)] transition-[translate,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_var(--color-ink)] motion-reduce:transition-none"
+              >
+                <svg
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4M9 18c-4.51 2-5-2-7-2" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://x.com/markasui"
+                aria-label="X"
+                className="inline-flex size-10 items-center justify-center rounded-full border-2 border-ink bg-canvas shadow-[3px_3px_0_var(--color-ink)] transition-[translate,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_var(--color-ink)] motion-reduce:transition-none"
+              >
+                <svg
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 4l11.7 16H20L8.3 4H4zM4 20l6.8-6.8M13.2 10.8 20 4" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://instagram.com/markasui"
+                aria-label="Instagram"
+                className="inline-flex size-10 items-center justify-center rounded-full border-2 border-ink bg-canvas shadow-[3px_3px_0_var(--color-ink)] transition-[translate,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_var(--color-ink)] motion-reduce:transition-none"
+              >
+                <svg
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zM16 11.4A4 4 0 1 1 12.6 8 4 4 0 0 1 16 11.4zM17.5 6.5h.01" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://youtube.com/@markasui"
+                aria-label="YouTube"
+                className="inline-flex size-10 items-center justify-center rounded-full border-2 border-ink bg-canvas shadow-[3px_3px_0_var(--color-ink)] transition-[translate,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_var(--color-ink)] motion-reduce:transition-none"
+              >
+                <svg
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M2.5 17a24 24 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24 24 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17M10 15l5-3-5-3z" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  );
+}

@@ -1,0 +1,21 @@
+---
+import "../../../styles/global.css";
+import TemplateDetail from "../../../components/templates/TemplateDetail.astro";
+import { LOCALES, toLocale } from "../../../lib/i18n";
+import { getTemplatesByKind } from "../../../lib/templates";
+
+/** Detail welcome page (template dengan "kind": "page"), memakai halaman detail yang sama dengan dashboard. */
+export function getStaticPaths() {
+  return LOCALES.flatMap((locale) =>
+    getTemplatesByKind("page").map((template) => ({
+      params: { lang: locale === "en" ? undefined : locale, slug: template.name },
+      props: { template },
+    })),
+  );
+}
+
+const { template } = Astro.props;
+const locale = toLocale(Astro.params.lang);
+---
+
+<TemplateDetail template={template} locale={locale} />

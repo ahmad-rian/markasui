@@ -4,8 +4,12 @@ import type { Framework } from "@markasui/registry/schema";
 import type { Locale } from "./i18n";
 import { REPO_ROOT } from "./paths";
 
+/** dashboard: aplikasi multi-halaman (menu Templates). page: welcome/landing page siap pakai (menu Pages). */
+export type TemplateKind = "dashboard" | "page";
+
 export type TemplateMeta = {
   name: string;
+  kind: TemplateKind;
   title: string;
   description: Record<Locale, string>;
   components: string[];
@@ -38,7 +42,14 @@ export function getTemplates(): Template[] {
         Object.values(files).some((file) => !existsSync(join(dir, file)))
       )
         return [];
-      const meta = JSON.parse(readFileSync(metaPath, "utf8")) as TemplateMeta;
+      const raw = JSON.parse(readFileSync(metaPath, "utf8")) as Omit<
+        TemplateMeta,
+        "kind"
+      > & { kind?: unknown };
+      const meta: TemplateMeta = {
+        ...raw,
+        kind: raw.kind === "page" ? "page" : "dashboard",
+      };
       const sources = Object.fromEntries(
         (Object.entries(files) as [Framework, string][]).map(([fw, file]) => [
           fw,
@@ -55,3 +66,18 @@ export function getTemplates(): Template[] {
     })
     .sort((a, b) => a.title.localeCompare(b.title));
 }
+
+/** Template berdasarkan jenis: "dashboard" untuk /templates, "page" untuk /pages. */
+export const getTemplatesByKind = (kind: TemplateKind): Template[] =>
+  getTemplates().filter((template) => template.kind === kind);
+
+/** Bagian path daftar per jenis, tanpa prefix locale. */
+export const KIND_BASE: Record<TemplateKind, "/templates" | "/pages"> = {
+  dashboard: "/templates",
+  page: "/pages",
+};
+
+/** Path detail kanonik (tanpa prefix locale): /pages/<slug> untuk page, /templates/<slug> untuk dashboard. */
+export const templateDetailPath = (
+  template: Pick<TemplateMeta, "name" | "kind">,
+) => `${KIND_BASE[template.kind]}/${template.name}`;

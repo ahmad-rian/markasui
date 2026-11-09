@@ -21,6 +21,7 @@ const ACTIVE: Record<string, (path: string) => boolean> = {
   home: (p) => p === "/",
   components: (p) => p.startsWith("/components"),
   templates: (p) => p.startsWith("/templates"),
+  pages: (p) => p === "/pages" || p.startsWith("/pages/"),
   mcp: (p) => p === "/docs/mcp",
   docs: (p) => p.startsWith("/docs") && p !== "/docs/mcp",
 };

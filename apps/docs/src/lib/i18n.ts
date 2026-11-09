@@ -45,6 +45,7 @@ const en = {
     docs: "Docs",
     components: "Components",
     templates: "Templates",
+    pages: "Pages",
     mcp: "MCP",
     main: "Main",
     mainMobile: "Main mobile",
@@ -77,6 +78,7 @@ const en = {
     start: "Guide",
     components: "Components",
     templates: "Templates",
+    pages: "Pages",
     fresh: "new",
     updated: "updated",
   },
@@ -180,6 +182,10 @@ const en = {
     templatesText:
       "Every template ships in Blade, React, and Vue. Open one and click around.",
     templatesLink: "All templates",
+    pagesTitle: ["Welcome pages,", "ready to ship."],
+    pagesText:
+      "Complete landing pages with a navbar, hero, sections, and footer. Swap the copy and launch.",
+    pagesLink: "All pages",
     componentsTitle: (n: number) => [`${n} components,`, "one registry."],
     componentsText:
       "Grouped the way you look for them. Each page has a live preview, props, and the code for all three frameworks.",
@@ -235,6 +241,17 @@ const en = {
     source: "View source on GitHub",
     back: "All templates",
   },
+  pages: {
+    title: "Pages",
+    subtitle:
+      "Ready-made welcome and landing pages built from MarkasUI components, in Blade, React, and Vue.",
+    empty: "New pages are on the way. Check back soon.",
+    back: "All pages",
+    componentsText: (n: number) =>
+      `${n} MarkasUI components make up this page. Open one to see its props and variants.`,
+    installText:
+      "Add every component this page uses, then copy the page itself from GitHub.",
+  },
   notFound: {
     eyebrow: "Error 404",
     title: "This page wandered off",
@@ -272,6 +289,7 @@ const id: Dictionary = {
     docs: "Docs",
     components: "Komponen",
     templates: "Template",
+    pages: "Halaman",
     mcp: "MCP",
     main: "Utama",
     mainMobile: "Utama seluler",
@@ -304,6 +322,7 @@ const id: Dictionary = {
     start: "Panduan",
     components: "Komponen",
     templates: "Template",
+    pages: "Halaman",
     fresh: "baru",
     updated: "diperbarui",
   },
@@ -411,6 +430,10 @@ const id: Dictionary = {
     templatesText:
       "Setiap template tersedia dalam Blade, React, dan Vue. Buka salah satunya dan coba langsung.",
     templatesLink: "Semua template",
+    pagesTitle: ["Halaman sambutan,", "siap rilis."],
+    pagesText:
+      "Landing page lengkap dengan navbar, hero, section, dan footer. Ganti teksnya lalu luncurkan.",
+    pagesLink: "Semua halaman",
     componentsTitle: (n: number) => [`${n} komponen,`, "satu registry."],
     componentsText:
       "Dikelompokkan sesuai cara Anda mencarinya. Setiap halaman punya preview langsung, props, dan kode untuk ketiga framework.",
@@ -465,6 +488,17 @@ const id: Dictionary = {
       "Tambahkan semua komponen yang dipakai template ini, lalu salin halamannya dari GitHub.",
     source: "Lihat source di GitHub",
     back: "Semua template",
+  },
+  pages: {
+    title: "Halaman",
+    subtitle:
+      "Welcome page dan landing page siap pakai yang disusun dari komponen MarkasUI, dalam Blade, React, dan Vue.",
+    empty: "Halaman baru sedang disiapkan. Kunjungi lagi nanti.",
+    back: "Semua halaman",
+    componentsText: (n: number) =>
+      `Halaman ini disusun dari ${n} komponen MarkasUI. Buka salah satunya untuk melihat props dan variasinya.`,
+    installText:
+      "Tambahkan semua komponen yang dipakai halaman ini, lalu salin halamannya dari GitHub.",
   },
   notFound: {
     eyebrow: "Error 404",

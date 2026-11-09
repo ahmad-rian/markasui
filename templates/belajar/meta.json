@@ -1,0 +1,11 @@
+{
+  "name": "belajar",
+  "kind": "page",
+  "title": "Belajar",
+  "description": {
+    "en": "Welcome page for Benak, an online psychology course platform in bright blue and lime: a hero with a tilted illustrated photo card, lime blob, and a small mascot, a blue learning tracks section with paper clipped cards that filter the course grid, course cards with ratings and Rupiah prices that open a details modal, a reviews slider, FAQ, and a newsletter form with a toast.",
+    "id": "Halaman sambutan untuk Benak, platform kursus psikologi online berwarna biru cerah dan lime: hero dengan kartu foto ilustrasi miring, blob lime, dan maskot kecil, section biru jalur belajar berisi kartu berklip kertas yang menyaring grid kursus, kartu kursus dengan rating dan harga Rupiah yang membuka modal detail, slider testimoni, FAQ, dan form newsletter dengan toast."
+  },
+  "components": ["input", "modal", "toast"],
+  "addedAt": "2026-11-09"
+}

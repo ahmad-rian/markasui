@@ -1,0 +1,11 @@
+{
+  "name": "studio",
+  "title": "Studio",
+  "kind": "page",
+  "description": {
+    "en": "Product designer portfolio on lined notebook paper: pill navbar with coloured tabs and a mobile menu, a pixel name box with sticky notes, a what's up section with taped polaroids and skill tags, folder style case studies with a filter and a case study modal, a playground grid, and a contact form with validation and a toast.",
+    "id": "Portofolio desainer produk di atas kertas buku bergaris: navbar pill dengan tab berwarna dan menu mobile, kotak nama piksel dengan sticky note, bagian what's up dengan polaroid berselotip dan tag keahlian, studi kasus bergaya map dengan filter dan modal studi kasus, grid playground, serta form kontak dengan validasi dan toast."
+  },
+  "components": ["button", "input", "modal", "textarea", "toast"],
+  "addedAt": "2026-11-09"
+}

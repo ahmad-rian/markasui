@@ -1,0 +1,18 @@
+{
+  "name": "pipeline",
+  "kind": "dashboard",
+  "title": "Pipeline",
+  "description": {
+    "en": "Workspace CRM in clean grey with five pages: a workspace with a clickable schedule timeline, new lead cards with interest filters and a detail drawer, day tasks with status menus, and a live call panel with a summary, plus searchable leads, a pipeline board, a week calendar, and messages.",
+    "id": "Ruang kerja CRM bernuansa abu bersih dengan lima halaman: workspace berisi timeline jadwal yang bisa diklik, kartu lead baru dengan filter minat dan drawer detail, tugas harian dengan menu status, serta panel panggilan langsung dengan ringkasan, ditambah daftar lead yang bisa dicari, papan pipeline, kalender mingguan, dan pesan."
+  },
+  "components": [
+    "avatar",
+    "button",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "toast"
+  ],
+  "addedAt": "2026-11-09"
+}

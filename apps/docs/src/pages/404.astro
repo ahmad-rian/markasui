@@ -13,7 +13,7 @@ import { DOC_SLUGS } from "../lib/site";
  */
 const components = (await getComponents()).map((item) => ({ path: `/components/${item.name}`, title: item.title }));
 const docs = DOC_SLUGS.map((slug) => ({ path: `/docs/${slug}`, title: t("en").docsNav[slug] }));
-const pages = [...components, ...docs, { path: "/templates", title: "Templates" }];
+const pages = [...components, ...docs, { path: "/templates", title: "Templates" }, { path: "/pages", title: "Pages" }];
 const copy = Object.fromEntries(LOCALES.map((locale) => [locale, t(locale).notFound]));
 ---
 

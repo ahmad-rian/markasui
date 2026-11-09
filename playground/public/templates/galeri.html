@@ -1,0 +1,687 @@
+<div
+class="min-h-dvh bg-(--tpl-paper) text-ink bg-[radial-gradient(60%_40%_at_50%_0%,var(--color-surface),transparent)] bg-no-repeat [--tpl-paper:#f3f3f0] dark:[--tpl-paper:#111113] [--tpl-tag-a:#b23a1d] [--tpl-tag-b:#2b4bc4] [--tpl-on-tag:#ffffff] dark:[--tpl-tag-a:#b23a1d] dark:[--tpl-tag-b:#2b4bc4] [--art-coral:#f07652] [--art-sun:#f6c34c] [--art-sky:#6ea8ea] [--art-mint:#5fc49f] [--art-violet:#8f78e0] [--art-rose:#ea7fa4] [--art-night:#1d2140] [--art-cream:#fbf1dc] [--art-deep:#1f5a48] [--art-plum:#4a2f7a] dark:[--art-coral:#e06a48] dark:[--art-sun:#e8b443] dark:[--art-sky:#6299d8] dark:[--art-mint:#56b08f] dark:[--art-violet:#8370cf] dark:[--art-rose:#d97396] dark:[--art-night:#171a33] dark:[--art-cream:#efe3c8] dark:[--art-deep:#1b4f40] dark:[--art-plum:#41296b] [--tpl-coral-1:#fde4da] [--tpl-coral-3:#8a2c12] [--tpl-sun-1:#fdf0c9] [--tpl-sun-3:#7a5200] [--tpl-sky-1:#deebfb] [--tpl-sky-3:#1d4677] [--tpl-mint-1:#dcf3ea] [--tpl-mint-3:#135a44] [--tpl-violet-1:#ebe6fb] [--tpl-violet-3:#45358a] [--tpl-rose-1:#fbe3ec] [--tpl-rose-3:#8a2246] dark:[--tpl-coral-1:#2c1b15] dark:[--tpl-coral-3:#f3b199] dark:[--tpl-sun-1:#2a2412] dark:[--tpl-sun-3:#f2cb6f] dark:[--tpl-sky-1:#162330] dark:[--tpl-sky-3:#a8c8ea] dark:[--tpl-mint-1:#13251f] dark:[--tpl-mint-3:#9dd6cc] dark:[--tpl-violet-1:#1e1a2d] dark:[--tpl-violet-3:#c2b5f0] dark:[--tpl-rose-1:#2b181b] dark:[--tpl-rose-3:#f0b2ba]"
+x-data="{
+menuOpen: false,
+active: 3,
+count: 8,
+artworks: JSON.parse('[{\u0022title\u0022:\u0022Sunset over Bromo\u0022,\u0022artist\u0022:\u0022Dewi Lestari\u0022,\u0022price\u0022:\u0022Rp4.200.000\u0022,\u0022art\u0022:0},{\u0022title\u0022:\u0022Tide Study\u0022,\u0022artist\u0022:\u0022Bayu Pratama\u0022,\u0022price\u0022:\u0022Rp2.750.000\u0022,\u0022art\u0022:1},{\u0022title\u0022:\u0022Kawung Bloom\u0022,\u0022artist\u0022:\u0022Sekar Ayu\u0022,\u0022price\u0022:\u0022Rp3.100.000\u0022,\u0022art\u0022:2},{\u0022title\u0022:\u0022Quiet Hills\u0022,\u0022artist\u0022:\u0022Rizky Ramadhan\u0022,\u0022price\u0022:\u0022Rp5.400.000\u0022,\u0022art\u0022:3},{\u0022title\u0022:\u0022Market at Noon\u0022,\u0022artist\u0022:\u0022Putri Maharani\u0022,\u0022price\u0022:\u0022Rp1.900.000\u0022,\u0022art\u0022:4},{\u0022title\u0022:\u0022Orbit No. 7\u0022,\u0022artist\u0022:\u0022Galih Saputra\u0022,\u0022price\u0022:\u0022Rp6.800.000\u0022,\u0022art\u0022:5},{\u0022title\u0022:\u0022Tegallalang\u0022,\u0022artist\u0022:\u0022Made Wirawan\u0022,\u0022price\u0022:\u0022Rp3.650.000\u0022,\u0022art\u0022:6},{\u0022title\u0022:\u0022Night Ferry\u0022,\u0022artist\u0022:\u0022Nadia Kusuma\u0022,\u0022price\u0022:\u0022Rp4.900.000\u0022,\u0022art\u0022:7}]'),
+filter: 'All',
+following: [],
+yearly: false,
+email: '',
+emailError: '',
+dragStart: null,
+dragged: false,
+go(index) {
+this.active = Math.min(this.count - 1, Math.max(0, index));
+},
+cardStyle(offset) {
+return { '--off': offset, '--lift': offset === 0 ? '-24px' : '0px', zIndex: 10 - Math.abs(offset) };
+},
+onPointerUp(event) {
+if (this.dragStart === null) return;
+const delta = event.clientX - this.dragStart;
+this.dragStart = null;
+if (Math.abs(delta) < 40) return;
+this.dragged = true;
+this.go(this.active + (delta < 0 ? 1 : -1));
+},
+onStageKey(event) {
+if (event.key === 'ArrowRight') this.go(this.active + 1);
+else if (event.key === 'ArrowLeft') this.go(this.active - 1);
+else return;
+event.preventDefault();
+},
+toggleFollow(id, name) {
+const isFollowing = this.following.includes(id);
+this.following = isFollowing ? this.following.filter((item) => item !== id) : [...this.following, id];
+if (!isFollowing) this.notify('You follow ' + name, 'New works will show up in your weekly drop.');
+},
+choosePlan(name) {
+this.notify(name + ' plan selected', 'Billed ' + (this.yearly ? 'yearly' : 'monthly') + '. You can switch any time.');
+},
+subscribe() {
+const value = this.email.trim();
+if (!new RegExp('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$').test(value)) {
+this.emailError = 'Enter a valid email address, like you@studio.id.';
+return;
+}
+this.emailError = '';
+this.email = '';
+this.notify('You are on the list', 'The weekly drop will reach ' + value + ' every Monday.');
+},
+notify(title, description) {
+this.$dispatch('markas-toast', { title, description, variant: 'success' });
+},
+}"
+x-init="
+
+const items = $el.querySelectorAll('[data-reveal]');
+if (!('IntersectionObserver' in window)) {
+items.forEach((item) => item.setAttribute('data-in', ''));
+} else {
+const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+if (!entry.isIntersecting) return;
+entry.target.setAttribute('data-in', '');
+observer.unobserve(entry.target);
+}), { rootMargin: '0px 0px -10% 0px' });
+items.forEach((item) => observer.observe(item));
+}
+"
+>
+<style>@keyframes galeri-drift{to{transform:translate(28px,16px)}}@keyframes galeri-drift-b{to{transform:translate(-26px,-14px)}}</style>
+<header class="sticky top-0 z-40 border-b border-line/60 bg-(--tpl-paper)/85 backdrop-blur" x-on:keydown.escape="menuOpen = false">
+<div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 lg:px-8 relative">
+<a href="#top" class="flex items-center gap-2 rounded-md text-base font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+<span class="flex size-7 items-center justify-center rounded-full bg-ink text-(--tpl-paper)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.5-1-2.6 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2ZM7.5 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm3-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" /></svg></span>
+Sanggar
+</a>
+<nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
+<a href="#how" class="rounded-full px-3 py-1.5 text-sm text-muted transition-colors duration-150 hover:bg-surface hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Get Started</a>
+<a href="#categories" class="rounded-full px-3 py-1.5 text-sm text-muted transition-colors duration-150 hover:bg-surface hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Create strategy</a>
+<a href="#pricing" class="rounded-full px-3 py-1.5 text-sm text-muted transition-colors duration-150 hover:bg-surface hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Pricing</a>
+<a href="#contact" class="rounded-full px-3 py-1.5 text-sm text-muted transition-colors duration-150 hover:bg-surface hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Contact</a>
+<a href="#artists" class="rounded-full px-3 py-1.5 text-sm text-muted transition-colors duration-150 hover:bg-surface hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Solution</a>
+<a href="#faq" class="rounded-full px-3 py-1.5 text-sm text-muted transition-colors duration-150 hover:bg-surface hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">E-Commerce</a>
+</nav>
+<div class="flex items-center gap-1">
+<a href="/login" class="inline-flex size-9 items-center justify-center rounded-full text-ink transition-colors duration-150 hover:bg-surface motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Sign in"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" /></svg></a>
+<button type="button" class="inline-flex size-9 items-center justify-center rounded-full text-ink transition-colors duration-150 hover:bg-surface motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Open menu" x-bind:aria-label="menuOpen ? 'Close menu' : 'Open menu'" aria-expanded="false" x-bind:aria-expanded="menuOpen ? 'true' : 'false'" aria-controls="galeri-menu" x-on:click="menuOpen = !menuOpen">
+<span x-show="!menuOpen"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg></span>
+<span x-show="menuOpen" x-cloak><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></span>
+</button>
+</div>
+<template x-if="menuOpen">
+<nav id="galeri-menu" aria-label="Menu" class="absolute inset-x-4 top-full mt-2 grid gap-1 rounded-2xl border border-line bg-surface p-2 shadow-overlay lg:right-8 lg:left-auto lg:w-64">
+<a href="#how" class="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Get Started</a>
+<a href="#categories" class="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Create strategy</a>
+<a href="#pricing" class="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Pricing</a>
+<a href="#contact" class="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Contact</a>
+<a href="#artists" class="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Solution</a>
+<a href="#faq" class="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">E-Commerce</a>
+</nav>
+</template>
+</div>
+</header>
+
+<main id="top">
+<section aria-labelledby="galeri-title" class="overflow-x-clip pt-14 text-center sm:pt-20">
+<p class="mx-auto inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted"><span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span>1,240 new works from Indonesian artists this month</p>
+<h1 id="galeri-title" class="mx-auto mt-5 max-w-4xl px-4 text-5xl leading-[1.02] font-semibold tracking-[-0.045em] text-balance sm:text-7xl lg:text-8xl">A place to display your masterpiece.</h1>
+<p class="mx-auto mt-5 max-w-xl px-4 text-base text-pretty text-muted sm:text-lg">Sanggar is a marketplace where painters, illustrators, and printmakers show their work, find collectors, and get paid in Rupiah.</p>
+<div class="mt-7 flex flex-wrap items-center justify-center gap-3 px-4">
+<a href="#pricing" class="inline-flex h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium whitespace-nowrap transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary bg-primary text-on-primary hover:bg-primary-strong">Join for Rp149k/mo</a>
+<a href="#how" class="inline-flex h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium whitespace-nowrap transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary border border-line bg-surface text-ink hover:bg-subtle">Read more</a>
+</div>
+
+<div class="relative mx-auto mt-4 h-[380px] max-w-[1440px] cursor-grab touch-pan-y overflow-hidden select-none [--fan-r:900px] [--fan-step:13deg] active:cursor-grabbing sm:h-[540px] sm:[--fan-r:1300px] sm:[--fan-step:10deg] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" role="region" aria-roledescription="carousel" aria-label="Featured artworks" tabindex="0" x-on:keydown="onStageKey($event)" x-on:pointerdown="dragStart = $event.clientX; dragged = false" x-on:pointerup="onPointerUp($event)" x-on:pointercancel="dragStart = null">
+<ul class="absolute inset-0">
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(0 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: -3; --lift: 0px; z-index: 7;" x-bind:style="cardStyle(0 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 0 ? null : 'true'" aria-roledescription="slide" aria-label="1 of 8" x-bind:data-active="active === 0 ? '' : null" x-on:click="if (!dragged) go(0)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[radial-gradient(circle_at_50%_56%,var(--art-sun)_0_15%,transparent_16%),radial-gradient(130%_55%_at_50%_100%,var(--art-plum)_0_48%,transparent_49%),linear-gradient(180deg,var(--art-coral),var(--art-rose)_55%,var(--art-violet))]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Sunset over Bromo</p>
+<p class="truncate text-xs text-muted">Dewi Lestari</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp4.200.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(1 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: -2; --lift: 0px; z-index: 8;" x-bind:style="cardStyle(1 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 1 ? null : 'true'" aria-roledescription="slide" aria-label="2 of 8" x-bind:data-active="active === 1 ? '' : null" x-on:click="if (!dragged) go(1)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[repeating-radial-gradient(circle_at_0%_100%,var(--art-sky)_0_14px,var(--art-cream)_14px_28px)]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Tide Study</p>
+<p class="truncate text-xs text-muted">Bayu Pratama</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp2.750.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(2 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: -1; --lift: 0px; z-index: 9;" x-bind:style="cardStyle(2 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 2 ? null : 'true'" aria-roledescription="slide" aria-label="3 of 8" x-bind:data-active="active === 2 ? '' : null" x-on:click="if (!dragged) go(2)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[radial-gradient(circle,var(--art-sun)_0_5px,transparent_6px),conic-gradient(from_45deg,var(--art-plum)_0_25%,var(--art-coral)_0_50%,var(--art-plum)_0_75%,var(--art-coral)_0)] bg-size-[36px_36px]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Kawung Bloom</p>
+<p class="truncate text-xs text-muted">Sekar Ayu</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp3.100.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(3 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: 0; --lift: -24px; z-index: 10;" x-bind:style="cardStyle(3 - active)"  x-bind:aria-hidden="active === 3 ? null : 'true'" aria-roledescription="slide" aria-label="4 of 8" x-bind:data-active="active === 3 ? '' : null" x-on:click="if (!dragged) go(3)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[radial-gradient(90%_50%_at_20%_100%,var(--art-deep)_0_60%,transparent_61%),radial-gradient(80%_45%_at_85%_100%,var(--art-mint)_0_70%,transparent_71%),radial-gradient(circle_at_70%_25%,var(--art-cream)_0_10%,transparent_11%),linear-gradient(180deg,var(--art-sky),var(--art-cream))]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Quiet Hills</p>
+<p class="truncate text-xs text-muted">Rizky Ramadhan</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp5.400.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(4 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: 1; --lift: 0px; z-index: 9;" x-bind:style="cardStyle(4 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 4 ? null : 'true'" aria-roledescription="slide" aria-label="5 of 8" x-bind:data-active="active === 4 ? '' : null" x-on:click="if (!dragged) go(4)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[repeating-linear-gradient(135deg,var(--art-sun)_0_18px,var(--art-rose)_18px_36px,var(--art-cream)_36px_54px)]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Market at Noon</p>
+<p class="truncate text-xs text-muted">Putri Maharani</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp1.900.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(5 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: 2; --lift: 0px; z-index: 8;" x-bind:style="cardStyle(5 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 5 ? null : 'true'" aria-roledescription="slide" aria-label="6 of 8" x-bind:data-active="active === 5 ? '' : null" x-on:click="if (!dragged) go(5)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[radial-gradient(circle,var(--art-sun)_0_17%,transparent_18%),repeating-conic-gradient(from_0deg,var(--art-violet)_0_15deg,var(--art-plum)_15deg_30deg)]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Orbit No. 7</p>
+<p class="truncate text-xs text-muted">Galih Saputra</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp6.800.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(6 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: 3; --lift: 0px; z-index: 7;" x-bind:style="cardStyle(6 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 6 ? null : 'true'" aria-roledescription="slide" aria-label="7 of 8" x-bind:data-active="active === 6 ? '' : null" x-on:click="if (!dragged) go(6)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[repeating-radial-gradient(ellipse_at_50%_140%,var(--art-mint)_0_16px,var(--art-deep)_16px_20px,var(--art-cream)_20px_36px)]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Tegallalang</p>
+<p class="truncate text-xs text-muted">Made Wirawan</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp3.650.000</p>
+</div>
+</li>
+<li class="absolute top-16 left-1/2 -ml-20 w-40 origin-[50%_var(--fan-r)] rounded-[1.75rem] bg-surface p-2 text-left shadow-overlay transition-[transform,opacity] duration-500 ease-out [transform:rotate(calc(var(--off)*var(--fan-step)))_translateY(var(--lift))] motion-reduce:transition-none sm:top-20 sm:-ml-26 sm:w-52" x-bind:class="Math.abs(7 - active) > 4 && 'pointer-events-none opacity-0'" style="--off: 4; --lift: 0px; z-index: 6;" x-bind:style="cardStyle(7 - active)"  aria-hidden="true"  x-bind:aria-hidden="active === 7 ? null : 'true'" aria-roledescription="slide" aria-label="8 of 8" x-bind:data-active="active === 7 ? '' : null" x-on:click="if (!dragged) go(7)">
+<div class="aspect-[4/5] rounded-[1.35rem] bg-[radial-gradient(circle_at_72%_26%,var(--art-cream)_0_9%,transparent_10%),radial-gradient(70%_30%_at_30%_100%,var(--art-coral)_0_50%,transparent_51%),linear-gradient(180deg,var(--art-night),var(--art-plum))]" aria-hidden="true"></div>
+<div class="grid gap-1 px-1.5 pt-2.5 pb-1 sm:flex sm:items-end sm:justify-between sm:gap-2">
+<div class="min-w-0">
+<p class="truncate text-sm font-medium">Night Ferry</p>
+<p class="truncate text-xs text-muted">Nadia Kusuma</p>
+</div>
+<p class="shrink-0 text-xs font-semibold">Rp4.900.000</p>
+</div>
+</li>
+</ul>
+<div class="pointer-events-none absolute z-30 flex items-start motion-reduce:animate-none top-6 left-[6%] animate-[galeri-drift_9s_ease-in-out_infinite_alternate] sm:top-10 sm:left-[24%]" aria-hidden="true">
+<svg class="size-5 fill-(--tpl-tag-a)" viewBox="0 0 20 20"><path d="M2 2l7 17 2.6-7.4L19 9z" /></svg>
+<span class="mt-4 -ml-1 rounded-full px-3 py-1 text-sm font-medium text-(--tpl-on-tag) bg-(--tpl-tag-a)">@coplin</span>
+</div>
+<div class="pointer-events-none absolute z-30 flex items-start motion-reduce:animate-none top-[58%] right-[6%] animate-[galeri-drift-b_11s_ease-in-out_infinite_alternate] sm:top-[34%] sm:right-[22%]" aria-hidden="true">
+<svg class="size-5 fill-(--tpl-tag-b)" viewBox="0 0 20 20"><path d="M2 2l7 17 2.6-7.4L19 9z" /></svg>
+<span class="mt-4 -ml-1 rounded-full px-3 py-1 text-sm font-medium text-(--tpl-on-tag) bg-(--tpl-tag-b)">@ercobs</span>
+</div>
+</div>
+<div class="relative z-10 mx-auto -mt-6 flex max-w-md items-center justify-between gap-4 px-4 sm:-mt-10">
+<button type="button" class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Previous artwork" x-bind:disabled="active === 0" x-on:click="go(active - 1)"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+<p class="min-w-0 text-center" aria-live="polite" data-now="">
+<span class="block truncate text-sm font-medium" x-text="artworks[active].title">Quiet Hills</span>
+<span class="block truncate text-xs text-muted" x-text="artworks[active].artist + ', ' + (active + 1) + ' of ' + count">Rizky Ramadhan, 4 of 8</span>
+</p>
+<button type="button" class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Next artwork" x-bind:disabled="active === count - 1" x-on:click="go(active + 1)"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
+</div>
+</section>
+
+<section id="categories" aria-labelledby="galeri-categories" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28">
+<div class="mx-auto max-w-2xl text-center transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<h2 id="galeri-categories" class="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-5xl">Every medium has a room</h2>
+<p class="mt-4 text-base text-pretty text-muted">Collectors browse by the way a work was made. List yours where the right people already look.</p>
+</div>
+<ul class="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6 transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<li class="grid gap-3 rounded-3xl border border-line bg-surface p-2.5 pb-4">
+<div class="aspect-square rounded-2xl bg-[radial-gradient(circle_at_50%_56%,var(--art-sun)_0_15%,transparent_16%),radial-gradient(130%_55%_at_50%_100%,var(--art-plum)_0_48%,transparent_49%),linear-gradient(180deg,var(--art-coral),var(--art-rose)_55%,var(--art-violet))]" aria-hidden="true"></div>
+<div>
+<p class="px-1.5 text-sm font-medium">Painting</p>
+<p class="px-1.5 text-xs text-muted">2,340 works</p>
+</div>
+</li>
+<li class="grid gap-3 rounded-3xl border border-line bg-surface p-2.5 pb-4">
+<div class="aspect-square rounded-2xl bg-[repeating-linear-gradient(135deg,var(--art-sun)_0_18px,var(--art-rose)_18px_36px,var(--art-cream)_36px_54px)]" aria-hidden="true"></div>
+<div>
+<p class="px-1.5 text-sm font-medium">Illustration</p>
+<p class="px-1.5 text-xs text-muted">1,860 works</p>
+</div>
+</li>
+<li class="grid gap-3 rounded-3xl border border-line bg-surface p-2.5 pb-4">
+<div class="aspect-square rounded-2xl bg-[radial-gradient(circle,var(--art-sun)_0_5px,transparent_6px),conic-gradient(from_45deg,var(--art-plum)_0_25%,var(--art-coral)_0_50%,var(--art-plum)_0_75%,var(--art-coral)_0)] bg-size-[36px_36px]" aria-hidden="true"></div>
+<div>
+<p class="px-1.5 text-sm font-medium">Printmaking</p>
+<p class="px-1.5 text-xs text-muted">920 works</p>
+</div>
+</li>
+<li class="grid gap-3 rounded-3xl border border-line bg-surface p-2.5 pb-4">
+<div class="aspect-square rounded-2xl bg-[repeating-radial-gradient(ellipse_at_50%_140%,var(--art-mint)_0_16px,var(--art-deep)_16px_20px,var(--art-cream)_20px_36px)]" aria-hidden="true"></div>
+<div>
+<p class="px-1.5 text-sm font-medium">Batik and textile</p>
+<p class="px-1.5 text-xs text-muted">640 works</p>
+</div>
+</li>
+<li class="grid gap-3 rounded-3xl border border-line bg-surface p-2.5 pb-4">
+<div class="aspect-square rounded-2xl bg-[radial-gradient(90%_50%_at_20%_100%,var(--art-deep)_0_60%,transparent_61%),radial-gradient(80%_45%_at_85%_100%,var(--art-mint)_0_70%,transparent_71%),radial-gradient(circle_at_70%_25%,var(--art-cream)_0_10%,transparent_11%),linear-gradient(180deg,var(--art-sky),var(--art-cream))]" aria-hidden="true"></div>
+<div>
+<p class="px-1.5 text-sm font-medium">Photography</p>
+<p class="px-1.5 text-xs text-muted">1,210 works</p>
+</div>
+</li>
+<li class="grid gap-3 rounded-3xl border border-line bg-surface p-2.5 pb-4">
+<div class="aspect-square rounded-2xl bg-[radial-gradient(circle,var(--art-sun)_0_17%,transparent_18%),repeating-conic-gradient(from_0deg,var(--art-violet)_0_15deg,var(--art-plum)_15deg_30deg)]" aria-hidden="true"></div>
+<div>
+<p class="px-1.5 text-sm font-medium">Digital art</p>
+<p class="px-1.5 text-xs text-muted">2,080 works</p>
+</div>
+</li>
+</ul>
+</section>
+
+<section id="artists" aria-labelledby="galeri-artists" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28 pt-0 lg:pt-0">
+<div class="mx-auto max-w-2xl text-center transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<h2 id="galeri-artists" class="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-5xl">Featured artists this week</h2>
+<p class="mt-4 text-base text-pretty text-muted">Hand picked by our curators from studios across the archipelago.</p>
+</div>
+<div class="mt-8 flex flex-wrap justify-center gap-2" role="group" aria-label="Filter by medium">
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:class="filter === 'All' ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-muted hover:text-ink'" x-bind:aria-pressed="filter === 'All' ? 'true' : 'false'" x-on:click="filter = 'All'">All</button>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:class="filter === 'Painting' ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-muted hover:text-ink'" x-bind:aria-pressed="filter === 'Painting' ? 'true' : 'false'" x-on:click="filter = 'Painting'">Painting</button>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:class="filter === 'Illustration' ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-muted hover:text-ink'" x-bind:aria-pressed="filter === 'Illustration' ? 'true' : 'false'" x-on:click="filter = 'Illustration'">Illustration</button>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:class="filter === 'Digital art' ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-muted hover:text-ink'" x-bind:aria-pressed="filter === 'Digital art' ? 'true' : 'false'" x-on:click="filter = 'Digital art'">Digital art</button>
+</div>
+<ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+<template x-if="filter === 'All' || filter === 'Painting'">
+<li class="grid gap-4 rounded-3xl border border-line bg-surface p-5" data-artist="">
+<div class="flex items-center gap-3">
+<span class="flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold bg-(--tpl-coral-1) text-(--tpl-coral-3)" aria-hidden="true">DL</span>
+<div class="min-w-0">
+<h3 class="truncate text-base font-semibold tracking-tight">Dewi Lestari</h3>
+<p class="truncate text-sm text-muted">Painting, Yogyakarta</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2" aria-hidden="true">
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle_at_50%_56%,var(--art-sun)_0_15%,transparent_16%),radial-gradient(130%_55%_at_50%_100%,var(--art-plum)_0_48%,transparent_49%),linear-gradient(180deg,var(--art-coral),var(--art-rose)_55%,var(--art-violet))]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(90%_50%_at_20%_100%,var(--art-deep)_0_60%,transparent_61%),radial-gradient(80%_45%_at_85%_100%,var(--art-mint)_0_70%,transparent_71%),radial-gradient(circle_at_70%_25%,var(--art-cream)_0_10%,transparent_11%),linear-gradient(180deg,var(--art-sky),var(--art-cream))]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle_at_72%_26%,var(--art-cream)_0_9%,transparent_10%),radial-gradient(70%_30%_at_30%_100%,var(--art-coral)_0_50%,transparent_51%),linear-gradient(180deg,var(--art-night),var(--art-plum))]"></div>
+</div>
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm text-muted"><span x-text="(1840 + (following.includes('dewi') ? 1 : 0)).toLocaleString('en-US')">1,840</span> followers, 42 works</p>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary h-8 px-3" x-bind:class="following.includes('dewi') ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink hover:bg-subtle'" x-bind:aria-pressed="following.includes('dewi') ? 'true' : 'false'" aria-label="Follow Dewi Lestari" x-on:click="toggleFollow('dewi', 'Dewi Lestari')" x-text="following.includes('dewi') ? 'Following' : 'Follow'">Follow</button>
+</div>
+</li>
+</template>
+<template x-if="filter === 'All' || filter === 'Illustration'">
+<li class="grid gap-4 rounded-3xl border border-line bg-surface p-5" data-artist="">
+<div class="flex items-center gap-3">
+<span class="flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold bg-(--tpl-sky-1) text-(--tpl-sky-3)" aria-hidden="true">BP</span>
+<div class="min-w-0">
+<h3 class="truncate text-base font-semibold tracking-tight">Bayu Pratama</h3>
+<p class="truncate text-sm text-muted">Illustration, Bandung</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2" aria-hidden="true">
+<div class="aspect-square rounded-xl bg-[repeating-radial-gradient(circle_at_0%_100%,var(--art-sky)_0_14px,var(--art-cream)_14px_28px)]"></div>
+<div class="aspect-square rounded-xl bg-[repeating-linear-gradient(135deg,var(--art-sun)_0_18px,var(--art-rose)_18px_36px,var(--art-cream)_36px_54px)]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle,var(--art-sun)_0_5px,transparent_6px),conic-gradient(from_45deg,var(--art-plum)_0_25%,var(--art-coral)_0_50%,var(--art-plum)_0_75%,var(--art-coral)_0)] bg-size-[36px_36px]"></div>
+</div>
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm text-muted"><span x-text="(960 + (following.includes('bayu') ? 1 : 0)).toLocaleString('en-US')">960</span> followers, 31 works</p>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary h-8 px-3" x-bind:class="following.includes('bayu') ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink hover:bg-subtle'" x-bind:aria-pressed="following.includes('bayu') ? 'true' : 'false'" aria-label="Follow Bayu Pratama" x-on:click="toggleFollow('bayu', 'Bayu Pratama')" x-text="following.includes('bayu') ? 'Following' : 'Follow'">Follow</button>
+</div>
+</li>
+</template>
+<template x-if="filter === 'All' || filter === 'Digital art'">
+<li class="grid gap-4 rounded-3xl border border-line bg-surface p-5" data-artist="">
+<div class="flex items-center gap-3">
+<span class="flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold bg-(--tpl-violet-1) text-(--tpl-violet-3)" aria-hidden="true">GS</span>
+<div class="min-w-0">
+<h3 class="truncate text-base font-semibold tracking-tight">Galih Saputra</h3>
+<p class="truncate text-sm text-muted">Digital art, Jakarta</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2" aria-hidden="true">
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle,var(--art-sun)_0_17%,transparent_18%),repeating-conic-gradient(from_0deg,var(--art-violet)_0_15deg,var(--art-plum)_15deg_30deg)]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle,var(--art-sun)_0_5px,transparent_6px),conic-gradient(from_45deg,var(--art-plum)_0_25%,var(--art-coral)_0_50%,var(--art-plum)_0_75%,var(--art-coral)_0)] bg-size-[36px_36px]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle_at_50%_56%,var(--art-sun)_0_15%,transparent_16%),radial-gradient(130%_55%_at_50%_100%,var(--art-plum)_0_48%,transparent_49%),linear-gradient(180deg,var(--art-coral),var(--art-rose)_55%,var(--art-violet))]"></div>
+</div>
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm text-muted"><span x-text="(2310 + (following.includes('galih') ? 1 : 0)).toLocaleString('en-US')">2,310</span> followers, 58 works</p>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary h-8 px-3" x-bind:class="following.includes('galih') ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink hover:bg-subtle'" x-bind:aria-pressed="following.includes('galih') ? 'true' : 'false'" aria-label="Follow Galih Saputra" x-on:click="toggleFollow('galih', 'Galih Saputra')" x-text="following.includes('galih') ? 'Following' : 'Follow'">Follow</button>
+</div>
+</li>
+</template>
+<template x-if="filter === 'All' || filter === 'Painting'">
+<li class="grid gap-4 rounded-3xl border border-line bg-surface p-5" data-artist="">
+<div class="flex items-center gap-3">
+<span class="flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold bg-(--tpl-rose-1) text-(--tpl-rose-3)" aria-hidden="true">SA</span>
+<div class="min-w-0">
+<h3 class="truncate text-base font-semibold tracking-tight">Sekar Ayu</h3>
+<p class="truncate text-sm text-muted">Painting, Solo</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2" aria-hidden="true">
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle,var(--art-sun)_0_5px,transparent_6px),conic-gradient(from_45deg,var(--art-plum)_0_25%,var(--art-coral)_0_50%,var(--art-plum)_0_75%,var(--art-coral)_0)] bg-size-[36px_36px]"></div>
+<div class="aspect-square rounded-xl bg-[repeating-radial-gradient(ellipse_at_50%_140%,var(--art-mint)_0_16px,var(--art-deep)_16px_20px,var(--art-cream)_20px_36px)]"></div>
+<div class="aspect-square rounded-xl bg-[repeating-linear-gradient(135deg,var(--art-sun)_0_18px,var(--art-rose)_18px_36px,var(--art-cream)_36px_54px)]"></div>
+</div>
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm text-muted"><span x-text="(1275 + (following.includes('sekar') ? 1 : 0)).toLocaleString('en-US')">1,275</span> followers, 27 works</p>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary h-8 px-3" x-bind:class="following.includes('sekar') ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink hover:bg-subtle'" x-bind:aria-pressed="following.includes('sekar') ? 'true' : 'false'" aria-label="Follow Sekar Ayu" x-on:click="toggleFollow('sekar', 'Sekar Ayu')" x-text="following.includes('sekar') ? 'Following' : 'Follow'">Follow</button>
+</div>
+</li>
+</template>
+<template x-if="filter === 'All' || filter === 'Illustration'">
+<li class="grid gap-4 rounded-3xl border border-line bg-surface p-5" data-artist="">
+<div class="flex items-center gap-3">
+<span class="flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold bg-(--tpl-sun-1) text-(--tpl-sun-3)" aria-hidden="true">PM</span>
+<div class="min-w-0">
+<h3 class="truncate text-base font-semibold tracking-tight">Putri Maharani</h3>
+<p class="truncate text-sm text-muted">Illustration, Surabaya</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2" aria-hidden="true">
+<div class="aspect-square rounded-xl bg-[repeating-linear-gradient(135deg,var(--art-sun)_0_18px,var(--art-rose)_18px_36px,var(--art-cream)_36px_54px)]"></div>
+<div class="aspect-square rounded-xl bg-[repeating-radial-gradient(circle_at_0%_100%,var(--art-sky)_0_14px,var(--art-cream)_14px_28px)]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(circle,var(--art-sun)_0_17%,transparent_18%),repeating-conic-gradient(from_0deg,var(--art-violet)_0_15deg,var(--art-plum)_15deg_30deg)]"></div>
+</div>
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm text-muted"><span x-text="(705 + (following.includes('putri') ? 1 : 0)).toLocaleString('en-US')">705</span> followers, 19 works</p>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary h-8 px-3" x-bind:class="following.includes('putri') ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink hover:bg-subtle'" x-bind:aria-pressed="following.includes('putri') ? 'true' : 'false'" aria-label="Follow Putri Maharani" x-on:click="toggleFollow('putri', 'Putri Maharani')" x-text="following.includes('putri') ? 'Following' : 'Follow'">Follow</button>
+</div>
+</li>
+</template>
+<template x-if="filter === 'All' || filter === 'Digital art'">
+<li class="grid gap-4 rounded-3xl border border-line bg-surface p-5" data-artist="">
+<div class="flex items-center gap-3">
+<span class="flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold bg-(--tpl-mint-1) text-(--tpl-mint-3)" aria-hidden="true">MW</span>
+<div class="min-w-0">
+<h3 class="truncate text-base font-semibold tracking-tight">Made Wirawan</h3>
+<p class="truncate text-sm text-muted">Digital art, Ubud</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2" aria-hidden="true">
+<div class="aspect-square rounded-xl bg-[repeating-radial-gradient(ellipse_at_50%_140%,var(--art-mint)_0_16px,var(--art-deep)_16px_20px,var(--art-cream)_20px_36px)]"></div>
+<div class="aspect-square rounded-xl bg-[radial-gradient(90%_50%_at_20%_100%,var(--art-deep)_0_60%,transparent_61%),radial-gradient(80%_45%_at_85%_100%,var(--art-mint)_0_70%,transparent_71%),radial-gradient(circle_at_70%_25%,var(--art-cream)_0_10%,transparent_11%),linear-gradient(180deg,var(--art-sky),var(--art-cream))]"></div>
+<div class="aspect-square rounded-xl bg-[repeating-radial-gradient(circle_at_0%_100%,var(--art-sky)_0_14px,var(--art-cream)_14px_28px)]"></div>
+</div>
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm text-muted"><span x-text="(1530 + (following.includes('made') ? 1 : 0)).toLocaleString('en-US')">1,530</span> followers, 36 works</p>
+<button type="button" class="inline-flex h-9 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary h-8 px-3" x-bind:class="following.includes('made') ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink hover:bg-subtle'" x-bind:aria-pressed="following.includes('made') ? 'true' : 'false'" aria-label="Follow Made Wirawan" x-on:click="toggleFollow('made', 'Made Wirawan')" x-text="following.includes('made') ? 'Following' : 'Follow'">Follow</button>
+</div>
+</li>
+</template>
+</ul>
+</section>
+
+<section id="how" aria-labelledby="galeri-how" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28">
+<div class="mx-auto max-w-2xl text-center transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<h2 id="galeri-how" class="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-5xl">From studio to collector in three steps</h2>
+<p class="mt-4 text-base text-pretty text-muted">No website to build and no gallery contract to sign.</p>
+</div>
+<ol class="mt-12 grid gap-4 md:grid-cols-3">
+<li class="relative grid content-start gap-3 overflow-hidden rounded-3xl border border-line bg-surface p-6 transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<span class="flex size-10 items-center justify-center rounded-full bg-ink text-sm font-semibold text-(--tpl-paper)" aria-hidden="true">01</span>
+<h3 class="mt-3 text-lg font-semibold tracking-tight">Open your gallery</h3>
+<p class="text-sm text-pretty text-muted">Pick a handle, add a short bio, and choose the room color that frames your work.</p>
+<div class="mt-4 h-28 rounded-2xl bg-[radial-gradient(90%_50%_at_20%_100%,var(--art-deep)_0_60%,transparent_61%),radial-gradient(80%_45%_at_85%_100%,var(--art-mint)_0_70%,transparent_71%),radial-gradient(circle_at_70%_25%,var(--art-cream)_0_10%,transparent_11%),linear-gradient(180deg,var(--art-sky),var(--art-cream))]" aria-hidden="true"></div>
+</li>
+<li class="relative grid content-start gap-3 overflow-hidden rounded-3xl border border-line bg-surface p-6 transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<span class="flex size-10 items-center justify-center rounded-full bg-ink text-sm font-semibold text-(--tpl-paper)" aria-hidden="true">02</span>
+<h3 class="mt-3 text-lg font-semibold tracking-tight">Upload and price</h3>
+<p class="text-sm text-pretty text-muted">Drop high resolution files, set editions and prices in Rupiah, and we prepare the listing.</p>
+<div class="mt-4 h-28 rounded-2xl bg-[repeating-linear-gradient(135deg,var(--art-sun)_0_18px,var(--art-rose)_18px_36px,var(--art-cream)_36px_54px)]" aria-hidden="true"></div>
+</li>
+<li class="relative grid content-start gap-3 overflow-hidden rounded-3xl border border-line bg-surface p-6 transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<span class="flex size-10 items-center justify-center rounded-full bg-ink text-sm font-semibold text-(--tpl-paper)" aria-hidden="true">03</span>
+<h3 class="mt-3 text-lg font-semibold tracking-tight">Sell and get paid</h3>
+<p class="text-sm text-pretty text-muted">Collectors check out with QRIS or bank transfer. Payouts land in your account every Friday.</p>
+<div class="mt-4 h-28 rounded-2xl bg-[radial-gradient(circle_at_72%_26%,var(--art-cream)_0_9%,transparent_10%),radial-gradient(70%_30%_at_30%_100%,var(--art-coral)_0_50%,transparent_51%),linear-gradient(180deg,var(--art-night),var(--art-plum))]" aria-hidden="true"></div>
+</li>
+</ol>
+</section>
+
+<section id="pricing" aria-labelledby="galeri-pricing" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28 pt-0 lg:pt-0">
+<div class="mx-auto max-w-2xl text-center transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<h2 id="galeri-pricing" class="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-5xl">Simple pricing in Rupiah</h2>
+<p class="mt-4 text-base text-pretty text-muted">Start free, upgrade when your first collectors arrive.</p>
+</div>
+<div class="mx-auto mt-8 flex w-fit gap-1 rounded-full border border-line bg-surface p-1" role="group" aria-label="Billing period">
+<button type="button" class="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:class="yearly ? 'text-muted hover:text-ink' : 'bg-primary text-on-primary'" x-bind:aria-pressed="yearly ? 'false' : 'true'" x-on:click="yearly = false">Monthly</button>
+<button type="button" class="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-bind:class="yearly ? 'bg-primary text-on-primary' : 'text-muted hover:text-ink'" x-bind:aria-pressed="yearly ? 'true' : 'false'" x-on:click="yearly = true">Yearly <span class="rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold text-primary">-20%</span></button>
+</div>
+<ul class="mt-10 grid gap-4 lg:grid-cols-3">
+<li class="grid content-start gap-5 rounded-3xl border border-line bg-surface p-6">
+<div class="flex items-center justify-between gap-3">
+<h3 class="text-lg font-semibold tracking-tight">Starter</h3>
+</div>
+<p class="text-sm text-muted">For trying the room out.</p>
+<p class="flex items-baseline gap-1">
+<span class="text-4xl font-semibold tracking-tight tabular-nums" data-price="" x-text="yearly ? 'Rp0' : 'Rp0'">Rp0</span>
+<span class="text-sm text-muted" x-text="yearly ? '/mo, billed yearly' : '/mo'">/mo</span>
+</p>
+<button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm" type="button" x-on:click="choosePlan('Starter')">
+Start free
+</button>
+<ul class="grid gap-2.5 text-sm">
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Up to 12 artworks</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Public gallery page</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>10% sales fee</li>
+</ul>
+</li>
+<li class="grid content-start gap-5 rounded-3xl border border-line bg-surface p-6 border-primary ring-1 ring-primary">
+<div class="flex items-center justify-between gap-3">
+<h3 class="text-lg font-semibold tracking-tight">Artist</h3>
+<span class="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-semibold text-primary">Popular</span>
+</div>
+<p class="text-sm text-muted">For working artists who sell often.</p>
+<p class="flex items-baseline gap-1">
+<span class="text-4xl font-semibold tracking-tight tabular-nums" data-price="" x-text="yearly ? 'Rp119k' : 'Rp149k'">Rp149k</span>
+<span class="text-sm text-muted" x-text="yearly ? '/mo, billed yearly' : '/mo'">/mo</span>
+</p>
+<button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm" type="button" x-on:click="choosePlan('Artist')">
+Join Artist
+</button>
+<ul class="grid gap-2.5 text-sm">
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Unlimited artworks</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Custom domain</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>5% sales fee</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Sales insights</li>
+</ul>
+</li>
+<li class="grid content-start gap-5 rounded-3xl border border-line bg-surface p-6">
+<div class="flex items-center justify-between gap-3">
+<h3 class="text-lg font-semibold tracking-tight">Studio</h3>
+</div>
+<p class="text-sm text-muted">For collectives and small galleries.</p>
+<p class="flex items-baseline gap-1">
+<span class="text-4xl font-semibold tracking-tight tabular-nums" data-price="" x-text="yearly ? 'Rp319k' : 'Rp399k'">Rp399k</span>
+<span class="text-sm text-muted" x-text="yearly ? '/mo, billed yearly' : '/mo'">/mo</span>
+</p>
+<button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm" type="button" x-on:click="choosePlan('Studio')">
+Join Studio
+</button>
+<ul class="grid gap-2.5 text-sm">
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Up to 10 artists</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Shared inventory</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>3% sales fee</li>
+<li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10" /></svg>Priority curation</li>
+</ul>
+</li>
+</ul>
+</section>
+
+<section id="faq" aria-labelledby="galeri-faq" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28 pt-0 lg:pt-0">
+<div class="mx-auto max-w-2xl text-center transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<h2 id="galeri-faq" class="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-5xl">Questions artists ask us</h2>
+</div>
+<div class="mx-auto mt-10 max-w-3xl">
+<div class="w-full divide-y divide-line border-y border-line">
+<details
+class="group"
+name="markas-accordion-UrSlTQED"              open         >
+<summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink transition-colors duration-150 ease-out hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none [&amp;::-webkit-details-marker]:hidden">
+<span>How much does Sanggar take from a sale?</span>
+<svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+</summary>
+<div class="pb-4 text-sm text-muted">Starter pays a 10% fee, Artist 5%, and Studio 3%. Payment processing is included, so the price a collector pays is the price you set.</div>
+</details>
+<details
+class="group"
+name="markas-accordion-UrSlTQED"                     >
+<summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink transition-colors duration-150 ease-out hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none [&amp;::-webkit-details-marker]:hidden">
+<span>When do I receive my money?</span>
+<svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+</summary>
+<div class="pb-4 text-sm text-muted">Every Friday we send the week&#039;s earnings to your Indonesian bank account or e-wallet, as long as the balance is above Rp50.000.</div>
+</details>
+<details
+class="group"
+name="markas-accordion-UrSlTQED"                     >
+<summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink transition-colors duration-150 ease-out hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none [&amp;::-webkit-details-marker]:hidden">
+<span>Who handles shipping for physical works?</span>
+<svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+</summary>
+<div class="pb-4 text-sm text-muted">You pack the work, we book the courier and insure it. Collectors see the shipping cost at checkout before they pay.</div>
+</details>
+<details
+class="group"
+name="markas-accordion-UrSlTQED"                     >
+<summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink transition-colors duration-150 ease-out hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none [&amp;::-webkit-details-marker]:hidden">
+<span>Do I keep the rights to my art?</span>
+<svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+</summary>
+<div class="pb-4 text-sm text-muted">Always. You grant Sanggar a license to show your work on the marketplace only, and you can remove it at any time.</div>
+</details>
+<details
+class="group"
+name="markas-accordion-UrSlTQED"                     >
+<summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink transition-colors duration-150 ease-out hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none [&amp;::-webkit-details-marker]:hidden">
+<span>Can I cancel or switch plans?</span>
+<svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+</summary>
+<div class="pb-4 text-sm text-muted">Yes. Change plans from your settings at any time. Yearly plans are refunded pro rata for unused months.</div>
+</details>
+</div>
+</div>
+</section>
+
+<section id="contact" aria-labelledby="galeri-contact" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28 pt-0 lg:pt-0">
+<div class="grid gap-8 overflow-hidden rounded-[2rem] border border-line bg-surface p-6 sm:p-10 lg:grid-cols-2 lg:items-center transition duration-700 ease-out motion-reduce:transition-none motion-safe:[&amp;:not([data-in])]:translate-y-6 motion-safe:[&amp;:not([data-in])]:opacity-0" data-reveal="">
+<div class="relative h-48 overflow-hidden rounded-3xl sm:h-64 lg:order-last bg-[radial-gradient(circle_at_50%_56%,var(--art-sun)_0_15%,transparent_16%),radial-gradient(130%_55%_at_50%_100%,var(--art-plum)_0_48%,transparent_49%),linear-gradient(180deg,var(--art-coral),var(--art-rose)_55%,var(--art-violet))]" aria-hidden="true"></div>
+<div>
+<h2 id="galeri-contact" class="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-5xl">Get the weekly drop</h2>
+<p class="mt-4 text-base text-pretty text-muted mb-6">Twelve new works, one artist interview, and open calls for exhibitions. Every Monday, no spam.</p>
+<form novalidate x-on:submit.prevent="subscribe()">
+<div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+<div class="min-w-0 flex-1">
+<div class="grid gap-1.5">
+<label for="markas-input-t4vnkGsb" class="text-sm font-medium text-ink">Email address</label>
+<input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="markas-input-t4vnkGsb" type="email" name="email" placeholder="you@studio.id" x-model="email" x-bind:aria-invalid="emailError ? 'true' : null" x-bind:aria-describedby="emailError ? 'galeri-email-error' : null" />
+</div>
+</div>
+<button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm" type="submit">
+Subscribe
+</button>
+</div>
+<template x-if="emailError">
+<p id="galeri-email-error" class="mt-2 text-sm text-danger" x-text="emailError"></p>
+</template>
+</form>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="border-t border-line">
+<div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-5 lg:px-8">
+<div class="grid content-start gap-3 lg:col-span-2">
+<a href="#top" class="flex items-center gap-2 rounded-md text-base font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+<span class="flex size-7 items-center justify-center rounded-full bg-ink text-(--tpl-paper)" aria-hidden="true"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.5-1-2.6 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2ZM7.5 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm3-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" /></svg></span>
+Sanggar
+</a>
+<p class="text-sm text-muted max-w-xs">A marketplace for Indonesian art, from Yogyakarta studios to your living room wall.</p>
+</div>
+<nav aria-label="Marketplace">
+<p class="text-sm font-semibold">Marketplace</p>
+<ul class="mt-3 grid gap-2">
+<li><a href="#categories" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Browse art</a></li>
+<li><a href="#artists" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Featured artists</a></li>
+<li><a href="#pricing" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Pricing</a></li>
+</ul>
+</nav>
+<nav aria-label="Company">
+<p class="text-sm font-semibold">Company</p>
+<ul class="mt-3 grid gap-2">
+<li><a href="/about" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">About</a></li>
+<li><a href="/careers" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Careers</a></li>
+<li><a href="#contact" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Contact</a></li>
+</ul>
+</nav>
+<nav aria-label="Support">
+<p class="text-sm font-semibold">Support</p>
+<ul class="mt-3 grid gap-2">
+<li><a href="/help" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Help center</a></li>
+<li><a href="/shipping" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Shipping</a></li>
+<li><a href="/returns" class="rounded-sm text-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Returns</a></li>
+</ul>
+</nav>
+</div>
+<div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-6 text-sm text-muted lg:px-8">
+<p>&copy; 2026 Sanggar Studio. Prices include VAT.</p>
+<p>Built with MarkasUI</p>
+</div>
+</footer>
+<div
+x-data="{
+toasts: [],
+timers: {},
+nextId: 0,
+variants: JSON.parse('{\u0022default\u0022:\u0022border-line\u0022,\u0022success\u0022:\u0022border-success\\\/40\u0022,\u0022danger\u0022:\u0022border-danger\\\/40\u0022}'),
+iconVariants: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022text-success\u0022,\u0022danger\u0022:\u0022text-danger\u0022}'),
+icons: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8.5 12l2.5 2.5 4.5-5\u0022,\u0022danger\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15 9l-6 6M9 9l6 6\u0022}'),
+add(detail) {
+const variant = detail.variant in this.variants ? detail.variant : 'default';
+const duration = Number.isFinite(detail.duration) ? detail.duration : 5000;
+const id = ++this.nextId;
+this.toasts = [...this.toasts, { id, title: String(detail.title ?? ''), description: detail.description ?? '', variant }];
+if (duration > 0) this.start(id, duration);
+},
+start(id, ms) {
+this.timers[id] = { handle: setTimeout(() => this.dismiss(id), ms), remaining: ms, startedAt: Date.now() };
+},
+dismiss(id) {
+clearTimeout(this.timers[id]?.handle);
+delete this.timers[id];
+this.toasts = this.toasts.filter((item) => item.id !== id);
+},
+pause(id) {
+const timer = this.timers[id];
+if (!timer?.handle) return;
+clearTimeout(timer.handle);
+this.timers[id] = { remaining: timer.remaining - (Date.now() - timer.startedAt), startedAt: 0 };
+},
+resume(id) {
+const timer = this.timers[id];
+if (!timer || timer.handle) return;
+this.start(id, Math.max(timer.remaining, 0));
+},
+}"
+x-init="[].forEach((detail) => add(detail))"
+x-on:markas-toast.window="add($event.detail ?? {})"
+class="pointer-events-none fixed right-4 bottom-4 z-50 flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2" role="status" aria-live="polite" aria-label="Notifications"
+>
+<template x-for="item in toasts" :key="item.id">
+<div
+data-state="open"
+class="pointer-events-auto flex items-start gap-3 rounded-lg border bg-surface p-4 text-sm text-ink shadow-overlay transition-[opacity,translate] duration-200 ease-out starting:translate-y-2 starting:opacity-0 motion-reduce:transition-none"
+:class="variants[item.variant]"
+x-on:mouseenter="pause(item.id)"
+x-on:mouseleave="if (! $el.contains(document.activeElement)) resume(item.id)"
+x-on:focusin="pause(item.id)"
+x-on:focusout="if (! $el.contains($event.relatedTarget) && ! $el.matches(':hover')) resume(item.id)"
+>
+<template x-if="icons[item.variant]">
+<svg class="mt-0.5 size-4 shrink-0" :class="iconVariants[item.variant]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.variant]" /></svg>
+</template>
+<div class="grid flex-1 gap-1">
+<p class="font-semibold" x-text="item.title"></p>
+<template x-if="item.description">
+<p class="text-muted" x-text="item.description"></p>
+</template>
+</div>
+<button type="button" class="-mt-1 -mr-1 inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close" x-on:click="dismiss(item.id)">
+<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+</button>
+</div>
+</template>
+</div>
+</div>

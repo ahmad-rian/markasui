@@ -3,7 +3,7 @@
  * yang ia tampilkan (budget CSS PRD 30 KB gzip per halaman):
  * - components/<nama>.css: CSS situs + komponen itu, contoh dan variasinya, dan komponen lain yang dipakai contohnya.
  * - landing.css: CSS situs + fixture yang tampil hidup di landing (lib/landing.ts).
- * - templates-sources.css: hanya @source komponen yang dipakai template, diimpor styles/templates.css.
+ * - templates/<slug>.css: styles/templates.css + satu template (dashboard atau page) dan komponen yang dipakainya.
  * Pemakaian (dari apps/docs): node scripts/page-css.ts
  */
 import {
@@ -94,18 +94,19 @@ function fixturesOf(component: string): string[] {
   return [component, ...variants];
 }
 
-function templateFiles(): string[] {
-  return readdirSync(templatesDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .flatMap((entry) =>
-      Object.keys(EXAMPLE_FILES).flatMap((fw) => {
-        const dir = join(templatesDir, entry.name, fw);
-        return existsSync(dir)
-          ? readdirSync(dir).map((file) => join(dir, file))
-          : [];
-      }),
-    );
-}
+const templateNames = readdirSync(templatesDir, { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .sort();
+
+/** File sumber satu template (blade, react, vue). */
+const templateFiles = (slug: string): string[] =>
+  Object.keys(EXAMPLE_FILES).flatMap((fw) => {
+    const dir = join(templatesDir, slug, fw);
+    return existsSync(dir)
+      ? readdirSync(dir).map((file) => join(dir, file))
+      : [];
+  });
 
 rmSync(outDir, { recursive: true, force: true });
 
@@ -130,12 +131,17 @@ cssFile(
   sourceClosure(landingExamples),
 );
 
-/* Template sendiri sudah di-@source oleh styles/templates.css; di sini cukup komponen yang dipakainya. */
-const templateComponents = sourceClosure(templateFiles()).filter((path) =>
-  path.startsWith(componentsDir),
-);
-cssFile(join(outDir, "templates-sources.css"), [], templateComponents);
+const templatesCss = join(docs, "src/styles/templates.css");
+for (const slug of templateNames) {
+  const files = templateFiles(slug);
+  if (!files.length) continue;
+  cssFile(
+    join(outDir, "templates", `${slug}.css`),
+    [templatesCss],
+    sourceClosure(files),
+  );
+}
 
 console.log(
-  `page-css: ${componentNames.length} komponen, landing, template -> ${relative(docs, outDir)}`,
+  `page-css: ${componentNames.length} komponen, landing, ${templateNames.length} template -> ${relative(docs, outDir)}`,
 );

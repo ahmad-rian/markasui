@@ -1,0 +1,850 @@
+<div
+  class="relative overflow-x-clip bg-canvas font-sans text-ink [scroll-behavior:smooth] motion-reduce:[scroll-behavior:auto] [--tpl-sky-1:#5d9fe6] [--tpl-sky-2:#a3cbf3] [--tpl-sky-3:#dcebfa] [--tpl-sky-ink:#0c2849] [--tpl-cloud:#ffffff] [--tpl-paper:#ffffff] [--tpl-coal:#1c1c21] [--tpl-coal-ink:#f4f1ea] [--tpl-butter:#fbe38a] [--tpl-butter-line:#e2bf45] [--tpl-lilac:#d8cdf6] [--tpl-peach:#fde1d1] [--tpl-mint:#d4efe1] [--tpl-cream:#fcf0c4] [--tpl-ice:#d9e9fb] [--tpl-rose:#fad8e3] [--tpl-coral:#ef8d70] [--tpl-teal:#5fb3a2] [--tpl-violet:#9c8ae8] [--tpl-sun:#f4c64a] [--tpl-blue:#5b93e0] dark:[--tpl-sky-1:#0b1830] dark:[--tpl-sky-2:#15284a] dark:[--tpl-sky-3:#1b2c48] dark:[--tpl-sky-ink:#e7f0fb] dark:[--tpl-cloud:#3a4f74] dark:[--tpl-paper:#3a3b42] dark:[--tpl-coal:#050506] dark:[--tpl-coal-ink:#f4f1ea] dark:[--tpl-butter:#5b4b17] dark:[--tpl-butter-line:#7d6725] dark:[--tpl-lilac:#3c3463] dark:[--tpl-peach:#4a2e24] dark:[--tpl-mint:#1f3c30] dark:[--tpl-cream:#3f3618] dark:[--tpl-ice:#1c3150] dark:[--tpl-rose:#472534] dark:[--tpl-coral:#a9563f] dark:[--tpl-teal:#2f7a6b] dark:[--tpl-violet:#6655b8] dark:[--tpl-sun:#a9831f] dark:[--tpl-blue:#36649f]"
+  x-data="{
+    menuOpen: false,
+    tab: 'docs',
+    yearly: false,
+    edges: { start: true, end: false },
+    email: '',
+    emailError: '',
+    labels: JSON.parse('{\u0022docs\u0022:\u0022Docs\u0022,\u0022tasks\u0022:\u0022Tasks\u0022,\u0022calendar\u0022:\u0022Calendar\u0022,\u0022boards\u0022:\u0022Whiteboards\u0022,\u0022daily\u0022:\u0022Daily Notes\u0022}'),
+    messages: JSON.parse('{\u0022free\u0022:[\u0022Download started\u0022,\u0022Lembar Free is on its way to your Downloads folder.\u0022],\u0022plus\u0022:[\u0022Your trial has started\u0022,\u002214 days of Plus, no card needed.\u0022],\u0022team\u0022:[\u0022Thanks for reaching out\u0022,\u0022Our team will email you within one working day.\u0022]}'),
+    stopReveal: () => {},
+    init() {
+      
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.setAttribute('data-reveal', 'shown');
+        observer.unobserve(entry.target);
+      }), { rootMargin: '0px 0px -10% 0px' });
+      this.$el.querySelectorAll('[data-reveal]').forEach((el) => {
+        if (el.getBoundingClientRect().top < innerHeight) return;
+        el.setAttribute('data-reveal', 'hidden');
+        observer.observe(el);
+      });
+      this.stopReveal = () => observer.disconnect();
+    },
+    destroy() {
+      this.stopReveal();
+    },
+    notify(title, description, variant = 'default') {
+      this.$dispatch('markas-toast', { title, description, variant });
+    },
+    onTabKey(event) {
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+      if (!step) return;
+      event.preventDefault();
+      const ids = Object.keys(this.labels);
+      const next = ids[(ids.indexOf(this.tab) + step + ids.length) % ids.length];
+      this.tab = next;
+      document.getElementById('catatan-tab-' + next)?.focus();
+    },
+    onScroll() {
+      const el = this.$refs.viewport;
+      this.edges = { start: el.scrollLeft <= 1, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 1 };
+    },
+    slide(direction) {
+      const el = this.$refs.viewport;
+      const card = el.querySelector('li');
+      if (card) el.scrollBy({ left: direction * (card.offsetWidth + 20) });
+    },
+    choosePlan(id) {
+      const [title, description] = this.messages[id];
+      this.notify(title, description, 'success');
+    },
+    submit() {
+      const value = this.email.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        this.emailError = 'Enter a valid email address, like you@mail.com.';
+        return;
+      }
+      this.emailError = '';
+      this.email = '';
+      this.notify('Link sent', 'Check ' + value + ' on your phone.', 'success');
+    },
+  }"
+>
+  <style>@keyframes catatan-drift{from{transform:translateX(-14px)}to{transform:translateX(14px)}}.catatan-torn-a{clip-path:polygon(0% 0%,100% 0%,100% 8.3%,95.4% 16.7%,98.6% 25%,98.9% 33.3%,96.4% 41.7%,97.3% 50%,98.4% 58.3%,96.2% 66.7%,96.2% 75%,97.3% 83.3%,96.6% 91.7%,100% 100%,91.7% 96.8%,83.3% 95.9%,75% 98.8%,66.7% 98.1%,58.3% 96.5%,50% 96.5%,41.7% 99.7%,33.3% 96.6%,25% 97.7%,16.7% 95.4%,8.3% 96%,0% 100%)}.catatan-torn-b{clip-path:polygon(0% 0%,6.3% 1.1%,12.5% 4.6%,18.8% 8.3%,25% 6.2%,31.3% 5.8%,37.5% 5.2%,43.8% 8.2%,50% 8.2%,56.3% 3.4%,62.5% 3%,68.8% 7.5%,75% 3%,81.3% 1.4%,87.5% 2.7%,93.8% 3.9%,100% 0%,100% 100%,0% 100%)}.catatan-torn-c{clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%,2.1% 92.9%,6.6% 85.7%,3.9% 78.6%,5.1% 71.4%,6.1% 64.3%,0.4% 57.1%,1.9% 50%,3.9% 42.9%,3.6% 35.7%,3% 28.6%,1.4% 21.4%,6.4% 14.3%,0.4% 7.1%)}.catatan-torn-d{clip-path:polygon(0% 0%,8.3% 2.2%,16.7% 2.1%,25% 4%,33.3% 5.5%,41.7% 3.1%,50% 1%,58.3% 2.4%,66.7% 1.7%,75% 2.2%,83.3% 2.5%,91.7% 2%,100% 0%,100% 100%,0% 100%,3.2% 91.7%,3.7% 83.3%,1.4% 75%,5.4% 66.7%,2.7% 58.3%,5.2% 50%,3.8% 41.7%,3.8% 33.3%,3.1% 25%,3% 16.7%,4.1% 8.3%)}@media (prefers-reduced-motion:no-preference){[data-reveal]{transition:opacity .7s ease-out,transform .7s ease-out}[data-reveal=hidden]{opacity:0;transform:translateY(24px)}}</style>
+  <header class="fixed inset-x-0 top-3 z-30 px-4 sm:top-4">
+    <nav aria-label="Main" class="mx-auto flex h-14 max-w-5xl items-center gap-2 rounded-full bg-surface/95 py-2 pr-2 pl-5 shadow-overlay ring-1 ring-ink/5 backdrop-blur">
+      <a href="#top" class="rounded-md text-xl font-black tracking-tighter focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">lembar</a>
+      <div class="mx-auto hidden items-center gap-1 md:flex">
+                  <a href="#product" class="rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Product</a>
+                  <a href="#stories" class="rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Community</a>
+                  <a href="#pricing" class="rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Pricing</a>
+                  <a href="#download" class="rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Download</a>
+              </div>
+      <a href="/login" class="ml-auto hidden rounded-full px-3 py-2 text-sm font-medium text-ink hover:bg-subtle md:ml-0 md:inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Log in</a>
+      <a href="#pricing" class="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold whitespace-nowrap text-canvas transition-transform duration-150 hover:-translate-y-px motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ml-auto md:ml-0">Try free</a>
+      <button type="button" class="inline-flex size-10 items-center justify-center rounded-full text-ink hover:bg-subtle md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-expanded="false" :aria-expanded="menuOpen ? 'true' : 'false'" aria-controls="catatan-menu" aria-label="Open menu" :aria-label="menuOpen ? 'Close menu' : 'Open menu'" x-on:click="menuOpen = !menuOpen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-5"><path d="M4 7h16M4 12h16M4 17h16" :d="menuOpen ? 'M18 6 6 18M6 6l12 12' : 'M4 7h16M4 12h16M4 17h16'" /></svg>
+      </button>
+    </nav>
+    <template x-if="menuOpen">
+      <div id="catatan-menu" class="mx-auto mt-2 grid max-w-5xl gap-1 rounded-3xl bg-surface p-3 shadow-overlay ring-1 ring-ink/5 md:hidden">
+                  <a href="#product" class="rounded-2xl px-4 py-3 text-base font-medium text-ink hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Product</a>
+                  <a href="#stories" class="rounded-2xl px-4 py-3 text-base font-medium text-ink hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Community</a>
+                  <a href="#pricing" class="rounded-2xl px-4 py-3 text-base font-medium text-ink hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Pricing</a>
+                  <a href="#download" class="rounded-2xl px-4 py-3 text-base font-medium text-ink hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="menuOpen = false">Download</a>
+                <a href="/login" class="rounded-2xl px-4 py-3 text-base font-medium text-ink hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Log in</a>
+      </div>
+    </template>
+  </header>
+
+  <main>
+    <section id="top" aria-labelledby="catatan-title" class="relative isolate overflow-hidden bg-[linear-gradient(180deg,var(--tpl-sky-1),var(--tpl-sky-2)_38%,var(--tpl-sky-3)_72%,var(--color-canvas))] px-4 pt-32 pb-28 sm:pt-40 sm:pb-32">
+              <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none top-20 -left-16 scale-125 opacity-95" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+              <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none top-44 left-[22%] scale-75 opacity-70 [animation-delay:-5s]" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+              <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none top-16 -right-10 scale-150 opacity-95 [animation-delay:-9s]" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+              <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none top-[25rem] right-[8%] opacity-70 [animation-delay:-3s]" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+              <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none top-[29rem] left-[2%] scale-110 opacity-70 [animation-delay:-7s]" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+            <div class="mx-auto grid max-w-5xl justify-items-center text-center">
+        <h1 id="catatan-title" class="max-w-4xl font-serif text-5xl leading-[1.02] font-normal tracking-tight text-balance text-(--tpl-sky-ink) sm:text-7xl">Your space for notes, tasks, and big ideas</h1>
+        <p class="mt-6 max-w-xl text-lg text-pretty text-(--tpl-sky-ink)/80 sm:text-xl">Lembar keeps everything you think, plan, and make on one calm page, from the first scribble to the finished thing.</p>
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a href="#download" class="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-surface px-6 text-base font-semibold whitespace-nowrap text-ink shadow-overlay transition-transform duration-150 hover:-translate-y-px motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" /></svg> Download for free</a>
+          <a href="#product" class="inline-flex h-12 items-center justify-center rounded-full px-5 text-base font-semibold text-(--tpl-sky-ink) underline decoration-(--tpl-sky-ink)/30 underline-offset-4 hover:decoration-(--tpl-sky-ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">See what it does</a>
+        </div>
+        <p class="mt-4 text-sm text-(--tpl-sky-ink)/75">Free on Mac, Windows, iPhone, and Android.</p>
+      </div>
+      <div class="relative mx-auto mt-16 w-full max-w-5xl sm:mt-20">
+        <div class="absolute drop-shadow-[0_10px_18px_rgb(12_40_73/0.18)] dark:drop-shadow-[0_10px_18px_rgb(0_0_0/0.45)] -top-10 -left-6 h-56 w-72 -rotate-6 sm:-left-14" aria-hidden="true">
+          <div class="catatan-torn-a size-full bg-(--tpl-paper)"></div>
+        </div>
+        <div class="absolute drop-shadow-[0_10px_18px_rgb(12_40_73/0.18)] dark:drop-shadow-[0_10px_18px_rgb(0_0_0/0.45)] -top-8 -right-6 h-72 w-60 rotate-6 sm:-right-12" aria-hidden="true">
+          <div class="catatan-torn-c size-full bg-(--tpl-butter) bg-[repeating-linear-gradient(180deg,transparent_0_21px,var(--tpl-butter-line)_21px_22px)]"></div>
+          <span class="absolute top-[66px] right-5 grid text-right font-serif text-base leading-[22px] text-ink/80 italic"><span>buy film</span><span>call Ibu</span><span>ideas!</span></span>
+        </div>
+        <div class="absolute drop-shadow-[0_10px_18px_rgb(12_40_73/0.18)] dark:drop-shadow-[0_10px_18px_rgb(0_0_0/0.45)] -bottom-20 -left-8 h-48 w-80 rotate-3 sm:-left-16" aria-hidden="true">
+          <div class="catatan-torn-b size-full bg-(--tpl-coal)"></div>
+          <span class="absolute font-serif text-lg italic text-(--tpl-coal-ink) [writing-mode:horizontal-tb] bottom-6 left-8 -rotate-3">think out loud</span>
+        </div>
+        <div class="absolute drop-shadow-[0_10px_18px_rgb(12_40_73/0.18)] dark:drop-shadow-[0_10px_18px_rgb(0_0_0/0.45)] -right-8 -bottom-14 h-44 w-72 -rotate-3 sm:-right-16" aria-hidden="true">
+          <div class="catatan-torn-d size-full bg-(--tpl-lilac)"></div>
+        </div>
+        <div class="relative z-10 mx-auto max-w-4xl" role="img" aria-label="The Lembar app with a sidebar of spaces and a planning board of pastel cards">
+          <div class="relative overflow-hidden rounded-2xl bg-surface text-left shadow-[0_30px_60px_-20px_rgb(12_40_73/0.35)] ring-1 ring-ink/10">
+            <div class="flex h-10 items-center gap-2 border-b border-line bg-subtle/60 px-4"><span class="size-3 rounded-full bg-line"></span><span class="size-3 rounded-full bg-line"></span><span class="size-3 rounded-full bg-line"></span><span class="mx-auto text-xs font-medium text-muted">Bali offsite</span></div>
+            <div class="grid min-h-96 md:grid-cols-[13rem_1fr]">
+              <div class="hidden flex-col gap-0.5 border-r border-line bg-subtle/40 p-3 text-sm md:flex">
+                <div class="mb-2 flex h-8 items-center gap-2 rounded-lg bg-surface px-2.5 text-xs text-faint ring-1 ring-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3.5"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3" /></svg> Search</div>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M3 11l9-8 9 8M5 10v10h14V10" /></svg> Home</span>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3v2M12 19v2M5.6 5.6 7 7M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" /></svg> Daily Notes</span>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9" /></svg> Tasks</span>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /></svg> Calendar</span>
+                                <span class="mt-4 mb-1 px-2.5 text-xs font-medium text-faint">Spaces</span>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg bg-surface px-2.5 font-medium text-ink shadow-sm ring-1 ring-line"><span class="size-2.5 rounded-sm bg-(--tpl-peach)"></span> Bali offsite</span>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-muted"><span class="size-2.5 rounded-sm bg-(--tpl-mint)"></span> Reading list</span>
+                                  <span class="flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-muted"><span class="size-2.5 rounded-sm bg-(--tpl-lilac)"></span> Studio Lembar</span>
+                              </div>
+              <div class="grid content-start gap-5 p-5 sm:p-7">
+                <div>
+                  <p class="font-serif text-3xl tracking-tight">Bali offsite</p>
+                  <p class="mt-1 text-sm text-muted">Planning board · edited 2 minutes ago</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
+                                      <div class="grid min-h-28 content-between gap-3 rounded-xl p-3.5 bg-(--tpl-peach)">
+                      <span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /></svg></span>
+                      <span><span class="block"><span class="text-sm font-semibold">Flights</span></span><span class="text-xs text-ink/70">Jakarta to Denpasar, 14 Mar</span></span>
+                    </div>
+                                      <div class="grid min-h-28 content-between gap-3 rounded-xl p-3.5 bg-(--tpl-mint)">
+                      <span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M3 11l9-8 9 8M5 10v10h14V10" /></svg></span>
+                      <span><span class="block"><span class="text-sm font-semibold">Villa shortlist</span></span><span class="text-xs text-ink/70">3 options in Ubud</span></span>
+                    </div>
+                                      <div class="grid min-h-28 content-between gap-3 rounded-xl p-3.5 bg-(--tpl-lilac)">
+                      <span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4" /></svg></span>
+                      <span><span class="block"><span class="text-sm font-semibold">Agenda</span></span><span class="text-xs text-ink/70">Day 1 to Day 4</span></span>
+                    </div>
+                                      <div class="grid min-h-28 content-between gap-3 rounded-xl p-3.5 bg-(--tpl-cream)">
+                      <span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" /></svg></span>
+                      <span><span class="block"><span class="text-sm font-semibold">Budget</span></span><span class="text-xs text-ink/70">Rp42.500.000</span></span>
+                    </div>
+                                      <div class="grid min-h-28 content-between gap-3 rounded-xl p-3.5 bg-(--tpl-ice)">
+                      <span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9" /></svg></span>
+                      <span><span class="block"><span class="text-sm font-semibold">Packing list</span></span><span class="text-xs text-ink/70">18 of 24 packed</span></span>
+                    </div>
+                                      <div class="grid min-h-28 content-between gap-3 rounded-xl p-3.5 bg-(--tpl-rose)">
+                      <span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17v4M8 21h8M7 12l3-3 2 2 4-4" /></svg></span>
+                      <span><span class="block"><span class="text-sm font-semibold">Moodboard</span></span><span class="text-xs text-ink/70">12 pins</span></span>
+                    </div>
+                                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="product" aria-labelledby="catatan-things" class="scroll-mt-24 px-4 py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl" data-reveal="">
+        <h2 id="catatan-things" class="mx-auto max-w-3xl text-center font-serif text-4xl leading-[1.08] tracking-tight text-balance sm:text-6xl">Lembar isn&rsquo;t just for one thing, it&rsquo;s for <em>your</em> things.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-center text-lg text-pretty text-muted">Write a doc, tick off a list, plan the week, or think on a canvas. Same app, same page, no switching.</p>
+        <div role="tablist" aria-label="What you can make" class="mx-auto mt-12 grid max-w-3xl grid-cols-5 gap-1 sm:flex sm:justify-center sm:gap-6" x-on:keydown="onTabKey($event)">
+                                  <button
+              id="catatan-tab-docs"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              :aria-selected="tab === 'docs' ? 'true' : 'false'"
+              aria-controls="catatan-panel"
+              tabindex="0"
+              :tabindex="tab === 'docs' ? 0 : -1"
+              class="group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-primary"
+              :class="tab === 'docs' ? 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-primary' : 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink'"
+              x-on:click="tab = 'docs'"
+            >
+              <span class="flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-primary-soft ring-primary" :class="tab === 'docs' ? 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-primary-soft ring-primary' : 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink\/30'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-7 [stroke-width:1.4] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4" /></svg></span>
+              Docs
+            </button>
+                                  <button
+              id="catatan-tab-tasks"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              :aria-selected="tab === 'tasks' ? 'true' : 'false'"
+              aria-controls="catatan-panel"
+              tabindex="-1"
+              :tabindex="tab === 'tasks' ? 0 : -1"
+              class="group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink"
+              :class="tab === 'tasks' ? 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-primary' : 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink'"
+              x-on:click="tab = 'tasks'"
+            >
+              <span class="flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink/30" :class="tab === 'tasks' ? 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-primary-soft ring-primary' : 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink\/30'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-7 [stroke-width:1.4] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9" /></svg></span>
+              Tasks
+            </button>
+                                  <button
+              id="catatan-tab-calendar"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              :aria-selected="tab === 'calendar' ? 'true' : 'false'"
+              aria-controls="catatan-panel"
+              tabindex="-1"
+              :tabindex="tab === 'calendar' ? 0 : -1"
+              class="group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink"
+              :class="tab === 'calendar' ? 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-primary' : 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink'"
+              x-on:click="tab = 'calendar'"
+            >
+              <span class="flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink/30" :class="tab === 'calendar' ? 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-primary-soft ring-primary' : 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink\/30'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-7 [stroke-width:1.4] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /></svg></span>
+              Calendar
+            </button>
+                                  <button
+              id="catatan-tab-boards"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              :aria-selected="tab === 'boards' ? 'true' : 'false'"
+              aria-controls="catatan-panel"
+              tabindex="-1"
+              :tabindex="tab === 'boards' ? 0 : -1"
+              class="group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink"
+              :class="tab === 'boards' ? 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-primary' : 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink'"
+              x-on:click="tab = 'boards'"
+            >
+              <span class="flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink/30" :class="tab === 'boards' ? 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-primary-soft ring-primary' : 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink\/30'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-7 [stroke-width:1.4] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17v4M8 21h8M7 12l3-3 2 2 4-4" /></svg></span>
+              Whiteboards
+            </button>
+                                  <button
+              id="catatan-tab-daily"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              :aria-selected="tab === 'daily' ? 'true' : 'false'"
+              aria-controls="catatan-panel"
+              tabindex="-1"
+              :tabindex="tab === 'daily' ? 0 : -1"
+              class="group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink"
+              :class="tab === 'daily' ? 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-primary' : 'group grid min-w-0 justify-items-center gap-2 rounded-2xl px-0.5 py-3 text-[11px] font-medium transition-colors duration-150 motion-reduce:transition-none sm:min-w-24 sm:px-2 sm:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink'"
+              x-on:click="tab = 'daily'"
+            >
+              <span class="flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink/30" :class="tab === 'daily' ? 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-primary-soft ring-primary' : 'flex size-12 items-center justify-center rounded-2xl ring-1 transition-colors duration-150 motion-reduce:transition-none sm:size-16 bg-surface ring-line group-hover:ring-ink\/30'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-7 [stroke-width:1.4] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M12 3v2M12 19v2M5.6 5.6 7 7M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" /></svg></span>
+              Daily Notes
+            </button>
+                  </div>
+        <div class="relative isolate mx-auto mt-10 max-w-5xl">
+          <span class="absolute -inset-x-6 -inset-y-6 -z-10 rounded-[2.5rem] bg-[linear-gradient(135deg,var(--tpl-ice),var(--tpl-lilac)_50%,var(--tpl-peach))] opacity-70 sm:-inset-x-10" aria-hidden="true"></span>
+          <div id="catatan-panel" role="tabpanel" aria-labelledby="catatan-tab-docs" :aria-labelledby="'catatan-tab-' + tab">
+            <div class="relative overflow-hidden rounded-2xl bg-surface text-left shadow-[0_30px_60px_-20px_rgb(12_40_73/0.35)] ring-1 ring-ink/10">
+              <div class="flex h-10 items-center gap-2 border-b border-line bg-subtle/60 px-4"><span class="size-3 rounded-full bg-line"></span><span class="size-3 rounded-full bg-line"></span><span class="size-3 rounded-full bg-line"></span><span class="mx-auto text-xs font-medium text-muted" x-text="labels[tab]">Docs</span></div>
+              <div class="min-h-[25rem] p-5 sm:p-8">
+                <template x-if="tab === 'docs'">
+                  <div class="grid gap-6 md:grid-cols-[1fr_15rem]">
+                    <div class="grid content-start gap-4">
+                      <p class="text-xs font-semibold tracking-wide text-muted uppercase">Studio Lembar / Letters</p>
+                      <p class="font-serif text-3xl tracking-tight">A quarterly letter to the team</p>
+                      <p class="text-sm leading-relaxed text-muted">This quarter we shipped offline sync, rebuilt search, and welcomed four new people. Here is what we learned, and what we want to try next.</p>
+                      <p class="rounded-xl bg-(--tpl-cream) p-4 font-serif text-lg leading-snug italic">&ldquo;Write it down first. Decide later.&rdquo;</p>
+                      <p class="text-sm leading-relaxed text-muted">Next up: shared spaces for small teams, and a calmer way to plan the week without leaving your notes.</p>
+                    </div>
+                    <div class="grid content-start gap-2">
+                      <p class="text-xs font-semibold tracking-wide text-muted uppercase">Linked pages</p>
+                                              <span class="flex items-center gap-3 rounded-xl p-3 text-sm font-medium ring-1 ring-line"><span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink bg-(--tpl-peach)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /></svg></span> Flights</span>
+                                              <span class="flex items-center gap-3 rounded-xl p-3 text-sm font-medium ring-1 ring-line"><span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink bg-(--tpl-mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M3 11l9-8 9 8M5 10v10h14V10" /></svg></span> Villa shortlist</span>
+                                              <span class="flex items-center gap-3 rounded-xl p-3 text-sm font-medium ring-1 ring-line"><span class="flex size-7 items-center justify-center rounded-lg bg-surface/70 text-ink bg-(--tpl-lilac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4" /></svg></span> Agenda</span>
+                                          </div>
+                  </div>
+                </template>
+                <template x-if="tab === 'tasks'">
+                  <div class="grid gap-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <p class="font-serif text-3xl tracking-tight">This week</p>
+                      <span class="flex items-center gap-3 text-sm text-muted">5 of 8 done <span class="h-1.5 w-32 overflow-hidden rounded-full bg-subtle"><span class="block h-full w-[62.5%] rounded-full bg-primary"></span></span></span>
+                    </div>
+                    <ul>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3"><path d="M5 12l5 5 9-10" /></svg></span>
+                                                    <span class="text-muted line-through">Send the venue deposit</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-peach)">Offsite</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Mon</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3"><path d="M5 12l5 5 9-10" /></svg></span>
+                                                    <span class="text-muted line-through">Draft the November newsletter</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-lilac)">Writing</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Mon</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3"><path d="M5 12l5 5 9-10" /></svg></span>
+                                                    <span class="text-muted line-through">Review Sekar&#039;s chapter notes</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-mint)">Reading</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Tue</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3"><path d="M5 12l5 5 9-10" /></svg></span>
+                                                    <span class="text-muted line-through">Book the Ubud villa</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-peach)">Offsite</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Tue</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3"><path d="M5 12l5 5 9-10" /></svg></span>
+                                                    <span class="text-muted line-through">Plan Q1 roadmap session</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-ice)">Team</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Wed</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="size-5 shrink-0 rounded-full ring-1 ring-faint ring-inset"></span>
+                                                    <span class="">Pick up film from the lab</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-cream)">Personal</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Thu</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="size-5 shrink-0 rounded-full ring-1 ring-faint ring-inset"></span>
+                                                    <span class="">Call Pak Hendra about catering</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-peach)">Offsite</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Fri</span>
+                        </li>
+                                              <li class="flex items-center gap-3 border-b border-line py-3 text-sm last:border-0">
+                                                      <span class="size-5 shrink-0 rounded-full ring-1 ring-faint ring-inset"></span>
+                                                    <span class="">Finish the pitch deck outline</span>
+                          <span class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium bg-(--tpl-ice)">Team</span>
+                          <span class="w-14 text-right text-xs text-muted tabular-nums">Fri</span>
+                        </li>
+                                          </ul>
+                  </div>
+                </template>
+                <template x-if="tab === 'calendar'">
+                  <div class="grid gap-4">
+                    <p class="font-serif text-3xl tracking-tight">November 2026</p>
+                    <div class="grid grid-cols-7 gap-1.5 sm:gap-2">
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Mon <span class="flex size-7 items-center justify-center rounded-full text-sm bg-primary font-semibold text-on-primary">9</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-ice)">Standup <span class="font-normal text-ink/70">09:00</span></span>
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-lilac)">Write <span class="font-normal text-ink/70">10:30</span></span>
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-peach)">Lunch with Rani <span class="font-normal text-ink/70">12:30</span></span>
+                                                      </div>
+                        </div>
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Tue <span class="flex size-7 items-center justify-center rounded-full text-sm">10</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-mint)">Design review <span class="font-normal text-ink/70">11:00</span></span>
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-cream)">Gym <span class="font-normal text-ink/70">18:00</span></span>
+                                                      </div>
+                        </div>
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Wed <span class="flex size-7 items-center justify-center rounded-full text-sm">11</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-ice)">Roadmap <span class="font-normal text-ink/70">13:00</span></span>
+                                                      </div>
+                        </div>
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Thu <span class="flex size-7 items-center justify-center rounded-full text-sm">12</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-rose)">Studio visit <span class="font-normal text-ink/70">10:00</span></span>
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-mint)">1:1 Bima <span class="font-normal text-ink/70">15:00</span></span>
+                                                      </div>
+                        </div>
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Fri <span class="flex size-7 items-center justify-center rounded-full text-sm">13</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-peach)">Catering call <span class="font-normal text-ink/70">09:30</span></span>
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-lilac)">Demo day <span class="font-normal text-ink/70">14:00</span></span>
+                                                      </div>
+                        </div>
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Sat <span class="flex size-7 items-center justify-center rounded-full text-sm">14</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                          <span class="grid min-w-0 gap-0.5 rounded-lg p-1 text-[10px] leading-tight font-medium [overflow-wrap:anywhere] sm:p-2 sm:text-xs bg-(--tpl-peach)">Flight DPS <span class="font-normal text-ink/70">07:15</span></span>
+                                                      </div>
+                        </div>
+                                              <div class="min-w-0">
+                          <div class="grid justify-items-center gap-0.5 pb-2 text-xs text-muted">Sun <span class="flex size-7 items-center justify-center rounded-full text-sm">15</span></div>
+                          <div class="grid min-h-64 content-start gap-1.5 rounded-xl bg-subtle/50 p-1">
+                                                      </div>
+                        </div>
+                                          </div>
+                  </div>
+                </template>
+                <template x-if="tab === 'boards'">
+                  <div class="relative h-[22rem] overflow-hidden rounded-xl bg-subtle/50 bg-[radial-gradient(var(--color-line)_1.2px,transparent_1.2px)] bg-size-[18px_18px]">
+                    <svg class="absolute inset-0 size-full fill-none stroke-faint [stroke-dasharray:5_5] [stroke-width:1.5]" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                              <path d="M22 22 C 28 14, 32 14, 37 17" vector-effect="non-scaling-stroke" />
+                                              <path d="M14 38 C 11 46, 12 52, 16 58" vector-effect="non-scaling-stroke" />
+                                              <path d="M28 72 C 34 76, 37 76, 42 72" vector-effect="non-scaling-stroke" />
+                                              <path d="M56 20 C 63 22, 67 28, 71 34" vector-effect="non-scaling-stroke" />
+                                              <path d="M61 70 C 68 68, 72 62, 76 56" vector-effect="non-scaling-stroke" />
+                                          </svg>
+                                          <span class="absolute grid w-[28%] gap-1 rounded-md p-2 text-[11px] leading-snug shadow-sm sm:w-52 sm:p-3 sm:text-sm bg-(--tpl-cream) top-[10%] left-[3%] -rotate-3"><span class="font-semibold">Problem</span> People lose ideas between apps</span>
+                                          <span class="absolute grid w-[28%] gap-1 rounded-md p-2 text-[11px] leading-snug shadow-sm sm:w-52 sm:p-3 sm:text-sm bg-(--tpl-mint) top-[6%] left-[37%] rotate-2"><span class="font-semibold">Insight</span> Notes, tasks and dates live together</span>
+                                          <span class="absolute grid w-[28%] gap-1 rounded-md p-2 text-[11px] leading-snug shadow-sm sm:w-52 sm:p-3 sm:text-sm bg-(--tpl-lilac) top-[58%] left-[8%] rotate-1"><span class="font-semibold">Idea</span> One page that grows into a plan</span>
+                                          <span class="absolute grid w-[28%] gap-1 rounded-md p-2 text-[11px] leading-snug shadow-sm sm:w-52 sm:p-3 sm:text-sm bg-(--tpl-rose) top-[60%] left-[42%] -rotate-2"><span class="font-semibold">Next</span> Prototype the weekly view</span>
+                                          <span class="absolute grid w-[28%] gap-1 rounded-md p-2 text-[11px] leading-snug shadow-sm sm:w-52 sm:p-3 sm:text-sm bg-(--tpl-ice) top-[32%] left-[70%] rotate-3"><span class="font-semibold">Ship</span> Launch to the first 100 users</span>
+                                      </div>
+                </template>
+                <template x-if="tab === 'daily'">
+                  <div class="grid gap-6 md:grid-cols-[1fr_14rem]">
+                    <div>
+                      <p class="text-xs font-semibold tracking-wide text-muted uppercase">Daily note</p>
+                      <p class="font-serif text-3xl tracking-tight">Monday, 9 November</p>
+                      <ul class="mt-3">
+                                                  <li class="flex gap-4 border-b border-line py-3 text-sm last:border-0"><span class="w-12 shrink-0 text-muted tabular-nums">07:30</span> Morning pages. Slept well, head feels clear.</li>
+                                                  <li class="flex gap-4 border-b border-line py-3 text-sm last:border-0"><span class="w-12 shrink-0 text-muted tabular-nums">09:10</span> Idea for the newsletter: small rituals that stick.</li>
+                                                  <li class="flex gap-4 border-b border-line py-3 text-sm last:border-0"><span class="w-12 shrink-0 text-muted tabular-nums">13:00</span> Lunch with Rani, she recommended Laut Bercerita.</li>
+                                                  <li class="flex gap-4 border-b border-line py-3 text-sm last:border-0"><span class="w-12 shrink-0 text-muted tabular-nums">16:45</span> Shipped the onboarding copy, two typos fixed.</li>
+                                              </ul>
+                      <div class="mt-4 flex flex-wrap gap-2">
+                                                  <span class="rounded-full px-3 py-1 text-xs font-medium bg-(--tpl-mint)">Calm</span>
+                                                  <span class="rounded-full px-3 py-1 text-xs font-medium bg-(--tpl-ice)">Focused</span>
+                                                  <span class="rounded-full px-3 py-1 text-xs font-medium bg-(--tpl-peach)">Grateful</span>
+                                              </div>
+                    </div>
+                    <div class="grid content-start gap-3 rounded-xl bg-subtle/60 p-4">
+                      <p class="text-xs font-semibold tracking-wide text-muted uppercase">Earlier</p>
+                                              <span class="flex items-center justify-between text-sm">Sunday, 8 Nov <span class="text-muted">4 notes</span></span>
+                                              <span class="flex items-center justify-between text-sm">Saturday, 7 Nov <span class="text-muted">2 notes</span></span>
+                                              <span class="flex items-center justify-between text-sm">Friday, 6 Nov <span class="text-muted">6 notes</span></span>
+                                          </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stories" aria-labelledby="catatan-stories" class="scroll-mt-24 px-4 py-20 sm:py-28">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-6" data-reveal="">
+        <h2 id="catatan-stories" class="font-serif text-4xl leading-tight tracking-tight sm:text-5xl">How people use Lembar</h2>
+        <div class="flex gap-2">
+          <button type="button" class="inline-flex size-11 items-center justify-center rounded-full bg-surface text-ink ring-1 ring-line transition-colors duration-150 hover:bg-subtle disabled:opacity-40 disabled:hover:bg-surface motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Previous stories" disabled :disabled="edges.start" x-on:click="slide(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-5"><path d="M15 18l-6-6 6-6" /></svg></button>
+          <button type="button" class="inline-flex size-11 items-center justify-center rounded-full bg-surface text-ink ring-1 ring-line transition-colors duration-150 hover:bg-subtle disabled:opacity-40 disabled:hover:bg-surface motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Next stories" :disabled="edges.end" x-on:click="slide(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-5"><path d="M9 18l6-6-6-6" /></svg></button>
+        </div>
+      </div>
+      <div x-ref="viewport" role="region" aria-label="Stories" tabindex="0" class="mx-auto mt-10 max-w-6xl snap-x snap-mandatory overflow-x-auto scroll-smooth rounded-3xl pb-2 [scrollbar-width:none] motion-reduce:scroll-auto [&amp;::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:scroll="onScroll()">
+        <ul class="flex gap-5">
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-ice)] [--story-a:var(--tpl-sun)] [--story-b:var(--tpl-blue)] [--story-c:var(--tpl-coral)] [--story-shirt:var(--tpl-coal)]" aria-hidden="true">
+                <span class="absolute inset-0"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">NP</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Nadia Putri</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">Architect</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;Site notes, sketches and client calls in one place, finally.&rdquo;</p>
+            </li>
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-peach)] [--story-a:var(--tpl-coral)] [--story-b:var(--tpl-teal)] [--story-c:var(--tpl-violet)] [--story-shirt:var(--tpl-blue)]" aria-hidden="true">
+                <span class="absolute inset-0 -scale-x-100"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">BS</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Bima Santoso</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">Founder</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;Our whole company handbook started as a single messy page.&rdquo;</p>
+            </li>
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-mint)] [--story-a:var(--tpl-teal)] [--story-b:var(--tpl-sun)] [--story-c:var(--tpl-blue)] [--story-shirt:var(--tpl-violet)]" aria-hidden="true">
+                <span class="absolute inset-0"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">SA</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Sekar Ayu</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">PhD student</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;Three years of reading notes, and I can still find every quote.&rdquo;</p>
+            </li>
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-lilac)] [--story-a:var(--tpl-violet)] [--story-b:var(--tpl-coral)] [--story-c:var(--tpl-sun)] [--story-shirt:var(--tpl-teal)]" aria-hidden="true">
+                <span class="absolute inset-0 -scale-x-100"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">RP</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Reza Pratama</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">Product manager</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;Specs, tasks and the launch calendar finally talk to each other.&rdquo;</p>
+            </li>
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-rose)] [--story-a:var(--tpl-coral)] [--story-b:var(--tpl-violet)] [--story-c:var(--tpl-teal)] [--story-shirt:var(--tpl-sun)]" aria-hidden="true">
+                <span class="absolute inset-0"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">IM</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Intan Maharani</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">Novelist</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;My second novel lives here, chapter by chapter, draft by draft.&rdquo;</p>
+            </li>
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-cream)] [--story-a:var(--tpl-sun)] [--story-b:var(--tpl-blue)] [--story-c:var(--tpl-teal)] [--story-shirt:var(--tpl-coral)]" aria-hidden="true">
+                <span class="absolute inset-0 -scale-x-100"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">DW</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Dimas Wicaksono</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">Teacher</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;Lesson plans for forty students, shared with one link.&rdquo;</p>
+            </li>
+                      <li class="w-64 shrink-0 snap-start sm:w-72">
+              <div class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-(--story-bg) [--story-bg:var(--tpl-ice)] [--story-a:var(--tpl-teal)] [--story-b:var(--tpl-rose)] [--story-c:var(--tpl-violet)] [--story-shirt:var(--tpl-coal)]" aria-hidden="true">
+                <span class="absolute inset-0"><span class="absolute -top-8 -right-10 size-40 rounded-full bg-(--story-a)"></span><span class="absolute -bottom-6 -left-8 h-24 w-56 -rotate-12 rounded-2xl bg-(--story-b)"></span><span class="absolute top-10 left-6 size-16 rounded-t-full bg-(--story-c) opacity-80"></span></span>
+                <span class="absolute bottom-0 left-1/2 h-[34%] w-[64%] -translate-x-1/2 rounded-t-[999px] bg-(--story-shirt)"></span>
+                <span class="absolute bottom-[30%] left-1/2 flex aspect-square w-[38%] -translate-x-1/2 items-center justify-center rounded-full bg-(--tpl-paper) font-serif text-3xl text-ink ring-4 ring-(--story-bg)">LW</span>
+              </div>
+              <p class="mt-4 text-base font-semibold">Laras Wulandari</p>
+              <p class="mt-0.5 text-xs font-semibold tracking-[0.12em] text-muted uppercase">Chef</p>
+              <p class="mt-3 font-serif text-lg leading-snug text-pretty italic">&ldquo;Every recipe test, every tweak, with photos of the plating.&rdquo;</p>
+            </li>
+                  </ul>
+      </div>
+    </section>
+
+    <section id="features" aria-labelledby="catatan-features" class="scroll-mt-24 px-4 py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl" data-reveal="">
+        <h2 id="catatan-features" class="mx-auto max-w-3xl text-center font-serif text-4xl leading-[1.08] tracking-tight text-balance sm:text-6xl">From first thought to finished</h2>
+        <p class="mx-auto mt-5 max-w-xl text-center text-lg text-pretty text-muted">Catch the idea, give it shape, then hand it to the people who need it.</p>
+        <div class="mt-14 grid gap-5 md:grid-cols-3">
+          <div class="grid content-start gap-5 rounded-3xl p-5 sm:p-6 bg-(--tpl-cream)">
+            <div class="grid min-h-44 content-center gap-2.5 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-ink/5" aria-hidden="true">
+              <span class="flex items-center gap-2 rounded-xl bg-subtle px-3 py-2.5 text-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 text-muted"><path d="M12 5v14M5 12h14" /></svg> Call Pak Hendra about the venue <span class="h-4 w-px bg-primary"></span></span>
+              <span class="inline-flex w-fit items-center gap-1 rounded-full bg-subtle px-2.5 py-1 text-xs font-medium text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg> Inbox</span>
+            </div>
+            <p class="text-sm font-semibold text-ink/70">01 Capture</p>
+            <h3 class="font-serif text-2xl tracking-tight">Jot it before it slips</h3>
+            <p class="text-sm leading-relaxed text-ink/80">A quick note from the menu bar, your phone, or your watch. It lands in Inbox, ready when you are.</p>
+          </div>
+          <div class="grid content-start gap-5 rounded-3xl p-5 sm:p-6 bg-(--tpl-mint)">
+            <div class="grid min-h-44 content-center gap-2.5 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-ink/5" aria-hidden="true">
+                              <span class="flex items-center gap-2 text-sm">
+                                      <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3"><path d="M5 12l5 5 9-10" /></svg></span>
+                                    Plan Q1 roadmap session
+                </span>
+                              <span class="flex items-center gap-2 text-sm">
+                                      <span class="size-5 shrink-0 rounded-full ring-1 ring-faint ring-inset"></span>
+                                    Pick up film from the lab
+                </span>
+                              <span class="flex items-center gap-2 text-sm">
+                                      <span class="size-5 shrink-0 rounded-full ring-1 ring-faint ring-inset"></span>
+                                    Call Pak Hendra about catering
+                </span>
+                          </div>
+            <p class="text-sm font-semibold text-ink/70">02 Shape</p>
+            <h3 class="font-serif text-2xl tracking-tight">Turn notes into plans</h3>
+            <p class="text-sm leading-relaxed text-ink/80">Any line becomes a task, any date becomes an event, any page becomes a board. Nothing gets copied twice.</p>
+          </div>
+          <div class="grid content-start gap-5 rounded-3xl p-5 sm:p-6 bg-(--tpl-lilac)">
+            <div class="grid min-h-44 content-center gap-2.5 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-ink/5" aria-hidden="true">
+              <span class="flex items-center gap-2 rounded-xl bg-subtle px-3 py-2 text-xs text-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-3.5"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg> lembar.page/bali-offsite</span>
+              <span class="flex items-center">
+                <span class="flex -space-x-1.5">
+                                      <span class="flex size-8 items-center justify-center rounded-full text-[11px] font-semibold text-ink ring-2 ring-surface bg-(--tpl-peach)">NP</span>
+                                      <span class="flex size-8 items-center justify-center rounded-full text-[11px] font-semibold text-ink ring-2 ring-surface bg-(--tpl-ice)">BS</span>
+                                      <span class="flex size-8 items-center justify-center rounded-full text-[11px] font-semibold text-ink ring-2 ring-surface bg-(--tpl-rose)">SA</span>
+                                  </span>
+                <span class="ml-auto rounded-full bg-success/15 px-2.5 py-1 text-xs font-medium text-ink">Published</span>
+              </span>
+            </div>
+            <p class="text-sm font-semibold text-ink/70">03 Share</p>
+            <h3 class="font-serif text-2xl tracking-tight">Send it out into the world</h3>
+            <p class="text-sm leading-relaxed text-ink/80">Invite people to edit, share a read only link, or publish a page as a site with its own address.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" aria-labelledby="catatan-pricing" class="scroll-mt-24 px-4 py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl" data-reveal="">
+        <h2 id="catatan-pricing" class="mx-auto max-w-3xl text-center font-serif text-4xl leading-[1.08] tracking-tight text-balance sm:text-6xl">Simple plans, honest prices</h2>
+        <p class="mx-auto mt-5 max-w-xl text-center text-lg text-pretty text-muted">Start free. Upgrade when your notes outgrow two devices.</p>
+        <div class="mx-auto mt-10 flex w-fit items-center gap-1 rounded-full bg-subtle p-1 ring-1 ring-line" role="group" aria-label="Billing period">
+          <button type="button" aria-pressed="true" :aria-pressed="!yearly ? 'true' : 'false'" class="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary bg-surface text-ink shadow-sm ring-1 ring-line" :class="yearly ? 'inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink' : 'inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary bg-surface text-ink shadow-sm ring-1 ring-line'" x-on:click="yearly = false">Monthly</button>
+          <button type="button" aria-pressed="false" :aria-pressed="yearly ? 'true' : 'false'" class="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink" :class="yearly ? 'inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary bg-surface text-ink shadow-sm ring-1 ring-line' : 'inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-muted hover:text-ink'" x-on:click="yearly = true">Yearly <span class="rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold text-primary">Save 20%</span></button>
+        </div>
+        <div class="mt-12 grid items-start gap-5 lg:grid-cols-3">
+                      <div data-plan="free" class="grid gap-6 rounded-3xl bg-surface p-6 sm:p-7 ring-1 ring-line">
+              <div>
+                <h3 class="flex items-center justify-between text-lg font-semibold">Free</h3>
+                <p class="mt-1 text-sm text-muted">For your own notes and ideas.</p>
+              </div>
+              <div>
+                <p><span class="text-5xl font-semibold tracking-tighter tabular-nums" x-text="yearly ? 'Rp0' : 'Rp0'">Rp0</span><span class="ml-1 text-sm text-muted">/ month</span></p>
+                <p class="mt-1 h-5 text-sm text-muted" x-text="yearly ? 'Free forever' : 'Free forever'">Free forever</p>
+              </div>
+              <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm w-full" type="button" x-on:click="choosePlan('free')">
+    Download free
+</button>
+              <ul class="grid gap-2.5 text-sm">
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Unlimited notes on 2 devices</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Docs, tasks and daily notes</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> 1 GB of uploads</li>
+                              </ul>
+            </div>
+                      <div data-plan="plus" class="grid gap-6 rounded-3xl bg-surface p-6 sm:p-7 ring-2 ring-primary shadow-overlay">
+              <div>
+                <h3 class="flex items-center justify-between text-lg font-semibold">Plus<span class="rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-on-primary">Popular</span></h3>
+                <p class="mt-1 text-sm text-muted">For people who live in their notes.</p>
+              </div>
+              <div>
+                <p><span class="text-5xl font-semibold tracking-tighter tabular-nums" x-text="yearly ? 'Rp39.000' : 'Rp49.000'">Rp49.000</span><span class="ml-1 text-sm text-muted">/ month</span></p>
+                <p class="mt-1 h-5 text-sm text-muted" x-text="yearly ? 'Rp468.000 billed yearly' : 'Billed monthly'">Billed monthly</p>
+              </div>
+              <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm w-full" type="button" x-on:click="choosePlan('plus')">
+    Start 14 day trial
+</button>
+              <ul class="grid gap-2.5 text-sm">
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Everything in Free, on every device</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Calendar and whiteboards</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Publish pages as a website</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> 50 GB of uploads</li>
+                              </ul>
+            </div>
+                      <div data-plan="team" class="grid gap-6 rounded-3xl bg-surface p-6 sm:p-7 ring-1 ring-line">
+              <div>
+                <h3 class="flex items-center justify-between text-lg font-semibold">Team</h3>
+                <p class="mt-1 text-sm text-muted">For small teams sharing one space.</p>
+              </div>
+              <div>
+                <p><span class="text-5xl font-semibold tracking-tighter tabular-nums" x-text="yearly ? 'Rp71.000' : 'Rp89.000'">Rp89.000</span><span class="ml-1 text-sm text-muted">/ month</span></p>
+                <p class="mt-1 h-5 text-sm text-muted" x-text="yearly ? 'Rp852.000 per member yearly' : 'Per member, billed monthly'">Per member, billed monthly</p>
+              </div>
+              <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none border border-line bg-surface text-ink hover:bg-subtle h-10 rounded-lg px-4 text-sm w-full" type="button" x-on:click="choosePlan('team')">
+    Talk to us
+</button>
+              <ul class="grid gap-2.5 text-sm">
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Everything in Plus</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Shared spaces and permissions</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Admin console and SSO</li>
+                                  <li class="flex items-start gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-primary"><path d="M5 12l5 5 9-10" /></svg> Priority support in Bahasa and English</li>
+                              </ul>
+            </div>
+                  </div>
+      </div>
+    </section>
+
+    <div class="scroll-mt-24 px-4 py-20 sm:py-28 [&amp;_h2]:font-serif [&amp;_h2]:text-4xl [&amp;_h2]:font-normal [&amp;_h2]:tracking-tight sm:[&amp;_h2]:text-5xl">
+      <div class="mx-auto max-w-6xl" data-reveal="">
+        <section
+         aria-labelledby="faq-title"     class="@container w-full [interpolate-size:allow-keywords]" id="faq"
+>
+    <div class="grid gap-8 @2xl:grid-cols-[2fr_3fr] @2xl:gap-12">
+        <div class="grid content-start gap-2">
+                            <h2 id="faq-title" class="text-2xl font-semibold tracking-tight text-balance text-ink">Questions, answered</h2>
+                                        <p class="max-w-prose text-sm text-pretty text-muted">Everything people ask before they move their notes in.</p>
+                                </div>
+        <div class="grid content-start gap-4">
+                                                    <div
+                                        class="border-t border-line"
+                >
+                                            <details
+                            class="group details-content:h-0 details-content:overflow-hidden details-content:transition-[height,content-visibility] details-content:transition-discrete details-content:duration-200 details-content:ease-out open:details-content:h-auto motion-reduce:details-content:transition-none border-b border-line"
+                             name="faq-item"                                                     >
+                            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&amp;::-webkit-details-marker]:hidden">
+                                <span>Does Lembar work offline?</span>
+                                <svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                            </summary>
+                            <p class="pb-4 text-sm leading-relaxed text-pretty text-muted">Yes. Everything is stored on your device first and syncs when you are back online, so a flight or a bad signal never stops you.</p>
+                        </details>
+                                            <details
+                            class="group details-content:h-0 details-content:overflow-hidden details-content:transition-[height,content-visibility] details-content:transition-discrete details-content:duration-200 details-content:ease-out open:details-content:h-auto motion-reduce:details-content:transition-none border-b border-line"
+                             name="faq-item"                                                     >
+                            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&amp;::-webkit-details-marker]:hidden">
+                                <span>Can I import from other apps?</span>
+                                <svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                            </summary>
+                            <p class="pb-4 text-sm leading-relaxed text-pretty text-muted">Bring your notes from Markdown files, Notion, Evernote, or Apple Notes. Folders, images, and links come along.</p>
+                        </details>
+                                            <details
+                            class="group details-content:h-0 details-content:overflow-hidden details-content:transition-[height,content-visibility] details-content:transition-discrete details-content:duration-200 details-content:ease-out open:details-content:h-auto motion-reduce:details-content:transition-none border-b border-line"
+                             name="faq-item"                                                     >
+                            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&amp;::-webkit-details-marker]:hidden">
+                                <span>Who can see my notes?</span>
+                                <svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                            </summary>
+                            <p class="pb-4 text-sm leading-relaxed text-pretty text-muted">Only you, until you share a page. Shared pages can be view only, editable, or published as a public site.</p>
+                        </details>
+                                            <details
+                            class="group details-content:h-0 details-content:overflow-hidden details-content:transition-[height,content-visibility] details-content:transition-discrete details-content:duration-200 details-content:ease-out open:details-content:h-auto motion-reduce:details-content:transition-none border-b border-line"
+                             name="faq-item"                                                     >
+                            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&amp;::-webkit-details-marker]:hidden">
+                                <span>Is there a discount for students?</span>
+                                <svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                            </summary>
+                            <p class="pb-4 text-sm leading-relaxed text-pretty text-muted">Students and teachers get Plus for free with a school email address. Renew it once a year.</p>
+                        </details>
+                                            <details
+                            class="group details-content:h-0 details-content:overflow-hidden details-content:transition-[height,content-visibility] details-content:transition-discrete details-content:duration-200 details-content:ease-out open:details-content:h-auto motion-reduce:details-content:transition-none border-b border-line"
+                             name="faq-item"                                                     >
+                            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&amp;::-webkit-details-marker]:hidden">
+                                <span>Can I cancel at any time?</span>
+                                <svg class="size-4 shrink-0 text-muted transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                            </summary>
+                            <p class="pb-4 text-sm leading-relaxed text-pretty text-muted">Yes. Your plan stays active until the end of the period, and your notes stay yours on the Free plan.</p>
+                        </details>
+                                    </div>
+                                </div>
+            </div>
+    </section>
+      </div>
+    </div>
+
+    <section id="download" aria-labelledby="catatan-download" class="scroll-mt-24 px-4 pb-20">
+      <div class="relative isolate mx-auto grid max-w-6xl justify-items-center overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,var(--tpl-sky-1),var(--tpl-sky-2)_55%,var(--tpl-sky-3))] px-5 py-16 text-center sm:py-24" data-reveal="">
+                  <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none -top-6 -left-10 opacity-80" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+                  <span class="pointer-events-none absolute -z-10 h-28 w-80 blur-lg animate-[catatan-drift_14s_ease-in-out_infinite_alternate] motion-reduce:animate-none right-0 bottom-4 scale-125 opacity-70 [animation-delay:-6s]" aria-hidden="true"><span class="absolute bottom-0 left-0 h-[45%] w-full rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[20%] left-[14%] h-[60%] w-[30%] rounded-full bg-(--tpl-cloud)"></span><span class="absolute bottom-[12%] left-[38%] h-full w-[40%] rounded-full bg-(--tpl-cloud)"></span></span>
+                <h2 id="catatan-download" class="max-w-2xl font-serif text-4xl leading-[1.05] tracking-tight text-balance text-(--tpl-sky-ink) sm:text-6xl">Start with a blank page</h2>
+        <p class="mt-4 max-w-md text-base text-(--tpl-sky-ink)/80 sm:text-lg">Get Lembar on every device. We will send the download link straight to your phone.</p>
+        <div class="mt-6 flex flex-wrap justify-center gap-2">
+                      <button type="button" class="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface/80 px-4 text-sm font-medium text-ink ring-1 ring-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="notify('Lembar for macOS', 'Your download will start in a moment.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" /></svg> macOS</button>
+                      <button type="button" class="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface/80 px-4 text-sm font-medium text-ink ring-1 ring-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="notify('Lembar for Windows', 'Your download will start in a moment.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" /></svg> Windows</button>
+                      <button type="button" class="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface/80 px-4 text-sm font-medium text-ink ring-1 ring-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="notify('Lembar for iPhone', 'Your download will start in a moment.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" /></svg> iPhone</button>
+                      <button type="button" class="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface/80 px-4 text-sm font-medium text-ink ring-1 ring-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" x-on:click="notify('Lembar for Android', 'Your download will start in a moment.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 shrink-0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" /></svg> Android</button>
+                  </div>
+        <form class="mt-8 grid w-full max-w-md gap-3 rounded-3xl bg-surface p-4 text-left shadow-overlay sm:grid-cols-[1fr_auto] sm:items-start" novalidate x-on:submit.prevent="submit()">
+          <div class="grid gap-1.5">
+            <div class="grid gap-1.5">
+            <label for="catatan-email" class="text-sm font-medium text-ink">Email</label>
+        <input class="h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none" id="catatan-email" type="email" name="email" placeholder="you@mail.com" x-model="email" x-bind:aria-invalid="emailError ? 'true' : null" x-bind:aria-describedby="emailError ? 'catatan-email-error' : null" />
+    </div>
+            <template x-if="emailError"><p id="catatan-email-error" class="text-sm text-danger" x-text="emailError"></p></template>
+          </div>
+          <button class="inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none bg-primary text-on-primary hover:bg-primary-strong h-10 rounded-lg px-4 text-sm sm:mt-7" type="submit">
+    Send link
+</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line px-4 pt-14 pb-10">
+    <div class="mx-auto grid max-w-6xl grid-cols-3 gap-x-4 gap-y-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+      <div class="col-span-3 grid content-start gap-3 md:col-span-1">
+        <a href="#top" class="rounded-md text-xl font-black tracking-tighter focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-fit">lembar</a>
+        <p class="max-w-xs text-sm text-muted">A calm home for notes, tasks, and big ideas. Made in Yogyakarta.</p>
+      </div>
+              <nav aria-label="Product">
+          <h2 class="text-sm font-semibold">Product</h2>
+          <ul class="mt-3 grid gap-2 text-sm">
+                          <li><a href="/docs" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Docs</a></li>
+                          <li><a href="/tasks" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Tasks</a></li>
+                          <li><a href="/calendar" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Calendar</a></li>
+                          <li><a href="/whiteboards" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Whiteboards</a></li>
+                      </ul>
+        </nav>
+              <nav aria-label="Company">
+          <h2 class="text-sm font-semibold">Company</h2>
+          <ul class="mt-3 grid gap-2 text-sm">
+                          <li><a href="/about" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">About</a></li>
+                          <li><a href="/careers" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Careers</a></li>
+                          <li><a href="/blog" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Blog</a></li>
+                          <li><a href="/press" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Press</a></li>
+                      </ul>
+        </nav>
+              <nav aria-label="Resources">
+          <h2 class="text-sm font-semibold">Resources</h2>
+          <ul class="mt-3 grid gap-2 text-sm">
+                          <li><a href="/help-center" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Help center</a></li>
+                          <li><a href="/templates" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Templates</a></li>
+                          <li><a href="/community" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Community</a></li>
+                          <li><a href="/status" class="rounded-sm text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Status</a></li>
+                      </ul>
+        </nav>
+          </div>
+    <div class="mx-auto mt-12 flex max-w-6xl flex-wrap items-center justify-between gap-3 border-t border-line pt-6 text-sm text-muted">
+      <p>&copy; 2026 Lembar Labs. All rights reserved.</p>
+      <p>Built with <a href="https://markasui.pages.dev" class="rounded-sm font-medium text-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">MarkasUI</a></p>
+    </div>
+  </footer>
+  <div
+    x-data="{
+        toasts: [],
+        timers: {},
+        nextId: 0,
+        variants: JSON.parse('{\u0022default\u0022:\u0022border-line\u0022,\u0022success\u0022:\u0022border-success\\\/40\u0022,\u0022danger\u0022:\u0022border-danger\\\/40\u0022}'),
+        iconVariants: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022text-success\u0022,\u0022danger\u0022:\u0022text-danger\u0022}'),
+        icons: JSON.parse('{\u0022default\u0022:\u0022\u0022,\u0022success\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8.5 12l2.5 2.5 4.5-5\u0022,\u0022danger\u0022:\u0022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15 9l-6 6M9 9l6 6\u0022}'),
+        add(detail) {
+            const variant = detail.variant in this.variants ? detail.variant : 'default';
+            const duration = Number.isFinite(detail.duration) ? detail.duration : 5000;
+            const id = ++this.nextId;
+            this.toasts = [...this.toasts, { id, title: String(detail.title ?? ''), description: detail.description ?? '', variant }];
+            if (duration > 0) this.start(id, duration);
+        },
+        start(id, ms) {
+            this.timers[id] = { handle: setTimeout(() => this.dismiss(id), ms), remaining: ms, startedAt: Date.now() };
+        },
+        dismiss(id) {
+            clearTimeout(this.timers[id]?.handle);
+            delete this.timers[id];
+            this.toasts = this.toasts.filter((item) => item.id !== id);
+        },
+        pause(id) {
+            const timer = this.timers[id];
+            if (!timer?.handle) return;
+            clearTimeout(timer.handle);
+            this.timers[id] = { remaining: timer.remaining - (Date.now() - timer.startedAt), startedAt: 0 };
+        },
+        resume(id) {
+            const timer = this.timers[id];
+            if (!timer || timer.handle) return;
+            this.start(id, Math.max(timer.remaining, 0));
+        },
+    }"
+    x-init="[].forEach((detail) => add(detail))"
+    x-on:markas-toast.window="add($event.detail ?? {})"
+    class="pointer-events-none fixed right-4 bottom-4 z-50 flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2" role="status" aria-live="polite" aria-label="Notifications"
+>
+    <template x-for="item in toasts" :key="item.id">
+        <div
+            data-state="open"
+            class="pointer-events-auto flex items-start gap-3 rounded-lg border bg-surface p-4 text-sm text-ink shadow-overlay transition-[opacity,translate] duration-200 ease-out starting:translate-y-2 starting:opacity-0 motion-reduce:transition-none"
+            :class="variants[item.variant]"
+            x-on:mouseenter="pause(item.id)"
+            x-on:mouseleave="if (! $el.contains(document.activeElement)) resume(item.id)"
+            x-on:focusin="pause(item.id)"
+            x-on:focusout="if (! $el.contains($event.relatedTarget) && ! $el.matches(':hover')) resume(item.id)"
+        >
+            <template x-if="icons[item.variant]">
+                <svg class="mt-0.5 size-4 shrink-0" :class="iconVariants[item.variant]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.variant]" /></svg>
+            </template>
+            <div class="grid flex-1 gap-1">
+                <p class="font-semibold" x-text="item.title"></p>
+                <template x-if="item.description">
+                    <p class="text-muted" x-text="item.description"></p>
+                </template>
+            </div>
+            <button type="button" class="-mt-1 -mr-1 inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none" aria-label="Close" x-on:click="dismiss(item.id)">
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+            </button>
+        </div>
+    </template>
+</div>
+</div>

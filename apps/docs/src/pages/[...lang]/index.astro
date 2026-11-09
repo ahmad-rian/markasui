@@ -15,7 +15,7 @@ import { FRAMEWORK_LABELS, cliCommand } from "../../lib/frameworks";
 import { localeParams, localePath, t, toLocale } from "../../lib/i18n";
 import { HERO_FIXTURE } from "../../lib/landing";
 import { getComponents, groupByCategory } from "../../lib/registry";
-import { getTemplates } from "../../lib/templates";
+import { getTemplatesByKind } from "../../lib/templates";
 
 export const getStaticPaths = localeParams;
 
@@ -25,7 +25,10 @@ const copy = strings.landing;
 const home = strings.home;
 const items = await getComponents();
 const groups = groupByCategory(items, locale);
-const templates = getTemplates();
+const templates = getTemplatesByKind("dashboard");
+/** Welcome page di landing: cukup beberapa, sisanya di /pages. */
+const LANDING_PAGES = 5;
+const pages = getTemplatesByKind("page").slice(0, LANDING_PAGES);
 /** Kolom angka di kiri dan kanan judul (di layar sempit menjadi grid 2 x 2 di bawah tombol). */
 const stats = [
   [
@@ -169,9 +172,31 @@ const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
             <a href={localePath(locale, "/templates")} class="lp-more">{copy.templatesLink}<Icon name="arrowRight" class="size-3.5" /></a>
           </div>
         </div>
-        <TemplateWall />
+        <TemplateWall templates={templates} />
       </div>
     </section>
+
+    {
+      pages.length > 0 && (
+        <section class="lp-lazy" aria-labelledby="pages-title">
+          <div class={`${shell} lp-section`}>
+            <div class="lp-head">
+              <h2 id="pages-title" class="lp-h2">
+                {copy.pagesTitle[0]} <em class="lp-accent">{copy.pagesTitle[1]}</em>
+              </h2>
+              <div>
+                <p class="lp-lead">{copy.pagesText}</p>
+                <a href={localePath(locale, "/pages")} class="lp-more">
+                  {copy.pagesLink}
+                  <Icon name="arrowRight" class="size-3.5" />
+                </a>
+              </div>
+            </div>
+            <TemplateWall templates={pages} />
+          </div>
+        </section>
+      )
+    }
 
     <section class="lp-lazy" aria-labelledby="komponen-title">
       <div class={`${shell} lp-section`}>

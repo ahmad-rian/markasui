@@ -6,14 +6,14 @@ import Icon from "./Icon.astro";
 import { getLocale, localePath, pagePath, t } from "../lib/i18n";
 import { freshness, getComponents, groupByCategory } from "../lib/registry";
 import { docsNav } from "../lib/site";
-import { getTemplates } from "../lib/templates";
+import { KIND_BASE, getTemplatesByKind, templateDetailPath, type TemplateKind } from "../lib/templates";
 
 const locale = getLocale(Astro.url);
 const strings = t(locale).sidebar;
 const path = pagePath(Astro.url);
 
 type Link = { href: string; label: string; tag: string | null };
-type IconName = "brand" | "book" | "layout" | "form" | "bell" | "layers" | "compass" | "table" | "sparkles" | "image" | "pointer";
+type IconName = "brand" | "book" | "layout" | "form" | "bell" | "layers" | "compass" | "table" | "sparkles" | "image" | "pointer" | "file";
 type Section = { label: string; icon: IconName; links: Link[] };
 
 const GROUP_ICONS: Record<RegistryItem["category"], IconName> = {
@@ -33,11 +33,14 @@ const guide = docsNav(locale).map((item) => ({ href: item.href, label: item.labe
 // Halaman ikhtisar ikut di Panduan, setelah Instalasi (seperti Animate UI).
 const overviews: Link[] = [
   { href: localePath(locale, "/components"), label: strings.components, tag: null },
-  { href: localePath(locale, "/templates"), label: strings.templates, tag: null },
+  { href: localePath(locale, KIND_BASE.dashboard), label: strings.templates, tag: null },
+  { href: localePath(locale, KIND_BASE.page), label: strings.pages, tag: null },
 ];
+const kindLinks = (kind: TemplateKind): Link[] =>
+  getTemplatesByKind(kind).map((template) => ({ href: localePath(locale, templateDetailPath(template)), label: template.title, tag: null }));
 const groups = groupByCategory(await getComponents(), locale);
 
-const sections: Section[] = [
+const allSections: Section[] = [
   { label: strings.start, icon: "book", links: [...guide.slice(0, 2), ...overviews, ...guide.slice(2)] },
   ...groups.map((group) => ({
     label: group.label,
@@ -51,12 +54,10 @@ const sections: Section[] = [
       };
     }),
   })),
-  {
-    label: strings.templates,
-    icon: "layout",
-    links: getTemplates().map((template) => ({ href: localePath(locale, `/templates/${template.name}`), label: template.title, tag: null })),
-  },
+  { label: strings.templates, icon: "layout", links: kindLinks("dashboard") },
+  { label: strings.pages, icon: "file", links: kindLinks("page") },
 ];
+const sections = allSections.filter((section) => section.links.length > 0);
 ---
 
 <div class="grid gap-7">

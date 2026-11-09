@@ -1,5 +1,4 @@
 ---
-import "../../../../styles/templates.css";
 import TemplateReact from "../../../../components/templates/TemplateReact";
 import TemplateVue from "../../../../components/templates/TemplateVue.vue";
 import { accentCss } from "../../../../lib/accents";
@@ -16,6 +15,10 @@ const { template } = Astro.props;
 const { fw } = Astro.params;
 const bladeFiles = import.meta.glob<string>("../../../../generated/templates/*.html", { query: "?raw", import: "default", eager: true });
 const bladeHtml = bladeFiles[`../../../../generated/templates/${template.name}.html`] ?? "";
+/** CSS per template dari scripts/page-css.ts: token, font, template ini, dan komponen yang dipakainya. */
+const stylesheets = import.meta.glob<string>("../../../../generated/css/templates/*.css", { query: "?url", import: "default", eager: true });
+const stylesheet = stylesheets[`../../../../generated/css/templates/${template.name}.css`];
+if (!stylesheet) throw new Error(`CSS untuk template ${template.name} belum dibangkitkan (node scripts/page-css.ts)`);
 ---
 
 <!doctype html>
@@ -26,6 +29,7 @@ const bladeHtml = bladeFiles[`../../../../generated/templates/${template.name}.h
     <meta name="robots" content="noindex" />
     <title>{template.title} - MarkasUI</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href={stylesheet} />
     <script is:inline>
       try {
         const theme = new URLSearchParams(location.search).get("theme") ?? localStorage.getItem("markas-theme");

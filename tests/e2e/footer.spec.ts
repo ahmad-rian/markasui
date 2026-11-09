@@ -10,6 +10,12 @@ const VARIANTS = [
   "footer--compact",
   "footer--sitemap",
   "footer--minimal-dark",
+  "footer--stickers",
+  "footer--playful",
+  "footer--blobs",
+  "footer--illustrated",
+  "footer--retro",
+  "footer--engraved",
 ];
 const MOBILE = { width: 390, height: 844 };
 

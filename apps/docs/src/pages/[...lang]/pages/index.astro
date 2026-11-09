@@ -1,0 +1,13 @@
+---
+import "../../../styles/global.css";
+import TemplateList from "../../../components/templates/TemplateList.astro";
+import { localeParams, t, toLocale } from "../../../lib/i18n";
+import { getTemplatesByKind } from "../../../lib/templates";
+
+export const getStaticPaths = localeParams;
+
+const locale = toLocale(Astro.params.lang);
+const strings = t(locale).pages;
+---
+
+<TemplateList title={strings.title} subtitle={strings.subtitle} templates={getTemplatesByKind("page")} locale={locale} empty={strings.empty} />

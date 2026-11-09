@@ -1,6 +1,6 @@
 ---
 import { getLocale, localePath } from "../../lib/i18n";
-import { getTemplates } from "../../lib/templates";
+import { templateDetailPath, type Template } from "../../lib/templates";
 
 /**
  * Template sebagai thumbnail live: halaman demo Blade di iframe lazy yang diperkecil.
@@ -8,8 +8,13 @@ import { getTemplates } from "../../lib/templates";
  * desktop sebenarnya tanpa perlu tahu lebar sel. src baru dipasang saat sel mendekati viewport
  * (skrip di bawah), karena loading="lazy" bawaan browser memuatnya terlalu awal.
  */
+interface Props {
+  /** Dashboard atau page yang ditampilkan; yang pertama tampil besar. */
+  templates: Template[];
+}
+
+const { templates } = Astro.props;
 const locale = getLocale(Astro.url);
-const templates = getTemplates();
 const frame = "pointer-events-none absolute top-0 left-0 origin-top-left border-0";
 const large = "h-[400%] w-[400%] scale-25 lg:h-[250%] lg:w-[250%] lg:scale-40";
 const small = "h-[400%] w-[400%] scale-25";
@@ -19,7 +24,7 @@ const small = "h-[400%] w-[400%] scale-25";
   {
     templates.map((template, index) => (
       <li class:list={["min-w-0", index === 0 && "sm:col-span-2 lg:row-span-2"]}>
-        <a href={localePath(locale, `/templates/${template.name}`)} class="group block">
+        <a href={localePath(locale, templateDetailPath(template))} class="group block">
           <div class="frame transition-colors duration-150 ease-out group-hover:bg-line">
             <div class="frame-panel relative aspect-[16/10] overflow-hidden">
               <iframe

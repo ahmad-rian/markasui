@@ -1,12 +1,10 @@
 /*
- * CSS halaman demo template (/demo/templates/<slug>/<fw>): token MarkasUI, class komponen dan template, dan font.
- * Sengaja tidak memuat global.css agar halaman demo tidak membawa CSS khusus situs docs.
+ * CSS dasar halaman demo template (/demo/templates/<slug>/<fw>): token MarkasUI dan font.
+ * Sengaja tidak memuat global.css agar halaman demo tidak membawa CSS khusus situs docs. Class template
+ * dan komponen yang dipakainya ditambahkan per template oleh scripts/page-css.ts
+ * (src/generated/css/templates/<slug>.css), jadi CSS satu demo tidak ikut membesar saat template bertambah.
  */
 @import "../../../../packages/theme/markas.css";
-/* @source komponen yang dipakai template, dibangkitkan oleh scripts/page-css.ts. */
-@import "../generated/css/templates-sources.css";
-
-@source "../../../../templates";
 
 @font-face {
   font-family: "Bricolage Grotesque";

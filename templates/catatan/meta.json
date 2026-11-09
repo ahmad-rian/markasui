@@ -1,0 +1,11 @@
+{
+  "name": "catatan",
+  "kind": "page",
+  "title": "Catatan",
+  "description": {
+    "en": "Welcome page for a notes app called Lembar: a soft blue sky hero with drifting clouds, a torn paper collage around the app, five tabs that swap the mockup, a stories carousel, a monthly or yearly pricing toggle, FAQ, and an email form with a toast.",
+    "id": "Halaman sambutan untuk aplikasi catatan bernama Lembar: hero langit biru dengan awan yang bergerak pelan, kolase kertas sobek di sekitar aplikasi, lima tab yang mengganti mockup, carousel cerita pengguna, toggle harga bulanan atau tahunan, FAQ, dan form email dengan toast."
+  },
+  "components": ["button", "faq", "input", "toast"],
+  "addedAt": "2026-11-09"
+}

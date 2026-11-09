@@ -1,0 +1,11 @@
+{
+  "name": "tender",
+  "kind": "page",
+  "title": "Tender",
+  "description": {
+    "en": "Welcome page for Tendera, tender software for Indonesian contractors: a pale blue sky hero with soft clouds and a pill navbar, a tilted dashboard mockup with floating cards, a four step path to submission, a bento of feature cards with small UI mockups, sector tabs, a monthly or yearly pricing toggle, FAQ, and a trial signup form with a toast.",
+    "id": "Halaman sambutan untuk Tendera, software tender bagi kontraktor Indonesia: hero langit biru muda dengan awan halus dan navbar pill, mockup dashboard miring dengan kartu mengambang, empat langkah menuju dokumen siap kirim, bento kartu fitur dengan mockup UI kecil, tab sektor, toggle harga bulanan atau tahunan, FAQ, dan form daftar uji coba dengan toast."
+  },
+  "components": ["input", "toast"],
+  "addedAt": "2026-11-09"
+}
