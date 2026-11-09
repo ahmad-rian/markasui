@@ -1,0 +1,11 @@
+{
+  "name": "konek",
+  "title": "Konek",
+  "kind": "page",
+  "description": {
+    "en": "Telecom operator welcome page on clean white: a red wordmark navbar with a black Get the app pill and a mobile menu, a giant Stay Connected headline flanked by hand drawn SVG mascots on orange clouds that float and wag their tails, red and black mission cards, key numbers, prepaid, postpaid and home internet plans with a quota switch, a city coverage check with a toast, an FAQ, and a careers band.",
+    "id": "Halaman sambutan operator telekomunikasi berlatar putih bersih: navbar dengan wordmark merah, pill hitam Get the app, dan menu mobile, judul raksasa Stay Connected diapit maskot SVG gambar tangan di atas awan oranye yang melayang dan menggoyangkan ekor, kartu misi merah dan hitam, angka utama, paket prabayar, pascabayar, dan internet rumah dengan switch kuota, cek jangkauan per kota dengan toast, FAQ, dan pita karier."
+  },
+  "components": ["button", "faq", "input", "switch", "toast"],
+  "addedAt": "2026-11-09"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "karya",
+  "title": "Karya",
+  "kind": "page",
+  "description": {
+    "en": "Product designer portfolio on light gray: a small pill navbar with a yellow mail button, a serif hero with a pile of colorful sticker pills that fall into place and can be dragged around, case study cards with UI mockups and a modal, a playground with a radius slider, a primary token tint and a pop switch, an about section with an experience timeline, and a contact form with a toast.",
+    "id": "Portofolio desainer produk berlatar abu terang: navbar pill kecil dengan tombol surat kuning, hero serif dengan tumpukan stiker pill warna-warni yang berjatuhan dan bisa diseret, kartu studi kasus dengan mockup UI dan modal, playground berisi slider radius, campuran token primary, dan switch pop, bagian about dengan timeline pengalaman, serta form kontak dengan toast."
+  },
+  "components": [
+    "button",
+    "input",
+    "modal",
+    "slider",
+    "switch",
+    "textarea",
+    "toast"
+  ],
+  "addedAt": "2026-11-09"
+}

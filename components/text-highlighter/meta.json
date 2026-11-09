@@ -1,0 +1,133 @@
+{
+  "name": "text-highlighter",
+  "title": "Text Highlighter",
+  "description": "A highlight that draws behind inline text from four directions: in view, on hover or focus, on mount, or on command. Solid, marker, underline, or gradient.",
+  "category": "animation",
+  "tags": [
+    "text",
+    "highlight",
+    "marker",
+    "article",
+    "hero",
+    "scroll",
+    "animation"
+  ],
+  "status": "stable",
+  "frameworks": {
+    "blade": { "file": "text-highlighter.blade.php", "deps": ["alpinejs"] },
+    "react": { "file": "TextHighlighter.tsx", "deps": [] },
+    "vue": { "file": "TextHighlighter.vue", "deps": [] }
+  },
+  "props": [
+    {
+      "name": "as",
+      "type": "string",
+      "default": "\"span\"",
+      "description": "The element to render. Keep it inline, such as span, strong, or mark."
+    },
+    {
+      "name": "trigger",
+      "type": "\"view\" | \"hover\" | \"auto\" | \"manual\"",
+      "default": "\"view\"",
+      "description": "view draws when the text scrolls into view, hover follows hover and keyboard focus of the closest link or button, auto draws on mount, manual follows active."
+    },
+    {
+      "name": "direction",
+      "type": "\"ltr\" | \"rtl\" | \"ttb\" | \"btt\"",
+      "default": "\"ltr\"",
+      "description": "Where the highlight grows from: left to right, right to left, top to bottom, or bottom to top."
+    },
+    {
+      "name": "variant",
+      "type": "\"solid\" | \"marker\" | \"underline\" | \"gradient\"",
+      "default": "\"solid\"",
+      "description": "solid fills the line, marker covers the lower 60% like a highlighter pen, underline draws a thick bar under the text, gradient blends two tokens."
+    },
+    {
+      "name": "color",
+      "type": "\"warning\" | \"primary\" | \"primary-soft\" | \"success\" | \"danger\"",
+      "default": "\"warning\"",
+      "description": "Token used for the highlight, mixed with transparency so the text stays readable."
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "default": "false",
+      "description": "Highlight state for trigger manual."
+    },
+    {
+      "name": "once",
+      "type": "boolean",
+      "default": "true",
+      "description": "trigger view: draw once, or clear again when the text leaves the viewport."
+    },
+    {
+      "name": "threshold",
+      "type": "number",
+      "default": "0.5",
+      "description": "trigger view: how much of the text must be visible, from 0 to 1."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "700",
+      "description": "Milliseconds the highlight takes to draw."
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "default": "0",
+      "description": "Milliseconds to wait before drawing. Use rising delays to highlight a paragraph in order."
+    }
+  ],
+  "a11y": [
+    "The text stays plain text; the highlight is a background image and is not announced.",
+    "Text on the highlight uses the ink token, which keeps AA contrast in light and dark themes.",
+    "trigger hover also responds to keyboard focus on the closest link, button, or focusable element.",
+    "With reduced motion, view and auto highlights are shown at once and every change happens without a transition."
+  ],
+  "ai": {
+    "whenToUse": "Key phrases in articles, hero headings, and checklists that should draw the eye as they scroll in or on interaction.",
+    "rules": [
+      "Highlight a few short phrases, not whole paragraphs",
+      "Use rising delay values to highlight phrases in reading order",
+      "Use trigger hover inside a link or button so keyboard focus works too",
+      "React exposes animate(direction) and reset() through ref, Vue through a template ref, Blade through the markas-highlight and markas-highlight-reset window events",
+      "Blade needs Alpine.js"
+    ]
+  },
+  "addedAt": "2026-11-09",
+  "i18n": {
+    "id": {
+      "description": "Sorotan di balik teks inline yang tergambar dari empat arah: saat masuk layar, hover atau fokus, mount, atau perintah. Solid, stabilo, garis bawah, gradien.",
+      "props": {
+        "as": "Elemen yang dirender. Tetap inline, misalnya span, strong, atau mark.",
+        "trigger": "view menggambar saat teks masuk layar, hover mengikuti hover dan fokus keyboard pada link atau tombol terdekat, auto menggambar saat mount, manual mengikuti active.",
+        "direction": "Arah tumbuh sorotan: kiri ke kanan, kanan ke kiri, atas ke bawah, atau bawah ke atas.",
+        "variant": "solid mengisi baris, marker menutup 60% bagian bawah seperti stabilo, underline menggambar garis tebal di bawah teks, gradient memadukan dua token.",
+        "color": "Token warna sorotan, dicampur transparansi agar teks tetap terbaca.",
+        "active": "Keadaan sorotan untuk trigger manual.",
+        "once": "trigger view: gambar sekali, atau hapus lagi saat teks keluar layar.",
+        "threshold": "trigger view: seberapa banyak teks harus terlihat, dari 0 sampai 1.",
+        "duration": "Milidetik yang dibutuhkan sorotan untuk tergambar.",
+        "delay": "Milidetik menunggu sebelum menggambar. Pakai delay bertingkat untuk menyorot paragraf berurutan."
+      },
+      "a11y": [
+        "Teks tetap teks biasa; sorotan adalah gambar latar dan tidak diumumkan.",
+        "Teks di atas sorotan memakai token ink sehingga kontras AA terjaga di tema terang dan gelap.",
+        "trigger hover juga merespons fokus keyboard pada link, tombol, atau elemen fokus terdekat.",
+        "Dengan reduced motion, sorotan view dan auto langsung tampil dan setiap perubahan terjadi tanpa transisi."
+      ],
+      "ai": {
+        "whenToUse": "Frasa kunci di artikel, judul hero, dan checklist yang perlu menarik mata saat masuk layar atau saat interaksi.",
+        "rules": [
+          "Sorot beberapa frasa pendek, bukan seluruh paragraf",
+          "Pakai delay bertingkat untuk menyorot frasa sesuai urutan baca",
+          "Pakai trigger hover di dalam link atau tombol agar fokus keyboard juga bekerja",
+          "React mengekspos animate(direction) dan reset() lewat ref, Vue lewat template ref, Blade lewat event window markas-highlight dan markas-highlight-reset",
+          "Blade butuh Alpine.js"
+        ]
+      }
+    }
+  }
+}
