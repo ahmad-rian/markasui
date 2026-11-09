@@ -3,7 +3,7 @@ title: Introduction
 description: What MarkasUI is and how to use it in a Blade, React, or Vue project.
 ---
 
-MarkasUI is a free, open source UI component library from CV Jenderal Solusi Digital. Every component ships in three versions, Blade (Laravel), React, and Vue, and looks exactly the same in each because they share the same Tailwind CSS classes.
+MarkasUI is a free, open source UI component library from CV Jenderal Solusi Digital. Every component ships for Blade (Laravel), React, and Vue, with Svelte, Astro, and Angular versions rolling out, and looks exactly the same in each because they share the same Tailwind CSS classes.
 
 ## Principles
 

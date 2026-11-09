@@ -9,7 +9,8 @@ import Icon from "../Icon.astro";
 import Tabs from "../Tabs.astro";
 import Docs from "../../layouts/Docs.astro";
 import { ACCENTS } from "../../lib/accents";
-import { PACKAGE_MANAGERS, cliCommand } from "../../lib/frameworks";
+import { FRAMEWORK_LABELS, PACKAGE_MANAGERS, cliCommand } from "../../lib/frameworks";
+import { TEMPLATE_FRAMEWORKS } from "../../lib/templates";
 import { localePath, t, type Locale } from "../../lib/i18n";
 import { getComponents, localized } from "../../lib/registry";
 import { SITE } from "../../lib/site";
@@ -32,7 +33,9 @@ const used = template.components.flatMap((name) => {
 const thumbs = import.meta.glob<string>("../../../public/thumbs/*.webp", { query: "?url", import: "default", eager: true });
 const hasThumb = (name: string) => `../../../public/thumbs/${name}.webp` in thumbs;
 const demo = `/demo/templates/${template.name}/blade`;
-const frameworks = ["blade", "react", "vue"] as const;
+const frameworks = TEMPLATE_FRAMEWORKS;
+/** Template belum di-porting ke Svelte, Astro, dan Angular: preview memakai React, kode diberi pesan. */
+const pending = ["svelte", "astro", "angular"] as const;
 ---
 
 <Docs title={template.title} description={template.description[locale]} wide>
@@ -97,6 +100,13 @@ const frameworks = ["blade", "react", "vue"] as const;
         </div>
       ))
     }
+    {
+      pending.map((fw) => (
+        <p data-fw={fw} class="text-sm text-muted">
+          {component.unavailable(FRAMEWORK_LABELS[fw])}
+        </p>
+      ))
+    }
   </section>
 
   <section class="mt-16" aria-labelledby="components">
@@ -151,6 +161,7 @@ const frameworks = ["blade", "react", "vue"] as const;
 
 <script>
   import { onPageLoad } from "../../scripts/lifecycle";
+  import { TEMPLATE_FRAMEWORKS } from "../../lib/template-frameworks";
   import { getFramework } from "../../scripts/prefs";
 
   const ACCENT_KEY = "markas-template-accent";
@@ -162,7 +173,9 @@ const frameworks = ["blade", "react", "vue"] as const;
     }
   };
   const themeOf = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
-  const demoUrl = (name: string) => `/demo/templates/${name}/${getFramework()}?accent=${readAccent()}&theme=${themeOf()}`;
+  /** Template hanya ada dalam Blade, React, dan Vue; framework lain melihat versi React. */
+  const demoFramework = () => (TEMPLATE_FRAMEWORKS.includes(getFramework() as (typeof TEMPLATE_FRAMEWORKS)[number]) ? getFramework() : "react");
+  const demoUrl = (name: string) => `/demo/templates/${name}/${demoFramework()}?accent=${readAccent()}&theme=${themeOf()}`;
   const post = (data: object) =>
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => frame.contentWindow?.postMessage(data, location.origin));
 
@@ -170,7 +183,7 @@ const frameworks = ["blade", "react", "vue"] as const;
   function sync() {
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => {
       const url = demoUrl(frame.dataset.templateFrame!);
-      const framework = `/${getFramework()}?`;
+      const framework = `/${demoFramework()}?`;
       if (!frame.src.includes(framework)) frame.src = url;
       document.querySelectorAll<HTMLAnchorElement>("[data-template-open]").forEach((link) => (link.href = url));
     });

@@ -89,6 +89,31 @@ describe("MCP server", () => {
     expect(data.rules.length).toBeGreaterThan(0);
   });
 
+  it("get_component untuk Svelte, Astro, dan Angular", async () => {
+    const data = JSON.parse(
+      (await call("get_component", { name: "modal", framework: "angular" }))
+        .text,
+    );
+    expect(data.targetPath).toBe("src/app/markas/modal.component.ts");
+    expect(data.dependencies).toEqual([]);
+    expect(data.code).toContain('selector: "markas-modal"');
+    const svelte = JSON.parse(
+      (await call("get_component", { name: "modal", framework: "svelte" }))
+        .text,
+    );
+    expect(svelte.targetPath).toBe("src/lib/components/markas/Modal.svelte");
+  });
+
+  it("get_component menjelaskan framework yang belum tersedia", async () => {
+    const result = await call("get_component", {
+      name: "tabs",
+      framework: "astro",
+    });
+    expect(result.isError).toBe(true);
+    expect(result.text).toContain("not available for astro yet");
+    expect(result.text).toContain("blade, react, vue");
+  });
+
   it("get_component memberi error yang bisa dibaca agent", async () => {
     const missing = await call("get_component", {
       name: "carousel",
@@ -102,6 +127,9 @@ describe("MCP server", () => {
     expect(JSON.parse((await call("get_theme")).text).tokens).toHaveLength(15);
     expect((await call("get_setup", { framework: "blade" })).text).toContain(
       "Alpine",
+    );
+    expect((await call("get_setup", { framework: "angular" })).text).toContain(
+      "standalone",
     );
   });
 

@@ -24,7 +24,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `pnpm blade:playground && pnpm exec vite playground --port ${port}`,
+    command: `pnpm blade:playground && pnpm astro:playground && pnpm exec vite playground --port ${port}`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

@@ -86,7 +86,10 @@
   /* Konten per framework: hanya yang cocok dengan pilihan global yang tampil. */
   html[data-framework="blade"] [data-fw]:not([data-fw="blade"]),
   html[data-framework="react"] [data-fw]:not([data-fw="react"]),
-  html[data-framework="vue"] [data-fw]:not([data-fw="vue"]) {
+  html[data-framework="vue"] [data-fw]:not([data-fw="vue"]),
+  html[data-framework="svelte"] [data-fw]:not([data-fw="svelte"]),
+  html[data-framework="astro"] [data-fw]:not([data-fw="astro"]),
+  html[data-framework="angular"] [data-fw]:not([data-fw="angular"]) {
     /* !important: utility display (flex, grid, block) di elemen yang sama tidak boleh menampilkannya. */
     display: none !important;
   }
@@ -95,13 +98,19 @@
   .fw-icon[data-brand],
   html[data-framework="blade"] [data-fw-option="blade"] .fw-icon,
   html[data-framework="react"] [data-fw-option="react"] .fw-icon,
-  html[data-framework="vue"] [data-fw-option="vue"] .fw-icon {
+  html[data-framework="vue"] [data-fw-option="vue"] .fw-icon,
+  html[data-framework="svelte"] [data-fw-option="svelte"] .fw-icon,
+  html[data-framework="astro"] [data-fw-option="astro"] .fw-icon,
+  html[data-framework="angular"] [data-fw-option="angular"] .fw-icon {
     color: var(--fw-light);
   }
   .dark .fw-icon[data-brand],
   .dark[data-framework="blade"] [data-fw-option="blade"] .fw-icon,
   .dark[data-framework="react"] [data-fw-option="react"] .fw-icon,
-  .dark[data-framework="vue"] [data-fw-option="vue"] .fw-icon {
+  .dark[data-framework="vue"] [data-fw-option="vue"] .fw-icon,
+  .dark[data-framework="svelte"] [data-fw-option="svelte"] .fw-icon,
+  .dark[data-framework="astro"] [data-fw-option="astro"] .fw-icon,
+  .dark[data-framework="angular"] [data-fw-option="angular"] .fw-icon {
     color: var(--fw-dark);
   }
 

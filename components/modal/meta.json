@@ -17,6 +17,18 @@
     "vue": {
       "file": "Modal.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Modal.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Modal.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "modal.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -28,15 +40,15 @@
     },
     {
       "name": "trigger",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Element that opens the modal when clicked."
+      "description": "Element that opens the modal when clicked. Angular: an element with the trigger attribute."
     },
     {
       "name": "footer",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Action area. Wrapped in form method=dialog, so a type=submit button closes the modal."
+      "description": "Action area. Wrapped in form method=dialog, so a type=submit button closes the modal. Angular: an element with the footer attribute."
     },
     {
       "name": "id",
@@ -49,6 +61,12 @@
       "type": "string",
       "default": "Close",
       "description": "Accessible label of the close button."
+    },
+    {
+      "name": "closed",
+      "type": "output<void>",
+      "default": "-",
+      "description": "Angular only. Emits when the modal closes."
     }
   ],
   "a11y": [
@@ -71,10 +89,11 @@
       "description": "Dialog modal berbasis elemen dialog native dengan fokus terkunci dan tombol tutup.",
       "props": {
         "title": "Judul dialog, dipakai juga sebagai aria-labelledby.",
-        "trigger": "Elemen yang membuka modal saat diklik.",
-        "footer": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup modal.",
+        "trigger": "Elemen yang membuka modal saat diklik. Angular: elemen dengan atribut trigger.",
+        "footer": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup modal. Angular: elemen dengan atribut footer.",
         "id": "Id dialog. Bisa dipakai untuk membuka modal dari luar lewat showModal().",
-        "closeLabel": "Label aksesibel tombol tutup. Isi \"Tutup\" untuk situs berbahasa Indonesia."
+        "closeLabel": "Label aksesibel tombol tutup. Isi \"Tutup\" untuk situs berbahasa Indonesia.",
+        "closed": "Khusus Angular. Dipancarkan saat modal tertutup."
       },
       "a11y": [
         "Memakai dialog dan showModal(), jadi fokus terkunci di dalam modal dan konten di belakangnya inert.",
@@ -91,5 +110,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

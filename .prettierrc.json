@@ -1,4 +1,5 @@
 {
-  "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindStylesheet": "./packages/theme/markas.css"
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./packages/theme/markas.css",
+  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
 }

@@ -15,7 +15,8 @@ Usage:
 
 Options:
   --cwd <path>                      project folder (default: current folder)
-  --framework <blade|react|vue>     skip framework detection
+  --framework <name>                blade, react, vue, svelte, astro, or angular
+                                    (skips framework detection)
   --overwrite                       replace changed files without asking
   -y, --yes                         answer yes to every prompt
   --registry <url|folder>           another registry (default https://markasui.pages.dev/r)

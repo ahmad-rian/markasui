@@ -10,7 +10,7 @@ import {
 // Keadaan awal setiap komponen. Keadaan terbuka (overlay) diuji di spec masing-masing.
 for (const component of components) {
   for (const theme of themes) {
-    test(`${component} (${theme}) tampil sama di Blade, React, dan Vue`, async ({
+    test(`${component} (${theme}) tampil sama di semua framework`, async ({
       page,
     }, testInfo) => {
       await expectSameAcrossFrameworks(page, testInfo, component, theme);

@@ -6,9 +6,30 @@
   "tags": ["switch", "toggle", "form", "boolean"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "switch.blade.php", "deps": [] },
-    "react": { "file": "Switch.tsx", "deps": [] },
-    "vue": { "file": "Switch.vue", "deps": [] }
+    "blade": {
+      "file": "switch.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Switch.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Switch.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Switch.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Switch.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "switch.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -18,16 +39,22 @@
       "description": "Label text next to the switch, linked through for/id."
     },
     {
-      "name": "checked / defaultChecked / v-model",
+      "name": "checked / defaultChecked / v-model / bind:checked",
       "type": "boolean",
       "default": "false",
-      "description": "On state. Blade uses the checked attribute, React checked or defaultChecked, Vue v-model."
+      "description": "On state. Blade and Astro use the checked attribute, React checked or defaultChecked, Vue v-model, Svelte bind:checked, Angular checked or [(checked)]."
     },
     {
       "name": "onCheckedChange",
       "type": "(checked: boolean) => void",
       "default": "-",
       "description": "React only. Called with the new state every time the switch changes."
+    },
+    {
+      "name": "checkedChange",
+      "type": "output<boolean>",
+      "default": "-",
+      "description": "Angular only. Emits the new state every time the switch changes."
     },
     {
       "name": "disabled",
@@ -60,10 +87,11 @@
       "description": "Saklar nyala/mati dari checkbox native dengan role switch, tanpa JavaScript di Blade.",
       "props": {
         "label": "Teks label di samping saklar, terhubung lewat for/id.",
-        "checked / defaultChecked / v-model": "Status nyala. Blade memakai atribut checked, React checked atau defaultChecked, Vue v-model.",
         "onCheckedChange": "Khusus React. Dipanggil dengan status baru setiap kali saklar berubah.",
         "disabled": "Menonaktifkan saklar dan meredupkan label.",
-        "id": "Id input. Dibuat otomatis kalau kosong."
+        "id": "Id input. Dibuat otomatis kalau kosong.",
+        "checked / defaultChecked / v-model / bind:checked": "Keadaan aktif. Blade dan Astro memakai atribut checked, React checked atau defaultChecked, Vue v-model, Svelte bind:checked, Angular checked atau [(checked)].",
+        "checkedChange": "Khusus Angular. Memancarkan keadaan baru setiap kali switch berubah."
       },
       "a11y": [
         "Input checkbox native dengan role switch, sehingga screen reader membacakan aktif atau nonaktif dari status checked.",
@@ -78,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

@@ -1,4 +1,9 @@
-import type { Framework, RegistryItem } from "@markasui/registry/schema";
+import {
+  availableFrameworks,
+  FRAMEWORKS,
+  type Framework,
+  type RegistryItem,
+} from "@markasui/registry/schema";
 import { FRAMEWORK_LABELS } from "./frameworks";
 import { localePath, type Locale } from "./i18n";
 import { categoryLabel, localized } from "./registry";
@@ -7,9 +12,12 @@ export const FRAMEWORK_FENCE: Record<Framework, string> = {
   blade: "blade",
   react: "tsx",
   vue: "vue",
+  svelte: "svelte",
+  astro: "astro",
+  angular: "ts",
 };
 
-/** Bagian usage.md per framework ("## Blade", "## React", "## Vue") plus catatan ("## Notes" / "## Catatan"). */
+/** Bagian usage.md per framework ("## Blade" sampai "## Angular") plus catatan ("## Notes" / "## Catatan"). */
 export function splitUsage(usage: string): Record<Framework | "notes", string> {
   const sections: Record<string, string> = {};
   for (const block of usage.split(/^## /m).filter(Boolean)) {
@@ -19,9 +27,9 @@ export function splitUsage(usage: string): Record<Framework | "notes", string> {
       .trim();
   }
   return {
-    blade: sections.blade ?? "",
-    react: sections.react ?? "",
-    vue: sections.vue ?? "",
+    ...(Object.fromEntries(
+      FRAMEWORKS.map((framework) => [framework, sections[framework] ?? ""]),
+    ) as Record<Framework, string>),
     notes: sections.notes ?? sections.catatan ?? "",
   };
 }
@@ -63,6 +71,7 @@ export function buildPrompt(
   const strings = PROMPT[locale];
   const text = localized(item, locale);
   const file = item.frameworks[framework];
+  if (!file) throw new Error(`${item.name} belum tersedia untuk ${framework}`);
   const rules = [
     strings.save(file.target),
     strings.css(
@@ -125,9 +134,9 @@ export function componentMarkdown(
   const strings = MARKDOWN[locale];
   const text = localized(item, locale);
   const usage = splitUsage(text.usage);
-  const frameworks = (["blade", "react", "vue"] as const)
+  const frameworks = availableFrameworks(item)
     .map((framework) => {
-      const file = item.frameworks[framework];
+      const file = item.frameworks[framework]!;
       const deps = file.deps.length
         ? strings.deps(file.deps.join(", "))
         : strings.noDeps;

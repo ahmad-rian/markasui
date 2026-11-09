@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { frameworks, openFixture, type Framework } from "./helpers";
+import {
+  frameworks,
+  frameworksFor,
+  openFixture,
+  type Framework,
+} from "./helpers";
 
 /** Fixture, keyframe yang dipakai, tombol di kontennya, dan apakah lapisannya menerima pointer. */
 const backgrounds = [
@@ -149,7 +154,7 @@ test("beams, boxes, and lines draw the same shapes in Blade, React, and Vue", as
 test("gradient-border: the glow layer sits behind and the field inside keeps focus", async ({
   page,
 }) => {
-  for (const framework of frameworks) {
+  for (const framework of frameworksFor("gradient-border--prompt")) {
     await openFixture(page, framework, "gradient-border--prompt");
     const layers = page.locator("#fixture .isolate > [aria-hidden=true]");
     await expect(layers).toHaveCount(2);

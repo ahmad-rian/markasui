@@ -9,7 +9,8 @@
   },
   "exports": {
     ".": "./src/lib.ts",
-    "./schema": "./src/schema.ts"
+    "./schema": "./src/schema.ts",
+    "./frameworks": "./src/frameworks.ts"
   },
   "scripts": {
     "build": "node src/build.ts"

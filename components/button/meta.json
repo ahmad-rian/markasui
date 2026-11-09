@@ -17,6 +17,18 @@
     "vue": {
       "file": "Button.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Button.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Button.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -75,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

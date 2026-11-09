@@ -32,11 +32,18 @@ async function safely(run: () => Promise<ToolResult>): Promise<ToolResult> {
   }
 }
 
-const summary = ({ name, title, category, description }: IndexItem) => ({
+const summary = ({
   name,
   title,
   category,
   description,
+  frameworks,
+}: IndexItem) => ({
+  name,
+  title,
+  category,
+  description,
+  ...(frameworks ? { frameworks } : {}),
 });
 
 /** Skor sederhana: nama paling berat, lalu judul dan tag, lalu deskripsi. */
@@ -68,14 +75,16 @@ export function createServer(registry: Registry = createRegistry()) {
   const server = new McpServer({ name: "markasui", version: VERSION });
   const framework = z
     .enum(FRAMEWORKS)
-    .describe("blade (Laravel + Alpine.js), react, or vue");
+    .describe(
+      "blade (Laravel + Alpine.js), react, vue, svelte (Svelte 5), astro, or angular (standalone + signals)",
+    );
 
   server.registerTool(
     "list_components",
     {
       title: "List components",
       description:
-        "List every MarkasUI component (name, title, category, description). Optionally filter by category.",
+        "List every MarkasUI component (name, title, category, description, available frameworks). Optionally filter by category.",
       inputSchema: {
         category: z
           .enum([
@@ -133,6 +142,12 @@ export function createServer(registry: Registry = createRegistry()) {
       safely(async () => {
         const item = await registry.component(name);
         const file = item.frameworks[fw];
+        if (!file) {
+          const available = Object.keys(item.frameworks).join(", ");
+          throw new Error(
+            `${item.name} is not available for ${fw} yet. Available: ${available}.`,
+          );
+        }
         return json({
           name: item.name,
           title: item.title,

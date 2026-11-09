@@ -34,6 +34,56 @@ const notifikasi = ref(true);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Switch from "$lib/components/markas/Switch.svelte";
+
+  let notifikasi = $state(true);
+</script>
+
+<Switch
+  bind:checked={notifikasi}
+  name="notifications"
+  label="Notifikasi email"
+/>
+```
+
+## Astro
+
+```astro
+---
+import Switch from "@/components/markas/Switch.astro";
+---
+
+<Switch name="notifications" label="Notifikasi email" checked />
+```
+
+Tanpa script klien: switch adalah checkbox native.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Switch } from "./markas/switch.component";
+
+@Component({
+  selector: "app-pengaturan",
+  imports: [Switch],
+  template: `
+    <markas-switch
+      [(checked)]="notifikasi"
+      name="notifications"
+      label="Notifikasi email"
+    />
+  `,
+})
+export class Pengaturan {
+  readonly notifikasi = signal(true);
+}
+```
+
 ## Catatan
 
 - Switch adalah `<input type="checkbox" role="switch">`, jadi nilainya ikut terkirim bersama form seperti checkbox biasa.

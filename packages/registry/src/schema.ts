@@ -1,7 +1,18 @@
 import { z } from "zod";
+import {
+  FILE_SUFFIXES,
+  type CoreFramework,
+  type Framework,
+} from "./frameworks.ts";
 
-export const FRAMEWORKS = ["blade", "react", "vue"] as const;
-export type Framework = (typeof FRAMEWORKS)[number];
+export {
+  availableFrameworks,
+  CORE_FRAMEWORKS,
+  FILE_SUFFIXES,
+  FRAMEWORKS,
+  type CoreFramework,
+  type Framework,
+} from "./frameworks.ts";
 
 /** Urutan juga urutan grup di sidebar docs: komponen khas MarkasUI paling atas. */
 export const CATEGORIES = [
@@ -22,11 +33,19 @@ export const ALLOWED_DEPS: Record<Framework, readonly string[]> = {
   blade: ["alpinejs"],
   react: [],
   vue: [],
+  svelte: [],
+  astro: [],
+  angular: [],
 };
 
 const frameworkFile = (framework: Framework) =>
   z.object({
-    file: z.string().min(1),
+    file: z
+      .string()
+      .min(1)
+      .refine((file) => file.endsWith(FILE_SUFFIXES[framework]), {
+        message: `file ${framework} harus berakhiran ${FILE_SUFFIXES[framework]}`,
+      }),
     deps: z
       .array(z.string())
       .refine(
@@ -65,6 +84,9 @@ export const metaSchema = z
       blade: frameworkFile("blade"),
       react: frameworkFile("react"),
       vue: frameworkFile("vue"),
+      svelte: frameworkFile("svelte").optional(),
+      astro: frameworkFile("astro").optional(),
+      angular: frameworkFile("angular").optional(),
     }),
     props: z.array(
       z.strictObject({
@@ -115,7 +137,9 @@ export const metaSchema = z
 
 export type ComponentMeta = z.infer<typeof metaSchema>;
 
-export type RegistryFile = ComponentMeta["frameworks"][Framework] & {
+export type RegistryFile = NonNullable<
+  ComponentMeta["frameworks"][Framework]
+> & {
   /** Path tujuan default di project user. */
   target: string;
   code: string;
@@ -125,15 +149,22 @@ export type ComponentTranslation = ComponentMeta["i18n"]["id"] & {
   usage: string;
 };
 
+/** Blade, React, dan Vue selalu ada; framework lain hanya kalau sudah di-porting. */
+export type RegistryFrameworks = Record<CoreFramework, RegistryFile> &
+  Partial<Record<Framework, RegistryFile>>;
+
 export type RegistryItem = Omit<ComponentMeta, "frameworks" | "i18n"> & {
-  frameworks: Record<Framework, RegistryFile>;
+  frameworks: RegistryFrameworks;
   /** usage.md dalam bahasa Inggris. */
   usage: string;
   /** Terjemahan Indonesia, termasuk usage.id.md. */
   i18n: { id: ComponentTranslation };
 };
 
-export type RegistryIndexItem = Pick<
+export type RegistryIndexItem = {
+  /** Framework yang sudah tersedia untuk komponen ini, urut sesuai FRAMEWORKS. */
+  frameworks: Framework[];
+} & Pick<
   ComponentMeta,
   | "name"
   | "title"

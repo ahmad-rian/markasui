@@ -1,0 +1,39 @@
+---
+/**
+ * Pane preview Svelte, Astro, dan Angular. Svelte hydrate sebagai island, Astro dirender statis
+ * (script komponen dibundel Astro), Angular dipasang di klien dari /angular/preview.js
+ * (scripts/angular-previews.ts) hanya saat framework Angular dipilih. Contoh yang belum di-porting
+ * menampilkan pesan "belum tersedia".
+ */
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import SveltePreview from "./SveltePreview.svelte";
+import { FRAMEWORK_LABELS } from "../../lib/frameworks";
+import { getLocale, t } from "../../lib/i18n";
+
+interface Props {
+  name: string;
+  /** Class lebar pane, sama dengan pane Blade, React, dan Vue. */
+  pane: string;
+}
+const { name, pane } = Astro.props;
+const strings = t(getLocale(Astro.url)).component;
+
+const svelteExamples = import.meta.glob("../../../../../examples/svelte/*.svelte");
+const astroExamples = import.meta.glob<{ default: AstroComponentFactory }>("../../../../../examples/astro/*.astro", { eager: true });
+const angularExamples = import.meta.glob("../../../../../examples/angular/*.ts");
+
+const hasSvelte = `../../../../../examples/svelte/${name}.svelte` in svelteExamples;
+const AstroExample = astroExamples[`../../../../../examples/astro/${name}.astro`]?.default;
+const hasAngular = `../../../../../examples/angular/${name}.ts` in angularExamples;
+const missing = "text-sm text-muted";
+---
+
+<div data-fw="svelte" class={pane}>
+  {hasSvelte ? <SveltePreview client:near name={name} /> : <p class={missing}>{strings.unavailable(FRAMEWORK_LABELS.svelte)}</p>}
+</div>
+<div data-fw="astro" class={pane}>
+  {AstroExample ? <AstroExample /> : <p class={missing}>{strings.unavailable(FRAMEWORK_LABELS.astro)}</p>}
+</div>
+<div data-fw="angular" class={pane}>
+  {hasAngular ? <div class="contents" data-angular-preview={name} /> : <p class={missing}>{strings.unavailable(FRAMEWORK_LABELS.angular)}</p>}
+</div>

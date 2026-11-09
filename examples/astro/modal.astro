@@ -1,0 +1,15 @@
+---
+import Button from "../../components/button/Button.astro";
+import Modal from "../../components/modal/Modal.astro";
+---
+
+<Modal title="Delete project?">
+  <Button slot="trigger" variant="danger">Delete project</Button>
+
+  The project and all of its data will be deleted permanently.
+
+  <Fragment slot="footer">
+    <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+    <Button variant="danger" type="submit" value="delete">Delete</Button>
+  </Fragment>
+</Modal>

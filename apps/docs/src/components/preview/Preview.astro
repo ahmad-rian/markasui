@@ -2,6 +2,7 @@
 import Icon from "../Icon.astro";
 import { getLocale, t } from "../../lib/i18n";
 import ReactPreview from "./ReactPreview";
+import FrameworkPanes from "./FrameworkPanes.astro";
 import VuePreview from "./VuePreview.vue";
 
 interface Props {
@@ -36,11 +37,12 @@ const strings = t(getLocale(Astro.url)).component;
         {bladeHtml ? <Fragment set:html={bladeHtml} /> : <p class="text-sm text-danger">{strings.bladeMissing}</p>}
       </div>
       <div data-fw="react" class={pane}>
-        <ReactPreview client:visible name={name} />
+        <ReactPreview client:near name={name} />
       </div>
       <div data-fw="vue" class={pane}>
-        <VuePreview client:visible name={name} />
+        <VuePreview client:near name={name} />
       </div>
+      <FrameworkPanes name={name} pane={pane} />
     </div>
   </div>
 </div>

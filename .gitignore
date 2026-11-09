@@ -16,3 +16,5 @@ apps/docs/src/generated/
 playwright-report-docs/
 apps/docs/public/thumbs/
 .lighthouseci/
+playground/public/astro/
+apps/docs/public/angular/

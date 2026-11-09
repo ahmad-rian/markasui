@@ -1,6 +1,9 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
-import type { Framework } from "@markasui/registry/schema";
+import {
+  TEMPLATE_FRAMEWORKS,
+  type TemplateFramework,
+} from "./template-frameworks";
 import type { Locale } from "./i18n";
 import { REPO_ROOT } from "./paths";
 
@@ -17,8 +20,10 @@ export type TemplateMeta = {
 };
 
 export type Template = TemplateMeta & {
-  sources: Record<Framework, { path: string; code: string }>;
+  sources: Record<TemplateFramework, { path: string; code: string }>;
 };
+
+export { TEMPLATE_FRAMEWORKS };
 
 const templatesDir = resolve(REPO_ROOT, "templates");
 const pascal = (slug: string) =>
@@ -31,7 +36,7 @@ export function getTemplates(): Template[] {
     .filter((entry) => entry.isDirectory())
     .flatMap((entry) => {
       const dir = join(templatesDir, entry.name);
-      const files: Record<Framework, string> = {
+      const files: Record<TemplateFramework, string> = {
         blade: `blade/${entry.name}.blade.php`,
         react: `react/${pascal(entry.name)}.tsx`,
         vue: `vue/${pascal(entry.name)}.vue`,
@@ -51,16 +56,18 @@ export function getTemplates(): Template[] {
         kind: raw.kind === "page" ? "page" : "dashboard",
       };
       const sources = Object.fromEntries(
-        (Object.entries(files) as [Framework, string][]).map(([fw, file]) => [
-          fw,
-          {
-            path: file,
-            code: readFileSync(join(dir, file), "utf8").replace(
-              /(["'])(?:\.\.\/)+components\/[a-z-]+\/([A-Za-z]+(?:\.vue)?)\1/g,
-              "$1@/components/markas/$2$1",
-            ),
-          },
-        ]),
+        (Object.entries(files) as [TemplateFramework, string][]).map(
+          ([fw, file]) => [
+            fw,
+            {
+              path: file,
+              code: readFileSync(join(dir, file), "utf8").replace(
+                /(["'])(?:\.\.\/)+components\/[a-z-]+\/([A-Za-z]+(?:\.vue)?)\1/g,
+                "$1@/components/markas/$2$1",
+              ),
+            },
+          ],
+        ),
       ) as Template["sources"];
       return [{ ...meta, sources }];
     })

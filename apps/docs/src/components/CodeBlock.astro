@@ -3,11 +3,12 @@ import type { Framework } from "@markasui/registry/schema";
 import { Code } from "astro:components";
 import FrameworkIcon from "./FrameworkIcon.astro";
 import Icon from "./Icon.astro";
+import type { ShikiFrameworkLang } from "../lib/frameworks";
 import { getLocale, t } from "../lib/i18n";
 
 interface Props {
   code: string;
-  lang: "blade" | "tsx" | "vue" | "bash" | "css" | "json" | "ts" | "js";
+  lang: ShikiFrameworkLang | "bash" | "css" | "json" | "ts" | "js";
   /** Judul di atas kode, biasanya path file. */
   title?: string;
   /** Logo framework di samping judul. */

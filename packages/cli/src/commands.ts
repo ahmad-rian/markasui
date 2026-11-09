@@ -11,7 +11,14 @@ import {
 } from "./project.ts";
 import { createRegistry, type Registry } from "./registry.ts";
 import { setupGuide } from "./setup.ts";
-import { isFramework, type Framework, type ProjectConfig } from "./types.ts";
+import {
+  CORE_FRAMEWORKS,
+  FRAMEWORKS,
+  isFramework,
+  type Framework,
+  type IndexItem,
+  type ProjectConfig,
+} from "./types.ts";
 
 export type CommonOptions = {
   cwd: string;
@@ -29,7 +36,7 @@ function parseFramework(value: string | undefined): Framework | undefined {
   if (value === undefined) return undefined;
   if (!isFramework(value))
     throw new CliError(
-      `--framework must be blade, react, or vue (got "${value}")`,
+      `--framework must be one of ${FRAMEWORKS.join(", ")} (got "${value}")`,
     );
   return value;
 }
@@ -47,7 +54,7 @@ async function resolveConfig(options: CommonOptions): Promise<ProjectConfig> {
     : await detectFramework(options.cwd);
   if (!detection) {
     throw new CliError(
-      "Could not detect the framework. Run this from the root of a Laravel, React, or Vue project, or pass --framework.",
+      "Could not detect the framework. Run this from the root of a Laravel, React, Vue, Svelte, Astro, or Angular project, or pass --framework.",
     );
   }
   return defaultConfig(options.cwd, detection);
@@ -142,8 +149,18 @@ export async function add(
   );
 
   const deps = new Set<string>();
+  const missing = items.filter((item) => !item.frameworks[config.framework]);
+  if (missing.length === items.length)
+    throw new CliError(
+      `Not available for ${config.framework} yet: ${missing.map((item) => item.name).join(", ")}`,
+    );
+  for (const item of missing)
+    io.warn(
+      `${item.title}: not available for ${config.framework} yet, skipped`,
+    );
   for (const item of items) {
     const file = item.frameworks[config.framework];
+    if (!file) continue;
     if (!SAFE_FILE_NAME.test(file.file))
       throw new CliError(`Unsafe file name from the registry: "${file.file}"`);
     file.deps.forEach((dep) => deps.add(dep));
@@ -173,16 +190,25 @@ export async function add(
   }
 }
 
+/** Index lama tanpa field frameworks berarti hanya Blade, React, dan Vue. */
+const supports = (item: IndexItem, framework: Framework) =>
+  (item.frameworks ?? (CORE_FRAMEWORKS as readonly Framework[])).includes(
+    framework,
+  );
+
 export async function list(options: CommonOptions, io: Io): Promise<void> {
-  const index = await registryFor(
-    options,
-    (await readConfig(options.cwd)) ?? undefined,
-  ).index();
+  const config = await readConfig(options.cwd);
+  const framework = parseFramework(options.framework) ?? config?.framework;
+  const index = await registryFor(options, config ?? undefined).index();
   const categories = [...new Set(index.map((item) => item.category))];
   for (const category of categories) {
     io.log(category.toUpperCase());
     for (const item of index.filter((entry) => entry.category === category)) {
-      io.log(`  ${item.name.padEnd(16)} ${item.description}`);
+      const note =
+        framework && !supports(item, framework)
+          ? ` (not yet for ${framework})`
+          : "";
+      io.log(`  ${item.name.padEnd(16)} ${item.description}${note}`);
     }
   }
 }

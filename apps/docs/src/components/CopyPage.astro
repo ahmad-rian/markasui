@@ -7,7 +7,7 @@ interface Props {
   markdown: string;
   markdownUrl: string;
   /** Tanpa prompts (halaman docs), menu Copy prompt disembunyikan. */
-  prompts?: Record<Framework, string>;
+  prompts?: Partial<Record<Framework, string>>;
 }
 const { markdown, markdownUrl, prompts } = Astro.props;
 const absoluteMd = new URL(markdownUrl, Astro.site).toString();

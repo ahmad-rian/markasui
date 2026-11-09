@@ -64,7 +64,7 @@ const path = stripLocale(Astro.url.pathname);
         };
         const apply = (root) => {
           const framework = read("markas-framework");
-          if (framework === "blade" || framework === "react" || framework === "vue") root.dataset.framework = framework;
+          if (["blade", "react", "vue", "svelte", "astro", "angular"].includes(framework)) root.dataset.framework = framework;
           const theme = read("markas-theme");
           root.classList.toggle("dark", theme ? theme === "dark" : root.hasAttribute("data-landing"));
         };
@@ -111,6 +111,7 @@ const path = stripLocale(Astro.url.pathname);
       // preview dulu: HTML asli preview disimpan sebelum Alpine mengubah DOM.
       import "../scripts/preview";
       import "../scripts/alpine";
+      import "../scripts/angular-preview";
       import "../scripts/code";
       import "../scripts/tabs";
       import "../scripts/framework-switcher";

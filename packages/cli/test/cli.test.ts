@@ -47,7 +47,17 @@ function fakeIo(answer: boolean | null = null) {
 }
 
 async function project(
-  kind: "laravel" | "react" | "next" | "vue" | "nuxt" | "empty",
+  kind:
+    | "laravel"
+    | "react"
+    | "next"
+    | "vue"
+    | "nuxt"
+    | "sveltekit"
+    | "svelte"
+    | "astro"
+    | "angular"
+    | "empty",
 ) {
   const dir = await mkdtemp(join(tmpdir(), `markas-cli-${kind}-`));
   const pkg = (deps: Record<string, string>) =>
@@ -64,6 +74,10 @@ async function project(
   if (kind === "next") await pkg({ next: "16", react: "19" });
   if (kind === "vue") await pkg({ vue: "3" });
   if (kind === "nuxt") await pkg({ nuxt: "4", vue: "3" });
+  if (kind === "sveltekit") await pkg({ "@sveltejs/kit": "2", svelte: "5" });
+  if (kind === "svelte") await pkg({ svelte: "5" });
+  if (kind === "astro") await pkg({ astro: "7", react: "19", svelte: "5" });
+  if (kind === "angular") await pkg({ "@angular/core": "22" });
   return dir;
 }
 
@@ -74,6 +88,10 @@ describe("deteksi project", () => {
     ["next", "react", "components/markas"],
     ["vue", "vue", "src/components/markas"],
     ["nuxt", "vue", "components/markas"],
+    ["sveltekit", "svelte", "src/lib/components/markas"],
+    ["svelte", "svelte", "src/lib/components/markas"],
+    ["astro", "astro", "src/components/markas"],
+    ["angular", "angular", "src/app/markas"],
   ] as const)(
     "%s terdeteksi sebagai %s",
     async (kind, framework, componentsDir) => {
@@ -127,7 +145,7 @@ describe("init", () => {
   it("menolak framework tidak dikenal", async () => {
     await expect(
       init(
-        { cwd: await project("empty"), registry, framework: "svelte" },
+        { cwd: await project("empty"), registry, framework: "solid" },
         fakeIo().io,
       ),
     ).rejects.toThrow(CliError);
@@ -135,6 +153,33 @@ describe("init", () => {
 });
 
 describe("add", () => {
+  it("menulis versi Svelte, Astro, dan Angular", async () => {
+    const cases = [
+      ["sveltekit", "src/lib/components/markas/Button.svelte", "$props()"],
+      ["astro", "src/components/markas/Button.astro", "Astro.props"],
+      [
+        "angular",
+        "src/app/markas/button.component.ts",
+        "button[markas-button]",
+      ],
+    ] as const;
+    for (const [kind, file, marker] of cases) {
+      const dir = await project(kind);
+      await add(["button"], { cwd: dir, registry }, fakeIo().io);
+      expect(await readFile(join(dir, file), "utf8")).toContain(marker);
+    }
+  });
+
+  it("melewati komponen yang belum di-porting dan gagal kalau semuanya belum", async () => {
+    const dir = await project("svelte");
+    const { io, output } = fakeIo();
+    await add(["button", "tabs"], { cwd: dir, registry }, io);
+    expect(output()).toContain("Tabs: not available for svelte yet");
+    await expect(
+      add(["tabs"], { cwd: dir, registry }, fakeIo().io),
+    ).rejects.toThrow(/Not available for svelte yet: tabs/);
+  });
+
   it("menulis file sesuai framework dan menampilkan dependensi", async () => {
     const dir = await project("laravel");
     await writeFile(join(dir, "pnpm-lock.yaml"), "");
@@ -229,6 +274,16 @@ describe("list dan registry", () => {
     expect(output()).toMatch(/FORM\n\s+button/);
   });
 
+  it("list menandai komponen yang belum tersedia untuk framework project", async () => {
+    const { io, output } = fakeIo();
+    await list(
+      { cwd: await project("empty"), registry, framework: "angular" },
+      io,
+    );
+    expect(output()).toMatch(/tabs .*\(not yet for angular\)/);
+    expect(output()).not.toMatch(/button .*not yet/);
+  });
+
   it("registry file:// dan cache", async () => {
     const client = createRegistry(`file://${registry}`);
     const first = await client.index();
@@ -239,5 +294,8 @@ describe("list dan registry", () => {
     expect(setupGuide("blade")).toContain("@source");
     expect(setupGuide("react", "app/markas.css")).toContain("app/markas.css");
     expect(setupGuide("vue")).toContain("vite.config.ts");
+    expect(setupGuide("svelte")).toContain("$lib/components/markas");
+    expect(setupGuide("astro")).toContain("src/styles/markas.css");
+    expect(setupGuide("angular")).toContain("@tailwindcss/postcss");
   });
 });

@@ -1,0 +1,33 @@
+---
+/**
+ * Satu halaman per contoh di examples/astro. Dibangun oleh scripts/render-astro.ts untuk playground
+ * dan tes e2e; CSS datang dari playground, jadi halaman ini hanya berisi markup dan script komponen.
+ */
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+export function getStaticPaths() {
+  const examples = import.meta.glob<{ default: AstroComponentFactory }>(
+    "../../../../examples/astro/*.astro",
+    { eager: true },
+  );
+  // MARKAS_ASTRO_ONLY="modal,switch": hanya contoh itu dan variasinya (scripts/render-astro.ts).
+  const only = (process.env.MARKAS_ASTRO_ONLY ?? "").split(",").filter(Boolean);
+  return Object.entries(examples)
+    .map(([path, module]) => ({
+      params: { name: path.split("/").at(-1)!.replace(/\.astro$/, "") },
+      props: { Example: module.default },
+    }))
+    .filter(
+      ({ params }) =>
+        only.length === 0 ||
+        only.some((name) => params.name === name || params.name.startsWith(`${name}--`)),
+    );
+}
+
+const { Example } = Astro.props;
+---
+
+<html lang="en">
+  <head><meta charset="utf-8" /></head>
+  <body><Example /></body>
+</html>

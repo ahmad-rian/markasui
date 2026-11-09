@@ -29,10 +29,22 @@ const dependencyNames = (pkg: Record<string, unknown> | null) =>
 
 export type Detection = {
   framework: Framework;
-  meta: "laravel" | "next" | "react" | "nuxt" | "vue";
+  meta:
+    | "laravel"
+    | "next"
+    | "react"
+    | "nuxt"
+    | "vue"
+    | "sveltekit"
+    | "svelte"
+    | "astro"
+    | "angular";
 };
 
-/** Aturan deteksi dari PRD bagian 9: artisan + resources/views, lalu react, lalu vue. */
+/**
+ * Aturan deteksi PRD bagian 9: artisan + resources/views, lalu package.json. Astro dan Angular
+ * diperiksa lebih dulu karena project Astro sering juga memasang react, vue, atau svelte.
+ */
 export async function detectFramework(cwd: string): Promise<Detection | null> {
   if (
     (await exists(join(cwd, "artisan"))) &&
@@ -41,10 +53,16 @@ export async function detectFramework(cwd: string): Promise<Detection | null> {
     return { framework: "blade", meta: "laravel" };
   }
   const deps = dependencyNames(await readPackageJson(cwd));
+  if (deps.has("astro")) return { framework: "astro", meta: "astro" };
+  if (deps.has("@angular/core"))
+    return { framework: "angular", meta: "angular" };
+  if (deps.has("@sveltejs/kit"))
+    return { framework: "svelte", meta: "sveltekit" };
   if (deps.has("next")) return { framework: "react", meta: "next" };
   if (deps.has("react")) return { framework: "react", meta: "react" };
   if (deps.has("nuxt")) return { framework: "vue", meta: "nuxt" };
   if (deps.has("vue")) return { framework: "vue", meta: "vue" };
+  if (deps.has("svelte")) return { framework: "svelte", meta: "svelte" };
   return null;
 }
 
@@ -73,6 +91,25 @@ export async function defaultConfig(
             componentsDir: "components/markas",
             cssPath: "app/markas.css",
           };
+    case "sveltekit":
+    case "svelte":
+      return {
+        framework: "svelte",
+        componentsDir: "src/lib/components/markas",
+        cssPath: "src/markas.css",
+      };
+    case "astro":
+      return {
+        framework: "astro",
+        componentsDir: "src/components/markas",
+        cssPath: "src/styles/markas.css",
+      };
+    case "angular":
+      return {
+        framework: "angular",
+        componentsDir: "src/app/markas",
+        cssPath: "src/markas.css",
+      };
     case "nuxt":
       return {
         framework: "vue",

@@ -1,9 +1,8 @@
-import type { Framework } from "@markasui/registry/schema";
+import { FRAMEWORKS, type Framework } from "@markasui/registry/frameworks";
 
 export const FRAMEWORK_KEY = "markas-framework";
 export const THEME_KEY = "markas-theme";
 export const DEFAULT_FRAMEWORK: Framework = "blade";
-const FRAMEWORKS: readonly Framework[] = ["blade", "react", "vue"];
 
 const read = (key: string): string | null => {
   try {

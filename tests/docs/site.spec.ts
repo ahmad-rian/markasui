@@ -162,6 +162,63 @@ test("modal di preview Blade terbuka dan tertutup", async ({ page }) => {
   ).toBeHidden();
 });
 
+for (const framework of ["Svelte", "Astro", "Angular"] as const) {
+  test(`modal di preview ${framework} terbuka dan tertutup`, async ({
+    page,
+  }) => {
+    await page.goto("/components/modal");
+    await page.getByRole("radio", { name: framework }).first().click();
+    const stage = pane(page, framework.toLowerCase());
+    await waitInteractive(page, framework.toLowerCase());
+    const trigger = stage.getByRole("button", { name: "Delete project" });
+    await expect(trigger).toBeVisible();
+    // Island Svelte dan contoh Angular dipasang di klien; klik diulang sampai dialog terbuka.
+    await expect(async () => {
+      await trigger.click();
+      await expect(
+        page.getByRole("dialog", { name: "Delete project?" }),
+      ).toBeVisible({ timeout: 1000 });
+    }).toPass();
+    await page.keyboard.press("Escape");
+    await expect(
+      page.getByRole("dialog", { name: "Delete project?" }),
+    ).toBeHidden();
+    await expect(
+      page
+        .locator(`[data-fw="${framework.toLowerCase()}"] [data-code-block]`)
+        .first(),
+    ).toBeVisible();
+  });
+}
+
+test("komponen yang belum di-porting menampilkan pesan belum tersedia", async ({
+  page,
+}) => {
+  await page.goto("/components/tabs");
+  await page.getByRole("radio", { name: "Svelte" }).first().click();
+  await expect(pane(page, "svelte")).toHaveText(
+    "Not available for Svelte yet.",
+  );
+  await page.goto("/id/components/tabs");
+  await expect(pane(page, "svelte")).toHaveText("Belum tersedia untuk Svelte.");
+});
+
+test("playground Button menampilkan contoh Angular statis", async ({
+  page,
+}) => {
+  await page.goto("/components/button");
+  await page.getByRole("radio", { name: "Angular" }).first().click();
+  await expect(
+    page.locator("[data-playground] > [data-fw=angular] [data-code-block]"),
+  ).toContainText("markas-button");
+  await expect(
+    page
+      .locator("[data-playground] [data-fw=angular]")
+      .first()
+      .getByRole("button", { name: "Save" }),
+  ).toBeVisible();
+});
+
 test("Copy prompt mengikuti framework terpilih", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/components/button");

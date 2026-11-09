@@ -3,7 +3,7 @@ title: Pengenalan
 description: Apa itu MarkasUI dan cara memakainya di project Blade, React, atau Vue.
 ---
 
-MarkasUI adalah library komponen UI gratis dan open source dari CV Jenderal Solusi Digital. Setiap komponen tersedia dalam tiga versi, yaitu Blade (Laravel), React, dan Vue, dengan desain yang sama persis karena memakai class Tailwind CSS yang sama.
+MarkasUI adalah library komponen UI gratis dan open source dari CV Jenderal Solusi Digital. Setiap komponen tersedia untuk Blade (Laravel), React, dan Vue, dengan versi Svelte, Astro, dan Angular yang menyusul bertahap, dan desainnya sama persis karena memakai class Tailwind CSS yang sama.
 
 ## Prinsip
 

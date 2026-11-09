@@ -1,0 +1,10 @@
+<script lang="ts">
+  import Button from "../../components/button/Button.svelte";
+</script>
+
+<div class="flex flex-wrap items-center justify-center gap-3">
+  <Button>Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="danger">Danger</Button>
+</div>

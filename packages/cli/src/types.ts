@@ -1,5 +1,16 @@
-export const FRAMEWORKS = ["blade", "react", "vue"] as const;
+export const FRAMEWORKS = [
+  "blade",
+  "react",
+  "vue",
+  "svelte",
+  "astro",
+  "angular",
+] as const;
 export type Framework = (typeof FRAMEWORKS)[number];
+
+/** Selalu tersedia. Svelte, Astro, dan Angular di-porting bertahap per komponen. */
+export const CORE_FRAMEWORKS = ["blade", "react", "vue"] as const;
+export type CoreFramework = (typeof CORE_FRAMEWORKS)[number];
 
 export const isFramework = (value: unknown): value is Framework =>
   FRAMEWORKS.includes(value as Framework);
@@ -12,6 +23,8 @@ export type IndexItem = {
   tags: string[];
   status: string;
   addedAt: string;
+  /** Framework yang tersedia (registry lama tidak punya field ini: anggap Blade, React, Vue). */
+  frameworks?: Framework[];
 };
 
 export type ComponentFile = {
@@ -21,8 +34,9 @@ export type ComponentFile = {
   code: string;
 };
 
-export type RegistryItem = IndexItem & {
-  frameworks: Record<Framework, ComponentFile>;
+export type RegistryItem = Omit<IndexItem, "frameworks"> & {
+  frameworks: Record<CoreFramework, ComponentFile> &
+    Partial<Record<Framework, ComponentFile>>;
   props: { name: string; type: string; default: string; description: string }[];
   a11y: string[];
   ai: { whenToUse: string; rules: string[] };

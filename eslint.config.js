@@ -18,6 +18,7 @@ export default tseslint.config(
       "test-results/",
       "playwright-report/",
       "playground/public/",
+      "apps/docs/public/angular/",
     ],
   },
   js.configs.recommended,

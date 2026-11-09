@@ -29,9 +29,12 @@ const EXAMPLE_FILES = {
   blade: ".blade.php",
   react: ".tsx",
   vue: ".vue",
+  svelte: ".svelte",
+  astro: ".astro",
+  angular: ".ts",
 } as const;
 /** File komponen yang berisi class (meta.json dan usage.md tidak dirender sebagai markup). */
-const SOURCE_FILE = /\.(blade\.php|tsx|ts|vue)$/;
+const SOURCE_FILE = /\.(blade\.php|tsx|ts|vue|svelte|astro)$/;
 /** Rujukan ke komponen lain: import ../../components/<nama>/, import ../<nama>/ di dalam komponen, atau <x-markas.nama>. */
 const COMPONENT_REF =
   /components\/([a-z-]+)\/|["']\.\.\/([a-z-]+)\/|x-markas\.([a-z-]+)/g;

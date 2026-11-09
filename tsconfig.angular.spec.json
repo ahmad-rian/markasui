@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.angular.json",
+  "include": [
+    "components/*/*.component.ts",
+    "examples/angular/*.ts",
+    "tests/unit/**/*.angular.test.ts",
+    "tests/unit/setup.ts"
+  ]
+}

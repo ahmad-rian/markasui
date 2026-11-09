@@ -1,0 +1,20 @@
+---
+import Button from "../../components/button/Button.astro";
+import Modal from "../../components/modal/Modal.astro";
+---
+
+<div class="flex justify-center">
+  <Modal title="What's new in version 2.4">
+    <Button slot="trigger" variant="secondary">View release notes</Button>
+
+    <ul class="grid list-disc gap-2 pl-5">
+      <li>Dark mode now follows your system setting.</li>
+      <li>Export reports to CSV from any table.</li>
+      <li>Search results load twice as fast.</li>
+    </ul>
+
+    <Fragment slot="footer">
+      <Button type="submit" value="close">Got it</Button>
+    </Fragment>
+  </Modal>
+</div>

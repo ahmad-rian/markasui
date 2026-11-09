@@ -2,8 +2,9 @@
 import type { Framework } from "@markasui/registry/schema";
 import CodeBlock from "../CodeBlock.astro";
 import PlaygroundReact from "./PlaygroundReact";
+import FrameworkPanes from "./FrameworkPanes.astro";
 import PlaygroundVue from "./PlaygroundVue.vue";
-import { shikiLang } from "../../lib/frameworks";
+import { EXAMPLE_EXTENSIONS, FRAMEWORK_LABELS, exampleForDisplay, shikiLang } from "../../lib/frameworks";
 import { getLocale, t } from "../../lib/i18n";
 import { PLAYGROUNDS, comboKey, combinations, defaults, usageCode } from "../../lib/playgrounds";
 
@@ -14,7 +15,15 @@ interface Props {
 const { name, title } = Astro.props;
 const playground = PLAYGROUNDS[name]!;
 const strings = t(getLocale(Astro.url)).component;
-const frameworks: Framework[] = ["blade", "react", "vue"];
+/** Kontrol props berlaku untuk Blade, React, dan Vue. Framework lain menampilkan contoh utama (statis). */
+const frameworks = ["blade", "react", "vue"] as const;
+const staticFrameworks = ["svelte", "astro", "angular"] as const;
+const exampleSources = import.meta.glob<string>("../../../../../examples/*/*", { query: "?raw", import: "default", eager: true });
+const exampleCode = (fw: Framework) => {
+  const code = Object.entries(exampleSources)
+    .find(([path]) => path.endsWith(`/examples/${fw}/${name}${EXAMPLE_EXTENSIONS[fw]}`))?.[1];
+  return code && exampleForDisplay(code, fw);
+};
 
 const combos = combinations(playground.controls).map((values, index) => ({ index, values, key: comboKey(playground.controls, values), built: playground.build(values) }));
 const defaultKey = comboKey(playground.controls, defaults(playground.controls));
@@ -45,6 +54,7 @@ const control = "h-8 rounded-lg bg-surface px-2 text-sm text-ink shadow-[0_0_0_1
           <div data-fw="vue" class="w-full max-w-md">
             <div class="flex justify-center"><PlaygroundVue client:visible name={name} initial={initial.built} /></div>
           </div>
+          <FrameworkPanes name={name} pane="w-full max-w-md" />
         </div>
       </div>
 
@@ -91,6 +101,12 @@ const control = "h-8 rounded-lg bg-surface px-2 text-sm text-ink shadow-[0_0_0_1
         ))}
       </div>
     ))
+  }
+  {
+    staticFrameworks.map((fw) => {
+      const code = exampleCode(fw);
+      return <div data-fw={fw}>{code ? <CodeBlock code={code} lang={shikiLang(fw)} collapsible /> : <p class="text-sm text-muted">{strings.unavailable(FRAMEWORK_LABELS[fw])}</p>}</div>;
+    })
   }
 </div>
 

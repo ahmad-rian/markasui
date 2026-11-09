@@ -1,7 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
-  FRAMEWORKS,
+  availableFrameworks,
   metaSchema,
   type ComponentMeta,
   type Framework,
@@ -16,7 +16,12 @@ export const TARGET_DIRS: Record<Framework, string> = {
   blade: "resources/views/components/markas",
   react: "src/components/markas",
   vue: "src/components/markas",
+  svelte: "src/lib/components/markas",
+  astro: "src/components/markas",
+  angular: "src/app/markas",
 };
+
+export { availableFrameworks };
 
 export class RegistryError extends Error {
   override name = "RegistryError";
@@ -76,8 +81,8 @@ export async function loadComponent(
   }
 
   const entries = await Promise.all(
-    FRAMEWORKS.map(async (framework) => {
-      const spec = meta.frameworks[framework];
+    availableFrameworks(meta).map(async (framework) => {
+      const spec = meta.frameworks[framework]!;
       const path = join(componentDir, spec.file);
       const code = await readText(path, `file ${framework}`);
       const violations = findColorViolations(code);
@@ -130,6 +135,7 @@ export function toIndexItem(item: RegistryItem): RegistryIndexItem {
   } = item;
   return {
     name,
+    frameworks: availableFrameworks(item),
     title,
     description,
     category,

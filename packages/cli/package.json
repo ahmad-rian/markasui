@@ -1,7 +1,7 @@
 {
   "name": "markasui",
   "version": "0.1.0",
-  "description": "CLI MarkasUI: tambahkan komponen Blade, React, atau Vue ke project Anda.",
+  "description": "CLI MarkasUI: tambahkan komponen Blade, React, Vue, Svelte, Astro, atau Angular ke project Anda.",
   "license": "MIT",
   "type": "module",
   "repository": {
@@ -18,6 +18,9 @@
     "laravel",
     "react",
     "vue",
+    "svelte",
+    "astro",
+    "angular",
     "tailwind",
     "cli"
   ],

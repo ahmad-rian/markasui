@@ -37,6 +37,28 @@ export function setupGuide(
 2. Save markas.css as ${cssPath} and import it once from src/main.ts (Vite).
 3. Import components from the components folder, for example import Button from "@/components/markas/Button.vue".
 4. Dark mode turns on when <html> has the "dark" class.`;
+    case "svelte":
+      return `## MarkasUI setup for Svelte (SvelteKit or Vite)
+
+1. npm install tailwindcss @tailwindcss/vite, then add tailwindcss() before sveltekit() (or svelte()) in plugins in vite.config.ts.
+2. Save markas.css as ${cssPath} and import it once: SvelteKit from src/routes/+layout.svelte (import "../markas.css"), Vite from src/main.ts.
+3. Import components from the components folder, for example import Button from "$lib/components/markas/Button.svelte".
+4. Components use Svelte 5 runes and have no other dependencies. Dark mode turns on when <html> has the "dark" class.`;
+    case "astro":
+      return `## MarkasUI setup for Astro
+
+1. npx astro add tailwind (or npm install tailwindcss @tailwindcss/vite and add tailwindcss() to vite.plugins in astro.config.mjs).
+2. Save markas.css as ${cssPath} and import it once from your layout: import "../styles/markas.css".
+3. Import components from the components folder, for example import Button from "@/components/markas/Button.astro".
+4. Components render on the server. Interactive ones ship a small bundled <script> with no framework runtime.
+5. Dark mode turns on when <html> has the "dark" class.`;
+    case "angular":
+      return `## MarkasUI setup for Angular
+
+1. npm install tailwindcss @tailwindcss/postcss postcss, then create .postcssrc.json with { "plugins": { "@tailwindcss/postcss": {} } }.
+2. Save markas.css as ${cssPath} and add ${cssImport} to src/styles.css.
+3. Components are standalone with signals and no other dependencies. Add them to imports, for example import { Button } from "./markas/button.component".
+4. Dark mode turns on when <html> has the "dark" class.`;
   }
 }
 
@@ -44,4 +66,7 @@ const defaultCss: Record<Framework, string> = {
   blade: "resources/css/markas.css",
   react: "src/markas.css",
   vue: "src/markas.css",
+  svelte: "src/markas.css",
+  astro: "src/styles/markas.css",
+  angular: "src/markas.css",
 };

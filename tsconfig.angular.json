@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "outDir": "node_modules/.cache/angular-out",
+    "types": ["vite/client", "node"]
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  },
+  "include": ["components/*/*.component.ts", "examples/angular/*.ts"],
+  "exclude": []
+}

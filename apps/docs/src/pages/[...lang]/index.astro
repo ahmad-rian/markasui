@@ -33,7 +33,7 @@ const pages = getTemplatesByKind("page").slice(0, LANDING_PAGES);
 const stats = [
   [
     { value: String(items.length), label: home.stats.components },
-    { value: "3", label: home.stats.frameworks },
+    { value: String(FRAMEWORKS.length), label: home.stats.frameworks },
   ],
   [
     { value: "0", label: home.stats.dependencies },

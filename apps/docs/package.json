@@ -7,6 +7,7 @@
   "dependencies": {
     "@astrojs/markdown-remark": "7.3.5",
     "@astrojs/react": "7.1.2",
+    "@astrojs/svelte": "9.1.2",
     "@astrojs/vue": "7.1.2",
     "@fontsource-variable/bricolage-grotesque": "5.3.0",
     "@fontsource-variable/martian-mono": "5.3.0",
@@ -18,19 +19,21 @@
     "cookie": "2.0.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "svelte": "5.57.3",
     "tailwindcss": "4.3.4",
     "vue": "3.5.44"
   },
   "scripts": {
     "prebuild": "pnpm run generate",
     "predev": "pnpm run generate",
-    "generate": "node ../../packages/registry/src/build.ts public/r && php ../../scripts/render-blade.php ../../examples/blade src/generated/blade && node scripts/playgrounds.ts && node ../../scripts/render-templates.ts src/generated/templates && node scripts/page-css.ts",
+    "generate": "node ../../packages/registry/src/build.ts public/r && php ../../scripts/render-blade.php ../../examples/blade src/generated/blade && node scripts/playgrounds.ts && node ../../scripts/render-templates.ts src/generated/templates && node scripts/page-css.ts && node scripts/angular-previews.ts",
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@emnapi/runtime": "1.11.3",
     "@types/hast": "3.0.5",
     "pagefind": "1.6.0",
     "typescript": "6.0.3"

@@ -12,3 +12,4 @@ test-results/
 playwright-report/
 playground/public/
 playwright-report-docs/
+apps/docs/public/angular/

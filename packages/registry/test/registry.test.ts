@@ -46,6 +46,57 @@ describe("registry", () => {
     );
     expect(button.frameworks.vue.code).toContain("<script setup");
     expect(button.usage).toContain("## Blade");
+    expect(button.frameworks.svelte?.target).toBe(
+      "src/lib/components/markas/Button.svelte",
+    );
+    expect(button.frameworks.astro?.target).toBe(
+      "src/components/markas/Button.astro",
+    );
+    expect(button.frameworks.angular?.target).toBe(
+      "src/app/markas/button.component.ts",
+    );
+    expect(toIndexItem(button).frameworks).toEqual([
+      "blade",
+      "react",
+      "vue",
+      "svelte",
+      "astro",
+      "angular",
+    ]);
+  });
+
+  it("framework baru opsional: komponen tanpa Svelte, Astro, Angular tetap valid", async () => {
+    const tabs = await loadComponent(join(root, "components", "tabs"));
+    expect(tabs.frameworks.svelte).toBeUndefined();
+    expect(toIndexItem(tabs).frameworks).toEqual(["blade", "react", "vue"]);
+  });
+
+  it("gagal kalau nama file framework baru salah akhiran", async () => {
+    const dir = await copyComponent("button");
+    await editMeta(dir, (meta) => ({
+      ...meta,
+      frameworks: {
+        ...(meta.frameworks as object),
+        angular: { file: "Button.ts", deps: [] },
+      },
+    }));
+    await expect(loadComponent(dir)).rejects.toThrow(
+      /harus berakhiran .component.ts/,
+    );
+  });
+
+  it("gagal kalau framework baru memakai dependensi", async () => {
+    const dir = await copyComponent("button");
+    await editMeta(dir, (meta) => ({
+      ...meta,
+      frameworks: {
+        ...(meta.frameworks as object),
+        svelte: { file: "Button.svelte", deps: ["bits-ui"] },
+      },
+    }));
+    await expect(loadComponent(dir)).rejects.toThrow(
+      /svelte hanya boleh memakai dependensi/,
+    );
   });
 
   it("index hanya berisi ringkasan", async () => {
@@ -55,6 +106,7 @@ describe("registry", () => {
       "addedAt",
       "category",
       "description",
+      "frameworks",
       "name",
       "status",
       "tags",

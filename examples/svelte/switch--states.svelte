@@ -1,0 +1,10 @@
+<script lang="ts">
+  import Switch from "../../components/switch/Switch.svelte";
+</script>
+
+<div class="grid gap-4">
+  <Switch name="wifi" label="Wi-Fi" checked />
+  <Switch name="bluetooth" label="Bluetooth" />
+  <Switch name="location" label="Location services" disabled />
+  <Switch name="find_device" label="Find my device" checked disabled />
+</div>

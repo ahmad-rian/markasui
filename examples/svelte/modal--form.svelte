@@ -1,0 +1,45 @@
+<script lang="ts">
+  import Button from "../../components/button/Button.svelte";
+  import Input from "../../components/input/Input.svelte";
+  import Modal from "../../components/modal/Modal.svelte";
+</script>
+
+<div class="flex justify-center">
+  <Modal title="Invite a team member">
+    {#snippet trigger()}
+      <Button>
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M15 19a6 6 0 0 0-12 0M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"
+          />
+        </svg>
+        Invite member
+      </Button>
+    {/snippet}
+
+    <div class="grid gap-4">
+      <Input name="invite-name" label="Name" placeholder="Sari Wijaya" />
+      <Input
+        name="invite-email"
+        type="email"
+        label="Email"
+        placeholder="sari@company.com"
+        hint="We will send a link to join the workspace."
+      />
+    </div>
+
+    {#snippet footer()}
+      <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+      <Button type="submit" value="invite">Send invite</Button>
+    {/snippet}
+  </Modal>
+</div>

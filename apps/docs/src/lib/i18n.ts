@@ -36,9 +36,10 @@ export const stripLocale = (pathname: string) =>
 
 const en = {
   meta: {
-    title: "MarkasUI - UI components for Blade, React, and Vue",
+    title:
+      "MarkasUI - UI components for Blade, React, Vue, Svelte, Astro, and Angular",
     description:
-      "Lightweight UI components for Blade, React, and Vue with one shared design.",
+      "Lightweight UI components for Blade, React, Vue, Svelte, Astro, and Angular with one shared design.",
   },
   nav: {
     home: "Home",
@@ -140,6 +141,7 @@ const en = {
     viewOrCode: (title: string) => `${title}: view or code`,
     source: "Component source",
     bladeMissing: "Blade preview is not rendered yet. Run pnpm build.",
+    unavailable: (framework: string) => `Not available for ${framework} yet.`,
   },
   code: { copy: "Copy code", expand: "Show code" },
   copyPage: {
@@ -156,7 +158,7 @@ const en = {
   list: {
     title: "Components",
     subtitle: (n: number) =>
-      `${n} components, each in Blade, React, and Vue with the same look`,
+      `${n} components with the same look in Blade, React, Vue, Svelte, Astro, and Angular`,
     search: "Search components",
     searchPlaceholder: "Search",
     category: "Category",
@@ -188,7 +190,7 @@ const en = {
     pagesLink: "All pages",
     componentsTitle: (n: number) => [`${n} components,`, "one registry."],
     componentsText:
-      "Grouped the way you look for them. Each page has a live preview, props, and the code for all three frameworks.",
+      "Grouped the way you look for them. Each page has a live preview, props, and the code for every framework.",
     componentsLink: "Browse with previews",
     ctaTitle: ["Start with", "one command."],
     ctaText:
@@ -199,9 +201,9 @@ const en = {
     titleBefore: "Ship",
     titleAfter: "components",
     titleEnd: "in one command.",
-    titleFrameworks: "Blade, React, and Vue",
+    titleFrameworks: "Blade, React, Vue, Svelte, Astro, and Angular",
     description:
-      "Copy-paste UI components on Tailwind CSS v4. The same classes and variants in all three, and the code lives in your repo.",
+      "Copy-paste UI components on Tailwind CSS v4. The same classes and variants in every framework, and the code lives in your repo.",
     frameworkLabel: "Framework for the code and previews",
     browse: "Browse components",
     copyCommand: "Copy install command",
@@ -209,14 +211,14 @@ const en = {
     stats: {
       components: "components in the registry",
       frameworks: "frameworks, one set of classes",
-      dependencies: "runtime packages beyond React, Vue, or Alpine",
+      dependencies: "runtime packages beyond the framework itself",
       size: "of gzipped JS per component",
     },
     cardBadge: "Try it",
     featuresLabel: "What you get",
     features: [
       ["Copied into your repo", "No package to update or fork"],
-      ["Same classes in 3 frameworks", "Blade, React, and Vue match"],
+      ["Same classes in 6 frameworks", "Every framework renders the same"],
       ["WCAG 2.2 AA tested", "axe and keyboard checks in CI"],
       ["Light and dark tokens", "One CSS file sets every color"],
       ["Ready for AI agents", "MCP server, Skill, and llms.txt"],
@@ -280,9 +282,10 @@ type Dictionary = typeof en;
 
 const id: Dictionary = {
   meta: {
-    title: "MarkasUI - Komponen UI untuk Blade, React, dan Vue",
+    title:
+      "MarkasUI - Komponen UI untuk Blade, React, Vue, Svelte, Astro, dan Angular",
     description:
-      "Komponen UI ringan untuk Blade, React, dan Vue dengan satu desain yang sama.",
+      "Komponen UI ringan untuk Blade, React, Vue, Svelte, Astro, dan Angular dengan satu desain yang sama.",
   },
   nav: {
     home: "Beranda",
@@ -385,6 +388,7 @@ const id: Dictionary = {
     viewOrCode: (title: string) => `${title}: tampilan atau kode`,
     source: "Source komponen",
     bladeMissing: "Preview Blade belum dirender. Jalankan pnpm build.",
+    unavailable: (framework: string) => `Belum tersedia untuk ${framework}.`,
   },
   code: { copy: "Salin kode", expand: "Lihat kode" },
   copyPage: {
@@ -401,7 +405,7 @@ const id: Dictionary = {
   list: {
     title: "Komponen",
     subtitle: (n: number) =>
-      `${n} komponen, masing-masing dalam versi Blade, React, dan Vue dengan tampilan yang sama`,
+      `${n} komponen dengan tampilan yang sama di Blade, React, Vue, Svelte, Astro, dan Angular`,
     search: "Cari komponen",
     searchPlaceholder: "Cari",
     category: "Kategori",
@@ -436,7 +440,7 @@ const id: Dictionary = {
     pagesLink: "Semua halaman",
     componentsTitle: (n: number) => [`${n} komponen,`, "satu registry."],
     componentsText:
-      "Dikelompokkan sesuai cara Anda mencarinya. Setiap halaman punya preview langsung, props, dan kode untuk ketiga framework.",
+      "Dikelompokkan sesuai cara Anda mencarinya. Setiap halaman punya preview langsung, props, dan kode untuk setiap framework.",
     componentsLink: "Lihat dengan preview",
     ctaTitle: ["Mulai dengan", "satu perintah."],
     ctaText:
@@ -447,9 +451,9 @@ const id: Dictionary = {
     titleBefore: "Pasang komponen",
     titleAfter: "",
     titleEnd: "dengan satu perintah.",
-    titleFrameworks: "Blade, React, dan Vue",
+    titleFrameworks: "Blade, React, Vue, Svelte, Astro, dan Angular",
     description:
-      "Komponen UI siap salin di atas Tailwind CSS v4. Class dan varian yang sama di ketiganya, dan kodenya tinggal di repo Anda.",
+      "Komponen UI siap salin di atas Tailwind CSS v4. Class dan varian yang sama di setiap framework, dan kodenya tinggal di repo Anda.",
     frameworkLabel: "Framework untuk kode dan preview",
     browse: "Lihat komponen",
     copyCommand: "Salin perintah instalasi",
@@ -457,14 +461,14 @@ const id: Dictionary = {
     stats: {
       components: "komponen di registry",
       frameworks: "framework, satu set class",
-      dependencies: "paket runtime selain React, Vue, atau Alpine",
+      dependencies: "paket runtime selain framework itu sendiri",
       size: "JS per komponen setelah gzip",
     },
     cardBadge: "Coba",
     featuresLabel: "Yang Anda dapat",
     features: [
       ["Disalin ke repo Anda", "Tanpa paket untuk diperbarui"],
-      ["Class sama di 3 framework", "Blade, React, dan Vue identik"],
+      ["Class sama di 6 framework", "Semua framework tampil identik"],
       ["Diuji WCAG 2.2 AA", "Cek axe dan keyboard di CI"],
       ["Token terang dan gelap", "Satu file CSS untuk semua warna"],
       ["Siap untuk agent AI", "MCP server, Skill, dan llms.txt"],

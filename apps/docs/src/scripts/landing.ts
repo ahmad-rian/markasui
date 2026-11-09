@@ -1,4 +1,4 @@
-import type { Framework } from "@markasui/registry/schema";
+import { FRAMEWORKS, type Framework } from "@markasui/registry/frameworks";
 import { onPageLoad } from "./lifecycle";
 import { getFramework, hasStoredFramework, isFramework } from "./prefs";
 
@@ -38,10 +38,10 @@ document.addEventListener("visibilitychange", syncMotion);
 
 /*
  * Kata framework di judul. Kalau pengunjung pernah memilih framework, kata itu langsung tampil dan
- * tidak berputar. Tanpa pilihan tersimpan, kata berputar Blade -> React -> Vue (dijeda saat hero tidak
+ * tidak berputar. Tanpa pilihan tersimpan, kata berputar Blade -> React -> Vue -> Svelte -> Astro -> Angular (dijeda saat hero tidak
  * terlihat atau tab tersembunyi) sampai pengunjung memilih di pill.
  */
-const ORDER: readonly Framework[] = ["blade", "react", "vue"];
+const ORDER: readonly Framework[] = FRAMEWORKS;
 const ROTATE_MS = 2400;
 let timer: ReturnType<typeof setInterval> | undefined;
 

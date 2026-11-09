@@ -4,6 +4,9 @@ export const FRAMEWORK_LABELS: Record<Framework, string> = {
   blade: "Blade",
   react: "React",
   vue: "Vue",
+  svelte: "Svelte",
+  astro: "Astro",
+  angular: "Angular",
 };
 
 /**
@@ -29,6 +32,21 @@ export const FRAMEWORK_ICONS: Record<
     dark: "#42b883",
     path: "M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z",
   },
+  svelte: {
+    light: "#d33a00",
+    dark: "#ff3e00",
+    path: "M10.354 21.125a4.44 4.44 0 0 1-4.765-1.767 4.109 4.109 0 0 1-.703-3.107 3.898 3.898 0 0 1 .134-.522l.105-.321.287.21a7.21 7.21 0 0 0 2.186 1.092l.208.063-.02.208a1.253 1.253 0 0 0 .226.83 1.337 1.337 0 0 0 1.435.533 1.231 1.231 0 0 0 .343-.15l5.59-3.562a1.164 1.164 0 0 0 .524-.778 1.242 1.242 0 0 0-.211-.937 1.338 1.338 0 0 0-1.435-.533 1.23 1.23 0 0 0-.343.15l-2.133 1.36a4.078 4.078 0 0 1-1.135.499 4.44 4.44 0 0 1-4.765-1.766 4.108 4.108 0 0 1-.702-3.108 3.855 3.855 0 0 1 1.742-2.582l5.589-3.563a4.072 4.072 0 0 1 1.135-.499 4.44 4.44 0 0 1 4.765 1.767 4.109 4.109 0 0 1 .703 3.107 3.943 3.943 0 0 1-.134.522l-.105.321-.286-.21a7.204 7.204 0 0 0-2.187-1.093l-.208-.063.02-.207a1.255 1.255 0 0 0-.226-.831 1.337 1.337 0 0 0-1.435-.532 1.231 1.231 0 0 0-.343.15L8.62 9.368a1.162 1.162 0 0 0-.524.778 1.24 1.24 0 0 0 .211.937 1.338 1.338 0 0 0 1.435.533 1.235 1.235 0 0 0 .344-.151l2.132-1.36a4.067 4.067 0 0 1 1.135-.498 4.44 4.44 0 0 1 4.765 1.766 4.108 4.108 0 0 1 .702 3.108 3.857 3.857 0 0 1-1.742 2.583l-5.589 3.562a4.072 4.072 0 0 1-1.135.499m10.358-17.95C18.484-.015 14.082-.96 10.9 1.068L5.31 4.63a6.412 6.412 0 0 0-2.896 4.295 6.753 6.753 0 0 0 .666 4.336 6.43 6.43 0 0 0-.96 2.396 6.833 6.833 0 0 0 1.168 5.167c2.229 3.19 6.63 4.135 9.812 2.108l5.59-3.562a6.41 6.41 0 0 0 2.896-4.295 6.756 6.756 0 0 0-.665-4.336 6.429 6.429 0 0 0 .958-2.396 6.831 6.831 0 0 0-1.167-5.168Z",
+  },
+  astro: {
+    light: "#9a3fcf",
+    dark: "#c77dff",
+    path: "M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z",
+  },
+  angular: {
+    light: "#c8003f",
+    dark: "#ff5c8a",
+    path: "M16.712 17.711H7.288l-1.204 2.916L12 24l5.916-3.373-1.204-2.916ZM14.692 0l7.832 16.855.814-12.856L14.692 0ZM9.308 0 .662 3.999l.814 12.856L9.308 0Zm-.405 13.93h6.198L12 6.396 8.903 13.93Z",
+  },
 };
 
 export const PACKAGE_MANAGERS = ["npm", "pnpm", "yarn", "bun"] as const;
@@ -44,9 +62,30 @@ const RUNNERS: Record<PackageManager, string> = {
 export const cliCommand = (pm: PackageManager, args: string) =>
   `${RUNNERS[pm]} markasui@latest ${args}`;
 
-export const shikiLang = (framework: Framework) =>
-  ({ blade: "blade", react: "tsx", vue: "vue" })[framework] as
-    "blade" | "tsx" | "vue";
+export type ShikiFrameworkLang =
+  "blade" | "tsx" | "vue" | "svelte" | "astro" | "angular-ts";
+
+export const shikiLang = (framework: Framework): ShikiFrameworkLang =>
+  (
+    ({
+      blade: "blade",
+      react: "tsx",
+      vue: "vue",
+      svelte: "svelte",
+      astro: "astro",
+      angular: "angular-ts",
+    }) as const
+  )[framework];
+
+/** Ekstensi contoh di examples/<framework>/<nama><ext>. */
+export const EXAMPLE_EXTENSIONS: Record<Framework, string> = {
+  blade: ".blade.php",
+  react: ".tsx",
+  vue: ".vue",
+  svelte: ".svelte",
+  astro: ".astro",
+  angular: ".ts",
+};
 
 /** Stack yang didukung, ditampilkan di landing (Simple Icons, CC0). */
 export const STACK = [
@@ -67,3 +106,22 @@ export const STACK = [
     path: "M13.056 23.238a.57.57 0 0 1-1.02-.355v-5.202c0-.63-.512-1.143-1.144-1.143H5.148a.57.57 0 0 1-.464-.903l3.777-5.29c.54-.753 0-1.804-.93-1.804H.57a.574.574 0 0 1-.543-.746.6.6 0 0 1 .08-.157L5.008.78a.57.57 0 0 1 .467-.24h14.589a.57.57 0 0 1 .466.903l-3.778 5.29c-.54.755 0 1.806.93 1.806h5.745c.238 0 .424.138.513.322a.56.56 0 0 1-.063.603z",
   },
 ] as const;
+
+/** Folder import komponen di contoh yang ditampilkan, sesuai target path CLI per framework. */
+const IMPORT_BASE: Record<Framework, string> = {
+  blade: "@/components/markas",
+  react: "@/components/markas",
+  vue: "@/components/markas",
+  svelte: "$lib/components/markas",
+  astro: "@/components/markas",
+  angular: "./markas",
+};
+
+/** Ganti import ../../components/<nama>/<File> di contoh repo dengan path di project user. */
+export const exampleForDisplay = (code: string, framework: Framework) =>
+  code
+    .replace(
+      /(["'])\.\.\/\.\.\/components\/[a-z-]+\/([A-Za-z][\w.-]*)\1/g,
+      `$1${IMPORT_BASE[framework]}/$2$1`,
+    )
+    .trim();

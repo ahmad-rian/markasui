@@ -736,7 +736,8 @@ html.dark :is(.lp-accent, .hero-rotator) {
 /* Lebar tetap selebar kata terpanjang dalam Instrument Serif, jadi pergantian font tidak menggeser judul. */
 .hero-rotator {
   display: inline-grid;
-  width: 2.7em;
+  /* Selebar kata terpanjang (Angular) plus logo. */
+  width: 3.75em;
   height: 1.02em;
   vertical-align: bottom;
   perspective: 600px;
@@ -764,9 +765,21 @@ html[data-framework="react"]
   .hero-rotator:not([data-active])
   [data-word="react"],
 html[data-framework="vue"] .hero-rotator:not([data-active]) [data-word="vue"],
+html[data-framework="svelte"]
+  .hero-rotator:not([data-active])
+  [data-word="svelte"],
+html[data-framework="astro"]
+  .hero-rotator:not([data-active])
+  [data-word="astro"],
+html[data-framework="angular"]
+  .hero-rotator:not([data-active])
+  [data-word="angular"],
 .hero-rotator[data-active="blade"] [data-word="blade"],
 .hero-rotator[data-active="react"] [data-word="react"],
-.hero-rotator[data-active="vue"] [data-word="vue"] {
+.hero-rotator[data-active="vue"] [data-word="vue"],
+.hero-rotator[data-active="svelte"] [data-word="svelte"],
+.hero-rotator[data-active="astro"] [data-word="astro"],
+.hero-rotator[data-active="angular"] [data-word="angular"] {
   opacity: 1;
   transform: none;
 }

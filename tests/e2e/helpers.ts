@@ -1,16 +1,48 @@
-import { readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { expect, type Page, type TestInfo } from "@playwright/test";
+import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 
-export const frameworks = ["blade", "react", "vue"] as const;
+/** Semua framework. React adalah rujukan visual; framework lain dibandingkan terhadapnya. */
+export const frameworks = [
+  "blade",
+  "react",
+  "vue",
+  "svelte",
+  "astro",
+  "angular",
+] as const;
 export type Framework = (typeof frameworks)[number];
 
+/** Ekstensi contoh di examples/<framework>/<nama><ext>. */
+export const EXAMPLE_EXTENSIONS: Record<Framework, string> = {
+  blade: ".blade.php",
+  react: ".tsx",
+  vue: ".vue",
+  svelte: ".svelte",
+  astro: ".astro",
+  angular: ".ts",
+};
+
+const examplesDir = resolve(import.meta.dirname, "../../examples");
+
+/** True kalau framework itu sudah punya contoh untuk komponen (atau variasi) ini. */
+export const hasFixture = (framework: Framework, component: string): boolean =>
+  existsSync(
+    resolve(
+      examplesDir,
+      framework,
+      `${component}${EXAMPLE_EXTENSIONS[framework]}`,
+    ),
+  );
+
+/** Framework yang punya contoh untuk komponen ini. Porting bertahap: yang belum ada dilewati. */
+export const frameworksFor = (component: string): Framework[] =>
+  frameworks.filter((framework) => hasFixture(framework, component));
+
 /** Semua komponen yang punya contoh di examples/react. Komponen baru otomatis ikut diuji. */
-export const components = readdirSync(
-  resolve(import.meta.dirname, "../../examples/react"),
-)
+export const components = readdirSync(resolve(examplesDir, "react"))
   .filter((file) => file.endsWith(".tsx"))
   .map((file) => file.replace(/\.tsx$/, ""))
   .sort();
@@ -22,12 +54,20 @@ export type Theme = (typeof themes)[number];
 /** Batas selisih piksel dari PRD bagian 11. */
 export const MAX_DIFF_RATIO = 0.005;
 
+/**
+ * Buka contoh di playground. Kalau framework itu belum punya contoh untuk komponen ini, tes
+ * dilewati (skip), bukan gagal, supaya porting ke Svelte, Astro, dan Angular bisa bertahap.
+ */
 export async function openFixture(
   page: Page,
   framework: Framework,
   component: ComponentName,
   theme: Theme = "light",
 ) {
+  test.skip(
+    !hasFixture(framework, component),
+    `${framework} belum punya contoh ${component}`,
+  );
   await page.goto(`/${framework}.html?c=${component}&theme=${theme}`);
   await page.locator("body[data-ready=true]").waitFor();
 }
@@ -50,7 +90,7 @@ export const screenshot = async (
   );
 
 /**
- * Bandingkan Blade dan Vue terhadap React untuk satu keadaan.
+ * Bandingkan setiap framework yang punya contoh terhadap React untuk satu keadaan.
  * `prepare` dijalankan setelah fixture siap, misalnya membuka dropdown, lalu mengembalikan screenshot.
  */
 export async function expectSameAcrossFrameworks(
@@ -66,7 +106,9 @@ export async function expectSameAcrossFrameworks(
   };
   const reference = await capture("react");
 
-  for (const framework of ["blade", "vue"] as const) {
+  for (const framework of frameworksFor(component).filter(
+    (framework) => framework !== "react",
+  )) {
     const candidate = await capture(framework);
     expect(
       [candidate.width, candidate.height],

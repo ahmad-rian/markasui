@@ -5,9 +5,11 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
+import angular from "@analogjs/vite-plugin-angular";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 import react from "@vitejs/plugin-react";
 import vue from "@vitejs/plugin-vue";
-import { build } from "vite";
+import { build, type PluginOption } from "vite";
 
 const KB = 1024;
 const BUDGET = {
@@ -16,6 +18,8 @@ const BUDGET = {
   fontFiles: 4,
   fontBytes: 120 * KB,
   componentJs: 3 * KB,
+  /** Angular AOT: definisi komponen dan instruksi template ikut terhitung, runtime @angular tidak (sekitar 38 KB gzip, dimuat terpisah). */
+  angularComponentJs: 4 * KB,
   thumbnail: 30 * KB,
 };
 
@@ -76,16 +80,55 @@ async function pageJsBytes(htmlPath: string): Promise<number> {
   return total;
 }
 
-async function componentJsBytes(entry: string): Promise<number> {
+/** Framework yang diukur per komponen. Runtime framework sendiri tidak dihitung (external). */
+const MEASURED = {
+  react: {
+    budget: BUDGET.componentJs,
+    plugins: () => [react()],
+    external: [/^react/],
+  },
+  vue: {
+    budget: BUDGET.componentJs,
+    plugins: () => [vue()],
+    external: [/^vue$/],
+  },
+  svelte: {
+    budget: BUDGET.componentJs,
+    plugins: () => [svelte()],
+    external: [/^svelte/],
+  },
+  angular: {
+    budget: BUDGET.angularComponentJs,
+    plugins: () =>
+      angular({
+        tsconfig: join(root, "tsconfig.angular.json"),
+        workspaceRoot: root,
+        transformFilter: (_code: string, id: string) =>
+          id.endsWith(".component.ts"),
+      }),
+    external: [/^@angular\//, /^rxjs/, /^tslib$/],
+  },
+} satisfies Record<
+  string,
+  { budget: number; plugins: () => PluginOption; external: RegExp[] }
+>;
+type MeasuredFramework = keyof typeof MEASURED;
+
+async function componentJsBytes(
+  entry: string,
+  framework: MeasuredFramework,
+): Promise<number> {
+  const { plugins, external } = MEASURED[framework];
   const output = await build({
     configFile: false,
     logLevel: "silent",
-    plugins: [react(), vue()],
+    publicDir: false,
+    plugins: plugins(),
     build: {
       write: false,
       minify: true,
       lib: { entry, formats: ["es"], fileName: "c" },
-      rollupOptions: { external: [/^react/, /^vue$/] },
+      rollupOptions: { external },
     },
   });
   const bundles = Array.isArray(output) ? output : [output];
@@ -165,17 +208,13 @@ async function main() {
     const meta = JSON.parse(
       await readFile(join(root, "components", name, "meta.json"), "utf8"),
     );
-    for (const framework of ["react", "vue"] as const) {
-      const entry = join(
-        root,
-        "components",
-        name,
-        meta.frameworks[framework].file,
-      );
+    for (const framework of Object.keys(MEASURED) as MeasuredFramework[]) {
+      const file = meta.frameworks[framework]?.file;
+      if (!file) continue;
       check(
         `JS ${name} (${framework})`,
-        await componentJsBytes(entry),
-        BUDGET.componentJs,
+        await componentJsBytes(join(root, "components", name, file), framework),
+        MEASURED[framework].budget,
       );
     }
   }

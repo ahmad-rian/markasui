@@ -30,6 +30,50 @@ import Button from "@/components/markas/Button.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+</script>
+
+<Button>Simpan</Button>
+<Button variant="secondary" size="sm">Batal</Button>
+<Button variant="danger" type="submit">Hapus akun</Button>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+---
+
+<Button>Simpan</Button>
+<Button variant="secondary" size="sm">Batal</Button>
+<Button variant="danger" type="submit">Hapus akun</Button>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+
+@Component({
+  selector: "app-aksi",
+  imports: [Button],
+  template: `
+    <button markas-button>Simpan</button>
+    <button markas-button variant="secondary" size="sm">Batal</button>
+    <button markas-button variant="danger" type="submit">Hapus akun</button>
+  `,
+})
+export class Aksi {}
+```
+
+Angular memakai attribute selector pada button native, jadi `disabled`, `aria-*`, dan `class` tetap di button.
+
 ## Catatan
 
 - Default `type="button"`. Isi `type="submit"` untuk tombol kirim form.
