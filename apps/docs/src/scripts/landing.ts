@@ -1,6 +1,6 @@
 import { FRAMEWORKS, type Framework } from "@markasui/registry/frameworks";
 import { onPageLoad } from "./lifecycle";
-import { getFramework, hasStoredFramework, isFramework } from "./prefs";
+import { getFramework, isFramework } from "./prefs";
 
 /*
  * Dekorasi bergerak (cahaya dan berkas di .lp-bg) hanya beranimasi saat bingkainya terlihat dan
@@ -37,9 +37,8 @@ onPageLoad(() => {
 document.addEventListener("visibilitychange", syncMotion);
 
 /*
- * Kata framework di judul. Kalau pengunjung pernah memilih framework, kata itu langsung tampil dan
- * tidak berputar. Tanpa pilihan tersimpan, kata berputar Blade -> React -> Vue -> Svelte -> Astro -> Angular (dijeda saat hero tidak
- * terlihat atau tab tersembunyi) sampai pengunjung memilih di pill.
+ * Kata framework di judul berputar terus melewati keenam framework (dijeda saat hero tidak terlihat,
+ * tab tersembunyi, atau reduced motion). Memilih di pill langsung menampilkan framework itu, lalu putaran berlanjut.
  */
 const ORDER: readonly Framework[] = FRAMEWORKS;
 const ROTATE_MS = 2400;
@@ -64,6 +63,31 @@ function show(root: HTMLElement, next: Framework) {
     word.toggleAttribute("data-leaving", word.dataset.word === previous);
   });
   root.dataset.active = next;
+  fitWidth(root);
+  markPill(next);
+}
+
+/** Sorotan pill hero ikut bergeser bersama kata yang berputar. */
+function markPill(framework: string) {
+  document
+    .querySelectorAll<HTMLElement>(".lp-switch [role=radio]")
+    .forEach((radio) =>
+      radio.toggleAttribute("data-shown", radio.dataset.value === framework),
+    );
+}
+
+/** Lebar slot mengikuti kata yang tampil, jadi tidak ada celah kosong setelah kata pendek. */
+function fitWidth(root: HTMLElement) {
+  const word = root.querySelector<HTMLElement>(
+    `[data-word="${root.dataset.active}"]`,
+  );
+  if (word) root.style.width = `${word.offsetWidth}px`;
+}
+
+function start() {
+  stop();
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  timer = setInterval(tick, ROTATE_MS);
 }
 
 function tick() {
@@ -79,19 +103,17 @@ onPageLoad(() => {
   const root = rotator();
   if (!root) return;
   root.dataset.active = getFramework();
-  if (
-    hasStoredFramework() ||
-    matchMedia("(prefers-reduced-motion: reduce)").matches
-  )
-    return;
-  timer = setInterval(tick, ROTATE_MS);
+  fitWidth(root);
+  markPill(root.dataset.active);
+  start();
 });
 
 document.addEventListener("markas:framework", (event) => {
-  stop();
   const root = rotator();
   const framework = (event as CustomEvent<unknown>).detail;
-  if (root && isFramework(framework)) show(root, framework);
+  if (!root || !isFramework(framework)) return;
+  show(root, framework);
+  start();
 });
 document.addEventListener("astro:before-swap", stop);
 
@@ -100,6 +122,11 @@ const SERIF = 'italic 400 1em "Instrument Serif"';
 const SERIF_DELAY_MS = 300;
 const enableSerif = () => {
   document.documentElement.dataset.serif = "";
+  // Serif mengubah lebar kata framework: ukur ulang slotnya setelah font tergambar.
+  requestAnimationFrame(() => {
+    const root = rotator();
+    if (root) fitWidth(root);
+  });
 };
 const loadSerif = () => {
   document.fonts

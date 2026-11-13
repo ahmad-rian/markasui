@@ -231,15 +231,26 @@ html[data-splash] :is(.lp-glow, .lp-beam),
   padding-inline: 14px;
   color: var(--lp-dim);
 }
-.lp-switch [aria-checked="true"] {
+/*
+ * Sorotan pill hero mengikuti kata framework yang sedang tampil di judul (data-shown, diatur
+ * scripts/landing.ts), bukan pilihan tersimpan. aria-checked tetap menandai pilihan sebenarnya.
+ */
+.lp-switch [role="radio"][aria-checked="true"]:not([data-shown]) {
+  background: transparent;
+  color: var(--lp-dim);
+  font-weight: 400;
+  box-shadow: none;
+}
+.lp-switch [role="radio"][data-shown] {
   background: var(--lp-chk);
   color: var(--lp-fg);
+  font-weight: 500;
   box-shadow: none;
 }
 .lp-title {
   margin-top: 28px;
-  font-size: clamp(2.5rem, 0.8rem + 4vw, 4.5rem);
-  line-height: 1.02;
+  font-size: clamp(2.5rem, 0.8rem + 3vw, 3.6rem);
+  line-height: 1.04;
   font-weight: 600;
   letter-spacing: -0.045em;
   text-wrap: balance;
@@ -736,14 +747,20 @@ html.dark :is(.lp-accent, .hero-rotator) {
 /* Lebar tetap selebar kata terpanjang dalam Instrument Serif, jadi pergantian font tidak menggeser judul. */
 .hero-rotator {
   display: inline-grid;
-  /* Selebar kata terpanjang (Angular) plus logo. */
+  /* Awal selebar kata terpanjang (Angular) plus logo; skrip lalu menyesuaikan dengan kata yang tampil. */
   width: 3.75em;
+  justify-items: start;
+  /* Kata yang keluar tidak boleh terlihat di atas judul saat berganti. */
+  overflow: clip;
+  overflow-clip-margin: 0.12em;
+  transition: width 500ms var(--ease-out-quint);
   height: 1.02em;
   vertical-align: bottom;
   perspective: 600px;
 }
 .hero-word {
   grid-area: 1 / 1;
+  width: max-content;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -786,5 +803,19 @@ html[data-framework="angular"]
 @media (prefers-reduced-motion: reduce) {
   .hero-word {
     transition: none;
+  }
+}
+
+/* Pill framework di hero: enam pilihan dalam satu baris mulai tablet. */
+@media (min-width: 40rem) {
+  .lp-switch [data-framework-switcher] {
+    grid-template-columns: repeat(6, auto);
+  }
+}
+
+/* Baris kedua judul tetap satu baris di layar lebar. */
+@media (min-width: 64rem) {
+  .lp-title-line {
+    white-space: nowrap;
   }
 }

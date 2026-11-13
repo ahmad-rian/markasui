@@ -749,7 +749,10 @@ test.describe("kata framework di judul landing", () => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
   });
 
-  test("preferensi tersimpan langsung tampil dan tidak berputar", async ({
+  const shownPill = (page: Page) =>
+    page.locator(".lp-switch [role=radio][data-shown]");
+
+  test("preferensi tersimpan tampil lebih dulu, lalu kata dan pill terus berputar", async ({
     page,
   }) => {
     await page.addInitScript(() =>
@@ -757,31 +760,30 @@ test.describe("kata framework di judul landing", () => {
     );
     await page.goto("/");
     await expect(rotator(page)).toHaveAttribute("data-active", "vue");
-    await expect(rotator(page).locator('[data-word="vue"]')).toHaveCSS(
-      "opacity",
-      "1",
-    );
-    await page.waitForTimeout(ROTATION_WAIT_MS);
-    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
+    await expect(shownPill(page)).toHaveAttribute("data-value", "vue");
+    await expect(rotator(page)).toHaveAttribute("data-active", "svelte", {
+      timeout: ROTATION_WAIT_MS + 1000,
+    });
+    // Sorotan pill ikut bergeser, tapi pilihan tersimpan (aria-checked) tetap Vue.
+    await expect(shownPill(page)).toHaveAttribute("data-value", "svelte");
+    await expect(
+      page.locator(".lp-switch [role=radio][aria-checked=true]"),
+    ).toHaveAttribute("data-value", "vue");
   });
 
-  test("tanpa preferensi berputar, memilih di pill mengganti kata dan menghentikan putaran", async ({
+  test("memilih di pill langsung menampilkan framework itu lalu putaran berlanjut", async ({
     page,
   }) => {
     await page.goto("/");
-    await expect(rotator(page)).toHaveAttribute("data-active", "blade");
-    await expect(rotator(page)).toHaveAttribute("data-active", "react", {
-      timeout: 4000,
-    });
-
-    await page.getByRole("radio", { name: "Vue" }).first().click();
-    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
-    await expect(rotator(page).locator('[data-word="vue"]')).toHaveCSS(
+    await page.getByRole("radio", { name: "Astro" }).first().click();
+    await expect(rotator(page)).toHaveAttribute("data-active", "astro");
+    await expect(rotator(page).locator('[data-word="astro"]')).toHaveCSS(
       "opacity",
       "1",
     );
-    await page.waitForTimeout(ROTATION_WAIT_MS);
-    await expect(rotator(page)).toHaveAttribute("data-active", "vue");
+    await expect(rotator(page)).toHaveAttribute("data-active", "angular", {
+      timeout: ROTATION_WAIT_MS + 1000,
+    });
   });
 
   test("tetap sinkron setelah navigasi SPA", async ({ page }) => {
@@ -798,8 +800,7 @@ test.describe("kata framework di judul landing", () => {
     await page.locator('header a[href="/"]').first().click();
     await expect(page).toHaveURL(/\/$/);
     await expect(rotator(page)).toHaveAttribute("data-active", "react");
-    await page.waitForTimeout(ROTATION_WAIT_MS);
-    await expect(rotator(page)).toHaveAttribute("data-active", "react");
+    await expect(shownPill(page)).toHaveAttribute("data-value", "react");
     expect(
       await page.evaluate(
         () => (window as unknown as { __spa?: number }).__spa,
