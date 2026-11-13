@@ -62,6 +62,73 @@ import { CardStack } from "@/components/markas/CardStack";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import CardStack from "$lib/components/markas/CardStack.svelte";
+</script>
+
+<CardStack label="Customer testimonials" items={testimonials}>
+  {#snippet card(item)}
+    <figure class="grid gap-6 p-5">
+      <blockquote>{item.quote}</blockquote>
+      <figcaption class="text-sm text-muted">{item.name}</figcaption>
+    </figure>
+  {/snippet}
+</CardStack>
+```
+
+Svelte, Astro, dan Angular menerima kartu sebagai `items` dan menggambar tiap kartu lewat snippet, function child, atau `ng-template`. Svelte membaca `{index}` di atribut biasa sebagai ekspresi, jadi tulis template label di dalam kurung kurawal: `cardLabel={"Tips {index} dari {total}"}`.
+
+## Astro
+
+```astro
+---
+import CardStack from "@/components/markas/CardStack.astro";
+---
+
+<CardStack label="Customer testimonials" items={testimonials}>
+  {
+    (item: Testimonial) => (
+      <figure class="grid gap-6 p-5">
+        <blockquote>{item.quote}</blockquote>
+        <figcaption class="text-sm text-muted">{item.name}</figcaption>
+      </figure>
+    )
+  }
+</CardStack>
+```
+
+Setiap tumpukan adalah custom element kecil, jadi tetap jalan setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { CardStack } from "./markas/card-stack.component";
+
+@Component({
+  selector: "app-testimonials",
+  imports: [CardStack],
+  template: `
+    <markas-card-stack label="Customer testimonials" [items]="testimonials">
+      <ng-template let-item let-index="index">
+        <figure class="grid gap-6 p-5">
+          <blockquote>{{ item.quote }}</blockquote>
+          <figcaption class="text-sm text-muted">{{ item.name }}</figcaption>
+        </figure>
+      </ng-template>
+    </markas-card-stack>
+  `,
+})
+export class Testimonials {
+  testimonials = [{ quote: "Setup took ten minutes.", name: "Sari Wijaya" }];
+}
+```
+
+Ikat `cardLabel` lewat properti kalau berisi `{index}`: `[cardLabel]="tipLabel"`.
+
 ## Catatan
 
 - Tumpukan sudah menyediakan permukaan kartu (border, latar, radius). Cukup tambahkan padding dan isi di setiap kartu.

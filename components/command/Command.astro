@@ -1,0 +1,292 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const dialogClass =
+  "mx-auto mt-24 mb-auto w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-line bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/40";
+const search = "flex items-center gap-2 border-b border-line px-4";
+const searchIcon = "size-4 shrink-0 text-muted";
+const input =
+  "h-12 w-full bg-transparent text-sm text-ink outline-none placeholder:text-muted";
+const list = "max-h-72 overflow-y-auto p-1";
+const groupClass = "py-1";
+const heading = "px-3 pt-1 pb-1.5 text-xs font-medium text-muted";
+const option =
+  "flex w-full cursor-pointer items-center justify-between gap-4 rounded-md px-3 py-2 text-left text-sm text-ink transition-colors duration-150 ease-out aria-selected:bg-subtle motion-reduce:transition-none";
+const shortcutClass = "font-sans text-xs text-muted";
+const empty = "px-4 py-6 text-center text-sm text-muted";
+
+const HAS_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+const SAFE_SCHEME = /^(https?|mailto|tel):/i;
+
+/** Href with a scheme other than http, https, mailto, and tel (such as javascript:) becomes "#". */
+const safeHref = (href: string) => {
+  const cleaned = href.replace(/[\t\n\r]/g, "");
+  const start = [...cleaned].findIndex((char) => char > " ");
+  const value = cleaned.slice(Math.max(start, 0));
+  return HAS_SCHEME.test(value) && !SAFE_SCHEME.test(value) ? "#" : href;
+};
+
+export type CommandItem = {
+  group: string;
+  label: string;
+  value?: string;
+  href?: string;
+  shortcut?: string;
+};
+
+type Props = Omit<HTMLAttributes<"dialog">, "open"> & {
+  items: CommandItem[];
+  /** Ctrl+K or Cmd+K opens and closes the palette. */
+  hotkey?: boolean;
+  placeholderLabel?: string;
+  emptyLabel?: string;
+  /** Accessible label of the search field. */
+  searchLabel?: string;
+  /** Accessible label of the dialog and the result list. */
+  dialogLabel?: string;
+};
+
+const {
+  items,
+  hotkey = false,
+  placeholderLabel = "Type a command or search...",
+  emptyLabel = "No results found.",
+  searchLabel = "Search commands",
+  dialogLabel = "Command palette",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const dialogId = id ?? `markas-command-${crypto.randomUUID().slice(0, 8)}`;
+const listId = `${dialogId}-list`;
+const optionId = (index: number) => `${dialogId}-option-${index}`;
+// Groups in order of first appearance; the original index keeps option ids stable.
+const groups = [...new Set(items.map((item) => item.group))].map(
+  (name, groupIndex) => ({
+    name,
+    id: `${dialogId}-group-${groupIndex}`,
+    entries: items
+      .map((item, index) => ({ item, index }))
+      .filter((entry) => entry.item.group === name),
+  }),
+);
+const firstId = groups[0] ? optionId(groups[0].entries[0]!.index) : undefined;
+---
+
+<markas-command class="contents" data-hotkey={hotkey ? "" : undefined}>
+  {
+    Astro.slots.has("trigger") && (
+      <div class="contents" data-markas-command-trigger>
+        <slot name="trigger" />
+      </div>
+    )
+  }
+  <dialog
+    id={dialogId}
+    aria-label={dialogLabel}
+    data-state="closed"
+    class:list={[dialogClass, className]}
+    {...rest}
+  >
+    <div class={search}>
+      <svg
+        class={searchIcon}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m20 20-3.5-3.5"></path>
+      </svg>
+      <input
+        type="text"
+        role="combobox"
+        aria-label={searchLabel}
+        aria-expanded={items.length > 0 ? "true" : "false"}
+        aria-controls={listId}
+        aria-autocomplete="list"
+        aria-activedescendant={firstId}
+        autocomplete="off"
+        spellcheck="false"
+        placeholder={placeholderLabel}
+        class={input}
+      />
+    </div>
+    <div
+      id={listId}
+      role="listbox"
+      aria-label={dialogLabel}
+      hidden={items.length === 0}
+      class={list}
+    >
+      {
+        groups.map((group) => (
+          <div
+            role="group"
+            aria-labelledby={`${group.id}-heading`}
+            class={groupClass}
+          >
+            <div id={`${group.id}-heading`} class={heading}>
+              {group.name}
+            </div>
+            {group.entries.map(({ item, index }) => {
+              const Tag = item.href ? "a" : "div";
+              return (
+                <Tag
+                  href={item.href ? safeHref(item.href) : undefined}
+                  id={optionId(index)}
+                  role="option"
+                  aria-selected={optionId(index) === firstId ? "true" : "false"}
+                  tabindex="-1"
+                  data-label={item.label}
+                  data-value={item.value ?? item.label}
+                  class={option}
+                >
+                  <span>{item.label}</span>
+                  {item.shortcut && (
+                    <kbd class={shortcutClass}>{item.shortcut}</kbd>
+                  )}
+                </Tag>
+              );
+            })}
+          </div>
+        ))
+      }
+    </div>
+    <p class={empty} hidden={items.length > 0}>{emptyLabel}</p>
+  </dialog>
+</markas-command>
+
+<script>
+  // One custom element per palette: it keeps its own query and highlight, and registers the
+  // Ctrl+K listener only while it is on the page (also after view transitions).
+  class MarkasCommand extends HTMLElement {
+    private active = 0;
+    private dialog!: HTMLDialogElement;
+    private input!: HTMLInputElement;
+    private readonly onHotkey = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "k")
+        return;
+      event.preventDefault();
+      if (this.dialog.open) return this.dialog.close();
+      this.show();
+    };
+
+    connectedCallback() {
+      if (this.dialog) return this.listen();
+      this.dialog = this.querySelector("dialog")!;
+      this.input = this.dialog.querySelector("input")!;
+      this.addEventListener("click", (event) => this.handleClick(event));
+      this.addEventListener("mousemove", (event) => {
+        const target = (event.target as Element).closest("[role=option]");
+        const index = this.visible().indexOf(target as HTMLElement);
+        if (index >= 0 && index !== this.active) this.update(index);
+      });
+      this.input.addEventListener("input", () => this.update(0));
+      this.input.addEventListener("keydown", (event) => this.handleKey(event));
+      this.dialog.addEventListener("close", () => {
+        this.dialog.dataset.state = "closed";
+        this.input.value = "";
+        this.update(0);
+      });
+      this.listen();
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener("keydown", this.onHotkey);
+    }
+
+    private listen() {
+      if (this.hasAttribute("data-hotkey"))
+        window.addEventListener("keydown", this.onHotkey);
+    }
+
+    private show() {
+      this.dialog.showModal();
+      this.dialog.dataset.state = "open";
+    }
+
+    private options() {
+      return [...this.dialog.querySelectorAll<HTMLElement>("[role=option]")];
+    }
+
+    private visible() {
+      return this.options().filter((el) => el.style.display !== "none");
+    }
+
+    private activeOption() {
+      const visible = this.visible();
+      return visible[Math.min(this.active, visible.length - 1)];
+    }
+
+    /** Filters by the query, then moves the highlight to the given position. */
+    private update(active: number) {
+      const query = this.input.value.trim().toLowerCase();
+      for (const el of this.options())
+        el.style.display = (el.dataset.label ?? "")
+          .toLowerCase()
+          .includes(query)
+          ? ""
+          : "none";
+      for (const group of this.dialog.querySelectorAll<HTMLElement>(
+        "[role=group]",
+      ))
+        group.style.display = group.querySelector(
+          "[role=option]:not([style*=none])",
+        )
+          ? ""
+          : "none";
+      const count = this.visible().length;
+      this.dialog.querySelector<HTMLElement>("[role=listbox]")!.hidden =
+        count === 0;
+      this.dialog.querySelector("p")!.hidden = count > 0;
+      this.input.setAttribute("aria-expanded", String(count > 0));
+      this.active = active;
+      const current = this.activeOption();
+      for (const el of this.options())
+        el.setAttribute("aria-selected", String(el === current));
+      if (current) {
+        this.input.setAttribute("aria-activedescendant", current.id);
+        current.scrollIntoView?.({ block: "nearest" });
+      } else this.input.removeAttribute("aria-activedescendant");
+    }
+
+    private handleKey(event: KeyboardEvent) {
+      const count = this.visible().length;
+      const step = ({ ArrowDown: 1, ArrowUp: -1 } as Record<string, number>)[
+        event.key
+      ];
+      if (step !== undefined) {
+        event.preventDefault();
+        if (count > 0) this.update((this.active + step + count) % count);
+        return;
+      }
+      if (event.key !== "Enter" || !count) return;
+      event.preventDefault();
+      this.activeOption()?.click();
+    }
+
+    private handleClick(event: MouseEvent) {
+      const target = event.target as Element;
+      if (target.closest("[data-markas-command-trigger]")) return this.show();
+      // A click on the dialog itself (not its content) is a click on the backdrop.
+      if (target === this.dialog) return this.dialog.close();
+      const option = target.closest<HTMLElement>("[role=option]");
+      if (!option) return;
+      this.dialog.dispatchEvent(
+        new CustomEvent("markas-select", {
+          bubbles: true,
+          detail: option.dataset.value,
+        }),
+      );
+      this.dialog.close();
+    }
+  }
+
+  if (!customElements.get("markas-command"))
+    customElements.define("markas-command", MarkasCommand);
+</script>

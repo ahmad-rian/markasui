@@ -6,9 +6,30 @@
   "tags": ["background", "waves", "svg", "hero", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "wavy-background.blade.php", "deps": [] },
-    "react": { "file": "WavyBackground.tsx", "deps": [] },
-    "vue": { "file": "WavyBackground.vue", "deps": [] }
+    "blade": {
+      "file": "wavy-background.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "WavyBackground.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "WavyBackground.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "WavyBackground.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "WavyBackground.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "wavy-background.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -78,5 +99,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

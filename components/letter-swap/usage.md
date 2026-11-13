@@ -38,6 +38,58 @@ import { LetterSwap } from "@/components/markas/LetterSwap";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import LetterSwap from "$lib/components/markas/LetterSwap.svelte";
+</script>
+
+<a href="/pricing" class="text-sm font-medium">
+  <LetterSwap text="Pricing" />
+</a>
+<button type="button" class="h-10 rounded-lg bg-primary px-4 text-on-primary">
+  <LetterSwap text="Start free trial" mode="pingpong" direction="down" />
+</button>
+```
+
+## Astro
+
+```astro
+---
+import LetterSwap from "@/components/markas/LetterSwap.astro";
+---
+
+<a href="/pricing" class="text-sm font-medium">
+  <LetterSwap text="Pricing" />
+</a>
+<a href="/careers"><LetterSwap text="Careers" mode="random" /></a>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { LetterSwap } from "./markas/letter-swap.component";
+
+@Component({
+  selector: "app-nav-link",
+  imports: [LetterSwap],
+  template: `
+    <a href="/pricing" class="text-sm font-medium">
+      <span markas-letter-swap text="Pricing"></span>
+    </a>
+    <button
+      type="button"
+      class="h-10 rounded-lg bg-primary px-4 text-on-primary"
+    >
+      <span markas-letter-swap text="Start free trial" mode="pingpong"></span>
+    </button>
+  `,
+})
+export class NavLink {}
+```
+
 ## Notes
 
 - Put the component inside a link or button. It listens to hover and focus on the closest `a`, `button`, `label`, or element with `tabindex`, so keyboard users see the same swap.

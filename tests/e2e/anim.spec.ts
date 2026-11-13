@@ -1,6 +1,15 @@
 import { expect, test, type Page } from "@playwright/test";
 import { frameworks, openFixture } from "./helpers";
 
+/**
+ * Akar komponen dicari lewat class, bukan `#fixture > div`: Astro membungkusnya dengan custom element
+ * dan Angular dengan elemen host, jadi akarnya tidak selalu anak langsung #fixture.
+ */
+const marqueeRoot = (page: Page) =>
+  page.locator("#fixture div.overflow-hidden").first();
+const spotlightCard = (page: Page) =>
+  page.locator('#fixture [class~="group/spotlight"]');
+
 /** Jumlah animasi Web Animations API per playState di halaman. */
 const playStates = (page: Page) =>
   page.evaluate(() => document.getAnimations().map((a) => a.playState));
@@ -62,7 +71,7 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "marquee");
-      const copies = page.locator("#fixture > div > div");
+      const copies = marqueeRoot(page).locator(":scope > div");
       await expect(copies).toHaveCount(2);
       await expect(copies.nth(0)).not.toHaveAttribute("aria-hidden");
       await expect(copies.nth(1)).toHaveAttribute("aria-hidden", "true");
@@ -90,7 +99,7 @@ for (const framework of frameworks) {
       page,
     }) => {
       await openFixture(page, framework, "spotlight-card--pricing");
-      const card = page.locator("#fixture > div");
+      const card = spotlightCard(page);
       const glow = card.locator(":scope > [aria-hidden=true]");
       await expect(glow).toHaveCSS("opacity", "0");
 
@@ -136,7 +145,7 @@ for (const framework of frameworks) {
     test("marquee: runs and pauses while hovered", async ({ page }) => {
       await openFixture(page, framework, "marquee");
       expect(await playStates(page)).toEqual(["running", "running"]);
-      await page.locator("#fixture > div").hover();
+      await marqueeRoot(page).hover();
       await expect.poll(() => playStates(page)).toEqual(["paused", "paused"]);
       await page.mouse.move(0, 0);
       await expect.poll(() => playStates(page)).toEqual(["running", "running"]);

@@ -6,16 +6,37 @@
   "tags": ["tabs", "tablist", "navigation", "panel"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "tabs.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Tabs.tsx", "deps": [] },
-    "vue": { "file": "Tabs.vue", "deps": [] }
+    "blade": {
+      "file": "tabs.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Tabs.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Tabs.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Tabs.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Tabs.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "tabs.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "items",
-      "type": "Blade: array<key, label> · React: { value, label, content }[] · Vue: { value, label }[]",
+      "type": "Blade: array<key, label> · React and Svelte: { value, label, content }[] · Vue, Astro, Angular: { value, label }[]",
       "default": "[]",
-      "description": "List of tabs. In Blade and Vue, fill each panel through a slot named after its key or value."
+      "description": "List of tabs. In Blade, Vue, and Astro, fill each panel through a slot named after its key or value. In Angular, use <ng-template markasTabPanel=\"value\">. In Svelte, content is text or a snippet."
     },
     {
       "name": "defaultValue",
@@ -28,6 +49,24 @@
       "type": "string",
       "default": "-",
       "description": "Vue uses v-model, React uses the onValueChange callback."
+    },
+    {
+      "name": "bind:value",
+      "type": "string",
+      "default": "-",
+      "description": "Svelte only. Two-way binding of the active tab. Svelte also accepts onValueChange."
+    },
+    {
+      "name": "[(value)] / valueChange",
+      "type": "model<string>",
+      "default": "-",
+      "description": "Angular only. Active tab with two-way binding; valueChange emits on every change."
+    },
+    {
+      "name": "markas-change",
+      "type": "CustomEvent<string>",
+      "default": "-",
+      "description": "Astro only. Bubbling event dispatched from the selected tab with its value as detail."
     }
   ],
   "a11y": [
@@ -47,9 +86,12 @@
     "id": {
       "description": "Tab untuk berpindah antar panel konten dengan navigasi keyboard sesuai WAI-ARIA.",
       "props": {
-        "items": "Daftar tab. Di Blade dan Vue, isi panel lewat slot dengan nama sama seperti key/value.",
+        "items": "Daftar tab. Di Blade, Vue, dan Astro, isi panel lewat slot dengan nama sama seperti key/value. Di Angular pakai <ng-template markasTabPanel=\"value\">. Di Svelte, content berupa teks atau snippet.",
         "defaultValue": "Tab yang aktif saat pertama dirender.",
-        "v-model / onValueChange": "Vue memakai v-model, React memakai callback onValueChange."
+        "v-model / onValueChange": "Vue memakai v-model, React memakai callback onValueChange.",
+        "bind:value": "Khusus Svelte. Binding dua arah untuk tab aktif. Svelte juga menerima onValueChange.",
+        "[(value)] / valueChange": "Khusus Angular. Tab aktif dengan binding dua arah; valueChange terpancar setiap kali berubah.",
+        "markas-change": "Khusus Astro. Event yang menggelembung dari tab terpilih dengan value-nya sebagai detail."
       },
       "a11y": [
         "Memakai role tablist, tab, dan tabpanel dengan aria-selected, aria-controls, dan aria-labelledby.",
@@ -64,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

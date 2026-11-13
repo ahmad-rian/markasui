@@ -1,0 +1,143 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline";
+const letter =
+  "transition-[font-variation-settings,font-weight] duration-200 ease-out motion-reduce:transition-none";
+
+type Props = Omit<HTMLAttributes<"span">, "children"> & {
+  text: string;
+  radius?: number;
+  min?: number;
+  max?: number;
+  wave?: boolean;
+};
+
+const {
+  text,
+  radius = 120,
+  min = 300,
+  max = 800,
+  wave = false,
+  class: className,
+  ...rest
+} = Astro.props;
+// Starting weight through the wght axis of a variable font, with font-weight as a fallback.
+const restWeight = `font-variation-settings: 'wght' ${Number(min)}; font-weight: ${Number(min)}`;
+---
+
+<markas-variable-weight-text class="contents" data-radius={radius} data-min={min} data-max={max} data-wave={String(wave)}><span {...rest} class:list={[root, className]}><span class="sr-only">{text}</span>{Array.from(text).map((char) => <span aria-hidden="true" data-letter="" class={letter} style={restWeight}>{char}</span>)}</span></markas-variable-weight-text>
+
+<script>
+  /** One breath of the wave (ms) and the phase step between letters (radians). */
+  const WAVE_PERIOD = 2400;
+  const WAVE_PHASE = 0.45;
+
+  /** Sets the weight through the wght axis of a variable font, with font-weight as a fallback. */
+  const setWeight = (el: HTMLElement, value: number) => {
+    el.style.fontVariationSettings = `'wght' ${value}`;
+    el.style.fontWeight = String(value);
+  };
+
+  // One element per instance: setup runs for markup added later and after view transitions.
+  class MarkasVariableWeightText extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const element = this.firstElementChild;
+      if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches)
+        return;
+      const radius = Number(this.dataset.radius);
+      const min = Number(this.dataset.min);
+      const span = Number(this.dataset.max) - min;
+      const wave = this.dataset.wave === "true";
+      const letters = [
+        ...element.querySelectorAll<HTMLElement>("[data-letter]"),
+      ];
+      const set = (values: number[]) =>
+        letters.forEach((el, i) => setWeight(el, values[i]!));
+      let pointer: { x: number; y: number } | undefined;
+      let visible = false;
+      let frame = 0;
+
+      // The letter closest to the cursor is boldest; outside the radius it goes back to min. Without a cursor, wave breathes.
+      const draw = (now: number) => {
+        frame = 0;
+        const near = pointer
+          ? letters.map((el) => {
+              const rect = el.getBoundingClientRect();
+              const distance = Math.hypot(
+                pointer!.x - (rect.left + rect.width / 2),
+                pointer!.y - (rect.top + rect.height / 2),
+              );
+              return Math.min(distance / radius, 1);
+            })
+          : [];
+        if (near.some((t) => t < 1))
+          return set(
+            near.map((t) =>
+              Math.round(min + span * (0.5 + 0.5 * Math.cos(Math.PI * t))),
+            ),
+          );
+        if (!wave) return set(letters.map(() => min));
+        set(
+          letters.map((_, i) =>
+            Math.round(
+              min +
+                span *
+                  (0.5 -
+                    0.5 *
+                      Math.cos(
+                        (now / WAVE_PERIOD) * 2 * Math.PI - i * WAVE_PHASE,
+                      )),
+            ),
+          ),
+        );
+        if (visible) frame = requestAnimationFrame(draw);
+      };
+      const schedule = () => {
+        if (!frame && visible) frame = requestAnimationFrame(draw);
+      };
+      const move = (event: PointerEvent) => {
+        pointer = { x: event.clientX, y: event.clientY };
+        schedule();
+      };
+      const out = () => {
+        pointer = undefined;
+        schedule();
+      };
+
+      const observer =
+        typeof IntersectionObserver === "undefined"
+          ? undefined
+          : new IntersectionObserver((entries) => {
+              visible = entries.some((entry) => entry.isIntersecting);
+              cancelAnimationFrame(frame);
+              frame = 0;
+              schedule();
+            });
+      visible = !observer;
+      observer?.observe(element);
+      schedule();
+      addEventListener("pointermove", move);
+      document.documentElement.addEventListener("pointerleave", out);
+      this.cleanup = () => {
+        observer?.disconnect();
+        cancelAnimationFrame(frame);
+        removeEventListener("pointermove", move);
+        document.documentElement.removeEventListener("pointerleave", out);
+        set(letters.map(() => min));
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-variable-weight-text"))
+    customElements.define(
+      "markas-variable-weight-text",
+      MarkasVariableWeightText,
+    );
+</script>

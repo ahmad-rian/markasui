@@ -124,6 +124,165 @@ const items = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import NavigationMenu from "$lib/components/markas/NavigationMenu.svelte";
+
+  const items = [
+    {
+      label: "Produk",
+      featured: {
+        title: "Workflow 2.0",
+        href: "/workflow",
+        description: "Percabangan, coba ulang, dan editor visual",
+      },
+      links: [
+        {
+          label: "Analitik",
+          href: "/analitik",
+          description: "Lihat asal pengunjung",
+          icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+        },
+        {
+          label: "Otomasi",
+          href: "/otomasi",
+          description: "Jalankan workflow terjadwal",
+        },
+      ],
+    },
+    {
+      label: "Developer",
+      links: [
+        {
+          label: "Dokumentasi",
+          href: "/docs",
+          description: "Panduan dan referensi API",
+        },
+        {
+          label: "Changelog",
+          href: "/changelog",
+          description: "Yang rilis bulan ini",
+        },
+      ],
+    },
+    { label: "Harga", href: "/harga", active: true },
+  ];
+</script>
+
+<NavigationMenu navLabel="Utama" {items} />
+```
+
+## Astro
+
+```astro
+---
+import NavigationMenu from "@/components/markas/NavigationMenu.astro";
+
+const items = [
+  {
+    label: "Produk",
+    featured: {
+      title: "Workflow 2.0",
+      href: "/workflow",
+      description: "Percabangan, coba ulang, dan editor visual",
+    },
+    links: [
+      {
+        label: "Analitik",
+        href: "/analitik",
+        description: "Lihat asal pengunjung",
+        icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+      },
+      {
+        label: "Otomasi",
+        href: "/otomasi",
+        description: "Jalankan workflow terjadwal",
+      },
+    ],
+  },
+  {
+    label: "Developer",
+    links: [
+      {
+        label: "Dokumentasi",
+        href: "/docs",
+        description: "Panduan dan referensi API",
+      },
+      {
+        label: "Changelog",
+        href: "/changelog",
+        description: "Yang rilis bulan ini",
+      },
+    ],
+  },
+  { label: "Harga", href: "/harga", active: true },
+];
+---
+
+<NavigationMenu navLabel="Utama" items={items} />
+```
+
+Satu script kecil yang dibundel menghidupkan setiap menu di halaman, termasuk setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import {
+  NavigationMenu,
+  type NavigationMenuItem,
+} from "./markas/navigation-menu.component";
+
+@Component({
+  selector: "app-site-nav",
+  imports: [NavigationMenu],
+  template: `<markas-navigation-menu navLabel="Utama" [items]="items" />`,
+})
+export class SiteNav {
+  protected readonly items: NavigationMenuItem[] = [
+    {
+      label: "Produk",
+      featured: {
+        title: "Workflow 2.0",
+        href: "/workflow",
+        description: "Percabangan, coba ulang, dan editor visual",
+      },
+      links: [
+        {
+          label: "Analitik",
+          href: "/analitik",
+          description: "Lihat asal pengunjung",
+          icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+        },
+        {
+          label: "Otomasi",
+          href: "/otomasi",
+          description: "Jalankan workflow terjadwal",
+        },
+      ],
+    },
+    {
+      label: "Developer",
+      links: [
+        {
+          label: "Dokumentasi",
+          href: "/docs",
+          description: "Panduan dan referensi API",
+        },
+        {
+          label: "Changelog",
+          href: "/changelog",
+          description: "Yang rilis bulan ini",
+        },
+      ],
+    },
+    { label: "Harga", href: "/harga", active: true },
+  ];
+}
+```
+
 ## Catatan
 
 - Entri dengan `links` atau `featured` menjadi pemicu dengan panel. Entri lain menjadi link biasa ke `href`.

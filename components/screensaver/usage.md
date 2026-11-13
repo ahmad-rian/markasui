@@ -44,6 +44,54 @@ import { Screensaver } from "@/components/markas/Screensaver";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Screensaver from "$lib/components/markas/Screensaver.svelte";
+</script>
+
+<Screensaver class="h-56 rounded-xl border border-line" aria-hidden="true">
+  <span class="text-3xl font-bold">Markas</span>
+</Screensaver>
+```
+
+## Astro
+
+```astro
+---
+import Screensaver from "@/components/markas/Screensaver.astro";
+---
+
+<Screensaver class="h-56 rounded-xl border border-line" aria-hidden="true">
+  <span class="text-3xl font-bold">Markas</span>
+</Screensaver>
+```
+
+A small bundled script runs each area through the `markas-screensaver` element.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Screensaver } from "./markas/screensaver.component";
+
+@Component({
+  selector: "app-idle",
+  imports: [Screensaver],
+  template: `
+    <markas-screensaver
+      effect="squash"
+      class="h-56 rounded-xl border border-line"
+      aria-hidden="true"
+    >
+      <span class="text-3xl font-bold">Markas</span>
+    </markas-screensaver>
+  `,
+})
+export class Idle {}
+```
+
 ## Notes
 
 - Each direct child starts at a seeded spot and bounces off the walls at `speed` px per second. Give the area a height.

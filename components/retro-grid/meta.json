@@ -6,9 +6,30 @@
   "tags": ["background", "grid", "perspective", "retro", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "retro-grid.blade.php", "deps": [] },
-    "react": { "file": "RetroGrid.tsx", "deps": [] },
-    "vue": { "file": "RetroGrid.vue", "deps": [] }
+    "blade": {
+      "file": "retro-grid.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "RetroGrid.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "RetroGrid.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "RetroGrid.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "RetroGrid.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "retro-grid.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -71,5 +92,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

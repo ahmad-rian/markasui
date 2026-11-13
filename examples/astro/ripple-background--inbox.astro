@@ -1,0 +1,34 @@
+---
+import RippleBackground from "../../components/ripple-background/RippleBackground.astro";
+---
+
+<div class="flex items-center gap-4 rounded-xl border border-line bg-surface p-4">
+  <RippleBackground
+    rings={3}
+    size={40}
+    gap={24}
+    class="grid size-24 shrink-0 place-items-center rounded-lg bg-canvas"
+  >
+    <span class="grid size-10 place-items-center rounded-full border border-line bg-surface text-muted">
+      <svg
+        class="size-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </svg>
+    </span>
+  </RippleBackground>
+  <div class="grid gap-1">
+    <h3 class="text-base font-semibold text-ink">Inbox zero</h3>
+    <p class="text-sm text-muted">
+      New replies will show up here as soon as they arrive.
+    </p>
+  </div>
+</div>

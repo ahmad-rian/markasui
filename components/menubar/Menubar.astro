@@ -1,0 +1,351 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const bar =
+  "inline-flex items-center gap-1 rounded-lg border border-line bg-surface p-1";
+const wrapper = "contents";
+const triggerClass =
+  "inline-flex h-8 items-center rounded-md px-3 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none";
+const menu =
+  "inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay";
+const item =
+  "flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+const tones = {
+  default: "text-ink hover:bg-subtle focus:bg-subtle",
+  danger: "text-danger hover:bg-danger/10 focus:bg-danger/10",
+};
+const separator = "my-1 h-px bg-line";
+
+const HAS_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+const SAFE_SCHEME = /^(https?|mailto|tel):/i;
+
+/** Href berskema selain http, https, mailto, dan tel (misalnya javascript:) diganti "#". */
+const safeHref = (href: string) => {
+  const cleaned = href.replace(/[\t\n\r]/g, "");
+  const start = [...cleaned].findIndex((char) => char > " ");
+  const value = cleaned.slice(Math.max(start, 0));
+  return HAS_SCHEME.test(value) && !SAFE_SCHEME.test(value) ? "#" : href;
+};
+
+export type MenubarItem =
+  | { separator: true }
+  | {
+      separator?: false;
+      label: string;
+      value?: string;
+      href?: string;
+      danger?: boolean;
+      disabled?: boolean;
+    };
+
+export type MenubarMenu = { label: string; items: MenubarItem[] };
+
+type Props = HTMLAttributes<"div"> & {
+  menus: MenubarMenu[];
+  /** Nama aksesibel bar (aria-label). */
+  label?: string;
+};
+
+const { menus, label = "Menu", id, class: className, ...rest } = Astro.props;
+const baseId = id ?? `markas-menubar-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<markas-menubar class="contents">
+  <div
+    id={baseId}
+    role="menubar"
+    aria-label={label}
+    class:list={[bar, className]}
+    {...rest}
+  >
+    {
+      menus.map((entry, menuIndex) => {
+        const menuId = `${baseId}-menu-${menuIndex}`;
+        const triggerId = `${baseId}-trigger-${menuIndex}`;
+        return (
+          <div role="none" class={wrapper}>
+            <button
+              id={triggerId}
+              type="button"
+              role="menuitem"
+              tabindex={menuIndex === 0 ? 0 : -1}
+              popovertarget={menuId}
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls={menuId}
+              data-state="closed"
+              class={triggerClass}
+            >
+              {entry.label}
+            </button>
+            <div
+              id={menuId}
+              popover="auto"
+              role="menu"
+              aria-labelledby={triggerId}
+              data-state="closed"
+              class={menu}
+            >
+              {entry.items.map((option) => {
+                if (option.separator)
+                  return <div role="separator" class={separator} />;
+                const itemClass = [
+                  item,
+                  tones[option.danger ? "danger" : "default"],
+                ];
+                const value = option.value ?? option.label;
+                return option.href && !option.disabled ? (
+                  <a
+                    href={safeHref(option.href)}
+                    role="menuitem"
+                    tabindex="-1"
+                    data-value={value}
+                    class:list={itemClass}
+                  >
+                    {option.label}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    tabindex="-1"
+                    disabled={option.disabled}
+                    data-value={value}
+                    class:list={itemClass}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</markas-menubar>
+
+<script>
+  type FocusTarget = "first" | "last";
+  type Moves = Record<string, number | undefined>;
+
+  const GAP = 4;
+  const TRIGGER_SELECTOR = ':scope > [role="none"] > [role="menuitem"]';
+  const MENU_SELECTOR = ':scope > [role="none"] > [role="menu"]';
+  const ITEM_SELECTOR = '[role="menuitem"]:not(:disabled)';
+
+  const wrap = (index: number, length: number) => (index + length) % length;
+
+  /** Letakkan menu di bawah pemicu rata kiri, pindah ke atas kalau tidak muat. */
+  function placeMenu(trigger: HTMLElement, panel: HTMLElement) {
+    const anchor = trigger.getBoundingClientRect();
+    const { width, height } = panel.getBoundingClientRect();
+    const below = anchor.bottom + GAP;
+    const above = anchor.top - GAP - height;
+    const fitsBelow = below + height <= innerHeight;
+    panel.style.top = `${fitsBelow || above < 0 ? below : above}px`;
+    panel.style.left = `${Math.max(GAP, Math.min(anchor.left, innerWidth - width - GAP))}px`;
+  }
+
+  // Satu custom element per bar: ia menyimpan menu terbuka dan item aktif (roving tabindex), dan
+  // mengikuti gulir dan ukuran jendela hanya selama sebuah menu terbuka.
+  class MarkasMenubar extends HTMLElement {
+    private bar!: HTMLElement;
+    private openIndex: number | null = null;
+    private focusTarget: FocusTarget = "first";
+    private readonly place = () => {
+      const index = this.openIndex;
+      if (index !== null) placeMenu(this.triggers()[index]!, this.panels()[index]!);
+    };
+
+    connectedCallback() {
+      if (this.bar) return;
+      this.bar = this.querySelector("[role=menubar]")!;
+      this.bar.addEventListener("keydown", (event) => this.onKeydown(event));
+      this.bar.addEventListener("focusin", (event) => {
+        const index = this.triggers().indexOf(event.target as HTMLElement);
+        if (index >= 0) this.setActive(index);
+      });
+      this.bar.addEventListener("click", (event) => {
+        const entry = (event.target as Element).closest<HTMLElement>(
+          "[role=menu] [role=menuitem]",
+        );
+        if (!entry) return;
+        this.dispatchEvent(
+          new CustomEvent("markas-select", {
+            bubbles: true,
+            detail: entry.dataset.value,
+          }),
+        );
+        this.close(this.panels().indexOf(entry.closest("[role=menu]")!));
+      });
+      // beforetoggle dan toggle tidak bubble; dengarkan di fase capture. beforetoggle berjalan
+      // sinkron, jadi status selalu terbaru untuk tombol berikutnya.
+      this.bar.addEventListener(
+        "beforetoggle",
+        (event) => this.onBeforeToggle(event as ToggleEvent),
+        true,
+      );
+      this.bar.addEventListener(
+        "toggle",
+        (event) => this.onToggle(event as ToggleEvent),
+        true,
+      );
+    }
+
+    disconnectedCallback() {
+      this.unfollow();
+    }
+
+    private triggers() {
+      return [...this.bar.querySelectorAll<HTMLElement>(TRIGGER_SELECTOR)];
+    }
+
+    private panels() {
+      return [...this.bar.querySelectorAll<HTMLElement>(MENU_SELECTOR)];
+    }
+
+    private menuItems(index: number) {
+      return [
+        ...(this.panels()[index]?.querySelectorAll<HTMLElement>(
+          ITEM_SELECTOR,
+        ) ?? []),
+      ];
+    }
+
+    private follow() {
+      addEventListener("scroll", this.place, { capture: true, passive: true });
+      addEventListener("resize", this.place, { passive: true });
+    }
+
+    private unfollow() {
+      removeEventListener("scroll", this.place, true);
+      removeEventListener("resize", this.place);
+    }
+
+    private setActive(index: number) {
+      this.triggers().forEach((trigger, i) => (trigger.tabIndex = i === index ? 0 : -1));
+    }
+
+    private setState(index: number, open: boolean) {
+      const state = open ? "open" : "closed";
+      const trigger = this.triggers()[index]!;
+      trigger.ariaExpanded = `${open}`;
+      trigger.dataset.state = state;
+      this.panels()[index]!.dataset.state = state;
+    }
+
+    private focusItem(menuIndex: number, index: number) {
+      const list = this.menuItems(menuIndex);
+      if (list.length > 0) list[wrap(index, list.length)]!.focus();
+    }
+
+    private focusEdge(menuIndex: number, target: FocusTarget) {
+      this.focusItem(menuIndex, target === "first" ? 0 : -1);
+    }
+
+    private focusTrigger(index: number) {
+      const all = this.triggers();
+      const next = wrap(index, all.length);
+      this.setActive(next);
+      all[next]!.focus();
+      return next;
+    }
+
+    private openMenu(index: number, target: FocusTarget) {
+      this.focusTarget = target;
+      this.panels()[index]?.showPopover();
+    }
+
+    private close(index: number) {
+      this.panels()[index]?.hidePopover();
+      this.triggers()[index]?.focus();
+    }
+
+    private onBeforeToggle(event: ToggleEvent) {
+      const index = this.panels().indexOf(event.target as HTMLElement);
+      if (index < 0) return;
+      const open = event.newState === "open";
+      this.setState(index, open);
+      if (open) {
+        this.openIndex = index;
+        this.setActive(index);
+      } else if (this.openIndex === index) {
+        this.openIndex = null;
+      }
+    }
+
+    private onToggle(event: ToggleEvent) {
+      const index = this.panels().indexOf(event.target as HTMLElement);
+      if (index < 0) return;
+      this.unfollow();
+      if (event.newState !== "open") {
+        if (this.openIndex !== null) this.follow();
+        return;
+      }
+      this.place();
+      this.follow();
+      this.focusEdge(index, this.focusTarget);
+      this.focusTarget = "first";
+    }
+
+    private onKeydown(event: KeyboardEvent) {
+      const target = event.target as HTMLElement;
+      const trigger = this.triggers().indexOf(target);
+      if (trigger >= 0) return this.onTriggerKeydown(trigger, event);
+      const menu = this.panels().indexOf(target.closest("[role=menu]")!);
+      if (menu >= 0) this.onMenuKeydown(menu, event);
+    }
+
+    private onTriggerKeydown(index: number, event: KeyboardEvent) {
+      const moves: Moves = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: -1 };
+      const move = moves[event.key];
+      if (move !== undefined) {
+        event.preventDefault();
+        this.focusTrigger(move);
+        return;
+      }
+      const targets: Record<string, FocusTarget | undefined> = {
+        ArrowDown: "first",
+        ArrowUp: "last",
+      };
+      const target = targets[event.key];
+      if (target === undefined) return;
+      event.preventDefault();
+      if (this.openIndex === index) return this.focusEdge(index, target);
+      this.openMenu(index, target);
+    }
+
+    private onMenuKeydown(index: number, event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        return this.close(index);
+      }
+      if (event.key === "Tab") return this.panels()[index]?.hidePopover();
+      const sideways: Moves = { ArrowRight: index + 1, ArrowLeft: index - 1 };
+      const side = sideways[event.key];
+      if (side !== undefined) {
+        event.preventDefault();
+        // Tutup menu sekarang, pindah ke menu di sebelahnya, lalu buka.
+        this.panels()[index]?.hidePopover();
+        return this.openMenu(this.focusTrigger(side), "first");
+      }
+      const current = this.menuItems(index).indexOf(
+        document.activeElement as HTMLElement,
+      );
+      const targets: Moves = {
+        ArrowDown: current + 1,
+        ArrowUp: current - 1,
+        Home: 0,
+        End: -1,
+      };
+      const target = targets[event.key];
+      if (target === undefined) return;
+      event.preventDefault();
+      this.focusItem(index, target);
+    }
+  }
+
+  if (!customElements.get("markas-menubar"))
+    customElements.define("markas-menubar", MarkasMenubar);
+</script>

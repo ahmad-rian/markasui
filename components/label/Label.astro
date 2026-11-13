@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const base = "text-sm font-medium text-ink";
+const marker = "ms-0.5 text-danger";
+const srOnly = "sr-only";
+const optionalClass = "font-normal text-muted";
+
+type Props = HTMLAttributes<"label"> & {
+  required?: boolean;
+  optional?: boolean;
+  requiredLabel?: string;
+  optionalLabel?: string;
+};
+
+const {
+  required = false,
+  optional = false,
+  requiredLabel = "required",
+  optionalLabel = "Optional",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<label class:list={[base, className]} {...rest}><slot />{required ? <Fragment><span aria-hidden="true" class={marker}>*</span>{" "}<span class={srOnly}>{requiredLabel}</span></Fragment> : optional ? <Fragment>{" "}<span class={optionalClass}>{optionalLabel}</span></Fragment> : null}</label>

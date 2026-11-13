@@ -114,12 +114,75 @@ const collapsed = ref(false);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Sidebar from "$lib/components/markas/Sidebar.svelte";
+
+  let collapsed = $state(false);
+  // sections: bentuknya sama dengan contoh React
+</script>
+
+<Sidebar bind:collapsed {sections} class="h-dvh">
+  {#snippet header()}MarkasUI{/snippet}
+  {#snippet footer()}Rina Saputra{/snippet}
+  <main class="flex-1 p-6">...</main>
+</Sidebar>
+```
+
+## Astro
+
+```astro
+---
+import Sidebar from "@/components/markas/Sidebar.astro";
+// sections: bentuknya sama dengan contoh React
+---
+
+<Sidebar sections={sections} class="h-dvh">
+  <Fragment slot="header">MarkasUI</Fragment>
+  <Fragment slot="footer">Rina Saputra</Fragment>
+  <main class="flex-1 p-6">...</main>
+</Sidebar>
+```
+
+Satu script kecil yang dibundel menangani tombol rail, grup sub-item, dan dialog seluler untuk semua sidebar di halaman. Dengarkan perubahan rail dengan `addEventListener("markas-collapsed-change", (e) => e.detail)`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Sidebar } from "./markas/sidebar.component";
+
+@Component({
+  selector: "app-shell",
+  imports: [Sidebar],
+  template: `
+    <markas-sidebar
+      [(collapsed)]="collapsed"
+      [sections]="sections"
+      class="h-dvh"
+    >
+      <ng-template #header>MarkasUI</ng-template>
+      <ng-template #footer>Rina Saputra</ng-template>
+      <main class="flex-1 p-6">...</main>
+    </markas-sidebar>
+  `,
+})
+export class AppShell {
+  readonly collapsed = signal(false);
+  // sections: bentuknya sama dengan contoh React
+}
+```
+
+`header` dan `footer` berupa `ng-template` karena dirender dua kali: di sidebar dan di dialog seluler.
+
 ## Catatan
 
 - Komponen ini adalah kerangka aplikasi utuh: taruh isi halaman di dalamnya. Lebarnya menentukan tata letak lewat container query. Mulai `breakpoint` (default `md`, 42rem) sidebar tampil di samping konten; di bawahnya tombol menu membuka link yang sama di `<dialog>` native yang meluncur dari kiri.
-- Tombol bulat di tepi sidebar mengubahnya jadi rail ikon selebar 64px. Label lalu tampil sebagai tooltip dan badge sebagai titik. Secara default state-nya tidak terkontrol. Mulai dalam mode rail dengan `defaultCollapsed` di React, atau `:collapsed="true"` tanpa `v-model` di Vue dan Blade.
+- Tombol bulat di tepi sidebar mengubahnya jadi rail ikon selebar 64px. Label lalu tampil sebagai tooltip dan badge sebagai titik. Secara default state-nya tidak terkontrol. Mulai dalam mode rail dengan `defaultCollapsed` di React, `:collapsed="true"` tanpa `v-model` di Vue dan Blade, atau nilai `collapsed` biasa di Svelte, Astro, dan Angular.
 - Di mode rail, item induk membentangkan sidebar dan membuka sub-itemnya.
 - Sorotan meluncur ke item yang di-hover atau difokus lalu kembali ke item aktif. Sorotan memakai CSS anchor positioning tanpa JavaScript; browser yang belum mendukungnya tetap menandai item aktif dengan teks tebal. Grup sub-item yang memuat halaman aktif terbuka di awal; isi `open` untuk mengubahnya.
-- `header` dan `footer` dirender dua kali: di sidebar dan di dialog seluler. Pemilih workspace (DropdownMenu) atau pemicu pencarian (Command) berfungsi di kedua salinan; di Blade, id di salinan dialog diberi akhiran `-m` agar tetap unik.
+- `header` dan `footer` dirender dua kali: di sidebar dan di dialog seluler. Pemilih workspace (DropdownMenu) atau pemicu pencarian (Command) berfungsi di kedua salinan; di Blade, id di salinan dialog diberi akhiran `-m` agar tetap unik (Astro: awalan `m-`).
 - Sembunyikan bagian header atau footer di mode rail dengan `in-data-[state=collapsed]:hidden`, misalnya kartu upgrade.
 - Label bawaan berbahasa Inggris: "Sidebar", "Collapse sidebar", "Expand sidebar", "Open sidebar", dan "Close sidebar". Terjemahkan lewat `navLabel`, `collapseLabel`, `expandLabel`, `openLabel`, dan `closeLabel` (Blade: `nav-label`, `collapse-label`, dan seterusnya), seperti contoh di atas.

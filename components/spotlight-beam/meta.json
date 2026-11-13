@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "spotlight-beam.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "SpotlightBeam.tsx", "deps": [] },
-    "vue": { "file": "SpotlightBeam.vue", "deps": [] }
+    "blade": {
+      "file": "spotlight-beam.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "SpotlightBeam.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "SpotlightBeam.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "SpotlightBeam.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "SpotlightBeam.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "spotlight-beam.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -95,5 +116,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

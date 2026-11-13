@@ -35,6 +35,64 @@ import { TextScramble } from "@/components/markas/TextScramble";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import TextScramble from "$lib/components/markas/TextScramble.svelte";
+</script>
+
+<h2 class="text-3xl font-semibold">
+  <TextScramble text="Operasi Nusantara" trigger="view" />
+</h2>
+<TextScramble text="99.98%" trigger="view" charset="digits" delay={150} />
+<a href="/brief"><TextScramble text="Buka brief" charset="symbols" /></a>
+```
+
+## Astro
+
+```astro
+---
+import TextScramble from "@/components/markas/TextScramble.astro";
+---
+
+<h2 class="text-3xl font-semibold">
+  <TextScramble text="Operasi Nusantara" trigger="view" />
+</h2>
+<TextScramble text="99.98%" trigger="view" charset="digits" delay={150} />
+<a href="/brief"><TextScramble text="Buka brief" charset="symbols" /></a>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { TextScramble } from "./markas/text-scramble.component";
+
+@Component({
+  selector: "app-stats",
+  imports: [TextScramble],
+  template: `
+    <h2 class="text-3xl font-semibold">
+      <span markas-text-scramble text="Operasi Nusantara" trigger="view"></span>
+    </h2>
+    <span
+      markas-text-scramble
+      text="99.98%"
+      trigger="view"
+      charset="digits"
+      delay="150"
+    ></span>
+    <a href="/brief">
+      <span markas-text-scramble text="Buka brief" charset="symbols"></span>
+    </a>
+  `,
+})
+export class Stats {}
+```
+
+Angular memakai attribute selector pada span: `<span markas-text-scramble>`. Di Astro teks dirender di server lalu script kecil mengacaknya.
+
 ## Catatan
 
 - `hover` berjalan saat hover dan fokus pada link atau tombol terdekat. `view` dan `mount` mulai dalam keadaan teracak lalu terdekripsi sekali; `view` menunggu sampai teks masuk layar.

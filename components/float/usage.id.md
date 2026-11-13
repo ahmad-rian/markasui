@@ -52,6 +52,63 @@ import { Float } from "@/components/markas/Float";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Float from "$lib/components/markas/Float.svelte";
+</script>
+
+<Float motion="bob" amplitude={6} duration={3} class="absolute -top-3 right-5">
+  <span class="rounded-full bg-primary px-3 py-1 text-xs text-on-primary">
+    Save 20%
+  </span>
+</Float>
+```
+
+## Astro
+
+```astro
+---
+import Float from "@/components/markas/Float.astro";
+---
+
+<Float motion="bob" amplitude={6} duration={3} class="absolute -top-3 right-5">
+  <span class="rounded-full bg-primary px-3 py-1 text-xs text-on-primary">
+    Save 20%
+  </span>
+</Float>
+```
+
+Setiap grup adalah custom element kecil, jadi tetap jalan setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Float } from "./markas/float.component";
+
+@Component({
+  selector: "app-save-badge",
+  imports: [Float],
+  template: `
+    <markas-float
+      motion="bob"
+      [amplitude]="6"
+      [duration]="3"
+      class="absolute -top-3 right-5"
+    >
+      <span class="rounded-full bg-primary px-3 py-1 text-xs text-on-primary">
+        Save 20%
+      </span>
+    </markas-float>
+  `,
+})
+export class SaveBadge {}
+```
+
+`aria-hidden` dan `class` pindah dari host ke grup.
+
 ## Catatan
 
 - Setiap anak langsung melayang dengan ritmenya sendiri. `motion` memilih jalurnya: `drift` (angka delapan dengan sedikit goyang), `bob` (naik turun), `orbit` (lingkaran kecil), atau `breathe` (membesar lembut).

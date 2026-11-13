@@ -51,6 +51,73 @@ import { CardStack } from "@/components/markas/CardStack";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import CardStack from "$lib/components/markas/CardStack.svelte";
+</script>
+
+<CardStack label="Customer testimonials" items={testimonials}>
+  {#snippet card(item)}
+    <figure class="grid gap-6 p-5">
+      <blockquote>{item.quote}</blockquote>
+      <figcaption class="text-sm text-muted">{item.name}</figcaption>
+    </figure>
+  {/snippet}
+</CardStack>
+```
+
+Svelte, Astro, and Angular take the cards as `items` and draw each one with a snippet, a function child, or an `ng-template`. Svelte reads `{index}` in a plain attribute as an expression, so pass label templates in braces: `cardLabel={"Tip {index} of {total}"}`.
+
+## Astro
+
+```astro
+---
+import CardStack from "@/components/markas/CardStack.astro";
+---
+
+<CardStack label="Customer testimonials" items={testimonials}>
+  {
+    (item: Testimonial) => (
+      <figure class="grid gap-6 p-5">
+        <blockquote>{item.quote}</blockquote>
+        <figcaption class="text-sm text-muted">{item.name}</figcaption>
+      </figure>
+    )
+  }
+</CardStack>
+```
+
+Each stack is a small custom element, so it keeps working after view transitions.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { CardStack } from "./markas/card-stack.component";
+
+@Component({
+  selector: "app-testimonials",
+  imports: [CardStack],
+  template: `
+    <markas-card-stack label="Customer testimonials" [items]="testimonials">
+      <ng-template let-item let-index="index">
+        <figure class="grid gap-6 p-5">
+          <blockquote>{{ item.quote }}</blockquote>
+          <figcaption class="text-sm text-muted">{{ item.name }}</figcaption>
+        </figure>
+      </ng-template>
+    </markas-card-stack>
+  `,
+})
+export class Testimonials {
+  testimonials = [{ quote: "Setup took ten minutes.", name: "Sari Wijaya" }];
+}
+```
+
+Bind `cardLabel` with a property when it holds `{index}`: `[cardLabel]="tipLabel"`.
+
 ## Notes
 
 - The stack provides the card surface (border, background, radius). Add only padding and content inside each card.

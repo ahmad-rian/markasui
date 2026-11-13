@@ -6,9 +6,30 @@
   "tags": ["dock", "toolbar", "launcher", "magnify", "macos"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "dock.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Dock.tsx", "deps": [] },
-    "vue": { "file": "Dock.vue", "deps": [] }
+    "blade": {
+      "file": "dock.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Dock.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Dock.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Dock.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Dock.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "dock.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -34,6 +55,18 @@
       "type": "string",
       "default": "Dock",
       "description": "Accessible name of the toolbar."
+    },
+    {
+      "name": "(itemSelect)",
+      "type": "output<string>",
+      "default": "-",
+      "description": "Angular only. Emits the value (or label) of the pressed item. Svelte uses onItemSelect like React."
+    },
+    {
+      "name": "markas-select",
+      "type": "CustomEvent<string>",
+      "default": "-",
+      "description": "Astro only. Bubbling event with the value of the pressed item as detail."
     }
   ],
   "a11y": [
@@ -59,7 +92,9 @@
         "items": "Item dock berurutan. icon adalah atribut d path SVG 24x24 bergaris. { separator: true } menggambar pemisah. Item dengan href menjadi link.",
         "magnification": "Seberapa besar item di bawah kursor atau fokus membesar. Tetangga dalam 140px membesar lebih sedikit. 1 mematikannya.",
         "onItemSelect / @select / x-on:select": "Dipicu saat item ditekan, dengan value atau label-nya. Blade mengirim event DOM select dengan value sebagai detail.",
-        "dockLabel": "Nama aksesibel toolbar."
+        "dockLabel": "Nama aksesibel toolbar.",
+        "(itemSelect)": "Khusus Angular. Memancarkan value (atau label) item yang ditekan. Svelte memakai onItemSelect seperti React.",
+        "markas-select": "Khusus Astro. Event menggelembung dengan value item yang ditekan sebagai detail."
       },
       "a11y": [
         "Dock adalah toolbar bernama dockLabel. Hanya satu item di urutan tab, Panah Kiri, Panah Kanan, Home, dan End berpindah antar item (roving tabindex).",
@@ -77,5 +112,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

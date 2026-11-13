@@ -1,0 +1,126 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline-flex";
+const tooltip =
+  "inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay";
+
+type Props = HTMLAttributes<"span"> & {
+  content: string;
+  side?: "top" | "bottom";
+};
+
+const { content, side = "top", id, class: className, ...rest } = Astro.props;
+const tooltipId = id ?? `markas-tooltip-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<markas-tooltip class="contents" data-side={side}>
+  <span class:list={[root, className]} {...rest}
+    ><slot /><span
+      id={tooltipId}
+      popover="manual"
+      role="tooltip"
+      data-state="closed"
+      class={tooltip}>{content}</span
+    ></span
+  >
+</markas-tooltip>
+
+<script>
+  const GAP = 6;
+  const SHOW_DELAY = 300;
+
+  /** Places the tooltip centered on the trigger on the chosen side, flipping when it does not fit. */
+  function placeTooltip(trigger: HTMLElement, tip: HTMLElement, side: string) {
+    const anchor = trigger.getBoundingClientRect();
+    const { width, height } = tip.getBoundingClientRect();
+    const above = anchor.top - GAP - height;
+    const below = anchor.bottom + GAP;
+    const fitsAbove = above >= 0;
+    const fitsBelow = below + height <= window.innerHeight;
+    const onTop =
+      side === "top" ? fitsAbove || !fitsBelow : !fitsBelow && fitsAbove;
+    const left = Math.max(
+      GAP,
+      Math.min(
+        anchor.left + anchor.width / 2 - width / 2,
+        window.innerWidth - width - GAP,
+      ),
+    );
+    tip.style.top = `${onTop ? above : below}px`;
+    tip.style.left = `${left}px`;
+  }
+
+  // One element per tooltip: setup runs for markup added later and after view transitions.
+  class MarkasTooltip extends HTMLElement {
+    private timer: ReturnType<typeof setTimeout> | undefined;
+    private cleanup: (() => void) | undefined;
+
+    connectedCallback() {
+      const root = this.firstElementChild as HTMLElement | null;
+      const tip = root?.querySelector<HTMLElement>(":scope > [role=tooltip]");
+      if (!root || !tip) return;
+
+      const trigger = root.firstElementChild;
+      const described = trigger?.getAttribute("aria-describedby") ?? "";
+      if (trigger && trigger !== tip && !described.split(" ").includes(tip.id))
+        trigger.setAttribute(
+          "aria-describedby",
+          [described, tip.id].filter(Boolean).join(" "),
+        );
+
+      const show = () => {
+        clearTimeout(this.timer);
+        tip.showPopover();
+      };
+      const showLater = () => {
+        clearTimeout(this.timer);
+        this.timer = setTimeout(show, SHOW_DELAY);
+      };
+      const hide = () => {
+        clearTimeout(this.timer);
+        if (tip.matches(":popover-open")) tip.hidePopover();
+      };
+      const onKeydown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") hide();
+      };
+      const place = () => placeTooltip(root, tip, this.dataset.side ?? "top");
+      const scrollOptions = { capture: true, passive: true };
+      const follow = (on: boolean) => {
+        const method = on ? "addEventListener" : "removeEventListener";
+        window[method]("scroll", place, scrollOptions);
+        window[method]("resize", place, { passive: true });
+      };
+      const onToggle = (event: Event) => {
+        const open = (event as ToggleEvent).newState === "open";
+        tip.dataset.state = open ? "open" : "closed";
+        follow(open);
+        if (open) place();
+      };
+
+      root.addEventListener("mouseenter", showLater);
+      root.addEventListener("mouseleave", hide);
+      root.addEventListener("focusin", show);
+      root.addEventListener("focusout", hide);
+      tip.addEventListener("toggle", onToggle);
+      document.addEventListener("keydown", onKeydown);
+      this.cleanup = () => {
+        clearTimeout(this.timer);
+        follow(false);
+        root.removeEventListener("mouseenter", showLater);
+        root.removeEventListener("mouseleave", hide);
+        root.removeEventListener("focusin", show);
+        root.removeEventListener("focusout", hide);
+        tip.removeEventListener("toggle", onToggle);
+        document.removeEventListener("keydown", onKeydown);
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup?.();
+    }
+  }
+
+  if (!customElements.get("markas-tooltip"))
+    customElements.define("markas-tooltip", MarkasTooltip);
+</script>

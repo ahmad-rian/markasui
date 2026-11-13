@@ -1,0 +1,121 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "block";
+const line = "block";
+const lineCut = "block overflow-hidden pb-[0.12em] -mb-[0.12em]";
+const cut = "inline-flex overflow-hidden pb-[0.12em] -mb-[0.12em]";
+const unit = "inline-block whitespace-pre";
+const lineUnit = "block";
+
+const offsets = { up: "translateY(120%)", down: "translateY(-120%)" };
+
+type Props = Omit<HTMLAttributes<"span">, "children"> & {
+  /** A line break (\n) splits the text into several lines. */
+  text: string;
+  split?: "chars" | "words" | "lines";
+  direction?: keyof typeof offsets;
+  from?: "first" | "last" | "center" | "random";
+  stagger?: number;
+  duration?: number;
+  delay?: number;
+};
+
+const {
+  text,
+  split = "words",
+  direction = "up",
+  from = "first",
+  stagger = 60,
+  duration = 700,
+  delay = 0,
+  class: className,
+  ...rest
+} = Astro.props;
+const lines = text.split("\n");
+---
+
+<markas-vertical-cut-reveal class="contents" data-offset={offsets[direction]} data-from={from} data-stagger={stagger} data-duration={duration} data-delay={delay}><span {...rest} class:list={[root, className]}><span class="sr-only">{lines.join(" ")}</span><span aria-hidden="true">{
+  lines.map((lineText) =>
+    split === "lines" ? (
+      <span class={lineCut}><span data-unit="" class={lineUnit}>{lineText}</span></span>
+    ) : (
+      <span class={line}>{lineText.split(" ").map((word, w) => (
+        <Fragment>{w > 0 && " "}<span class={cut}>{split === "words" ? (
+          <span data-unit="" class={unit}>{word}</span>
+        ) : (
+          Array.from(word).map((char) => <span data-unit="" class={unit}>{char}</span>)
+        )}</span></Fragment>
+      ))}</span>
+    ),
+  )
+}</span></span></markas-vertical-cut-reveal>
+
+<script>
+  const EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+  /** Stagger rank of each unit from the starting point. Random uses a fixed shuffled order (hash). */
+  function ranks(count: number, from: string | undefined) {
+    const order = [...Array(count).keys()];
+    const hash = (i: number) => Math.imul(i + 1, 2654435761) >>> 0;
+    if (from === "random") order.sort((a, b) => hash(a) - hash(b));
+    const rank: number[] = [];
+    order.forEach((index, position) => {
+      const middle = Math.abs(index - (count - 1) / 2);
+      rank[index] =
+        from === "last"
+          ? count - 1 - index
+          : from === "center"
+            ? middle
+            : position;
+    });
+    return rank;
+  }
+
+  // One element per instance: setup runs for markup added later and after view transitions.
+  class MarkasVerticalCutReveal extends HTMLElement {
+    private cleanup = () => {};
+
+    // Hide every unit behind the cut line, then reveal them in turn once the text scrolls into view.
+    connectedCallback() {
+      const element = this.firstElementChild;
+      if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches)
+        return;
+      const offset = this.dataset.offset ?? "";
+      const duration = Number(this.dataset.duration);
+      const delay = Number(this.dataset.delay);
+      const stagger = Number(this.dataset.stagger);
+      const units = [...element.querySelectorAll<HTMLElement>("[data-unit]")];
+      const rank = ranks(units.length, this.dataset.from);
+      units.forEach((el) => (el.style.transform = offset));
+      const reveal = () =>
+        units.forEach((el, i) => {
+          el.animate?.([{ transform: offset }, { transform: "none" }], {
+            duration,
+            delay: delay + rank[i]! * stagger,
+            easing: EASING,
+            fill: "backwards",
+          });
+          el.style.transform = "";
+        });
+      if (typeof IntersectionObserver === "undefined") return reveal();
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        reveal();
+      });
+      observer.observe(element);
+      this.cleanup = () => {
+        observer.disconnect();
+        units.forEach((el) => (el.style.transform = ""));
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-vertical-cut-reveal"))
+    customElements.define("markas-vertical-cut-reveal", MarkasVerticalCutReveal);
+</script>

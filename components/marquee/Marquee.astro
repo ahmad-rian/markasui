@@ -1,0 +1,127 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "flex overflow-hidden";
+const copy = "flex shrink-0 justify-around gap-4";
+const orientations = {
+  horizontal: { root: "flex-row", copy: "min-w-full flex-row pr-4" },
+  vertical: { root: "flex-col", copy: "min-h-full flex-col pb-4" },
+};
+const fades = {
+  horizontal: "mask-x-from-85%",
+  vertical: "mask-y-from-85%",
+};
+
+type Props = HTMLAttributes<"div"> & {
+  vertical?: boolean;
+  reverse?: boolean;
+  /** Seconds for one full loop. */
+  duration?: number;
+  pauseOnHover?: boolean;
+  fade?: boolean;
+};
+
+const {
+  vertical = false,
+  reverse = false,
+  duration = 20,
+  pauseOnHover = true,
+  fade = true,
+  class: className,
+  ...rest
+} = Astro.props;
+const orientation = vertical ? "vertical" : "horizontal";
+// A slot renders once, so the same HTML fills the visible copy and the hidden one.
+const content = await Astro.slots.render("default");
+---
+
+<markas-marquee
+  class="contents"
+  data-vertical={vertical ? "" : undefined}
+  data-reverse={reverse ? "" : undefined}
+  data-duration={duration}
+  data-pause-on-hover={pauseOnHover ? "" : undefined}
+>
+  <div
+    {...rest}
+    class:list={[
+      root,
+      orientations[orientation].root,
+      fade && fades[orientation],
+      className,
+    ]}
+  >
+    <div class:list={[copy, orientations[orientation].copy]}>
+      <Fragment set:html={content} />
+    </div>
+    <div aria-hidden="true" inert class:list={[copy, orientations[orientation].copy]}>
+      <Fragment set:html={content} />
+    </div>
+  </div>
+</markas-marquee>
+
+<script>
+  const MS_PER_SECOND = 1000;
+
+  // One element per marquee: setup runs for markup added later and after view transitions.
+  class MarkasMarquee extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const element = this.firstElementChild as HTMLElement | null;
+      if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches)
+        return;
+      const axis = this.hasAttribute("data-vertical") ? "Y" : "X";
+      const pauseOnHover = this.hasAttribute("data-pause-on-hover");
+      // Move every copy by its own size, forever.
+      const animations = Array.from(element.children).flatMap(
+        (child) =>
+          child.animate?.(
+            [
+              { transform: `translate${axis}(0)` },
+              { transform: `translate${axis}(-100%)` },
+            ],
+            {
+              duration: Number(this.dataset.duration) * MS_PER_SECOND,
+              iterations: Infinity,
+              direction: this.hasAttribute("data-reverse") ? "reverse" : "normal",
+            },
+          ) ?? [],
+      );
+      // Pause while hovered, while focus is inside, or while off screen.
+      const state = { hover: false, focus: false, hidden: false };
+      const sync = () => {
+        const paused = (pauseOnHover && state.hover) || state.focus || state.hidden;
+        for (const animation of animations)
+          if (paused) animation.pause();
+          else animation.play();
+      };
+      const listeners: [string, () => void][] = [
+        ["mouseenter", () => ((state.hover = true), sync())],
+        ["mouseleave", () => ((state.hover = false), sync())],
+        ["focusin", () => ((state.focus = true), sync())],
+        ["focusout", () => ((state.focus = false), sync())],
+      ];
+      for (const [type, listener] of listeners)
+        element.addEventListener(type, listener);
+      const observer = new IntersectionObserver((entries) => {
+        state.hidden = !entries.some((entry) => entry.isIntersecting);
+        sync();
+      });
+      observer.observe(element);
+      this.cleanup = () => {
+        observer.disconnect();
+        for (const [type, listener] of listeners)
+          element.removeEventListener(type, listener);
+        for (const animation of animations) animation.cancel();
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-marquee"))
+    customElements.define("markas-marquee", MarkasMarquee);
+</script>

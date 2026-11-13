@@ -6,9 +6,30 @@
   "tags": ["stack", "cards", "swipe", "testimonials", "carousel", "drag"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "card-stack.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "CardStack.tsx", "deps": [] },
-    "vue": { "file": "CardStack.vue", "deps": [] }
+    "blade": {
+      "file": "card-stack.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "CardStack.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "CardStack.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "CardStack.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "CardStack.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "card-stack.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -46,6 +67,12 @@
       "type": "string",
       "default": "auto",
       "description": "Id of the region. The card list gets the same id with a -cards suffix."
+    },
+    {
+      "name": "items",
+      "type": "T[]",
+      "default": "-",
+      "description": "Svelte, Astro, and Angular only. One card per entry, drawn by a card snippet (Svelte), a function child (Astro), or an ng-template with let-item and let-index (Angular)."
     }
   ],
   "a11y": [
@@ -74,7 +101,8 @@
         "prevLabel": "Nama aksesibel tombol sebelumnya.",
         "nextLabel": "Nama aksesibel tombol berikutnya.",
         "cardLabel": "Nama setiap kartu dan teks posisi yang diumumkan setelah setiap perpindahan. Menerima {index} dan {total}.",
-        "id": "Id region. Daftar kartu memakai id yang sama dengan akhiran -cards."
+        "id": "Id region. Daftar kartu memakai id yang sama dengan akhiran -cards.",
+        "items": "Khusus Svelte, Astro, dan Angular. Satu kartu per entri, digambar oleh snippet card (Svelte), function child (Astro), atau ng-template dengan let-item dan let-index (Angular)."
       },
       "a11y": [
         "Tumpukan adalah region dengan aria-roledescription carousel dan setiap kartu adalah group yang dinamai cardLabel.",
@@ -93,5 +121,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

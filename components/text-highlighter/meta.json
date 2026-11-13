@@ -14,16 +14,37 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "text-highlighter.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "TextHighlighter.tsx", "deps": [] },
-    "vue": { "file": "TextHighlighter.vue", "deps": [] }
+    "blade": {
+      "file": "text-highlighter.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "TextHighlighter.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "TextHighlighter.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "TextHighlighter.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "TextHighlighter.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "text-highlighter.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "as",
       "type": "string",
       "default": "\"span\"",
-      "description": "The element to render. Keep it inline, such as span, strong, or mark."
+      "description": "The element to render. Keep it inline, such as span, strong, or mark. Angular: put the markas-text-highlighter attribute on that element."
     },
     {
       "name": "trigger",
@@ -101,7 +122,7 @@
     "id": {
       "description": "Sorotan di balik teks inline yang tergambar dari empat arah: saat masuk layar, hover atau fokus, mount, atau perintah. Solid, stabilo, garis bawah, gradien.",
       "props": {
-        "as": "Elemen yang dirender. Tetap inline, misalnya span, strong, atau mark.",
+        "as": "Elemen yang dirender. Tetap inline, misalnya span, strong, atau mark. Angular: pasang atribut markas-text-highlighter di elemen itu.",
         "trigger": "view menggambar saat teks masuk layar, hover mengikuti hover dan fokus keyboard pada link atau tombol terdekat, auto menggambar saat mount, manual mengikuti active.",
         "direction": "Arah tumbuh sorotan: kiri ke kanan, kanan ke kiri, atas ke bawah, atau bawah ke atas.",
         "variant": "solid mengisi baris, marker menutup 60% bagian bawah seperti stabilo, underline menggambar garis tebal di bawah teks, gradient memadukan dua token.",
@@ -129,5 +150,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

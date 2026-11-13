@@ -52,6 +52,63 @@ import { Float } from "@/components/markas/Float";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Float from "$lib/components/markas/Float.svelte";
+</script>
+
+<Float motion="bob" amplitude={6} duration={3} class="absolute -top-3 right-5">
+  <span class="rounded-full bg-primary px-3 py-1 text-xs text-on-primary">
+    Save 20%
+  </span>
+</Float>
+```
+
+## Astro
+
+```astro
+---
+import Float from "@/components/markas/Float.astro";
+---
+
+<Float motion="bob" amplitude={6} duration={3} class="absolute -top-3 right-5">
+  <span class="rounded-full bg-primary px-3 py-1 text-xs text-on-primary">
+    Save 20%
+  </span>
+</Float>
+```
+
+Each group is a small custom element, so it keeps working after view transitions.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Float } from "./markas/float.component";
+
+@Component({
+  selector: "app-save-badge",
+  imports: [Float],
+  template: `
+    <markas-float
+      motion="bob"
+      [amplitude]="6"
+      [duration]="3"
+      class="absolute -top-3 right-5"
+    >
+      <span class="rounded-full bg-primary px-3 py-1 text-xs text-on-primary">
+        Save 20%
+      </span>
+    </markas-float>
+  `,
+})
+export class SaveBadge {}
+```
+
+`aria-hidden` and `class` move from the host to the group.
+
 ## Notes
 
 - Every direct child floats on its own loop. `motion` picks the path: `drift` (figure eight with a slight sway), `bob` (rise and fall), `orbit` (small circle), or `breathe` (gentle swell).

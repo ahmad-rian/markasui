@@ -1,0 +1,348 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root =
+  "grid gap-1 rounded-2xl border border-line bg-surface p-2 transition-colors duration-150 ease-out has-[textarea:focus-visible]:border-primary-line has-[textarea:focus-visible]:outline-2 has-[textarea:focus-visible]:outline-offset-2 has-[textarea:focus-visible]:outline-primary motion-reduce:transition-none";
+const chips = "flex flex-wrap gap-1.5 px-1 pt-1";
+const chip =
+  "inline-flex h-7 max-w-full items-center gap-1.5 rounded-md border border-line bg-subtle pr-1 pl-2 text-xs font-medium text-ink";
+const chipName = "max-w-40 truncate";
+const chipRemove =
+  "grid size-5 shrink-0 place-items-center rounded text-muted transition-colors duration-150 ease-out hover:bg-line hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary motion-reduce:transition-none";
+const field =
+  "block min-h-10 w-full resize-none overflow-y-auto bg-transparent px-2 py-2 text-sm leading-6 text-ink outline-none field-sizing-content placeholder:text-faint";
+const bar = "flex items-center gap-1";
+const iconButton =
+  "inline-flex size-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const select =
+  "h-8 max-w-40 cursor-pointer truncate rounded-full bg-transparent px-2.5 text-xs font-medium text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const counter =
+  "ml-auto px-1.5 text-xs text-muted tabular-nums data-[state=limit]:text-danger";
+const send =
+  "group grid size-8 shrink-0 place-items-center rounded-full bg-primary text-on-primary transition-[background-color,opacity,scale] duration-150 ease-out hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:scale-90 disabled:pointer-events-none disabled:opacity-30 motion-reduce:transition-none";
+const sendIcon =
+  "col-start-1 row-start-1 size-4 transition-[opacity,scale] duration-200 ease-out group-data-[state=stop]:scale-50 group-data-[state=stop]:opacity-0 motion-reduce:transition-none";
+const stopIcon =
+  "col-start-1 row-start-1 size-3 scale-50 rounded-xs bg-current opacity-0 transition-[opacity,scale] duration-200 ease-out group-data-[state=stop]:scale-100 group-data-[state=stop]:opacity-100 motion-reduce:transition-none";
+const icon = "size-4";
+const smallIcon = "size-3";
+
+export type PromptInputModel = string | { value: string; label: string };
+
+type Props = HTMLAttributes<"form"> & {
+  /** Starting text. */
+  value?: string;
+  /** Turns the send button into a stop button. Toggle it later with the loading attribute on markas-prompt-input. */
+  loading?: boolean;
+  /** Character limit. Shows a counter next to the send button. */
+  maxLength?: number;
+  /** Tallest the field grows before it scrolls, in px. */
+  maxHeight?: number;
+  /** Shows the attach button. */
+  attachments?: boolean;
+  accept?: string;
+  /** Options of the small model picker on the left. */
+  models?: PromptInputModel[];
+  model?: string;
+  placeholderLabel?: string;
+  inputLabel?: string;
+  sendLabel?: string;
+  stopLabel?: string;
+  attachLabel?: string;
+  /** Name of each remove button. Accepts {name}. */
+  removeLabel?: string;
+  modelLabel?: string;
+};
+
+const {
+  value = "",
+  loading = false,
+  maxLength,
+  maxHeight = 200,
+  attachments = true,
+  accept,
+  models = [],
+  model,
+  placeholderLabel = "Ask anything",
+  inputLabel = "Message",
+  sendLabel = "Send",
+  stopLabel = "Stop",
+  attachLabel = "Attach files",
+  removeLabel = "Remove {name}",
+  modelLabel = "Model",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const options = models.map((option) =>
+  typeof option === "string" ? { value: option, label: option } : option,
+);
+const canSend = value.trim() !== "" && !loading;
+const atLimit = maxLength !== undefined && value.length >= maxLength;
+---
+
+<markas-prompt-input
+  class="contents"
+  loading={loading ? "" : undefined}
+  data-send-label={sendLabel}
+  data-stop-label={stopLabel}
+  data-remove-label={removeLabel}
+>
+  <form class:list={[root, className]} {...rest}>
+    <ul class={chips} hidden>
+      <template>
+        <li class={chip}>
+          <span class={chipName}></span>
+          <button type="button" class={chipRemove}>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class={smallIcon}
+            >
+              <path d="M18 6 6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+        </li>
+      </template>
+    </ul>
+    <textarea
+      rows="1"
+      maxlength={maxLength}
+      aria-label={inputLabel}
+      placeholder={placeholderLabel}
+      style={`max-height: ${Number(maxHeight)}px`}
+      class={field}>{value}</textarea>
+    <div class={bar}>
+      {
+        attachments && (
+          <>
+            <button
+              type="button"
+              aria-label={attachLabel}
+              class={iconButton}
+              data-markas-attach
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class={icon}
+              >
+                <path d="m21 11-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6L15 7.6"></path>
+              </svg>
+            </button>
+            <input type="file" multiple hidden tabindex="-1" accept={accept} />
+          </>
+        )
+      }
+      {
+        options.length > 0 && (
+          <select aria-label={modelLabel} class={select}>
+            {options.map((item) => (
+              <option value={item.value} selected={item.value === model}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        )
+      }
+      <slot name="actions" />
+      <span
+        data-state={atLimit ? "limit" : "ok"}
+        data-max={maxLength}
+        class={counter}>{maxLength !== undefined ? `${value.length}/${maxLength}` : ""}</span>
+      <button
+        type={loading ? "button" : "submit"}
+        aria-label={loading ? stopLabel : sendLabel}
+        data-state={loading ? "stop" : "send"}
+        disabled={!loading && !canSend}
+        class={send}
+        data-markas-send
+      >
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class={sendIcon}
+        >
+          <path d="M12 19V5M6 11l6-6 6 6"></path>
+        </svg>
+        <span aria-hidden="true" class={stopIcon}></span>
+      </button>
+    </div>
+  </form>
+</markas-prompt-input>
+
+<script>
+  /** Browsers without field-sizing grow the textarea by hand. */
+  function grow(el: HTMLTextAreaElement) {
+    if (globalThis.CSS?.supports?.("field-sizing", "content")) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }
+
+  /**
+   * Enter or the send button dispatches send with { text, files }. While loading the button
+   * dispatches stop instead; it turns into submit during that click, so the click is prevented.
+   * Set or remove the loading attribute to switch between the two.
+   */
+  class PromptInput extends HTMLElement {
+    static observedAttributes = ["loading"];
+    #files: File[] = [];
+    #controller?: AbortController;
+
+    get #form() {
+      return this.querySelector("form");
+    }
+
+    get #field() {
+      return this.querySelector("textarea");
+    }
+
+    get #loading() {
+      return this.hasAttribute("loading");
+    }
+
+    connectedCallback() {
+      const form = this.#form;
+      const field = this.#field;
+      if (!form || !field) return;
+      this.#controller = new AbortController();
+      const { signal } = this.#controller;
+      field.addEventListener("input", () => this.#sync(), { signal });
+      field.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key !== "Enter" || event.shiftKey || event.isComposing)
+            return;
+          event.preventDefault();
+          form.requestSubmit();
+        },
+        { signal },
+      );
+      form.addEventListener("submit", (event) => this.#submit(event), {
+        signal,
+      });
+      form.addEventListener("click", (event) => this.#click(event), {
+        signal,
+      });
+      form.addEventListener(
+        "change",
+        (event) => {
+          const input = event.target;
+          if (!(input instanceof HTMLInputElement) || input.type !== "file")
+            return;
+          this.#files = [...this.#files, ...Array.from(input.files ?? [])];
+          input.value = "";
+          this.#renderFiles();
+        },
+        { signal },
+      );
+      this.#sync();
+    }
+
+    disconnectedCallback() {
+      this.#controller?.abort();
+    }
+
+    attributeChangedCallback() {
+      this.#sync();
+    }
+
+    #submit(event: SubmitEvent) {
+      event.preventDefault();
+      const field = this.#field;
+      if (!field || field.value.trim() === "" || this.#loading) return;
+      this.dispatchEvent(
+        new CustomEvent("send", {
+          detail: { text: field.value, files: this.#files },
+          bubbles: true,
+        }),
+      );
+      field.value = "";
+      this.#files = [];
+      this.#renderFiles();
+      this.#sync();
+    }
+
+    #click(event: MouseEvent) {
+      const target = event.target as Element;
+      if (target.closest("[data-markas-attach]")) {
+        this.querySelector<HTMLInputElement>("input[type=file]")?.click();
+        return;
+      }
+      const remove = target.closest<HTMLElement>("[data-index]");
+      if (remove) {
+        const index = Number(remove.dataset.index);
+        this.#files = this.#files.filter((_, i) => i !== index);
+        this.#renderFiles();
+        this.#field?.focus();
+        return;
+      }
+      if (target.closest("[data-markas-send]") && this.#loading) {
+        event.preventDefault();
+        this.dispatchEvent(new CustomEvent("stop", { bubbles: true }));
+      }
+    }
+
+    #renderFiles() {
+      const list = this.querySelector("ul");
+      const template = list?.querySelector("template");
+      if (!list || !template) return;
+      for (const item of list.querySelectorAll("li")) item.remove();
+      this.#files.forEach((file, index) => {
+        const item = template.content.firstElementChild!.cloneNode(
+          true,
+        ) as HTMLElement;
+        item.querySelector("span")!.textContent = file.name;
+        const button = item.querySelector("button")!;
+        button.dataset.index = String(index);
+        button.setAttribute(
+          "aria-label",
+          (this.dataset.removeLabel ?? "").replace("{name}", file.name),
+        );
+        list.append(item);
+      });
+      list.hidden = this.#files.length === 0;
+    }
+
+    /** Update the counter and the send button from the text and the loading attribute. */
+    #sync() {
+      const field = this.#field;
+      const button = this.querySelector<HTMLButtonElement>("[data-markas-send]");
+      if (!field || !button) return;
+      const loading = this.#loading;
+      const text = field.value;
+      button.type = loading ? "button" : "submit";
+      button.setAttribute(
+        "aria-label",
+        (loading ? this.dataset.stopLabel : this.dataset.sendLabel) ?? "",
+      );
+      button.dataset.state = loading ? "stop" : "send";
+      button.disabled = !loading && text.trim() === "";
+      const counter = this.querySelector<HTMLElement>("[data-max]");
+      if (counter) {
+        const max = Number(counter.dataset.max);
+        counter.textContent = `${text.length}/${max}`;
+        counter.dataset.state = text.length >= max ? "limit" : "ok";
+      }
+      grow(field);
+    }
+  }
+
+  if (!customElements.get("markas-prompt-input"))
+    customElements.define("markas-prompt-input", PromptInput);
+</script>

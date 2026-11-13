@@ -48,6 +48,85 @@ import { Accordion } from "@/components/markas/Accordion";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Accordion from "$lib/components/markas/Accordion.svelte";
+
+  const items = [
+    {
+      value: "pengiriman",
+      title: "Berapa lama pengiriman?",
+      content: "Pesanan tiba dalam 2 sampai 4 hari kerja.",
+    },
+    { value: "retur", title: "Bagaimana cara retur?", content: retur },
+  ];
+</script>
+
+{#snippet retur()}
+  Ajukan retur dalam 7 hari lewat <a href="/pesanan">halaman pesanan</a>.
+{/snippet}
+
+<Accordion {items} defaultValue="pengiriman" />
+```
+
+`content` menerima teks biasa atau snippet untuk isi kaya.
+
+## Astro
+
+```astro
+---
+import Accordion from "@/components/markas/Accordion.astro";
+
+const items = [
+  {
+    value: "pengiriman",
+    title: "Berapa lama pengiriman?",
+    content: "Pesanan tiba dalam 2 sampai 4 hari kerja.",
+  },
+  { value: "retur", title: "Bagaimana cara retur?" },
+];
+---
+
+<Accordion items={items} defaultValue="pengiriman">
+  <p slot="retur">Ajukan retur dalam 7 hari lewat halaman pesanan.</p>
+</Accordion>
+```
+
+Item tanpa `content` merender slot dengan nama sama seperti `value`-nya. Tidak ada JavaScript yang dikirim.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Accordion } from "./markas/accordion.component";
+
+@Component({
+  selector: "app-faq",
+  imports: [Accordion],
+  template: `
+    <ng-template #retur>
+      Ajukan retur dalam 7 hari lewat <a href="/pesanan">halaman pesanan</a>.
+    </ng-template>
+    <markas-accordion
+      [items]="[
+        {
+          value: 'pengiriman',
+          title: 'Berapa lama pengiriman?',
+          content: 'Pesanan tiba dalam 2 sampai 4 hari kerja.',
+        },
+        { value: 'retur', title: 'Bagaimana cara retur?', content: retur },
+      ]"
+      defaultValue="pengiriman"
+    />
+  `,
+})
+export class Faq {}
+```
+
+`content` menerima teks biasa atau referensi `ng-template` untuk isi kaya.
+
 ## Catatan
 
 - `type="single"` (default) memberi atribut `name` yang sama ke setiap `details`, sehingga browser menutup bagian lain secara native. Pakai `type="multiple"` agar beberapa bagian bisa terbuka bersamaan.

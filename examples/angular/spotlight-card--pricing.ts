@@ -1,0 +1,50 @@
+import { Component } from "@angular/core";
+import { SpotlightCard } from "../../components/spotlight-card/spotlight-card.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [SpotlightCard],
+  template: `
+    <div markas-spotlight-card class="mx-auto max-w-xs">
+      <div class="p-6">
+        <p class="text-sm font-medium text-muted">Pro</p>
+        <p class="mt-2 text-ink">
+          <span class="text-4xl font-semibold tracking-tight">$24</span
+          ><span class="text-sm text-muted"> per month</span>
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-ink">
+          @for (feature of features; track feature) {
+            <li class="flex items-center gap-2">
+              <svg
+                class="size-4 text-success"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 12 5 5L20 7"></path>
+              </svg>
+              {{ feature }}
+            </li>
+          }
+        </ul>
+        <button
+          type="button"
+          class="mt-6 h-10 w-full rounded-lg bg-primary text-sm font-medium text-on-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          Upgrade to Pro
+        </button>
+      </div>
+    </div>
+  `,
+})
+export default class SpotlightCardPricingExample {
+  protected readonly features = [
+    "Unlimited projects",
+    "Preview links",
+    "Priority support",
+  ];
+}

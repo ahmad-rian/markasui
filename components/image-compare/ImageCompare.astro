@@ -1,0 +1,192 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root =
+  "group/compare relative isolate grid overflow-hidden rounded-xl select-none [&_img]:pointer-events-none";
+const layer = "relative col-start-1 row-start-1 min-w-0 bg-surface";
+const motion =
+  "duration-200 ease-out group-data-dragging/compare:transition-none motion-reduce:transition-none";
+const label =
+  "pointer-events-none absolute rounded-full border border-line bg-surface/85 px-2.5 py-1 text-xs font-medium text-ink backdrop-blur-sm";
+const divider = "pointer-events-none absolute z-10 bg-surface";
+const handle =
+  "pointer-events-auto absolute top-1/2 left-1/2 grid size-10 -translate-1/2 place-items-center rounded-full border border-line bg-surface text-ink shadow-overlay transition-[scale] duration-150 ease-out group-data-dragging/compare:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const iconClass = "size-5";
+const orientations = {
+  horizontal: {
+    root: "cursor-ew-resize touch-pan-y",
+    clip: "[clip-path:inset(0_calc(100%_-_var(--position))_0_0)] transition-[clip-path]",
+    divider:
+      "inset-y-0 left-(--position) w-0.5 -translate-x-1/2 transition-[left]",
+    before: "top-3 left-3",
+    after: "top-3 right-3",
+    icon: "",
+  },
+  vertical: {
+    root: "cursor-ns-resize touch-pan-x",
+    clip: "[clip-path:inset(0_0_calc(100%_-_var(--position))_0)] transition-[clip-path]",
+    divider:
+      "inset-x-0 top-(--position) h-0.5 -translate-y-1/2 transition-[top]",
+    before: "top-3 left-3",
+    after: "bottom-3 left-3",
+    icon: "rotate-90",
+  },
+};
+
+type Props = HTMLAttributes<"div"> & {
+  orientation?: keyof typeof orientations;
+  /** Starting divider position in percent. */
+  position?: number;
+  /** Percent moved per arrow key press. */
+  step?: number;
+  beforeLabel?: string;
+  afterLabel?: string;
+  sliderLabel?: string;
+};
+
+const {
+  orientation = "horizontal",
+  position: start = 50,
+  step = 5,
+  beforeLabel = "Before",
+  afterLabel = "After",
+  sliderLabel = "Comparison position",
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+const o = orientations[orientation];
+const position = Math.min(100, Math.max(0, Number(start)));
+const userStyle = typeof style === "string" && style ? `${style}; ` : "";
+---
+
+<div
+  role="group"
+  {...rest}
+  data-markas-image-compare
+  data-step={Number(step)}
+  data-orientation={orientation}
+  class:list={[root, o.root, className]}
+  style={`${userStyle}--position: ${position}%`}
+>
+  <div class={layer}>
+    <slot name="after" />
+    <span class:list={[label, o.after]}>{afterLabel}</span>
+  </div>
+  <div class:list={[layer, o.clip, motion]}>
+    <slot name="before" />
+    <span class:list={[label, o.before]}>{beforeLabel}</span>
+  </div>
+  <div class:list={[divider, o.divider, motion]}>
+    <div
+      role="slider"
+      tabindex="0"
+      aria-label={sliderLabel}
+      aria-orientation={orientation}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow={Math.round(position)}
+      aria-valuetext={`${Math.round(position)}%`}
+      class={handle}
+    >
+      <svg
+        class:list={[iconClass, o.icon]}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m9 7-5 5 5 5M15 7l5 5-5 5"></path>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PAGE_STEP = 10;
+  const pressed = new WeakSet<HTMLElement>();
+
+  const compareOf = (target: EventTarget | null) =>
+    target instanceof Element
+      ? target.closest<HTMLElement>("[data-markas-image-compare]")
+      : null;
+  const positionOf = (root: HTMLElement) =>
+    parseFloat(root.style.getPropertyValue("--position")) || 0;
+
+  /** Move the divider, update the slider value, and announce it with a position-change event. */
+  function move(root: HTMLElement, next: number) {
+    const value = Math.min(100, Math.max(0, next));
+    root.style.setProperty("--position", `${value}%`);
+    const slider = root.querySelector("[role=slider]");
+    slider?.setAttribute("aria-valuenow", String(Math.round(value)));
+    slider?.setAttribute("aria-valuetext", `${Math.round(value)}%`);
+    root.dispatchEvent(
+      new CustomEvent("position-change", { detail: value, bubbles: true }),
+    );
+  }
+
+  function fromPointer(root: HTMLElement, event: PointerEvent) {
+    const rect = root.getBoundingClientRect();
+    move(
+      root,
+      root.dataset.orientation === "vertical"
+        ? ((event.clientY - rect.top) / rect.height) * 100
+        : ((event.clientX - rect.left) / rect.width) * 100,
+    );
+  }
+
+  function release(event: Event) {
+    const root = compareOf(event.target);
+    if (!root) return;
+    pressed.delete(root);
+    delete root.dataset.dragging;
+  }
+
+  // One set of listeners per page serves every comparison: drag anywhere, click a spot, or use the
+  // arrow keys, Page Up/Down, Home, and End on the handle.
+  document.addEventListener("pointerdown", (event) => {
+    const root = compareOf(event.target);
+    if (!root || event.button !== 0) return;
+    event.preventDefault();
+    pressed.add(root);
+    root.querySelector<HTMLElement>("[role=slider]")?.focus({
+      preventScroll: true,
+    });
+    root.setPointerCapture?.(event.pointerId);
+    fromPointer(root, event);
+  });
+  document.addEventListener("pointermove", (event) => {
+    const root = compareOf(event.target);
+    if (!root || !pressed.has(root)) return;
+    root.dataset.dragging = "";
+    fromPointer(root, event);
+  });
+  document.addEventListener("pointerup", release);
+  document.addEventListener("pointercancel", release);
+  document.addEventListener("keydown", (event) => {
+    const target = event.target;
+    const root = compareOf(target);
+    if (!root || !(target instanceof Element) || target.getAttribute("role") !== "slider")
+      return;
+    const step = Number(root.dataset.step) || 0;
+    const flip = root.dataset.orientation === "vertical" ? -1 : 1;
+    const at = positionOf(root);
+    const moves: Record<string, number> = {
+      ArrowRight: at + step,
+      ArrowLeft: at - step,
+      ArrowUp: at + step * flip,
+      ArrowDown: at - step * flip,
+      PageUp: at + PAGE_STEP,
+      PageDown: at - PAGE_STEP,
+      Home: 0,
+      End: 100,
+    };
+    const next = moves[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    move(root, next);
+  });
+</script>

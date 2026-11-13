@@ -62,6 +62,59 @@ const pinned = ref(["desain"]);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import PinnedList from "$lib/components/markas/PinnedList.svelte";
+
+  const items = [
+    { value: "roadmap", label: "Q4 roadmap", description: "Product, 14 pages" },
+    { value: "standup", label: "Standup notes", description: "Team, daily" },
+  ];
+  let pinned = $state(["roadmap"]);
+</script>
+
+<PinnedList {items} bind:pinned />
+```
+
+## Astro
+
+```astro
+---
+import PinnedList from "@/components/markas/PinnedList.astro";
+
+const items = [
+  { value: "roadmap", label: "Q4 roadmap", description: "Product, 14 pages" },
+  { value: "standup", label: "Standup notes", description: "Team, daily" },
+];
+---
+
+<PinnedList items={items} defaultPinned={["roadmap"]} />
+```
+
+Satu script kecil yang dibundel memindahkan baris dan memancarkan `change` dengan nilai yang disematkan.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { PinnedList } from "./markas/pinned-list.component";
+
+@Component({
+  selector: "app-docs",
+  imports: [PinnedList],
+  template: `<markas-pinned-list [items]="items" [(pinned)]="pinned" />`,
+})
+export class Docs {
+  readonly items = [
+    { value: "roadmap", label: "Q4 roadmap", description: "Product, 14 pages" },
+    { value: "standup", label: "Standup notes", description: "Team, daily" },
+  ];
+  readonly pinned = signal(["roadmap"]);
+}
+```
+
 ## Catatan
 
 - Baris tersemat mengikuti urutan items, jadi melepas sematan mengembalikan baris ke tempat asalnya.

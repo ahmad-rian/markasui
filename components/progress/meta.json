@@ -17,6 +17,18 @@
     "vue": {
       "file": "Progress.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Progress.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Progress.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "progress.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -82,5 +94,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

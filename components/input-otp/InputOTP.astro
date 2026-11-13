@@ -1,0 +1,173 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "m-0 min-w-0 border-0 p-0";
+const legend = "mb-1.5 p-0 text-sm font-medium text-ink";
+const group = "flex gap-2";
+const box =
+  "h-12 w-10 rounded-md border border-line bg-surface text-center text-lg font-medium text-ink transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none";
+
+type Props = Omit<HTMLAttributes<"fieldset">, "name"> & {
+  length?: number;
+  label?: string;
+  name?: string;
+  value?: string;
+  /** aria-label of each box. {index} and {length} are replaced with numbers. */
+  digitLabel?: string;
+};
+
+const {
+  length: rawLength = 6,
+  label,
+  name,
+  value = "",
+  digitLabel = "Digit {index} of {length}",
+  class: className,
+  ...rest
+} = Astro.props;
+const length = Math.max(1, Math.trunc(Number(rawLength)));
+// Split the value into exactly `length` characters; empty positions hold "".
+const chars = Array.from({ length }, (_, index) => value[index] ?? "");
+const formatDigitLabel = (index: number) =>
+  digitLabel
+    .replace("{index}", String(index + 1))
+    .replace("{length}", String(length));
+---
+
+<fieldset data-markas-otp class:list={[root, className]} {...rest}>
+  {label && <legend class={legend}>{label}</legend>}
+  <div class={group}>
+    {
+      chars.map((char, index) => (
+        <input
+          type="text"
+          inputmode="numeric"
+          autocomplete={index === 0 ? "one-time-code" : "off"}
+          aria-label={formatDigitLabel(index)}
+          value={char}
+          class={box}
+        />
+      ))
+    }
+  </div>
+  {name && <input type="hidden" name={name} value={chars.join("")} />}
+</fieldset>
+
+<script>
+  // One set of listeners per page serves every OTP field, including markup added later.
+  // The last committed character of each box is remembered, so a raw edit can be compared
+  // and undone (digits only), like the controlled boxes in React and Vue.
+  const NON_DIGIT = /\D/g;
+  const committed = new WeakMap<HTMLInputElement, string>();
+
+  type Field = { root: HTMLFieldSetElement; boxes: HTMLInputElement[] };
+
+  function fieldOf(target: EventTarget | null): [Field, number] | null {
+    if (!(target instanceof HTMLInputElement) || target.type !== "text")
+      return null;
+    const root = target.closest<HTMLFieldSetElement>("[data-markas-otp]");
+    if (!root) return null;
+    const boxes = [
+      ...root.querySelectorAll<HTMLInputElement>('input[type="text"]'),
+    ];
+    return [{ root, boxes }, boxes.indexOf(target)];
+  }
+
+  const charsOf = ({ boxes }: Field) =>
+    boxes.map((box) => committed.get(box) ?? box.defaultValue);
+
+  function update(field: Field, next: string[]) {
+    const previous = charsOf(field).join("");
+    field.boxes.forEach((box, index) => {
+      box.value = next[index] ?? "";
+      committed.set(box, box.value);
+    });
+    const value = next.join("");
+    if (value === previous) return;
+    const hidden = field.root.querySelector<HTMLInputElement>(
+      'input[type="hidden"]',
+    );
+    if (hidden) hidden.value = value;
+    field.root.dispatchEvent(
+      new CustomEvent("markas-change", { detail: value, bubbles: true }),
+    );
+    if (next.every(Boolean))
+      field.root.dispatchEvent(
+        new CustomEvent("markas-complete", { detail: value, bubbles: true }),
+      );
+  }
+
+  const setChar = (field: Field, index: number, char: string) =>
+    update(
+      field,
+      charsOf(field).map((current, i) => (i === index ? char : current)),
+    );
+
+  /** Fill boxes from `start` with consecutive digits, then focus the box after them. */
+  function fill(field: Field, start: number, digits: string) {
+    update(
+      field,
+      charsOf(field).map((char, index) =>
+        index >= start && index < start + digits.length
+          ? (digits[index - start] ?? char)
+          : char,
+      ),
+    );
+    field.boxes[
+      Math.min(start + digits.length, field.boxes.length - 1)
+    ]?.focus();
+  }
+
+  document.addEventListener("input", (event) => {
+    const found = fieldOf(event.target);
+    if (!found) return;
+    const [field, index] = found;
+    const digits = field.boxes[index]!.value.replace(NON_DIGIT, "");
+    if (digits === "") setChar(field, index, "");
+    else fill(field, index, digits);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const found = fieldOf(event.target);
+    if (!found) return;
+    const [field, index] = found;
+    const moves: Record<string, number | undefined> = {
+      ArrowLeft: index - 1,
+      ArrowRight: index + 1,
+      Home: 0,
+      End: field.boxes.length - 1,
+    };
+    const move = moves[event.key];
+    if (move !== undefined) {
+      event.preventDefault();
+      field.boxes[move]?.focus();
+      return;
+    }
+    if (event.key === "Delete") {
+      event.preventDefault();
+      return setChar(field, index, "");
+    }
+    if (event.key !== "Backspace") return;
+    event.preventDefault();
+    if (charsOf(field)[index] || index === 0)
+      return setChar(field, index, "");
+    setChar(field, index - 1, "");
+    field.boxes[index - 1]?.focus();
+  });
+
+  document.addEventListener("paste", (event) => {
+    const found = fieldOf(event.target);
+    if (!found) return;
+    const [field, index] = found;
+    event.preventDefault();
+    const digits = (event.clipboardData?.getData("text") ?? "")
+      .replace(NON_DIGIT, "")
+      .slice(0, field.boxes.length);
+    if (digits === "") return;
+    fill(field, digits.length >= field.boxes.length ? 0 : index, digits);
+  });
+
+  document.addEventListener("focusin", (event) => {
+    if (fieldOf(event.target)) (event.target as HTMLInputElement).select();
+  });
+</script>

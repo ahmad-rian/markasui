@@ -1,0 +1,276 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type DropdownMenuItem =
+  | { separator: true }
+  | {
+      separator?: false;
+      label: string;
+      value?: string;
+      href?: string;
+      danger?: boolean;
+      disabled?: boolean;
+    };
+
+const root = "inline-block";
+const triggerClass =
+  "inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none";
+const chevron = "size-4 text-muted";
+const menu =
+  "inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay";
+const item =
+  "flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+const tones = {
+  default: "text-ink hover:bg-subtle focus:bg-subtle",
+  danger: "text-danger hover:bg-danger/10 focus:bg-danger/10",
+};
+const separator = "my-1 h-px bg-line";
+
+const HAS_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+const SAFE_SCHEME = /^(https?|mailto|tel):/i;
+
+/** Hrefs with a scheme other than http, https, mailto, and tel (such as javascript:) become "#". */
+const safeHref = (href: string) => {
+  const cleaned = href.replace(/[\t\n\r]/g, "");
+  const start = [...cleaned].findIndex((char) => char > " ");
+  const value = cleaned.slice(Math.max(start, 0));
+  return HAS_SCHEME.test(value) && !SAFE_SCHEME.test(value) ? "#" : href;
+};
+
+type Props = HTMLAttributes<"div"> & {
+  items: DropdownMenuItem[];
+  label?: string;
+};
+
+const { items, label = "Options", id, class: className, ...rest } =
+  Astro.props;
+const menuId = id ?? `markas-dropdown-menu-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<div class:list={[root, className]} {...rest}>
+  <button
+    type="button"
+    id={`${menuId}-trigger`}
+    popovertarget={menuId}
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-controls={menuId}
+    data-state="closed"
+    data-markas-dropdown-menu-trigger
+    class={triggerClass}
+  >
+    <slot name="trigger">{label}</slot>
+    <svg
+      class={chevron}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </button>
+  <div
+    id={menuId}
+    popover="auto"
+    role="menu"
+    aria-labelledby={`${menuId}-trigger`}
+    data-state="closed"
+    data-markas-dropdown-menu
+    class={menu}
+  >
+    {
+      items.map((entry) => {
+        if (entry.separator)
+          return <div role="separator" class={separator} />;
+        const itemClass = [item, tones[entry.danger ? "danger" : "default"]];
+        const value = entry.value ?? entry.label;
+        if (entry.href && !entry.disabled)
+          return (
+            <a
+              href={safeHref(entry.href)}
+              role="menuitem"
+              tabindex="-1"
+              data-value={value}
+              class:list={itemClass}
+            >
+              {entry.label}
+            </a>
+          );
+        return (
+          <button
+            type="button"
+            role="menuitem"
+            tabindex="-1"
+            disabled={entry.disabled}
+            data-value={value}
+            class:list={itemClass}
+          >
+            {entry.label}
+          </button>
+        );
+      })
+    }
+  </div>
+</div>
+
+<script>
+  // One set of listeners per page serves every dropdown menu, including markup added later
+  // and pages reached through view transitions. Only one auto popover menu is open at a time.
+  type FocusTarget = "first" | "last";
+
+  const GAP = 4;
+  const ITEM_SELECTOR = '[role="menuitem"]:not(:disabled)';
+  let focusTarget: FocusTarget = "first";
+  let followed: HTMLElement | undefined;
+  let unfollow: (() => void) | undefined;
+
+  const isMenu = (node: EventTarget | null): node is HTMLElement =>
+    node instanceof HTMLElement && node.hasAttribute("data-markas-dropdown-menu");
+  const triggerOf = (menu: HTMLElement) =>
+    document.getElementById(`${menu.id}-trigger`);
+  const menuItems = (menu: HTMLElement) =>
+    Array.from(menu.querySelectorAll<HTMLElement>(ITEM_SELECTOR));
+
+  function focusItem(menu: HTMLElement, index: number) {
+    const list = menuItems(menu);
+    if (list.length === 0) return;
+    list[(index + list.length) % list.length]?.focus();
+  }
+
+  const focusEdge = (menu: HTMLElement, target: FocusTarget) =>
+    focusItem(menu, target === "first" ? 0 : -1);
+
+  /** Places the menu below the trigger, aligned to its start, and flips above when it does not fit. */
+  function place(menu: HTMLElement) {
+    const trigger = triggerOf(menu);
+    if (!trigger) return;
+    const anchor = trigger.getBoundingClientRect();
+    const { width, height } = menu.getBoundingClientRect();
+    const below = anchor.bottom + GAP;
+    const above = anchor.top - GAP - height;
+    const fitsBelow = below + height <= window.innerHeight;
+    const top = fitsBelow || above < 0 ? below : above;
+    const left = Math.max(
+      GAP,
+      Math.min(anchor.left, window.innerWidth - width - GAP),
+    );
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
+  }
+
+  /** Re-runs placement while the page scrolls or the window resizes. */
+  function follow(menu: HTMLElement) {
+    unfollow?.();
+    followed = menu;
+    const update = () => place(menu);
+    const scrollOptions = { capture: true, passive: true };
+    window.addEventListener("scroll", update, scrollOptions);
+    window.addEventListener("resize", update, { passive: true });
+    unfollow = () => {
+      window.removeEventListener("scroll", update, scrollOptions);
+      window.removeEventListener("resize", update);
+      unfollow = followed = undefined;
+    };
+  }
+
+  function close(menu: HTMLElement) {
+    menu.hidePopover();
+    triggerOf(menu)?.focus();
+  }
+
+  function onTriggerKeydown(event: KeyboardEvent, trigger: HTMLElement) {
+    const target = ({ ArrowDown: "first", ArrowUp: "last" } as const)[
+      event.key as "ArrowDown" | "ArrowUp"
+    ];
+    const menu = document.getElementById(
+      trigger.getAttribute("aria-controls") ?? "",
+    );
+    if (target === undefined || !isMenu(menu)) return;
+    event.preventDefault();
+    if (menu.matches(":popover-open")) return focusEdge(menu, target);
+    focusTarget = target;
+    menu.showPopover();
+  }
+
+  function onMenuKeydown(event: KeyboardEvent, menu: HTMLElement) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      return close(menu);
+    }
+    if (event.key === "Tab") return menu.hidePopover();
+    const index = menuItems(menu).indexOf(
+      document.activeElement as HTMLElement,
+    );
+    const targets: Record<string, number | undefined> = {
+      ArrowDown: index + 1,
+      ArrowUp: index - 1,
+      Home: 0,
+      End: -1,
+    };
+    const target = targets[event.key];
+    if (target === undefined) return;
+    event.preventDefault();
+    focusItem(menu, target);
+  }
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target as Element;
+    const trigger = target.closest<HTMLElement>(
+      "[data-markas-dropdown-menu-trigger]",
+    );
+    if (trigger) return onTriggerKeydown(event, trigger);
+    const menu = target.closest("[data-markas-dropdown-menu]");
+    if (isMenu(menu)) onMenuKeydown(event, menu);
+  });
+
+  document.addEventListener("click", (event) => {
+    const entry = (event.target as Element).closest<HTMLElement>(
+      "[data-markas-dropdown-menu] [role=menuitem]",
+    );
+    const menu = entry?.closest("[data-markas-dropdown-menu]") ?? null;
+    if (!entry || !isMenu(menu)) return;
+    menu.dispatchEvent(
+      new CustomEvent("markas-select", {
+        bubbles: true,
+        detail: entry.dataset.value,
+      }),
+    );
+    close(menu);
+  });
+
+  // beforetoggle and toggle do not bubble, so listen in the capture phase. beforetoggle runs
+  // synchronously, so the state is current for the next key press.
+  document.addEventListener(
+    "beforetoggle",
+    (event) => {
+      if (!isMenu(event.target)) return;
+      const state = (event as ToggleEvent).newState;
+      event.target.dataset.state = state;
+      const trigger = triggerOf(event.target);
+      if (!trigger) return;
+      trigger.dataset.state = state;
+      trigger.setAttribute("aria-expanded", String(state === "open"));
+    },
+    true,
+  );
+
+  document.addEventListener(
+    "toggle",
+    (event) => {
+      if (!isMenu(event.target)) return;
+      if ((event as ToggleEvent).newState !== "open") {
+        if (followed === event.target) unfollow?.();
+        return;
+      }
+      place(event.target);
+      follow(event.target);
+      focusEdge(event.target, focusTarget);
+      focusTarget = "first";
+    },
+    true,
+  );
+</script>

@@ -1,0 +1,44 @@
+---
+import Button from "../../components/button/Button.astro";
+import ThemeToggle from "../../components/theme-toggle/ThemeToggle.astro";
+
+---
+
+  <div class="flex flex-col items-center gap-5">
+    <div class="grid w-full grid-cols-6 gap-2">
+      <div class="flex flex-col items-center gap-2">
+        <ThemeToggle animation="rotate" variant="outline" size="lg" />
+        <span class="text-xs text-muted">Rotate</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <ThemeToggle animation="morph" variant="outline" size="lg" />
+        <span class="text-xs text-muted">Morph</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <ThemeToggle animation="flip" variant="outline" size="lg" />
+        <span class="text-xs text-muted">Flip</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <ThemeToggle animation="slide" variant="outline" size="lg" />
+        <span class="text-xs text-muted">Slide</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <ThemeToggle animation="eclipse" variant="outline" size="lg" />
+        <span class="text-xs text-muted">Eclipse</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <ThemeToggle animation="spring" variant="outline" size="lg" />
+        <span class="text-xs text-muted">Spring</span>
+      </div>
+    </div>
+    <Button variant="secondary" size="sm" data-play-all>Play all</Button>
+  </div>
+
+<script>
+  /** Plays every toggle there and back without changing the page theme. */
+  document
+    .querySelector("[data-play-all]")
+    ?.addEventListener("click", () =>
+      document.dispatchEvent(new Event("markas-theme-demo")),
+    );
+</script>

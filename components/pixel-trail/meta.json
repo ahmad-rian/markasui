@@ -6,9 +6,30 @@
   "tags": ["pixel", "grid", "trail", "canvas", "hero", "background", "pointer"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "pixel-trail.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "PixelTrail.tsx", "deps": [] },
-    "vue": { "file": "PixelTrail.vue", "deps": [] }
+    "blade": {
+      "file": "pixel-trail.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "PixelTrail.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "PixelTrail.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "PixelTrail.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "PixelTrail.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "pixel-trail.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -96,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

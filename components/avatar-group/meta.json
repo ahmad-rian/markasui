@@ -6,9 +6,30 @@
   "tags": ["avatar", "group", "stack", "team", "members", "tooltip"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "avatar-group.blade.php", "deps": [] },
-    "react": { "file": "AvatarGroup.tsx", "deps": [] },
-    "vue": { "file": "AvatarGroup.vue", "deps": [] }
+    "blade": {
+      "file": "avatar-group.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "AvatarGroup.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "AvatarGroup.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "AvatarGroup.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "AvatarGroup.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "avatar-group.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -84,5 +105,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

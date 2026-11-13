@@ -53,6 +53,77 @@ import ChatMessage from "@/components/markas/ChatMessage.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import ChatMessage from "$lib/components/markas/ChatMessage.svelte";
+</script>
+
+<div role="log" aria-label="Conversation" class="grid gap-5">
+  <ChatMessage
+    from="user"
+    text="How do I bill a client in Rupiah?"
+    time="10:24"
+  />
+  <ChatMessage
+    text={answer}
+    time="10:24"
+    assistantLabel="Markas AI"
+    stream
+    onFeedback={rate}
+    onRegenerate={retry}
+  />
+</div>
+```
+
+## Astro
+
+```astro
+---
+import ChatMessage from "@/components/markas/ChatMessage.astro";
+---
+
+<div role="log" aria-label="Conversation" class="grid gap-5">
+  <ChatMessage from="user" text="How do I bill a client in Rupiah?" time="10:24" />
+  <ChatMessage text={answer} time="10:24" assistantLabel="Markas AI" stream />
+</div>
+```
+
+Custom element kecil menjalankan streaming, menyalin teks, dan mengganti rating. Ia mengirim `markas-feedback` (nilai baru sebagai detail) dan `markas-regenerate`, keduanya menggelembung.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { ChatMessage } from "./markas/chat-message.component";
+
+@Component({
+  selector: "app-conversation",
+  imports: [ChatMessage],
+  template: `
+    <div role="log" aria-label="Conversation" class="grid gap-5">
+      <markas-chat-message
+        from="user"
+        text="How do I bill a client in Rupiah?"
+      />
+      <markas-chat-message
+        [text]="answer"
+        assistantLabel="Markas AI"
+        stream
+        (feedback)="rate($event)"
+        (regenerate)="retry()"
+      />
+    </div>
+  `,
+})
+export class Conversation {
+  answer = "Add the amount in Rupiah and a payment term.";
+  rate(value: "like" | "dislike" | null) {}
+  retry() {}
+}
+```
+
 ## Catatan
 
 - Baris aksi muncul saat kursor di atas pesan atau fokus ada di dalamnya, jadi percakapan tetap rapi.

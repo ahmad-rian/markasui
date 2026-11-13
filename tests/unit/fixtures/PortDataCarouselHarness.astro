@@ -1,0 +1,9 @@
+---
+import Carousel from "../../../components/carousel/Carousel.astro";
+
+const { items = ["Plan", "Share", "Track"], ...rest } = Astro.props;
+---
+
+<Carousel items={items} {...rest}>
+  {(title: string, index: number) => <p>{index + 1}. {title}</p>}
+</Carousel>

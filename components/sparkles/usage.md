@@ -46,9 +46,75 @@ import { Sparkles } from "@/components/markas/Sparkles";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Sparkles from "$lib/components/markas/Sparkles.svelte";
+</script>
+
+<Sparkles
+  variant="burst"
+  density={32}
+  size="lg"
+  class="rounded-xl border border-line bg-surface px-6 py-10"
+>
+  <h2 class="text-xl font-semibold text-ink">Unlock every template</h2>
+  <Button>Upgrade now</Button>
+</Sparkles>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Sparkles from "@/components/markas/Sparkles.astro";
+---
+
+<Sparkles
+  variant="burst"
+  density={32}
+  size="lg"
+  class="rounded-xl border border-line bg-surface px-6 py-10"
+>
+  <h2 class="text-xl font-semibold text-ink">Unlock every template</h2>
+  <Button>Upgrade now</Button>
+</Sparkles>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Sparkles } from "./markas/sparkles.component";
+
+@Component({
+  selector: "app-upgrade",
+  imports: [Button, Sparkles],
+  template: `
+    <div
+      markas-sparkles
+      variant="burst"
+      density="32"
+      size="lg"
+      class="rounded-xl border border-line bg-surface px-6 py-10"
+    >
+      <h2 class="text-xl font-semibold text-ink">Unlock every template</h2>
+      <button markas-button>Upgrade now</button>
+    </div>
+  `,
+})
+export class Upgrade {}
+```
+
+Angular uses an attribute selector on the native div, so `class`, `aria-*`, and other attributes stay on the root element.
+
 ## Notes
 
-- Positions, sizes, and timing come from `seed` with integer math, so Blade, React, and Vue render the same sparkles.
+- Positions, sizes, and timing come from `seed` with integer math, so all six frameworks render the same sparkles.
 - `burst` uses a CSS hover and focus-within group on the component, so it needs no JavaScript and also plays for keyboard users.
 - With reduced motion, field and text sparkles stay still and burst sparkles stay hidden.
 - The component has no built-in text, so there are no label props to translate.

@@ -6,9 +6,30 @@
   "tags": ["background", "sparkles", "particles", "celebration", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "sparkles.blade.php", "deps": [] },
-    "react": { "file": "Sparkles.tsx", "deps": [] },
-    "vue": { "file": "Sparkles.vue", "deps": [] }
+    "blade": {
+      "file": "sparkles.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Sparkles.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Sparkles.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Sparkles.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Sparkles.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "sparkles.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -87,5 +108,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

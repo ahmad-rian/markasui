@@ -1,0 +1,121 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const wrapper = "contents";
+const base =
+  "group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden font-medium whitespace-nowrap select-none transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+const variants = {
+  primary: "bg-primary text-on-primary hover:bg-primary-strong",
+  secondary: "border border-line bg-surface text-ink hover:bg-subtle",
+  ghost: "text-ink hover:bg-subtle",
+  danger: "bg-danger text-on-primary hover:bg-danger/90",
+};
+const sizes = {
+  sm: "h-8 rounded-md px-3 text-sm",
+  md: "h-10 rounded-lg px-4 text-sm",
+  lg: "h-12 rounded-lg px-6 text-base",
+};
+const fill =
+  "pointer-events-none absolute inset-0 -z-10 origin-left scale-x-0 transition-transform duration-200 ease-out group-data-[state=complete]:scale-x-100 group-data-[state=holding]:scale-x-100 group-data-[state=holding]:duration-(--hold-duration) group-data-[state=holding]:ease-linear";
+const fillVariants = {
+  primary: "bg-on-primary/25",
+  secondary: "bg-primary/10",
+  ghost: "bg-primary/10",
+  danger: "bg-on-primary/25",
+};
+const srOnly = "sr-only";
+
+type Props = HTMLAttributes<"button"> & {
+  variant?: keyof typeof variants;
+  size?: keyof typeof sizes;
+  /** How long the button must be held, in milliseconds. */
+  duration?: number;
+  /** Hidden hint read by screen readers. */
+  holdLabel?: string;
+};
+
+const {
+  variant = "primary",
+  size = "md",
+  duration = 1500,
+  holdLabel = "Press and hold to confirm",
+  type = "button",
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+const hintId = `markas-hold-button-${crypto.randomUUID().slice(0, 8)}`;
+const holdDuration = `--hold-duration: ${Number(duration)}ms`;
+---
+
+<span class={wrapper}>
+  <button
+    type={type}
+    data-state="idle"
+    data-markas-hold-button={Number(duration)}
+    aria-describedby={hintId}
+    style={typeof style === "string" && style ? `${style};${holdDuration}` : holdDuration}
+    class:list={[base, variants[variant], sizes[size], className]}
+    {...rest}
+  >
+    <span class:list={[fill, fillVariants[variant]]} aria-hidden="true"></span>
+    <slot />
+  </button>
+  <span id={hintId} class={srOnly}>{holdLabel}</span>
+</span>
+
+<script>
+  // One set of listeners per page serves every hold button. Holding Space, Enter, or the
+  // pointer for the full duration dispatches a bubbling "complete" event. Releasing early cancels.
+  const SELECTOR = "[data-markas-hold-button]";
+  const HOLD_KEYS = new Set([" ", "Enter"]);
+  const timers = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
+
+  const closest = (event: Event) =>
+    event.target instanceof Element
+      ? event.target.closest<HTMLElement>(SELECTOR)
+      : null;
+  /** Leave and blur do not bubble: only react when the hold button itself is the target. */
+  const self = (event: Event) =>
+    event.target instanceof HTMLElement && event.target.matches(SELECTOR)
+      ? event.target
+      : null;
+
+  const start = (button: HTMLElement) => {
+    if (button.dataset.state !== "idle") return;
+    button.dataset.state = "holding";
+    timers.set(
+      button,
+      setTimeout(() => {
+        button.dataset.state = "complete";
+        button.dispatchEvent(new CustomEvent("complete", { bubbles: true }));
+      }, Number(button.dataset.markasHoldButton)),
+    );
+  };
+  const cancel = (button: HTMLElement | null) => {
+    if (!button) return;
+    clearTimeout(timers.get(button));
+    button.dataset.state = "idle";
+  };
+
+  document.addEventListener("pointerdown", (event) => {
+    const button = closest(event);
+    if (button && event.button === 0) start(button);
+  });
+  for (const type of ["pointerup", "pointercancel"])
+    document.addEventListener(type, (event) => cancel(closest(event)));
+  for (const type of ["pointerleave", "blur"])
+    document.addEventListener(type, (event) => cancel(self(event)), true);
+  document.addEventListener("keydown", (event) => {
+    const button = closest(event);
+    if (!button || !HOLD_KEYS.has(event.key)) return;
+    event.preventDefault();
+    if (!event.repeat) start(button);
+  });
+  document.addEventListener("keyup", (event) => {
+    if (HOLD_KEYS.has(event.key)) cancel(closest(event));
+  });
+  document.addEventListener("contextmenu", (event) => {
+    if (closest(event)) event.preventDefault();
+  });
+</script>

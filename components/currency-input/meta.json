@@ -6,9 +6,30 @@
   "tags": ["currency", "money", "rupiah", "idr", "amount", "input", "form"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "currency-input.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "CurrencyInput.tsx", "deps": [] },
-    "vue": { "file": "CurrencyInput.vue", "deps": [] }
+    "blade": {
+      "file": "currency-input.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "CurrencyInput.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "CurrencyInput.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "CurrencyInput.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "CurrencyInput.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "currency-input.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -76,6 +97,18 @@
       "type": "string",
       "default": "auto",
       "description": "Id of the visible field. Generated automatically when empty."
+    },
+    {
+      "name": "bind:value / [(value)]",
+      "type": "number | null",
+      "default": "-",
+      "description": "Svelte and Angular. Two-way binding of the amount. Svelte also takes onValueChange; Angular emits valueChange."
+    },
+    {
+      "name": "markas-change",
+      "type": "CustomEvent<number | null>",
+      "default": "-",
+      "description": "Astro only. Bubbling event with the new amount as detail."
     }
   ],
   "a11y": [
@@ -108,7 +141,9 @@
         "name": "Nama input tersembunyi yang mengirim angka murni, misalnya 12500000. Kolom yang terlihat tidak punya name.",
         "presets": "Chip nominal cepat di bawah kolom, berlabel singkat (50rb, 1jt, $1K). Memilih chip menghitung angka menuju nominal baru.",
         "presetsLabel": "Nama aksesibel grup chip.",
-        "id": "Id kolom yang terlihat. Dibuat otomatis bila kosong."
+        "id": "Id kolom yang terlihat. Dibuat otomatis bila kosong.",
+        "bind:value / [(value)]": "Svelte dan Angular. Binding dua arah untuk nominal. Svelte juga menerima onValueChange; Angular memancarkan valueChange.",
+        "markas-change": "Khusus Astro. Event menggelembung dengan nominal baru sebagai detail."
       },
       "a11y": [
         "Label terhubung ke kolom, dan simbol mata uang, petunjuk, serta error dibacakan lewat aria-describedby.",
@@ -126,5 +161,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

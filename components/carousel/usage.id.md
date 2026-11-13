@@ -56,6 +56,68 @@ import { Carousel } from "@/components/markas/Carousel";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Carousel from "$lib/components/markas/Carousel.svelte";
+
+  const slides = ["Plan your week", "Share with your team", "Track progress"];
+</script>
+
+<Carousel label="Product tour" showDots items={slides}>
+  {#snippet slide(title, index)}
+    <div class="h-40 rounded-xl bg-subtle p-5">{index + 1}. {title}</div>
+  {/snippet}
+</Carousel>
+```
+
+Svelte, Astro, dan Angular menerima slide sebagai `items` dan merender tiap item lewat snippet, function child, atau `ng-template`. Svelte membaca `{index}` di atribut biasa sebagai ekspresi, jadi tulis template label di dalam kurung kurawal: `slideLabel={"Slide {index} dari {total}"}`.
+
+## Astro
+
+```astro
+---
+import Carousel from "@/components/markas/Carousel.astro";
+
+const slides = ["Plan your week", "Share with your team", "Track progress"];
+---
+
+<Carousel label="Product tour" showDots items={slides}>
+  {
+    (title: string, index: number) => (
+      <div class="h-40 rounded-xl bg-subtle p-5">{index + 1}. {title}</div>
+    )
+  }
+</Carousel>
+```
+
+Setiap carousel adalah custom element kecil, jadi tetap jalan setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Carousel } from "./markas/carousel.component";
+
+@Component({
+  selector: "app-example",
+  imports: [Carousel],
+  template: `
+    <markas-carousel label="Product tour" showDots [items]="slides">
+      <ng-template let-title let-index="index">
+        <div class="h-40 rounded-xl bg-subtle p-5">
+          {{ index + 1 }}. {{ title }}
+        </div>
+      </ng-template>
+    </markas-carousel>
+  `,
+})
+export class Example {
+  slides = ["Plan your week", "Share with your team", "Track progress"];
+}
+```
+
 ## Catatan
 
 - Slide digulir dengan CSS scroll snap, jadi swipe sentuh dan trackpad langsung berfungsi.

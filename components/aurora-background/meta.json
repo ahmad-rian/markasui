@@ -6,9 +6,30 @@
   "tags": ["background", "aurora", "gradient", "hero", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "aurora-background.blade.php", "deps": [] },
-    "react": { "file": "AuroraBackground.tsx", "deps": [] },
-    "vue": { "file": "AuroraBackground.vue", "deps": [] }
+    "blade": {
+      "file": "aurora-background.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "AuroraBackground.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "AuroraBackground.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "AuroraBackground.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "AuroraBackground.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "aurora-background.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -25,7 +46,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the glow."
     }
@@ -66,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

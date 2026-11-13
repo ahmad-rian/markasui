@@ -57,6 +57,64 @@ import Toaster, { toast } from "@/components/markas/Toast.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Toaster, { toast } from "$lib/components/markas/Toast.svelte";
+</script>
+
+<Button onclick={() => toast({ title: "Changes saved", variant: "success" })}>
+  Save
+</Button>
+<Toaster />
+```
+
+## Astro
+
+```astro
+---
+import Toaster from "@/components/markas/Toast.astro";
+---
+
+<!-- In the layout -->
+<Toaster />
+
+<script>
+  // Anywhere in the browser
+  window.dispatchEvent(
+    new CustomEvent("markas-toast", {
+      detail: { title: "Changes saved", variant: "success" },
+    }),
+  );
+</script>
+```
+
+Komponen Astro tidak bisa mengekspor fungsi ke halaman, jadi Toaster Astro mendengarkan event `markas-toast` yang sama dengan Blade. Prop `initial` menampilkan toast langsung.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Toaster, toast } from "./markas/toast.component";
+
+@Component({
+  selector: "app-root",
+  imports: [Button, Toaster],
+  template: `
+    <button markas-button (click)="save()">Save</button>
+    <markas-toaster />
+  `,
+})
+export class App {
+  save() {
+    toast({ title: "Changes saved", variant: "success" });
+  }
+}
+```
+
 ## Catatan
 
 - Detail toast: `title`, `description`, `variant` (`default`, `success`, `danger`), dan `duration` dalam milidetik (default 5000, `0` berarti tetap tampil sampai ditutup).

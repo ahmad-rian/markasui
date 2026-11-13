@@ -8,7 +8,10 @@
   "frameworks": {
     "blade": { "file": "typing-text.blade.php", "deps": ["alpinejs"] },
     "react": { "file": "TypingText.tsx", "deps": [] },
-    "vue": { "file": "TypingText.vue", "deps": [] }
+    "vue": { "file": "TypingText.vue", "deps": [] },
+    "svelte": { "file": "TypingText.svelte", "deps": [] },
+    "astro": { "file": "TypingText.astro", "deps": [] },
+    "angular": { "file": "typing-text.component.ts", "deps": [] }
   },
   "props": [
     {
@@ -63,6 +66,7 @@
     ]
   },
   "addedAt": "2026-11-05",
+  "updatedAt": "2026-11-11",
   "i18n": {
     "id": {
       "description": "Teks yang mengetik, berhenti, lalu menghapus kata dari daftar secara bergantian, dengan kursor berkedip. Berhenti saat di luar layar.",

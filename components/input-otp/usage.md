@@ -47,6 +47,68 @@ const code = ref("");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import InputOTP from "$lib/components/markas/InputOTP.svelte";
+
+  let code = $state("");
+</script>
+
+<InputOTP
+  bind:value={code}
+  name="code"
+  label="Verification code"
+  oncomplete={(value) => verify(value)}
+/>
+```
+
+## Astro
+
+```astro
+---
+import InputOTP from "@/components/markas/InputOTP.astro";
+---
+
+<InputOTP name="code" label="Verification code" />
+
+<script>
+  document.addEventListener("markas-complete", (event) => {
+    verify((event as CustomEvent<string>).detail);
+  });
+</script>
+```
+
+One small script per page handles every field. Like Blade, the fieldset dispatches `markas-change` and `markas-complete` events with the code in `detail`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { InputOTP } from "./markas/input-otp.component";
+
+@Component({
+  selector: "app-verify",
+  imports: [InputOTP],
+  template: `
+    <markas-input-otp
+      [(value)]="code"
+      name="code"
+      label="Verification code"
+      (complete)="verify($event)"
+    />
+  `,
+})
+export class Verify {
+  readonly code = signal("");
+
+  verify(code: string) {
+    // Send the code to your API.
+  }
+}
+```
+
 ## Notes
 
 - The boxes accept digits only. Pasting a full code fills every box, even with spaces or dashes in it.

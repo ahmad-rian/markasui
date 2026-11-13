@@ -17,6 +17,18 @@
     "vue": {
       "file": "Breadcrumb.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Breadcrumb.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Breadcrumb.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "breadcrumb.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -66,5 +78,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

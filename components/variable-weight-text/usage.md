@@ -29,6 +29,64 @@ import { VariableWeightText } from "@/components/markas/VariableWeightText";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import VariableWeightText from "$lib/components/markas/VariableWeightText.svelte";
+</script>
+
+<p class="text-6xl">
+  <VariableWeightText text="Proximity" radius={100} min={200} max={900} />
+</p>
+<VariableWeightText text="markasui" wave class="text-7xl" />
+```
+
+## Astro
+
+```astro
+---
+import VariableWeightText from "@/components/markas/VariableWeightText.astro";
+---
+
+<p class="text-6xl">
+  <VariableWeightText text="Proximity" radius={100} min={200} max={900} />
+</p>
+<VariableWeightText text="markasui" wave class="text-7xl" />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { VariableWeightText } from "./markas/variable-weight-text.component";
+
+@Component({
+  selector: "app-wordmark",
+  imports: [VariableWeightText],
+  template: `
+    <p class="text-6xl">
+      <span
+        markas-variable-weight-text
+        text="Proximity"
+        radius="100"
+        min="200"
+        max="900"
+      ></span>
+    </p>
+    <span
+      markas-variable-weight-text
+      text="markasui"
+      wave
+      class="text-7xl"
+    ></span>
+  `,
+})
+export class Wordmark {}
+```
+
+Angular uses an attribute selector on a span: `<span markas-variable-weight-text>`.
+
 ## Notes
 
 - Needs a variable font with a `wght` axis, such as Inter, Geist, Recursive, or the system font on macOS and iOS. With a static font, the weight jumps between the weights you load.

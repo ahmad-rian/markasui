@@ -51,6 +51,72 @@ const amount = ref<number | null>(100000);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import CurrencyInput from "$lib/components/markas/CurrencyInput.svelte";
+
+  let amount = $state<number | null>(100000);
+</script>
+
+<CurrencyInput
+  label="Top-up amount"
+  name="amount"
+  hint="Minimum Rp10.000"
+  min={10000}
+  bind:value={amount}
+  presets={[50000, 100000, 250000, 500000]}
+/>
+```
+
+## Astro
+
+```astro
+---
+import CurrencyInput from "@/components/markas/CurrencyInput.astro";
+---
+
+<CurrencyInput
+  label="Top-up amount"
+  name="amount"
+  hint="Minimum Rp10.000"
+  min={10000}
+  defaultValue={100000}
+  presets={[50000, 100000, 250000, 500000]}
+/>
+```
+
+A small custom element formats while typing and fills the hidden input. It dispatches a bubbling `markas-change` event with the amount (or null) as detail.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { CurrencyInput } from "./markas/currency-input.component";
+
+@Component({
+  selector: "app-top-up",
+  imports: [CurrencyInput],
+  template: `
+    <markas-currency-input
+      label="Top-up amount"
+      name="amount"
+      hint="Minimum Rp10.000"
+      [min]="10000"
+      [(value)]="amount"
+      [presets]="presets"
+    />
+  `,
+})
+export class TopUp {
+  amount = signal<number | null>(100000);
+  presets = [50000, 100000, 250000, 500000];
+}
+```
+
+`id`, `name`, `placeholder`, `aria-label`, and `class` land on the visible field.
+
 ## Notes
 
 - IDR is the default: `Rp` prefix, dot thousands (12.500.000), no decimals. `currency="USD"` switches to `$`, comma thousands, and up to two decimals (1,250.50).

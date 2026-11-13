@@ -17,6 +17,18 @@
     "vue": {
       "file": "Drawer.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Drawer.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Drawer.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "drawer.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -34,15 +46,15 @@
     },
     {
       "name": "trigger",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Element that opens the drawer when clicked."
+      "description": "Element that opens the drawer when clicked. Angular: an element with the trigger attribute."
     },
     {
       "name": "footer",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Action area. Wrapped in form method=dialog, so a type=submit button closes the drawer."
+      "description": "Action area. Wrapped in form method=dialog, so a type=submit button closes the drawer. Angular: an element with the footer attribute."
     },
     {
       "name": "id",
@@ -55,6 +67,12 @@
       "type": "string",
       "default": "Close",
       "description": "Accessible label of the close button."
+    },
+    {
+      "name": "closed",
+      "type": "output<void>",
+      "default": "-",
+      "description": "Angular only. Emits when the drawer closes."
     }
   ],
   "a11y": [
@@ -78,10 +96,11 @@
       "props": {
         "title": "Judul drawer, dipakai juga sebagai aria-labelledby.",
         "side": "Sisi layar tempat drawer muncul.",
-        "trigger": "Elemen yang membuka drawer saat diklik.",
-        "footer": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup drawer.",
+        "trigger": "Elemen yang membuka drawer saat diklik. Angular: elemen dengan atribut trigger.",
+        "footer": "Area aksi. Dibungkus form method=dialog, jadi tombol type=submit menutup drawer. Angular: elemen dengan atribut footer.",
         "id": "Id dialog. Bisa dipakai untuk membuka drawer dari luar lewat showModal().",
-        "closeLabel": "Label aksesibel tombol tutup. Isi \"Tutup\" untuk situs berbahasa Indonesia."
+        "closeLabel": "Label aksesibel tombol tutup. Isi \"Tutup\" untuk situs berbahasa Indonesia.",
+        "closed": "Khusus Angular. Dipancarkan saat drawer tertutup."
       },
       "a11y": [
         "Memakai dialog dan showModal(), jadi fokus terkunci di dalam drawer dan konten di belakangnya inert.",
@@ -98,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

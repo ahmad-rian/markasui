@@ -51,6 +51,80 @@ import { Button } from "@/components/markas/Button";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import AlertDialog from "$lib/components/markas/AlertDialog.svelte";
+  import Button from "$lib/components/markas/Button.svelte";
+</script>
+
+<AlertDialog
+  title="Delete your account?"
+  variant="danger"
+  actionLabel="Delete account"
+  onaction={deleteAccount}
+>
+  {#snippet trigger()}
+    <Button variant="danger">Delete account</Button>
+  {/snippet}
+
+  All of your projects and invoices will be removed. You cannot undo this
+  action.
+</AlertDialog>
+```
+
+## Astro
+
+```astro
+---
+import AlertDialog from "@/components/markas/AlertDialog.astro";
+import Button from "@/components/markas/Button.astro";
+---
+
+<AlertDialog
+  title="Delete your account?"
+  variant="danger"
+  actionLabel="Delete account"
+>
+  <Button slot="trigger" variant="danger">Delete account</Button>
+
+  All of your projects and invoices will be removed. You cannot undo this
+  action.
+</AlertDialog>
+```
+
+A small bundled script opens every alert dialog on the page and dispatches a bubbling `markas-action` or `markas-cancel` event from the dialog when it closes.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { AlertDialog } from "./markas/alert-dialog.component";
+import { Button } from "./markas/button.component";
+
+@Component({
+  selector: "app-delete-account",
+  imports: [AlertDialog, Button],
+  template: `
+    <markas-alert-dialog
+      title="Delete your account?"
+      variant="danger"
+      actionLabel="Delete account"
+      (action)="deleteAccount()"
+    >
+      <button markas-button trigger variant="danger">Delete account</button>
+
+      All of your projects and invoices will be removed. You cannot undo this
+      action.
+    </markas-alert-dialog>
+  `,
+})
+export class DeleteAccount {
+  deleteAccount() {}
+}
+```
+
 ## Notes
 
 - Unlike Modal, clicking the backdrop does not close the dialog. The user must choose cancel or the action; Escape counts as cancel.

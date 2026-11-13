@@ -6,9 +6,30 @@
   "tags": ["pin", "favorites", "list", "reorder", "flip"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "pinned-list.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "PinnedList.tsx", "deps": [] },
-    "vue": { "file": "PinnedList.vue", "deps": [] }
+    "blade": {
+      "file": "pinned-list.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "PinnedList.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "PinnedList.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "PinnedList.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "PinnedList.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "pinned-list.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -70,6 +91,12 @@
       "type": "string",
       "default": "{label} unpinned",
       "description": "Announced in the live region after unpinning."
+    },
+    {
+      "name": "pinnedChange",
+      "type": "output<string[]>",
+      "default": "-",
+      "description": "Angular only. Emits the pinned values after every change; supports [(pinned)]. Svelte uses bind:pinned or onPinnedChange, Astro dispatches change."
     }
   ],
   "a11y": [
@@ -101,7 +128,8 @@
         "pinnedLabel": "Judul dan nama daftar grup tersemat.",
         "allLabel": "Judul dan nama daftar baris lainnya.",
         "pinnedMessage": "Diumumkan di live region setelah menyematkan.",
-        "unpinnedMessage": "Diumumkan di live region setelah melepas sematan."
+        "unpinnedMessage": "Diumumkan di live region setelah melepas sematan.",
+        "pinnedChange": "Khusus Angular. Memancarkan nilai yang disematkan setiap kali berubah; mendukung [(pinned)]. Svelte memakai bind:pinned atau onPinnedChange, Astro memancarkan change."
       },
       "a11y": [
         "Setiap tombol pin adalah toggle button dengan aria-pressed dan nama tetap dari pinLabel.",
@@ -119,5 +147,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

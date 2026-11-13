@@ -6,9 +6,30 @@
   "tags": ["cards", "scroll", "sticky", "stack", "features", "onboarding"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "stacking-cards.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "StackingCards.tsx", "deps": [] },
-    "vue": { "file": "StackingCards.vue", "deps": [] }
+    "blade": {
+      "file": "stacking-cards.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "StackingCards.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "StackingCards.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "StackingCards.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "StackingCards.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "stacking-cards.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -75,5 +96,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

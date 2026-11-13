@@ -17,6 +17,18 @@
     "vue": {
       "file": "Pagination.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Pagination.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Pagination.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "pagination.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -105,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

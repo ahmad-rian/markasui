@@ -1,0 +1,11 @@
+---
+import CodeBlock from "../../components/code-block/CodeBlock.astro";
+
+const code = [
+  "pnpm add markasui",
+  "pnpm markasui init",
+  "pnpm markasui add carousel",
+].join("\n");
+---
+
+<CodeBlock code={code} title="Terminal" />

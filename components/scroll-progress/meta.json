@@ -6,9 +6,30 @@
   "tags": ["scroll", "progress", "reading", "indicator", "bar"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "scroll-progress.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ScrollProgress.tsx", "deps": [] },
-    "vue": { "file": "ScrollProgress.vue", "deps": [] }
+    "blade": {
+      "file": "scroll-progress.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ScrollProgress.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ScrollProgress.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ScrollProgress.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ScrollProgress.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "scroll-progress.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -66,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

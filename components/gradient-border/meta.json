@@ -6,9 +6,30 @@
   "tags": ["border", "gradient", "conic", "glow", "card", "button", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "gradient-border.blade.php", "deps": [] },
-    "react": { "file": "GradientBorder.tsx", "deps": [] },
-    "vue": { "file": "GradientBorder.vue", "deps": [] }
+    "blade": {
+      "file": "gradient-border.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "GradientBorder.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "GradientBorder.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "GradientBorder.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "GradientBorder.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "gradient-border.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -43,7 +64,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content inside the border, on a bg-surface panel."
     }
@@ -87,5 +108,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

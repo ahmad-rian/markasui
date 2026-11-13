@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "file-dropzone.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "FileDropzone.tsx", "deps": [] },
-    "vue": { "file": "FileDropzone.vue", "deps": [] }
+    "blade": {
+      "file": "file-dropzone.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "FileDropzone.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "FileDropzone.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "FileDropzone.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "FileDropzone.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "file-dropzone.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -114,6 +135,18 @@
       "type": "string",
       "default": "Only {max} files allowed",
       "description": "Error for files past maxFiles. {max} is the limit."
+    },
+    {
+      "name": "(filesChange)",
+      "type": "output<File[]>",
+      "default": "-",
+      "description": "Angular only. Emits the valid picked files every time the list changes. Svelte uses onFilesChange like React."
+    },
+    {
+      "name": "markas-change / setProgress()",
+      "type": "CustomEvent<File[]> / method",
+      "default": "-",
+      "description": "Astro only. Bubbling event with the valid files as detail, and a method on markas-file-dropzone that shows upload progress for a file name."
     }
   ],
   "a11y": [
@@ -151,7 +184,9 @@
         "removeLabel": "Nama aksesibel tiap tombol hapus. {name} adalah nama file.",
         "tooLargeLabel": "Error untuk file di atas maxSize. {size} adalah maxSize yang sudah diformat, misalnya 5 MB.",
         "typeLabel": "Error untuk file yang tidak cocok dengan accept.",
-        "tooManyLabel": "Error untuk file yang melewati maxFiles. {max} adalah batasnya."
+        "tooManyLabel": "Error untuk file yang melewati maxFiles. {max} adalah batasnya.",
+        "(filesChange)": "Khusus Angular. Memancarkan file valid yang dipilih setiap kali daftar berubah. Svelte memakai onFilesChange seperti React.",
+        "markas-change / setProgress()": "Khusus Astro. Event menggelembung dengan file valid sebagai detail, dan method di markas-file-dropzone untuk menampilkan progres unggah sebuah nama file."
       },
       "a11y": [
         "Area jatuh adalah label yang membungkus input file native tersembunyi, sehingga klik, Enter, atau Space membuka pemilih file dan ajakannya menjadi nama input.",
@@ -169,5 +204,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

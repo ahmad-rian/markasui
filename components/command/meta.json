@@ -25,6 +25,18 @@
     "vue": {
       "file": "Command.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Command.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Command.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "command.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -36,9 +48,9 @@
     },
     {
       "name": "trigger",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Element that opens the palette on click, usually a button."
+      "description": "Element that opens the palette on click, usually a button. Angular: an element with the trigger attribute."
     },
     {
       "name": "hotkey",
@@ -74,13 +86,19 @@
       "name": "onSelect / @select / markas-select",
       "type": "(value: string) => void",
       "default": "-",
-      "description": "Called when a command is chosen, with its value (or label when value is empty). Blade dispatches a markas-select event."
+      "description": "Called when a command is chosen, with its value (or label when value is empty). Svelte: onselect. Blade and Astro dispatch a bubbling markas-select event with the value in detail."
     },
     {
       "name": "id",
       "type": "string",
       "default": "auto",
       "description": "Dialog id. The list and options use it as a prefix."
+    },
+    {
+      "name": "selected",
+      "type": "output<string>",
+      "default": "-",
+      "description": "Angular only. Emits the value (or label) of the chosen command."
     }
   ],
   "a11y": [
@@ -103,14 +121,15 @@
       "description": "Daftar perintah yang bisa dicari di dalam dialog modal, tersaring saat mengetik, dengan navigasi panah dan pintasan Ctrl+K atau Cmd+K opsional.",
       "props": {
         "items": "Daftar perintah. Item dikelompokkan per group sesuai urutan kemunculan pertama. Item dengan href dirender sebagai link.",
-        "trigger": "Elemen yang membuka palet saat diklik, biasanya tombol.",
+        "trigger": "Elemen yang membuka palet saat diklik, biasanya tombol. Angular: elemen dengan atribut trigger.",
         "hotkey": "Ctrl+K atau Cmd+K di mana saja pada halaman membuka dan menutup palet.",
         "placeholderLabel": "Placeholder kolom pencarian. Default \"Type a command or search...\", isi misalnya \"Ketik perintah atau cari...\".",
         "emptyLabel": "Pesan saat tidak ada perintah yang cocok. Default \"No results found.\", isi misalnya \"Tidak ada hasil.\".",
         "searchLabel": "Nama aksesibel kolom pencarian. Isi misalnya \"Cari perintah\".",
         "dialogLabel": "Nama aksesibel dialog dan daftar hasil. Isi misalnya \"Palet perintah\".",
-        "onSelect / @select / markas-select": "Dipanggil saat perintah dipilih dengan value-nya (atau label bila value kosong). Blade memancarkan event markas-select.",
-        "id": "Id dialog. Daftar dan opsi memakainya sebagai awalan."
+        "onSelect / @select / markas-select": "Dipanggil saat perintah dipilih dengan value-nya (atau label bila value kosong). Svelte: onselect. Blade dan Astro memancarkan event markas-select (bubble) dengan value di detail.",
+        "id": "Id dialog. Daftar dan opsi memakainya sebagai awalan.",
+        "selected": "Khusus Angular. Dipancarkan dengan value (atau label) perintah yang dipilih."
       },
       "a11y": [
         "Dialog modal native: fokus pindah ke kolom pencarian saat dibuka, tertahan di dalam dialog, dan kembali ke pemicu saat ditutup.",
@@ -127,5 +146,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

@@ -17,6 +17,18 @@
     "vue": {
       "file": "Kbd.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Kbd.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Kbd.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "kbd.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -40,7 +52,7 @@
     },
     {
       "name": "children / slot",
-      "type": "ReactNode / slot",
+      "type": "ReactNode / slot / snippet",
       "default": "-",
       "description": "Content of a single keycap when keys is empty."
     }
@@ -82,5 +94,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

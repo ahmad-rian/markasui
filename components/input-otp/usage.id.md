@@ -50,6 +50,74 @@ const code = ref("");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import InputOTP from "$lib/components/markas/InputOTP.svelte";
+
+  let kode = $state("");
+</script>
+
+<InputOTP
+  bind:value={kode}
+  name="code"
+  label="Kode verifikasi"
+  digitLabel="Digit {index} dari {length}"
+  oncomplete={(value) => verify(value)}
+/>
+```
+
+## Astro
+
+```astro
+---
+import InputOTP from "@/components/markas/InputOTP.astro";
+---
+
+<InputOTP
+  name="code"
+  label="Kode verifikasi"
+  digitLabel="Digit {index} dari {length}"
+/>
+
+<script>
+  document.addEventListener("markas-complete", (event) => {
+    verify((event as CustomEvent<string>).detail);
+  });
+</script>
+```
+
+Satu script kecil per halaman melayani semua kolom. Seperti Blade, fieldset memancarkan event `markas-change` dan `markas-complete` dengan kode di `detail`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { InputOTP } from "./markas/input-otp.component";
+
+@Component({
+  selector: "app-verifikasi",
+  imports: [InputOTP],
+  template: `
+    <markas-input-otp
+      [(value)]="kode"
+      name="code"
+      label="Kode verifikasi"
+      digitLabel="Digit {index} dari {length}"
+      (complete)="verify($event)"
+    />
+  `,
+})
+export class Verifikasi {
+  readonly kode = signal("");
+
+  verify(kode: string) {
+    // Kirim kode ke API.
+  }
+}
+```
+
 ## Catatan
 
 - Kotak hanya menerima digit. Menempel kode lengkap mengisi semua kotak, walaupun ada spasi atau tanda hubung.

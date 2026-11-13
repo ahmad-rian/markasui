@@ -17,6 +17,18 @@
     "vue": {
       "file": "Badge.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Badge.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Badge.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "badge.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -68,5 +80,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

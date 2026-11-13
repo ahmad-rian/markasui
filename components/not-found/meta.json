@@ -6,9 +6,30 @@
   "tags": ["404", "error", "not found", "page", "section", "empty state"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "not-found.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "NotFound.tsx", "deps": [] },
-    "vue": { "file": "NotFound.vue", "deps": [] }
+    "blade": {
+      "file": "not-found.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "NotFound.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "NotFound.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "NotFound.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "NotFound.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "not-found.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -126,5 +147,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

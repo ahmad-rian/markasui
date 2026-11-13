@@ -17,6 +17,18 @@
     "vue": {
       "file": "HoldButton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "HoldButton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "HoldButton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "hold-button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -45,10 +57,10 @@
       "description": "Hidden hint linked with aria-describedby."
     },
     {
-      "name": "onComplete / @complete / x-on:complete",
+      "name": "onComplete / @complete / oncomplete / (complete)",
       "type": "() => void",
       "default": "-",
-      "description": "Fires once the hold reaches the full duration. Blade dispatches a complete DOM event."
+      "description": "Fires once the hold reaches the full duration (React, Vue, Svelte, Angular). Blade and Astro dispatch a bubbling complete DOM event."
     }
   ],
   "a11y": [
@@ -74,7 +86,7 @@
         "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
         "duration": "Lama tombol harus ditahan, dalam milidetik.",
         "holdLabel": "Petunjuk tersembunyi yang ditautkan lewat aria-describedby.",
-        "onComplete / @complete / x-on:complete": "Dipicu saat tahanan mencapai durasi penuh. Blade mengirim event DOM complete."
+        "onComplete / @complete / oncomplete / (complete)": "Dipicu saat tahanan mencapai durasi penuh (React, Vue, Svelte, Angular). Blade dan Astro mengirim event DOM complete yang bubble."
       },
       "a11y": [
         "Menahan Spasi atau Enter sama seperti menahan pointer, melepas tombol membatalkan.",
@@ -91,5 +103,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { frameworks, openFixture, type Framework } from "./helpers";
+import {
+  frameworks,
+  frameworksFor,
+  openFixture,
+  type Framework,
+} from "./helpers";
 
 /** Fixture utama, keyframe yang dipakai, dan tombol pertama di kontennya. */
 const backgrounds = [
@@ -91,8 +96,10 @@ test("stars-background places the same stars in Blade, React, and Vue", async ({
   };
   const react = await layout("react");
   expect(react).toHaveLength(120);
-  expect(await layout("blade")).toEqual(react);
-  expect(await layout("vue")).toEqual(react);
+  for (const framework of frameworksFor("stars-background").filter(
+    (fw) => fw !== "react",
+  ))
+    expect(await layout(framework), framework).toEqual(react);
 });
 
 test("grid-pattern and ripple-background place cells and rings the same in every framework", async ({
@@ -112,7 +119,7 @@ test("grid-pattern and ripple-background place cells and rings the same in every
     };
     const react = await boxes("react");
     expect(react.length).toBeGreaterThan(0);
-    expect(await boxes("blade")).toEqual(react);
-    expect(await boxes("vue")).toEqual(react);
+    for (const framework of frameworksFor(name).filter((fw) => fw !== "react"))
+      expect(await boxes(framework), `${name} ${framework}`).toEqual(react);
   }
 });

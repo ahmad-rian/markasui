@@ -24,6 +24,18 @@
     "vue": {
       "file": "ContextMenu.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "ContextMenu.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ContextMenu.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "context-menu.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -35,9 +47,9 @@
     },
     {
       "name": "children / slot",
-      "type": "ReactNode / slot",
+      "type": "ReactNode / slot / snippet",
       "default": "-",
-      "description": "Content of the trigger area. Right-clicking anywhere in it opens the menu."
+      "description": "Content of the trigger area. Right-clicking anywhere in it opens the menu. Angular: the projected content."
     },
     {
       "name": "menuLabel",
@@ -62,6 +74,12 @@
       "type": "string",
       "default": "auto",
       "description": "Menu panel id. The hint uses this id with a -hint suffix."
+    },
+    {
+      "name": "selected",
+      "type": "output<string>",
+      "default": "-",
+      "description": "Angular only. Emits the item value (or label) when an item is selected. Svelte uses the onselect prop, Astro dispatches a markas-select event like Blade."
     }
   ],
   "a11y": [
@@ -84,11 +102,12 @@
       "description": "Menu yang terbuka saat area diklik kanan atau Shift+F10 ditekan, tampil di posisi kursor lewat Popover API dengan keyboard sesuai WAI-ARIA Menu.",
       "props": {
         "items": "Daftar item menu. Item dengan href dirender sebagai link, separator menjadi garis pemisah.",
-        "children / slot": "Isi area pemicu. Klik kanan di mana saja di dalamnya membuka menu.",
+        "children / slot": "Isi area pemicu. Klik kanan di mana saja di dalamnya membuka menu. Angular: konten yang diproyeksikan.",
         "menuLabel": "Nama aksesibel panel menu. Default \"Context menu\", isi misalnya \"Menu konteks\".",
         "hintLabel": "Petunjuk pembaca layar yang ditautkan ke area lewat aria-describedby. Isi misalnya \"Tekan Shift+F10 untuk membuka menu konteks\".",
         "onSelect / @select / markas-select": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select.",
-        "id": "Id panel menu. Petunjuk memakai id ini dengan akhiran -hint."
+        "id": "Id panel menu. Petunjuk memakai id ini dengan akhiran -hint.",
+        "selected": "Khusus Angular. Dipancarkan dengan value item (atau label) saat item dipilih. Svelte memakai prop onselect, Astro memancarkan event markas-select seperti Blade."
       },
       "a11y": [
         "Area pemicu bisa difokus (tabindex=0) dan dideskripsikan oleh petunjuk tersembunyi tentang Shift+F10.",
@@ -105,5 +124,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

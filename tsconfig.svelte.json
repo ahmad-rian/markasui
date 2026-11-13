@@ -8,5 +8,6 @@
     "playground/src/svelte.ts",
     "env.d.ts",
     "tests/unit/setup.ts"
-  ]
+  ],
+  "exclude": ["node_modules", "playground/public"]
 }

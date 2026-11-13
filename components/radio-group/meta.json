@@ -6,9 +6,30 @@
   "tags": ["radio", "radio-group", "form", "fieldset", "option"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "radio-group.blade.php", "deps": [] },
-    "react": { "file": "RadioGroup.tsx", "deps": [] },
-    "vue": { "file": "RadioGroup.vue", "deps": [] }
+    "blade": {
+      "file": "radio-group.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "RadioGroup.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "RadioGroup.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "RadioGroup.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "RadioGroup.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "radio-group.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -30,10 +51,10 @@
       "description": "Group title, rendered as the legend."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value",
       "type": "string",
       "default": "-",
-      "description": "Selected option. Blade uses value, React value or defaultValue, Vue v-model."
+      "description": "Selected option. Blade and Astro use value, React value or defaultValue, Vue v-model, Svelte bind:value, Angular value or [(value)]."
     },
     {
       "name": "onValueChange",
@@ -74,10 +95,10 @@
         "name": "Atribut name untuk semua radio di grup.",
         "options": "Daftar opsi. Value dipakai juga sebagai bagian id.",
         "label": "Judul grup, dirender sebagai legend.",
-        "value / defaultValue / v-model": "Opsi terpilih. Blade memakai value, React value atau defaultValue, Vue v-model.",
         "onValueChange": "Khusus React. Dipanggil dengan value opsi yang baru dipilih.",
         "orientation": "Susunan opsi: bertumpuk atau berjajar.",
-        "id": "Id fieldset, juga awalan id tiap radio. Dibuat otomatis kalau kosong."
+        "id": "Id fieldset, juga awalan id tiap radio. Dibuat otomatis kalau kosong.",
+        "value / defaultValue / v-model / bind:value": "Opsi terpilih. Blade dan Astro memakai value, React value atau defaultValue, Vue v-model, Svelte bind:value, Angular value atau [(value)]."
       },
       "a11y": [
         "Memakai fieldset dan legend sehingga judul grup dibacakan saat masuk ke radio.",
@@ -92,5 +113,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

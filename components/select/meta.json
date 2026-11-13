@@ -6,9 +6,30 @@
   "tags": ["select", "form", "dropdown", "option", "field"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "select.blade.php", "deps": [] },
-    "react": { "file": "Select.tsx", "deps": [] },
-    "vue": { "file": "Select.vue", "deps": [] }
+    "blade": {
+      "file": "select.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Select.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Select.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Select.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Select.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "select.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -36,10 +57,10 @@
       "description": "Native option (and optgroup) elements."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value",
       "type": "string",
       "default": "-",
-      "description": "Selected value. Blade uses the selected attribute on an option, React value or defaultValue, Vue v-model."
+      "description": "Selected value. Blade and Astro use the selected attribute on an option, React value or defaultValue, Vue v-model, Svelte bind:value, Angular value or [(value)]."
     },
     {
       "name": "id",
@@ -69,8 +90,8 @@
         "hint": "Teks petunjuk di bawah select. Disembunyikan saat ada error.",
         "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
         "slot / children": "Daftar elemen option (dan optgroup) native.",
-        "value / defaultValue / v-model": "Nilai terpilih. Blade memakai atribut selected di option, React value atau defaultValue, Vue v-model.",
-        "id": "Id select. Dibuat otomatis kalau kosong."
+        "id": "Id select. Dibuat otomatis kalau kosong.",
+        "value / defaultValue / v-model / bind:value": "Nilai terpilih. Blade dan Astro memakai atribut selected di option, React value atau defaultValue, Vue v-model, Svelte bind:value, Angular value atau [(value)]."
       },
       "a11y": [
         "Memakai elemen select native, jadi keyboard dan screen reader bekerja tanpa JavaScript.",
@@ -85,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

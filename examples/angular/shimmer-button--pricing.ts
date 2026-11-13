@@ -1,0 +1,26 @@
+import { Component } from "@angular/core";
+import { ShimmerButton } from "../../components/shimmer-button/shimmer-button.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [ShimmerButton],
+  template: `
+    <div
+      class="mx-auto grid w-full max-w-xs gap-5 rounded-xl border border-line bg-surface p-6"
+    >
+      <div class="grid gap-1">
+        <p class="text-sm font-medium text-muted">Pro</p>
+        <p class="text-3xl font-semibold text-ink">
+          $24<span class="text-sm font-normal text-muted"> / month</span>
+        </p>
+      </div>
+      <ul class="grid gap-2 text-sm text-ink">
+        <li>Unlimited projects</li>
+        <li>Priority support</li>
+        <li>Team roles and audit log</li>
+      </ul>
+      <button markas-shimmer-button class="w-full">Upgrade to Pro</button>
+    </div>
+  `,
+})
+export default class ShimmerButtonPricingExample {}

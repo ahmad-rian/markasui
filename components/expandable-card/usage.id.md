@@ -66,6 +66,95 @@ import { ExpandableCard } from "@/components/markas/ExpandableCard";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import ExpandableCard from "$lib/components/markas/ExpandableCard.svelte";
+</script>
+
+<div class="grid grid-cols-2 gap-3">
+  {#each products as product (product.id)}
+    <ExpandableCard title={product.name} description={product.summary}>
+      {#snippet media()}
+        <img src={product.image} alt="" class="size-full object-cover" />
+      {/snippet}
+      {#snippet footer()}
+        <Button>Add to cart</Button>
+      {/snippet}
+      <p class="text-base font-semibold">{product.price}</p>
+    </ExpandableCard>
+  {/each}
+</div>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import ExpandableCard from "@/components/markas/ExpandableCard.astro";
+---
+
+<div class="grid grid-cols-2 gap-3">
+  {
+    products.map((product) => (
+      <ExpandableCard title={product.name} description={product.summary}>
+        <img slot="media" src={product.image} alt="" class="size-full object-cover" />
+        <Button slot="footer">Add to cart</Button>
+        <p class="text-base font-semibold">{product.price}</p>
+      </ExpandableCard>
+    ))
+  }
+</div>
+```
+
+Slot media dirender sekali dan tampil di kartu dan tampilan terbuka. Custom element kecil membuka dialog dan memainkan animasi membesar dan mengecil.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import {
+  ExpandableCard,
+  ExpandableCardMedia,
+} from "./markas/expandable-card.component";
+
+@Component({
+  selector: "app-products",
+  imports: [Button, ExpandableCard, ExpandableCardMedia],
+  template: `
+    @for (product of products; track product.id) {
+      <markas-expandable-card
+        [title]="product.name"
+        [description]="product.summary"
+      >
+        <ng-template markasCardMedia>
+          <img [src]="product.image" alt="" class="size-full object-cover" />
+        </ng-template>
+        <button markas-button footer>Add to cart</button>
+        <p class="text-base font-semibold">{{ product.price }}</p>
+      </markas-expandable-card>
+    }
+  `,
+})
+export class Products {
+  products = [
+    {
+      id: 1,
+      name: "Desk lamp",
+      summary: "Warm light.",
+      image: "/lamp.jpg",
+      price: "$48",
+    },
+  ];
+}
+```
+
+Media ditaruh di `ng-template markasCardMedia` karena tampil dua kali. Elemen dengan atribut `footer` mengisi baris aksi.
+
 ## Catatan
 
 - Satu komponen merender satu kartu beserta dialognya. Susun beberapa kartu di grid atau daftar milikmu.

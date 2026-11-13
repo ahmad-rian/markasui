@@ -69,6 +69,85 @@ const countries = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Combobox from "$lib/components/markas/Combobox.svelte";
+
+  let country = $state("id");
+  const countries = [
+    { value: "au", label: "Australia" },
+    { value: "id", label: "Indonesia" },
+    { value: "jp", label: "Jepang" },
+  ];
+</script>
+
+<Combobox
+  bind:value={country}
+  name="country"
+  label="Negara"
+  placeholder="Cari negara"
+  emptyLabel="Tidak ada hasil"
+  options={countries}
+/>
+```
+
+## Astro
+
+```astro
+---
+import Combobox from "@/components/markas/Combobox.astro";
+
+const countries = [
+  { value: "au", label: "Australia" },
+  { value: "id", label: "Indonesia" },
+  { value: "jp", label: "Jepang" },
+];
+---
+
+<Combobox
+  name="country"
+  label="Negara"
+  placeholder="Cari negara"
+  emptyLabel="Tidak ada hasil"
+  value="id"
+  options={countries}
+/>
+```
+
+Opsi dirender di server. Script kecil yang dibundel (satu custom element per combobox) memfilter, menyorot, dan menempatkan daftar. Mengganti pilihan memancarkan event `markas-change` yang menggelembung dengan value di `event.detail`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Combobox } from "./markas/combobox.component";
+
+@Component({
+  selector: "app-address",
+  imports: [Combobox],
+  template: `
+    <markas-combobox
+      [(value)]="country"
+      name="country"
+      label="Negara"
+      placeholder="Cari negara"
+      emptyLabel="Tidak ada hasil"
+      [options]="countries"
+    />
+  `,
+})
+export class Address {
+  readonly country = signal("id");
+  readonly countries = [
+    { value: "au", label: "Australia" },
+    { value: "id", label: "Indonesia" },
+    { value: "jp", label: "Jepang" },
+  ];
+}
+```
+
 ## Catatan
 
 - Atribut tambahan (`placeholder`, `required`, `disabled`, `class`) jatuh ke input teks yang terlihat. `name` dipasang di input tersembunyi berisi value terpilih, jadi form mengirim `country=id`, bukan labelnya.

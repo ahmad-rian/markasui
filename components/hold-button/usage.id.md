@@ -42,6 +42,73 @@ import HoldButton from "@/components/markas/HoldButton.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import HoldButton from "$lib/components/markas/HoldButton.svelte";
+</script>
+
+<HoldButton
+  variant="danger"
+  duration={2000}
+  holdLabel="Tekan dan tahan untuk mengonfirmasi"
+  oncomplete={deleteWorkspace}
+>
+  Tahan untuk menghapus
+</HoldButton>
+```
+
+## Astro
+
+```astro
+---
+import HoldButton from "@/components/markas/HoldButton.astro";
+---
+
+<HoldButton
+  id="hapus-workspace"
+  variant="danger"
+  duration={2000}
+  holdLabel="Tekan dan tahan untuk mengonfirmasi"
+>
+  Tahan untuk menghapus
+</HoldButton>
+
+<script>
+  document
+    .getElementById("hapus-workspace")
+    ?.addEventListener("complete", () => deleteWorkspace());
+</script>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { HoldButton } from "./markas/hold-button.component";
+
+@Component({
+  selector: "app-dangerzone",
+  imports: [HoldButton],
+  template: `
+    <markas-hold-button
+      variant="danger"
+      [duration]="2000"
+      holdLabel="Tekan dan tahan untuk mengonfirmasi"
+      (complete)="deleteWorkspace()"
+    >
+      Tahan untuk menghapus
+    </markas-hold-button>
+  `,
+})
+export class DangerZone {
+  deleteWorkspace() {}
+}
+```
+
+Astro mengirim event DOM `complete` yang bubble dari tombol. Angular memindahkan `id`, `aria-label`, `title`, dan `class` dari `markas-hold-button` ke tombol di dalamnya.
+
 ## Catatan
 
 - Jalankan aksi di event complete. Klik singkat tidak melakukan apa-apa.

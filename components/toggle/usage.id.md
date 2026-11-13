@@ -38,6 +38,59 @@ const tebal = ref(true);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Toggle from "$lib/components/markas/Toggle.svelte";
+
+  let tebal = $state(true);
+</script>
+
+<Toggle bind:pressed={tebal} aria-label="Tebal">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    aria-hidden="true"
+    ><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zm0 7h7a3.5 3.5 0 0 1 0 7H7z" /></svg
+  >
+</Toggle>
+<Toggle variant="outline">Tandai</Toggle>
+```
+
+## Astro
+
+```astro
+---
+import Toggle from "@/components/markas/Toggle.astro";
+---
+
+<Toggle variant="outline" pressed>Tandai</Toggle>
+```
+
+Script kecil di halaman membalik `aria-pressed` dan `data-state` saat diklik.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Toggle } from "./markas/toggle.component";
+
+@Component({
+  selector: "app-penyunting",
+  imports: [Toggle],
+  template: `
+    <button markas-toggle [(pressed)]="tebal" aria-label="Tebal">B</button>
+    <button markas-toggle variant="outline">Tandai</button>
+  `,
+})
+export class Penyunting {
+  readonly tebal = signal(true);
+}
+```
+
 ## Catatan
 
 - Toggle adalah `<button aria-pressed>`. Tampilannya mengikuti `data-state="on"` atau `"off"`.

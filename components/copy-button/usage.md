@@ -32,6 +32,59 @@ import CopyButton from "@/components/markas/CopyButton.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import CopyButton from "$lib/components/markas/CopyButton.svelte";
+</script>
+
+<CopyButton
+  text="pnpm dlx markasui add button"
+  variant="ghost"
+  size="sm"
+  copyLabel="Copy command"
+/>
+<CopyButton text="sk_live_51Hx9aT2" variant="secondary">Copy key</CopyButton>
+```
+
+## Astro
+
+```astro
+---
+import CopyButton from "@/components/markas/CopyButton.astro";
+---
+
+<CopyButton text="pnpm dlx markasui add button" variant="ghost" size="sm" copyLabel="Copy command" />
+<CopyButton text="sk_live_51Hx9aT2" variant="secondary">Copy key</CopyButton>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { CopyButton } from "./markas/copy-button.component";
+
+@Component({
+  selector: "app-install",
+  imports: [CopyButton],
+  template: `
+    <markas-copy-button
+      text="pnpm dlx markasui add button"
+      variant="ghost"
+      size="sm"
+      copyLabel="Copy command"
+    />
+    <markas-copy-button text="sk_live_51Hx9aT2" variant="secondary">
+      Copy key
+    </markas-copy-button>
+  `,
+})
+export class Install {}
+```
+
+Angular moves `id`, `aria-label`, `title`, and `class` from `markas-copy-button` to the inner button.
+
 ## Notes
 
 - Uses `navigator.clipboard.writeText`, which needs a secure context (https or localhost). If the browser blocks the clipboard, the button stays idle.

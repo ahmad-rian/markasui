@@ -6,9 +6,30 @@
   "tags": ["compare", "before after", "image", "slider", "photo", "redesign"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "image-compare.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ImageCompare.tsx", "deps": [] },
-    "vue": { "file": "ImageCompare.vue", "deps": [] }
+    "blade": {
+      "file": "image-compare.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ImageCompare.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ImageCompare.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ImageCompare.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ImageCompare.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "image-compare.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -52,6 +73,12 @@
       "type": "string",
       "default": "Comparison position",
       "description": "Accessible name of the divider handle."
+    },
+    {
+      "name": "positionChange",
+      "type": "output<number>",
+      "default": "-",
+      "description": "Angular only. Emits the new position in percent; supports [(position)]. Svelte uses bind:position or onPositionChange, Astro dispatches position-change."
     }
   ],
   "a11y": [
@@ -80,7 +107,8 @@
         "step": "Persen yang dipindah per tombol panah. Page Up dan Page Down memindah 10.",
         "beforeLabel": "Teks chip di sisi before.",
         "afterLabel": "Teks chip di sisi after.",
-        "sliderLabel": "Nama aksesibel pegangan pembatas."
+        "sliderLabel": "Nama aksesibel pegangan pembatas.",
+        "positionChange": "Khusus Angular. Memancarkan posisi baru dalam persen; mendukung [(position)]. Svelte memakai bind:position atau onPositionChange, Astro memancarkan position-change."
       },
       "a11y": [
         "Pegangan adalah role slider yang bisa difokus dengan aria-valuenow, aria-valuetext dalam persen, dan aria-orientation.",
@@ -98,5 +126,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

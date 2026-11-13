@@ -1,0 +1,27 @@
+---
+import Button from "../../components/button/Button.astro";
+import Drawer from "../../components/drawer/Drawer.astro";
+import Input from "../../components/input/Input.astro";
+---
+
+<div class="flex justify-center">
+  <Drawer title="Edit profile">
+    <Button slot="trigger">Edit profile</Button>
+
+    <div class="grid gap-4">
+      <Input name="profile-name" label="Display name" placeholder="Budi Santoso" />
+      <Input name="profile-role" label="Job title" placeholder="Product designer" />
+      <Input
+        name="profile-website"
+        type="url"
+        label="Website"
+        placeholder="https://example.com"
+      />
+    </div>
+
+    <Fragment slot="footer">
+      <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+      <Button type="submit" value="save">Save changes</Button>
+    </Fragment>
+  </Drawer>
+</div>

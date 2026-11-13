@@ -17,6 +17,18 @@
     "vue": {
       "file": "RippleButton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "RippleButton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "RippleButton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "ripple-button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -75,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

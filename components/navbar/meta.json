@@ -25,6 +25,18 @@
     "vue": {
       "file": "Navbar.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Navbar.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Navbar.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "navbar.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -130,5 +142,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

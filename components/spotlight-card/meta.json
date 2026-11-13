@@ -6,9 +6,30 @@
   "tags": ["card", "spotlight", "glow", "hover", "pointer", "animation"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "spotlight-card.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "SpotlightCard.tsx", "deps": [] },
-    "vue": { "file": "SpotlightCard.vue", "deps": [] }
+    "blade": {
+      "file": "spotlight-card.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "SpotlightCard.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "SpotlightCard.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "SpotlightCard.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "SpotlightCard.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "spotlight-card.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -59,5 +80,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

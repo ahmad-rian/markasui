@@ -6,9 +6,30 @@
   "tags": ["textarea", "form", "text", "field", "multiline"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "textarea.blade.php", "deps": [] },
-    "react": { "file": "Textarea.tsx", "deps": [] },
-    "vue": { "file": "Textarea.vue", "deps": [] }
+    "blade": {
+      "file": "textarea.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Textarea.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Textarea.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Textarea.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Textarea.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "textarea.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -36,10 +57,10 @@
       "description": "Number of visible rows. Users can still resize the height vertically."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value / [(value)]",
       "type": "string",
       "default": "-",
-      "description": "Initial content. Blade uses the value prop, React value or defaultValue, Vue v-model."
+      "description": "Initial content. Blade and Astro use the value prop, React value or defaultValue, Vue v-model, Svelte bind:value, Angular value or [(value)]."
     },
     {
       "name": "id",
@@ -69,8 +90,8 @@
         "hint": "Teks petunjuk di bawah textarea. Disembunyikan saat ada error.",
         "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
         "rows": "Jumlah baris yang terlihat. Pengguna tetap bisa mengubah tinggi secara vertikal.",
-        "value / defaultValue / v-model": "Isi awal. Blade memakai prop value, React value atau defaultValue, Vue v-model.",
-        "id": "Id textarea. Dibuat otomatis kalau kosong."
+        "id": "Id textarea. Dibuat otomatis kalau kosong.",
+        "value / defaultValue / v-model / bind:value / [(value)]": "Isi awal. Blade dan Astro memakai prop value, React value atau defaultValue, Vue v-model, Svelte bind:value, Angular value atau [(value)]."
       },
       "a11y": [
         "Label terhubung ke textarea lewat atribut for dan id.",
@@ -85,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

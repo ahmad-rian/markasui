@@ -1,0 +1,113 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline-flex items-center gap-1 rounded-lg bg-subtle p-1";
+const item =
+  "inline-flex h-8 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium whitespace-nowrap text-muted transition-colors duration-150 ease-out hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=on]:bg-surface data-[state=on]:text-ink motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0";
+
+type Item = { value: string; label: string; ariaLabel?: string };
+
+type Props = Omit<HTMLAttributes<"div">, "role"> & {
+  items: Item[];
+  label?: string;
+  type?: "single" | "multiple";
+  value?: string | string[];
+};
+
+const {
+  items,
+  label,
+  type = "single",
+  value,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const values = items.map((entry) => entry.value);
+const wanted = Array.isArray(value) ? value : value ? [value] : [];
+const selected = values
+  .filter((entry) => wanted.includes(entry))
+  .slice(0, type === "multiple" ? undefined : 1);
+const tabStop = selected[0] ?? values[0];
+// A slot named after an item value replaces its label, for example an icon.
+const labels = await Promise.all(
+  items.map((entry) =>
+    Astro.slots.has(entry.value) ? Astro.slots.render(entry.value) : null,
+  ),
+);
+---
+
+<div
+  role="group"
+  aria-label={label}
+  data-markas-toggle-group={type}
+  class:list={[root, className]}
+  {...rest}
+>
+  {
+    items.map((entry, index) => {
+      const isOn = selected.includes(entry.value);
+      return (
+        <button
+          type="button"
+          data-value={entry.value}
+          aria-pressed={isOn ? "true" : "false"}
+          data-state={isOn ? "on" : "off"}
+          tabindex={entry.value === tabStop ? "0" : "-1"}
+          aria-label={entry.ariaLabel}
+          class={item}
+        >
+          {labels[index] === null ? entry.label : <Fragment set:html={labels[index]} />}
+        </button>
+      );
+    })
+  }
+</div>
+
+<script>
+  // One set of listeners per page serves every toggle group, including markup added later.
+  const STEPS: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1 };
+
+  const itemsOf = (group: Element) =>
+    Array.from(group.querySelectorAll<HTMLButtonElement>(":scope > button"));
+
+  const groupOf = (target: EventTarget | null) =>
+    target instanceof Element
+      ? target.closest<HTMLElement>("[data-markas-toggle-group]")
+      : null;
+
+  // Roving tabindex: only the last focused or clicked item is in the tab order.
+  function rove(group: Element, current: HTMLButtonElement) {
+    for (const button of itemsOf(group))
+      button.tabIndex = button === current ? 0 : -1;
+  }
+
+  function press(button: HTMLButtonElement, pressed: boolean) {
+    button.setAttribute("aria-pressed", String(pressed));
+    button.dataset.state = pressed ? "on" : "off";
+  }
+
+  document.addEventListener("click", (event) => {
+    const group = groupOf(event.target);
+    const button = (event.target as Element).closest("button");
+    if (!group || !button || button.parentElement !== group) return;
+    const isOn = button.getAttribute("aria-pressed") === "true";
+    if (!isOn && group.dataset.markasToggleGroup !== "multiple")
+      for (const other of itemsOf(group)) press(other, false);
+    press(button, !isOn);
+    rove(group, button);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const group = groupOf(event.target);
+    const step = STEPS[event.key];
+    if (!group || step === undefined) return;
+    event.preventDefault();
+    const buttons = itemsOf(group);
+    const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    const target = buttons[(index + step + buttons.length) % buttons.length];
+    if (!target) return;
+    rove(group, target);
+    target.focus();
+  });
+</script>

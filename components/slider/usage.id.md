@@ -35,6 +35,56 @@ const volume = ref(60);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Slider from "$lib/components/markas/Slider.svelte";
+
+  let volume = $state(60);
+</script>
+
+<Slider bind:value={volume} name="volume" label="Volume suara" />
+<Slider name="budget" label="Anggaran" max={500} step={25} value={250} />
+```
+
+## Astro
+
+```astro
+---
+import Slider from "@/components/markas/Slider.astro";
+---
+
+<Slider name="volume" label="Volume suara" value={60} />
+```
+
+Script kecil di halaman memperbarui isian dan angka saat digeser.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Slider } from "./markas/slider.component";
+
+@Component({
+  selector: "app-suara",
+  imports: [Slider],
+  template: `
+    <markas-slider [(value)]="volume" name="volume" label="Volume suara" />
+    <markas-slider
+      name="budget"
+      label="Anggaran"
+      max="500"
+      step="25"
+      value="250"
+    />
+  `,
+})
+export class Suara {
+  readonly volume = signal(60);
+}
+```
+
 ## Catatan
 
 - Slider adalah `<input type="range">`, jadi nilainya ikut terkirim bersama form dan keyboard bekerja secara native.

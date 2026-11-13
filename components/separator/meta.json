@@ -17,6 +17,18 @@
     "vue": {
       "file": "Separator.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Separator.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Separator.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "separator.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -75,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

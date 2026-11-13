@@ -1,0 +1,20 @@
+---
+import Button from "../../components/button/Button.astro";
+import Command from "../../components/command/Command.astro";
+
+const items = [
+  {
+    group: "Documentation",
+    label: "Getting started",
+    href: "#getting-started",
+  },
+  { group: "Documentation", label: "Installation", href: "#installation" },
+  { group: "Documentation", label: "Theming", href: "#theming" },
+  { group: "Components", label: "Button", href: "#button" },
+  { group: "Components", label: "Modal", href: "#modal" },
+];
+---
+
+<Command items={items}>
+  <Button slot="trigger" variant="ghost">Search documentation</Button>
+</Command>

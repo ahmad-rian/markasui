@@ -17,6 +17,18 @@
     "vue": {
       "file": "Sidebar.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Sidebar.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Sidebar.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "sidebar.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -28,19 +40,19 @@
     },
     {
       "name": "header",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Brand or workspace at the top. In rail mode only the first 32px stay visible."
+      "description": "Brand or workspace at the top. In rail mode only the first 32px stay visible. Angular: <ng-template #header>, since it renders in the sidebar and the mobile dialog."
     },
     {
       "name": "footer",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "User profile at the bottom."
+      "description": "User profile at the bottom. Angular: <ng-template #footer>."
     },
     {
       "name": "children",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Page content shown next to the sidebar."
     },
@@ -60,13 +72,19 @@
       "name": "collapsed",
       "type": "boolean",
       "default": "-",
-      "description": "Icon rail mode. React: controlled with onCollapsedChange. Vue: v-model:collapsed, or a plain value for the uncontrolled initial state. Blade: initial state, changes dispatch markas-collapsed-change."
+      "description": "Icon rail mode. React: controlled with onCollapsedChange. Vue: v-model:collapsed, or a plain value for the uncontrolled initial state. Svelte: bind:collapsed or a plain initial value. Angular: [(collapsed)] or a plain initial value. Blade and Astro: initial state, changes dispatch markas-collapsed-change."
     },
     {
       "name": "defaultCollapsed",
       "type": "boolean",
       "default": "false",
       "description": "Initial rail mode when uncontrolled (React only)."
+    },
+    {
+      "name": "collapsedChange",
+      "type": "output<boolean>",
+      "default": "-",
+      "description": "Angular only. Emits the new rail state when it changes."
     },
     {
       "name": "navLabel",
@@ -120,13 +138,14 @@
       "description": "Sidebar aplikasi dengan grup link, indikator aktif yang meluncur, sub-item yang bisa dibuka, mode rail ikon, dan dialog off-canvas di tata letak sempit.",
       "props": {
         "sections": "Grup link. icon berisi path SVG (d) untuk ikon garis 24px. Item dengan children menjadi tombol buka/tutup.",
-        "header": "Brand atau workspace di atas. Di mode rail hanya 32px pertama yang terlihat.",
-        "footer": "Profil pengguna di bawah.",
+        "header": "Brand atau workspace di atas. Di mode rail hanya 32px pertama yang terlihat. Angular: <ng-template #header>, karena dirender di sidebar dan dialog seluler.",
+        "footer": "Profil pengguna di bawah. Angular: <ng-template #footer>.",
         "children": "Isi halaman yang tampil di samping sidebar.",
         "variant": "default menempel dengan border kanan, floating berupa panel membulat yang mengambang.",
         "breakpoint": "Lebar kontainer mulai sidebar tampil di samping konten: 24rem, 42rem, atau 56rem. Di bawahnya tombol membuka sidebar sebagai dialog.",
-        "collapsed": "Mode rail ikon. React: terkontrol bersama onCollapsedChange. Vue: v-model:collapsed, atau nilai biasa untuk keadaan awal tidak terkontrol. Blade: keadaan awal, perubahan mengirim event markas-collapsed-change.",
+        "collapsed": "Mode rail ikon. React: terkontrol bersama onCollapsedChange. Vue: v-model:collapsed, atau nilai biasa untuk keadaan awal tidak terkontrol. Svelte: bind:collapsed atau nilai awal biasa. Angular: [(collapsed)] atau nilai awal biasa. Blade dan Astro: keadaan awal, perubahan mengirim event markas-collapsed-change.",
         "defaultCollapsed": "Mode rail awal saat tidak terkontrol (hanya React).",
+        "collapsedChange": "Khusus Angular. Dipancarkan dengan keadaan rail baru saat berubah.",
         "navLabel": "Label aksesibel nav dan dialog seluler. Isi \"Sidebar\" atau \"Navigasi samping\" untuk situs berbahasa Indonesia.",
         "collapseLabel": "Label aksesibel tombol rail saat sidebar terbentang. Isi \"Ciutkan sidebar\".",
         "expandLabel": "Label aksesibel tombol rail saat sidebar diciutkan. Isi \"Bentangkan sidebar\".",
@@ -149,5 +168,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

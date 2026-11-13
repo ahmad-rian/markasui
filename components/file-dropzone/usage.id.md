@@ -63,6 +63,71 @@ import { FileDropzone } from "@/components/markas/FileDropzone";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import FileDropzone from "$lib/components/markas/FileDropzone.svelte";
+</script>
+
+<FileDropzone
+  accept="image/*,.pdf"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  maxFiles={4}
+  hint="Images or PDF, up to 5 MB each"
+  {progress}
+  onFilesChange={upload}
+/>
+```
+
+## Astro
+
+```astro
+---
+import FileDropzone from "@/components/markas/FileDropzone.astro";
+---
+
+<FileDropzone
+  name="attachments[]"
+  accept="image/*,.pdf"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  maxFiles={4}
+  hint="Images or PDF, up to 5 MB each"
+/>
+```
+
+Custom element kecil memvalidasi file pilihan, menyimpannya di input native, dan mengirim event `markas-change` yang menggelembung dengan file valid sebagai detail. Tampilkan progres unggah dengan `dropzone.setProgress(name, percent)`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { FileDropzone } from "./markas/file-dropzone.component";
+
+@Component({
+  selector: "app-attachments",
+  imports: [FileDropzone],
+  template: `
+    <markas-file-dropzone
+      name="attachments[]"
+      accept="image/*,.pdf"
+      multiple
+      [maxSize]="5242880"
+      [maxFiles]="4"
+      hint="Images or PDF, up to 5 MB each"
+      [progress]="progress()"
+      (filesChange)="upload($event)"
+    />
+  `,
+})
+export class Attachments {
+  progress = signal<Record<string, number>>({});
+  upload(files: File[]) {}
+}
+```
+
 ## Catatan
 
 - Area jatuh adalah label yang membungkus input file native, jadi klik, Enter, atau Space membuka pemilih. Hanya file valid yang tetap di input, sehingga form biasa mengirimnya.

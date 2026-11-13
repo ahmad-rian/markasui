@@ -44,6 +44,54 @@ import { Screensaver } from "@/components/markas/Screensaver";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Screensaver from "$lib/components/markas/Screensaver.svelte";
+</script>
+
+<Screensaver class="h-56 rounded-xl border border-line" aria-hidden="true">
+  <span class="text-3xl font-bold">Markas</span>
+</Screensaver>
+```
+
+## Astro
+
+```astro
+---
+import Screensaver from "@/components/markas/Screensaver.astro";
+---
+
+<Screensaver class="h-56 rounded-xl border border-line" aria-hidden="true">
+  <span class="text-3xl font-bold">Markas</span>
+</Screensaver>
+```
+
+Satu script kecil yang dibundel menjalankan setiap area lewat elemen `markas-screensaver`.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Screensaver } from "./markas/screensaver.component";
+
+@Component({
+  selector: "app-idle",
+  imports: [Screensaver],
+  template: `
+    <markas-screensaver
+      effect="squash"
+      class="h-56 rounded-xl border border-line"
+      aria-hidden="true"
+    >
+      <span class="text-3xl font-bold">Markas</span>
+    </markas-screensaver>
+  `,
+})
+export class Idle {}
+```
+
 ## Catatan
 
 - Setiap anak langsung mulai di posisi seed dan memantul di dinding dengan kecepatan `speed` px per detik. Beri area tinggi.

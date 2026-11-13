@@ -1,0 +1,20 @@
+<script lang="ts">
+  import Skeleton from "../../components/skeleton/Skeleton.svelte";
+</script>
+
+<div
+  class="grid justify-items-center gap-4 rounded-lg border border-line bg-surface p-6"
+  role="status"
+>
+  <span class="sr-only">Loading profile</span>
+  <Skeleton shape="circle" class="size-20" />
+  <div class="grid w-full justify-items-center gap-2">
+    <Skeleton class="h-5 w-40" />
+    <Skeleton class="h-4 w-56" />
+  </div>
+  <div class="grid w-full grid-cols-3 gap-3">
+    <Skeleton class="h-12" />
+    <Skeleton class="h-12" />
+    <Skeleton class="h-12" />
+  </div>
+</div>

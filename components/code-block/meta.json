@@ -6,9 +6,30 @@
   "tags": ["code", "snippet", "pre", "copy", "clipboard"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "code-block.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "CodeBlock.tsx", "deps": [] },
-    "vue": { "file": "CodeBlock.vue", "deps": [] }
+    "blade": {
+      "file": "code-block.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "CodeBlock.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "CodeBlock.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "CodeBlock.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "CodeBlock.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "code-block.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -80,5 +101,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

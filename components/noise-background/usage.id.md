@@ -42,6 +42,72 @@ import { NoiseBackground } from "@/components/markas/NoiseBackground";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import NoiseBackground from "$lib/components/markas/NoiseBackground.svelte";
+</script>
+
+<NoiseBackground
+  color="warning"
+  class="rounded-xl border border-line bg-surface px-6 py-14"
+>
+  <h2 class="text-3xl font-semibold text-ink">
+    Design tools with a little texture
+  </h2>
+  <Button>Download the kit</Button>
+</NoiseBackground>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import NoiseBackground from "@/components/markas/NoiseBackground.astro";
+---
+
+<NoiseBackground
+  color="warning"
+  class="rounded-xl border border-line bg-surface px-6 py-14"
+>
+  <h2 class="text-3xl font-semibold text-ink">
+    Design tools with a little texture
+  </h2>
+  <Button>Download the kit</Button>
+</NoiseBackground>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { NoiseBackground } from "./markas/noise-background.component";
+
+@Component({
+  selector: "app-kit",
+  imports: [Button, NoiseBackground],
+  template: `
+    <div
+      markas-noise-background
+      color="warning"
+      class="rounded-xl border border-line bg-surface px-6 py-14"
+    >
+      <h2 class="text-3xl font-semibold text-ink">
+        Design tools with a little texture
+      </h2>
+      <button markas-button>Download the kit</button>
+    </div>
+  `,
+})
+export class Kit {}
+```
+
+Angular memakai attribute selector pada div native, jadi `class`, `aria-*`, dan atribut lain tetap di elemen akar.
+
 ## Catatan
 
 - Tekstur berupa satu tile SVG `feTurbulence` yang disisipkan sebagai data URL dan dipakai sebagai mask CSS di atas token `ink`, jadi ikut mode terang dan gelap. Browser merendernya sekali lalu mengulangnya.

@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { frameworks, openFixture, type Framework } from "./helpers";
+import {
+  frameworks,
+  frameworksFor,
+  openFixture,
+  type Framework,
+} from "./helpers";
 
 /** Fixture utama, keyframe yang dipakai, elemen bergerak, dan tombol pertama di kontennya. */
 const backgrounds = [
@@ -129,7 +134,7 @@ test("meteors, shooting-stars, sparkles, and wavy-background place the same laye
     };
     const react = await layout("react");
     expect(react.length, name).toBeGreaterThan(0);
-    expect(await layout("blade"), name).toEqual(react);
-    expect(await layout("vue"), name).toEqual(react);
+    for (const framework of frameworksFor(name).filter((fw) => fw !== "react"))
+      expect(await layout(framework), `${name} ${framework}`).toEqual(react);
   }
 });

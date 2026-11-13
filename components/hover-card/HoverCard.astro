@@ -1,0 +1,145 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline-block";
+const card =
+  "inset-auto m-0 w-72 max-w-[calc(100vw-16px)] rounded-xl border border-line bg-surface p-4 text-sm text-ink shadow-overlay";
+
+type Props = HTMLAttributes<"span">;
+
+const { id, class: className, ...rest } = Astro.props;
+const cardId = id ?? `markas-hover-card-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<markas-hover-card class="contents"
+  ><span {...rest} class:list={[root, className]}
+    ><slot /><span
+      id={cardId}
+      popover="manual"
+      data-state="closed"
+      class={card}><slot name="content" /></span
+    ></span
+  ></markas-hover-card
+>
+
+<script>
+  const GAP = 8;
+  const SHOW_DELAY = 400;
+  /** Short delay so the pointer can move from the trigger to the card. */
+  const HIDE_DELAY = 100;
+
+  // Per instance: timers, the aria-describedby link, and placement while open.
+  class MarkasHoverCard extends HTMLElement {
+    private timer: ReturnType<typeof setTimeout> | undefined;
+    private abort: AbortController | undefined;
+    private open = false;
+
+    private get root() {
+      return this.firstElementChild as HTMLElement;
+    }
+
+    private get card() {
+      return this.root.lastElementChild as HTMLElement;
+    }
+
+    connectedCallback() {
+      const { root, card } = this;
+      if (!root || !card) return;
+      this.abort = new AbortController();
+      const { signal } = this.abort;
+
+      const trigger = root.firstElementChild;
+      const described = trigger?.getAttribute("aria-describedby") ?? "";
+      if (trigger && trigger !== card && !described.split(" ").includes(card.id))
+        trigger.setAttribute(
+          "aria-describedby",
+          [described, card.id].filter(Boolean).join(" "),
+        );
+
+      root.addEventListener("mouseenter", () => this.showLater(), { signal });
+      root.addEventListener("mouseleave", () => this.hideLater(), { signal });
+      root.addEventListener("focusin", () => this.show(), { signal });
+      // Focus that moves into the card (a link in the card, for example) keeps it open.
+      root.addEventListener(
+        "focusout",
+        (event) => {
+          if (!root.contains(event.relatedTarget as Node | null)) this.hide();
+        },
+        { signal },
+      );
+      card.addEventListener(
+        "toggle",
+        (event) => {
+          this.open = (event as ToggleEvent).newState === "open";
+          card.dataset.state = this.open ? "open" : "closed";
+          if (this.open) this.place();
+        },
+        { signal },
+      );
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key === "Escape") this.hide();
+        },
+        { signal },
+      );
+      // Re-place while open when the page scrolls or the window resizes.
+      const update = () => {
+        if (this.open) this.place();
+      };
+      window.addEventListener("scroll", update, {
+        capture: true,
+        passive: true,
+        signal,
+      });
+      window.addEventListener("resize", update, { passive: true, signal });
+    }
+
+    disconnectedCallback() {
+      clearTimeout(this.timer);
+      this.abort?.abort();
+    }
+
+    private show() {
+      clearTimeout(this.timer);
+      this.card.showPopover();
+    }
+
+    private showLater() {
+      clearTimeout(this.timer);
+      if (this.open) return;
+      this.timer = setTimeout(() => this.show(), SHOW_DELAY);
+    }
+
+    private hide() {
+      clearTimeout(this.timer);
+      this.card.hidePopover();
+    }
+
+    private hideLater() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.hide(), HIDE_DELAY);
+    }
+
+    /** Place the card below the center of the trigger, flip above when it does not fit. */
+    private place() {
+      const anchor = this.root.getBoundingClientRect();
+      const { width, height } = this.card.getBoundingClientRect();
+      const above = anchor.top - GAP - height;
+      const below = anchor.bottom + GAP;
+      const onTop = below + height > window.innerHeight && above >= 0;
+      const left = Math.max(
+        GAP,
+        Math.min(
+          anchor.left + anchor.width / 2 - width / 2,
+          window.innerWidth - width - GAP,
+        ),
+      );
+      this.card.style.top = `${onTop ? above : below}px`;
+      this.card.style.left = `${left}px`;
+    }
+  }
+
+  if (!customElements.get("markas-hover-card"))
+    customElements.define("markas-hover-card", MarkasHoverCard);
+</script>

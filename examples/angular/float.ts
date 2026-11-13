@@ -1,0 +1,113 @@
+import { Component } from "@angular/core";
+import { Float } from "../../components/float/float.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [Float],
+  template: `
+    <div [class]="hero">
+      <markas-float [parallax]="14" aria-hidden="true" [class]="layer">
+        <span [class]="tileA">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            [class]="icon"
+          >
+            <path d="m8 8-4 4 4 4" />
+            <path d="m16 8 4 4-4 4" />
+          </svg>
+        </span>
+        <span [class]="tileB">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            [class]="icon"
+          >
+            <path
+              d="M12 3 13.9 8.1 19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"
+            />
+          </svg>
+        </span>
+        <span [class]="tileC">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            [class]="icon"
+          >
+            <path d="m12 4 8 4-8 4-8-4 8-4Z" />
+            <path d="m4 12 8 4 8-4" />
+            <path d="m4 16 8 4 8-4" />
+          </svg>
+        </span>
+        <span [class]="tileD">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            [class]="icon"
+          >
+            <path d="M13 3 5 14h6l-1 7 8-11h-6l1-7Z" />
+          </svg>
+        </span>
+        <span [class]="tileE">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            [class]="icon"
+          >
+            <path d="m5 3 14 7-6 2-2 6-6-15Z" />
+          </svg>
+        </span>
+      </markas-float>
+      <div [class]="copy">
+        <p [class]="title">Ship the idea this week</p>
+        <p [class]="text">
+          Copy a component into Blade, React, or Vue and keep going.
+        </p>
+      </div>
+    </div>
+  `,
+})
+export default class FloatExample {
+  protected readonly hero =
+    "relative grid h-80 place-items-center overflow-hidden rounded-xl border border-line bg-canvas px-6 text-center";
+  protected readonly layer = "absolute inset-0";
+  protected readonly tileA =
+    "absolute top-[12%] left-[10%] grid size-12 place-items-center rounded-xl border border-line bg-surface text-ink shadow-overlay";
+  protected readonly tileB =
+    "absolute top-[16%] right-[12%] grid size-12 place-items-center rounded-xl border border-line bg-surface text-ink shadow-overlay";
+  protected readonly tileC =
+    "absolute bottom-[14%] left-[16%] grid size-12 place-items-center rounded-xl border border-line bg-surface text-ink shadow-overlay";
+  protected readonly tileD =
+    "absolute right-[18%] bottom-[12%] grid size-12 place-items-center rounded-xl border border-line bg-surface text-ink shadow-overlay";
+  protected readonly tileE =
+    "absolute top-[46%] left-[4%] grid size-12 place-items-center rounded-xl border border-line bg-surface text-ink shadow-overlay";
+  protected readonly icon = "size-6";
+  protected readonly copy = "relative max-w-64";
+  protected readonly title = "text-2xl font-semibold text-ink";
+  protected readonly text = "mt-2 text-sm text-muted";
+}

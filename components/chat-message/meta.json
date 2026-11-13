@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "chat-message.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ChatMessage.tsx", "deps": [] },
-    "vue": { "file": "ChatMessage.vue", "deps": [] }
+    "blade": {
+      "file": "chat-message.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ChatMessage.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ChatMessage.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ChatMessage.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ChatMessage.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "chat-message.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -138,6 +159,18 @@
       "type": "string",
       "default": "Regenerate",
       "description": "Accessible name of the regenerate button."
+    },
+    {
+      "name": "(feedback) / (regenerate)",
+      "type": "output",
+      "default": "-",
+      "description": "Angular only. Emits the new rating (like, dislike, or null) and a press of regenerate. Svelte uses onFeedback and onRegenerate like React."
+    },
+    {
+      "name": "markas-feedback / markas-regenerate",
+      "type": "CustomEvent",
+      "default": "-",
+      "description": "Astro only. Bubbling events from markas-chat-message, with the new rating as detail for feedback."
     }
   ],
   "a11y": [
@@ -179,7 +212,9 @@
         "copiedLabel": "Status yang diumumkan setelah menyalin. Default \"Copied\", isi misalnya \"Tersalin\".",
         "likeLabel": "Nama aksesibel tombol like. Default \"Good response\", isi misalnya \"Jawaban bagus\".",
         "dislikeLabel": "Nama aksesibel tombol dislike. Default \"Bad response\", isi misalnya \"Jawaban buruk\".",
-        "regenerateLabel": "Nama aksesibel tombol regenerate. Default \"Regenerate\", isi misalnya \"Buat ulang\"."
+        "regenerateLabel": "Nama aksesibel tombol regenerate. Default \"Regenerate\", isi misalnya \"Buat ulang\".",
+        "(feedback) / (regenerate)": "Khusus Angular. Memancarkan rating baru (like, dislike, atau null) dan tekanan regenerate. Svelte memakai onFeedback dan onRegenerate seperti React.",
+        "markas-feedback / markas-regenerate": "Khusus Astro. Event menggelembung dari markas-chat-message, dengan rating baru sebagai detail untuk feedback."
       },
       "a11y": [
         "Setiap pesan adalah article bernama userLabel atau assistantLabel. Letakkan pesan di dalam elemen role=\"log\" agar pesan baru diumumkan.",
@@ -197,5 +232,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

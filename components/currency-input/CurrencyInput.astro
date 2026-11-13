@@ -1,0 +1,305 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const wrapper = "grid gap-1.5";
+const labelClass = "text-sm font-medium text-ink";
+const control =
+  "flex h-11 w-full items-center gap-2 rounded-md border border-line bg-surface px-3 text-base transition-colors duration-150 ease-out has-[:disabled]:cursor-not-allowed has-[:disabled]:bg-subtle has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary has-[[aria-invalid=true]]:border-danger motion-reduce:transition-none";
+const prefix = "shrink-0 font-medium text-muted select-none";
+const field =
+  "h-full min-w-0 flex-1 bg-transparent font-medium text-ink tabular-nums outline-none placeholder:text-faint disabled:cursor-not-allowed disabled:text-muted";
+const chips = "flex flex-wrap gap-2 pt-1";
+const chip =
+  "inline-flex h-8 items-center rounded-full border border-line bg-surface px-3 text-sm font-medium text-ink tabular-nums transition-[background-color,border-color,scale] duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:scale-95 disabled:pointer-events-none disabled:opacity-50 aria-pressed:border-primary aria-pressed:bg-primary-soft motion-reduce:transition-none";
+const hintClass = "text-sm text-muted";
+const errorClass = "text-sm text-danger";
+
+/** Separators and short units per currency. IDR follows id-ID, USD follows en-US. */
+const CURRENCIES = {
+  IDR: {
+    symbol: "Rp",
+    group: ".",
+    decimal: ",",
+    fraction: 0,
+    short: "",
+    units: [
+      [1e6, "jt"],
+      [1e3, "rb"],
+    ],
+  },
+  USD: {
+    symbol: "$",
+    group: ",",
+    decimal: ".",
+    fraction: 2,
+    short: "$",
+    units: [
+      [1e6, "M"],
+      [1e3, "K"],
+    ],
+  },
+} as const;
+type Currency = (typeof CURRENCIES)[keyof typeof CURRENCIES];
+
+const groupDigits = (digits: string, c: Currency) =>
+  digits.replace(/\B(?=(\d{3})+(?!\d))/g, c.group);
+
+/** 12500000 -> "12.500.000". Decimals show only when they are not zero. */
+function formatAmount(value: number, c: Currency) {
+  const [int = "0", frac = ""] = Math.abs(value).toFixed(c.fraction).split(".");
+  return groupDigits(int, c) + (/[1-9]/.test(frac) ? c.decimal + frac : "");
+}
+
+/** 50000 -> "50rb", 1500000 -> "1,5jt", 1000 USD -> "$1K". */
+function shortAmount(value: number, c: Currency) {
+  const unit = c.units.find(([size]) => value >= size);
+  if (!unit) return c.short + formatAmount(value, c);
+  const scaled = String(Number((value / unit[0]).toFixed(1)));
+  return c.short + scaled.replace(".", c.decimal) + unit[1];
+}
+
+type Props = Omit<HTMLAttributes<"input">, "type" | "value" | "min" | "max"> & {
+  label?: string;
+  hint?: string;
+  error?: string;
+  currency?: keyof typeof CURRENCIES;
+  min?: number;
+  max?: number;
+  defaultValue?: number | null;
+  /** Quick amount chips below the field. */
+  presets?: number[];
+  presetsLabel?: string;
+};
+
+const {
+  label,
+  hint,
+  error,
+  currency = "IDR",
+  min,
+  max,
+  defaultValue = null,
+  presets = [],
+  presetsLabel = "Quick amounts",
+  name,
+  id,
+  disabled,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const c = CURRENCIES[currency];
+const inputId = id ?? `markas-currency-input-${crypto.randomUUID().slice(0, 8)}`;
+const currencyId = `${inputId}-currency`;
+const messageId = error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined;
+---
+
+<markas-currency-input
+  class="contents"
+  data-currency={currency}
+  data-min={min}
+  data-max={max}
+  data-value={defaultValue ?? ""}
+>
+  <div class={wrapper}>
+    {label && <label for={inputId} class={labelClass}>{label}</label>}
+    <div class={control}>
+      <span id={currencyId} class={prefix}>{c.symbol}</span>
+      <input
+        id={inputId}
+        type="text"
+        inputmode={c.fraction ? "decimal" : "numeric"}
+        autocomplete="off"
+        value={defaultValue === null ? "" : formatAmount(defaultValue, c)}
+        disabled={disabled}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={[currencyId, messageId].filter(Boolean).join(" ")}
+        class:list={[field, className]}
+        data-field
+        {...rest}
+      />
+    </div>
+    {name && <input type="hidden" name={name} value={defaultValue ?? ""} data-hidden />}
+    {
+      error ? (
+        <p id={`${inputId}-error`} class={errorClass}>{error}</p>
+      ) : hint ? (
+        <p id={`${inputId}-hint`} class={hintClass}>{hint}</p>
+      ) : null
+    }
+    {
+      presets.length > 0 && (
+        <div role="group" aria-label={presetsLabel} class={chips}>
+          {presets.map((preset) => (
+            <button
+              type="button"
+              aria-pressed={defaultValue === preset ? "true" : "false"}
+              disabled={disabled}
+              data-preset={preset}
+              class={chip}
+            >
+              {shortAmount(preset, c)}
+            </button>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</markas-currency-input>
+
+<script>
+  // Separators per currency, as in the markup above: IDR follows id-ID, USD follows en-US.
+  const CURRENCIES = {
+    IDR: { group: ".", decimal: ",", fraction: 0 },
+    USD: { group: ",", decimal: ".", fraction: 2 },
+  } as const;
+  type Currency = (typeof CURRENCIES)[keyof typeof CURRENCIES];
+
+  const groupDigits = (digits: string, c: Currency) =>
+    digits.replace(/\B(?=(\d{3})+(?!\d))/g, c.group);
+
+  function formatAmount(value: number, c: Currency) {
+    const [int = "0", frac = ""] = Math.abs(value)
+      .toFixed(c.fraction)
+      .split(".");
+    return groupDigits(int, c) + (/[1-9]/.test(frac) ? c.decimal + frac : "");
+  }
+
+  /** Typed text -> clean grouped text and its number (null when empty). */
+  function parseTyped(raw: string, c: Currency) {
+    const [head = "", ...tail] = c.fraction ? raw.split(c.decimal) : [raw];
+    const int = head.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+    const hasDecimal = tail.length > 0;
+    const frac = tail.join("").replace(/\D/g, "").slice(0, c.fraction);
+    if (!int && !hasDecimal) return { text: "", value: null };
+    const whole = int || "0";
+    return {
+      text: groupDigits(whole, c) + (hasDecimal ? c.decimal + frac : ""),
+      value: Number(`${whole}.${frac || "0"}`),
+    };
+  }
+
+  /** Digits (and the decimal mark) are what the caret position is counted in. */
+  const significant = (text: string, c: Currency) =>
+    [...text].filter(
+      (ch) => /\d/.test(ch) || (c.fraction > 0 && ch === c.decimal),
+    ).length;
+
+  function caretAfter(text: string, count: number, c: Currency) {
+    let position = 0;
+    for (let seen = 0; position < text.length && seen < count; position++)
+      if (significant(text[position] ?? "", c)) seen++;
+    return position;
+  }
+
+  const COUNT_MS = 400;
+
+  // Each field keeps its own amount, so it is a custom element: it also works for markup
+  // added later and for pages reached through view transitions.
+  class MarkasCurrencyInput extends HTMLElement {
+    private frame = 0;
+    private ready = false;
+
+    connectedCallback() {
+      const input = this.querySelector<HTMLInputElement>("[data-field]");
+      if (this.ready || !input) return;
+      this.ready = true;
+      const c = CURRENCIES[this.dataset.currency as keyof typeof CURRENCIES];
+      input.addEventListener("input", () => {
+        cancelAnimationFrame(this.frame);
+        const count = significant(
+          input.value.slice(0, input.selectionStart ?? input.value.length),
+          c,
+        );
+        const parsed = parseTyped(input.value, c);
+        input.value = parsed.text;
+        const position = caretAfter(parsed.text, count, c);
+        input.setSelectionRange(position, position);
+        this.commit(parsed.value);
+      });
+      // Backspace or Delete next to a separator removes the digit behind it instead.
+      input.addEventListener("keydown", (event) => {
+        const at = input.selectionStart;
+        if (at === null || at !== input.selectionEnd) return;
+        if (event.key === "Backspace" && input.value[at - 1] === c.group)
+          input.setSelectionRange(at - 1, at - 1);
+        if (event.key === "Delete" && input.value[at] === c.group)
+          input.setSelectionRange(at + 1, at + 1);
+      });
+      input.addEventListener("blur", () => {
+        const value = this.value;
+        if (value === null) return;
+        const next = this.clamp(value);
+        input.value = formatAmount(next, c);
+        if (next !== value) this.commit(next);
+      });
+      this.addEventListener("click", (event) => {
+        const chip = (event.target as Element).closest<HTMLElement>(
+          "[data-preset]",
+        );
+        if (chip) this.pick(input, Number(chip.dataset.preset), c);
+      });
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+    }
+
+    private get value() {
+      return this.dataset.value ? Number(this.dataset.value) : null;
+    }
+
+    private clamp(n: number) {
+      const min = this.dataset.min ? Number(this.dataset.min) : -Infinity;
+      const max = this.dataset.max ? Number(this.dataset.max) : Infinity;
+      return Math.min(Math.max(n, min), max);
+    }
+
+    private commit(next: number | null) {
+      this.dataset.value = next === null ? "" : String(next);
+      const hidden = this.querySelector<HTMLInputElement>("[data-hidden]");
+      if (hidden) hidden.value = this.dataset.value;
+      this.querySelectorAll("[data-preset]").forEach((chip) =>
+        chip.setAttribute(
+          "aria-pressed",
+          String(Number(chip.getAttribute("data-preset")) === next),
+        ),
+      );
+      this.dispatchEvent(
+        new CustomEvent("markas-change", { detail: next, bubbles: true }),
+      );
+    }
+
+    /** Jump to a preset, counting the digits up or down on the way. */
+    private pick(
+      input: HTMLInputElement,
+      preset: number,
+      c: Currency,
+    ) {
+      const target = this.clamp(preset);
+      const from = this.value ?? 0;
+      this.commit(target);
+      cancelAnimationFrame(this.frame);
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        input.value = formatAmount(target, c);
+        return;
+      }
+      let start: number | undefined;
+      const tick = (now: number) => {
+        start ??= now;
+        const t = Math.min((now - start) / COUNT_MS, 1);
+        const eased = 1 - (1 - t) ** 3;
+        const step = 10 ** c.fraction;
+        input.value = formatAmount(
+          Math.round((from + (target - from) * eased) * step) / step,
+          c,
+        );
+        if (t < 1) this.frame = requestAnimationFrame(tick);
+      };
+      this.frame = requestAnimationFrame(tick);
+    }
+  }
+
+  if (!customElements.get("markas-currency-input"))
+    customElements.define("markas-currency-input", MarkasCurrencyInput);
+</script>

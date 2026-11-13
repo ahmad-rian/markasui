@@ -1,0 +1,358 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const wrapper = "grid gap-1.5";
+const labelClass = "text-sm font-medium text-ink";
+const control = "relative";
+const field =
+  "h-10 w-full rounded-md border border-line bg-surface ps-3 pe-9 text-sm text-ink transition-colors duration-150 ease-out placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger motion-reduce:transition-none";
+const chevron =
+  "pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted";
+const panel =
+  "inset-auto m-0 max-h-60 overflow-y-auto rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay";
+const optionClass =
+  "flex cursor-pointer items-center justify-between gap-2 rounded-md px-3 py-2 text-sm text-ink hover:bg-subtle aria-selected:bg-subtle";
+const check = "size-4 shrink-0 text-primary";
+const emptyClass = "px-3 py-2 text-sm text-muted";
+const hintClass = "text-sm text-muted";
+const errorClass = "text-sm text-danger";
+
+export type ComboboxOption = { value: string; label: string };
+
+type Props = Omit<
+  HTMLAttributes<"input">,
+  "value" | "type" | "role" | "name"
+> & {
+  options: ComboboxOption[];
+  label?: string;
+  hint?: string;
+  error?: string;
+  name?: string;
+  value?: string;
+  emptyLabel?: string;
+};
+
+const {
+  options,
+  label,
+  hint,
+  error,
+  name,
+  value = "",
+  emptyLabel = "No results",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const inputId = id ?? `markas-combobox-${crypto.randomUUID().slice(0, 8)}`;
+const listId = `${inputId}-listbox`;
+const text = options.find((option) => option.value === value)?.label ?? "";
+const describedBy = error
+  ? `${inputId}-error`
+  : hint
+    ? `${inputId}-hint`
+    : undefined;
+const isChecked = (option: ComboboxOption) =>
+  value !== "" && option.value === value;
+---
+
+<markas-combobox class="contents">
+  <div class={wrapper}>
+    {
+      label && (
+        <label id={`${inputId}-label`} for={inputId} class={labelClass}>
+          {label}
+        </label>
+      )
+    }
+    <div class={control}>
+      <input
+        id={inputId}
+        type="text"
+        role="combobox"
+        autocomplete="off"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls={listId}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={describedBy}
+        data-state="closed"
+        class:list={[field, className]}
+        {...rest}
+        value={text}
+        data-markas-combobox-input
+      />
+      <svg
+        class={chevron}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
+    </div>
+    {
+      name && (
+        <input
+          type="hidden"
+          name={name}
+          value={value}
+          data-markas-combobox-value
+        />
+      )
+    }
+    <div
+      id={`${inputId}-popup`}
+      popover="manual"
+      data-state="closed"
+      class={panel}
+      data-markas-combobox-panel
+    >
+      <ul
+        id={listId}
+        role="listbox"
+        aria-labelledby={label ? `${inputId}-label` : undefined}
+      >
+        {
+          options.map((option, index) => (
+            <li
+              id={`${inputId}-option-${index}`}
+              role="option"
+              aria-selected="false"
+              data-state={isChecked(option) ? "checked" : "unchecked"}
+              data-value={option.value}
+              data-label={option.label}
+              class={optionClass}
+            >
+              {option.label}
+              <svg
+                class={check}
+                style={isChecked(option) ? undefined : "display: none"}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 12 5 5L20 7" />
+              </svg>
+            </li>
+          ))
+        }
+      </ul>
+      <p class={emptyClass} hidden={options.length > 0} data-markas-combobox-empty>
+        {emptyLabel}
+      </p>
+    </div>
+    {
+      error ? (
+        <p id={`${inputId}-error`} class={errorClass}>
+          {error}
+        </p>
+      ) : hint ? (
+        <p id={`${inputId}-hint`} class={hintClass}>
+          {hint}
+        </p>
+      ) : null
+    }
+  </div>
+</markas-combobox>
+
+<script>
+  const GAP = 4;
+
+  /**
+   * One instance per combobox. Options are rendered on the server; the script only filters,
+   * highlights, and positions them. Changing the selection dispatches a bubbling
+   * `markas-change` event with the value in `detail` ("" when cleared).
+   */
+  class MarkasCombobox extends HTMLElement {
+    private input!: HTMLInputElement;
+    private panel!: HTMLElement;
+    private valueInput: HTMLInputElement | null = null;
+    private items: HTMLLIElement[] = [];
+    private empty: HTMLElement | null = null;
+    private value = "";
+    private active = -1;
+    private open = false;
+    private unfollow: (() => void) | null = null;
+
+    connectedCallback() {
+      if (this.input) return;
+      this.input = this.querySelector("[data-markas-combobox-input]")!;
+      this.panel = this.querySelector("[data-markas-combobox-panel]")!;
+      this.valueInput = this.querySelector("[data-markas-combobox-value]");
+      this.empty = this.querySelector("[data-markas-combobox-empty]");
+      this.items = [...this.panel.querySelectorAll("li")];
+      this.value =
+        this.items.find((item) => item.dataset.state === "checked")?.dataset
+          .value ?? "";
+
+      this.input.addEventListener("input", () => this.onInput());
+      this.input.addEventListener("keydown", (event) => this.onKeydown(event));
+      this.input.addEventListener("blur", () => this.hide());
+      this.input.addEventListener("click", () => this.show());
+      this.panel.addEventListener("mousedown", (event) =>
+        event.preventDefault(),
+      );
+      this.panel.addEventListener("click", (event) => {
+        const item = (event.target as Element).closest("li");
+        if (item) this.select(this.items.indexOf(item));
+      });
+      // beforetoggle runs synchronously, so the state is current for the next key press.
+      this.panel.addEventListener("beforetoggle", (event) =>
+        this.setOpen((event as ToggleEvent).newState === "open"),
+      );
+      this.panel.addEventListener("toggle", (event) => {
+        if ((event as ToggleEvent).newState !== "open") return this.unfollow?.();
+        this.place();
+        this.follow();
+      });
+    }
+
+    disconnectedCallback() {
+      this.unfollow?.();
+    }
+
+    /** Indexes of options whose label contains the filter text. */
+    private visible() {
+      return this.items.flatMap((item, index) => (item.hidden ? [] : [index]));
+    }
+
+    private filter(text: string) {
+      const query = text.trim().toLowerCase();
+      for (const item of this.items)
+        item.hidden = !(item.dataset.label ?? "").toLowerCase().includes(query);
+      if (this.empty) this.empty.hidden = this.visible().length > 0;
+    }
+
+    private setOpen(open: boolean) {
+      this.open = open;
+      const state = open ? "open" : "closed";
+      this.input.setAttribute("aria-expanded", String(open));
+      this.input.dataset.state = state;
+      this.panel.dataset.state = state;
+    }
+
+    private setActive(index: number) {
+      this.active = index;
+      this.items.forEach((item, i) =>
+        item.setAttribute("aria-selected", String(i === index)),
+      );
+      const item = this.items[index];
+      if (!item) return this.input.removeAttribute("aria-activedescendant");
+      this.input.setAttribute("aria-activedescendant", item.id);
+      item.scrollIntoView({ block: "nearest" });
+    }
+
+    private commit(next: string) {
+      if (next === this.value) return;
+      this.value = next;
+      if (this.valueInput) this.valueInput.value = next;
+      this.items.forEach((item) => {
+        const checked = next !== "" && item.dataset.value === next;
+        item.dataset.state = checked ? "checked" : "unchecked";
+        item.querySelector("svg")!.style.display = checked ? "" : "none";
+      });
+      this.dispatchEvent(
+        new CustomEvent("markas-change", { detail: next, bubbles: true }),
+      );
+    }
+
+    private show() {
+      if (!this.open) this.panel.showPopover();
+    }
+
+    private hide() {
+      this.setActive(-1);
+      if (this.open) this.panel.hidePopover();
+    }
+
+    private select(index: number) {
+      const item = this.items[index];
+      if (!item) return;
+      this.commit(item.dataset.value ?? "");
+      this.input.value = item.dataset.label ?? "";
+      this.filter("");
+      this.hide();
+    }
+
+    private move(step: 1 | -1) {
+      const list = this.visible();
+      if (list.length === 0) return;
+      const position = list.indexOf(this.active);
+      const next =
+        position === -1
+          ? step === 1
+            ? 0
+            : list.length - 1
+          : (position + step + list.length) % list.length;
+      this.setActive(list[next] ?? -1);
+    }
+
+    private onInput() {
+      this.filter(this.input.value);
+      this.setActive(-1);
+      this.commit("");
+      this.show();
+    }
+
+    private onKeydown(event: KeyboardEvent) {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        if (this.open) return this.move(step);
+        this.show();
+        const list = this.visible();
+        return this.setActive(
+          (step === 1 ? list[0] : list[list.length - 1]) ?? -1,
+        );
+      }
+      if (event.key === "Enter" && this.open && this.active >= 0) {
+        event.preventDefault();
+        return this.select(this.active);
+      }
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      if (this.open) return this.hide();
+      this.input.value = "";
+      this.filter("");
+      this.commit("");
+    }
+
+    /** Place the list below the input at its width, flip above when it does not fit. */
+    private place() {
+      const anchor = this.input.getBoundingClientRect();
+      this.panel.style.width = `${anchor.width}px`;
+      const { height } = this.panel.getBoundingClientRect();
+      const below = anchor.bottom + GAP;
+      const above = anchor.top - GAP - height;
+      const fitsBelow = below + height <= window.innerHeight;
+      this.panel.style.top = `${fitsBelow || above < 0 ? below : above}px`;
+      this.panel.style.left = `${anchor.left}px`;
+    }
+
+    /** Re-place the list while the page scrolls or the window resizes. */
+    private follow() {
+      this.unfollow?.();
+      const update = () => this.place();
+      const scrollOptions = { capture: true, passive: true };
+      window.addEventListener("scroll", update, scrollOptions);
+      window.addEventListener("resize", update, { passive: true });
+      this.unfollow = () => {
+        window.removeEventListener("scroll", update, scrollOptions);
+        window.removeEventListener("resize", update);
+        this.unfollow = null;
+      };
+    }
+  }
+
+  if (!customElements.get("markas-combobox"))
+    customElements.define("markas-combobox", MarkasCombobox);
+</script>

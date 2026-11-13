@@ -6,16 +6,43 @@
   "tags": ["carousel", "slider", "slides", "gallery", "scroll-snap"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "carousel.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Carousel.tsx", "deps": [] },
-    "vue": { "file": "Carousel.vue", "deps": [] }
+    "blade": {
+      "file": "carousel.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Carousel.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Carousel.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Carousel.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Carousel.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "carousel.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "slides",
-      "type": "Blade: named slots · React: children · Vue: default slot",
+      "type": "Blade: named slots · React: children · Vue: default slot · Svelte, Astro, Angular: items",
       "default": "-",
-      "description": "Each named slot (Blade) or each child element (React and Vue) becomes one slide, in order."
+      "description": "Each named slot (Blade) or each child element (React and Vue) becomes one slide, in order. Svelte, Astro, and Angular render one slide per entry of items instead."
+    },
+    {
+      "name": "items",
+      "type": "T[]",
+      "default": "-",
+      "description": "Svelte, Astro, and Angular only. Data for the slides, rendered by a slide snippet (Svelte), a function child (Astro), or an ng-template with let-item and let-index (Angular)."
     },
     {
       "name": "label",
@@ -81,14 +108,15 @@
     "id": {
       "description": "Deretan slide berbasis CSS scroll snap dengan tombol sebelumnya dan berikutnya, titik opsional, dan navigasi panah. Tanpa autoplay.",
       "props": {
-        "slides": "Setiap named slot (Blade) atau setiap elemen anak (React dan Vue) menjadi satu slide, sesuai urutan.",
+        "slides": "Setiap named slot (Blade) atau setiap elemen anak (React dan Vue) menjadi satu slide, sesuai urutan. Svelte, Astro, dan Angular merender satu slide per entri items.",
         "label": "Nama aksesibel region carousel. Jelaskan isinya, misalnya Tur produk.",
         "perView": "Jumlah slide yang terlihat sekaligus. Tombol tetap bergeser satu slide.",
         "showDots": "Tampilkan satu titik per slide untuk melompat ke slide itu. Paling cocok dengan perView 1.",
         "previousLabel": "Label aksesibel tombol sebelumnya. Isi \"Slide sebelumnya\" untuk situs berbahasa Indonesia.",
         "nextLabel": "Label aksesibel tombol berikutnya. Isi \"Slide berikutnya\" untuk situs berbahasa Indonesia.",
         "slideLabel": "Label aksesibel tiap slide. {index} dan {total} diganti angka, misalnya \"{index} dari {total}\".",
-        "dotLabel": "Label aksesibel tiap titik. {index} dan {total} diganti angka, misalnya \"Ke slide {index}\"."
+        "dotLabel": "Label aksesibel tiap titik. {index} dan {total} diganti angka, misalnya \"Ke slide {index}\".",
+        "items": "Khusus Svelte, Astro, dan Angular. Data slide, dirender oleh snippet slide (Svelte), function child (Astro), atau ng-template dengan let-item dan let-index (Angular)."
       },
       "a11y": [
         "Root adalah region dengan aria-roledescription=carousel dan prop label sebagai namanya.",
@@ -107,5 +135,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

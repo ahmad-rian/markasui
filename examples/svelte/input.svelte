@@ -1,0 +1,20 @@
+<script lang="ts">
+  import Input from "../../components/input/Input.svelte";
+</script>
+
+<div class="grid gap-4">
+  <Input
+    name="name"
+    label="Full name"
+    placeholder="Budi Santoso"
+    hint="As shown on your ID"
+  />
+  <Input
+    name="email"
+    type="email"
+    label="Email"
+    value="budi@"
+    error="Enter a valid email address"
+  />
+  <Input name="code" label="Invite code" value="MARKAS-2026" disabled />
+</div>

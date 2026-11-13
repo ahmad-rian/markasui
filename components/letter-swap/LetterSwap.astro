@@ -1,0 +1,99 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "relative inline-flex overflow-hidden";
+const letter = "relative inline-block whitespace-pre";
+const copies = {
+  up: "absolute inset-x-0 top-full",
+  down: "absolute inset-x-0 bottom-full",
+};
+
+type Props = Omit<HTMLAttributes<"span">, "children"> & {
+  text: string;
+  mode?: "forward" | "pingpong" | "random";
+  direction?: keyof typeof copies;
+  stagger?: number;
+  duration?: number;
+};
+
+const {
+  text,
+  mode = "forward",
+  direction = "up",
+  stagger = 30,
+  duration = 400,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<markas-letter-swap class="contents" data-mode={mode} data-direction={direction} data-stagger={stagger} data-duration={duration}><span {...rest} class:list={[root, className]}><span class="sr-only">{text}</span>{Array.from(text).map((char) => <span aria-hidden="true" data-letter="" class={letter}>{char}<span class={copies[direction]}>{char}</span></span>)}</span></markas-letter-swap>
+
+<script>
+  const EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
+  /** Hover and focus are heard on the closest interactive element (link, button), or on the text itself. */
+  const TRIGGER = "a, button, label, [tabindex]";
+  const EVENTS = ["pointerenter", "focusin", "pointerleave", "focusout"];
+
+  /** Stagger rank of each letter. Random mode uses a fixed shuffled order (hash), the same on every render. */
+  function ranks(count: number, random: boolean) {
+    const order = [...Array(count).keys()];
+    const hash = (i: number) => Math.imul(i + 1, 2654435761) >>> 0;
+    if (random) order.sort((a, b) => hash(a) - hash(b));
+    const rank: number[] = [];
+    order.forEach((index, position) => (rank[index] = position));
+    return rank;
+  }
+
+  // One element per instance: setup runs for markup added later and after view transitions.
+  class MarkasLetterSwap extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const element = this.firstElementChild as HTMLElement | null;
+      if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches)
+        return;
+      const { mode = "forward", direction = "up" } = this.dataset;
+      const stagger = Number(this.dataset.stagger);
+      const duration = Number(this.dataset.duration);
+      const target = element.closest<HTMLElement>(TRIGGER) ?? element;
+      const letters = [...element.querySelectorAll<HTMLElement>("[data-letter]")];
+      const rank = ranks(letters.length, mode === "random");
+      const shift = `translateY(${direction === "up" ? "-100%" : "100%"})`;
+      let busyUntil = 0;
+
+      // Pingpong: a CSS transition back and forth. Forward and random: one pass, then an invisible reset.
+      const move = (event: Event) => {
+        const enter = EVENTS.indexOf(event.type) < 2;
+        const now = performance.now();
+        if (mode !== "pingpong") {
+          if (!enter || now < busyUntil) return;
+          busyUntil = now + duration + stagger * letters.length;
+        }
+        letters.forEach((el, i) => {
+          const delay = rank[i]! * stagger;
+          if (mode !== "pingpong") {
+            el.animate?.([{ transform: "none" }, { transform: shift }], {
+              duration,
+              delay,
+              easing: EASING,
+            });
+            return;
+          }
+          el.style.transition = `transform ${duration}ms ${EASING} ${delay}ms`;
+          el.style.transform = enter ? shift : "";
+        });
+      };
+      EVENTS.forEach((name) => target.addEventListener(name, move));
+      this.cleanup = () =>
+        EVENTS.forEach((name) => target.removeEventListener(name, move));
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-letter-swap"))
+    customElements.define("markas-letter-swap", MarkasLetterSwap);
+</script>

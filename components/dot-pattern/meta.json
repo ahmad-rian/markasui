@@ -6,9 +6,30 @@
   "tags": ["background", "pattern", "dots", "hero", "decorative"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "dot-pattern.blade.php", "deps": [] },
-    "react": { "file": "DotPattern.tsx", "deps": [] },
-    "vue": { "file": "DotPattern.vue", "deps": [] }
+    "blade": {
+      "file": "dot-pattern.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "DotPattern.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "DotPattern.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "DotPattern.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "DotPattern.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "dot-pattern.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -37,7 +58,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the pattern."
     }
@@ -78,5 +99,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

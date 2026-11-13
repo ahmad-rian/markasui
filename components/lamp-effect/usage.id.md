@@ -32,6 +32,61 @@ import { LampEffect } from "@/components/markas/LampEffect";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import LampEffect from "$lib/components/markas/LampEffect.svelte";
+</script>
+
+<LampEffect class="dark rounded-xl bg-canvas px-6 pt-32 pb-14 text-ink">
+  <h2 class="text-3xl font-semibold text-ink">Berkarya di bawah cahaya</h2>
+  <Button>Mulai gratis</Button>
+</LampEffect>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import LampEffect from "@/components/markas/LampEffect.astro";
+---
+
+<LampEffect class="dark rounded-xl bg-canvas px-6 pt-32 pb-14 text-ink">
+  <h2 class="text-3xl font-semibold text-ink">Berkarya di bawah cahaya</h2>
+  <Button>Mulai gratis</Button>
+</LampEffect>
+```
+
+Script kecil yang dibundel menjalankan efek per instance. Tetap jalan setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { LampEffect } from "./markas/lamp-effect.component";
+
+@Component({
+  selector: "app-hero",
+  imports: [Button, LampEffect],
+  template: `
+    <div
+      markas-lamp-effect
+      class="dark rounded-xl bg-canvas px-6 pt-32 pb-14 text-ink"
+    >
+      <h2 class="text-3xl font-semibold text-ink">Berkarya di bawah cahaya</h2>
+      <button markas-button>Mulai gratis</button>
+    </div>
+  `,
+})
+export class Hero {}
+```
+
+Komponen ini berupa atribut pada div, jadi class, style, dan atribut lain tetap di elemen akar.
+
 ## Catatan
 
 - Cahaya dibuat dari gradien conic dan radial CSS dengan token `color`. Tanpa canvas dan tanpa filter blur.

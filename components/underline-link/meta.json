@@ -16,7 +16,10 @@
   "frameworks": {
     "blade": { "file": "underline-link.blade.php", "deps": [] },
     "react": { "file": "UnderlineLink.tsx", "deps": [] },
-    "vue": { "file": "UnderlineLink.vue", "deps": [] }
+    "vue": { "file": "UnderlineLink.vue", "deps": [] },
+    "svelte": { "file": "UnderlineLink.svelte", "deps": [] },
+    "astro": { "file": "UnderlineLink.astro", "deps": [] },
+    "angular": { "file": "underline-link.component.ts", "deps": [] }
   },
   "props": [
     {
@@ -54,6 +57,7 @@
     ]
   },
   "addedAt": "2026-11-05",
+  "updatedAt": "2026-11-11",
   "i18n": {
     "id": {
       "description": "Link dengan garis bawah beranimasi dalam lima gaya, termasuk coretan tangan. Tampil saat hover, saat fokus keyboard, dan untuk halaman aktif.",

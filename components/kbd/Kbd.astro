@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const keycap =
+  "inline-flex items-center justify-center rounded-md bg-surface font-sans font-medium text-muted ring-1 ring-line";
+const sizes = {
+  sm: "h-5 min-w-5 px-1 text-[11px]",
+  md: "h-6 min-w-6 px-1.5 text-xs",
+};
+const group = "inline-flex items-center gap-1 font-sans";
+const joiner = "text-xs text-muted";
+
+type Props = HTMLAttributes<"kbd"> & {
+  size?: keyof typeof sizes;
+  /** Key combination, rendered as separate keycaps. Replaces the slot. */
+  keys?: string[];
+  /** Text between keys in a combination. */
+  separator?: string;
+};
+
+const { size = "md", keys = [], separator = "+", class: className, ...rest } =
+  Astro.props;
+---
+
+{
+  keys.length === 0 ? (
+    <kbd class:list={[keycap, sizes[size], className]} {...rest}><slot /></kbd>
+  ) : (
+    <kbd class:list={[group, className]} {...rest}>
+      {keys.map((key, index) => (
+        <Fragment>
+          {index > 0 && <span class={joiner}>{separator}</span>}
+          <kbd class:list={[keycap, sizes[size]]}>{key}</kbd>
+        </Fragment>
+      ))}
+    </kbd>
+  )
+}

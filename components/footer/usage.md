@@ -114,6 +114,100 @@ const columns = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Footer from "$lib/components/markas/Footer.svelte";
+
+  const columns = [
+    {
+      title: "Product",
+      links: [
+        { label: "Components", href: "/components" },
+        { label: "Templates", href: "/templates" },
+      ],
+    },
+  ];
+</script>
+
+<Footer
+  variant="newsletter"
+  newsletterDescription="One email a month. No spam."
+  copyright="© 2026 MarkasUI"
+  {columns}
+>
+  {#snippet brand()}MarkasUI{/snippet}
+</Footer>
+```
+
+## Astro
+
+```astro
+---
+import Footer from "@/components/markas/Footer.astro";
+
+const columns = [
+  {
+    title: "Product",
+    links: [
+      { label: "Components", href: "/components" },
+      { label: "Templates", href: "/templates" },
+    ],
+  },
+];
+---
+
+<Footer
+  variant="newsletter"
+  newsletterDescription="One email a month. No spam."
+  copyright="© 2026 MarkasUI"
+  columns={columns}
+  backToTop
+>
+  <Fragment slot="brand">MarkasUI</Fragment>
+</Footer>
+```
+
+The footer renders on the server. Only the built-in newsletter form uses a small bundled script, shared by every footer on the page.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Footer, type FooterColumn } from "./markas/footer.component";
+
+@Component({
+  selector: "app-site-footer",
+  imports: [Footer],
+  template: `
+    <footer
+      markas-footer
+      variant="newsletter"
+      newsletterDescription="One email a month. No spam."
+      copyright="© 2026 MarkasUI"
+      [columns]="columns"
+      backToTop
+    >
+      <ng-container brand>MarkasUI</ng-container>
+    </footer>
+  `,
+})
+export class SiteFooter {
+  protected readonly columns: FooterColumn[] = [
+    {
+      title: "Product",
+      links: [
+        { label: "Components", href: "/components" },
+        { label: "Templates", href: "/templates" },
+      ],
+    },
+  ];
+}
+```
+
+Footer is an attribute component on a native `footer`, so `class`, `id`, and `aria-*` stay on that element. Put slot content in an element (or `ng-container`) with the `brand`, `actions`, or `newsletter` attribute.
+
 ## Notes
 
 - The layout responds to the footer's own width (container queries), so it stacks correctly inside a narrow column as well as on a phone.

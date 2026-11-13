@@ -17,14 +17,26 @@
     "vue": {
       "file": "Accordion.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Accordion.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Accordion.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "accordion.component.ts",
+      "deps": []
     }
   },
   "props": [
     {
       "name": "items",
-      "type": "Blade: array<key, title> · React: { value, title, content }[] · Vue: { value, title }[]",
+      "type": "Blade: array<key, title> · React: { value, title, content }[] · Vue: { value, title }[] · Svelte: { value, title, content: string | Snippet }[] · Astro: { value, title, content? }[] · Angular: { value, title, content: string | TemplateRef }[]",
       "default": "[]",
-      "description": "Section list. In Blade and Vue, fill each section through a slot named after its key or value."
+      "description": "Section list. In Blade and Vue, fill each section through a slot named after its key or value. Astro uses the same named slot when an item has no content. Svelte takes a snippet and Angular an ng-template reference for rich content."
     },
     {
       "name": "type",
@@ -56,7 +68,7 @@
     "id": {
       "description": "Daftar bagian yang bisa dibuka dan ditutup, dibangun dari details dan summary native tanpa JavaScript.",
       "props": {
-        "items": "Daftar bagian. Di Blade dan Vue, isi tiap bagian lewat slot dengan nama sama seperti key/value.",
+        "items": "Daftar bagian. Di Blade dan Vue, isi tiap bagian lewat slot dengan nama sama seperti key/value. Astro memakai slot bernama yang sama bila item tidak punya content. Svelte menerima snippet dan Angular referensi ng-template untuk isi kaya.",
         "type": "single: hanya satu bagian terbuka (atribut name yang sama di details). multiple: bebas.",
         "defaultValue": "Bagian yang terbuka saat pertama dirender. Pada type single hanya nilai pertama yang dipakai."
       },
@@ -73,5 +85,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

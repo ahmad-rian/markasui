@@ -17,6 +17,18 @@
     "vue": {
       "file": "Skeleton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Skeleton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Skeleton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "skeleton.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -68,5 +80,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

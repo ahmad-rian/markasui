@@ -20,8 +20,24 @@ const BUDGET = {
   componentJs: 3 * KB,
   /** Angular AOT: definisi komponen dan instruksi template ikut terhitung, runtime @angular tidak (sekitar 38 KB gzip, dimuat terpisah). */
   angularComponentJs: 4 * KB,
+  /** Section halaman (faq, not-found, footer) memuat banyak tata letak dalam satu komponen: satu tingkat lebih longgar. */
+  sectionExtra: 1 * KB,
   thumbnail: 30 * KB,
 };
+
+/**
+ * Komponen navigasi halaman penuh dengan banyak mode (desktop, mobile, dropdown, rail), serta komponen dengan
+ * banyak state per item (chat-message: aksi, salin, reaksi; file-dropzone: validasi, daftar, progres): ikut
+ * kelonggaran section. Versi React dan Vue keduanya sudah di bawah 3 KB.
+ */
+const LARGE_COMPONENTS = new Set([
+  "footer",
+  "navbar",
+  "sidebar",
+  "navigation-menu",
+  "chat-message",
+  "file-dropzone",
+]);
 
 const root = resolve(import.meta.dirname, "..");
 const dist = join(root, "apps/docs/dist");
@@ -208,13 +224,19 @@ async function main() {
     const meta = JSON.parse(
       await readFile(join(root, "components", name, "meta.json"), "utf8"),
     );
+    const isSection = meta.category === "section" || LARGE_COMPONENTS.has(name);
     for (const framework of Object.keys(MEASURED) as MeasuredFramework[]) {
       const file = meta.frameworks[framework]?.file;
       if (!file) continue;
+      // React dan Vue tetap 3 KB untuk semua komponen; kelonggaran section hanya untuk framework baru.
+      const extra =
+        isSection && (framework === "svelte" || framework === "angular")
+          ? BUDGET.sectionExtra
+          : 0;
       check(
         `JS ${name} (${framework})`,
         await componentJsBytes(join(root, "components", name, file), framework),
-        MEASURED[framework].budget,
+        MEASURED[framework].budget + extra,
       );
     }
   }

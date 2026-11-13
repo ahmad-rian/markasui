@@ -1,0 +1,344 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type NavbarChild = {
+  label: string;
+  href: string;
+  description?: string;
+  /** SVG path data (d attribute) for a 24x24 stroke icon. */
+  icon?: string;
+};
+
+export type NavbarLink = {
+  label: string;
+  /** Plain link target. Ignored when the item has children. */
+  href?: string;
+  active?: boolean;
+  /** Dropdown links. An item with children becomes a dropdown trigger. */
+  children?: NavbarChild[];
+};
+
+const root =
+  "@container w-full **:focus-visible:outline-2 **:focus-visible:outline-offset-2 **:focus-visible:outline-primary motion-reduce:**:transition-none";
+const variants = {
+  default: "top-0 border-b border-line bg-surface",
+  floating: "top-3 rounded-2xl border border-line bg-surface shadow-overlay",
+  blur: "top-0 border-b border-line/60 bg-surface/70 backdrop-blur-md",
+};
+const stickyClass = "sticky z-40";
+const bar = "flex h-14 items-center gap-4 px-4";
+const brandClass =
+  "flex shrink-0 items-center gap-2 text-sm font-semibold text-ink";
+const desktopNav = "relative hidden items-center @2xl:flex";
+const indicator =
+  "absolute inset-y-0 left-0 rounded-md bg-subtle transition-[translate,width] duration-200 ease-out";
+const list = "relative flex items-center";
+const item =
+  "flex h-9 cursor-pointer items-center justify-between gap-1 rounded-md px-3 text-sm font-medium whitespace-nowrap text-muted transition-colors duration-150 ease-out hover:text-ink aria-expanded:text-ink aria-[current]:bg-subtle aria-[current]:text-ink @max-2xl:hover:bg-subtle [&::-webkit-details-marker]:hidden";
+const chevron =
+  "size-3.5 text-faint transition-transform duration-200 ease-out in-aria-expanded:rotate-180 in-open:rotate-180";
+const panel =
+  "inset-auto m-0 rounded-xl border border-line bg-surface p-2 text-ink shadow-overlay transition-[opacity,translate] duration-200 ease-out starting:open:translate-y-1.5 starting:open:opacity-0";
+const panelList = "grid grid-flow-col grid-rows-3 gap-1";
+const panelLink =
+  "flex w-64 items-start gap-3 rounded-lg p-3 text-sm transition-colors duration-150 ease-out hover:bg-subtle focus-visible:bg-subtle";
+const iconClass =
+  "size-9 shrink-0 rounded-md border border-line bg-canvas p-[7px]";
+const linkBody = "grid gap-0.5";
+const linkTitle = "font-medium";
+const linkDescription = "text-muted";
+const actionsClass = "ml-auto flex items-center gap-2";
+const toggle =
+  "inline-flex size-9 shrink-0 items-center justify-center rounded-md text-ink transition-colors duration-150 ease-out hover:bg-subtle @2xl:hidden";
+const openIcon = "size-5 in-aria-expanded:hidden";
+const closeIcon = "hidden size-5 in-aria-expanded:block";
+const mobilePanel =
+  "border-t border-line px-4 py-2 transition-[opacity,translate] duration-200 ease-out starting:-translate-y-1 starting:opacity-0 @2xl:hidden";
+const mobileList = "grid gap-1";
+const groupList =
+  "my-1 ml-3 grid gap-1 border-l border-line pl-2 transition-[opacity,translate] duration-200 ease-out starting:-translate-y-1 starting:opacity-0";
+
+/** Hrefs with a scheme other than http, https, mailto, and tel (javascript: for one) become "#". Spaces and control characters are ignored like browsers do. */
+const safeHref = (href = "#") =>
+  /^(?!https?:|mailto:|tel:)[a-z][\w+.-]*:/i.test(href.replace(/[\0- ]/g, ""))
+    ? "#"
+    : href;
+
+const svg = {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  "stroke-width": "1.5",
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  "aria-hidden": "true",
+} as const;
+
+type Props = HTMLAttributes<"header"> & {
+  links?: NavbarLink[];
+  /** default: hairline bottom border, floating: rounded and floating, blur: translucent background. */
+  variant?: keyof typeof variants;
+  sticky?: boolean;
+  /** Accessible label of the mobile menu button. */
+  menuLabel?: string;
+  /** Accessible label of the desktop nav element. */
+  navLabel?: string;
+  /** Accessible label of the mobile nav element. */
+  mobileNavLabel?: string;
+};
+
+const {
+  links = [],
+  variant = "default",
+  sticky = false,
+  menuLabel = "Menu",
+  navLabel = "Main",
+  mobileNavLabel = "Main mobile",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const navbarId = id ?? `markas-navbar-${crypto.randomUUID().slice(0, 8)}`;
+const menuId = `${navbarId}-menu`;
+---
+
+<header
+  id={navbarId}
+  data-markas-navbar
+  class:list={[root, variants[variant], sticky && stickyClass, className]}
+  {...rest}
+>
+  <div class={bar}>
+    {
+      Astro.slots.has("brand") && (
+        <div class={brandClass}>
+          <slot name="brand" />
+        </div>
+      )
+    }
+    <nav aria-label={navLabel} class={desktopNav}>
+      <span aria-hidden="true" hidden class={indicator}></span>
+      <ul class={list}>
+        {
+          links.map((entry, index) => {
+            const panelId = `${navbarId}-panel-${index}`;
+            return (
+              <li data-markas-navbar-item>
+                {entry.children?.length ? (
+                  <>
+                    <button
+                      type="button"
+                      popovertarget={panelId}
+                      aria-expanded="false"
+                      aria-controls={panelId}
+                      data-markas-navbar-trigger
+                      class={item}
+                    >
+                      {entry.label}<svg class={chevron} {...svg}><path d="m6 9 6 6 6-6" /></svg>
+                    </button>
+                    <div
+                      id={panelId}
+                      popover="auto"
+                      data-markas-navbar-panel
+                      class={panel}
+                    >
+                      <ul class={panelList}>
+                        {entry.children.map((child) => (
+                          <li>
+                            <a href={safeHref(child.href)} class={panelLink}>
+                              {child.icon && (
+                                <svg class={iconClass} {...svg}>
+                                  <path d={child.icon} />
+                                </svg>
+                              )}
+                              <span class={linkBody}>
+                                <span class={linkTitle}>{child.label}</span>
+                                {child.description && (
+                                  <span class={linkDescription}>
+                                    {child.description}
+                                  </span>
+                                )}
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <a
+                    href={safeHref(entry.href)}
+                    aria-current={entry.active ? "page" : undefined}
+                    class={item}
+                  >
+                    {entry.label}
+                  </a>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+    <div class={actionsClass}>
+      <slot name="actions" />
+      <button
+        type="button"
+        aria-label={menuLabel}
+        aria-expanded="false"
+        aria-controls={menuId}
+        data-markas-navbar-toggle
+        class={toggle}
+      >
+        <svg class={openIcon} {...svg}>
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg class={closeIcon} {...svg}>
+          <path d="M18 6 6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id={menuId} data-state="closed" hidden class={mobilePanel}>
+    <nav aria-label={mobileNavLabel} class={mobileList}>
+      {
+        links.map((entry) =>
+          entry.children?.length ? (
+            <details>
+              <summary class={item}>
+                {entry.label}<svg class={chevron} {...svg}><path d="m6 9 6 6 6-6" /></svg>
+              </summary>
+              <div class={groupList}>
+                {entry.children.map((child) => (
+                  <a href={safeHref(child.href)} class={item}>
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <a
+              href={safeHref(entry.href)}
+              aria-current={entry.active ? "page" : undefined}
+              class={item}
+            >
+              {entry.label}
+            </a>
+          ),
+        )
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  // One set of listeners per page serves every navbar, including markup added later and pages
+  // reached through view transitions.
+  /** Delay before a panel opens when the pointer lingers, and before it closes when the pointer leaves. */
+  const OPEN_DELAY = 120;
+  const CLOSE_DELAY = 180;
+  /** Distance of the panel from its trigger and from the viewport edge. */
+  const GAP = 8;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  const closest = (node: EventTarget | null, selector: string) =>
+    node instanceof Element ? node.closest<HTMLElement>(selector) : null;
+
+  /**
+   * Slide the indicator to the hovered item, the open panel, or the active item, then place the
+   * open panel under its trigger. The indicator is the nav's first child, the panel is the trigger's next sibling.
+   */
+  function sync(nav: Element) {
+    const find = (selector: string) => nav.querySelector<HTMLElement>(selector);
+    const open = find("[aria-expanded=true]");
+    const target =
+      find(":scope>ul>li:hover>:first-child") ?? open ?? find("[aria-current]");
+    const pill = nav.firstElementChild as HTMLElement;
+    pill.hidden = !target;
+    if (target) {
+      pill.style.width = `${target.offsetWidth}px`;
+      pill.style.translate = `${target.offsetLeft}px 0`;
+    }
+    const popover = open?.nextElementSibling as HTMLElement | undefined;
+    if (!popover) return;
+    const box = open!.getBoundingClientRect();
+    const maxLeft = innerWidth - popover.offsetWidth - GAP;
+    popover.style.top = `${box.bottom + GAP}px`;
+    popover.style.left = `${Math.max(GAP, Math.min(box.left, maxLeft))}px`;
+  }
+
+  /** Opens or closes the mobile panel of a navbar. */
+  function setMobile(toggle: HTMLElement, open: boolean) {
+    const menu = document.getElementById(toggle.getAttribute("aria-controls")!);
+    toggle.setAttribute("aria-expanded", String(open));
+    if (!menu) return;
+    menu.hidden = !open;
+    menu.dataset.state = open ? "open" : "closed";
+  }
+
+  document.addEventListener("click", (event) => {
+    const toggle = closest(event.target, "[data-markas-navbar-toggle]");
+    if (toggle) {
+      setMobile(toggle, toggle.getAttribute("aria-expanded") !== "true");
+      return;
+    }
+    // A mouse click on a trigger that is already open (usually by hover) does not close it.
+    const trigger = closest(event.target, "[data-markas-navbar-trigger]");
+    if (trigger && event.detail && trigger.matches("[aria-expanded=true]"))
+      event.preventDefault();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    // ArrowDown on a trigger opens the panel and focuses the first link.
+    const trigger = closest(event.target, "[data-markas-navbar-trigger]");
+    if (trigger && event.key === "ArrowDown") {
+      const popover = trigger.nextElementSibling as HTMLElement;
+      event.preventDefault();
+      popover.showPopover();
+      popover.querySelector("a")?.focus();
+      return;
+    }
+    // Escape closes the mobile panel and returns focus to the menu button.
+    const header = closest(event.target, "[data-markas-navbar]");
+    const toggle = header?.querySelector<HTMLElement>(
+      "[data-markas-navbar-toggle][aria-expanded=true]",
+    );
+    if (event.key !== "Escape" || !toggle) return;
+    setMobile(toggle, false);
+    toggle.focus();
+  });
+
+  // pointerenter, pointerleave, beforetoggle, and toggle do not bubble, so listen in the capture phase.
+  // Mouse hover: entering a dropdown item opens it after a delay, leaving closes it after a delay.
+  // Items without a dropdown do not cancel the close delay.
+  const hover = (event: Event) => {
+    const entry = event.target;
+    if (!(entry instanceof HTMLElement) || !entry.hasAttribute("data-markas-navbar-item"))
+      return;
+    const popover = entry.querySelector<HTMLElement>("[popover]");
+    sync(entry.closest("nav")!);
+    if ((event as PointerEvent).pointerType !== "mouse" || !popover) return;
+    const enter = event.type === "pointerenter";
+    clearTimeout(timer);
+    timer = setTimeout(
+      () => popover.togglePopover(enter),
+      enter ? OPEN_DELAY : CLOSE_DELAY,
+    );
+  };
+  document.addEventListener("pointerenter", hover, true);
+  document.addEventListener("pointerleave", hover, true);
+
+  // beforetoggle runs synchronously so aria-expanded is always current; toggle places the panel once it shows.
+  const toggled = (event: Event) => {
+    const popover = event.target;
+    if (!(popover instanceof HTMLElement) || !popover.hasAttribute("data-markas-navbar-panel"))
+      return;
+    popover.previousElementSibling!.setAttribute(
+      "aria-expanded",
+      String((event as ToggleEvent).newState === "open"),
+    );
+    sync(popover.closest("nav")!);
+  };
+  document.addEventListener("beforetoggle", toggled, true);
+  document.addEventListener("toggle", toggled, true);
+</script>

@@ -6,9 +6,30 @@
   "tags": ["alert", "dialog", "confirm", "modal", "overlay"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "alert-dialog.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "AlertDialog.tsx", "deps": [] },
-    "vue": { "file": "AlertDialog.vue", "deps": [] }
+    "blade": {
+      "file": "alert-dialog.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "AlertDialog.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "AlertDialog.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "AlertDialog.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "AlertDialog.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "alert-dialog.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -19,15 +40,15 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Short explanation of the consequence, used for aria-describedby."
     },
     {
       "name": "trigger",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Element that opens the dialog when clicked."
+      "description": "Element that opens the dialog when clicked. Angular: an element with the trigger attribute."
     },
     {
       "name": "variant",
@@ -51,19 +72,31 @@
       "name": "onAction / @action / markas-action",
       "type": "() => void",
       "default": "-",
-      "description": "Called when the action button is chosen. Blade dispatches a markas-action event."
+      "description": "Called when the action button is chosen. Svelte: onaction. Blade and Astro dispatch a markas-action event."
     },
     {
       "name": "onCancel / @cancel / markas-cancel",
       "type": "() => void",
       "default": "-",
-      "description": "Called when the dialog closes through the cancel button or Escape. Blade dispatches a markas-cancel event."
+      "description": "Called when the dialog closes through the cancel button or Escape. Svelte: oncancel. Blade and Astro dispatch a markas-cancel event."
     },
     {
       "name": "id",
       "type": "string",
       "default": "auto",
       "description": "Dialog id. Use it to open the dialog from elsewhere with showModal()."
+    },
+    {
+      "name": "action",
+      "type": "output<void>",
+      "default": "-",
+      "description": "Angular only. Emits when the action button is chosen."
+    },
+    {
+      "name": "cancelled",
+      "type": "output<void>",
+      "default": "-",
+      "description": "Angular only. Emits when the dialog closes through the cancel button or Escape."
     }
   ],
   "a11y": [
@@ -87,13 +120,15 @@
       "props": {
         "title": "Judul dialog, dipakai sebagai aria-labelledby.",
         "children / slot": "Penjelasan singkat akibat aksi, dipakai sebagai aria-describedby.",
-        "trigger": "Elemen yang membuka dialog saat diklik.",
+        "trigger": "Elemen yang membuka dialog saat diklik. Angular: elemen dengan atribut trigger.",
         "variant": "Warna tombol aksi. Pakai danger untuk aksi yang merusak atau tidak bisa dibatalkan.",
         "cancelLabel": "Teks tombol batal. Isi \"Batal\" untuk situs berbahasa Indonesia.",
         "actionLabel": "Teks tombol aksi. Isi \"Lanjutkan\" atau nama aksinya untuk situs berbahasa Indonesia.",
-        "onAction / @action / markas-action": "Dipanggil saat tombol aksi dipilih. Blade memancarkan event markas-action.",
-        "onCancel / @cancel / markas-cancel": "Dipanggil saat dialog ditutup lewat tombol batal atau Escape. Blade memancarkan event markas-cancel.",
-        "id": "Id dialog. Bisa dipakai untuk membuka dialog dari luar lewat showModal()."
+        "onAction / @action / markas-action": "Dipanggil saat tombol aksi dipilih. Svelte: onaction. Blade dan Astro memancarkan event markas-action.",
+        "onCancel / @cancel / markas-cancel": "Dipanggil saat dialog ditutup lewat tombol batal atau Escape. Svelte: oncancel. Blade dan Astro memancarkan event markas-cancel.",
+        "id": "Id dialog. Bisa dipakai untuk membuka dialog dari luar lewat showModal().",
+        "action": "Khusus Angular. Dipancarkan saat tombol aksi dipilih.",
+        "cancelled": "Khusus Angular. Dipancarkan saat dialog ditutup lewat tombol batal atau Escape."
       },
       "a11y": [
         "Memakai dialog dengan role=alertdialog dan showModal(), jadi fokus terkunci di dalam dan halaman di belakangnya inert.",
@@ -110,5 +145,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

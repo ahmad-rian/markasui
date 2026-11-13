@@ -14,16 +14,37 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "logo-cloud.blade.php", "deps": [] },
-    "react": { "file": "LogoCloud.tsx", "deps": [] },
-    "vue": { "file": "LogoCloud.vue", "deps": [] }
+    "blade": {
+      "file": "logo-cloud.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "LogoCloud.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "LogoCloud.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "LogoCloud.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "LogoCloud.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "logo-cloud.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "logos",
       "type": "{ name: string; href?: string; path?: string; viewBox?: string; wordmark?: boolean; quote?: string; author?: string }[]",
       "default": "[]",
-      "description": "Logos. path is an SVG path filled with currentColor; the name shows as a wordmark unless wordmark is false. Custom markup: React logo field, Vue logo slot, Blade slot named after the array key."
+      "description": "Logos. path is an SVG path filled with currentColor; the name shows as a wordmark unless wordmark is false. Custom markup: React logo field, Vue logo slot, Blade slot named after the array key, Svelte logo snippet, Astro function child (logo, index), Angular ng-template child."
     },
     {
       "name": "title",
@@ -97,5 +118,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

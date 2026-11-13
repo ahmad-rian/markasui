@@ -62,6 +62,84 @@ import { Drawer } from "@/components/markas/Drawer";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Drawer from "$lib/components/markas/Drawer.svelte";
+</script>
+
+<Drawer title="Filter produk" closeLabel="Tutup">
+  {#snippet trigger()}
+    <Button variant="secondary">Buka filter</Button>
+  {/snippet}
+
+  Pilih kategori dan rentang harga untuk menyaring daftar produk.
+
+  {#snippet footer()}
+    <Button variant="secondary" type="submit" value="cancel">Batal</Button>
+    <Button type="submit" value="apply">Terapkan</Button>
+  {/snippet}
+</Drawer>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Drawer from "@/components/markas/Drawer.astro";
+---
+
+<Drawer title="Filter produk" closeLabel="Tutup">
+  <Button slot="trigger" variant="secondary">Buka filter</Button>
+
+  Pilih kategori dan rentang harga untuk menyaring daftar produk.
+
+  <Fragment slot="footer">
+    <Button variant="secondary" type="submit" value="cancel">Batal</Button>
+    <Button type="submit" value="apply">Terapkan</Button>
+  </Fragment>
+</Drawer>
+```
+
+Satu script kecil yang dibundel Astro membuka semua drawer di halaman, termasuk setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Drawer } from "./markas/drawer.component";
+
+@Component({
+  selector: "app-filters",
+  imports: [Button, Drawer],
+  template: `
+    <markas-drawer
+      title="Filter produk"
+      closeLabel="Tutup"
+      (closed)="onClosed()"
+    >
+      <button markas-button trigger variant="secondary">Buka filter</button>
+
+      Pilih kategori dan rentang harga untuk menyaring daftar produk.
+
+      <ng-container footer>
+        <button markas-button variant="secondary" type="submit" value="cancel">
+          Batal
+        </button>
+        <button markas-button type="submit" value="apply">Terapkan</button>
+      </ng-container>
+    </markas-drawer>
+  `,
+})
+export class Filter {
+  onClosed() {}
+}
+```
+
 ## Catatan
 
 - Pakai `side="left"` untuk drawer dari sisi kiri.

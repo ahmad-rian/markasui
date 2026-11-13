@@ -6,9 +6,30 @@
   "tags": ["background", "stars", "space", "dark", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "stars-background.blade.php", "deps": [] },
-    "react": { "file": "StarsBackground.tsx", "deps": [] },
-    "vue": { "file": "StarsBackground.vue", "deps": [] }
+    "blade": {
+      "file": "stars-background.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "StarsBackground.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "StarsBackground.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "StarsBackground.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "StarsBackground.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "stars-background.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -71,5 +92,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

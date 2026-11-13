@@ -51,6 +51,82 @@ import { Table } from "@/components/markas/Table";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Badge from "$lib/components/markas/Badge.svelte";
+  import Table, { type TableRow } from "$lib/components/markas/Table.svelte";
+
+  const columns = [
+    { key: "code", label: "Order" },
+    { key: "status", label: "Status" },
+    { key: "total", label: "Total", align: "right" as const },
+  ];
+</script>
+
+{#snippet status(row: TableRow)}
+  <Badge>{row.status}</Badge>
+{/snippet}
+
+<Table caption="Recent orders" {columns} rows={orders} cells={{ status }} />
+```
+
+`cells` maps a column key to a snippet that receives the row. Other columns show the plain value.
+
+## Astro
+
+```astro
+---
+import Badge from "@/components/markas/Badge.astro";
+import Table, { type TableRow } from "@/components/markas/Table.astro";
+---
+
+<Table caption="Recent orders" columns={columns} rows={orders}>
+  {
+    (row: TableRow, key: string) =>
+      key === "status" && <Badge>{row.status}</Badge>
+  }
+</Table>
+```
+
+The function child runs for every cell. Return nothing to keep the plain value.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Badge } from "./markas/badge.component";
+import { Table, type TableColumn } from "./markas/table.component";
+
+@Component({
+  selector: "app-orders",
+  imports: [Badge, Table],
+  template: `
+    <div
+      markas-table
+      caption="Recent orders"
+      [columns]="columns"
+      [rows]="orders"
+      [cells]="{ status: statusCell }"
+    ></div>
+    <ng-template #statusCell let-row>
+      <span markas-badge>{{ row.status }}</span>
+    </ng-template>
+  `,
+})
+export class Orders {
+  columns: TableColumn[] = [
+    { key: "code", label: "Order" },
+    { key: "status", label: "Status" },
+    { key: "total", label: "Total", align: "right" },
+  ];
+  orders = [{ code: "INV-1024", status: "Paid", total: "$250.00" }];
+}
+```
+
+`cells` maps a column key to an `ng-template` that receives the row as `let-row`.
+
 ## Notes
 
 - Blade only shows escaped text values. For cells with other components, write the table by hand with the same classes, or prepare the string in the controller.

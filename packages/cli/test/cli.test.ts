@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { loadComponent, parseTheme, toIndexItem } from "@markasui/registry";
+import type { RegistryItem } from "@markasui/registry/schema";
 import { beforeAll, describe, expect, it } from "vitest";
 import { add, CliError, init, list } from "../src/commands.ts";
 import type { Io } from "../src/io.ts";
@@ -16,14 +17,23 @@ import { setupGuide } from "../src/setup.ts";
 
 const root = resolve(import.meta.dirname, "../../..");
 const PILOT = ["button", "input", "modal", "tabs"];
+/** Disajikan hanya dengan Blade, React, Vue, seperti komponen yang belum di-porting. */
+const LEGACY = "tabs";
 let registry: string;
+
+function withoutNewFrameworks(item: RegistryItem): RegistryItem {
+  const { blade, react, vue } = item.frameworks;
+  return { ...item, frameworks: { blade, react, vue } };
+}
 
 /** Registry lokal dari komponen pilot, seperti hasil pnpm registry. */
 beforeAll(async () => {
   registry = await mkdtemp(join(tmpdir(), "markas-cli-registry-"));
-  const items = await Promise.all(
-    PILOT.map((name) => loadComponent(join(root, "components", name))),
-  );
+  const items = (
+    await Promise.all(
+      PILOT.map((name) => loadComponent(join(root, "components", name))),
+    )
+  ).map((item) => (item.name === LEGACY ? withoutNewFrameworks(item) : item));
   const theme = parseTheme(
     await readFile(join(root, "packages/theme/markas.css"), "utf8"),
   );

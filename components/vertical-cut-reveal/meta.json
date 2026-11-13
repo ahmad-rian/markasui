@@ -16,7 +16,10 @@
   "frameworks": {
     "blade": { "file": "vertical-cut-reveal.blade.php", "deps": ["alpinejs"] },
     "react": { "file": "VerticalCutReveal.tsx", "deps": [] },
-    "vue": { "file": "VerticalCutReveal.vue", "deps": [] }
+    "vue": { "file": "VerticalCutReveal.vue", "deps": [] },
+    "svelte": { "file": "VerticalCutReveal.svelte", "deps": [] },
+    "astro": { "file": "VerticalCutReveal.astro", "deps": [] },
+    "angular": { "file": "vertical-cut-reveal.component.ts", "deps": [] }
   },
   "props": [
     {
@@ -77,6 +80,7 @@
     ]
   },
   "addedAt": "2026-11-05",
+  "updatedAt": "2026-11-11",
   "i18n": {
     "id": {
       "description": "Teks yang naik dari balik garis potong per huruf, kata, atau baris saat masuk layar. Dibuat untuk judul hero.",

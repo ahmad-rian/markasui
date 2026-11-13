@@ -6,9 +6,30 @@
   "tags": ["card", "tilt", "3d", "parallax", "glare", "hover", "pointer"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "tilt-card.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "TiltCard.tsx", "deps": [] },
-    "vue": { "file": "TiltCard.vue", "deps": [] }
+    "blade": {
+      "file": "tilt-card.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "TiltCard.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "TiltCard.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "TiltCard.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "TiltCard.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "tilt-card.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -68,5 +89,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

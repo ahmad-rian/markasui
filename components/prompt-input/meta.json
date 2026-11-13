@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "prompt-input.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "PromptInput.tsx", "deps": [] },
-    "vue": { "file": "PromptInput.vue", "deps": [] }
+    "blade": {
+      "file": "prompt-input.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "PromptInput.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "PromptInput.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "PromptInput.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "PromptInput.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "prompt-input.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -126,6 +147,12 @@
       "type": "string",
       "default": "Model",
       "description": "Accessible name of the model picker."
+    },
+    {
+      "name": "(send) / (stop)",
+      "type": "output",
+      "default": "-",
+      "description": "Angular only. Outputs for send and stop; the text supports [(value)] and the picker [(model)]. Svelte uses onSend, onStop, bind:value, and bind:model. Astro dispatches send and stop on markas-prompt-input and follows its loading attribute."
     }
   ],
   "a11y": [
@@ -165,7 +192,8 @@
         "stopLabel": "Nama aksesibel tombol saat loading. Default \"Stop\", isi misalnya \"Hentikan\".",
         "attachLabel": "Nama aksesibel tombol lampiran. Default \"Attach files\", isi misalnya \"Lampirkan berkas\".",
         "removeLabel": "Nama aksesibel tombol hapus tiap chip. {name} diganti nama berkas. Default \"Remove {name}\".",
-        "modelLabel": "Nama aksesibel pemilih model. Default \"Model\"."
+        "modelLabel": "Nama aksesibel pemilih model. Default \"Model\".",
+        "(send) / (stop)": "Khusus Angular. Output untuk kirim dan berhenti; teks mendukung [(value)] dan pemilih [(model)]. Svelte memakai onSend, onStop, bind:value, dan bind:model. Astro memancarkan send dan stop di markas-prompt-input dan mengikuti atribut loading-nya."
       },
       "a11y": [
         "Kolom adalah textarea native bernama inputLabel dengan maxlength native. Seluruh kotak menampilkan cincin fokus saat kolom difokus.",
@@ -183,5 +211,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

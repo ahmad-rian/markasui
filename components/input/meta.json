@@ -6,9 +6,30 @@
   "tags": ["input", "form", "text", "field"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "input.blade.php", "deps": [] },
-    "react": { "file": "Input.tsx", "deps": [] },
-    "vue": { "file": "Input.vue", "deps": [] }
+    "blade": {
+      "file": "input.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Input.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Input.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Input.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Input.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "input.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -40,6 +61,12 @@
       "type": "string",
       "default": "text",
       "description": "Native type attribute (email, password, and so on)."
+    },
+    {
+      "name": "value / v-model / bind:value / [(value)]",
+      "type": "string",
+      "default": "-",
+      "description": "Current text. Blade and Astro use the value attribute, React value or defaultValue, Vue v-model, Svelte bind:value, Angular value or [(value)]."
     }
   ],
   "a11y": [
@@ -63,7 +90,8 @@
         "hint": "Teks petunjuk di bawah input. Disembunyikan saat ada error.",
         "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
         "id": "Id input. Dibuat otomatis kalau kosong.",
-        "type": "Atribut type native (email, password, dan seterusnya)."
+        "type": "Atribut type native (email, password, dan seterusnya).",
+        "value / v-model / bind:value / [(value)]": "Teks saat ini. Blade dan Astro memakai atribut value, React value atau defaultValue, Vue v-model, Svelte bind:value, Angular value atau [(value)]."
       },
       "a11y": [
         "Label terhubung ke input lewat atribut for dan id.",
@@ -78,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

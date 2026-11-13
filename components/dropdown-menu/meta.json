@@ -17,6 +17,18 @@
     "vue": {
       "file": "DropdownMenu.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "DropdownMenu.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "DropdownMenu.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "dropdown-menu.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -34,9 +46,9 @@
     },
     {
       "name": "trigger",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Custom trigger button content, replaces label."
+      "description": "Custom trigger button content, replaces label. Angular: an element with the trigger attribute."
     },
     {
       "name": "onSelect / @select / markas-select",
@@ -49,6 +61,12 @@
       "type": "string",
       "default": "auto",
       "description": "Menu panel id. The trigger button uses this id with a -trigger suffix."
+    },
+    {
+      "name": "selected",
+      "type": "output<string>",
+      "default": "-",
+      "description": "Angular only. Emits the item value (or label) when an item is selected. Svelte uses the onselect prop, Astro dispatches a markas-select event like Blade."
     }
   ],
   "a11y": [
@@ -72,9 +90,10 @@
       "props": {
         "items": "Daftar item menu. Item dengan href dirender sebagai link, separator menjadi garis pemisah.",
         "label": "Teks tombol pemicu. Default \"Options\", isi misalnya \"Opsi\" atau \"Aksi\" untuk situs berbahasa Indonesia.",
-        "trigger": "Isi tombol pemicu kustom, menggantikan label.",
+        "trigger": "Isi tombol pemicu kustom, menggantikan label. Angular: elemen dengan atribut trigger.",
         "onSelect / @select / markas-select": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select.",
-        "id": "Id panel menu. Tombol pemicu memakai id ini dengan akhiran -trigger."
+        "id": "Id panel menu. Tombol pemicu memakai id ini dengan akhiran -trigger.",
+        "selected": "Khusus Angular. Dipancarkan dengan value item (atau label) saat item dipilih. Svelte memakai prop onselect, Astro memancarkan event markas-select seperti Blade."
       },
       "a11y": [
         "Tombol pemicu memakai aria-haspopup=menu, aria-expanded, dan aria-controls ke panel role=menu.",
@@ -91,5 +110,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

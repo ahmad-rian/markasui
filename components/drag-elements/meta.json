@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "drag-elements.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "DragElements.tsx", "deps": [] },
-    "vue": { "file": "DragElements.vue", "deps": [] }
+    "blade": {
+      "file": "drag-elements.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "DragElements.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "DragElements.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "DragElements.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "DragElements.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "drag-elements.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -92,5 +113,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

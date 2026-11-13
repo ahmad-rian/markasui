@@ -1,0 +1,281 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type ContextMenuItem =
+  | { separator: true }
+  | {
+      separator?: false;
+      label: string;
+      value?: string;
+      href?: string;
+      danger?: boolean;
+      disabled?: boolean;
+    };
+
+const area =
+  "block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const hint = "sr-only";
+const menu =
+  "inset-auto m-0 min-w-48 rounded-lg border border-line bg-surface p-1 text-ink shadow-overlay";
+const item =
+  "flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+const tones = {
+  default: "text-ink hover:bg-subtle focus:bg-subtle",
+  danger: "text-danger hover:bg-danger/10 focus:bg-danger/10",
+};
+const separator = "my-1 h-px bg-line";
+
+const HAS_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+const SAFE_SCHEME = /^(https?|mailto|tel):/i;
+
+/** Hrefs with a scheme other than http, https, mailto, and tel (such as javascript:) become "#". */
+const safeHref = (href: string) => {
+  const cleaned = href.replace(/[\t\n\r]/g, "");
+  const start = [...cleaned].findIndex((char) => char > " ");
+  const value = cleaned.slice(Math.max(start, 0));
+  return HAS_SCHEME.test(value) && !SAFE_SCHEME.test(value) ? "#" : href;
+};
+
+type Props = HTMLAttributes<"div"> & {
+  items: ContextMenuItem[];
+  /** Accessible label of the menu panel. */
+  menuLabel?: string;
+  /** Hidden screen reader hint on how to open the menu. */
+  hintLabel?: string;
+};
+
+const {
+  items,
+  menuLabel = "Context menu",
+  hintLabel = "Press Shift+F10 to open the context menu",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const menuId = id ?? `markas-context-menu-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<div class="contents">
+  <div
+    {...rest}
+    role="group"
+    tabindex="0"
+    aria-describedby={`${menuId}-hint`}
+    data-state="closed"
+    data-markas-context-menu={menuId}
+    class:list={[area, className]}
+  >
+    <slot />
+  </div>
+  <span id={`${menuId}-hint`} class={hint}>{hintLabel}</span>
+  <div
+    id={menuId}
+    popover="auto"
+    role="menu"
+    aria-label={menuLabel}
+    data-state="closed"
+    data-markas-context-menu-panel
+    class={menu}
+  >
+    {
+      items.map((entry) => {
+        if (entry.separator)
+          return <div role="separator" class={separator} />;
+        const itemClass = [item, tones[entry.danger ? "danger" : "default"]];
+        const value = entry.value ?? entry.label;
+        if (entry.href && !entry.disabled)
+          return (
+            <a
+              href={safeHref(entry.href)}
+              role="menuitem"
+              tabindex="-1"
+              data-value={value}
+              class:list={itemClass}
+            >
+              {entry.label}
+            </a>
+          );
+        return (
+          <button
+            type="button"
+            role="menuitem"
+            tabindex="-1"
+            disabled={entry.disabled}
+            data-value={value}
+            class:list={itemClass}
+          >
+            {entry.label}
+          </button>
+        );
+      })
+    }
+  </div>
+</div>
+
+<script>
+  // One set of listeners per page serves every context menu, including markup added later
+  // and pages reached through view transitions. Only one auto popover menu is open at a time.
+  type Offset = { x: number; y: number };
+
+  const GAP = 4;
+  const ITEM_SELECTOR = '[role="menuitem"]:not(:disabled)';
+  const offsets = new WeakMap<HTMLElement, Offset>();
+  let followed: HTMLElement | undefined;
+  let unfollow: (() => void) | undefined;
+
+  const isMenu = (node: EventTarget | null): node is HTMLElement =>
+    node instanceof HTMLElement &&
+    node.hasAttribute("data-markas-context-menu-panel");
+  const areaOf = (menu: HTMLElement) =>
+    document.querySelector<HTMLElement>(
+      `[data-markas-context-menu="${CSS.escape(menu.id)}"]`,
+    );
+  const menuItems = (menu: HTMLElement) =>
+    Array.from(menu.querySelectorAll<HTMLElement>(ITEM_SELECTOR));
+
+  function focusItem(menu: HTMLElement, index: number) {
+    const list = menuItems(menu);
+    if (list.length === 0) return;
+    list[(index + list.length) % list.length]?.focus();
+  }
+
+  /** Places the menu at the point (relative to the area), shifting or flipping up when it does not fit. */
+  function place(menu: HTMLElement) {
+    const target = areaOf(menu);
+    if (!target) return;
+    const offset = offsets.get(menu) ?? { x: 0, y: 0 };
+    const anchor = target.getBoundingClientRect();
+    const { width, height } = menu.getBoundingClientRect();
+    const x = anchor.left + offset.x;
+    const y = anchor.top + offset.y;
+    const fitsBelow = y + height <= window.innerHeight - GAP;
+    const top = fitsBelow ? y : Math.max(GAP, y - height);
+    const left = Math.max(GAP, Math.min(x, window.innerWidth - width - GAP));
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
+  }
+
+  /** Re-runs placement while the page scrolls or the window resizes. */
+  function follow(menu: HTMLElement) {
+    unfollow?.();
+    followed = menu;
+    const update = () => place(menu);
+    const scrollOptions = { capture: true, passive: true };
+    window.addEventListener("scroll", update, scrollOptions);
+    window.addEventListener("resize", update, { passive: true });
+    unfollow = () => {
+      window.removeEventListener("scroll", update, scrollOptions);
+      window.removeEventListener("resize", update);
+      unfollow = followed = undefined;
+    };
+  }
+
+  function openAt(area: HTMLElement, offset: Offset) {
+    const menu = document.getElementById(
+      area.dataset.markasContextMenu ?? "",
+    );
+    if (!isMenu(menu)) return;
+    offsets.set(menu, offset);
+    // Place synchronously after showPopover; the toggle event arrives later.
+    if (!menu.matches(":popover-open")) menu.showPopover();
+    place(menu);
+    focusItem(menu, 0);
+  }
+
+  function close(menu: HTMLElement) {
+    menu.hidePopover();
+    areaOf(menu)?.focus();
+  }
+
+  function onMenuKeydown(event: KeyboardEvent, menu: HTMLElement) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      return close(menu);
+    }
+    if (event.key === "Tab") return menu.hidePopover();
+    const index = menuItems(menu).indexOf(
+      document.activeElement as HTMLElement,
+    );
+    const targets: Record<string, number | undefined> = {
+      ArrowDown: index + 1,
+      ArrowUp: index - 1,
+      Home: 0,
+      End: -1,
+    };
+    const target = targets[event.key];
+    if (target === undefined) return;
+    event.preventDefault();
+    focusItem(menu, target);
+  }
+
+  document.addEventListener("contextmenu", (event) => {
+    const target = event.target as Element;
+    if (target.closest("[data-markas-context-menu-panel]"))
+      return event.preventDefault();
+    const area = target.closest<HTMLElement>("[data-markas-context-menu]");
+    if (!area) return;
+    event.preventDefault();
+    const anchor = area.getBoundingClientRect();
+    openAt(area, {
+      x: event.clientX - anchor.left,
+      y: event.clientY - anchor.top,
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target as Element;
+    const menu = target.closest("[data-markas-context-menu-panel]");
+    if (isMenu(menu)) return onMenuKeydown(event, menu);
+    // Shift+F10 and the ContextMenu key open the menu from the keyboard.
+    const isMenuKey =
+      event.key === "ContextMenu" || (event.shiftKey && event.key === "F10");
+    const area = target.closest<HTMLElement>("[data-markas-context-menu]");
+    if (!isMenuKey || !area) return;
+    event.preventDefault();
+    openAt(area, { x: 0, y: 0 });
+  });
+
+  document.addEventListener("click", (event) => {
+    const entry = (event.target as Element).closest<HTMLElement>(
+      "[data-markas-context-menu-panel] [role=menuitem]",
+    );
+    const menu = entry?.closest("[data-markas-context-menu-panel]") ?? null;
+    if (!entry || !isMenu(menu)) return;
+    menu.dispatchEvent(
+      new CustomEvent("markas-select", {
+        bubbles: true,
+        detail: entry.dataset.value,
+      }),
+    );
+    close(menu);
+  });
+
+  // beforetoggle and toggle do not bubble, so listen in the capture phase. beforetoggle runs
+  // synchronously, so the state is current for the next key press.
+  document.addEventListener(
+    "beforetoggle",
+    (event) => {
+      if (!isMenu(event.target)) return;
+      const state = (event as ToggleEvent).newState;
+      event.target.dataset.state = state;
+      const area = areaOf(event.target);
+      if (area) area.dataset.state = state;
+    },
+    true,
+  );
+
+  document.addEventListener(
+    "toggle",
+    (event) => {
+      if (!isMenu(event.target)) return;
+      if ((event as ToggleEvent).newState !== "open") {
+        if (followed === event.target) unfollow?.();
+        return;
+      }
+      place(event.target);
+      follow(event.target);
+      focusItem(event.target, 0);
+    },
+    true,
+  );
+</script>

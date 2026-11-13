@@ -17,6 +17,18 @@
     "vue": {
       "file": "Table.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Table.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Table.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "table.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -87,10 +99,10 @@
       "description": "Name of the field holding a unique id per row (such as id), used as the React and Vue key so rows do not get mixed up when data is sorted or removed. Without it the key is the index. Not used in Blade."
     },
     {
-      "name": "renderCell / slot cell-<key>",
-      "type": "(row, key) => ReactNode · slot { row }",
+      "name": "renderCell / slot cell-<key> / cells",
+      "type": "(row, key) => ReactNode · slot { row } · Record<string, Snippet | TemplateRef>",
       "default": "-",
-      "description": "Custom cell content. React uses renderCell, Vue uses the named slot cell-<key>. Blade is text only."
+      "description": "Custom cell content. React uses renderCell, Vue the named slot cell-<key>, Svelte and Angular a cells map of snippets or ng-templates per column key, Astro a function child (row, key) that returns markup or nothing. Blade is text only."
     }
   ],
   "a11y": [
@@ -125,7 +137,7 @@
         "size": "Padding sel. sm memakai padding lebih rapat dan teks 13px untuk data padat.",
         "footer": "Satu baris footer opsional di tfoot, berisi nilai per key kolom, misalnya total. Key yang tidak ada menjadi sel kosong.",
         "rowKey": "Nama field berisi id unik per baris (misalnya id), dipakai sebagai key React dan Vue agar baris tidak tertukar saat data diurutkan atau dihapus. Tanpa ini key memakai indeks. Blade tidak memakainya.",
-        "renderCell / slot cell-<key>": "Isi sel kustom. React lewat renderCell, Vue lewat named slot cell-<key>. Blade hanya teks."
+        "renderCell / slot cell-<key> / cells": "Isi sel kustom. React memakai renderCell, Vue named slot cell-<key>, Svelte dan Angular peta cells berisi snippet atau ng-template per key kolom, Astro function child (row, key) yang mengembalikan markup atau kosong. Blade hanya teks."
       },
       "a11y": [
         "Pembungkus memakai role region, aria-label, dan tabindex 0 agar tabel yang terpotong bisa difokus lalu digulir dengan panah.",
@@ -144,5 +156,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

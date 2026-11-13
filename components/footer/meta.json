@@ -25,6 +25,18 @@
     "vue": {
       "file": "Footer.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Footer.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Footer.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "footer.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -219,5 +231,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

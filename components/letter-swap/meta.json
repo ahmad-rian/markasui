@@ -6,9 +6,30 @@
   "tags": ["text", "hover", "link", "navbar", "button", "stagger", "animation"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "letter-swap.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "LetterSwap.tsx", "deps": [] },
-    "vue": { "file": "LetterSwap.vue", "deps": [] }
+    "blade": {
+      "file": "letter-swap.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "LetterSwap.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "LetterSwap.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "LetterSwap.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "LetterSwap.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "letter-swap.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -82,5 +103,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

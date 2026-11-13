@@ -70,6 +70,84 @@ const tab = ref("beranda");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import BottomNavigation from "$lib/components/markas/BottomNavigation.svelte";
+
+  let tab = $state("home");
+</script>
+
+<BottomNavigation
+  {items}
+  bind:value={tab}
+  shrinkOnScroll
+  actionLabel="New transfer"
+  onaction={openTransfer}
+  class="absolute inset-x-4 bottom-4"
+>
+  {#snippet action()}
+    <PlusIcon class="size-6" />
+  {/snippet}
+</BottomNavigation>
+```
+
+Tombol aksi hanya dirender kalau snippet `action` diisi.
+
+## Astro
+
+```astro
+---
+import BottomNavigation from "@/components/markas/BottomNavigation.astro";
+---
+
+<BottomNavigation
+  items={items}
+  defaultValue="home"
+  shrinkOnScroll
+  actionLabel="New transfer"
+  class="absolute inset-x-4 bottom-4"
+>
+  <PlusIcon slot="action" class="size-6" />
+</BottomNavigation>
+```
+
+Custom element kecil menggeser pill dan mengecilkan bar. Ia mengirim `markas-change` (value sebagai detail) dan `markas-action`, keduanya menggelembung.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { BottomNavigation } from "./markas/bottom-navigation.component";
+
+@Component({
+  selector: "app-wallet-nav",
+  imports: [BottomNavigation],
+  template: `
+    <markas-bottom-navigation
+      [items]="items"
+      [(value)]="tab"
+      shrinkOnScroll
+      actionLabel="New transfer"
+      (action)="openTransfer()"
+      class="absolute inset-x-4 bottom-4"
+    >
+      <svg action class="size-6" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" stroke="currentColor" />
+      </svg>
+    </markas-bottom-navigation>
+  `,
+})
+export class WalletNav {
+  items = [{ value: "home", label: "Home", icon: "M3 10.5 12 3l9 7.5V20H3z" }];
+  tab = signal("home");
+  openTransfer() {}
+}
+```
+
+Elemen dengan atribut `action` mengisi tombol aksi bulat.
+
 ## Catatan
 
 - Letakkan bar di dalam elemen yang discroll (atau di sebelahnya, dalam induk yang sama). shrinkOnScroll mendengarkan scroll di dalam elemen induk bar dan di halaman.

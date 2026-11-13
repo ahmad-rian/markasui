@@ -41,10 +41,12 @@ let nextId = 0;
         [type]="type()"
         [value]="value()"
         [disabled]="disabled()"
+        [readOnly]="readonly()"
         [required]="required()"
         [attr.name]="name() ?? null"
         [attr.placeholder]="placeholder() ?? null"
         [attr.autocomplete]="autocomplete() ?? null"
+        [attr.inputmode]="inputmode() ?? null"
         [attr.aria-label]="ariaLabel() ?? null"
         [attr.aria-invalid]="error() ? 'true' : null"
         [attr.aria-describedby]="describedBy()"
@@ -69,7 +71,10 @@ export class Input {
   readonly placeholder = input<string>();
   readonly autocomplete = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly required = input(false, { transform: booleanAttribute });
+  /** Virtual keyboard hint, for example decimal or numeric. */
+  readonly inputmode = input<string>();
   readonly ariaLabel = input<string | undefined>(undefined, {
     alias: "aria-label",
   });

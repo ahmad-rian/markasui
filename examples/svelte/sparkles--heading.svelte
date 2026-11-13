@@ -1,0 +1,18 @@
+<script lang="ts">
+  import Button from "../../components/button/Button.svelte";
+  import Sparkles from "../../components/sparkles/Sparkles.svelte";
+</script>
+
+<div
+  class="grid justify-items-center gap-4 rounded-xl border border-line bg-surface px-6 py-10 text-center"
+>
+  <Sparkles variant="text" density={18} size="sm" class="px-6 py-4">
+    <h3 class="text-3xl font-semibold tracking-tight text-ink">
+      Meet MarkasUI Pro
+    </h3>
+  </Sparkles>
+  <p class="max-w-72 text-sm text-muted">
+    Every component, every template, and early access to what we build next.
+  </p>
+  <Button>See what is new</Button>
+</div>

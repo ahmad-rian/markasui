@@ -1,0 +1,22 @@
+---
+import Button from "../../components/button/Button.astro";
+import Toaster from "../../components/toast/Toast.astro";
+---
+
+<div class="flex flex-wrap items-center gap-3">
+  <Button variant="secondary" data-toast={JSON.stringify({ title: "Link copied" })}>Default</Button>
+  <Button variant="secondary" data-toast={JSON.stringify({ title: "Invitation sent", variant: "success" })}>Success</Button>
+  <Button variant="secondary" data-toast={JSON.stringify({ title: "Upload failed", variant: "danger" })}>Danger</Button>
+</div>
+<Toaster />
+
+<script>
+  // Toaster listens for the markas-toast event on window.
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-toast]");
+    if (!button) return;
+    window.dispatchEvent(
+      new CustomEvent("markas-toast", { detail: JSON.parse(button.dataset.toast!) }),
+    );
+  });
+</script>

@@ -13,9 +13,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "dynamic-island.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "DynamicIsland.tsx", "deps": [] },
-    "vue": { "file": "DynamicIsland.vue", "deps": [] }
+    "blade": {
+      "file": "dynamic-island.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "DynamicIsland.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "DynamicIsland.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "DynamicIsland.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "DynamicIsland.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "dynamic-island.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -59,6 +80,12 @@
       "type": "string",
       "default": "Live activity",
       "description": "Accessible name of the island region."
+    },
+    {
+      "name": "state attribute",
+      "type": "idle | compact | expanded",
+      "default": "-",
+      "description": "Astro only. Set the state attribute on markas-dynamic-island from a script to morph the island after the first render."
     }
   ],
   "a11y": [
@@ -87,7 +114,8 @@
         "trailing": "Sisi kanan pill compact, misalnya timer atau nilai singkat.",
         "expanded": "Isi kartu besar, cukup untuk teks dan tombol.",
         "announcements": "Teks yang dibacakan live region polite saat island pindah ke keadaan itu. Isi hanya keadaan yang penting.",
-        "islandLabel": "Nama aksesibel region island. Default \"Live activity\", isi misalnya \"Aktivitas langsung\"."
+        "islandLabel": "Nama aksesibel region island. Default \"Live activity\", isi misalnya \"Aktivitas langsung\".",
+        "state attribute": "Khusus Astro. Atur atribut state di markas-dynamic-island dari script untuk mengubah island setelah render pertama."
       },
       "a11y": [
         "Island adalah region bernama islandLabel. Isi keadaan yang tidak tampil bersifat inert, jadi tidak bisa difokus atau dibaca.",
@@ -105,5 +133,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

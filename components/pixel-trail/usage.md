@@ -42,6 +42,58 @@ import { PixelTrail } from "@/components/markas/PixelTrail";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import PixelTrail from "$lib/components/markas/PixelTrail.svelte";
+</script>
+
+<PixelTrail
+  variant="dot"
+  showGrid
+  class="grid h-64 place-items-center rounded-xl"
+>
+  <h2 class="text-2xl font-semibold">Move your mouse</h2>
+</PixelTrail>
+```
+
+## Astro
+
+```astro
+---
+import PixelTrail from "@/components/markas/PixelTrail.astro";
+---
+
+<PixelTrail variant="dot" showGrid class="grid h-64 place-items-center rounded-xl">
+  <h2 class="text-2xl font-semibold">Move your mouse</h2>
+</PixelTrail>
+```
+
+A small bundled script draws each canvas through the `markas-pixel-trail` element.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { PixelTrail } from "./markas/pixel-trail.component";
+
+@Component({
+  selector: "app-hero",
+  imports: [PixelTrail],
+  template: `
+    <markas-pixel-trail
+      variant="dot"
+      showGrid
+      class="grid h-64 place-items-center rounded-xl"
+    >
+      <h2 class="text-2xl font-semibold">Move your mouse</h2>
+    </markas-pixel-trail>
+  `,
+})
+export class Hero {}
+```
+
 ## Notes
 
 - Cells are drawn on one canvas behind the content, so even thousands of cells cost no DOM nodes. The canvas only redraws while some cell is still lit.

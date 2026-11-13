@@ -6,16 +6,37 @@
   "tags": ["toggle", "group", "segmented", "toolbar"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "toggle-group.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ToggleGroup.tsx", "deps": [] },
-    "vue": { "file": "ToggleGroup.vue", "deps": [] }
+    "blade": {
+      "file": "toggle-group.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ToggleGroup.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ToggleGroup.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ToggleGroup.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ToggleGroup.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "toggle-group.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "items",
       "type": "{ value, label, ariaLabel? }[]",
       "default": "[]",
-      "description": "Buttons in the group. ariaLabel is required when the label is only an icon. Blade and Vue can replace a label through a slot named after its value."
+      "description": "Buttons in the group. ariaLabel is required when the label is only an icon. Blade, Vue, and Astro can replace a label through a slot named after its value, Svelte accepts a snippet as label, Angular an ng-template with markasToggleGroupItem set to the value."
     },
     {
       "name": "type",
@@ -24,10 +45,10 @@
       "description": "Single allows one pressed item, or none. Multiple allows any number."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value",
       "type": "string | string[]",
       "default": "-",
-      "description": "Pressed items. A string for single (empty when none) and an array for multiple. Blade uses value, React value or defaultValue, Vue v-model or defaultValue."
+      "description": "Pressed items. A string for single (empty when none) and an array for multiple. Blade and Astro use value, React value or defaultValue, Vue v-model or defaultValue, Svelte bind:value, Angular value or [(value)]."
     },
     {
       "name": "onValueChange",
@@ -60,11 +81,11 @@
     "id": {
       "description": "Grup tombol toggle bersegmen dengan pilihan tunggal atau ganda dan navigasi tombol panah antar item.",
       "props": {
-        "items": "Tombol di dalam grup. ariaLabel wajib kalau label hanya ikon. Blade dan Vue bisa mengganti label lewat slot bernama sesuai value.",
+        "items": "Tombol di dalam grup. ariaLabel wajib kalau label hanya ikon. Blade, Vue, dan Astro bisa mengganti label lewat slot bernama sesuai value, Svelte menerima snippet sebagai label, Angular memakai ng-template dengan markasToggleGroupItem berisi value.",
         "type": "Single mengizinkan satu item ditekan, atau tidak ada. Multiple mengizinkan berapa pun.",
-        "value / defaultValue / v-model": "Item yang ditekan. String untuk single (kosong kalau tidak ada) dan array untuk multiple. Blade memakai value, React value atau defaultValue, Vue v-model atau defaultValue.",
         "onValueChange": "Khusus React. Dipanggil dengan nilai baru setiap kali berubah, urut sesuai item untuk multiple.",
-        "label": "Nama aksesibel grup, dipasang sebagai aria-label."
+        "label": "Nama aksesibel grup, dipasang sebagai aria-label.",
+        "value / defaultValue / v-model / bind:value": "Item yang ditekan. String untuk single (kosong kalau tidak ada) dan array untuk multiple. Blade dan Astro memakai value, React value atau defaultValue, Vue v-model atau defaultValue, Svelte bind:value, Angular value atau [(value)]."
       },
       "a11y": [
         "Wadah memiliki role group dan aria-label dari label, setiap item adalah button dengan aria-pressed.",
@@ -80,5 +101,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

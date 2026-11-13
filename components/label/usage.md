@@ -36,6 +36,56 @@ import Label from "@/components/markas/Label.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Label from "$lib/components/markas/Label.svelte";
+</script>
+
+<Label for="full_name" required>Full name</Label>
+<input id="full_name" name="full_name" required />
+
+<Label for="company" optional>Company</Label>
+<input id="company" name="company" />
+```
+
+## Astro
+
+```astro
+---
+import Label from "@/components/markas/Label.astro";
+---
+
+<Label for="full_name" required>Full name</Label>
+<input id="full_name" name="full_name" required />
+
+<Label for="company" optional>Company</Label>
+<input id="company" name="company" />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Label } from "./markas/label.component";
+
+@Component({
+  selector: "app-profile-form",
+  imports: [Label],
+  template: `
+    <label markas-label for="full_name" required>Full name</label>
+    <input id="full_name" name="full_name" required />
+
+    <label markas-label for="company" optional>Company</label>
+    <input id="company" name="company" />
+  `,
+})
+export class ProfileForm {}
+```
+
+In Angular, Label is an attribute on a native `<label>`, so `for`, `id`, and `class` stay on that element.
+
 ## Notes
 
 - Label needs no JavaScript. Extra attributes and `class` go to the `<label>` element, and your classes come last.

@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const base = "animate-pulse bg-subtle motion-reduce:animate-none";
+const shapes = {
+  rect: "rounded-md",
+  circle: "rounded-full",
+};
+
+type Props = HTMLAttributes<"div"> & {
+  shape?: keyof typeof shapes;
+};
+
+const { shape = "rect", class: className, ...rest } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={[base, shapes[shape], className]} {...rest}></div>

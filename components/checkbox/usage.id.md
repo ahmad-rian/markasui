@@ -39,6 +39,59 @@ const kabar = ref(false);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Checkbox from "$lib/components/markas/Checkbox.svelte";
+
+  let updates = $state(false);
+</script>
+
+<Checkbox
+  bind:checked={updates}
+  name="updates"
+  label="Kirimi saya kabar produk"
+  description="Paling banyak satu email per bulan."
+/>
+```
+
+## Astro
+
+```astro
+---
+import Checkbox from "@/components/markas/Checkbox.astro";
+---
+
+<Checkbox name="terms" label="Saya setuju dengan ketentuan layanan" required />
+<Checkbox name="updates" label="Kirimi saya kabar produk" description="Paling banyak satu email per bulan." checked />
+```
+
+Tanpa script klien: checkbox-nya input native.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Checkbox } from "./markas/checkbox.component";
+
+@Component({
+  selector: "app-preferences",
+  imports: [Checkbox],
+  template: `
+    <markas-checkbox
+      [(checked)]="updates"
+      name="updates"
+      label="Kirimi saya kabar produk"
+      description="Paling banyak satu email per bulan."
+    />
+  `,
+})
+export class Preferences {
+  readonly updates = signal(false);
+}
+```
+
 ## Catatan
 
 - Atribut tambahan (`name`, `value`, `required`, `class`) diteruskan ke elemen `<input>`.

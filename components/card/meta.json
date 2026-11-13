@@ -6,9 +6,30 @@
   "tags": ["card", "kartu", "panel", "container"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "card.blade.php", "deps": [] },
-    "react": { "file": "Card.tsx", "deps": [] },
-    "vue": { "file": "Card.vue", "deps": [] }
+    "blade": {
+      "file": "card.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Card.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Card.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Card.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Card.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "card.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -25,9 +46,9 @@
     },
     {
       "name": "footer",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Action area at the bottom of the card, such as buttons."
+      "description": "Action area at the bottom of the card, such as buttons. Angular: an element with the footer attribute."
     }
   ],
   "a11y": [
@@ -50,7 +71,7 @@
       "props": {
         "title": "Judul kartu, dirender sebagai h3.",
         "description": "Teks pendek di bawah judul.",
-        "footer": "Area aksi di bagian bawah kartu, misalnya tombol."
+        "footer": "Area aksi di bagian bawah kartu, misalnya tombol. Angular: elemen dengan atribut footer."
       },
       "a11y": [
         "Memakai elemen article, jadi kartu terbaca sebagai satu kesatuan konten.",
@@ -66,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

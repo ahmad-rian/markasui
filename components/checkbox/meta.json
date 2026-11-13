@@ -6,9 +6,30 @@
   "tags": ["checkbox", "form", "toggle", "boolean"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "checkbox.blade.php", "deps": [] },
-    "react": { "file": "Checkbox.tsx", "deps": [] },
-    "vue": { "file": "Checkbox.vue", "deps": [] }
+    "blade": {
+      "file": "checkbox.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Checkbox.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Checkbox.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Checkbox.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Checkbox.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "checkbox.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -24,10 +45,10 @@
       "description": "Supporting text below the label, linked through aria-describedby."
     },
     {
-      "name": "checked / defaultChecked / v-model",
+      "name": "checked / defaultChecked / v-model / bind:checked",
       "type": "boolean",
       "default": "false",
-      "description": "Checked state. Blade uses the checked attribute, React checked or defaultChecked, Vue v-model."
+      "description": "Checked state. Blade and Astro use the checked attribute, React checked or defaultChecked, Vue v-model, Svelte bind:checked, Angular checked or [(checked)]."
     },
     {
       "name": "disabled",
@@ -40,6 +61,12 @@
       "type": "string",
       "default": "auto",
       "description": "Input id. Generated when empty."
+    },
+    {
+      "name": "checkedChange",
+      "type": "output<boolean>",
+      "default": "-",
+      "description": "Angular only. Emits the new state every time the checkbox changes."
     }
   ],
   "a11y": [
@@ -61,9 +88,10 @@
       "props": {
         "label": "Teks label di samping kotak, terhubung lewat for/id.",
         "description": "Teks penjelas di bawah label, dihubungkan lewat aria-describedby.",
-        "checked / defaultChecked / v-model": "Status centang. Blade memakai atribut checked, React checked atau defaultChecked, Vue v-model.",
         "disabled": "Menonaktifkan checkbox dan meredupkan label.",
-        "id": "Id input. Dibuat otomatis kalau kosong."
+        "id": "Id input. Dibuat otomatis kalau kosong.",
+        "checked / defaultChecked / v-model / bind:checked": "Status centang. Blade dan Astro memakai atribut checked, React checked atau defaultChecked, Vue v-model, Svelte bind:checked, Angular checked atau [(checked)].",
+        "checkedChange": "Khusus Angular. Memancarkan status baru setiap kali checkbox berubah."
       },
       "a11y": [
         "Memakai input type checkbox native, jadi Spasi mencentang dan status dibacakan screen reader.",
@@ -78,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

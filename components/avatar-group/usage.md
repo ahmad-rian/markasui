@@ -40,6 +40,56 @@ import { AvatarGroup } from "@/components/markas/AvatarGroup";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import AvatarGroup from "$lib/components/markas/AvatarGroup.svelte";
+
+  const team = [
+    { name: "Dewi Lestari", src: "/dewi.jpg" },
+    { name: "Budi Santoso" },
+  ];
+</script>
+
+<AvatarGroup items={team} max={3} groupLabel="Project members" />
+```
+
+## Astro
+
+```astro
+---
+import AvatarGroup from "@/components/markas/AvatarGroup.astro";
+
+const team = [{ name: "Dewi Lestari", src: "/dewi.jpg" }, { name: "Budi Santoso" }];
+---
+
+<AvatarGroup items={team} max={3} groupLabel="Project members" />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { AvatarGroup } from "./markas/avatar-group.component";
+
+@Component({
+  selector: "app-members",
+  imports: [AvatarGroup],
+  template: `
+    <div
+      markas-avatar-group
+      [items]="team"
+      [max]="3"
+      groupLabel="Project members"
+    ></div>
+  `,
+})
+export class Members {
+  team = [{ name: "Dewi Lestari", src: "/dewi.jpg" }, { name: "Budi Santoso" }];
+}
+```
+
 ## Notes
 
 - No JavaScript needed. The Blade version does not need Alpine.js; hover effects are pure CSS.

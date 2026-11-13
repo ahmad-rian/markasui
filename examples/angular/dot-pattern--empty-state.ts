@@ -1,0 +1,46 @@
+import { Component } from "@angular/core";
+import { Button } from "../../components/button/button.component";
+import { DotPattern } from "../../components/dot-pattern/dot-pattern.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [Button, DotPattern],
+  template: `
+    <div
+      markas-dot-pattern
+      mask="radial"
+      [spacing]="12"
+      class="rounded-xl border border-dashed border-line bg-canvas px-6 py-10"
+    >
+      <div class="grid justify-items-center gap-3 text-center">
+        <span
+          class="grid size-12 place-items-center rounded-full border border-line bg-surface text-muted"
+        >
+          <svg
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+            />
+            <path d="M12 11v5m-2.5-2.5h5" />
+          </svg>
+        </span>
+        <div class="grid gap-1">
+          <h3 class="text-base font-semibold text-ink">No projects yet</h3>
+          <p class="text-sm text-muted">
+            Create your first project to start tracking work.
+          </p>
+        </div>
+        <button markas-button size="sm">New project</button>
+      </div>
+    </div>
+  `,
+})
+export default class DotPatternEmptyStateExample {}

@@ -1,0 +1,118 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "w-full";
+const list = "inline-flex items-center gap-1 rounded-lg bg-subtle p-1";
+const tab =
+  "inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap text-muted transition-colors duration-150 ease-out hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=active]:bg-surface data-[state=active]:text-ink motion-reduce:transition-none";
+const panel =
+  "mt-4 rounded-md text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+
+export type TabItem = { value: string; label: string };
+
+type Props = HTMLAttributes<"div"> & {
+  items: TabItem[];
+  defaultValue?: string;
+};
+
+const { items, defaultValue, id, class: className, ...rest } = Astro.props;
+const tabsId = id ?? `markas-tabs-${crypto.randomUUID().slice(0, 8)}`;
+const active = defaultValue ?? items[0]?.value;
+const panels = await Promise.all(
+  items.map((item) => Astro.slots.render(item.value)),
+);
+---
+
+<div id={tabsId} class:list={[root, className]} {...rest}>
+  <div role="tablist" aria-orientation="horizontal" class={list}>
+    {
+      items.map((item) => {
+        const selected = item.value === active;
+        return (
+          <button
+            type="button"
+            role="tab"
+            id={`${tabsId}-tab-${item.value}`}
+            aria-controls={`${tabsId}-panel-${item.value}`}
+            aria-selected={selected ? "true" : "false"}
+            tabindex={selected ? 0 : -1}
+            data-state={selected ? "active" : "inactive"}
+            data-markas-tab={item.value}
+            class={tab}
+          >{item.label}</button>
+        );
+      })
+    }
+  </div>
+  {
+    items.map((item, index) => {
+      const selected = item.value === active;
+      return (
+        <div
+          role="tabpanel"
+          id={`${tabsId}-panel-${item.value}`}
+          aria-labelledby={`${tabsId}-tab-${item.value}`}
+          tabindex="0"
+          data-state={selected ? "active" : "inactive"}
+          hidden={!selected}
+          class={panel}
+          set:html={panels[index]}
+        />
+      );
+    })
+  }
+</div>
+
+<script>
+  // One listener per page serves every Tabs instance, including markup added later.
+  // Selecting a tab dispatches a bubbling "markas-change" event with the value as detail.
+  const tabOf = (target: EventTarget | null) =>
+    target instanceof Element
+      ? target.closest<HTMLButtonElement>("[data-markas-tab]")
+      : null;
+
+  function select(next: HTMLButtonElement) {
+    for (const item of next.parentElement!.children) {
+      const selected = item === next;
+      const panel = document.getElementById(
+        item.getAttribute("aria-controls") ?? "",
+      );
+      item.setAttribute("aria-selected", String(selected));
+      item.setAttribute("tabindex", selected ? "0" : "-1");
+      item.setAttribute("data-state", selected ? "active" : "inactive");
+      if (panel) {
+        panel.hidden = !selected;
+        panel.dataset.state = selected ? "active" : "inactive";
+      }
+    }
+    next.dispatchEvent(
+      new CustomEvent("markas-change", {
+        detail: next.dataset.markasTab,
+        bubbles: true,
+      }),
+    );
+  }
+
+  document.addEventListener("click", (event) => {
+    const tab = tabOf(event.target);
+    if (tab) select(tab);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const tab = tabOf(event.target);
+    if (!tab) return;
+    const tabs = [...tab.parentElement!.children] as HTMLButtonElement[];
+    const index = tabs.indexOf(tab);
+    const targets: Record<string, HTMLButtonElement | undefined> = {
+      ArrowRight: tabs[(index + 1) % tabs.length],
+      ArrowLeft: tabs[(index - 1 + tabs.length) % tabs.length],
+      Home: tabs[0],
+      End: tabs[tabs.length - 1],
+    };
+    const target = targets[event.key];
+    if (!target) return;
+    event.preventDefault();
+    select(target);
+    target.focus();
+  });
+</script>

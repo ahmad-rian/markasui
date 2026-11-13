@@ -6,9 +6,30 @@
   "tags": ["bottom navigation", "tab bar", "mobile", "nav", "app bar"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "bottom-navigation.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "BottomNavigation.tsx", "deps": [] },
-    "vue": { "file": "BottomNavigation.vue", "deps": [] }
+    "blade": {
+      "file": "bottom-navigation.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "BottomNavigation.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "BottomNavigation.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "BottomNavigation.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "BottomNavigation.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "bottom-navigation.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -70,6 +91,24 @@
       "type": "string",
       "default": "{count} new",
       "description": "Hidden text read after an item with a badge. {count} is replaced by the badge."
+    },
+    {
+      "name": "bind:value",
+      "type": "string",
+      "default": "-",
+      "description": "Svelte only. Two-way binding of the current item. Svelte also takes onValueChange, onaction, and an action snippet."
+    },
+    {
+      "name": "[(value)] / (action)",
+      "type": "model<string> / output<void>",
+      "default": "-",
+      "description": "Angular only. Current item with two-way binding, and the action button press. An element with the action attribute fills the button."
+    },
+    {
+      "name": "markas-change / markas-action",
+      "type": "CustomEvent",
+      "default": "-",
+      "description": "Astro only. Bubbling events from markas-bottom-navigation: the picked value as detail, and a press of the action button (slot=\"action\")."
     }
   ],
   "a11y": [
@@ -101,7 +140,10 @@
         "onAction / @action / x-on:action": "Dipicu saat tombol aksi ditekan.",
         "navLabel": "Nama aksesibel elemen nav.",
         "actionLabel": "Nama aksesibel tombol aksi.",
-        "badgeLabel": "Teks tersembunyi yang dibacakan setelah item ber-badge. {count} diganti isi badge."
+        "badgeLabel": "Teks tersembunyi yang dibacakan setelah item ber-badge. {count} diganti isi badge.",
+        "bind:value": "Khusus Svelte. Binding dua arah item aktif. Svelte juga menerima onValueChange, onaction, dan snippet action.",
+        "[(value)] / (action)": "Khusus Angular. Item aktif dengan binding dua arah, dan tekanan tombol aksi. Elemen dengan atribut action mengisi tombolnya.",
+        "markas-change / markas-action": "Khusus Astro. Event menggelembung dari markas-bottom-navigation: value terpilih sebagai detail, dan tekanan tombol aksi (slot=\"action\")."
       },
       "a11y": [
         "Bar adalah landmark nav bernama navLabel, berisi daftar link atau tombol sesuai urutan tab.",
@@ -119,5 +161,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

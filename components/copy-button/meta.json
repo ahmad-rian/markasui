@@ -17,6 +17,18 @@
     "vue": {
       "file": "CopyButton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "CopyButton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "CopyButton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "copy-button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -91,5 +103,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

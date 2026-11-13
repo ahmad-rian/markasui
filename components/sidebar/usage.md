@@ -96,12 +96,75 @@ const collapsed = ref(false);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Sidebar from "$lib/components/markas/Sidebar.svelte";
+
+  let collapsed = $state(false);
+  // sections: same shape as the React example
+</script>
+
+<Sidebar bind:collapsed {sections} class="h-dvh">
+  {#snippet header()}MarkasUI{/snippet}
+  {#snippet footer()}Rina Saputra{/snippet}
+  <main class="flex-1 p-6">...</main>
+</Sidebar>
+```
+
+## Astro
+
+```astro
+---
+import Sidebar from "@/components/markas/Sidebar.astro";
+// sections: same shape as the React example
+---
+
+<Sidebar sections={sections} class="h-dvh">
+  <Fragment slot="header">MarkasUI</Fragment>
+  <Fragment slot="footer">Rina Saputra</Fragment>
+  <main class="flex-1 p-6">...</main>
+</Sidebar>
+```
+
+A small bundled script handles the rail toggle, sub-item groups, and the mobile dialog for every sidebar on the page. Listen for rail changes with `addEventListener("markas-collapsed-change", (e) => e.detail)`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Sidebar } from "./markas/sidebar.component";
+
+@Component({
+  selector: "app-shell",
+  imports: [Sidebar],
+  template: `
+    <markas-sidebar
+      [(collapsed)]="collapsed"
+      [sections]="sections"
+      class="h-dvh"
+    >
+      <ng-template #header>MarkasUI</ng-template>
+      <ng-template #footer>Rina Saputra</ng-template>
+      <main class="flex-1 p-6">...</main>
+    </markas-sidebar>
+  `,
+})
+export class AppShell {
+  readonly collapsed = signal(false);
+  // sections: same shape as the React example
+}
+```
+
+`header` and `footer` are `ng-template`s because they render twice: in the sidebar and in the mobile dialog.
+
 ## Notes
 
 - The component is the whole app shell: put the page content inside it. Its width decides the layout through a container query. From `breakpoint` (default `md`, 42rem) the sidebar sits next to the content; below it a menu button opens the same links in a native `<dialog>` that slides in from the left.
-- The round button on the sidebar edge switches to a 64px icon rail. Labels then show as tooltips and badges as a dot. The state is uncontrolled by default. Start in rail mode with `defaultCollapsed` in React, or `:collapsed="true"` without `v-model` in Vue and Blade.
+- The round button on the sidebar edge switches to a 64px icon rail. Labels then show as tooltips and badges as a dot. The state is uncontrolled by default. Start in rail mode with `defaultCollapsed` in React, `:collapsed="true"` without `v-model` in Vue and Blade, or a plain `collapsed` value in Svelte, Astro, and Angular.
 - In rail mode a parent item expands the sidebar and opens its sub-items.
 - The highlight slides to the hovered or focused item and back to the active one. It uses CSS anchor positioning, so it needs no JavaScript; browsers without it still mark the active item with bold text. Sub-item groups that hold the active page start open; set `open` to override.
-- `header` and `footer` render twice: once in the sidebar and once in the mobile dialog. A workspace switcher (DropdownMenu) or a search trigger (Command) works in both copies; in Blade, ids inside the dialog copy get a `-m` suffix so they stay unique.
+- `header` and `footer` render twice: once in the sidebar and once in the mobile dialog. A workspace switcher (DropdownMenu) or a search trigger (Command) works in both copies; in Blade, ids inside the dialog copy get a `-m` suffix so they stay unique (Astro: an `m-` prefix).
 - Hide parts of the header or footer in rail mode with `in-data-[state=collapsed]:hidden`, for example an upgrade card.
 - Labels default to English: "Sidebar", "Collapse sidebar", "Expand sidebar", "Open sidebar", and "Close sidebar". Translate them with `navLabel`, `collapseLabel`, `expandLabel`, `openLabel`, and `closeLabel` (Blade: `nav-label`, `collapse-label`, and so on).

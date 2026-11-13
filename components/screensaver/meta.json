@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "screensaver.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Screensaver.tsx", "deps": [] },
-    "vue": { "file": "Screensaver.vue", "deps": [] }
+    "blade": {
+      "file": "screensaver.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Screensaver.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Screensaver.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Screensaver.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Screensaver.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "screensaver.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -97,5 +118,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

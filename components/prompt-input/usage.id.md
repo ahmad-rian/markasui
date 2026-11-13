@@ -60,6 +60,76 @@ import PromptInput from "@/components/markas/PromptInput.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import PromptInput from "$lib/components/markas/PromptInput.svelte";
+
+  let text = $state("");
+  let loading = $state(false);
+</script>
+
+<PromptInput
+  bind:value={text}
+  {loading}
+  models={["Markas Pro", "Markas Mini"]}
+  model="Markas Pro"
+  onSend={({ text, files }) => (loading = true)}
+  onStop={() => (loading = false)}
+/>
+```
+
+## Astro
+
+```astro
+---
+import PromptInput from "@/components/markas/PromptInput.astro";
+---
+
+<PromptInput models={["Markas Pro", "Markas Mini"]} model="Markas Pro" />
+
+<script>
+  const input = document.querySelector("markas-prompt-input");
+  input?.addEventListener("send", () => input.toggleAttribute("loading", true));
+  input?.addEventListener("stop", () => input.toggleAttribute("loading", false));
+</script>
+```
+
+Script yang dibundel memancarkan `send` dengan `{ text, files }` dan `stop` di `markas-prompt-input`; pasang atau hapus atribut `loading`-nya untuk mengganti tombol.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import {
+  PromptInput,
+  type PromptInputValue,
+} from "./markas/prompt-input.component";
+
+@Component({
+  selector: "app-chat",
+  imports: [PromptInput],
+  template: `
+    <markas-prompt-input
+      [(value)]="text"
+      [loading]="loading()"
+      [models]="['Markas Pro', 'Markas Mini']"
+      model="Markas Pro"
+      (send)="onSend($event)"
+      (stop)="loading.set(false)"
+    />
+  `,
+})
+export class Chat {
+  readonly text = signal("");
+  readonly loading = signal(false);
+  onSend(value: PromptInputValue) {
+    this.loading.set(true);
+  }
+}
+```
+
 ## Catatan
 
 - Kolom tumbuh mengikuti isi sampai maxHeight, lalu bisa digulir. Memakai CSS field-sizing dan mengukur manual di browser lama.

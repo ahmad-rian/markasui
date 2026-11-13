@@ -6,9 +6,30 @@
   "tags": ["toggle", "button", "pressed", "toolbar"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "toggle.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Toggle.tsx", "deps": [] },
-    "vue": { "file": "Toggle.vue", "deps": [] }
+    "blade": {
+      "file": "toggle.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Toggle.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Toggle.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Toggle.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Toggle.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "toggle.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -24,16 +45,22 @@
       "description": "Height 32, 36, or 40px. The minimum width matches the height for icon-only toggles."
     },
     {
-      "name": "pressed / defaultPressed / v-model",
+      "name": "pressed / defaultPressed / v-model / bind:pressed",
       "type": "boolean",
       "default": "false",
-      "description": "Pressed state. Blade uses pressed, React pressed or defaultPressed, Vue v-model or defaultPressed."
+      "description": "Pressed state. Blade and Astro use pressed, React pressed or defaultPressed, Vue v-model or defaultPressed, Svelte bind:pressed, Angular pressed or [(pressed)]."
     },
     {
       "name": "onPressedChange",
       "type": "(pressed: boolean) => void",
       "default": "-",
       "description": "React only. Called with the new state on every click."
+    },
+    {
+      "name": "pressedChange",
+      "type": "output<boolean>",
+      "default": "-",
+      "description": "Angular only. Emits the new state on every click."
     },
     {
       "name": "disabled",
@@ -62,9 +89,10 @@
       "props": {
         "variant": "Tampilan toggle. Outline menambahkan border dan latar surface.",
         "size": "Tinggi 32, 36, atau 40px. Lebar minimum sama dengan tinggi untuk toggle berisi ikon saja.",
-        "pressed / defaultPressed / v-model": "Keadaan ditekan. Blade memakai pressed, React pressed atau defaultPressed, Vue v-model atau defaultPressed.",
         "onPressedChange": "Khusus React. Dipanggil dengan keadaan baru setiap kali diklik.",
-        "disabled": "Menonaktifkan toggle."
+        "disabled": "Menonaktifkan toggle.",
+        "pressed / defaultPressed / v-model / bind:pressed": "Keadaan ditekan. Blade dan Astro memakai pressed, React pressed atau defaultPressed, Vue v-model atau defaultPressed, Svelte bind:pressed, Angular pressed atau [(pressed)].",
+        "pressedChange": "Khusus Angular. Memancarkan keadaan baru setiap kali diklik."
       },
       "a11y": [
         "Button native dengan aria-pressed, sehingga screen reader membacakannya sebagai tombol toggle yang ditekan atau tidak.",
@@ -80,5 +108,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

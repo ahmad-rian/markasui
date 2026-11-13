@@ -69,6 +69,94 @@ import { Command } from "@/components/markas/Command";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Command from "$lib/components/markas/Command.svelte";
+
+  const items = [
+    { group: "Navigation", label: "Dashboard", href: "/dashboard" },
+    { group: "Navigation", label: "Projects", href: "/projects" },
+    {
+      group: "Actions",
+      label: "Create project",
+      value: "create",
+      shortcut: "Ctrl+N",
+    },
+    { group: "Actions", label: "Invite member", value: "invite" },
+  ];
+</script>
+
+<Command hotkey {items} onselect={(value) => console.log(value)}>
+  {#snippet trigger()}
+    <Button variant="secondary">Search</Button>
+  {/snippet}
+</Command>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Command from "@/components/markas/Command.astro";
+
+const items = [
+  { group: "Navigation", label: "Dashboard", href: "/dashboard" },
+  { group: "Navigation", label: "Projects", href: "/projects" },
+  { group: "Actions", label: "Create project", value: "create", shortcut: "Ctrl+N" },
+  { group: "Actions", label: "Invite member", value: "invite" },
+];
+---
+
+<Command hotkey items={items}>
+  <Button slot="trigger" variant="secondary">Search</Button>
+</Command>
+
+<script>
+  document.addEventListener("markas-select", (event) => {
+    console.log((event as CustomEvent<string>).detail);
+  });
+</script>
+```
+
+A small bundled script filters the list and handles the keyboard. Choosing a command dispatches a bubbling `markas-select` event with the value in `detail`.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Command } from "./markas/command.component";
+
+@Component({
+  selector: "app-launcher",
+  imports: [Button, Command],
+  template: `
+    <markas-command hotkey [items]="items" (selected)="run($event)">
+      <button markas-button trigger variant="secondary">Search</button>
+    </markas-command>
+  `,
+})
+export class Launcher {
+  readonly items = [
+    { group: "Navigation", label: "Dashboard", href: "/dashboard" },
+    { group: "Navigation", label: "Projects", href: "/projects" },
+    {
+      group: "Actions",
+      label: "Create project",
+      value: "create",
+      shortcut: "Ctrl+N",
+    },
+    { group: "Actions", label: "Invite member", value: "invite" },
+  ];
+
+  run(value: string) {}
+}
+```
+
 ## Notes
 
 - The search is a case-insensitive match on the label. The search resets when the dialog closes.

@@ -43,6 +43,50 @@ import { Separator } from "@/components/markas/Separator";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Separator from "$lib/components/markas/Separator.svelte";
+</script>
+
+<Separator class="my-4" />
+<Separator orientation="vertical" />
+<Separator decorative={false} label="Danger zone" />
+```
+
+## Astro
+
+```astro
+---
+import Separator from "@/components/markas/Separator.astro";
+---
+
+<Separator class="my-4" />
+<Separator orientation="vertical" />
+<Separator decorative={false} label="Danger zone" />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Separator } from "./markas/separator.component";
+
+@Component({
+  selector: "app-example",
+  imports: [Separator],
+  template: `
+    <div markas-separator class="my-4"></div>
+    <div markas-separator orientation="vertical"></div>
+    <div markas-separator [decorative]="false" label="Danger zone"></div>
+  `,
+})
+export class Example {}
+```
+
+Angular memakai attribute selector pada `div` native.
+
 ## Catatan
 
 - Tanpa JavaScript. Versi Blade tidak butuh Alpine.js.

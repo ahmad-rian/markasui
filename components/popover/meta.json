@@ -6,9 +6,30 @@
   "tags": ["popover", "floating", "panel", "overlay"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "popover.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Popover.tsx", "deps": [] },
-    "vue": { "file": "Popover.vue", "deps": [] }
+    "blade": {
+      "file": "popover.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Popover.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Popover.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Popover.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Popover.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "popover.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -19,9 +40,9 @@
     },
     {
       "name": "trigger",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Custom trigger button content, replaces label. Add sr-only text when it only holds an icon."
+      "description": "Custom trigger button content, replaces label. Add sr-only text when it only holds an icon. Angular: an element with the trigger attribute (an ng-container works)."
     },
     {
       "name": "children / slot",
@@ -68,7 +89,7 @@
       "description": "Panel mengambang non-modal berbasis Popover API untuk form kecil dan detail tambahan, menempel pada tombol pemicu.",
       "props": {
         "label": "Teks tombol pemicu. Default \"Open\", isi misalnya \"Bagikan\" untuk situs berbahasa Indonesia.",
-        "trigger": "Isi tombol pemicu kustom, menggantikan label. Tambahkan teks sr-only bila isinya hanya ikon.",
+        "trigger": "Isi tombol pemicu kustom, menggantikan label. Tambahkan teks sr-only bila isinya hanya ikon. Angular: elemen dengan atribut trigger (ng-container bisa).",
         "children / slot": "Isi panel, misalnya form singkat atau detail.",
         "side": "Sisi pemicu tempat panel muncul. Pindah ke sisi lain bila tidak muat di layar.",
         "align": "Perataan horizontal panel terhadap pemicu.",
@@ -89,5 +110,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

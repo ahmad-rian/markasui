@@ -1,0 +1,352 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const roots = {
+  user: "group/message flex flex-col items-end gap-1",
+  assistant: "group/message flex items-start gap-3",
+};
+const avatarClass =
+  "grid size-8 shrink-0 place-items-center overflow-hidden rounded-full border border-line bg-surface text-ink";
+const avatarImage = "size-full object-cover";
+const avatarIcon = "size-4";
+const bodies = {
+  user: "flex w-full flex-col items-end gap-1",
+  assistant: "grid min-w-0 flex-1 justify-items-start gap-1",
+};
+const header = "flex items-baseline gap-2 text-sm font-medium text-ink";
+const contents = {
+  user: "max-w-[85%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-6 break-words whitespace-pre-line text-on-primary",
+  plain: "text-sm leading-6 break-words whitespace-pre-line text-ink",
+  bubble:
+    "rounded-2xl rounded-tl-md bg-subtle px-4 py-2.5 text-sm leading-6 break-words whitespace-pre-line text-ink",
+};
+const timeClass = "text-xs font-normal text-muted";
+const footer = "flex min-h-7 items-center gap-1";
+const actionsClass =
+  "flex items-center gap-0.5 opacity-0 transition-opacity duration-150 ease-out group-focus-within/message:opacity-100 group-hover/message:opacity-100 motion-reduce:transition-none [@media(hover:none)]:opacity-100";
+const action =
+  "group/action grid size-7 place-items-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary aria-pressed:text-ink motion-reduce:transition-none";
+const actionIcon = "col-start-1 row-start-1 size-4";
+const pressIcon = "size-4 group-aria-pressed/action:fill-current/20";
+const copyIcon =
+  "col-start-1 row-start-1 size-4 transition-[opacity,scale] duration-200 ease-out group-data-[state=copied]/action:scale-50 group-data-[state=copied]/action:opacity-0 motion-reduce:transition-none";
+const checkIcon =
+  "col-start-1 row-start-1 size-4 scale-50 opacity-0 transition-[opacity,scale] duration-200 ease-out group-data-[state=copied]/action:scale-100 group-data-[state=copied]/action:opacity-100 motion-reduce:transition-none";
+const dots = "inline-flex h-6 items-center gap-1";
+const dot = [
+  "size-1.5 animate-pulse rounded-full bg-muted motion-reduce:animate-none",
+  "size-1.5 animate-pulse rounded-full bg-muted [animation-delay:150ms] motion-reduce:animate-none",
+  "size-1.5 animate-pulse rounded-full bg-muted [animation-delay:300ms] motion-reduce:animate-none",
+];
+const caret =
+  "ml-0.5 inline-block h-4 w-1.5 translate-y-0.5 animate-pulse rounded-xs bg-current motion-reduce:animate-none";
+const srOnly = "sr-only";
+
+const PATHS = {
+  spark:
+    "M12 3c.4 4.6 2.4 6.6 7 7-4.6.4-6.6 2.4-7 7-.4-4.6-2.4-6.6-7-7 4.6-.4 6.6-2.4 7-7zM19 16c.2 1.6.9 2.3 2.5 2.5-1.6.2-2.3.9-2.5 2.5-.2-1.6-.9-2.3-2.5-2.5 1.6-.2 2.3-.9 2.5-2.5z",
+  copy: "M9 9h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H11a2 2 0 0 1-2-2zM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1",
+  check: "m4 12 5 5L20 6",
+  like: "M7 10v11M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 8a2 2 0 0 1-1.9 1.4H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.8a2 2 0 0 0 1.8-1.1L12 2a3.1 3.1 0 0 1 3 3.9z",
+  dislike:
+    "M17 14V3M9 18.1 10 14H4.2a2 2 0 0 1-1.9-2.6l2.3-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.8a2 2 0 0 0-1.8 1.1L12 22a3.1 3.1 0 0 1-3-3.9z",
+  regenerate:
+    "M3 12a9 9 0 0 1 15.7-6L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.7 6L3 16M8 16H3v5",
+};
+
+type Props = HTMLAttributes<"article"> & {
+  from?: "user" | "assistant";
+  text?: string;
+  /** Assistant messages: plain text or a soft bubble. */
+  variant?: "plain" | "bubble";
+  time?: string;
+  /** Image URL for the assistant avatar. Defaults to a spark icon. */
+  avatar?: string;
+  /** Shows three dots instead of the text. */
+  typing?: boolean;
+  /** Reveals the text token by token with a caret. Off with reduced motion. */
+  stream?: boolean;
+  /** Pause between streamed tokens, in ms. */
+  streamSpeed?: number;
+  /** Shows copy, and for the assistant like, dislike, and regenerate. */
+  actions?: boolean;
+  userLabel?: string;
+  assistantLabel?: string;
+  typingLabel?: string;
+  actionsLabel?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+  likeLabel?: string;
+  dislikeLabel?: string;
+  regenerateLabel?: string;
+};
+
+const {
+  from = "assistant",
+  text = "",
+  variant = "plain",
+  time,
+  avatar,
+  typing = false,
+  stream = false,
+  streamSpeed = 40,
+  actions = true,
+  userLabel = "You",
+  assistantLabel = "Assistant",
+  typingLabel = "Typing",
+  actionsLabel = "Message actions",
+  copyLabel = "Copy",
+  copiedLabel = "Copied",
+  likeLabel = "Good response",
+  dislikeLabel = "Bad response",
+  regenerateLabel = "Regenerate",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const assistant = from === "assistant";
+const feedbackButtons = [
+  { value: "like", label: likeLabel, d: PATHS.like },
+  { value: "dislike", label: dislikeLabel, d: PATHS.dislike },
+];
+---
+
+<markas-chat-message
+  class="contents"
+  data-stream={stream ? String(streamSpeed) : undefined}
+  data-copied-label={copiedLabel}
+  data-text={text}
+>
+  <article
+    data-from={from}
+    aria-label={assistant ? assistantLabel : userLabel}
+    class:list={[roots[from], className]}
+    {...rest}
+  >
+    {
+      assistant && (
+        <span aria-hidden="true" class={avatarClass}>
+          {avatar ? (
+            <img src={avatar} alt="" class={avatarImage} />
+          ) : (
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class={avatarIcon}
+            >
+              <path d={PATHS.spark} />
+            </svg>
+          )}
+        </span>
+      )
+    }
+    <div class={bodies[from]}>
+      {
+        assistant && (
+          <p class={header}>
+            {assistantLabel}
+            {time && <time class={timeClass}>{time}</time>}
+          </p>
+        )
+      }
+      <div class={contents[assistant ? variant : "user"]}>{typing ? (<span role="status" class={dots}><span class={srOnly}>{typingLabel}</span>{dot.map((c) => (<span aria-hidden="true" class={c} />))}</span>) : stream ? (<Fragment><span class={srOnly}>{text}</span><span aria-hidden="true" data-text={text}>{text}</span><span aria-hidden="true" class={caret} data-caret hidden /></Fragment>) : text}</div>
+      <div class={footer}>
+        {
+          actions && !typing && (
+            <div
+              role="group"
+              aria-label={actionsLabel}
+              class={actionsClass}
+              data-actions
+            >
+              <button
+                type="button"
+                aria-label={copyLabel}
+                data-state="idle"
+                data-copy
+                class={action}
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class={copyIcon}
+                >
+                  <path d={PATHS.copy} />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class={checkIcon}
+                >
+                  <path d={PATHS.check} />
+                </svg>
+              </button>
+              {assistant && (
+                <Fragment>
+                  {feedbackButtons.map((button) => (
+                    <button
+                      type="button"
+                      aria-label={button.label}
+                      aria-pressed="false"
+                      data-feedback={button.value}
+                      class={action}
+                    >
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class={pressIcon}
+                      >
+                        <path d={button.d} />
+                      </svg>
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    aria-label={regenerateLabel}
+                    data-regenerate
+                    class={action}
+                  >
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class={actionIcon}
+                    >
+                      <path d={PATHS.regenerate} />
+                    </svg>
+                  </button>
+                </Fragment>
+              )}
+              <span role="status" class={srOnly} data-status />
+            </div>
+          )
+        }
+        {!assistant && time && <time class={timeClass}>{time}</time>}
+      </div>
+    </div>
+  </article>
+</markas-chat-message>
+
+<script>
+  /** How long the check mark stays after copying. */
+  const COPIED_MS = 2000;
+
+  // Each message streams and copies on its own, so it is a custom element: it also works
+  // for markup added later and for pages reached through view transitions.
+  class MarkasChatMessage extends HTMLElement {
+    private timer: ReturnType<typeof setTimeout> | undefined;
+    private tick: ReturnType<typeof setTimeout> | undefined;
+    private ready = false;
+
+    connectedCallback() {
+      if (this.ready) return;
+      this.ready = true;
+      this.addEventListener("click", (event) => this.onClick(event));
+      this.startStream();
+    }
+
+    disconnectedCallback() {
+      clearTimeout(this.timer);
+      clearTimeout(this.tick);
+    }
+
+    /** Reveal the text one token (a word or the spaces after it) at a time. */
+    private startStream() {
+      const speed = Number(this.dataset.stream);
+      const visible = this.querySelector<HTMLElement>("[data-text]");
+      if (
+        this.dataset.stream === undefined ||
+        !visible ||
+        matchMedia("(prefers-reduced-motion: reduce)").matches
+      )
+        return;
+      const tokens = (visible.dataset.text ?? "")
+        .split(/(\s+)/)
+        .filter(Boolean);
+      const caret = this.querySelector<HTMLElement>("[data-caret]");
+      const actions = this.querySelector<HTMLElement>("[data-actions]");
+      let shown = 0;
+      const render = () => {
+        const streaming = shown < tokens.length;
+        visible.textContent = tokens.slice(0, shown).join("");
+        if (caret) caret.hidden = !streaming;
+        if (actions) actions.hidden = streaming;
+        if (!streaming) return;
+        shown++;
+        this.tick = setTimeout(render, speed);
+      };
+      render();
+    }
+
+    private async onClick(event: Event) {
+      const target = event.target as Element;
+      const copy = target.closest<HTMLElement>("[data-copy]");
+      const feedback = target.closest<HTMLElement>("[data-feedback]");
+      if (target.closest("[data-regenerate]"))
+        this.dispatchEvent(
+          new CustomEvent("markas-regenerate", { bubbles: true }),
+        );
+      if (feedback) this.rate(feedback);
+      if (copy) await this.copy(copy);
+    }
+
+    private rate(button: HTMLElement) {
+      const pressed = button.getAttribute("aria-pressed") !== "true";
+      this.querySelectorAll("[data-feedback]").forEach((other) =>
+        other.setAttribute("aria-pressed", "false"),
+      );
+      button.setAttribute("aria-pressed", String(pressed));
+      this.dispatchEvent(
+        new CustomEvent("markas-feedback", {
+          detail: pressed ? button.dataset.feedback : null,
+          bubbles: true,
+        }),
+      );
+    }
+
+    private async copy(button: HTMLElement) {
+      try {
+        await navigator.clipboard.writeText(this.dataset.text ?? "");
+      } catch {
+        // Clipboard blocked or unavailable: no check mark.
+        return;
+      }
+      const status = this.querySelector("[data-status]");
+      const setCopied = (copied: boolean) => {
+        button.dataset.state = copied ? "copied" : "idle";
+        if (status)
+          status.textContent = copied ? (this.dataset.copiedLabel ?? "") : "";
+      };
+      setCopied(true);
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => setCopied(false), COPIED_MS);
+    }
+  }
+
+  if (!customElements.get("markas-chat-message"))
+    customElements.define("markas-chat-message", MarkasChatMessage);
+</script>

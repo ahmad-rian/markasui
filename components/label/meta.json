@@ -6,16 +6,37 @@
   "tags": ["label", "form", "required", "optional", "field"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "label.blade.php", "deps": [] },
-    "react": { "file": "Label.tsx", "deps": [] },
-    "vue": { "file": "Label.vue", "deps": [] }
+    "blade": {
+      "file": "label.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Label.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Label.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Label.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Label.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "label.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
       "name": "for / htmlFor",
       "type": "string",
       "default": "-",
-      "description": "Id of the form control this label names. React uses htmlFor."
+      "description": "Id of the form control this label names. React uses htmlFor. In Angular, Label is an attribute on a native label (<label markas-label for=\"...\">)."
     },
     {
       "name": "required",
@@ -60,11 +81,11 @@
     "id": {
       "description": "Label form dengan gaya konsisten serta penanda wajib atau opsional yang dibacakan screen reader dengan benar.",
       "props": {
-        "for / htmlFor": "Id kontrol form yang diberi nama oleh label ini. React memakai htmlFor.",
         "required": "Menampilkan tanda bintang merah (disembunyikan dari screen reader) dan teks khusus screen reader dari requiredLabel. Lebih diutamakan daripada optional.",
         "optional": "Menampilkan teks redup dari optionalLabel setelah teks label.",
         "requiredLabel": "Teks screen reader untuk kolom wajib. Isi misalnya \"wajib\".",
-        "optionalLabel": "Teks terlihat untuk kolom opsional. Isi misalnya \"Opsional\"."
+        "optionalLabel": "Teks terlihat untuk kolom opsional. Isi misalnya \"Opsional\".",
+        "for / htmlFor": "Id kontrol form yang diberi nama oleh label ini. React memakai htmlFor. Di Angular, Label adalah atribut pada label native (<label markas-label for=\"...\">)."
       },
       "a11y": [
         "Merender elemen label native, jadi mengekliknya memfokuskan atau mengubah kontrol yang terhubung.",
@@ -80,5 +101,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

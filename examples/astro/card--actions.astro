@@ -1,0 +1,18 @@
+---
+import Button from "../../components/button/Button.astro";
+import Card from "../../components/card/Card.astro";
+---
+
+<Card
+  title="Delete project"
+  description="This removes the project, its files, and all deployments. This cannot be undone."
+>
+  <p class="text-muted">
+    Project: <span class="font-medium text-ink">marketing-site</span>
+  </p>
+
+  <Fragment slot="footer">
+    <Button variant="secondary" size="sm" class="ml-auto">Cancel</Button>
+    <Button variant="danger" size="sm">Delete project</Button>
+  </Fragment>
+</Card>

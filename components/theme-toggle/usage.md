@@ -38,6 +38,44 @@ import ThemeToggle from "@/components/markas/ThemeToggle.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import ThemeToggle from "$lib/components/markas/ThemeToggle.svelte";
+</script>
+
+<ThemeToggle animation="morph" variant="outline" />
+```
+
+## Astro
+
+```astro
+---
+import ThemeToggle from "@/components/markas/ThemeToggle.astro";
+---
+
+<ThemeToggle animation="morph" variant="outline" />
+```
+
+A small bundled script runs each toggle through the `markas-theme-toggle` element.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { ThemeToggle } from "./markas/theme-toggle.component";
+
+@Component({
+  selector: "app-header",
+  imports: [ThemeToggle],
+  template: `
+    <button markas-theme-toggle animation="morph" variant="outline"></button>
+  `,
+})
+export class Header {}
+```
+
 ## Notes
 
 - The toggle adds or removes the `dark` class on `<html>`, saves the choice in localStorage (`storageKey`), and dispatches `markas-theme-change` on `document` with the theme as `detail`.

@@ -6,9 +6,30 @@
   "tags": ["background", "stars", "shooting star", "night", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "shooting-stars.blade.php", "deps": [] },
-    "react": { "file": "ShootingStars.tsx", "deps": [] },
-    "vue": { "file": "ShootingStars.vue", "deps": [] }
+    "blade": {
+      "file": "shooting-stars.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "ShootingStars.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ShootingStars.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ShootingStars.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ShootingStars.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "shooting-stars.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -85,5 +106,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

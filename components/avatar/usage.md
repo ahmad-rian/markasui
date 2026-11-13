@@ -32,6 +32,47 @@ import Avatar from "@/components/markas/Avatar.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Avatar from "$lib/components/markas/Avatar.svelte";
+</script>
+
+<Avatar name="Dewi Lestari" src="/avatars/dewi.jpg" size="lg" />
+<Avatar name="Budi Santoso" />
+```
+
+## Astro
+
+```astro
+---
+import Avatar from "@/components/markas/Avatar.astro";
+---
+
+<Avatar name="Dewi Lestari" src="/avatars/dewi.jpg" size="lg" />
+<Avatar name="Budi Santoso" />
+```
+
+A small bundled script swaps a broken image for the initials.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Avatar } from "./markas/avatar.component";
+
+@Component({
+  selector: "app-example",
+  imports: [Avatar],
+  template: `
+    <markas-avatar name="Dewi Lestari" src="/avatars/dewi.jpg" size="lg" />
+    <markas-avatar name="Budi Santoso" />
+  `,
+})
+export class Example {}
+```
+
 ## Notes
 
 - Initials come from the first letter of the first and last word: `John Carter` becomes `JC`, `ann` becomes `A`. The `getInitials` function is exported from the React and Vue versions.

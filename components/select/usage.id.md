@@ -36,6 +36,57 @@ const kota = ref("bandung");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Select from "$lib/components/markas/Select.svelte";
+
+  let kota = $state("bandung");
+</script>
+
+<Select bind:value={kota} name="kota" label="Kota">
+  <option value="jakarta">Jakarta</option>
+  <option value="bandung">Bandung</option>
+</Select>
+```
+
+## Astro
+
+```astro
+---
+import Select from "@/components/markas/Select.astro";
+---
+
+<Select name="kota" label="Kota">
+  <option value="jakarta">Jakarta</option>
+  <option value="bandung" selected>Bandung</option>
+</Select>
+```
+
+Tanpa script klien: select adalah elemen native.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Select } from "./markas/select.component";
+
+@Component({
+  selector: "app-alamat",
+  imports: [Select],
+  template: `
+    <markas-select [(value)]="kota" name="kota" label="Kota">
+      <option value="jakarta">Jakarta</option>
+      <option value="bandung">Bandung</option>
+    </markas-select>
+  `,
+})
+export class Alamat {
+  readonly kota = signal("bandung");
+}
+```
+
 ## Catatan
 
 - Atribut tambahan (`name`, `required`, `multiple`, `class`) diteruskan ke elemen `<select>`.

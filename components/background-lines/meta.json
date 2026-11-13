@@ -6,9 +6,30 @@
   "tags": ["background", "lines", "waves", "rays", "svg", "hero", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "background-lines.blade.php", "deps": [] },
-    "react": { "file": "BackgroundLines.tsx", "deps": [] },
-    "vue": { "file": "BackgroundLines.vue", "deps": [] }
+    "blade": {
+      "file": "background-lines.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "BackgroundLines.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "BackgroundLines.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "BackgroundLines.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "BackgroundLines.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "background-lines.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -37,7 +58,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the lines."
     }
@@ -80,5 +101,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

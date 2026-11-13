@@ -1,0 +1,27 @@
+import { Component } from "@angular/core";
+import { Accordion } from "../../components/accordion/accordion.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [Accordion],
+  template: `<markas-accordion [items]="items" defaultValue="shipping" />`,
+})
+export default class AccordionExample {
+  protected readonly items = [
+    {
+      value: "shipping",
+      title: "How long does shipping take?",
+      content: "Orders arrive in 2 to 4 business days.",
+    },
+    {
+      value: "payment",
+      title: "Which payment methods are available?",
+      content: "Bank transfer, credit card, and digital wallets.",
+    },
+    {
+      value: "returns",
+      title: "How do I return an item?",
+      content: "Request a return within 7 days from the order page.",
+    },
+  ];
+}

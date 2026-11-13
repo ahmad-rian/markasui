@@ -5,6 +5,7 @@ import { join, resolve } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { loadComponent, parseTheme, toIndexItem } from "@markasui/registry";
+import type { RegistryItem } from "@markasui/registry/schema";
 import { createRegistry } from "markasui";
 import { beforeAll, describe, expect, it } from "vitest";
 import { createServer, searchIndex } from "../src/server.ts";
@@ -12,13 +13,23 @@ import { createServer, searchIndex } from "../src/server.ts";
 const root = resolve(import.meta.dirname, "../../..");
 let client: Client;
 
+/** Disajikan hanya dengan Blade, React, Vue, seperti komponen yang belum di-porting. */
+const LEGACY = "tabs";
+
+function withoutNewFrameworks(item: RegistryItem): RegistryItem {
+  const { blade, react, vue } = item.frameworks;
+  return { ...item, frameworks: { blade, react, vue } };
+}
+
 beforeAll(async () => {
   const dir = await mkdtemp(join(tmpdir(), "markas-mcp-"));
-  const items = await Promise.all(
-    ["button", "input", "modal", "tabs"].map((n) =>
-      loadComponent(join(root, "components", n)),
-    ),
-  );
+  const items = (
+    await Promise.all(
+      ["button", "input", "modal", "tabs"].map((n) =>
+        loadComponent(join(root, "components", n)),
+      ),
+    )
+  ).map((item) => (item.name === LEGACY ? withoutNewFrameworks(item) : item));
   await writeFile(
     join(dir, "index.json"),
     JSON.stringify(items.map(toIndexItem)),
@@ -106,7 +117,7 @@ describe("MCP server", () => {
 
   it("get_component menjelaskan framework yang belum tersedia", async () => {
     const result = await call("get_component", {
-      name: "tabs",
+      name: LEGACY,
       framework: "astro",
     });
     expect(result.isError).toBe(true);

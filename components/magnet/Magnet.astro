@@ -1,0 +1,111 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const base =
+  "w-fit transition-[translate,scale] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] has-[:focus-visible]:scale-105 data-[state=active]:duration-150 data-[state=active]:ease-out motion-reduce:transition-none [&_[data-depth]]:inline-block [&_[data-depth]]:transition-[translate] [&_[data-depth]]:duration-500 [&_[data-depth]]:ease-[cubic-bezier(0.34,1.56,0.64,1)] data-[state=active]:[&_[data-depth]]:duration-150 motion-reduce:[&_[data-depth]]:transition-none";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Share of the pointer distance the element follows, 0 to 1. For repel, how far it is pushed. */
+  strength?: number;
+  /** Distance in px beyond the element edges where the pull starts. */
+  radius?: number;
+  /** Move toward the pointer or away from it. */
+  mode?: "attract" | "repel";
+};
+
+const {
+  strength = 0.35,
+  radius = 80,
+  mode = "attract",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<markas-magnet
+  class="contents"
+  data-strength={Number(strength)}
+  data-radius={Number(radius)}
+  data-mode={mode}
+>
+  <div {...rest} class:list={[base, className]}><slot /></div>
+</markas-magnet>
+
+<script>
+  // Per instance: each wrapper listens to the pointer only while its content is on screen.
+  class Magnet extends HTMLElement {
+    #stop = () => {};
+
+    connectedCallback() {
+      const root = this.firstElementChild as HTMLElement | null;
+      if (!root) return;
+      if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
+        return;
+      const strength = Number(this.dataset.strength);
+      const radius = Number(this.dataset.radius);
+      const repel = this.dataset.mode === "repel";
+      let x = 0;
+      let y = 0;
+      const set = (nx: number, ny: number) => {
+        x = nx;
+        y = ny;
+        if (x || y) root.dataset.state = "active";
+        else delete root.dataset.state;
+        root.style.translate = x || y ? `${x}px ${y}px` : "";
+        for (const layer of root.querySelectorAll<HTMLElement>(
+          "[data-depth]",
+        )) {
+          const depth = Number(layer.dataset.depth) || 0;
+          layer.style.translate = x || y ? `${x * depth}px ${y * depth}px` : "";
+        }
+      };
+      const move = (e: PointerEvent) => {
+        if (e.pointerType === "touch") return;
+        const r = root.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2 - x);
+        const dy = e.clientY - (r.top + r.height / 2 - y);
+        const gap = Math.hypot(
+          Math.max(Math.abs(dx) - r.width / 2, 0),
+          Math.max(Math.abs(dy) - r.height / 2, 0),
+        );
+        const near = Math.max(1 - gap / radius, 0);
+        if (repel) {
+          const push = (near * radius * strength) / (Math.hypot(dx, dy) || 1);
+          return set(-dx * push, -dy * push);
+        }
+        set(dx * near * strength, dy * near * strength);
+      };
+      const reset = () => set(0, 0);
+      const html = document.documentElement;
+      const listen = (on: boolean) => {
+        if (on) {
+          document.addEventListener("pointermove", move);
+          html.addEventListener("pointerleave", reset);
+          return;
+        }
+        document.removeEventListener("pointermove", move);
+        html.removeEventListener("pointerleave", reset);
+        reset();
+      };
+      const observer =
+        typeof IntersectionObserver === "undefined"
+          ? undefined
+          : new IntersectionObserver(([entry]) =>
+              listen(!!entry?.isIntersecting),
+            );
+      if (observer) observer.observe(root);
+      else listen(true);
+      this.#stop = () => {
+        observer?.disconnect();
+        listen(false);
+      };
+    }
+
+    disconnectedCallback() {
+      this.#stop();
+    }
+  }
+
+  if (!customElements.get("markas-magnet"))
+    customElements.define("markas-magnet", Magnet);
+</script>

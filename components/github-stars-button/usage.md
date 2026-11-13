@@ -28,6 +28,54 @@ import GithubStarsButton from "@/components/markas/GithubStarsButton.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import GithubStarsButton from "$lib/components/markas/GithubStarsButton.svelte";
+</script>
+
+<GithubStarsButton href="https://github.com/markasui/markasui" stars={12480}>
+  Star on GitHub
+</GithubStarsButton>
+```
+
+## Astro
+
+```astro
+---
+import GithubStarsButton from "@/components/markas/GithubStarsButton.astro";
+---
+
+<GithubStarsButton href="https://github.com/markasui/markasui" stars={12480}>
+  Star on GitHub
+</GithubStarsButton>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { GithubStarsButton } from "./markas/github-stars-button.component";
+
+@Component({
+  selector: "app-repo",
+  imports: [GithubStarsButton],
+  template: `
+    <a
+      markas-github-stars-button
+      href="https://github.com/markasui/markasui"
+      [stars]="12480"
+    >
+      Star on GitHub
+    </a>
+  `,
+})
+export class Repo {}
+```
+
+Angular uses an attribute selector on the native link, so `target`, `rel`, and `aria-*` stay on it.
+
 ## Notes
 
 - The component never calls the GitHub API. Read the count at build time or on the server and pass it in.

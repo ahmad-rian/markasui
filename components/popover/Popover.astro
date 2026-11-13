@@ -1,0 +1,146 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline-block";
+const triggerClass =
+  "inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-medium whitespace-nowrap text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=open]:bg-subtle motion-reduce:transition-none";
+const panel =
+  "inset-auto m-0 w-72 max-w-[calc(100vw-16px)] rounded-xl border border-line bg-surface p-4 text-sm text-ink shadow-overlay";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Text of the trigger button. */
+  label?: string;
+  side?: "top" | "bottom";
+  align?: "start" | "center" | "end";
+};
+
+const {
+  label = "Open",
+  side = "bottom",
+  align = "start",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const panelId = id ?? `markas-popover-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<div class:list={[root, className]} {...rest}>
+  <button
+    type="button"
+    id={`${panelId}-trigger`}
+    popovertarget={panelId}
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls={panelId}
+    data-state="closed"
+    class={triggerClass}
+  >
+    {Astro.slots.has("trigger") ? <slot name="trigger" /> : label}
+  </button>
+  <div
+    id={panelId}
+    popover="auto"
+    role="dialog"
+    aria-labelledby={`${panelId}-trigger`}
+    data-state="closed"
+    data-markas-popover
+    data-side={side}
+    data-align={align}
+    class={panel}
+  >
+    <slot />
+  </div>
+</div>
+
+<script>
+  // One set of listeners per page serves every popover, including markup added later and
+  // pages reached through view transitions.
+  const GAP = 4;
+  const FOCUSABLE =
+    "a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
+  const open = new Set<HTMLElement>();
+
+  const isPopover = (node: EventTarget | null): node is HTMLElement =>
+    node instanceof HTMLElement && node.hasAttribute("data-markas-popover");
+  const triggerOf = (panel: HTMLElement) =>
+    document.getElementById(`${panel.id}-trigger`);
+
+  /** Place the panel on the chosen side with the chosen alignment, flip when it does not fit. */
+  function place(panel: HTMLElement) {
+    const trigger = triggerOf(panel);
+    if (!trigger) return;
+    const anchor = trigger.getBoundingClientRect();
+    const { width, height } = panel.getBoundingClientRect();
+    const above = anchor.top - GAP - height;
+    const below = anchor.bottom + GAP;
+    const fitsAbove = above >= 0;
+    const fitsBelow = below + height <= window.innerHeight;
+    const onTop =
+      panel.dataset.side === "top"
+        ? fitsAbove || !fitsBelow
+        : !fitsBelow && fitsAbove;
+    const starts: Record<string, number> = {
+      start: anchor.left,
+      center: anchor.left + anchor.width / 2 - width / 2,
+      end: anchor.right - width,
+    };
+    const start = starts[panel.dataset.align ?? ""] ?? anchor.left;
+    const left = Math.max(GAP, Math.min(start, window.innerWidth - width - GAP));
+    panel.style.top = `${onTop ? above : below}px`;
+    panel.style.left = `${left}px`;
+  }
+
+  // beforetoggle and toggle do not bubble, so listen in the capture phase.
+  document.addEventListener(
+    "beforetoggle",
+    (event) => {
+      if (!isPopover(event.target)) return;
+      const state = (event as ToggleEvent).newState;
+      const trigger = triggerOf(event.target);
+      event.target.dataset.state = state;
+      trigger?.setAttribute("data-state", state);
+      trigger?.setAttribute("aria-expanded", String(state === "open"));
+    },
+    true,
+  );
+
+  document.addEventListener(
+    "toggle",
+    (event) => {
+      const panel = event.target;
+      if (!isPopover(panel)) return;
+      if ((event as ToggleEvent).newState === "open") {
+        open.add(panel);
+        place(panel);
+        panel.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+        return;
+      }
+      open.delete(panel);
+      // Focus returns to the trigger, unless the user already moved it outside the panel.
+      const active = document.activeElement;
+      if (active === document.body || panel.contains(active))
+        triggerOf(panel)?.focus();
+    },
+    true,
+  );
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    const panel = (event.target as Element).closest?.(
+      "[data-markas-popover]",
+    );
+    if (!isPopover(panel)) return;
+    event.preventDefault();
+    panel.hidePopover();
+    triggerOf(panel)?.focus();
+  });
+
+  // Re-place open panels when the page scrolls or the window resizes.
+  const update = () =>
+    open.forEach((panel) =>
+      panel.isConnected ? place(panel) : open.delete(panel),
+    );
+  window.addEventListener("scroll", update, { capture: true, passive: true });
+  window.addEventListener("resize", update, { passive: true });
+</script>

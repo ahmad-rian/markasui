@@ -17,20 +17,32 @@
     "vue": {
       "file": "Collapsible.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Collapsible.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Collapsible.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "collapsible.component.ts",
+      "deps": []
     }
   },
   "props": [
     {
       "name": "title",
-      "type": "string / slot / ReactNode",
+      "type": "string / slot / ReactNode / snippet",
       "default": "-",
-      "description": "Text of the summary row. Blade and Vue also accept a title slot for rich content."
+      "description": "Text of the summary row. Blade, Vue, and Astro also accept a title slot, Svelte a title snippet, and Angular an element with the title attribute (an ng-container works) for rich content."
     },
     {
       "name": "open",
       "type": "boolean",
       "default": "false",
-      "description": "Starts the section open."
+      "description": "Starts the section open. Svelte supports bind:open."
     },
     {
       "name": "children / slot",
@@ -57,8 +69,8 @@
     "id": {
       "description": "Satu bagian yang bisa dibuka dan ditutup memakai details dan summary native tanpa JavaScript. Cocok untuk konten tampilkan lebih banyak.",
       "props": {
-        "title": "Teks baris ringkasan. Blade dan Vue juga menerima slot title untuk isi kaya.",
-        "open": "Bagian dimulai dalam keadaan terbuka.",
+        "title": "Teks baris ringkasan. Blade, Vue, dan Astro juga menerima slot title, Svelte snippet title, dan Angular elemen dengan atribut title (ng-container bisa) untuk isi kaya.",
+        "open": "Bagian dimulai dalam keadaan terbuka. Svelte mendukung bind:open.",
         "children / slot": "Isi yang tampil saat bagian terbuka."
       },
       "a11y": [
@@ -75,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

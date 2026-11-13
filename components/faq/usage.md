@@ -59,6 +59,74 @@ import { Faq } from "@/components/markas/Faq";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Faq from "$lib/components/markas/Faq.svelte";
+</script>
+
+<Faq
+  variant="split"
+  title="Frequently asked questions"
+  items={faqs}
+  exclusive
+  schema
+>
+  {#snippet contact()}
+    Still have questions? <a href="/contact">Contact support</a>
+  {/snippet}
+</Faq>
+
+<Faq variant="searchable" title="Help center" items={faqs} />
+```
+
+## Astro
+
+```astro
+---
+import Faq from "@/components/markas/Faq.astro";
+---
+
+<Faq variant="split" title="Frequently asked questions" items={faqs} exclusive schema>
+  <Fragment slot="contact">
+    Still have questions? <a href="/contact">Contact support</a>
+  </Fragment>
+</Faq>
+
+<Faq variant="categories" title="Help center" items={faqsWithCategory} />
+```
+
+searchable and categories use one small bundled script per page. The other variants ship no JavaScript.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Faq, type FaqItem } from "./markas/faq.component";
+
+@Component({
+  selector: "app-help",
+  imports: [Faq],
+  template: `
+    <markas-faq
+      variant="split"
+      title="Frequently asked questions"
+      [items]="faqs"
+      exclusive
+      schema
+    >
+      <ng-container contact>
+        Still have questions? <a href="/contact">Contact support</a>
+      </ng-container>
+    </markas-faq>
+  `,
+})
+export class Help {
+  faqs: FaqItem[] = [];
+}
+```
+
 ## Notes
 
 - Opening and closing is native `details`, so simple, split, cards, and centered need no JavaScript. Heights animate with `::details-content` and `interpolate-size` where supported and simply snap elsewhere.

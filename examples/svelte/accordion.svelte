@@ -1,0 +1,23 @@
+<script lang="ts">
+  import Accordion from "../../components/accordion/Accordion.svelte";
+
+  const items = [
+    {
+      value: "shipping",
+      title: "How long does shipping take?",
+      content: "Orders arrive in 2 to 4 business days.",
+    },
+    {
+      value: "payment",
+      title: "Which payment methods are available?",
+      content: "Bank transfer, credit card, and digital wallets.",
+    },
+    {
+      value: "returns",
+      title: "How do I return an item?",
+      content: "Request a return within 7 days from the order page.",
+    },
+  ];
+</script>
+
+<Accordion {items} defaultValue="shipping" />

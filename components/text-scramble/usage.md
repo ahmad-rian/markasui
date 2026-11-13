@@ -35,6 +35,68 @@ import { TextScramble } from "@/components/markas/TextScramble";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import TextScramble from "$lib/components/markas/TextScramble.svelte";
+</script>
+
+<h2 class="text-3xl font-semibold">
+  <TextScramble text="Operation Nusantara" trigger="view" />
+</h2>
+<TextScramble text="99.98%" trigger="view" charset="digits" delay={150} />
+<a href="/brief"><TextScramble text="Open the brief" charset="symbols" /></a>
+```
+
+## Astro
+
+```astro
+---
+import TextScramble from "@/components/markas/TextScramble.astro";
+---
+
+<h2 class="text-3xl font-semibold">
+  <TextScramble text="Operation Nusantara" trigger="view" />
+</h2>
+<TextScramble text="99.98%" trigger="view" charset="digits" delay={150} />
+<a href="/brief"><TextScramble text="Open the brief" charset="symbols" /></a>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { TextScramble } from "./markas/text-scramble.component";
+
+@Component({
+  selector: "app-stats",
+  imports: [TextScramble],
+  template: `
+    <h2 class="text-3xl font-semibold">
+      <span
+        markas-text-scramble
+        text="Operation Nusantara"
+        trigger="view"
+      ></span>
+    </h2>
+    <span
+      markas-text-scramble
+      text="99.98%"
+      trigger="view"
+      charset="digits"
+      delay="150"
+    ></span>
+    <a href="/brief">
+      <span markas-text-scramble text="Open the brief" charset="symbols"></span>
+    </a>
+  `,
+})
+export class Stats {}
+```
+
+Angular uses an attribute selector on a span: `<span markas-text-scramble>`. In Astro the text is rendered on the server and a small script scrambles it.
+
 ## Notes
 
 - `hover` runs on hover and focus of the closest link or button. `view` and `mount` start scrambled and decode once; `view` waits until the text scrolls into view.

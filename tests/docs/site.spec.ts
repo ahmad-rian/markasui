@@ -191,16 +191,17 @@ for (const framework of ["Svelte", "Astro", "Angular"] as const) {
   });
 }
 
-test("komponen yang belum di-porting menampilkan pesan belum tersedia", async ({
+// Semua komponen sudah punya versi Svelte; template belum, jadi pesannya diuji di halaman template.
+test("template yang belum di-porting menampilkan pesan belum tersedia", async ({
   page,
 }) => {
-  await page.goto("/components/tabs");
+  const code = (name: string) =>
+    page.getByRole("region", { name }).locator('[data-fw="svelte"]');
+  await page.goto("/templates/larisa");
   await page.getByRole("radio", { name: "Svelte" }).first().click();
-  await expect(pane(page, "svelte")).toHaveText(
-    "Not available for Svelte yet.",
-  );
-  await page.goto("/id/components/tabs");
-  await expect(pane(page, "svelte")).toHaveText("Belum tersedia untuk Svelte.");
+  await expect(code("Code")).toHaveText("Not available for Svelte yet.");
+  await page.goto("/id/templates/larisa");
+  await expect(code("Kode")).toHaveText("Belum tersedia untuk Svelte.");
 });
 
 test("playground Button menampilkan contoh Angular statis", async ({
@@ -555,7 +556,8 @@ test("posisi gulir sidebar docs tetap setelah pindah halaman", async ({
   test.skip(isMobile, "sidebar docs hanya tampil di desktop");
   await page.goto("/components/button");
   const sidebar = page.locator("[data-docs-sidebar]");
-  const link = sidebar.getByRole("link", { name: "Tooltip", exact: true });
+  // By href: the accessible name gains "new"/"updated" badges as meta.json changes.
+  const link = sidebar.locator('a[href="/components/tooltip"]');
   await link.scrollIntoViewIfNeeded();
   const before = await sidebar.evaluate((element) => element.scrollTop);
   expect(before).toBeGreaterThan(0);

@@ -1,0 +1,13 @@
+<script lang="ts">
+  import VariableWeightText from "../../components/variable-weight-text/VariableWeightText.svelte";
+</script>
+
+<footer class="rounded-xl bg-primary px-6 pt-6 pb-2 text-on-primary">
+  <div class="flex justify-between text-sm">
+    <span>Made in Bandung</span>
+    <span>2026</span>
+  </div>
+  <p class="mt-4 text-7xl leading-none tracking-tighter">
+    <VariableWeightText text="markasui" wave min={100} max={900} radius={100} />
+  </p>
+</footer>

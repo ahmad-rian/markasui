@@ -1,0 +1,101 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline-grid tabular-nums";
+const layer = "col-start-1 row-start-1";
+const holder = "invisible col-start-1 row-start-1";
+
+type Props = Omit<HTMLAttributes<"span">, "prefix"> & {
+  value: number;
+  from?: number;
+  /** Milliseconds from the start number to value. */
+  duration?: number;
+  decimals?: number;
+  locale?: string;
+  prefix?: string;
+  suffix?: string;
+};
+
+const {
+  value,
+  from = 0,
+  duration = 2000,
+  decimals = 0,
+  locale = "en-US",
+  prefix = "",
+  suffix = "",
+  class: className,
+  ...rest
+} = Astro.props;
+const formatter = new Intl.NumberFormat(locale, {
+  minimumFractionDigits: decimals,
+  maximumFractionDigits: decimals,
+});
+// The final number is rendered on the server; the script counts up to it once it is visible.
+const text = `${prefix}${formatter.format(value)}${suffix}`;
+---
+
+<markas-number-ticker
+  class="contents"
+  data-value={value}
+  data-from={from}
+  data-duration={duration}
+  data-decimals={decimals}
+  data-locale={locale}
+  data-prefix={prefix}
+  data-suffix={suffix}
+><span {...rest} class:list={[root, className]}><span class="sr-only">{text}</span><span aria-hidden="true" class={holder}>{text}</span><span aria-hidden="true" class={layer}>{text}</span></span></markas-number-ticker>
+
+<script>
+  /** Exponential ease-out: fast at first, slowing down near the final number. */
+  const easeOut = (t: number) => (t >= 1 ? 1 : 1 - 2 ** (-10 * t));
+
+  // One element per ticker: setup runs for markup added later and after view transitions.
+  class MarkasNumberTicker extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const display = this.firstElementChild?.lastElementChild;
+      if (!display || matchMedia("(prefers-reduced-motion: reduce)").matches)
+        return;
+      const data = this.dataset;
+      const decimals = Number(data.decimals);
+      const formatter = new Intl.NumberFormat(data.locale, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      });
+      const show = (n: number) =>
+        (display.textContent = `${data.prefix ?? ""}${formatter.format(n)}${data.suffix ?? ""}`);
+      const start = Number(data.from);
+      const target = Number(data.value);
+      const duration = Number(data.duration);
+      let frame = 0;
+      show(start);
+      // Count from the start number to value the first time the ticker is visible.
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        let began: number | undefined;
+        const tick = (now: number) => {
+          began ??= now;
+          const progress = Math.min((now - began) / duration, 1);
+          show(start + (target - start) * easeOut(progress));
+          if (progress < 1) frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      });
+      observer.observe(this.firstElementChild!);
+      this.cleanup = () => {
+        observer.disconnect();
+        cancelAnimationFrame(frame);
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-number-ticker"))
+    customElements.define("markas-number-ticker", MarkasNumberTicker);
+</script>

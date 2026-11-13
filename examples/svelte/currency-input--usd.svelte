@@ -1,0 +1,13 @@
+<script lang="ts">
+  import CurrencyInput from "../../components/currency-input/CurrencyInput.svelte";
+</script>
+
+<CurrencyInput
+  label="Monthly budget"
+  name="budget"
+  currency="USD"
+  hint="Billed in US dollars at the end of each month"
+  defaultValue={1250.5}
+  presets={[100, 500, 1000, 5000]}
+  presetsLabel="Suggested budgets"
+/>

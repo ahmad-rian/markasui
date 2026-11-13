@@ -1,0 +1,113 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline";
+const caret = "ml-0.5 inline-block h-[1.1em] w-0.5 bg-current align-[-0.2em]";
+
+type Props = Omit<HTMLAttributes<"span">, "children"> & {
+  words: string[];
+  typeSpeed?: number;
+  deleteSpeed?: number;
+  pause?: number;
+  loop?: boolean;
+  cursor?: boolean;
+};
+
+const {
+  words,
+  typeSpeed = 70,
+  deleteSpeed = 40,
+  pause = 1800,
+  loop = true,
+  cursor = true,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<markas-typing-text class="contents" data-words={JSON.stringify(words)} data-type-speed={typeSpeed} data-delete-speed={deleteSpeed} data-pause={pause} data-loop={String(loop)}><span {...rest} class:list={[root, className]}><span class="sr-only">{words.join(", ")}</span><span aria-hidden="true" data-markas-typed>{words[0] ?? ""}</span>{cursor && <span aria-hidden="true" data-markas-caret class={caret} />}</span></markas-typing-text>
+
+<script>
+  const reducedMotion = () =>
+    typeof matchMedia === "function" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /** Calls `callback(true/false)` whenever the element enters or leaves the screen. Returns a stop function. */
+  function onVisibility(element: Element, callback: (visible: boolean) => void) {
+    if (typeof IntersectionObserver === "undefined") {
+      callback(true);
+      return () => {};
+    }
+    const observer = new IntersectionObserver((entries) =>
+      callback(entries.some((entry) => entry.isIntersecting)),
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }
+
+  // One element per instance: setup runs for markup added later and after view transitions.
+  class MarkasTypingText extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const element = this.firstElementChild;
+      const output = this.querySelector<HTMLElement>("[data-markas-typed]");
+      const list = (JSON.parse(this.dataset.words ?? "[]") as string[]).map(
+        (word) => Array.from(word),
+      );
+      if (!element || !output || list.length === 0 || reducedMotion()) return;
+      const typeSpeed = Number(this.dataset.typeSpeed);
+      const deleteSpeed = Number(this.dataset.deleteSpeed);
+      const pause = Number(this.dataset.pause);
+      const loop = this.dataset.loop !== "false";
+
+      let index = 0;
+      let count = list[0]?.length ?? 0;
+      let deleting = false;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      // The caret blinks every 500 ms with the Web Animations API.
+      const animation = this.querySelector<HTMLElement>(
+        "[data-markas-caret]",
+      )?.animate?.([{ opacity: 1 }, { opacity: 0 }], {
+        duration: 1000,
+        iterations: Infinity,
+        easing: "steps(2, jump-none)",
+      });
+
+      // Type one letter, pause on the full word, delete it, then move to the next word.
+      const step = () => {
+        const chars = list[index] ?? [];
+        let delay = deleting ? deleteSpeed : typeSpeed;
+        if (!deleting && count >= chars.length) {
+          if (!loop && index === list.length - 1) return;
+          deleting = true;
+          delay = pause;
+        } else if (deleting && count === 0) {
+          deleting = false;
+          index = (index + 1) % list.length;
+        } else {
+          count += deleting ? -1 : 1;
+          output.textContent = chars.slice(0, count).join("");
+        }
+        timer = setTimeout(step, delay);
+      };
+
+      const stop = onVisibility(element, (visible) => {
+        clearTimeout(timer);
+        if (visible) step();
+      });
+      this.cleanup = () => {
+        stop();
+        clearTimeout(timer);
+        animation?.cancel();
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-typing-text"))
+    customElements.define("markas-typing-text", MarkasTypingText);
+</script>

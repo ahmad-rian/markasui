@@ -1,0 +1,16 @@
+---
+import CodeBlock from "../../components/code-block/CodeBlock.astro";
+
+const code = [
+  "{",
+  '  "name": "acme-dashboard",',
+  '  "private": true,',
+  '  "scripts": {',
+  '    "dev": "vite",',
+  '    "build": "vite build"',
+  "  }",
+  "}",
+].join("\n");
+---
+
+<CodeBlock code={code} />

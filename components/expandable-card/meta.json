@@ -6,9 +6,30 @@
   "tags": ["card", "expand", "dialog", "flip", "product", "detail"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "expandable-card.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ExpandableCard.tsx", "deps": [] },
-    "vue": { "file": "ExpandableCard.vue", "deps": [] }
+    "blade": {
+      "file": "expandable-card.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ExpandableCard.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ExpandableCard.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ExpandableCard.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ExpandableCard.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "expandable-card.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -52,6 +73,12 @@
       "type": "string",
       "default": "auto",
       "description": "Id of the card button. The dialog uses the same id with a -dialog suffix."
+    },
+    {
+      "name": "markasCardMedia",
+      "type": "ng-template",
+      "default": "-",
+      "description": "Angular only. Put the media in <ng-template markasCardMedia> (import ExpandableCardMedia), since it shows on the card and in the open view. An element with the footer attribute fills the actions."
     }
   ],
   "a11y": [
@@ -80,7 +107,8 @@
         "children": "Detail tambahan yang hanya tampil saat terbuka.",
         "footer": "Aksi di bagian bawah tampilan detail, misalnya Tambah ke keranjang.",
         "closeLabel": "Nama aksesibel tombol tutup.",
-        "id": "Id tombol kartu. Dialog memakai id yang sama dengan akhiran -dialog."
+        "id": "Id tombol kartu. Dialog memakai id yang sama dengan akhiran -dialog.",
+        "markasCardMedia": "Khusus Angular. Taruh media di <ng-template markasCardMedia> (impor ExpandableCardMedia), karena tampil di kartu dan tampilan terbuka. Elemen dengan atribut footer mengisi aksi."
       },
       "a11y": [
         "Kartu adalah tombol asli dengan aria-haspopup dialog, jadi Enter dan Spasi membukanya.",
@@ -98,5 +126,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

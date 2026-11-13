@@ -112,6 +112,111 @@ const columns = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Footer from "$lib/components/markas/Footer.svelte";
+
+  const columns = [
+    {
+      title: "Produk",
+      links: [
+        { label: "Komponen", href: "/komponen" },
+        { label: "Template", href: "/template" },
+      ],
+    },
+  ];
+</script>
+
+<Footer
+  variant="newsletter"
+  newsletterLabel="Berlangganan kabar terbaru"
+  newsletterDescription="Satu email per bulan. Tanpa spam."
+  emailLabel="Alamat email"
+  subscribeLabel="Langganan"
+  successLabel="Terima kasih sudah berlangganan"
+  copyright="© 2026 MarkasUI"
+  {columns}
+>
+  {#snippet brand()}MarkasUI{/snippet}
+</Footer>
+```
+
+## Astro
+
+```astro
+---
+import Footer from "@/components/markas/Footer.astro";
+
+const columns = [
+  {
+    title: "Produk",
+    links: [
+      { label: "Komponen", href: "/komponen" },
+      { label: "Template", href: "/template" },
+    ],
+  },
+];
+---
+
+<Footer
+  variant="newsletter"
+  newsletterLabel="Berlangganan kabar terbaru"
+  emailLabel="Alamat email"
+  subscribeLabel="Langganan"
+  successLabel="Terima kasih sudah berlangganan"
+  backToTopLabel="Kembali ke atas"
+  copyright="© 2026 MarkasUI"
+  columns={columns}
+  backToTop
+>
+  <Fragment slot="brand">MarkasUI</Fragment>
+</Footer>
+```
+
+Footer dirender di server. Hanya form newsletter bawaan yang memakai script kecil yang dibundel Astro, satu untuk semua footer di halaman.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Footer, type FooterColumn } from "./markas/footer.component";
+
+@Component({
+  selector: "app-site-footer",
+  imports: [Footer],
+  template: `
+    <footer
+      markas-footer
+      variant="newsletter"
+      navLabel="Navigasi kaki"
+      newsletterLabel="Berlangganan kabar terbaru"
+      emailLabel="Alamat email"
+      subscribeLabel="Langganan"
+      successLabel="Terima kasih sudah berlangganan"
+      copyright="© 2026 MarkasUI"
+      [columns]="columns"
+    >
+      <ng-container brand>MarkasUI</ng-container>
+    </footer>
+  `,
+})
+export class SiteFooter {
+  protected readonly columns: FooterColumn[] = [
+    {
+      title: "Produk",
+      links: [
+        { label: "Komponen", href: "/komponen" },
+        { label: "Template", href: "/template" },
+      ],
+    },
+  ];
+}
+```
+
+Footer adalah komponen atribut pada elemen `footer` native, jadi `class`, `id`, dan `aria-*` tetap di elemen itu. Taruh isi slot di elemen (atau `ng-container`) beratribut `brand`, `actions`, atau `newsletter`.
+
 ## Catatan
 
 - Tata letak mengikuti lebar footer itu sendiri (container query), jadi tetap rapi di kolom sempit maupun di ponsel.

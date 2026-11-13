@@ -1,0 +1,30 @@
+<script lang="ts">
+  import TextHighlighter from "../../components/text-highlighter/TextHighlighter.svelte";
+</script>
+
+<ul class="grid gap-3 text-base leading-7 text-muted">
+  <li>
+    A <TextHighlighter>solid block</TextHighlighter> for quotes worth saving.
+  </li>
+  <li>
+    A
+    <TextHighlighter variant="marker" color="success" delay={150}
+      >marker stroke</TextHighlighter
+    >
+    for notes in the margin.
+  </li>
+  <li>
+    A
+    <TextHighlighter variant="underline" color="danger" delay={300}
+      >thick underline</TextHighlighter
+    >
+    for terms to remember.
+  </li>
+  <li>
+    A
+    <TextHighlighter variant="gradient" delay={450}
+      >two tone gradient</TextHighlighter
+    >
+    for the headline idea.
+  </li>
+</ul>

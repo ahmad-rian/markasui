@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "hero-highlight.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "HeroHighlight.tsx", "deps": [] },
-    "vue": { "file": "HeroHighlight.vue", "deps": [] }
+    "blade": {
+      "file": "hero-highlight.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "HeroHighlight.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "HeroHighlight.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "HeroHighlight.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "HeroHighlight.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "hero-highlight.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -51,7 +72,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the grid. Wrap words in <mark> to highlight them."
     }
@@ -95,5 +116,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

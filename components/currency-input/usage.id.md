@@ -54,6 +54,72 @@ const nominal = ref<number | null>(100000);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import CurrencyInput from "$lib/components/markas/CurrencyInput.svelte";
+
+  let amount = $state<number | null>(100000);
+</script>
+
+<CurrencyInput
+  label="Top-up amount"
+  name="amount"
+  hint="Minimum Rp10.000"
+  min={10000}
+  bind:value={amount}
+  presets={[50000, 100000, 250000, 500000]}
+/>
+```
+
+## Astro
+
+```astro
+---
+import CurrencyInput from "@/components/markas/CurrencyInput.astro";
+---
+
+<CurrencyInput
+  label="Top-up amount"
+  name="amount"
+  hint="Minimum Rp10.000"
+  min={10000}
+  defaultValue={100000}
+  presets={[50000, 100000, 250000, 500000]}
+/>
+```
+
+Custom element kecil memformat saat mengetik dan mengisi input tersembunyi. Ia mengirim event `markas-change` yang menggelembung dengan nominal (atau null) sebagai detail.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { CurrencyInput } from "./markas/currency-input.component";
+
+@Component({
+  selector: "app-top-up",
+  imports: [CurrencyInput],
+  template: `
+    <markas-currency-input
+      label="Top-up amount"
+      name="amount"
+      hint="Minimum Rp10.000"
+      [min]="10000"
+      [(value)]="amount"
+      [presets]="presets"
+    />
+  `,
+})
+export class TopUp {
+  amount = signal<number | null>(100000);
+  presets = [50000, 100000, 250000, 500000];
+}
+```
+
+`id`, `name`, `placeholder`, `aria-label`, dan `class` jatuh ke field yang terlihat.
+
 ## Catatan
 
 - IDR adalah default: prefiks `Rp`, pemisah ribuan titik (12.500.000), tanpa desimal. `currency="USD"` beralih ke `$`, pemisah ribuan koma, dan maksimal dua desimal (1,250.50).

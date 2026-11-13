@@ -6,9 +6,30 @@
   "tags": ["avatar", "profil", "foto", "inisial", "user"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "avatar.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Avatar.tsx", "deps": [] },
-    "vue": { "file": "Avatar.vue", "deps": [] }
+    "blade": {
+      "file": "avatar.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Avatar.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Avatar.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Avatar.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Avatar.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "avatar.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -73,5 +94,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

@@ -1,0 +1,41 @@
+---
+import FileDropzone from "../../components/file-dropzone/FileDropzone.astro";
+
+const uploads = [
+  {
+    name: "keynote-deck.pdf",
+    size: 5872025,
+    type: "application/pdf",
+    progress: 100,
+  },
+  { name: "product-demo.mp4", size: 41943040, type: "video/mp4", progress: 72 },
+  { name: "voiceover.wav", size: 9437184, type: "audio/wav", progress: 35 },
+];
+---
+
+<FileDropzone multiple hint="Add a file to watch it upload" files={uploads} />
+
+<script>
+  /** Simulated upload: +9% every 150ms. A real app reports progress from its upload request. */
+  const STEP = 9;
+  const TICK_MS = 150;
+  const started = new Set<string>();
+
+  type Dropzone = HTMLElement & { setProgress(name: string, percent: number): void };
+
+  document.addEventListener("markas-change", (event) => {
+    const dropzone = event.target as Dropzone;
+    if (dropzone.localName !== "markas-file-dropzone") return;
+    for (const { name } of (event as CustomEvent<File[]>).detail) {
+      if (started.has(name)) continue;
+      started.add(name);
+      let value = 0;
+      dropzone.setProgress(name, value);
+      const timer = window.setInterval(() => {
+        value = Math.min(100, value + STEP);
+        dropzone.setProgress(name, value);
+        if (value === 100) clearInterval(timer);
+      }, TICK_MS);
+    }
+  });
+</script>

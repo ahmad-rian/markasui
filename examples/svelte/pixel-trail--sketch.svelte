@@ -1,0 +1,20 @@
+<script lang="ts">
+  import PixelTrail from "../../components/pixel-trail/PixelTrail.svelte";
+
+  const pad =
+    "grid h-64 content-end rounded-xl border border-dashed border-line bg-canvas p-4";
+  const title = "text-sm font-semibold text-ink";
+  const text = "text-sm text-muted";
+</script>
+
+<PixelTrail
+  variant="brush"
+  color="warning"
+  cellSize={12}
+  fade={1500}
+  autoplay
+  class={pad}
+>
+  <p class={title}>Sketch pad</p>
+  <p class={text}>Draw with your cursor. It doodles on its own too.</p>
+</PixelTrail>

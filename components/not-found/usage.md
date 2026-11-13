@@ -51,6 +51,59 @@ const links = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import NotFound from "$lib/components/markas/NotFound.svelte";
+</script>
+
+<NotFound />
+<NotFound variant="search" {links} />
+<NotFound variant="glitch" code="500" title="Something went wrong" />
+```
+
+## Astro
+
+```astro
+---
+import NotFound from "@/components/markas/NotFound.astro";
+---
+
+<NotFound />
+<NotFound variant="search" links={links} />
+<NotFound variant="glitch" code="500" title="Something went wrong" />
+```
+
+Go back and the search filter use one small bundled script per page.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { NotFound } from "./markas/not-found.component";
+
+@Component({
+  selector: "app-not-found-page",
+  imports: [NotFound],
+  template: `
+    <markas-not-found />
+    <markas-not-found variant="search" [links]="links" />
+    <markas-not-found
+      variant="glitch"
+      code="500"
+      title="Something went wrong"
+    />
+  `,
+})
+export class NotFoundPage {
+  links = [
+    { label: "Documentation", href: "/docs" },
+    { label: "Pricing", href: "/pricing" },
+  ];
+}
+```
+
 ## Notes
 
 - The block renders an h1, so use it as the main content of the error page.

@@ -37,6 +37,50 @@ import { TiltCard } from "@/components/markas/TiltCard";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import TiltCard from "$lib/components/markas/TiltCard.svelte";
+</script>
+
+<TiltCard maxAngle={8} class="border border-line bg-surface p-6">
+  <div data-depth="20">Pro plan</div>
+</TiltCard>
+```
+
+## Astro
+
+```astro
+---
+import TiltCard from "@/components/markas/TiltCard.astro";
+---
+
+<TiltCard maxAngle={8} class="border border-line bg-surface p-6">
+  <div data-depth="20">Pro plan</div>
+</TiltCard>
+```
+
+One small bundled script serves every card on the page.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { TiltCard } from "./markas/tilt-card.component";
+
+@Component({
+  selector: "app-plan",
+  imports: [TiltCard],
+  template: `
+    <markas-tilt-card [maxAngle]="8" class="border border-line bg-surface p-6">
+      <div data-depth="20">Pro plan</div>
+    </markas-tilt-card>
+  `,
+})
+export class Plan {}
+```
+
 ## Notes
 
 - The card rotates up to `maxAngle` degrees toward the pointer through the `--tilt-x` and `--tilt-y` custom properties, and eases back when the pointer leaves.

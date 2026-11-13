@@ -44,8 +44,77 @@ import { StarsBackground } from "@/components/markas/StarsBackground";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import StarsBackground from "$lib/components/markas/StarsBackground.svelte";
+</script>
+
+<StarsBackground
+  count={120}
+  seed={7}
+  class="rounded-xl border border-line bg-surface px-6 py-12"
+>
+  <h2 class="text-2xl font-semibold text-ink">
+    Deploys that ship while you sleep
+  </h2>
+  <Button>Get started</Button>
+</StarsBackground>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import StarsBackground from "@/components/markas/StarsBackground.astro";
+---
+
+<StarsBackground
+  count={120}
+  seed={7}
+  class="rounded-xl border border-line bg-surface px-6 py-12"
+>
+  <h2 class="text-2xl font-semibold text-ink">
+    Deploys that ship while you sleep
+  </h2>
+  <Button>Get started</Button>
+</StarsBackground>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { StarsBackground } from "./markas/stars-background.component";
+
+@Component({
+  selector: "app-launch",
+  imports: [Button, StarsBackground],
+  template: `
+    <div
+      markas-stars-background
+      count="120"
+      seed="7"
+      class="rounded-xl border border-line bg-surface px-6 py-12"
+    >
+      <h2 class="text-2xl font-semibold text-ink">
+        Deploys that ship while you sleep
+      </h2>
+      <button markas-button>Get started</button>
+    </div>
+  `,
+})
+export class Launch {}
+```
+
+Angular memakai attribute selector pada div native, jadi `class`, `aria-*`, dan atribut lain tetap di elemen akar.
+
 ## Catatan
 
-- Posisi bintang dihitung dari `seed` dengan bilangan bulat, jadi Blade, React, dan Vue merender langit yang sama di server dan klien.
+- Posisi bintang dihitung dari `seed` dengan bilangan bulat, jadi semua framework merender langit yang sama di server dan klien.
 - Tambahkan class `dark` supaya section tetap gelap di semua tema. Dengan reduced motion bintang berhenti berkelip.
 - Komponen ini tidak punya teks bawaan, jadi tidak ada prop label yang perlu diterjemahkan.

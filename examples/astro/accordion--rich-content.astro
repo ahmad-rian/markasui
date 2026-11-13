@@ -1,0 +1,26 @@
+---
+import Accordion from "../../components/accordion/Accordion.astro";
+import Button from "../../components/button/Button.astro";
+
+const items = [
+  { value: "pro", title: "What is included in the Pro plan?" },
+  {
+    value: "upgrade",
+    title: "How do I upgrade?",
+    content: "Open the billing page and choose a new plan.",
+  },
+];
+---
+
+<Accordion items={items} defaultValue="pro">
+  <div slot="pro" class="grid gap-3">
+    <ul class="grid list-disc gap-1 pl-5">
+      <li>Up to 10 team members</li>
+      <li>50 GB of storage</li>
+      <li>Priority email support</li>
+    </ul>
+    <div>
+      <Button variant="secondary" size="sm">Compare plans</Button>
+    </div>
+  </div>
+</Accordion>

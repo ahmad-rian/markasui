@@ -1,0 +1,33 @@
+import { Component } from "@angular/core";
+import { TypingText } from "../../components/typing-text/typing-text.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [TypingText],
+  template: `
+    <div class="py-4 text-center">
+      <h2 class="text-4xl font-semibold tracking-tight text-ink">
+        Your team ships
+        <br />
+        <span
+          markas-typing-text
+          [words]="words"
+          class="underline decoration-success decoration-2 underline-offset-8"
+        ></span>
+      </h2>
+      <p class="mx-auto mt-4 max-w-sm text-sm text-muted">
+        One component library for Blade, React, and Vue, with the same classes
+        everywhere.
+      </p>
+      <button
+        type="button"
+        class="mt-6 h-10 rounded-lg bg-primary px-4 text-sm font-medium text-on-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      >
+        Get started
+      </button>
+    </div>
+  `,
+})
+export default class TypingTextHeroExample {
+  protected readonly words = ["faster", "with confidence", "every Friday"];
+}

@@ -29,6 +29,53 @@ import { Tooltip } from "@/components/markas/Tooltip";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Tooltip from "$lib/components/markas/Tooltip.svelte";
+</script>
+
+<Tooltip content="Copy link to clipboard">
+  <Button variant="secondary">Copy link</Button>
+</Tooltip>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Tooltip from "@/components/markas/Tooltip.astro";
+---
+
+<Tooltip content="Copy link to clipboard">
+  <Button variant="secondary">Copy link</Button>
+</Tooltip>
+```
+
+Each tooltip is wrapped in a `markas-tooltip` custom element with `display: contents`, so it also works for markup added later and after view transitions.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Tooltip } from "./markas/tooltip.component";
+
+@Component({
+  selector: "app-share",
+  imports: [Button, Tooltip],
+  template: `
+    <markas-tooltip content="Copy link to clipboard">
+      <button markas-button variant="secondary">Copy link</button>
+    </markas-tooltip>
+  `,
+})
+export class Share {}
+```
+
 ## Notes
 
 - The first element inside Tooltip automatically gets `aria-describedby` pointing to the tooltip.

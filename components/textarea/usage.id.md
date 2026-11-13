@@ -34,6 +34,59 @@ const bio = ref("");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Textarea from "$lib/components/markas/Textarea.svelte";
+
+  let bio = $state("");
+</script>
+
+<Textarea
+  bind:value={bio}
+  name="bio"
+  label="Bio singkat"
+  hint="Maksimal 200 karakter."
+/>
+```
+
+## Astro
+
+```astro
+---
+import Textarea from "@/components/markas/Textarea.astro";
+---
+
+<Textarea name="bio" label="Bio singkat" hint="Maksimal 200 karakter." />
+<Textarea name="address" label="Alamat" rows={2} value="Jl. Merdeka 12" error="Alamat belum lengkap." />
+```
+
+Tanpa script klien. Isi awal dikirim lewat `value`, sama seperti Blade.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Textarea } from "./markas/textarea.component";
+
+@Component({
+  selector: "app-profile",
+  imports: [Textarea],
+  template: `
+    <markas-textarea
+      [(value)]="bio"
+      name="bio"
+      label="Bio singkat"
+      hint="Maksimal 200 karakter."
+    />
+  `,
+})
+export class Profile {
+  readonly bio = signal("");
+}
+```
+
 ## Catatan
 
 - Atribut tambahan (`name`, `placeholder`, `maxlength`, `class`) diteruskan ke elemen `<textarea>`, bukan ke pembungkusnya.

@@ -6,9 +6,30 @@
   "tags": ["line", "divider", "separator", "svg", "spring", "pointer"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "elastic-line.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ElasticLine.tsx", "deps": [] },
-    "vue": { "file": "ElasticLine.vue", "deps": [] }
+    "blade": {
+      "file": "elastic-line.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ElasticLine.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ElasticLine.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ElasticLine.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ElasticLine.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "elastic-line.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -96,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

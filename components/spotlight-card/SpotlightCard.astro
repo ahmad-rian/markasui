@@ -1,0 +1,50 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root =
+  "group/spotlight relative isolate rounded-xl bg-line p-px [--spot-x:50%] [--spot-y:50%]";
+const glow =
+  "pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(240px_circle_at_var(--spot-x)_var(--spot-y),var(--spot-color),transparent_100%)] opacity-0 transition-opacity duration-300 ease-out group-focus-within/spotlight:opacity-100 group-hover/spotlight:opacity-100 motion-reduce:transition-none";
+const inner = "relative h-full overflow-hidden rounded-[11px] bg-surface";
+const light =
+  "pointer-events-none absolute inset-0 bg-[radial-gradient(320px_circle_at_var(--spot-x)_var(--spot-y),color-mix(in_oklab,var(--spot-color)_12%,transparent),transparent_100%)] opacity-0 transition-opacity duration-300 ease-out group-focus-within/spotlight:opacity-100 group-hover/spotlight:opacity-100 motion-reduce:transition-none";
+const content = "relative";
+const colors = {
+  primary: "[--spot-color:var(--color-primary)]",
+  success: "[--spot-color:var(--color-success)]",
+  warning: "[--spot-color:var(--color-warning)]",
+  danger: "[--spot-color:var(--color-danger)]",
+};
+
+type Props = HTMLAttributes<"div"> & {
+  color?: keyof typeof colors;
+};
+
+const { color = "primary", class: className, ...rest } = Astro.props;
+---
+
+<div data-markas-spotlight-card {...rest} class:list={[root, colors[color], className]}>
+  <div aria-hidden="true" class={glow}></div>
+  <div class={inner}>
+    <div aria-hidden="true" class={light}></div>
+    <div class={content}><slot /></div>
+  </div>
+</div>
+
+<script>
+  // One listener per page serves every card, including markup added later and pages
+  // reached through view transitions. Stores the pointer position relative to the card.
+  document.addEventListener(
+    "pointermove",
+    (event) => {
+      const card = (event.target as Element | null)?.closest?.<HTMLElement>(
+        "[data-markas-spotlight-card]",
+      );
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--spot-x", `${event.clientX - rect.left}px`);
+      card.style.setProperty("--spot-y", `${event.clientY - rect.top}px`);
+    },
+    { passive: true },
+  );
+</script>

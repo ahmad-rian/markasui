@@ -6,9 +6,30 @@
   "tags": ["background", "meteors", "space", "card", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "meteors.blade.php", "deps": [] },
-    "react": { "file": "Meteors.tsx", "deps": [] },
-    "vue": { "file": "Meteors.vue", "deps": [] }
+    "blade": {
+      "file": "meteors.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "Meteors.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Meteors.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Meteors.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Meteors.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "meteors.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -92,5 +113,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

@@ -1,0 +1,210 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "@container w-full";
+const layouts = {
+  row: {
+    root: "grid gap-8",
+    title: "text-center text-sm font-medium text-muted",
+    list: "flex flex-wrap items-center justify-center gap-x-10 gap-y-6",
+    item: "flex",
+  },
+  grid: {
+    root: "grid gap-8",
+    title: "text-center text-sm font-medium text-muted",
+    list: "grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line @lg:grid-cols-3 @3xl:grid-cols-4",
+    item: "flex h-24 items-center justify-center bg-surface px-4",
+  },
+  marquee: {
+    root: "grid gap-8",
+    title: "text-center text-sm font-medium text-muted",
+    list: "flex shrink-0 items-center gap-12 pr-12 motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-6 motion-reduce:pr-0",
+    item: "flex",
+  },
+  cards: {
+    root: "grid gap-8",
+    title: "text-center text-sm font-medium text-muted",
+    list: "grid gap-4 @xl:grid-cols-2 @3xl:grid-cols-3",
+    item: "flex flex-col items-start gap-4 rounded-xl border border-line bg-surface p-5",
+  },
+  stats: {
+    root: "grid items-center gap-8 @2xl:grid-cols-[2fr_3fr] @2xl:gap-12",
+    title: "text-2xl font-semibold tracking-tight text-balance text-ink",
+    list: "grid grid-cols-2 items-center gap-x-8 gap-y-6 @lg:grid-cols-3",
+    item: "flex",
+  },
+};
+const viewport =
+  "group overflow-hidden mask-x-from-80% motion-reduce:mask-none";
+const track =
+  "flex w-max animate-[markas-logo-cloud_30s_linear_infinite] group-focus-within:[animation-play-state:paused] group-hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none";
+const copy = "motion-reduce:hidden";
+const keyframes = "@keyframes markas-logo-cloud{to{translate:-50% 0}}";
+const header = "grid gap-6";
+const statList = "grid grid-cols-2 gap-6";
+const stat = "flex flex-col-reverse gap-1";
+const statValue = "text-3xl font-semibold tracking-tight text-ink";
+const statLabel = "text-sm text-muted";
+const logoBase =
+  "inline-flex items-center gap-2 rounded-md text-lg font-semibold tracking-tight whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const tones = {
+  gray: "text-muted grayscale transition-[color,filter] duration-200 ease-out hover:text-ink hover:grayscale-0 motion-reduce:transition-none",
+  color: "text-ink",
+};
+const mark = "h-7 w-auto shrink-0";
+const quote = "text-sm text-pretty text-ink";
+const author = "mt-auto text-xs text-muted";
+const COPIES = [0, 1];
+
+/** Hrefs with a scheme other than http, https, mailto, and tel (javascript: for one) become "#". Spaces and control characters are ignored, as browsers do. */
+const safeHref = (href: string) =>
+  /^(?!https?:|mailto:|tel:)[a-z][\w+.-]*:/i.test(href.replace(/[\0- ]/g, ""))
+    ? "#"
+    : href;
+
+export type LogoCloudLogo = {
+  name: string;
+  href?: string;
+  /** SVG path (d attribute) filled with currentColor. */
+  path?: string;
+  viewBox?: string;
+  /** Show the name as text next to the path. false: SVG only, the name becomes aria-label. */
+  wordmark?: boolean;
+  quote?: string;
+  author?: string;
+};
+export type LogoCloudStat = { value: string; label: string };
+export type LogoCloudVariant = keyof typeof layouts;
+
+type Props = Omit<HTMLAttributes<"section">, "title"> & {
+  logos: LogoCloudLogo[];
+  title?: string;
+  variant?: LogoCloudVariant;
+  grayscale?: boolean;
+  stats?: LogoCloudStat[];
+  logosLabel?: string;
+};
+
+const {
+  logos,
+  title = "",
+  variant = "row",
+  grayscale = true,
+  stats = [],
+  logosLabel = "Customer logos",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const baseId = id ?? `markas-logo-cloud-${crypto.randomUUID().slice(0, 8)}`;
+const layout = layouts[variant];
+const tone = grayscale ? tones.gray : tones.color;
+// A function as the child, (logo, index) => markup, replaces the content of each logo.
+const custom = Astro.slots.has("default")
+  ? await Promise.all(
+      logos.map((logo, index) => Astro.slots.render("default", [logo, index])),
+    )
+  : [];
+const lists = variant === "marquee" ? COPIES : [0];
+const items = logos.map((logo, index) => ({
+  logo,
+  html: custom[index] ?? "",
+  wordmark: logo.wordmark !== false || !logo.path,
+}));
+---
+
+<section
+  id={baseId}
+  aria-labelledby={title ? `${baseId}-title` : undefined}
+  aria-label={title ? undefined : logosLabel}
+  class:list={[root, className]}
+  {...rest}
+>
+  <div class={layout.root}>
+    {
+      variant === "stats" ? (
+        <div class={header}>
+          {title && (
+            <h2 id={`${baseId}-title`} class={layout.title}>
+              {title}
+            </h2>
+          )}
+          {stats.length > 0 && (
+            <dl class={statList}>
+              {stats.map((entry) => (
+                <div class={stat}>
+                  <dt class={statLabel}>{entry.label}</dt>
+                  <dd class={statValue}>{entry.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      ) : (
+        title && (
+          <h2 id={`${baseId}-title`} class={layout.title}>
+            {title}
+          </h2>
+        )
+      )
+    }
+    {
+      (() => {
+        const rendered = lists.map((copyIndex) => (
+          <ul
+            role="list"
+            aria-hidden={copyIndex > 0 ? "true" : undefined}
+            inert={copyIndex > 0}
+            class:list={[layout.list, copyIndex > 0 && copy]}
+          >
+            {items.map(({ logo, html, wordmark }) => {
+              const Tag = logo.href ? "a" : "span";
+              return (
+                <li class={layout.item}>
+                  <Tag
+                    href={logo.href ? safeHref(logo.href) : undefined}
+                    class:list={[logoBase, tone]}
+                  >
+                    {html ? (
+                      <Fragment set:html={html} />
+                    ) : (
+                      <>
+                        {logo.path && (
+                          <svg
+                            class={mark}
+                            viewBox={logo.viewBox ?? "0 0 24 24"}
+                            fill="currentColor"
+                            role={wordmark ? undefined : "img"}
+                            aria-label={wordmark ? undefined : logo.name}
+                            aria-hidden={wordmark ? "true" : undefined}
+                          >
+                            <path d={logo.path} />
+                          </svg>
+                        )}
+                        {wordmark && <span>{logo.name}</span>}
+                      </>
+                    )}
+                  </Tag>
+                  {variant === "cards" && logo.quote && (
+                    <blockquote class={quote}>{logo.quote}</blockquote>
+                  )}
+                  {variant === "cards" && logo.author && (
+                    <p class={author}>{logo.author}</p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        ));
+        return variant === "marquee" ? (
+          <div class={viewport}>
+            <style is:inline set:html={keyframes} />
+            <div class={track}>{rendered}</div>
+          </div>
+        ) : (
+          rendered
+        );
+      })()
+    }
+  </div>
+</section>

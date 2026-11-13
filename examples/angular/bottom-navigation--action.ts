@@ -1,0 +1,58 @@
+import { Component } from "@angular/core";
+import { BottomNavigation } from "../../components/bottom-navigation/bottom-navigation.component";
+
+@Component({
+  selector: "markas-example",
+  imports: [BottomNavigation],
+  template: `
+    <div
+      class="relative mx-auto h-[420px] w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface"
+    >
+      <div class="grid gap-3 p-5">
+        <p class="text-lg font-semibold text-ink">Moments</p>
+        <div class="h-40 rounded-2xl bg-subtle"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="h-28 rounded-2xl bg-subtle"></div>
+          <div class="h-28 rounded-2xl bg-primary-soft"></div>
+        </div>
+      </div>
+      <markas-bottom-navigation
+        [items]="items"
+        actionLabel="New post"
+        class="absolute inset-x-4 bottom-4"
+      >
+        <svg
+          action
+          class="size-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </markas-bottom-navigation>
+    </div>
+  `,
+})
+export default class BottomNavigationActionExample {
+  protected readonly items = [
+    {
+      value: "home",
+      label: "Home",
+      icon: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
+    },
+    {
+      value: "search",
+      label: "Search",
+      icon: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3",
+    },
+    {
+      value: "inbox",
+      label: "Inbox",
+      icon: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+    },
+  ];
+}

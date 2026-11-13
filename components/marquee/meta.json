@@ -6,9 +6,30 @@
   "tags": ["marquee", "ticker", "logos", "testimonials", "loop", "animation"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "marquee.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Marquee.tsx", "deps": [] },
-    "vue": { "file": "Marquee.vue", "deps": [] }
+    "blade": {
+      "file": "marquee.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Marquee.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Marquee.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Marquee.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Marquee.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "marquee.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -91,5 +112,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

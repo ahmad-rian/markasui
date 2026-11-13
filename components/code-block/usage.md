@@ -37,6 +37,50 @@ pnpm markasui add carousel`;
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import CodeBlock from "$lib/components/markas/CodeBlock.svelte";
+
+  const code = `pnpm add markasui\npnpm markasui init`;
+</script>
+
+<CodeBlock {code} title="Terminal" showLineNumbers />
+```
+
+## Astro
+
+```astro
+---
+import CodeBlock from "@/components/markas/CodeBlock.astro";
+
+const code = `pnpm add markasui\npnpm markasui init`;
+---
+
+<CodeBlock code={code} title="Terminal" showLineNumbers />
+```
+
+A small bundled script handles the copy button of every code block on the page.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { CodeBlock } from "./markas/code-block.component";
+
+@Component({
+  selector: "app-example",
+  imports: [CodeBlock],
+  template: `
+    <div markas-code-block [code]="code" title="Terminal" showLineNumbers></div>
+  `,
+})
+export class Example {
+  code = "pnpm add markasui\npnpm markasui init";
+}
+```
+
 ## Notes
 
 - Code is plain text without syntax highlighting, so it stays small and identical in every framework.

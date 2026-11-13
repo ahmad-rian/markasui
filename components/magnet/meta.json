@@ -6,9 +6,30 @@
   "tags": ["magnet", "magnetic", "button", "cta", "hover", "pointer", "spring"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "magnet.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Magnet.tsx", "deps": [] },
-    "vue": { "file": "Magnet.vue", "deps": [] }
+    "blade": {
+      "file": "magnet.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Magnet.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Magnet.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Magnet.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Magnet.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "magnet.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -75,5 +96,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

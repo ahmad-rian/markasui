@@ -1,0 +1,12 @@
+---
+import PromptInput from "../../components/prompt-input/PromptInput.astro";
+---
+
+<PromptInput value="Summarize the March invoices by client" loading />
+
+<script>
+  // The loading attribute on markas-prompt-input switches the button between send and stop.
+  const input = document.querySelector("markas-prompt-input");
+  input?.addEventListener("stop", () => input.toggleAttribute("loading", false));
+  input?.addEventListener("send", () => input.toggleAttribute("loading", true));
+</script>

@@ -1,0 +1,13 @@
+---
+import LogoCloud from "../../../components/logo-cloud/LogoCloud.astro";
+
+const logos = [{ name: "Sagara" }, { name: "Rimba" }];
+---
+
+<LogoCloud logos={logos}>
+  {
+    (logo: { name: string }, index: number) => (
+      <img src={`/logos/${logo.name}.svg`} alt={`${index} ${logo.name}`} />
+    )
+  }
+</LogoCloud>

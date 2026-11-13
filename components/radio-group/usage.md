@@ -52,6 +52,73 @@ const plan = ref("pro");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import RadioGroup from "$lib/components/markas/RadioGroup.svelte";
+
+  let plan = $state("pro");
+</script>
+
+<RadioGroup
+  bind:value={plan}
+  name="plan"
+  label="Subscription plan"
+  options={[
+    { value: "free", label: "Free", description: "For personal projects." },
+    { value: "pro", label: "Pro" },
+  ]}
+/>
+```
+
+## Astro
+
+```astro
+---
+import RadioGroup from "@/components/markas/RadioGroup.astro";
+---
+
+<RadioGroup
+  name="plan"
+  label="Subscription plan"
+  value="pro"
+  options={[
+    { value: "free", label: "Free", description: "For personal projects." },
+    { value: "pro", label: "Pro" },
+  ]}
+/>
+```
+
+No client script: the options are native radios.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { RadioGroup } from "./markas/radio-group.component";
+
+@Component({
+  selector: "app-billing",
+  imports: [RadioGroup],
+  template: `
+    <markas-radio-group
+      [(value)]="plan"
+      name="plan"
+      label="Subscription plan"
+      [options]="plans"
+    />
+  `,
+})
+export class Billing {
+  readonly plan = signal<string | undefined>("pro");
+  readonly plans = [
+    { value: "free", label: "Free", description: "For personal projects." },
+    { value: "pro", label: "Pro" },
+  ];
+}
+```
+
 ## Notes
 
 - Extra attributes (`class`, `disabled`, `aria-*`) fall through to the `<fieldset>`. `disabled` on the fieldset disables every radio at once.

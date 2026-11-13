@@ -6,9 +6,30 @@
   "tags": ["background", "pattern", "grid", "hero", "decorative"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "grid-pattern.blade.php", "deps": [] },
-    "react": { "file": "GridPattern.tsx", "deps": [] },
-    "vue": { "file": "GridPattern.vue", "deps": [] }
+    "blade": {
+      "file": "grid-pattern.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "GridPattern.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "GridPattern.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "GridPattern.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "GridPattern.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "grid-pattern.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -37,7 +58,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the grid."
     }
@@ -78,5 +99,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

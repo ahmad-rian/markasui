@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { frameworks, openFixture, type Framework } from "./helpers";
+import {
+  frameworks,
+  frameworksFor,
+  openFixture,
+  type Framework,
+} from "./helpers";
 
 /** Fixture utama, keyframe yang dipakai, dan tombol pertama di kontennya. */
 const backgrounds = [
@@ -151,7 +156,9 @@ test("noise-background and lamp-effect render the same layers in Blade, React, a
   ]) {
     const react = await layers("react", name);
     expect(react.length).toBeGreaterThan(0);
-    expect(await layers("blade", name)).toEqual(react);
-    expect(await layers("vue", name)).toEqual(react);
+    for (const framework of frameworksFor(name).filter((fw) => fw !== "react"))
+      expect(await layers(framework, name), `${name} ${framework}`).toEqual(
+        react,
+      );
   }
 });

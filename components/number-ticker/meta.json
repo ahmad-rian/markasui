@@ -6,9 +6,30 @@
   "tags": ["number", "counter", "count up", "stat", "animation"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "number-ticker.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "NumberTicker.tsx", "deps": [] },
-    "vue": { "file": "NumberTicker.vue", "deps": [] }
+    "blade": {
+      "file": "number-ticker.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "NumberTicker.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "NumberTicker.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "NumberTicker.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "NumberTicker.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "number-ticker.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -96,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

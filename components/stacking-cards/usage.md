@@ -52,6 +52,61 @@ import { StackingCards } from "@/components/markas/StackingCards";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import StackingCards from "$lib/components/markas/StackingCards.svelte";
+</script>
+
+<StackingCards variant="fan" class="gap-4">
+  <article class="h-48 rounded-xl border border-line bg-surface p-5">
+    One
+  </article>
+  <article class="h-48 rounded-xl border border-line bg-surface p-5">
+    Two
+  </article>
+</StackingCards>
+```
+
+## Astro
+
+```astro
+---
+import StackingCards from "@/components/markas/StackingCards.astro";
+---
+
+<StackingCards variant="fan" class="gap-4">
+  <article class="h-48 rounded-xl border border-line bg-surface p-5">One</article>
+  <article class="h-48 rounded-xl border border-line bg-surface p-5">Two</article>
+</StackingCards>
+```
+
+A small bundled script measures each stack through the `markas-stacking-cards` element.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { StackingCards } from "./markas/stacking-cards.component";
+
+@Component({
+  selector: "app-features",
+  imports: [StackingCards],
+  template: `
+    <markas-stacking-cards variant="fan" class="gap-4">
+      <article class="h-48 rounded-xl border border-line bg-surface p-5">
+        One
+      </article>
+      <article class="h-48 rounded-xl border border-line bg-surface p-5">
+        Two
+      </article>
+    </markas-stacking-cards>
+  `,
+})
+export class Features {}
+```
+
 ## Notes
 
 - Every direct child is a card. Cards stick at `top` plus `offset` per card, so earlier cards peek out above the later ones.

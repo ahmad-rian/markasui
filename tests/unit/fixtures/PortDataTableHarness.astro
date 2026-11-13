@@ -1,0 +1,28 @@
+---
+import Table, { type TableRow } from "../../../components/table/Table.astro";
+
+const columns = [
+  { key: "name", label: "Name" },
+  { key: "status", label: "Status" },
+  { key: "total", label: "Total", align: "right" as const },
+];
+const rows = [
+  { name: "Budi", status: "Paid", total: "$10" },
+  { name: "Siti", status: null, total: "$20" },
+];
+---
+
+<Table
+  caption="Orders"
+  columns={columns}
+  rows={rows}
+  bordered
+  striped
+  footer={{ name: "Total", total: "$30" }}
+  class="mt-2"
+>
+  {
+    (row: TableRow, key: string) =>
+      key === "status" && <strong>{row.status ?? "None"}</strong>
+  }
+</Table>

@@ -1,0 +1,82 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "pointer-events-none z-50 w-full";
+const bar = "h-full w-full origin-left";
+const targets = {
+  page: "fixed inset-x-0 top-0",
+  parent: "sticky top-0 left-0",
+};
+const sizes = {
+  sm: "h-0.5",
+  md: "h-1",
+  lg: "h-1.5",
+};
+const colors = {
+  primary: "bg-primary",
+  success: "bg-success",
+  warning: "bg-warning",
+  danger: "bg-danger",
+};
+
+type Props = Omit<HTMLAttributes<"div">, "children"> & {
+  /** Follow the whole page, or the closest scrolling parent element. */
+  target?: keyof typeof targets;
+  color?: keyof typeof colors;
+  size?: keyof typeof sizes;
+};
+
+const {
+  target = "page",
+  color = "primary",
+  size = "sm",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<markas-scroll-progress class="contents" data-target={target}
+  ><div aria-hidden="true" {...rest} class:list={[root, targets[target], sizes[size], className]}><div class:list={[bar, colors[color]]} style="transform: scaleX(0)"></div></div></markas-scroll-progress
+>
+
+<script>
+  // One element per bar: setup runs for markup added later and after view transitions.
+  class MarkasScrollProgress extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const fill = this.firstElementChild?.firstElementChild as HTMLElement | null;
+      if (!fill) return;
+      // This element is display: contents, so its parent is the parent of the bar.
+      const scroller = this.dataset.target === "parent" ? this.parentElement : null;
+      const source = scroller ?? document.documentElement;
+      const events: EventTarget = scroller ?? window;
+      let frame = 0;
+      // Fill the bar with the scroll position. Updates are batched per frame.
+      const update = () => {
+        frame = 0;
+        const max = source.scrollHeight - source.clientHeight;
+        const progress = max > 0 ? Math.min(Math.max(source.scrollTop / max, 0), 1) : 0;
+        fill.style.transform = `scaleX(${progress})`;
+      };
+      const schedule = () => {
+        if (!frame) frame = requestAnimationFrame(update);
+      };
+      update();
+      events.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", schedule, { passive: true });
+      this.cleanup = () => {
+        cancelAnimationFrame(frame);
+        events.removeEventListener("scroll", schedule);
+        window.removeEventListener("resize", schedule);
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-scroll-progress"))
+    customElements.define("markas-scroll-progress", MarkasScrollProgress);
+</script>

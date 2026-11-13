@@ -17,6 +17,18 @@
     "vue": {
       "file": "Menubar.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Menubar.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Menubar.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "menubar.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -43,6 +55,12 @@
       "type": "string",
       "default": "auto",
       "description": "Bar id. Triggers and menus use it with -trigger-<index> and -menu-<index> suffixes."
+    },
+    {
+      "name": "selected",
+      "type": "output<string>",
+      "default": "-",
+      "description": "Angular only. Emits the item value (or label) when an item is selected. Svelte uses the onselect prop, Astro dispatches a markas-select event like Blade."
     }
   ],
   "a11y": [
@@ -60,6 +78,7 @@
     ]
   },
   "addedAt": "2026-11-05",
+  "updatedAt": "2026-11-09",
   "i18n": {
     "id": {
       "description": "Bar horizontal berisi beberapa menu seperti aplikasi desktop, berbasis Popover API, dengan keyboard sesuai pola WAI-ARIA Menubar.",
@@ -67,7 +86,8 @@
         "menus": "Daftar menu di bar. Setiap menu punya label dan item dengan bentuk sama seperti item Dropdown Menu.",
         "label": "Nama aksesibel bar (aria-label). Default \"Menu\", isi misalnya \"Menu aplikasi\" untuk situs berbahasa Indonesia.",
         "onSelect / @select / markas-select": "Dipanggil saat item dipilih dengan value item (atau label bila value kosong). Blade memancarkan event markas-select.",
-        "id": "Id bar. Pemicu dan menu memakai id ini dengan akhiran -trigger-<indeks> dan -menu-<indeks>."
+        "id": "Id bar. Pemicu dan menu memakai id ini dengan akhiran -trigger-<indeks> dan -menu-<indeks>.",
+        "selected": "Khusus Angular. Dipancarkan dengan value item (atau label) saat item dipilih. Svelte memakai prop onselect, Astro memancarkan event markas-select seperti Blade."
       },
       "a11y": [
         "Bar memakai role=menubar dengan aria-label; setiap tombol tingkat atas adalah menuitem dengan aria-haspopup=menu, aria-expanded, dan aria-controls.",

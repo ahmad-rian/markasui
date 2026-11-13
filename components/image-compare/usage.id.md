@@ -50,6 +50,60 @@ import { ImageCompare } from "@/components/markas/ImageCompare";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import ImageCompare from "$lib/components/markas/ImageCompare.svelte";
+
+  let position = $state(50);
+</script>
+
+<ImageCompare bind:position aria-label="Kitchen renovation">
+  {#snippet before()}<img src="/img/kitchen-old.webp" alt="" />{/snippet}
+  {#snippet after()}<img src="/img/kitchen-new.webp" alt="" />{/snippet}
+</ImageCompare>
+```
+
+## Astro
+
+```astro
+---
+import ImageCompare from "@/components/markas/ImageCompare.astro";
+---
+
+<ImageCompare aria-label="Kitchen renovation">
+  <img slot="before" src="/img/kitchen-old.webp" alt="" />
+  <img slot="after" src="/img/kitchen-new.webp" alt="" />
+</ImageCompare>
+```
+
+Satu script kecil yang dibundel melayani semua perbandingan di halaman dan memancarkan `position-change`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { ImageCompare } from "./markas/image-compare.component";
+
+@Component({
+  selector: "app-renovation",
+  imports: [ImageCompare],
+  template: `
+    <markas-image-compare
+      [(position)]="position"
+      aria-label="Kitchen renovation"
+    >
+      <img before src="/img/kitchen-old.webp" alt="" />
+      <img after src="/img/kitchen-new.webp" alt="" />
+    </markas-image-compare>
+  `,
+})
+export class Renovation {
+  readonly position = signal(50);
+}
+```
+
 ## Catatan
 
 - Before di kiri (atau atas dengan `orientation="vertical"`), after di kanan (atau bawah). Beri ukuran yang sama.

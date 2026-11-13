@@ -6,9 +6,30 @@
   "tags": ["background", "ripple", "circles", "pulse", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "ripple-background.blade.php", "deps": [] },
-    "react": { "file": "RippleBackground.tsx", "deps": [] },
-    "vue": { "file": "RippleBackground.vue", "deps": [] }
+    "blade": {
+      "file": "ripple-background.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "RippleBackground.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "RippleBackground.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "RippleBackground.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "RippleBackground.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "ripple-background.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -80,5 +101,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

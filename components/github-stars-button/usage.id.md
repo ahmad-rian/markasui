@@ -36,6 +36,63 @@ import GithubStarsButton from "@/components/markas/GithubStarsButton.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import GithubStarsButton from "$lib/components/markas/GithubStarsButton.svelte";
+</script>
+
+<GithubStarsButton
+  href="https://github.com/markasui/markasui"
+  stars={12480}
+  starsLabel={"{count} bintang"}
+>
+  Beri bintang
+</GithubStarsButton>
+```
+
+## Astro
+
+```astro
+---
+import GithubStarsButton from "@/components/markas/GithubStarsButton.astro";
+---
+
+<GithubStarsButton
+  href="https://github.com/markasui/markasui"
+  stars={12480}
+  starsLabel="{count} bintang"
+>
+  Beri bintang
+</GithubStarsButton>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { GithubStarsButton } from "./markas/github-stars-button.component";
+
+@Component({
+  selector: "app-repo",
+  imports: [GithubStarsButton],
+  template: `
+    <a
+      markas-github-stars-button
+      href="https://github.com/markasui/markasui"
+      [stars]="12480"
+      starsLabel="{{ '{' }}count} bintang"
+    >
+      Beri bintang
+    </a>
+  `,
+})
+export class Repo {}
+```
+
+Angular memakai attribute selector pada link native, jadi `target`, `rel`, dan `aria-*` tetap di link itu. Di template Angular, `{` ditulis sebagai `{{ '{' }}`.
+
 ## Catatan
 
 - Komponen tidak pernah memanggil API GitHub. Ambil jumlahnya saat build atau di server lalu kirim lewat prop.

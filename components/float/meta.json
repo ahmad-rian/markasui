@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "float.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Float.tsx", "deps": [] },
-    "vue": { "file": "Float.vue", "deps": [] }
+    "blade": {
+      "file": "float.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Float.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Float.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Float.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Float.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "float.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -106,5 +127,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "noise-background.blade.php", "deps": [] },
-    "react": { "file": "NoiseBackground.tsx", "deps": [] },
-    "vue": { "file": "NoiseBackground.vue", "deps": [] }
+    "blade": {
+      "file": "noise-background.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "NoiseBackground.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "NoiseBackground.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "NoiseBackground.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "NoiseBackground.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "noise-background.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -95,5 +116,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

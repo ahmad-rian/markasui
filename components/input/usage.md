@@ -35,6 +35,61 @@ const email = ref("");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Input from "$lib/components/markas/Input.svelte";
+
+  let email = $state("");
+</script>
+
+<Input
+  bind:value={email}
+  name="email"
+  type="email"
+  label="Email"
+  hint="We never share your email."
+/>
+```
+
+## Astro
+
+```astro
+---
+import Input from "@/components/markas/Input.astro";
+---
+
+<Input name="email" type="email" label="Email" hint="We never share your email." />
+<Input name="password" type="password" label="Password" error="Password is too short." />
+```
+
+No client script: the field is a native input.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Input } from "./markas/input.component";
+
+@Component({
+  selector: "app-sign-in",
+  imports: [Input],
+  template: `
+    <markas-input
+      [(value)]="email"
+      name="email"
+      type="email"
+      label="Email"
+      hint="We never share your email."
+    />
+  `,
+})
+export class SignIn {
+  readonly email = signal("");
+}
+```
+
 ## Notes
 
 - Extra attributes (`name`, `placeholder`, `required`, `class`) go to the `<input>` element, not its wrapper.

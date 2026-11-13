@@ -81,6 +81,125 @@ import { Menubar } from "@/components/markas/Menubar";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Menubar, {
+    type MenubarMenu,
+  } from "$lib/components/markas/Menubar.svelte";
+
+  const menus: MenubarMenu[] = [
+    {
+      label: "Berkas",
+      items: [
+        { label: "Berkas baru", value: "baru" },
+        { label: "Simpan", value: "simpan" },
+      ],
+    },
+    {
+      label: "Ubah",
+      items: [
+        { label: "Urungkan", value: "urungkan" },
+        { separator: true },
+        { label: "Hapus", value: "hapus", danger: true },
+      ],
+    },
+    { label: "Bantuan", items: [{ label: "Dokumentasi", href: "/docs" }] },
+  ];
+</script>
+
+<Menubar
+  label="Menu aplikasi"
+  {menus}
+  onselect={(value) => console.log(value)}
+/>
+```
+
+## Astro
+
+```astro
+---
+import Menubar from "@/components/markas/Menubar.astro";
+---
+
+<Menubar
+  label="Menu aplikasi"
+  id="app-menu"
+  menus={[
+    {
+      label: "Berkas",
+      items: [
+        { label: "Berkas baru", value: "baru" },
+        { label: "Simpan", value: "simpan" },
+      ],
+    },
+    {
+      label: "Ubah",
+      items: [
+        { label: "Urungkan", value: "urungkan" },
+        { separator: true },
+        { label: "Hapus", value: "hapus", danger: true },
+      ],
+    },
+    { label: "Bantuan", items: [{ label: "Dokumentasi", href: "/docs" }] },
+  ]}
+/>
+
+<script>
+  document
+    .getElementById("app-menu")
+    ?.addEventListener("markas-select", (event) =>
+      console.log((event as CustomEvent<string>).detail),
+    );
+</script>
+```
+
+Satu script kecil yang dibundel menghidupkan setiap menubar di halaman, termasuk setelah view transition. Pilihan item memancarkan event `markas-select` (bubble) dengan value di `detail`, sama seperti Blade.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Menubar, type MenubarMenu } from "./markas/menubar.component";
+
+@Component({
+  selector: "app-editor-menu",
+  imports: [Menubar],
+  template: `
+    <markas-menubar
+      label="Menu aplikasi"
+      [menus]="menus"
+      (selected)="onSelected($event)"
+    />
+  `,
+})
+export class EditorMenu {
+  protected readonly menus: MenubarMenu[] = [
+    {
+      label: "Berkas",
+      items: [
+        { label: "Berkas baru", value: "baru" },
+        { label: "Simpan", value: "simpan" },
+      ],
+    },
+    {
+      label: "Ubah",
+      items: [
+        { label: "Urungkan", value: "urungkan" },
+        { separator: true },
+        { label: "Hapus", value: "hapus", danger: true },
+      ],
+    },
+    { label: "Bantuan", items: [{ label: "Dokumentasi", href: "/docs" }] },
+  ];
+
+  protected onSelected(value: string) {
+    console.log(value);
+  }
+}
+```
+
 ## Catatan
 
 - Item menu memakai bentuk yang sama dengan item Dropdown Menu: `value`, `href`, `danger`, `disabled`, atau `{ separator: true }`.

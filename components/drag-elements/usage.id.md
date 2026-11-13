@@ -49,6 +49,70 @@ import { DragElements } from "@/components/markas/DragElements";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import DragElements from "$lib/components/markas/DragElements.svelte";
+</script>
+
+<DragElements
+  release="return"
+  class="h-80 rounded-xl border border-line bg-subtle"
+  role="group"
+  aria-label="Skills"
+>
+  <span class="rounded-full bg-primary-soft px-3 py-1.5">Laravel</span>
+  <span class="rounded-full bg-primary-soft px-3 py-1.5">Vue</span>
+</DragElements>
+```
+
+## Astro
+
+```astro
+---
+import DragElements from "@/components/markas/DragElements.astro";
+---
+
+<DragElements
+  release="return"
+  class="h-80 rounded-xl border border-line bg-subtle"
+  role="group"
+  aria-label="Skills"
+>
+  <span class="rounded-full bg-primary-soft px-3 py-1.5">Laravel</span>
+  <span class="rounded-full bg-primary-soft px-3 py-1.5">Vue</span>
+</DragElements>
+```
+
+Setiap area adalah custom element kecil, jadi tetap jalan setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { DragElements } from "./markas/drag-elements.component";
+
+@Component({
+  selector: "app-skills",
+  imports: [DragElements],
+  template: `
+    <markas-drag-elements
+      release="return"
+      class="h-80 rounded-xl border border-line bg-subtle"
+      role="group"
+      aria-label="Skills"
+    >
+      <span class="rounded-full bg-primary-soft px-3 py-1.5">Laravel</span>
+      <span class="rounded-full bg-primary-soft px-3 py-1.5">Vue</span>
+    </markas-drag-elements>
+  `,
+})
+export class Skills {}
+```
+
+`role`, `aria-label`, dan `class` pindah dari host ke area.
+
 ## Catatan
 
 - Setiap anak langsung bisa diseret dan ditaruh di posisi seed di dalam area. `data-x` dan `data-y` (0 sampai 100) serta `data-rotate` pada anak mengunci posisi awalnya.

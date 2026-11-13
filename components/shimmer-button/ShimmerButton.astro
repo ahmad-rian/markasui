@@ -1,0 +1,100 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const base =
+  "relative isolate inline-flex items-center justify-center gap-2 overflow-hidden font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+const variants = {
+  primary: "bg-primary text-on-primary hover:bg-primary-strong",
+  secondary: "border border-line bg-surface text-ink hover:bg-subtle",
+  ghost: "text-ink hover:bg-subtle",
+  danger: "bg-danger text-on-primary hover:bg-danger/90",
+};
+const sizes = {
+  sm: "h-8 rounded-md px-3 text-sm",
+  md: "h-10 rounded-lg px-4 text-sm",
+  lg: "h-12 rounded-lg px-6 text-base",
+};
+const sheen =
+  "pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-linear-to-r from-transparent to-transparent";
+const sheenVariants = {
+  primary: "via-on-primary/30",
+  secondary: "via-primary/10",
+  ghost: "via-primary/10",
+  danger: "via-on-primary/30",
+};
+
+type Props = HTMLAttributes<"button"> & {
+  variant?: keyof typeof variants;
+  size?: keyof typeof sizes;
+  /** Length of one shimmer cycle in milliseconds. */
+  duration?: number;
+};
+
+const {
+  variant = "primary",
+  size = "md",
+  duration = 2400,
+  type = "button",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<markas-shimmer-button class="contents" data-duration={Number(duration)}>
+  <button
+    type={type}
+    class:list={[base, variants[variant], sizes[size], className]}
+    {...rest}
+  >
+    <slot />
+    <span
+      data-markas-sheen
+      class:list={[sheen, sheenVariants[variant]]}
+      aria-hidden="true"></span>
+  </button>
+</markas-shimmer-button>
+
+<script>
+  /** The sheen sweeps across in the first 60% of each cycle, then rests off the button. */
+  const SWEEP = [
+    { translate: "0 0" },
+    { translate: "300% 0", offset: 0.6 },
+    { translate: "300% 0" },
+  ];
+
+  // Per instance: the sweep pauses while its button is off screen.
+  class ShimmerButton extends HTMLElement {
+    #stop = () => {};
+
+    connectedCallback() {
+      const element = this.querySelector<HTMLElement>("[data-markas-sheen]");
+      const button = element?.parentElement;
+      if (!element || !button || typeof element.animate !== "function") return;
+      if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+      const animation = element.animate(SWEEP, {
+        duration: Number(this.dataset.duration),
+        iterations: Infinity,
+        easing: "ease-in-out",
+      });
+      if (typeof IntersectionObserver === "undefined") {
+        this.#stop = () => animation.cancel();
+        return;
+      }
+      const observer = new IntersectionObserver(([entry]) =>
+        entry?.isIntersecting ? animation.play() : animation.pause(),
+      );
+      observer.observe(button);
+      this.#stop = () => {
+        observer.disconnect();
+        animation.cancel();
+      };
+    }
+
+    disconnectedCallback() {
+      this.#stop();
+    }
+  }
+
+  if (!customElements.get("markas-shimmer-button"))
+    customElements.define("markas-shimmer-button", ShimmerButton);
+</script>

@@ -41,6 +41,55 @@ import { Magnet } from "@/components/markas/Magnet";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Magnet from "$lib/components/markas/Magnet.svelte";
+</script>
+
+<Magnet>
+  <Button size="lg">Get started <span data-depth="0.5">&rarr;</span></Button>
+</Magnet>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Magnet from "@/components/markas/Magnet.astro";
+---
+
+<Magnet>
+  <Button size="lg">Get started <span data-depth="0.5">&rarr;</span></Button>
+</Magnet>
+```
+
+A small bundled script runs each magnet through the `markas-magnet` element.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Magnet } from "./markas/magnet.component";
+
+@Component({
+  selector: "app-cta",
+  imports: [Button, Magnet],
+  template: `
+    <markas-magnet [strength]="0.5" [radius]="32">
+      <button markas-button size="lg">
+        Get started <span data-depth="0.5">&rarr;</span>
+      </button>
+    </markas-magnet>
+  `,
+})
+export class Cta {}
+```
+
 ## Notes
 
 - Within `radius` px of its edges the content follows the mouse by `strength` (0 to 1) and springs back with a slight overshoot when the mouse moves away.

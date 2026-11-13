@@ -54,6 +54,84 @@ import DynamicIsland from "@/components/markas/DynamicIsland.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import DynamicIsland, {
+    type DynamicIslandState,
+  } from "$lib/components/markas/DynamicIsland.svelte";
+
+  let state = $state<DynamicIslandState>("compact");
+</script>
+
+<DynamicIsland
+  {state}
+  announcements={{ expanded: "Focus timer, 12 minutes left" }}
+>
+  {#snippet leading()}<TimerIcon />{/snippet}
+  {#snippet trailing()}<span class="tabular-nums">12:48</span>{/snippet}
+  {#snippet expanded()}
+    <TimerCard onEnd={() => (state = "idle")} />
+  {/snippet}
+</DynamicIsland>
+```
+
+## Astro
+
+```astro
+---
+import DynamicIsland from "@/components/markas/DynamicIsland.astro";
+---
+
+<DynamicIsland
+  state="compact"
+  announcements={{ expanded: "Focus timer, 12 minutes left" }}
+>
+  <TimerIcon slot="leading" />
+  <span slot="trailing" class="tabular-nums">12:48</span>
+  <TimerCard slot="expanded" />
+</DynamicIsland>
+
+<script>
+  document
+    .querySelector("markas-dynamic-island")
+    ?.setAttribute("state", "expanded");
+</script>
+```
+
+Island merender state pertama di server. Ubah setelahnya dengan mengatur atribut `state` di `markas-dynamic-island`; panel, inert, dan pengumuman ikut berubah.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import {
+  DynamicIsland,
+  type DynamicIslandState,
+} from "./markas/dynamic-island.component";
+
+@Component({
+  selector: "app-timer-island",
+  imports: [DynamicIsland],
+  template: `
+    <markas-dynamic-island [state]="state()" [announcements]="announcements">
+      <span leading class="size-2 rounded-full bg-warning"></span>
+      <span trailing class="tabular-nums">12:48</span>
+      <div expanded>
+        <button type="button" (click)="state.set('idle')">End</button>
+      </div>
+    </markas-dynamic-island>
+  `,
+})
+export class TimerIsland {
+  state = signal<DynamicIslandState>("compact");
+  announcements = { expanded: "Focus timer, 12 minutes left" };
+}
+```
+
+Elemen dengan atribut `idle`, `leading`, `trailing`, atau `expanded` mengisi slot yang sesuai. `ng-container` juga bisa.
+
 ## Catatan
 
 - Lebar, tinggi, dan radius sudut bergerak dengan satu transisi CSS yang memantul halus. Konten baru memudar masuk dan menajam sesaat kemudian.

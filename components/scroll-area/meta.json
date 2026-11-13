@@ -6,9 +6,30 @@
   "tags": ["scroll", "overflow", "scrollbar", "container"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "scroll-area.blade.php", "deps": [] },
-    "react": { "file": "ScrollArea.tsx", "deps": [] },
-    "vue": { "file": "ScrollArea.vue", "deps": [] }
+    "blade": {
+      "file": "scroll-area.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "ScrollArea.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ScrollArea.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ScrollArea.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ScrollArea.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "scroll-area.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -66,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

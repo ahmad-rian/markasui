@@ -39,6 +39,59 @@ const updates = ref(false);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Checkbox from "$lib/components/markas/Checkbox.svelte";
+
+  let updates = $state(false);
+</script>
+
+<Checkbox
+  bind:checked={updates}
+  name="updates"
+  label="Send me product updates"
+  description="At most one email per month."
+/>
+```
+
+## Astro
+
+```astro
+---
+import Checkbox from "@/components/markas/Checkbox.astro";
+---
+
+<Checkbox name="terms" label="I agree to the terms of service" required />
+<Checkbox name="updates" label="Send me product updates" description="At most one email per month." checked />
+```
+
+No client script: the checkbox is a native input.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Checkbox } from "./markas/checkbox.component";
+
+@Component({
+  selector: "app-preferences",
+  imports: [Checkbox],
+  template: `
+    <markas-checkbox
+      [(checked)]="updates"
+      name="updates"
+      label="Send me product updates"
+      description="At most one email per month."
+    />
+  `,
+})
+export class Preferences {
+  readonly updates = signal(false);
+}
+```
+
 ## Notes
 
 - Extra attributes (`name`, `value`, `required`, `class`) go to the `<input>` element.

@@ -66,6 +66,82 @@ const countries = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Combobox from "$lib/components/markas/Combobox.svelte";
+
+  let country = $state("id");
+  const countries = [
+    { value: "au", label: "Australia" },
+    { value: "id", label: "Indonesia" },
+    { value: "jp", label: "Japan" },
+  ];
+</script>
+
+<Combobox
+  bind:value={country}
+  name="country"
+  label="Country"
+  placeholder="Search countries"
+  options={countries}
+/>
+```
+
+## Astro
+
+```astro
+---
+import Combobox from "@/components/markas/Combobox.astro";
+
+const countries = [
+  { value: "au", label: "Australia" },
+  { value: "id", label: "Indonesia" },
+  { value: "jp", label: "Japan" },
+];
+---
+
+<Combobox
+  name="country"
+  label="Country"
+  placeholder="Search countries"
+  value="id"
+  options={countries}
+/>
+```
+
+Options render on the server. A small bundled script (one custom element per combobox) filters, highlights, and positions the list. Changing the selection dispatches a bubbling `markas-change` event with the value in `event.detail`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Combobox } from "./markas/combobox.component";
+
+@Component({
+  selector: "app-address",
+  imports: [Combobox],
+  template: `
+    <markas-combobox
+      [(value)]="country"
+      name="country"
+      label="Country"
+      placeholder="Search countries"
+      [options]="countries"
+    />
+  `,
+})
+export class Address {
+  readonly country = signal("id");
+  readonly countries = [
+    { value: "au", label: "Australia" },
+    { value: "id", label: "Indonesia" },
+    { value: "jp", label: "Japan" },
+  ];
+}
+```
+
 ## Notes
 
 - Extra attributes (`placeholder`, `required`, `disabled`, `class`) go to the visible text input. `name` goes to a hidden input that holds the selected value, so the form sends `country=id`, not the label.

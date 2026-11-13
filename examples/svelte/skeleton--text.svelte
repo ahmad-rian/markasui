@@ -1,0 +1,14 @@
+<script lang="ts">
+  import Skeleton from "../../components/skeleton/Skeleton.svelte";
+</script>
+
+<div class="grid gap-3" role="status">
+  <span class="sr-only">Loading content</span>
+  <Skeleton class="h-6 w-1/2" />
+  <div class="grid gap-2">
+    <Skeleton class="h-4 w-full" />
+    <Skeleton class="h-4 w-full" />
+    <Skeleton class="h-4 w-11/12" />
+    <Skeleton class="h-4 w-2/3" />
+  </div>
+</div>

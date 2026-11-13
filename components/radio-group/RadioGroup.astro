@@ -1,0 +1,85 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "min-w-0";
+const legendClass = "mb-3 text-sm font-medium text-ink";
+const orientations = {
+  vertical: "grid gap-3",
+  horizontal: "flex flex-wrap gap-x-6 gap-y-3",
+};
+const item =
+  "flex items-start gap-3 has-disabled:cursor-not-allowed has-disabled:opacity-50";
+const control = "relative mt-0.5 flex size-4 shrink-0";
+const radio =
+  "peer size-4 shrink-0 cursor-pointer appearance-none rounded-full border border-faint bg-surface transition-colors duration-150 ease-out checked:border-primary checked:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed motion-reduce:transition-none";
+const dot =
+  "pointer-events-none absolute inset-1 rounded-full bg-on-primary opacity-0 peer-checked:opacity-100";
+const text = "grid gap-0.5";
+const labelClass = "text-sm font-medium text-ink";
+const descriptionClass = "text-sm text-muted";
+
+type RadioOption = {
+  value: string;
+  label: string;
+  description?: string;
+};
+
+type Props = HTMLAttributes<"fieldset"> & {
+  name: string;
+  options: RadioOption[];
+  label?: string;
+  value?: string;
+  orientation?: keyof typeof orientations;
+};
+
+const {
+  name,
+  options,
+  label,
+  value,
+  orientation = "vertical",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+const groupId = id ?? `markas-radio-group-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<fieldset id={groupId} class:list={[root, className]} {...rest}>
+  {label && <legend class={legendClass}>{label}</legend>}
+  <div class={orientations[orientation]}>
+    {
+      options.map((option) => {
+        const optionId = `${groupId}-${option.value}`;
+        return (
+          <div class={item}>
+            <span class={control}>
+              <input
+                type="radio"
+                id={optionId}
+                name={name}
+                value={option.value}
+                checked={option.value === value}
+                aria-describedby={
+                  option.description ? `${optionId}-description` : undefined
+                }
+                class={radio}
+              />
+              <span class={dot} aria-hidden="true" />
+            </span>
+            <div class={text}>
+              <label for={optionId} class={labelClass}>
+                {option.label}
+              </label>
+              {option.description && (
+                <p id={`${optionId}-description`} class={descriptionClass}>
+                  {option.description}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</fieldset>

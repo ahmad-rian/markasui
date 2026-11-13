@@ -6,9 +6,30 @@
   "tags": ["hover card", "preview", "popover", "overlay"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "hover-card.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "HoverCard.tsx", "deps": [] },
-    "vue": { "file": "HoverCard.vue", "deps": [] }
+    "blade": {
+      "file": "hover-card.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "HoverCard.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "HoverCard.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "HoverCard.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "HoverCard.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "hover-card.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -19,9 +40,9 @@
     },
     {
       "name": "content",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
-      "description": "Card content. Blade and Vue use the content slot, React uses the content prop."
+      "description": "Card content. Blade, Vue, and Astro use the content slot, React uses the content prop, Svelte the content snippet, Angular an element with the content attribute."
     },
     {
       "name": "id",
@@ -50,7 +71,7 @@
       "description": "Kartu pratinjau berbasis Popover API yang muncul saat link di-hover atau difokus, untuk profil, repositori, dan pratinjau lain.",
       "props": {
         "children / slot": "Satu elemen pemicu yang bisa difokus, biasanya link.",
-        "content": "Isi kartu. Blade dan Vue memakai slot content, React memakai prop content.",
+        "content": "Isi kartu. Blade, Vue, dan Astro memakai slot content, React memakai prop content, Svelte snippet content, Angular elemen dengan atribut content.",
         "id": "Id elemen kartu, dipakai untuk aria-describedby pemicu."
       },
       "a11y": [
@@ -68,5 +89,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

@@ -76,6 +76,107 @@ import { Command } from "@/components/markas/Command";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Command from "$lib/components/markas/Command.svelte";
+
+  const items = [
+    { group: "Navigasi", label: "Dasbor", href: "/dasbor" },
+    { group: "Navigasi", label: "Proyek", href: "/proyek" },
+    { group: "Aksi", label: "Buat proyek", value: "buat", shortcut: "Ctrl+N" },
+    { group: "Aksi", label: "Undang anggota", value: "undang" },
+  ];
+</script>
+
+<Command
+  hotkey
+  placeholderLabel="Ketik perintah atau cari..."
+  emptyLabel="Tidak ada hasil."
+  searchLabel="Cari perintah"
+  dialogLabel="Palet perintah"
+  {items}
+  onselect={(value) => console.log(value)}
+>
+  {#snippet trigger()}
+    <Button variant="secondary">Cari</Button>
+  {/snippet}
+</Command>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Command from "@/components/markas/Command.astro";
+
+const items = [
+  { group: "Navigasi", label: "Dasbor", href: "/dasbor" },
+  { group: "Navigasi", label: "Proyek", href: "/proyek" },
+  { group: "Aksi", label: "Buat proyek", value: "buat", shortcut: "Ctrl+N" },
+  { group: "Aksi", label: "Undang anggota", value: "undang" },
+];
+---
+
+<Command
+  hotkey
+  placeholderLabel="Ketik perintah atau cari..."
+  emptyLabel="Tidak ada hasil."
+  searchLabel="Cari perintah"
+  dialogLabel="Palet perintah"
+  items={items}
+>
+  <Button slot="trigger" variant="secondary">Cari</Button>
+</Command>
+
+<script>
+  document.addEventListener("markas-select", (event) => {
+    console.log((event as CustomEvent<string>).detail);
+  });
+</script>
+```
+
+Script kecil yang dibundel menyaring daftar dan menangani keyboard. Memilih perintah memancarkan event `markas-select` (bubble) dengan value di `detail`.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Command } from "./markas/command.component";
+
+@Component({
+  selector: "app-peluncur",
+  imports: [Button, Command],
+  template: `
+    <markas-command
+      hotkey
+      placeholderLabel="Ketik perintah atau cari..."
+      emptyLabel="Tidak ada hasil."
+      searchLabel="Cari perintah"
+      dialogLabel="Palet perintah"
+      [items]="items"
+      (selected)="jalankan($event)"
+    >
+      <button markas-button trigger variant="secondary">Cari</button>
+    </markas-command>
+  `,
+})
+export class Peluncur {
+  readonly items = [
+    { group: "Navigasi", label: "Dasbor", href: "/dasbor" },
+    { group: "Navigasi", label: "Proyek", href: "/proyek" },
+    { group: "Aksi", label: "Buat proyek", value: "buat", shortcut: "Ctrl+N" },
+    { group: "Aksi", label: "Undang anggota", value: "undang" },
+  ];
+
+  jalankan(value: string) {}
+}
+```
+
 ## Catatan
 
 - Pencarian mencocokkan label tanpa membedakan huruf besar dan kecil. Pencarian dikosongkan saat dialog ditutup.

@@ -30,6 +30,45 @@ import Progress from "@/components/markas/Progress.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Progress from "$lib/components/markas/Progress.svelte";
+</script>
+
+<Progress label="Uploading file" value={60} />
+<Progress aria-label="Preparing export" />
+```
+
+## Astro
+
+```astro
+---
+import Progress from "@/components/markas/Progress.astro";
+---
+
+<Progress label="Uploading file" value={60} />
+<Progress aria-label="Preparing export" />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Progress } from "./markas/progress.component";
+
+@Component({
+  selector: "app-upload",
+  imports: [Progress],
+  template: `
+    <markas-progress label="Uploading file" [value]="60" />
+    <markas-progress aria-label="Preparing export" />
+  `,
+})
+export class Upload {}
+```
+
 ## Notes
 
 - Without `value`, the progress is indeterminate and pulses. The animation stops under `prefers-reduced-motion`.

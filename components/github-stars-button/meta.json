@@ -17,6 +17,18 @@
     "vue": {
       "file": "GithubStarsButton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "GithubStarsButton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "GithubStarsButton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "github-stars-button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -91,5 +103,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

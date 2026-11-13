@@ -17,6 +17,18 @@
     "vue": {
       "file": "FlipButton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "FlipButton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "FlipButton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "flip-button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -36,7 +48,7 @@
       "name": "backLabel",
       "type": "string (React: ReactNode)",
       "default": "-",
-      "description": "Text on the back face. Vue and Blade also take a back slot. Falls back to the label."
+      "description": "Text on the back face. Vue, Blade, and Astro also take a back slot, Svelte a back snippet, Angular an element with the back attribute. Falls back to the label."
     },
     {
       "name": "type",
@@ -66,7 +78,7 @@
       "props": {
         "variant": "Gaya visual, sama seperti Button.",
         "size": "Tinggi 32, 40, atau 48px, sama seperti Button.",
-        "backLabel": "Teks di sisi belakang. Vue dan Blade juga menerima slot back. Jika kosong memakai label utama.",
+        "backLabel": "Teks di sisi belakang. Vue, Blade, dan Astro juga menerima slot back, Svelte snippet back, Angular elemen dengan atribut back. Jika kosong memakai label utama.",
         "type": "Atribut type native."
       },
       "a11y": [
@@ -84,5 +96,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

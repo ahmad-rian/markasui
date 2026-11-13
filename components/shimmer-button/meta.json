@@ -17,6 +17,18 @@
     "vue": {
       "file": "ShimmerButton.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "ShimmerButton.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ShimmerButton.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "shimmer-button.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -82,5 +94,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

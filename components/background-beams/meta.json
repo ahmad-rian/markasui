@@ -6,9 +6,30 @@
   "tags": ["background", "beams", "light", "svg", "hero", "animated"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "background-beams.blade.php", "deps": [] },
-    "react": { "file": "BackgroundBeams.tsx", "deps": [] },
-    "vue": { "file": "BackgroundBeams.vue", "deps": [] }
+    "blade": {
+      "file": "background-beams.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "BackgroundBeams.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "BackgroundBeams.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "BackgroundBeams.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "BackgroundBeams.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "background-beams.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -37,7 +58,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the beams."
     }
@@ -80,5 +101,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

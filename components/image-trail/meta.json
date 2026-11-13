@@ -6,9 +6,30 @@
   "tags": ["trail", "cursor", "pointer", "hero", "images", "playful"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "image-trail.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "ImageTrail.tsx", "deps": [] },
-    "vue": { "file": "ImageTrail.vue", "deps": [] }
+    "blade": {
+      "file": "image-trail.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "ImageTrail.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "ImageTrail.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "ImageTrail.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ImageTrail.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "image-trail.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -96,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

@@ -99,6 +99,130 @@ const links = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import Navbar from "$lib/components/markas/Navbar.svelte";
+
+  const links = [
+    { label: "Beranda", href: "/", active: true },
+    {
+      label: "Produk",
+      children: [
+        {
+          label: "Analitik",
+          href: "/analitik",
+          description: "Pantau pemakaian secara langsung",
+          icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+        },
+        { label: "Otomasi", href: "/otomasi" },
+      ],
+    },
+    { label: "Harga", href: "/harga" },
+  ];
+</script>
+
+<Navbar
+  variant="blur"
+  sticky
+  navLabel="Utama"
+  mobileNavLabel="Utama seluler"
+  {links}
+>
+  {#snippet brand()}MarkasUI{/snippet}
+  {#snippet actions()}
+    <Button size="sm">Masuk</Button>
+  {/snippet}
+</Navbar>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import Navbar from "@/components/markas/Navbar.astro";
+
+const links = [
+  { label: "Beranda", href: "/", active: true },
+  {
+    label: "Produk",
+    children: [
+      {
+        label: "Analitik",
+        href: "/analitik",
+        description: "Pantau pemakaian secara langsung",
+        icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+      },
+      { label: "Otomasi", href: "/otomasi" },
+    ],
+  },
+  { label: "Harga", href: "/harga" },
+];
+---
+
+<Navbar
+  variant="blur"
+  sticky
+  navLabel="Utama"
+  mobileNavLabel="Utama seluler"
+  links={links}
+>
+  <Fragment slot="brand">MarkasUI</Fragment>
+  <Button slot="actions" size="sm">Masuk</Button>
+</Navbar>
+```
+
+Satu script kecil yang dibundel menjalankan dropdown dan menu seluler semua navbar di halaman. Tetap jalan setelah view transition.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { Navbar, type NavbarLink } from "./markas/navbar.component";
+
+@Component({
+  selector: "app-header",
+  imports: [Button, Navbar],
+  template: `
+    <header
+      markas-navbar
+      variant="blur"
+      sticky
+      navLabel="Utama"
+      mobileNavLabel="Utama seluler"
+      [links]="links"
+    >
+      <ng-container brand>MarkasUI</ng-container>
+      <button markas-button actions size="sm">Masuk</button>
+    </header>
+  `,
+})
+export class AppHeader {
+  readonly links: NavbarLink[] = [
+    { label: "Beranda", href: "/", active: true },
+    {
+      label: "Produk",
+      children: [
+        {
+          label: "Analitik",
+          href: "/analitik",
+          description: "Pantau pemakaian secara langsung",
+          icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+        },
+        { label: "Otomasi", href: "/otomasi" },
+      ],
+    },
+    { label: "Harga", href: "/harga" },
+  ];
+}
+```
+
+Komponen dipasang di elemen `header` native (`header[markas-navbar]`), jadi atribut `id`, `class`, dan `data-*` tetap di header.
+
 ## Catatan
 
 - Link biasa dari versi sebelumnya tetap jalan. Tambahkan `children` pada item untuk menjadikannya dropdown; `href` item itu lalu diabaikan.

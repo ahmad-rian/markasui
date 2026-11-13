@@ -6,9 +6,30 @@
   "tags": ["background", "grid", "boxes", "tiles", "hover", "isometric"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "background-boxes.blade.php", "deps": [] },
-    "react": { "file": "BackgroundBoxes.tsx", "deps": [] },
-    "vue": { "file": "BackgroundBoxes.vue", "deps": [] }
+    "blade": {
+      "file": "background-boxes.blade.php",
+      "deps": []
+    },
+    "react": {
+      "file": "BackgroundBoxes.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "BackgroundBoxes.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "BackgroundBoxes.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "BackgroundBoxes.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "background-boxes.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -49,7 +70,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown on top of the grid."
     }
@@ -94,5 +115,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

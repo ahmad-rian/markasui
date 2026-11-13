@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  availableFrameworks,
   findColorViolations,
   loadComponent,
   loadComponents,
@@ -66,9 +67,21 @@ describe("registry", () => {
   });
 
   it("framework baru opsional: komponen tanpa Svelte, Astro, Angular tetap valid", async () => {
-    const tabs = await loadComponent(join(root, "components", "tabs"));
-    expect(tabs.frameworks.svelte).toBeUndefined();
-    expect(toIndexItem(tabs).frameworks).toEqual(["blade", "react", "vue"]);
+    const dir = await copyComponent("button");
+    await editMeta(dir, (meta) => {
+      const { blade, react, vue } = meta.frameworks as Record<string, unknown>;
+      return { ...meta, frameworks: { blade, react, vue } };
+    });
+    await Promise.all(
+      ["Button.svelte", "Button.astro", "button.component.ts"].map((file) =>
+        rm(join(dir, file), { force: true }),
+      ),
+    );
+    const legacy = await loadComponent(dir);
+    expect(legacy.frameworks.svelte).toBeUndefined();
+    expect(legacy.frameworks.astro).toBeUndefined();
+    expect(legacy.frameworks.angular).toBeUndefined();
+    expect(toIndexItem(legacy).frameworks).toEqual(["blade", "react", "vue"]);
   });
 
   it("gagal kalau nama file framework baru salah akhiran", async () => {
@@ -100,9 +113,9 @@ describe("registry", () => {
   });
 
   it("index hanya berisi ringkasan", async () => {
-    const [item] = await loadComponents(join(root, "components"));
-    const index = toIndexItem(item!);
-    expect(Object.keys(index).sort()).toEqual([
+    const button = await loadComponent(join(root, "components", "button"));
+    const withoutUpdate = { ...button, updatedAt: undefined };
+    const summaryKeys = [
       "addedAt",
       "category",
       "description",
@@ -111,7 +124,13 @@ describe("registry", () => {
       "status",
       "tags",
       "title",
-    ]);
+    ];
+    expect(Object.keys(toIndexItem(withoutUpdate)).sort()).toEqual(summaryKeys);
+    const updated = toIndexItem({ ...button, updatedAt: "2026-01-02" });
+    expect(Object.keys(updated).sort()).toEqual(
+      [...summaryKeys, "updatedAt"].sort(),
+    );
+    expect(updated.frameworks).toEqual(availableFrameworks(button));
   });
 
   it("gagal kalau meta.json tidak sesuai skema", () => {

@@ -122,6 +122,165 @@ const items = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import NavigationMenu from "$lib/components/markas/NavigationMenu.svelte";
+
+  const items = [
+    {
+      label: "Products",
+      featured: {
+        title: "Workflows 2.0",
+        href: "/workflows",
+        description: "Branching, retries, and a visual editor",
+      },
+      links: [
+        {
+          label: "Analytics",
+          href: "/analytics",
+          description: "See where visitors come from",
+          icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+        },
+        {
+          label: "Automation",
+          href: "/automation",
+          description: "Run workflows on a schedule",
+        },
+      ],
+    },
+    {
+      label: "Developers",
+      links: [
+        {
+          label: "Documentation",
+          href: "/docs",
+          description: "Guides and API reference",
+        },
+        {
+          label: "Changelog",
+          href: "/changelog",
+          description: "What shipped this month",
+        },
+      ],
+    },
+    { label: "Pricing", href: "/pricing", active: true },
+  ];
+</script>
+
+<NavigationMenu {items} />
+```
+
+## Astro
+
+```astro
+---
+import NavigationMenu from "@/components/markas/NavigationMenu.astro";
+
+const items = [
+  {
+    label: "Products",
+    featured: {
+      title: "Workflows 2.0",
+      href: "/workflows",
+      description: "Branching, retries, and a visual editor",
+    },
+    links: [
+      {
+        label: "Analytics",
+        href: "/analytics",
+        description: "See where visitors come from",
+        icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+      },
+      {
+        label: "Automation",
+        href: "/automation",
+        description: "Run workflows on a schedule",
+      },
+    ],
+  },
+  {
+    label: "Developers",
+    links: [
+      {
+        label: "Documentation",
+        href: "/docs",
+        description: "Guides and API reference",
+      },
+      {
+        label: "Changelog",
+        href: "/changelog",
+        description: "What shipped this month",
+      },
+    ],
+  },
+  { label: "Pricing", href: "/pricing", active: true },
+];
+---
+
+<NavigationMenu items={items} />
+```
+
+A small bundled script powers every menu on the page. It also works after view transitions.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import {
+  NavigationMenu,
+  type NavigationMenuItem,
+} from "./markas/navigation-menu.component";
+
+@Component({
+  selector: "app-site-nav",
+  imports: [NavigationMenu],
+  template: `<markas-navigation-menu [items]="items" />`,
+})
+export class SiteNav {
+  protected readonly items: NavigationMenuItem[] = [
+    {
+      label: "Products",
+      featured: {
+        title: "Workflows 2.0",
+        href: "/workflows",
+        description: "Branching, retries, and a visual editor",
+      },
+      links: [
+        {
+          label: "Analytics",
+          href: "/analytics",
+          description: "See where visitors come from",
+          icon: "M3 3v18h18M7 15l4-4 3 3 5-6",
+        },
+        {
+          label: "Automation",
+          href: "/automation",
+          description: "Run workflows on a schedule",
+        },
+      ],
+    },
+    {
+      label: "Developers",
+      links: [
+        {
+          label: "Documentation",
+          href: "/docs",
+          description: "Guides and API reference",
+        },
+        {
+          label: "Changelog",
+          href: "/changelog",
+          description: "What shipped this month",
+        },
+      ],
+    },
+    { label: "Pricing", href: "/pricing", active: true },
+  ];
+}
+```
+
 ## Notes
 
 - An entry with `links` or `featured` becomes a trigger with a panel. Any other entry is a plain link to `href`.

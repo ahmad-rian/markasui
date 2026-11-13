@@ -16,7 +16,10 @@
   "frameworks": {
     "blade": { "file": "text-rotate.blade.php", "deps": ["alpinejs"] },
     "react": { "file": "TextRotate.tsx", "deps": [] },
-    "vue": { "file": "TextRotate.vue", "deps": [] }
+    "vue": { "file": "TextRotate.vue", "deps": [] },
+    "svelte": { "file": "TextRotate.svelte", "deps": [] },
+    "astro": { "file": "TextRotate.astro", "deps": [] },
+    "angular": { "file": "text-rotate.component.ts", "deps": [] }
   },
   "props": [
     {
@@ -77,6 +80,7 @@
     ]
   },
   "addedAt": "2026-11-05",
+  "updatedAt": "2026-11-11",
   "i18n": {
     "id": {
       "description": "Kata atau frasa yang bergiliran, keluar dan masuk per huruf atau per kata dengan stagger dari bagian pertama, terakhir, tengah, atau acak.",

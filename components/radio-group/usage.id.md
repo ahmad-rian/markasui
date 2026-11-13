@@ -56,6 +56,73 @@ const paket = ref("pro");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import RadioGroup from "$lib/components/markas/RadioGroup.svelte";
+
+  let plan = $state("pro");
+</script>
+
+<RadioGroup
+  bind:value={plan}
+  name="plan"
+  label="Paket langganan"
+  options={[
+    { value: "free", label: "Gratis", description: "Untuk proyek pribadi." },
+    { value: "pro", label: "Pro" },
+  ]}
+/>
+```
+
+## Astro
+
+```astro
+---
+import RadioGroup from "@/components/markas/RadioGroup.astro";
+---
+
+<RadioGroup
+  name="plan"
+  label="Paket langganan"
+  value="pro"
+  options={[
+    { value: "free", label: "Gratis", description: "Untuk proyek pribadi." },
+    { value: "pro", label: "Pro" },
+  ]}
+/>
+```
+
+Tanpa script klien: opsinya radio native.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { RadioGroup } from "./markas/radio-group.component";
+
+@Component({
+  selector: "app-tagihan",
+  imports: [RadioGroup],
+  template: `
+    <markas-radio-group
+      [(value)]="plan"
+      name="plan"
+      label="Paket langganan"
+      [options]="plans"
+    />
+  `,
+})
+export class Tagihan {
+  readonly plan = signal<string | undefined>("pro");
+  readonly plans = [
+    { value: "free", label: "Gratis", description: "Untuk proyek pribadi." },
+    { value: "pro", label: "Pro" },
+  ];
+}
+```
+
 ## Catatan
 
 - Atribut tambahan (`class`, `disabled`, `aria-*`) jatuh ke `<fieldset>`. `disabled` di fieldset menonaktifkan semua radio sekaligus.

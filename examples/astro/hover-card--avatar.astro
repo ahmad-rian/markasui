@@ -1,0 +1,24 @@
+---
+import Avatar from "../../components/avatar/Avatar.astro";
+import HoverCard from "../../components/hover-card/HoverCard.astro";
+
+const link =
+  "inline-flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+---
+
+<div class="flex items-center justify-center gap-3 py-6">
+  <HoverCard>
+    <a href="https://github.com/dewilestari" class={link}><Avatar name="Dewi Lestari" /></a>
+    <div slot="content" class="grid gap-1">
+      <p class="font-medium text-ink">Dewi Lestari</p>
+      <p class="text-muted">Product designer. Leads the design system team.</p>
+    </div>
+  </HoverCard>
+  <HoverCard>
+    <a href="https://github.com/budisantoso" class={link}><Avatar name="Budi Santoso" /></a>
+    <div slot="content" class="grid gap-1">
+      <p class="font-medium text-ink">Budi Santoso</p>
+      <p class="text-muted">Backend engineer. Maintains the registry and CLI.</p>
+    </div>
+  </HoverCard>
+</div>

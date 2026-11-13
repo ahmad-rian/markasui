@@ -14,9 +14,30 @@
   ],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "lamp-effect.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "LampEffect.tsx", "deps": [] },
-    "vue": { "file": "LampEffect.vue", "deps": [] }
+    "blade": {
+      "file": "lamp-effect.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "LampEffect.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "LampEffect.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "LampEffect.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "LampEffect.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "lamp-effect.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -45,7 +66,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "Content shown under the light."
     }
@@ -88,5 +109,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-11"
 }

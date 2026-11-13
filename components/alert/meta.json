@@ -17,6 +17,18 @@
     "vue": {
       "file": "Alert.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Alert.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Alert.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "alert.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -77,5 +89,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

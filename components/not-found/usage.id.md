@@ -71,6 +71,59 @@ const links = [
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import NotFound from "$lib/components/markas/NotFound.svelte";
+</script>
+
+<NotFound />
+<NotFound variant="search" {links} />
+<NotFound variant="glitch" code="500" title="Something went wrong" />
+```
+
+## Astro
+
+```astro
+---
+import NotFound from "@/components/markas/NotFound.astro";
+---
+
+<NotFound />
+<NotFound variant="search" links={links} />
+<NotFound variant="glitch" code="500" title="Something went wrong" />
+```
+
+Go back dan filter pencarian memakai satu script kecil yang dibundel per halaman.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { NotFound } from "./markas/not-found.component";
+
+@Component({
+  selector: "app-not-found-page",
+  imports: [NotFound],
+  template: `
+    <markas-not-found />
+    <markas-not-found variant="search" [links]="links" />
+    <markas-not-found
+      variant="glitch"
+      code="500"
+      title="Something went wrong"
+    />
+  `,
+})
+export class NotFoundPage {
+  links = [
+    { label: "Documentation", href: "/docs" },
+    { label: "Pricing", href: "/pricing" },
+  ];
+}
+```
+
 ## Catatan
 
 - Blok ini merender h1, jadi pakai sebagai isi utama halaman error.

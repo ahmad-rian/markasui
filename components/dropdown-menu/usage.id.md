@@ -49,6 +49,82 @@ import { DropdownMenu } from "@/components/markas/DropdownMenu";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import DropdownMenu from "$lib/components/markas/DropdownMenu.svelte";
+</script>
+
+<DropdownMenu
+  label="Actions"
+  items={[
+    { label: "Edit", value: "edit" },
+    { label: "View details", href: "/projects/1" },
+    { separator: true },
+    { label: "Delete", value: "delete", danger: true },
+  ]}
+  onselect={(value) => console.log(value)}
+/>
+```
+
+## Astro
+
+```astro
+---
+import DropdownMenu from "@/components/markas/DropdownMenu.astro";
+---
+
+<DropdownMenu
+  label="Actions"
+  items={[
+    { label: "Edit", value: "edit" },
+    { label: "View details", href: "/projects/1" },
+    { separator: true },
+    { label: "Delete", value: "delete", danger: true },
+  ]}
+/>
+
+<script>
+  document.addEventListener("markas-select", (event) =>
+    console.log((event as CustomEvent<string>).detail),
+  );
+</script>
+```
+
+Satu script kecil yang dibundel menjalankan semua dropdown menu di halaman, juga setelah view transition. Memilih item memancarkan event `markas-select` (bubble) dengan value item di `detail`.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { DropdownMenu } from "./markas/dropdown-menu.component";
+
+@Component({
+  selector: "app-project-actions",
+  imports: [DropdownMenu],
+  template: `
+    <markas-dropdown-menu
+      label="Actions"
+      [items]="items"
+      (selected)="onSelect($event)"
+    />
+  `,
+})
+export class ProjectActions {
+  readonly items = [
+    { label: "Edit", value: "edit" },
+    { label: "View details", href: "/projects/1" },
+    { separator: true as const },
+    { label: "Delete", value: "delete", danger: true },
+  ];
+
+  onSelect(value: string) {}
+}
+```
+
+Isi tombol pemicu bisa diganti dengan elemen beratribut `trigger` (`ng-container` juga bisa).
+
 ## Catatan
 
 - Isi tombol bisa diganti lewat slot `trigger` (Blade dan Vue) atau prop `trigger` (React). Ikon panah tetap ditampilkan.

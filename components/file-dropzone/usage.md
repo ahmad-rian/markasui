@@ -45,6 +45,71 @@ import { FileDropzone } from "@/components/markas/FileDropzone";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import FileDropzone from "$lib/components/markas/FileDropzone.svelte";
+</script>
+
+<FileDropzone
+  accept="image/*,.pdf"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  maxFiles={4}
+  hint="Images or PDF, up to 5 MB each"
+  {progress}
+  onFilesChange={upload}
+/>
+```
+
+## Astro
+
+```astro
+---
+import FileDropzone from "@/components/markas/FileDropzone.astro";
+---
+
+<FileDropzone
+  name="attachments[]"
+  accept="image/*,.pdf"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  maxFiles={4}
+  hint="Images or PDF, up to 5 MB each"
+/>
+```
+
+A small custom element validates picks, keeps them on the native input, and dispatches a bubbling `markas-change` event with the valid files as detail. Show upload progress with `dropzone.setProgress(name, percent)`.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { FileDropzone } from "./markas/file-dropzone.component";
+
+@Component({
+  selector: "app-attachments",
+  imports: [FileDropzone],
+  template: `
+    <markas-file-dropzone
+      name="attachments[]"
+      accept="image/*,.pdf"
+      multiple
+      [maxSize]="5242880"
+      [maxFiles]="4"
+      hint="Images or PDF, up to 5 MB each"
+      [progress]="progress()"
+      (filesChange)="upload($event)"
+    />
+  `,
+})
+export class Attachments {
+  progress = signal<Record<string, number>>({});
+  upload(files: File[]) {}
+}
+```
+
 ## Notes
 
 - The drop area is a label around a native file input, so a click, Enter, or Space opens the picker. Only valid files stay on the input, so a regular form post sends them.

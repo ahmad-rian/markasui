@@ -57,6 +57,76 @@ const loading = ref(false);
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import PromptInput from "$lib/components/markas/PromptInput.svelte";
+
+  let text = $state("");
+  let loading = $state(false);
+</script>
+
+<PromptInput
+  bind:value={text}
+  {loading}
+  models={["Markas Pro", "Markas Mini"]}
+  model="Markas Pro"
+  onSend={({ text, files }) => (loading = true)}
+  onStop={() => (loading = false)}
+/>
+```
+
+## Astro
+
+```astro
+---
+import PromptInput from "@/components/markas/PromptInput.astro";
+---
+
+<PromptInput models={["Markas Pro", "Markas Mini"]} model="Markas Pro" />
+
+<script>
+  const input = document.querySelector("markas-prompt-input");
+  input?.addEventListener("send", () => input.toggleAttribute("loading", true));
+  input?.addEventListener("stop", () => input.toggleAttribute("loading", false));
+</script>
+```
+
+The bundled script dispatches `send` with `{ text, files }` and `stop` on `markas-prompt-input`; set or remove its `loading` attribute to switch the button.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import {
+  PromptInput,
+  type PromptInputValue,
+} from "./markas/prompt-input.component";
+
+@Component({
+  selector: "app-chat",
+  imports: [PromptInput],
+  template: `
+    <markas-prompt-input
+      [(value)]="text"
+      [loading]="loading()"
+      [models]="['Markas Pro', 'Markas Mini']"
+      model="Markas Pro"
+      (send)="onSend($event)"
+      (stop)="loading.set(false)"
+    />
+  `,
+})
+export class Chat {
+  readonly text = signal("");
+  readonly loading = signal(false);
+  onSend(value: PromptInputValue) {
+    this.loading.set(true);
+  }
+}
+```
+
 ## Notes
 
 - The field grows with its content up to maxHeight, then scrolls. It uses CSS field-sizing and falls back to measuring in older browsers.

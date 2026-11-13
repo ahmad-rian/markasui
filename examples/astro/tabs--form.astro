@@ -1,0 +1,32 @@
+---
+import Button from "../../components/button/Button.astro";
+import Input from "../../components/input/Input.astro";
+import Tabs from "../../components/tabs/Tabs.astro";
+
+const items = [
+  { value: "profile", label: "Profile" },
+  { value: "password", label: "Password" },
+];
+---
+
+<Tabs items={items} defaultValue="profile">
+  <div slot="profile" class="grid gap-4">
+    <Input name="name" label="Name" value="Siti Aminah" />
+    <Input name="email" type="email" label="Email" value="siti@example.com" />
+    <div>
+      <Button>Save changes</Button>
+    </div>
+  </div>
+  <div slot="password" class="grid gap-4">
+    <Input name="current-password" type="password" label="Current password" />
+    <Input
+      name="new-password"
+      type="password"
+      label="New password"
+      hint="At least 8 characters"
+    />
+    <div>
+      <Button>Update password</Button>
+    </div>
+  </div>
+</Tabs>

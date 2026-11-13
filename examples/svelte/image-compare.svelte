@@ -1,0 +1,33 @@
+<script lang="ts">
+  import ImageCompare from "../../components/image-compare/ImageCompare.svelte";
+
+  const frame =
+    "relative aspect-[8/5] w-full overflow-hidden bg-linear-to-b from-warning/35 via-warning/10 to-success/20";
+  const sun = "absolute top-8 right-20 size-14 rounded-full bg-warning";
+  const hills = "absolute inset-x-0 bottom-0 h-3/5 w-full";
+  const far = "fill-success/50";
+  const near = "fill-success";
+  const lake = "fill-surface/50";
+</script>
+
+<!-- One deterministic landscape, toned flat (before) or vivid (after). -->
+{#snippet scene(tone: string)}
+  <div class={`${frame} ${tone}`}>
+    <span class={sun}></span>
+    <svg
+      class={hills}
+      viewBox="0 0 480 180"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path class={far} d="M0 90 70 40l70 45 80-55 90 65 80-50 90 35v100H0Z" />
+      <path class={near} d="M0 130c80-30 150-10 230-25s170 15 250-5v80H0Z" />
+      <path class={lake} d="M0 160c120-12 360-12 480 0v20H0Z" />
+    </svg>
+  </div>
+{/snippet}
+
+<ImageCompare aria-label="Photo edit, before and after">
+  {#snippet before()}{@render scene("grayscale contrast-75")}{/snippet}
+  {#snippet after()}{@render scene("saturate-150")}{/snippet}
+</ImageCompare>

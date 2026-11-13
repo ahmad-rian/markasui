@@ -36,6 +36,60 @@ import Label from "@/components/markas/Label.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Label from "$lib/components/markas/Label.svelte";
+</script>
+
+<Label for="full_name" required requiredLabel="wajib">Nama lengkap</Label>
+<input id="full_name" name="full_name" required />
+
+<Label for="company" optional optionalLabel="Opsional">Perusahaan</Label>
+<input id="company" name="company" />
+```
+
+## Astro
+
+```astro
+---
+import Label from "@/components/markas/Label.astro";
+---
+
+<Label for="full_name" required requiredLabel="wajib">Nama lengkap</Label>
+<input id="full_name" name="full_name" required />
+
+<Label for="company" optional optionalLabel="Opsional">Perusahaan</Label>
+<input id="company" name="company" />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Label } from "./markas/label.component";
+
+@Component({
+  selector: "app-profile-form",
+  imports: [Label],
+  template: `
+    <label markas-label for="full_name" required requiredLabel="wajib"
+      >Nama lengkap</label
+    >
+    <input id="full_name" name="full_name" required />
+
+    <label markas-label for="company" optional optionalLabel="Opsional"
+      >Perusahaan</label
+    >
+    <input id="company" name="company" />
+  `,
+})
+export class ProfileForm {}
+```
+
+Di Angular, Label adalah atribut pada `<label>` native, jadi `for`, `id`, dan `class` tetap di elemen itu.
+
 ## Catatan
 
 - Label tidak butuh JavaScript. Atribut tambahan dan `class` jatuh ke elemen `<label>`, dan class Anda ditaruh paling akhir.

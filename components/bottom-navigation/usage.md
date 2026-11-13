@@ -65,6 +65,84 @@ const tab = ref("home");
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import BottomNavigation from "$lib/components/markas/BottomNavigation.svelte";
+
+  let tab = $state("home");
+</script>
+
+<BottomNavigation
+  {items}
+  bind:value={tab}
+  shrinkOnScroll
+  actionLabel="New transfer"
+  onaction={openTransfer}
+  class="absolute inset-x-4 bottom-4"
+>
+  {#snippet action()}
+    <PlusIcon class="size-6" />
+  {/snippet}
+</BottomNavigation>
+```
+
+The action button renders only when the `action` snippet is given.
+
+## Astro
+
+```astro
+---
+import BottomNavigation from "@/components/markas/BottomNavigation.astro";
+---
+
+<BottomNavigation
+  items={items}
+  defaultValue="home"
+  shrinkOnScroll
+  actionLabel="New transfer"
+  class="absolute inset-x-4 bottom-4"
+>
+  <PlusIcon slot="action" class="size-6" />
+</BottomNavigation>
+```
+
+A small custom element moves the pill and shrinks the bar. It dispatches `markas-change` (the value as detail) and `markas-action`, both bubbling.
+
+## Angular
+
+```ts
+import { Component, signal } from "@angular/core";
+import { BottomNavigation } from "./markas/bottom-navigation.component";
+
+@Component({
+  selector: "app-wallet-nav",
+  imports: [BottomNavigation],
+  template: `
+    <markas-bottom-navigation
+      [items]="items"
+      [(value)]="tab"
+      shrinkOnScroll
+      actionLabel="New transfer"
+      (action)="openTransfer()"
+      class="absolute inset-x-4 bottom-4"
+    >
+      <svg action class="size-6" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" stroke="currentColor" />
+      </svg>
+    </markas-bottom-navigation>
+  `,
+})
+export class WalletNav {
+  items = [{ value: "home", label: "Home", icon: "M3 10.5 12 3l9 7.5V20H3z" }];
+  tab = signal("home");
+  openTransfer() {}
+}
+```
+
+An element with the `action` attribute fills the round action button.
+
 ## Notes
 
 - Place the bar inside the element that scrolls (or next to it, in the same parent). shrinkOnScroll listens to scrolling inside the bar's parent element and on the page.

@@ -17,6 +17,18 @@
     "vue": {
       "file": "Toast.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Toast.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Toast.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "toast.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -24,7 +36,7 @@
       "name": "title",
       "type": "string",
       "default": "-",
-      "description": "Toast title. Option for toast() or the markas-toast event detail."
+      "description": "Toast title. Option for toast() or the markas-toast event detail (Blade, Astro)."
     },
     {
       "name": "description",
@@ -48,7 +60,7 @@
       "name": "initial",
       "type": "array",
       "default": "[]",
-      "description": "Blade only: toasts shown right away, for example from a session flash."
+      "description": "Blade and Astro only: toasts shown right away, for example from a session flash."
     },
     {
       "name": "closeLabel",
@@ -82,11 +94,11 @@
     "id": {
       "description": "Notifikasi singkat di pojok kanan bawah yang hilang sendiri, dipicu lewat fungsi toast() atau event.",
       "props": {
-        "title": "Judul toast. Opsi untuk toast() atau detail event markas-toast.",
+        "title": "Judul toast. Opsi untuk toast() atau detail event markas-toast (Blade, Astro).",
         "description": "Teks pendukung di bawah judul.",
         "variant": "Warna border dan ikon.",
         "duration": "Milidetik sebelum toast hilang sendiri. 0 berarti tetap tampil sampai ditutup.",
-        "initial": "Khusus Blade: daftar toast yang langsung tampil, misalnya dari flash session.",
+        "initial": "Khusus Blade dan Astro: daftar toast yang langsung tampil, misalnya dari flash session.",
         "closeLabel": "Label aksesibel tombol tutup di setiap toast. Isi \"Tutup\" untuk situs berbahasa Indonesia.",
         "regionLabel": "Label aksesibel region live. Isi \"Notifikasi\" untuk situs berbahasa Indonesia."
       },
@@ -105,5 +117,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

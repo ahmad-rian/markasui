@@ -32,6 +32,53 @@ import { NumberTicker } from "@/components/markas/NumberTicker";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import NumberTicker from "$lib/components/markas/NumberTicker.svelte";
+</script>
+
+<p class="text-4xl font-semibold">
+  <NumberTicker value={84200} prefix="$" />
+</p>
+<NumberTicker value={99.9} decimals={1} suffix="%" />
+```
+
+## Astro
+
+```astro
+---
+import NumberTicker from "@/components/markas/NumberTicker.astro";
+---
+
+<p class="text-4xl font-semibold">
+  <NumberTicker value={84200} prefix="$" />
+</p>
+<NumberTicker value={12} from={100} />
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { NumberTicker } from "./markas/number-ticker.component";
+
+@Component({
+  selector: "app-revenue",
+  imports: [NumberTicker],
+  template: `
+    <p class="text-4xl font-semibold">
+      <span markas-number-ticker [value]="revenue" prefix="$"></span>
+    </p>
+    <span markas-number-ticker value="99.9" decimals="1" suffix="%"></span>
+  `,
+})
+export class Revenue {
+  revenue = 84200;
+}
+```
+
 ## Catatan
 
 - Hitungan dimulai saat angka pertama kali masuk layar dan melambat menjelang akhir.

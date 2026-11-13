@@ -1,0 +1,10 @@
+<script lang="ts">
+  import FlipButton from "../../components/flip-button/FlipButton.svelte";
+</script>
+
+<div class="flex flex-wrap items-center justify-center gap-3">
+  <FlipButton backLabel="It takes 2 minutes">Create account</FlipButton>
+  <FlipButton variant="secondary" backLabel="No card needed">
+    Start free trial
+  </FlipButton>
+</div>

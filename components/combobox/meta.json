@@ -6,9 +6,30 @@
   "tags": ["combobox", "autocomplete", "search", "select", "listbox", "form"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "combobox.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Combobox.tsx", "deps": [] },
-    "vue": { "file": "Combobox.vue", "deps": [] }
+    "blade": {
+      "file": "combobox.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Combobox.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Combobox.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Combobox.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Combobox.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "combobox.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -42,16 +63,16 @@
       "description": "Name of the hidden input that holds the selected value for form submit."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value",
       "type": "string",
       "default": "\"\"",
-      "description": "Selected option value. React accepts value with onValueChange or defaultValue; Vue uses v-model; Blade uses value."
+      "description": "Selected option value. React accepts value with onValueChange or defaultValue; Vue uses v-model; Svelte bind:value; Angular value or [(value)]; Blade and Astro use value."
     },
     {
-      "name": "onValueChange / markas-change",
+      "name": "onValueChange / onvaluechange / markas-change",
       "type": "(value: string) => void",
       "default": "-",
-      "description": "Called when the selected value changes, with an empty string when cleared (React). Blade dispatches a markas-change event."
+      "description": "Called when the selected value changes, with an empty string when cleared (React onValueChange, Svelte onvaluechange). Blade and Astro dispatch a bubbling markas-change event; Angular emits valueChange."
     },
     {
       "name": "emptyLabel",
@@ -90,10 +111,10 @@
         "hint": "Teks petunjuk di bawah input. Disembunyikan saat ada error.",
         "error": "Pesan error. Mengaktifkan aria-invalid dan border danger.",
         "name": "Nama input tersembunyi yang berisi value terpilih untuk submit form.",
-        "value / defaultValue / v-model": "Value opsi terpilih. React menerima value dengan onValueChange atau defaultValue; Vue memakai v-model; Blade memakai value.",
-        "onValueChange / markas-change": "Dipanggil saat value terpilih berubah, berisi string kosong saat dikosongkan (React). Blade memancarkan event markas-change.",
         "emptyLabel": "Teks saat tidak ada opsi yang cocok. Isi misalnya \"Tidak ada hasil\".",
-        "id": "Id input. Listbox dan opsi memakainya sebagai awalan."
+        "id": "Id input. Listbox dan opsi memakainya sebagai awalan.",
+        "value / defaultValue / v-model / bind:value": "Value opsi terpilih. React menerima value dengan onValueChange atau defaultValue; Vue memakai v-model; Svelte bind:value; Angular value atau [(value)]; Blade dan Astro memakai value.",
+        "onValueChange / onvaluechange / markas-change": "Dipanggil saat value terpilih berubah, berisi string kosong saat dikosongkan (React onValueChange, Svelte onvaluechange). Blade dan Astro memancarkan event markas-change yang menggelembung; Angular memancarkan valueChange."
       },
       "a11y": [
         "Input memakai role=combobox, aria-autocomplete=list, aria-expanded, dan aria-controls ke role=listbox.",
@@ -110,5 +131,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

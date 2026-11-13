@@ -1,0 +1,229 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "w-full";
+const viewport =
+  "relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth rounded-xl [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden";
+const slideClass = "min-w-0 shrink-0 snap-start";
+const perViews = {
+  1: "basis-full",
+  2: "basis-[calc((100%-1rem)/2)]",
+  3: "basis-[calc((100%-2rem)/3)]",
+};
+const controls = "mt-3 flex items-center gap-2";
+const dots = "flex items-center";
+const dot =
+  "group inline-flex h-6 min-w-6 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const dotMark =
+  "h-2 w-2 rounded-full bg-faint transition-all duration-150 ease-out group-data-[state=active]:w-4 group-data-[state=active]:bg-primary motion-reduce:transition-none";
+const buttons = "ml-auto flex items-center gap-2";
+const navButton =
+  "inline-flex size-8 items-center justify-center rounded-md border border-line bg-surface text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+const icon = "size-4";
+
+type Props = HTMLAttributes<"div"> & {
+  /** One slide per item, rendered by the function child: (item, index) => markup. */
+  items: unknown[];
+  label?: string;
+  perView?: keyof typeof perViews;
+  showDots?: boolean;
+  previousLabel?: string;
+  nextLabel?: string;
+  slideLabel?: string;
+  dotLabel?: string;
+};
+
+const {
+  items,
+  label = "Carousel",
+  perView = 1,
+  showDots = false,
+  previousLabel = "Previous slide",
+  nextLabel = "Next slide",
+  slideLabel = "{index} of {total}",
+  dotLabel = "Go to slide {index}",
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+
+/** Fill the {index} and {total} placeholders in a label. */
+const formatLabel = (template: string, index: number, total: number) =>
+  template
+    .replaceAll("{index}", String(index))
+    .replaceAll("{total}", String(total));
+
+const carouselId = id ?? `markas-carousel-${crypto.randomUUID().slice(0, 8)}`;
+const viewportId = `${carouselId}-viewport`;
+const total = items.length;
+const slides = await Promise.all(
+  items.map((item, index) => Astro.slots.render("default", [item, index])),
+);
+---
+
+<markas-carousel class="contents">
+  <div
+    id={carouselId}
+    role="region"
+    aria-roledescription="carousel"
+    aria-label={label}
+    class:list={[root, className]}
+    {...rest}
+  >
+    <div id={viewportId} tabindex="0" class={viewport} data-viewport>
+      {
+        slides.map((html, index) => (
+          <div
+            role="group"
+            aria-roledescription="slide"
+            aria-label={formatLabel(slideLabel, index + 1, total)}
+            class:list={[slideClass, perViews[perView]]}
+            set:html={html}
+          />
+        ))
+      }
+    </div>
+    <div class={controls}>
+      {
+        showDots && (
+          <div class={dots}>
+            {slides.map((_, index) => (
+              <button
+                type="button"
+                aria-label={formatLabel(dotLabel, index + 1, total)}
+                aria-controls={viewportId}
+                aria-current={index === 0 ? "true" : undefined}
+                data-state={index === 0 ? "active" : "inactive"}
+                data-dot={index}
+                class={dot}
+              >
+                <span aria-hidden="true" class={dotMark} />
+              </button>
+            ))}
+          </div>
+        )
+      }
+      <div class={buttons}>
+        <button
+          type="button"
+          aria-label={previousLabel}
+          aria-controls={viewportId}
+          disabled
+          data-step="-1"
+          class={navButton}
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class={icon}
+          >
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+        </button>
+        <button
+          type="button"
+          aria-label={nextLabel}
+          aria-controls={viewportId}
+          disabled={total <= 1}
+          data-step="1"
+          class={navButton}
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class={icon}
+          >
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</markas-carousel>
+
+<script>
+  // Each carousel keeps its own position, so it is a custom element: it also works for
+  // markup added later and for pages reached through view transitions.
+  class MarkasCarousel extends HTMLElement {
+    private index = 0;
+    private ready = false;
+
+    connectedCallback() {
+      if (this.ready) return;
+      this.ready = true;
+      const viewport = this.querySelector<HTMLElement>("[data-viewport]");
+      if (!viewport) return;
+      viewport.addEventListener("scroll", () => this.sync(viewport));
+      this.addEventListener("click", (event) => {
+        const button = (event.target as Element).closest<HTMLElement>(
+          "[data-dot], [data-step]",
+        );
+        if (button?.dataset.dot !== undefined)
+          this.goTo(viewport, Number(button.dataset.dot));
+        else if (button?.dataset.step !== undefined)
+          this.step(viewport, Number(button.dataset.step));
+      });
+      this.addEventListener("keydown", (event) => {
+        const directions: Record<string, number | undefined> = {
+          ArrowRight: 1,
+          ArrowLeft: -1,
+        };
+        const direction = directions[event.key];
+        if (direction === undefined || event.defaultPrevented) return;
+        event.preventDefault();
+        this.step(viewport, direction);
+      });
+      this.sync(viewport);
+    }
+
+    /** Read the nearest slide and whether the viewport is at its left or right edge. */
+    private sync(viewport: HTMLElement) {
+      const slides = Array.from(viewport.children) as HTMLElement[];
+      const left = viewport.scrollLeft;
+      this.index = slides.reduce(
+        (best, slide, i) =>
+          Math.abs(slide.offsetLeft - left) <
+          Math.abs((slides[best]?.offsetLeft ?? 0) - left)
+            ? i
+            : best,
+        0,
+      );
+      this.querySelectorAll<HTMLElement>("[data-dot]").forEach((dot) => {
+        const active = Number(dot.dataset.dot) === this.index;
+        dot.dataset.state = active ? "active" : "inactive";
+        if (active) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+      const atStart = left <= 1;
+      const atEnd = left + viewport.clientWidth >= viewport.scrollWidth - 1;
+      this.querySelectorAll<HTMLButtonElement>("[data-step]").forEach(
+        (button) => {
+          button.disabled = button.dataset.step === "-1" ? atStart : atEnd;
+        },
+      );
+    }
+
+    private goTo(viewport: HTMLElement, index: number) {
+      const target = viewport.children[index] as HTMLElement | undefined;
+      if (target) viewport.scrollTo({ left: target.offsetLeft });
+    }
+
+    private step(viewport: HTMLElement, direction: number) {
+      const last = viewport.children.length - 1;
+      this.goTo(viewport, Math.min(Math.max(this.index + direction, 0), last));
+    }
+  }
+
+  if (!customElements.get("markas-carousel"))
+    customElements.define("markas-carousel", MarkasCarousel);
+</script>

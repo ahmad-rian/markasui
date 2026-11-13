@@ -1,0 +1,21 @@
+---
+import Input from "../../components/input/Input.astro";
+---
+
+<div class="grid gap-4">
+  <Input
+    name="username"
+    label="Username"
+    value="budi.santoso"
+    hint="Letters, numbers, and dots only."
+  />
+  <Input
+    name="email"
+    type="email"
+    label="Email"
+    value="budi@markas"
+    error="Enter a valid email address."
+  />
+  <Input name="api_key" label="API key" value="mk_live_4f8a2c91" readonly />
+  <Input name="workspace" label="Workspace" value="MarkasUI" disabled />
+</div>

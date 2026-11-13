@@ -45,6 +45,54 @@ import Skeleton from "@/components/markas/Skeleton.vue";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Skeleton from "$lib/components/markas/Skeleton.svelte";
+</script>
+
+<div class="flex items-center gap-4" role="status">
+  <span class="sr-only">Loading profile</span>
+  <Skeleton shape="circle" class="size-12" />
+  <Skeleton class="h-4 w-1/2" />
+</div>
+```
+
+## Astro
+
+```astro
+---
+import Skeleton from "@/components/markas/Skeleton.astro";
+---
+
+<div class="flex items-center gap-4" role="status">
+  <span class="sr-only">Loading profile</span>
+  <Skeleton shape="circle" class="size-12" />
+  <Skeleton class="h-4 w-1/2" />
+</div>
+```
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Skeleton } from "./markas/skeleton.component";
+
+@Component({
+  selector: "app-profile-loading",
+  imports: [Skeleton],
+  template: `
+    <div class="flex items-center gap-4" role="status">
+      <span class="sr-only">Loading profile</span>
+      <div markas-skeleton shape="circle" class="size-12"></div>
+      <div markas-skeleton class="h-4 w-1/2"></div>
+    </div>
+  `,
+})
+export class ProfileLoading {}
+```
+
 ## Catatan
 
 - Atur ukuran lewat class (`h-4 w-1/2`, `size-12`). Untuk lingkaran pakai `shape="circle"`, bukan class `rounded-full`, karena tanpa `tailwind-merge` class radius yang bentrok bergantung pada urutan CSS.

@@ -6,9 +6,30 @@
   "tags": ["otp", "verification", "code", "pin", "2fa", "form"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "input-otp.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "InputOTP.tsx", "deps": [] },
-    "vue": { "file": "InputOTP.vue", "deps": [] }
+    "blade": {
+      "file": "input-otp.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "InputOTP.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "InputOTP.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "InputOTP.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "InputOTP.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "input-otp.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -30,22 +51,34 @@
       "description": "Name of the hidden input that holds the full code for form submit."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value",
       "type": "string",
       "default": "\"\"",
-      "description": "The code. React accepts value with onValueChange or defaultValue; Vue uses v-model; Blade uses value."
+      "description": "The code. React accepts value with onValueChange or defaultValue; Vue uses v-model; Svelte bind:value; Angular value or [(value)]; Blade and Astro use value."
     },
     {
       "name": "onValueChange / markas-change",
       "type": "(value: string) => void",
       "default": "-",
-      "description": "Called on every change with the joined code (React). Blade dispatches a markas-change event."
+      "description": "Called on every change with the joined code (React). Blade and Astro dispatch a markas-change event."
     },
     {
       "name": "onComplete / @complete / markas-complete",
       "type": "(value: string) => void",
       "default": "-",
-      "description": "Called once every box is filled, with the full code. Blade dispatches a markas-complete event."
+      "description": "Called once every box is filled, with the full code. Blade and Astro dispatch a markas-complete event."
+    },
+    {
+      "name": "oncomplete",
+      "type": "(value: string) => void",
+      "default": "-",
+      "description": "Svelte only. Called once every box is filled, with the full code."
+    },
+    {
+      "name": "complete",
+      "type": "output<string>",
+      "default": "-",
+      "description": "Angular only. Emits the full code once every box is filled."
     },
     {
       "name": "digitLabel",
@@ -76,10 +109,12 @@
         "length": "Jumlah kotak digit.",
         "label": "Label grup, dirender sebagai legend fieldset.",
         "name": "Nama input tersembunyi yang berisi kode lengkap untuk submit form.",
-        "value / defaultValue / v-model": "Kode. React menerima value dengan onValueChange atau defaultValue; Vue memakai v-model; Blade memakai value.",
-        "onValueChange / markas-change": "Dipanggil setiap perubahan dengan kode gabungan (React). Blade memancarkan event markas-change.",
-        "onComplete / @complete / markas-complete": "Dipanggil sekali saat semua kotak terisi, dengan kode lengkap. Blade memancarkan event markas-complete.",
-        "digitLabel": "aria-label tiap kotak. {index} dan {length} diganti angka. Isi misalnya \"Digit {index} dari {length}\"."
+        "digitLabel": "aria-label tiap kotak. {index} dan {length} diganti angka. Isi misalnya \"Digit {index} dari {length}\".",
+        "value / defaultValue / v-model / bind:value": "Kode. React menerima value dengan onValueChange atau defaultValue; Vue memakai v-model; Svelte bind:value; Angular value atau [(value)]; Blade dan Astro memakai value.",
+        "onValueChange / markas-change": "Dipanggil setiap perubahan dengan kode gabungan (React). Blade dan Astro memancarkan event markas-change.",
+        "onComplete / @complete / markas-complete": "Dipanggil sekali saat semua kotak terisi, dengan kode lengkap. Blade dan Astro memancarkan event markas-complete.",
+        "oncomplete": "Khusus Svelte. Dipanggil sekali saat semua kotak terisi, dengan kode lengkap.",
+        "complete": "Khusus Angular. Memancarkan kode lengkap saat semua kotak terisi."
       },
       "a11y": [
         "Kotak berada di fieldset dengan legend dari prop label, dan tiap kotak punya aria-label seperti \"Digit 1 of 6\".",
@@ -96,5 +131,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

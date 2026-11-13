@@ -1,0 +1,131 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "inline-grid tabular-nums";
+const layer = "col-start-1 row-start-1";
+const holder = "invisible col-start-1 row-start-1";
+
+const charsets = {
+  letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  digits: "0123456789",
+  symbols: "!@$%&*+=<>/?{}[]",
+  binary: "01",
+};
+
+type Props = Omit<HTMLAttributes<"span">, "children"> & {
+  text: string;
+  trigger?: "hover" | "view" | "mount";
+  charset?: keyof typeof charsets;
+  duration?: number;
+  delay?: number;
+};
+
+const {
+  text,
+  trigger = "hover",
+  charset = "letters",
+  duration = 800,
+  delay = 0,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<markas-text-scramble class="contents" data-trigger={trigger} data-charset={charsets[charset]} data-duration={duration} data-delay={delay}><span {...rest} class:list={[root, className]}><span class="sr-only">{text}</span><span aria-hidden="true" class={holder}>{text}</span><span aria-hidden="true" class={layer}>{text}</span></span></markas-text-scramble>
+
+<script>
+  /** Random letters change at most every 50 ms, so it reads as an effect, not a flicker. */
+  const FRAME = 50;
+  /** Hover and focus are heard on the closest interactive element (link, button), or on the text itself. */
+  const TRIGGER = "a, button, label, [tabindex]";
+
+  /** Deterministic random (Park-Miller): the same scrambled letters on every run and in every framework. */
+  function scrambler(text: string, charset: string) {
+    const chars = Array.from(text);
+    let seed = 1;
+    const pick = () => {
+      seed = (seed * 48271) % 2147483647;
+      return charset[seed % charset.length];
+    };
+    return (revealed: number) =>
+      chars
+        .map((char, i) => (i < revealed || char.trim() === "" ? char : pick()))
+        .join("");
+  }
+
+  // One element per instance: setup runs for markup added later and after view transitions.
+  class MarkasTextScramble extends HTMLElement {
+    private cleanup = () => {};
+
+    connectedCallback() {
+      const element = this.firstElementChild as HTMLElement | null;
+      const output = element?.lastElementChild;
+      if (!element || !output) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const text = element.firstElementChild?.textContent ?? "";
+      const set = this.dataset.charset ?? "";
+      const duration = Number(this.dataset.duration);
+      const delay = Number(this.dataset.delay);
+      const total = Array.from(text).length;
+      let frame = 0;
+      let observer: IntersectionObserver | undefined;
+
+      // Scramble every letter, then reveal from left to right until the real text is whole again.
+      const run = (wait: number) => {
+        if (frame) return;
+        const scramble = scrambler(text, set);
+        let began: number | undefined;
+        let last = -FRAME;
+        const tick = (now: number) => {
+          began ??= now;
+          const progress = Math.min((now - began - wait) / duration, 1);
+          if (now - last >= FRAME || progress >= 1) {
+            last = now;
+            output.textContent = scramble(
+              Math.max(Math.floor(progress * total), 0),
+            );
+          }
+          frame = progress < 1 ? requestAnimationFrame(tick) : 0;
+        };
+        frame = requestAnimationFrame(tick);
+      };
+
+      const target = element.closest<HTMLElement>(TRIGGER) ?? element;
+      const hover = () => run(0);
+      if (this.dataset.trigger === "hover") {
+        target.addEventListener("pointerenter", hover);
+        target.addEventListener("focusin", hover);
+      } else {
+        output.textContent = scrambler(text, set)(0);
+        if (
+          this.dataset.trigger === "mount" ||
+          typeof IntersectionObserver === "undefined"
+        )
+          run(delay);
+        else {
+          // Scrambled while off screen, then decoded once when it scrolls into view.
+          observer = new IntersectionObserver((entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) return;
+            observer?.disconnect();
+            run(delay);
+          });
+          observer.observe(element);
+        }
+      }
+      this.cleanup = () => {
+        observer?.disconnect();
+        cancelAnimationFrame(frame);
+        target.removeEventListener("pointerenter", hover);
+        target.removeEventListener("focusin", hover);
+        output.textContent = text;
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-text-scramble"))
+    customElements.define("markas-text-scramble", MarkasTextScramble);
+</script>

@@ -1,0 +1,15 @@
+---
+import Tabs from "../../components/tabs/Tabs.astro";
+
+const items = [
+  { value: "account", label: "Account" },
+  { value: "password", label: "Password" },
+  { value: "notifications", label: "Notifications" },
+];
+---
+
+<Tabs items={items} defaultValue="account">
+  <Fragment slot="account">Change your account name and email.</Fragment>
+  <Fragment slot="password">Change your password regularly.</Fragment>
+  <Fragment slot="notifications">Choose which emails you want to receive.</Fragment>
+</Tabs>

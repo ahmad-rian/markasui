@@ -37,6 +37,64 @@ import { GradientBorder } from "@/components/markas/GradientBorder";
 </template>
 ```
 
+## Svelte
+
+```svelte
+<script lang="ts">
+  import Button from "$lib/components/markas/Button.svelte";
+  import GradientBorder from "$lib/components/markas/GradientBorder.svelte";
+</script>
+
+<GradientBorder variant="spin" glow class="max-w-80">
+  <div class="grid gap-3 p-6">
+    <h3 class="text-lg font-semibold text-ink">Pro workspace</h3>
+    <Button>Upgrade now</Button>
+  </div>
+</GradientBorder>
+```
+
+## Astro
+
+```astro
+---
+import Button from "@/components/markas/Button.astro";
+import GradientBorder from "@/components/markas/GradientBorder.astro";
+---
+
+<GradientBorder variant="spin" glow class="max-w-80">
+  <div class="grid gap-3 p-6">
+    <h3 class="text-lg font-semibold text-ink">Pro workspace</h3>
+    <Button>Upgrade now</Button>
+  </div>
+</GradientBorder>
+```
+
+No client-side JavaScript; the markup is rendered on the server.
+
+## Angular
+
+```ts
+import { Component } from "@angular/core";
+import { Button } from "./markas/button.component";
+import { GradientBorder } from "./markas/gradient-border.component";
+
+@Component({
+  selector: "app-hero",
+  imports: [Button, GradientBorder],
+  template: `
+    <div markas-gradient-border variant="spin" glow class="max-w-80">
+      <div class="grid gap-3 p-6">
+        <h3 class="text-lg font-semibold text-ink">Pro workspace</h3>
+        <button markas-button>Upgrade now</button>
+      </div>
+    </div>
+  `,
+})
+export class Hero {}
+```
+
+The component is an attribute on a div, so class, style, and other attributes stay on the root element.
+
 ## Notes
 
 - The border is 1px. Put padding on the content inside; the inner panel uses `bg-surface`.

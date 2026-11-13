@@ -1,0 +1,122 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const root = "overflow-hidden rounded-xl border border-line bg-subtle";
+const header =
+  "flex items-center gap-2 border-b border-line py-1.5 pr-1.5 pl-4";
+const titleClass = "min-w-0 truncate text-xs font-medium text-muted";
+const copyButton =
+  "ml-auto inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted transition-colors duration-150 ease-out hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const icon = "size-4";
+const pre =
+  "overflow-x-auto p-4 font-mono text-sm leading-6 text-ink focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary";
+const lineClass = "block min-h-6 whitespace-pre";
+const lineNumber =
+  "mr-4 inline-block min-w-6 text-right text-muted select-none";
+
+type Props = Omit<HTMLAttributes<"div">, "children"> & {
+  code: string;
+  title?: string;
+  showLineNumbers?: boolean;
+  copyLabel?: string;
+  copiedLabel?: string;
+};
+
+const {
+  code,
+  title,
+  showLineNumbers = false,
+  copyLabel = "Copy code",
+  copiedLabel = "Copied",
+  class: className,
+  ...rest
+} = Astro.props;
+
+// Split code into lines, ignoring one trailing empty line.
+const lines = code.replace(/\r?\n$/, "").split(/\r?\n/);
+---
+
+<div class:list={[root, className]} {...rest}>
+  <div class={header}>
+    {title && <span class={titleClass}>{title}</span>}
+    <button
+      type="button"
+      data-state="idle"
+      data-markas-code-block-copy={code}
+      data-copy-label={copyLabel}
+      data-copied-label={copiedLabel}
+      class={copyButton}
+    >
+      <svg
+        style="display: none"
+        data-icon="copied"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={icon}
+      >
+        <path d="m5 12 5 5L20 7"></path>
+      </svg>
+      <svg
+        data-icon="idle"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={icon}
+      >
+        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+        <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+        ></path>
+      </svg>
+      <span aria-live="polite">{copyLabel}</span>
+    </button>
+  </div>
+  <pre tabindex="0" class={pre}><code>{lines.map((line, index) => <span class={lineClass}>{showLineNumbers && <span aria-hidden="true" class={lineNumber}>{index + 1}</span>}{line}</span>)}</code></pre>
+</div>
+
+<script>
+  // One listener per page serves every code block, including markup added later.
+  const COPIED_DURATION = 2000;
+  const timers = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
+
+  const setCopied = (button: HTMLElement, copied: boolean) => {
+    button.dataset.state = copied ? "copied" : "idle";
+    button.querySelectorAll<SVGElement>("[data-icon]").forEach((svg) => {
+      const shown = svg.dataset.icon === button.dataset.state;
+      svg.style.display = shown ? "" : "none";
+    });
+    const label = button.querySelector("[aria-live]");
+    if (label)
+      label.textContent =
+        (copied ? button.dataset.copiedLabel : button.dataset.copyLabel) ?? "";
+  };
+
+  document.addEventListener("click", async (event) => {
+    const button = (event.target as Element).closest<HTMLElement>(
+      "[data-markas-code-block-copy]",
+    );
+    if (!button) return;
+    try {
+      await navigator.clipboard.writeText(
+        button.dataset.markasCodeBlockCopy ?? "",
+      );
+    } catch {
+      setCopied(button, false);
+      return;
+    }
+    setCopied(button, true);
+    clearTimeout(timers.get(button));
+    timers.set(
+      button,
+      setTimeout(() => setCopied(button, false), COPIED_DURATION),
+    );
+  });
+</script>

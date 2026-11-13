@@ -6,9 +6,30 @@
   "tags": ["faq", "section", "landing", "details", "accordion", "seo"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "faq.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Faq.tsx", "deps": [] },
-    "vue": { "file": "Faq.vue", "deps": [] }
+    "blade": {
+      "file": "faq.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Faq.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Faq.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Faq.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Faq.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "faq.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -51,7 +72,7 @@
       "name": "contact",
       "type": "Blade: slot or string · React: ReactNode · Vue: slot or string",
       "default": "-",
-      "description": "Closing line such as \"Still have questions?\" with a link."
+      "description": "Closing line such as \"Still have questions?\" with a link. Svelte: string or snippet. Astro: contact slot or string. Angular: contact text input or an element with the contact attribute."
     },
     {
       "name": "searchLabel",
@@ -97,7 +118,7 @@
         "variant": "Tata letak. split menaruh judul di samping daftar pada kontainer lebar, cards memakai grid dua kolom, searchable menambah kotak cari, categories menambah tab.",
         "exclusive": "Hanya satu pertanyaan terbuka, lewat atribut name yang sama di details.",
         "schema": "Render JSON-LD FAQPage untuk mesin pencari.",
-        "contact": "Kalimat penutup seperti \"Masih punya pertanyaan?\" dengan tautan.",
+        "contact": "Kalimat penutup seperti \"Masih ada pertanyaan?\" dengan tautan. Svelte: string atau snippet. Astro: slot contact atau string. Angular: input teks contact atau elemen dengan atribut contact.",
         "searchLabel": "Label dan placeholder kotak cari (searchable).",
         "emptyLabel": "Pesan yang diumumkan saat pencarian tidak menemukan apa pun (searchable).",
         "categoriesLabel": "Nama aksesibel daftar tab kategori (categories)."
@@ -117,5 +138,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

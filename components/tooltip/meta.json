@@ -17,6 +17,18 @@
     "vue": {
       "file": "Tooltip.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "Tooltip.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Tooltip.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "tooltip.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -34,7 +46,7 @@
     },
     {
       "name": "children / slot",
-      "type": "slot / ReactNode",
+      "type": "slot / ReactNode / snippet",
       "default": "-",
       "description": "A single focusable trigger element, such as a button."
     },
@@ -82,5 +94,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }

@@ -1,0 +1,148 @@
+---
+import type { HTMLAttributes, HTMLTag } from "astro/types";
+
+const base =
+  "bg-transparent text-ink bg-no-repeat box-decoration-clone [--markas-th-fill:color-mix(in_oklab,var(--markas-th-c)_var(--markas-th-a,28%),transparent)] -mx-[0.12em] px-[0.12em] bg-left [background-size:var(--markas-th-size,0%_100%)] data-[direction=rtl]:bg-right data-[direction=ttb]:bg-top data-[direction=btt]:bg-bottom data-[direction$=b]:[--markas-th-size:100%_0%] data-[state=active]:[background-size:100%_100%] transition-[background-size] ease-out motion-reduce:transition-none motion-reduce:data-[trigger=view]:[background-size:100%_100%] motion-reduce:data-[trigger=auto]:[background-size:100%_100%]";
+const variants = {
+  solid:
+    "rounded-[0.2em] [background-image:linear-gradient(var(--markas-th-fill)_0_0)]",
+  marker:
+    "rounded-[0.1em_0.5em_0.2em_0.6em] [background-image:linear-gradient(transparent_40%,var(--markas-th-fill)_40%_94%,transparent_94%)]",
+  underline:
+    "[background-image:linear-gradient(transparent_84%,var(--markas-th-c)_84%)]",
+  gradient:
+    "rounded-[0.2em] [background-image:linear-gradient(100deg,var(--markas-th-fill),color-mix(in_oklab,var(--markas-th-c2,var(--color-warning))_var(--markas-th-a,28%),transparent))]",
+};
+const colors = {
+  warning:
+    "[--markas-th-c:var(--color-warning)] [--markas-th-c2:var(--color-danger)]",
+  primary: "[--markas-th-a:16%] [--markas-th-c:var(--color-primary)]",
+  "primary-soft":
+    "[--markas-th-a:100%] [--markas-th-c:var(--color-primary-soft)]",
+  success: "[--markas-th-c:var(--color-success)]",
+  danger: "[--markas-th-c:var(--color-danger)]",
+};
+
+type Props = HTMLAttributes<"span"> & {
+  as?: string;
+  trigger?: "view" | "hover" | "auto" | "manual";
+  direction?: "ltr" | "rtl" | "ttb" | "btt";
+  variant?: keyof typeof variants;
+  color?: keyof typeof colors;
+  /** Highlight state for trigger manual. */
+  active?: boolean;
+  /** Trigger view: draw once, or clear again when the text leaves the viewport. */
+  once?: boolean;
+  /** Trigger view: how much of the text must be visible (0 to 1). */
+  threshold?: number;
+  duration?: number;
+  delay?: number;
+};
+
+const {
+  as = "span",
+  trigger = "view",
+  direction = "ltr",
+  variant = "solid",
+  color = "warning",
+  active = false,
+  once = true,
+  threshold = 0.5,
+  duration = 700,
+  delay = 0,
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+// Only a valid element name is used as the tag.
+const Tag = (/^[a-z][a-z0-9]*$/.test(as) ? as : "span") as HTMLTag;
+const styleText = [
+  `transition-duration: ${duration}ms; transition-delay: ${delay}ms`,
+  typeof style === "string" ? style : "",
+]
+  .filter(Boolean)
+  .join("; ");
+---
+
+<markas-text-highlighter class="contents" data-once={once ? "" : undefined} data-threshold={threshold}><Tag data-state={active ? "active" : "inactive"} data-direction={direction} data-trigger={trigger} {...rest} class:list={[base, variants[variant], colors[color], className]} style={styleText}><slot /></Tag></markas-text-highlighter>
+
+<script>
+  type Direction = "ltr" | "rtl" | "ttb" | "btt";
+
+  /** Hover and focus are heard on the closest interactive element (link, button), or on the text itself. */
+  const TRIGGER = "a, button, label, [tabindex]";
+  /** The first two events draw the highlight, the last two clear it. */
+  const EVENTS = ["pointerenter", "focusin", "pointerleave", "focusout"];
+
+  // One element per highlight: setup runs for markup added later and after view transitions.
+  class MarkasTextHighlighter extends HTMLElement {
+    private cleanup = () => {};
+
+    private get mark() {
+      return this.firstElementChild as HTMLElement | null;
+    }
+
+    /** Draws the highlight, optionally from another direction. Not named animate: that is Element.animate(). */
+    highlight(direction?: Direction) {
+      if (!this.mark) return;
+      if (direction) this.mark.dataset.direction = direction;
+      this.mark.dataset.state = "active";
+    }
+
+    /** Clears the highlight. */
+    reset() {
+      if (this.mark) this.mark.dataset.state = "inactive";
+    }
+
+    connectedCallback() {
+      const element = this.mark;
+      if (!element) return;
+      const set = (on: boolean) => (on ? this.highlight() : this.reset());
+      const trigger = element.dataset.trigger;
+      if (trigger === "manual") {
+        // Same window events as the Blade version.
+        const show = (event: Event) =>
+          this.highlight((event as CustomEvent<{ direction?: Direction } | null>).detail?.direction);
+        const hide = () => this.reset();
+        window.addEventListener("markas-highlight", show);
+        window.addEventListener("markas-highlight-reset", hide);
+        this.cleanup = () => {
+          window.removeEventListener("markas-highlight", show);
+          window.removeEventListener("markas-highlight-reset", hide);
+        };
+        return;
+      }
+      if (trigger === "hover") {
+        const target = element.closest<HTMLElement>(TRIGGER) ?? element;
+        const toggle = (event: Event) => set(EVENTS.indexOf(event.type) < 2);
+        EVENTS.forEach((name) => target.addEventListener(name, toggle));
+        this.cleanup = () =>
+          EVENTS.forEach((name) => target.removeEventListener(name, toggle));
+        return;
+      }
+      // Auto draws right away. offsetWidth applies the empty start first, so the transition runs.
+      if (trigger === "auto") {
+        void element.offsetWidth;
+        return set(true);
+      }
+      const once = this.hasAttribute("data-once");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries.some((entry) => entry.isIntersecting);
+          if (visible && once) observer.disconnect();
+          if (visible || !once) set(visible);
+        },
+        { threshold: Number(this.dataset.threshold) },
+      );
+      observer.observe(element);
+      this.cleanup = () => observer.disconnect();
+    }
+
+    disconnectedCallback() {
+      this.cleanup();
+    }
+  }
+
+  if (!customElements.get("markas-text-highlighter"))
+    customElements.define("markas-text-highlighter", MarkasTextHighlighter);
+</script>

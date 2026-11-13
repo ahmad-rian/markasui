@@ -17,6 +17,18 @@
     "vue": {
       "file": "ThemeToggle.vue",
       "deps": []
+    },
+    "svelte": {
+      "file": "ThemeToggle.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "ThemeToggle.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "theme-toggle.component.ts",
+      "deps": []
     }
   },
   "props": [
@@ -73,6 +85,12 @@
       "type": "(theme: 'light' | 'dark') => void",
       "default": "-",
       "description": "React callback after a click. Vue emits change. Every version also dispatches markas-theme-change on document."
+    },
+    {
+      "name": "themeChange",
+      "type": "output<\"light\" | \"dark\">",
+      "default": "-",
+      "description": "Angular only. Emits the theme a click asked for. Svelte uses onThemeChange."
     }
   ],
   "a11y": [
@@ -102,7 +120,8 @@
         "showText": "Menampilkan label sebagai teks di samping ikon. Pakai label pendek seperti Mode gelap.",
         "lightLabel": "Nama tombol saat tema gelap aktif. Menjadi teks terlihat dengan showText.",
         "darkLabel": "Nama tombol saat tema terang aktif. Menjadi teks terlihat dengan showText.",
-        "onThemeChange": "Callback React setelah klik. Vue memancarkan change. Semua versi juga mengirim markas-theme-change di document."
+        "onThemeChange": "Callback React setelah klik. Vue memancarkan change. Semua versi juga mengirim markas-theme-change di document.",
+        "themeChange": "Khusus Angular. Memancarkan tema yang diminta klik. Svelte memakai onThemeChange."
       },
       "a11y": [
         "Elemen button native, jadi Enter dan Spasi berfungsi dan fokus tampil sebagai outline 2px warna primary.",
@@ -119,5 +138,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-13"
 }

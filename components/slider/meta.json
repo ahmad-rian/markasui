@@ -6,9 +6,30 @@
   "tags": ["slider", "range", "form", "number"],
   "status": "stable",
   "frameworks": {
-    "blade": { "file": "slider.blade.php", "deps": ["alpinejs"] },
-    "react": { "file": "Slider.tsx", "deps": [] },
-    "vue": { "file": "Slider.vue", "deps": [] }
+    "blade": {
+      "file": "slider.blade.php",
+      "deps": ["alpinejs"]
+    },
+    "react": {
+      "file": "Slider.tsx",
+      "deps": []
+    },
+    "vue": {
+      "file": "Slider.vue",
+      "deps": []
+    },
+    "svelte": {
+      "file": "Slider.svelte",
+      "deps": []
+    },
+    "astro": {
+      "file": "Slider.astro",
+      "deps": []
+    },
+    "angular": {
+      "file": "slider.component.ts",
+      "deps": []
+    }
   },
   "props": [
     {
@@ -36,16 +57,22 @@
       "description": "Increment used by dragging and the arrow keys."
     },
     {
-      "name": "value / defaultValue / v-model",
+      "name": "value / defaultValue / v-model / bind:value",
       "type": "number",
       "default": "min",
-      "description": "Current value. Blade uses value, React value or defaultValue, Vue v-model or defaultValue."
+      "description": "Current value. Blade and Astro use value, React value or defaultValue, Vue v-model or defaultValue, Svelte bind:value, Angular value or [(value)]."
     },
     {
       "name": "onValueChange",
       "type": "(value: number) => void",
       "default": "-",
       "description": "React only. Called with the new number on every input."
+    },
+    {
+      "name": "valueChange",
+      "type": "output<number>",
+      "default": "-",
+      "description": "Angular only. Emits the new number on every input."
     },
     {
       "name": "showValue",
@@ -88,11 +115,12 @@
         "min": "Nilai terendah.",
         "max": "Nilai tertinggi.",
         "step": "Kenaikan nilai saat digeser dan saat memakai tombol panah.",
-        "value / defaultValue / v-model": "Nilai saat ini. Blade memakai value, React value atau defaultValue, Vue v-model atau defaultValue.",
         "onValueChange": "Khusus React. Dipanggil dengan angka baru setiap kali digeser.",
         "showValue": "Menampilkan nilai saat ini di kanan label dengan angka tabular.",
         "disabled": "Menonaktifkan slider dan meredupkan label.",
-        "id": "Id input. Dibuat otomatis kalau kosong."
+        "id": "Id input. Dibuat otomatis kalau kosong.",
+        "value / defaultValue / v-model / bind:value": "Nilai saat ini. Blade dan Astro memakai value, React value atau defaultValue, Vue v-model atau defaultValue, Svelte bind:value, Angular value atau [(value)].",
+        "valueChange": "Khusus Angular. Memancarkan angka baru setiap kali digeser."
       },
       "a11y": [
         "Input type range native, sehingga screen reader membacakan peran slider dan nilainya.",
@@ -108,5 +136,6 @@
         ]
       }
     }
-  }
+  },
+  "updatedAt": "2026-11-09"
 }
