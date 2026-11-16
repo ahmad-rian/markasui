@@ -78,7 +78,8 @@ async function pageJsBytes(htmlPath: string): Promise<number> {
   let total = [
     ...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g),
   ]
-    .filter((m) => !m[0].includes("application/json"))
+    // Data JSON (termasuk JSON-LD application/ld+json) bukan JavaScript yang dijalankan.
+    .filter((m) => !/application\/(ld\+)?json/.test(m[0]))
     .reduce((sum, m) => sum + gzip(m[1]!), 0);
 
   const seen = new Set<string>();

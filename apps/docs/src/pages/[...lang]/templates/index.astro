@@ -8,6 +8,7 @@ export const getStaticPaths = localeParams;
 
 const locale = toLocale(Astro.params.lang);
 const strings = t(locale).templates;
+const seo = t(locale).seo;
 ---
 
-<TemplateList title={strings.title} subtitle={strings.subtitle} templates={getTemplatesByKind("dashboard")} locale={locale} empty={strings.subtitle} />
+<TemplateList title={strings.title} subtitle={strings.subtitle} templates={getTemplatesByKind("dashboard")} locale={locale} kind="dashboard" seo={{ title: seo.templatesTitle, description: seo.templatesDescription }} empty={strings.subtitle} />

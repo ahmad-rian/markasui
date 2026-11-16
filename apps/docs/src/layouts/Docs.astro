@@ -3,7 +3,9 @@ import type { MarkdownHeading } from "astro";
 import Base from "./Base.astro";
 import SidebarNav from "../components/SidebarNav.astro";
 import Toc from "../components/Toc.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { getLocale, t } from "../lib/i18n";
+import { breadcrumbTrail, type Crumb } from "../lib/seo";
 
 interface Props {
   title: string;
@@ -13,18 +15,24 @@ interface Props {
   wide?: boolean;
   /** Diteruskan ke Base: stylesheet halaman dari src/generated/css/. */
   stylesheet?: string;
+  /** Breadcrumb di bawah beranda (path tanpa locale): tampil di atas konten dan masuk JSON-LD. */
+  breadcrumbs?: Crumb[];
+  /** Node JSON-LD tambahan, diteruskan ke Base. */
+  jsonLd?: Record<string, unknown>[];
 }
-const { title, description, headings = [], wide = false, stylesheet } = Astro.props;
+const { title, description, headings = [], wide = false, stylesheet, breadcrumbs, jsonLd } = Astro.props;
+const locale = getLocale(Astro.url);
 ---
 
-<Base title={title} description={description} stylesheet={stylesheet}>
+<Base title={title} description={description} stylesheet={stylesheet} ogType="article" breadcrumbs={breadcrumbs} jsonLd={jsonLd}>
   <div class="mx-auto flex max-w-screen-2xl gap-10 px-4 sm:px-6 lg:px-10 xl:gap-16">
-    <aside data-docs-sidebar class="sticky top-16 hidden h-[calc(100dvh-4rem)] w-64 shrink-0 overflow-y-auto pt-6 pb-10 pr-2 lg:block" aria-label={t(getLocale(Astro.url)).sidebar.label}>
+    <aside data-docs-sidebar class="sticky top-16 hidden h-[calc(100dvh-4rem)] w-64 shrink-0 overflow-y-auto pt-6 pb-10 pr-2 lg:block" aria-label={t(locale).sidebar.label}>
       <SidebarNav />
     </aside>
 
     <main id="konten" class="min-w-0 flex-1 pt-8 pb-24 sm:pt-10" data-pagefind-body>
       <div class:list={["mx-auto min-w-0", !wide && "max-w-3xl"]}>
+        {breadcrumbs && <Breadcrumbs trail={breadcrumbTrail(locale, breadcrumbs)} />}
         <slot />
       </div>
     </main>

@@ -15,6 +15,7 @@ import { FRAMEWORK_LABELS, cliCommand } from "../../lib/frameworks";
 import { localeParams, localePath, t, toLocale } from "../../lib/i18n";
 import { HERO_FIXTURE } from "../../lib/landing";
 import { getComponents, groupByCategory } from "../../lib/registry";
+import { landingGraph } from "../../lib/seo";
 import { getTemplatesByKind } from "../../lib/templates";
 
 export const getStaticPaths = localeParams;
@@ -47,7 +48,7 @@ const componentsTitle = copy.componentsTitle(items.length);
 const shell = "mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8";
 ---
 
-<Base splash hero>
+<Base splash hero jsonLd={landingGraph(Astro.site!, locale, strings.seo.homeDescription)}>
   <Splash />
   <main id="konten">
     <section class="lp-frame lp-hero" aria-labelledby="hero-title">

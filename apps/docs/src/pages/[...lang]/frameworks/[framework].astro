@@ -1,0 +1,175 @@
+---
+/**
+ * Hub per framework (/frameworks/<fw>): cara pasang dan pakai di framework itu, lalu semua komponen
+ * dan template yang tersedia. Tautan komponen membawa ?framework=<fw> supaya halaman komponen
+ * langsung menampilkan kode framework ini.
+ */
+import "../../../styles/global.css";
+import { FRAMEWORKS, type Framework } from "@markasui/registry/schema";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import FrameworkIcon from "../../../components/FrameworkIcon.astro";
+import Icon from "../../../components/Icon.astro";
+import Base from "../../../layouts/Base.astro";
+import { FRAMEWORK_LABELS, cliCommand } from "../../../lib/frameworks";
+import { HUBS } from "../../../lib/hubs";
+import { LOCALES, localePath, t, toLocale } from "../../../lib/i18n";
+import { getComponents, groupByCategory, localized } from "../../../lib/registry";
+import { breadcrumbTrail, collectionPage } from "../../../lib/seo";
+import { getTemplates, templateDetailPath } from "../../../lib/templates";
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((locale) =>
+    FRAMEWORKS.map((framework) => ({
+      params: { lang: locale === "en" ? undefined : locale, framework },
+      props: { framework },
+    })),
+  );
+}
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+const locale = toLocale(Astro.params.lang);
+const dictionary = t(locale);
+const strings = dictionary.hub;
+const hub = HUBS[framework];
+const copy = hub.copy[locale];
+const label = FRAMEWORK_LABELS[framework];
+const path = `/frameworks/${framework}`;
+
+const items = (await getComponents()).filter((item) => item.frameworks[framework]);
+const groups = groupByCategory(items, locale);
+/** Template yang sudah punya versi framework ini (Svelte, Astro, Angular di-porting bertahap). */
+const templates = getTemplates().filter((template) => (template.frameworks as readonly Framework[]).includes(framework));
+const hasTemplates = templates.length > 0;
+const componentHref = (name: string) => `${localePath(locale, `/components/${name}`)}?framework=${framework}`;
+const absolute = (href: string) => new URL(href, Astro.site).toString();
+
+const description = copy.description(items.length);
+const breadcrumbs = [
+  { name: dictionary.nav.components, path: "/components" },
+  { name: label, path },
+];
+const jsonLd = [
+  collectionPage(
+    { url: absolute(localePath(locale, path)), name: copy.heading, description, locale },
+    items.map((item) => ({ name: item.title, url: absolute(componentHref(item.name)) })),
+  ),
+];
+const install = [cliCommand("npm", "init"), cliCommand("npm", "add button modal")].join("\n");
+const heading = "scroll-mt-24 text-[26px] leading-tight font-semibold tracking-[-0.02em]";
+const card = "block h-full rounded-xl border border-line p-4 transition-colors hover:bg-subtle";
+---
+
+<Base title={copy.heading} description={description} breadcrumbs={breadcrumbs} jsonLd={jsonLd}>
+  <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-24 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
+    <Breadcrumbs trail={breadcrumbTrail(locale, breadcrumbs)} />
+    <div class="max-w-3xl">
+      <FrameworkIcon framework={framework} brand class="size-9" />
+      <h1 class="mt-5 text-[34px] leading-tight font-semibold tracking-[-0.025em] text-balance sm:text-[42px]">{copy.heading}</h1>
+      <p class="mt-4 text-lg leading-8 text-muted">{copy.intro}</p>
+    </div>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-2">
+      <section aria-labelledby="install">
+        <h2 id="install" class={heading}>{strings.install}</h2>
+        <p class="mt-3 text-muted">{strings.installText}</p>
+        <CodeBlock code={install} lang="bash" class="mt-5" />
+      </section>
+      <section aria-labelledby="usage">
+        <h2 id="usage" class={heading}>{strings.usage}</h2>
+        <p class="mt-3 text-muted"><code class="font-mono text-[13px]">{hub.target}</code></p>
+        <CodeBlock code={hub.usage.code} lang={hub.usage.lang} framework={framework} title={label} class="mt-5" />
+      </section>
+    </div>
+
+    <section class="mt-14 max-w-3xl" aria-labelledby="details">
+      <h2 id="details" class={heading}>{strings.details}</h2>
+      <ul class="mt-4 grid gap-3 text-muted">
+        {
+          copy.points.map((point) => (
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-1 size-4 shrink-0 text-brand" />
+              <span>{point}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="components">
+      <h2 id="components" class={heading}>{strings.components(items.length)}</h2>
+      <p class="mt-3 text-muted">{strings.componentsText(label)}</p>
+      {
+        groups.map((group) => (
+          <div class="mt-10">
+            <h3 class="flex items-baseline gap-2 text-lg font-semibold">
+              {group.label}
+              <span class="text-sm font-normal text-muted">{group.items.length}</span>
+            </h3>
+            <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {group.items.map((item) => (
+                <li>
+                  <a href={componentHref(item.name)} class={card}>
+                    <span class="font-medium text-ink">{item.title}</span>
+                    <span class="mt-1 line-clamp-2 block text-sm text-muted">{localized(item, locale).description}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="mt-16" aria-labelledby="templates">
+      <h2 id="templates" class={heading}>{strings.templates}</h2>
+      {
+        hasTemplates ? (
+          <>
+            <p class="mt-3 text-muted">{strings.templatesText(label)}</p>
+            <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {templates.map((template) => (
+                <li>
+                  <a href={`${localePath(locale, templateDetailPath(template))}?framework=${framework}`} class={card}>
+                    <span class="font-medium text-ink">{template.title}</span>
+                    <span class="mt-1 line-clamp-2 block text-sm text-muted">{template.description[locale]}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p class="mt-3 max-w-3xl text-muted">
+            {strings.templatesPending(label)}{" "}
+            <a href={localePath(locale, "/templates")} class="text-ink underline underline-offset-4">
+              {dictionary.nav.templates}
+            </a>
+          </p>
+        )
+      }
+    </section>
+
+    <nav class="mt-16" aria-labelledby="others">
+      <h2 id="others" class={heading}>{strings.others}</h2>
+      <ul class="mt-5 flex flex-wrap gap-2">
+        {
+          FRAMEWORKS.filter((other) => other !== framework).map((other) => (
+            <li>
+              <a
+                href={localePath(locale, `/frameworks/${other}`)}
+                class="inline-flex h-9 items-center gap-2 rounded-lg bg-subtle px-3 text-sm text-ink transition-colors hover:bg-line"
+              >
+                <FrameworkIcon framework={other} class="size-4" />
+                {strings.link(FRAMEWORK_LABELS[other])}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </main>
+</Base>

@@ -11,6 +11,7 @@ playwright-report/
 test-results/
 .cache/
 playground/public/blade/
+playground/public/templates/
 apps/docs/public/r/
 apps/docs/src/generated/
 playwright-report-docs/

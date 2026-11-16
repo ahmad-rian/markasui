@@ -1,6 +1,8 @@
 ---
 title: Theming
 description: Daftar token warna MarkasUI dan cara mengganti warna brand.
+seoTitle: "Theming komponen Tailwind dengan token warna CSS"
+seoDescription: "Semua warna MarkasUI berasal dari variabel CSS di markas.css. Ganti warna brand, atur mode gelap, dan jaga komponen bebas dari nilai hex."
 ---
 
 Semua warna komponen berasal dari variabel CSS `--markas-*` di `markas.css`. Komponen tidak pernah memakai hex atau warna bawaan Tailwind seperti `bg-green-700`, jadi mengganti tema cukup dengan mengubah variabel.

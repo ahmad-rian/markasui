@@ -1,8 +1,12 @@
 {
   "name": "@markasui/mcp",
   "version": "0.1.0",
-  "description": "MCP server MarkasUI: cari dan ambil komponen Blade, React, atau Vue untuk agent AI.",
+  "description": "MarkasUI MCP server: lets AI coding agents search Tailwind CSS components and fetch Blade, React, Vue, Svelte, Astro, or Angular code.",
   "license": "MIT",
+  "author": "CV Jenderal Solusi Digital (https://jenderalcorp.com)",
+  "bugs": {
+    "url": "https://github.com/ahmad-rian/markasui/issues"
+  },
   "type": "module",
   "repository": {
     "type": "git",
@@ -13,11 +17,20 @@
   "keywords": [
     "markasui",
     "mcp",
+    "mcp-server",
     "model-context-protocol",
-    "ui",
-    "blade",
+    "claude-code",
+    "cursor",
+    "ai-agents",
+    "tailwindcss",
+    "ui-components",
     "react",
-    "vue"
+    "vue",
+    "blade",
+    "laravel",
+    "svelte",
+    "astro",
+    "angular"
   ],
   "bin": {
     "markasui-mcp": "./dist/bin.js"

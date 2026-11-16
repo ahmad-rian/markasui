@@ -1,6 +1,8 @@
 ---
 title: Changelog
 description: MarkasUI release history.
+seoTitle: "MarkasUI changelog and release notes"
+seoDescription: "Release history of MarkasUI: new components, templates, framework ports, and breaking changes for Blade, React, Vue, Svelte, Astro, and Angular."
 ---
 
 ## 0.1.0 (unreleased)

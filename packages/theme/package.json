@@ -3,6 +3,26 @@
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
+  "description": "MarkasUI color tokens for Tailwind CSS v4: light and dark CSS variables shared by every MarkasUI component.",
+  "author": "CV Jenderal Solusi Digital (https://jenderalcorp.com)",
+  "homepage": "https://markasui.pages.dev/docs/theming",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmad-rian/markasui.git",
+    "directory": "packages/theme"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmad-rian/markasui/issues"
+  },
+  "keywords": [
+    "markasui",
+    "tailwindcss",
+    "tailwind",
+    "theme",
+    "design-tokens",
+    "css-variables",
+    "dark-mode"
+  ],
   "type": "module",
   "exports": {
     "./markas.css": "./markas.css"

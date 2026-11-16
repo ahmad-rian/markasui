@@ -17,7 +17,7 @@ const pages = [...components, ...docs, { path: "/templates", title: "Templates" 
 const copy = Object.fromEntries(LOCALES.map((locale) => [locale, t(locale).notFound]));
 ---
 
-<Base title={copy.en.title}>
+<Base title={t("en").seo.notFound} description={copy.en.text} noindex>
   <main id="konten" class="relative isolate overflow-hidden">
     <div class="not-found-grid" aria-hidden="true"></div>
     <div class="mx-auto flex min-h-[calc(100dvh-12rem)] max-w-3xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6">

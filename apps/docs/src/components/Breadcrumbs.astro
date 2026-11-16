@@ -1,0 +1,30 @@
+---
+/** Breadcrumb tampil di atas judul halaman. Item terakhir adalah halaman ini (tanpa tautan). */
+import { getLocale, localePath, t } from "../lib/i18n";
+import type { Crumb } from "../lib/seo";
+
+interface Props {
+  trail: Crumb[];
+}
+const { trail } = Astro.props;
+const locale = getLocale(Astro.url);
+---
+
+<nav aria-label={t(locale).seo.breadcrumb} class="mb-4 text-sm text-muted" data-pagefind-ignore>
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    {
+      trail.map((crumb, index) =>
+        index === trail.length - 1 ? (
+          <li aria-current="page" class="text-ink">{crumb.name}</li>
+        ) : (
+          <li class="flex items-center gap-2">
+            <a href={localePath(locale, crumb.path)} class="transition-colors hover:text-ink">
+              {crumb.name}
+            </a>
+            <span aria-hidden="true" class="text-faint">/</span>
+          </li>
+        ),
+      )
+    }
+  </ol>
+</nav>

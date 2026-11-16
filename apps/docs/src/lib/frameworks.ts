@@ -117,11 +117,14 @@ const IMPORT_BASE: Record<Framework, string> = {
   angular: "./markas",
 };
 
-/** Ganti import ../../components/<nama>/<File> di contoh repo dengan path di project user. */
+/**
+ * Ganti import ../../components/<nama>/<File> di contoh repo (../../../ di template) dengan path di
+ * project user.
+ */
 export const exampleForDisplay = (code: string, framework: Framework) =>
   code
     .replace(
-      /(["'])\.\.\/\.\.\/components\/[a-z-]+\/([A-Za-z][\w.-]*)\1/g,
+      /(["'])(?:\.\.\/)+components\/[a-z-]+\/([A-Za-z][\w.-]*)\1/g,
       `$1${IMPORT_BASE[framework]}/$2$1`,
     )
     .trim();

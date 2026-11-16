@@ -18,7 +18,7 @@ export function setupGuide(
 3. Save markas.css as ${cssPath}, then set resources/css/app.css to:
    ${cssImport}
    @source "../views";
-4. Start Alpine in resources/js/app.js (skip this with Livewire 3):
+4. Start Alpine in resources/js/app.js (skip this with Livewire 3 or 4, which already start Alpine; see /docs/livewire):
    import Alpine from "alpinejs"; window.Alpine = Alpine; Alpine.start();
 5. Use components as <x-markas.button>, stored in resources/views/components/markas/.`;
     case "react":

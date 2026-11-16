@@ -6,6 +6,8 @@ import Icon from "../../../components/Icon.astro";
 import Docs from "../../../layouts/Docs.astro";
 import { getDocs } from "../../../lib/docs";
 import { LOCALES, localePath, t, toLocale } from "../../../lib/i18n";
+import { techArticle } from "../../../lib/seo";
+import { gitModified, ogImagePath } from "../../../lib/seo-files";
 
 export async function getStaticPaths() {
   const pages = await Promise.all(
@@ -27,9 +29,29 @@ const slug = entry.id.split("/").at(-1)!;
 const { Content, headings } = await render(entry);
 const markdown = `# ${entry.data.title}\n\n${entry.data.description}\n\n${entry.body ?? ""}`;
 const pager = "icon-button size-9 bg-subtle text-ink hover:bg-line";
+
+const path = `/docs/${slug}`;
+const seoTitle = entry.data.seoTitle ?? entry.data.title;
+const seoDescription = entry.data.seoDescription ?? entry.data.description;
+const ogImage = ogImagePath(locale, path);
+const jsonLd = [
+  techArticle(Astro.site!, {
+    url: new URL(localePath(locale, path), Astro.site).toString(),
+    headline: seoTitle,
+    description: seoDescription,
+    locale,
+    image: ogImage && new URL(ogImage, Astro.site).toString(),
+    modified: entry.filePath && gitModified(entry.filePath),
+  }),
+];
+/** Pengenalan adalah pintu masuk docs, jadi tidak diberi tingkat "Docs" yang menunjuk ke dirinya sendiri. */
+const breadcrumbs = [
+  ...(slug === "introduction" ? [] : [{ name: t(locale).nav.docs, path: "/docs/introduction" }]),
+  { name: entry.data.title, path },
+];
 ---
 
-<Docs title={entry.data.title} description={entry.data.description} headings={headings}>
+<Docs title={seoTitle} description={seoDescription} headings={headings} breadcrumbs={breadcrumbs} jsonLd={jsonLd}>
   <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
     <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{entry.data.title}</h1>
     <div class="flex items-center gap-2 sm:pt-1">

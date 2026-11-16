@@ -1,28 +1,46 @@
 {
   "name": "markasui",
   "version": "0.1.0",
-  "description": "CLI MarkasUI: tambahkan komponen Blade, React, Vue, Svelte, Astro, atau Angular ke project Anda.",
+  "description": "MarkasUI CLI: add Tailwind CSS v4 UI components to Laravel Blade, React, Vue, Svelte, Astro, and Angular projects with one command.",
   "license": "MIT",
+  "author": "CV Jenderal Solusi Digital (https://jenderalcorp.com)",
+  "bugs": {
+    "url": "https://github.com/ahmad-rian/markasui/issues"
+  },
   "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ahmad-rian/markasui.git",
     "directory": "packages/cli"
   },
-  "homepage": "https://markasui.pages.dev",
+  "homepage": "https://markasui.pages.dev/docs/cli",
   "keywords": [
     "markasui",
-    "ui",
-    "components",
-    "blade",
-    "laravel",
-    "react",
-    "vue",
-    "svelte",
-    "astro",
-    "angular",
+    "cli",
+    "tailwindcss",
     "tailwind",
-    "cli"
+    "tailwind-components",
+    "ui-components",
+    "component-library",
+    "design-system",
+    "copy-paste",
+    "react",
+    "react-components",
+    "vue",
+    "vue-components",
+    "laravel",
+    "blade",
+    "blade-components",
+    "livewire",
+    "alpinejs",
+    "svelte",
+    "svelte-components",
+    "astro",
+    "astro-components",
+    "angular",
+    "angular-components",
+    "accessibility",
+    "dark-mode"
   ],
   "bin": {
     "markasui": "./dist/bin.js"

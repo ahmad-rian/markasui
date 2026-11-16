@@ -1,6 +1,8 @@
 ---
 title: Theming
 description: The MarkasUI color tokens and how to change the brand color.
+seoTitle: "Theming Tailwind components with CSS color tokens"
+seoDescription: "Every MarkasUI color comes from CSS variables in markas.css. Change the brand color, adjust dark mode, and keep components free of hex values."
 ---
 
 Every component color comes from the `--markas-*` CSS variables in `markas.css`. Components never use hex values or default Tailwind colors like `bg-green-700`, so changing the theme only means changing the variables.

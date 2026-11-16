@@ -191,18 +191,29 @@ for (const framework of ["Svelte", "Astro", "Angular"] as const) {
   });
 }
 
-// Semua komponen sudah punya versi Svelte; template belum, jadi pesannya diuji di halaman template.
-test("template yang belum di-porting menampilkan pesan belum tersedia", async ({
-  page,
-}) => {
-  const code = (name: string) =>
-    page.getByRole("region", { name }).locator('[data-fw="svelte"]');
-  await page.goto("/templates/larisa");
-  await page.getByRole("radio", { name: "Svelte" }).first().click();
-  await expect(code("Code")).toHaveText("Not available for Svelte yet.");
-  await page.goto("/id/templates/larisa");
-  await expect(code("Kode")).toHaveText("Belum tersedia untuk Svelte.");
-});
+// Semua template sudah punya versi Svelte, Astro, dan Angular; kodenya dimuat saat diminta.
+for (const [framework, file] of [
+  ["Svelte", "svelte/Larisa.svelte"],
+  ["Astro", "astro/Larisa.astro"],
+  ["Angular", "angular/larisa.component.ts"],
+] as const) {
+  test(`template menampilkan dan memuat kode ${framework}`, async ({
+    page,
+  }) => {
+    const code = (name: string) =>
+      page
+        .getByRole("region", { name })
+        .locator(`[data-fw="${framework.toLowerCase()}"]`);
+    await page.goto("/templates/larisa");
+    await page.getByRole("radio", { name: framework }).first().click();
+    await expect(code("Code")).toContainText(file);
+    await code("Code").getByRole("button", { name: "View code" }).click();
+    await expect(code("Code").locator("[data-code-block]")).toBeVisible();
+    await page.goto("/id/templates/larisa");
+    await expect(code("Kode")).toContainText(file);
+    await expect(code("Kode")).not.toContainText("Belum tersedia");
+  });
+}
 
 test("playground Button menampilkan contoh Angular statis", async ({
   page,
@@ -641,10 +652,11 @@ test("detail welcome page memuat iframe demo dan tautan lama dialihkan", async (
   await expect(page.locator("header nav a[aria-current=page]")).toHaveText(
     "Pages",
   );
-  await expect(page.locator("a", { hasText: "All pages" })).toHaveAttribute(
-    "href",
-    "/pages",
-  );
+  await expect(
+    page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", {
+      name: "Pages",
+    }),
+  ).toHaveAttribute("href", "/pages");
 
   await page.goto(`/templates/${slug}`);
   await expect(page).toHaveURL(new RegExp(`/pages/${slug}$`));

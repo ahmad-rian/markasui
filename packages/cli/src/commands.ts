@@ -184,9 +184,7 @@ export async function add(
       `\nThese components need the following dependencies:\n  ${installCommand(manager, [...deps])}`,
     );
     if (deps.has("alpinejs"))
-      io.log(
-        "  (Livewire 3 already ships Alpine.js, so you can skip this step.)",
-      );
+      io.log("  (Livewire 3 and 4 already ship Alpine.js, so skip this step.)");
   }
 }
 

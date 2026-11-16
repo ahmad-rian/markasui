@@ -9,7 +9,8 @@
     ".astro/types.d.ts",
     "src/**/*",
     "../../components/*/*.astro",
-    "../../examples/astro/*.astro"
+    "../../examples/astro/*.astro",
+    "../../templates/*/astro/*.astro"
   ],
   "exclude": ["dist", "src/generated"]
 }

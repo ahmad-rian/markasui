@@ -1,6 +1,8 @@
 ---
 title: Changelog
 description: Riwayat rilis MarkasUI.
+seoTitle: "Changelog dan catatan rilis MarkasUI"
+seoDescription: "Riwayat rilis MarkasUI: komponen baru, template, port framework, dan perubahan besar untuk Blade, React, Vue, Svelte, Astro, dan Angular."
 ---
 
 ## 0.1.0 (belum dirilis)

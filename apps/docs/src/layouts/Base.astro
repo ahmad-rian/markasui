@@ -4,6 +4,8 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import LanguageOverlay from "../components/LanguageOverlay.astro";
 import { LOCALES, getLocale, localePath, pagePath, stripLocale, t } from "../lib/i18n";
+import { breadcrumbList, breadcrumbTrail, serializeGraph, withSiteName, type Crumb } from "../lib/seo";
+import { OG_SIZE, ogImagePath } from "../lib/seo-files";
 import { SITE } from "../lib/site";
 import sansFont from "../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
 
@@ -20,14 +22,36 @@ interface Props {
    * memuat class yang ia tampilkan.
    */
   stylesheet?: string;
+  /** "article" untuk halaman komponen dan docs. */
+  ogType?: "website" | "article";
+  /** Halaman yang tidak boleh diindeks (404): tanpa canonical dan hreflang. */
+  noindex?: boolean;
+  /** Breadcrumb di bawah beranda (path tanpa locale); dipasang sebagai JSON-LD BreadcrumbList. */
+  breadcrumbs?: Crumb[];
+  /** Node JSON-LD tambahan untuk halaman ini, digabung dalam satu @graph. */
+  jsonLd?: Record<string, unknown>[];
 }
 
 const locale = getLocale(Astro.url);
 const strings = t(locale);
-const { title, description = strings.meta.description, splash = false, hero = false, stylesheet } = Astro.props;
-const fullTitle = title ? `${title} - ${SITE.name}` : strings.meta.title;
-const canonical = new URL(pagePath(Astro.url), Astro.site);
+const {
+  title,
+  description = strings.seo.homeDescription,
+  splash = false,
+  hero = false,
+  stylesheet,
+  ogType = "website",
+  noindex = false,
+  breadcrumbs,
+  jsonLd = [],
+} = Astro.props;
+const site = Astro.site!;
+const fullTitle = title ? withSiteName(title) : strings.seo.homeTitle;
+const canonical = new URL(pagePath(Astro.url), site);
 const path = stripLocale(Astro.url.pathname);
+const ogPath = ogImagePath(locale, path);
+const ogImage = ogPath && new URL(ogPath, site).toString();
+const graph = [...jsonLd, ...(breadcrumbs ? [breadcrumbList(site, locale, breadcrumbTrail(locale, breadcrumbs))] : [])];
 ---
 
 <!doctype html>
@@ -38,16 +62,48 @@ const path = stripLocale(Astro.url.pathname);
     <title>{fullTitle}</title>
     {stylesheet && <link rel="stylesheet" href={stylesheet} />}
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {LOCALES.map((code) => <link rel="alternate" hreflang={code} href={new URL(localePath(code, path), Astro.site)} />)}
-    <link rel="alternate" hreflang="x-default" href={new URL(path, Astro.site)} />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex" />
+      ) : (
+        <>
+          <meta name="robots" content="index, follow, max-image-preview:large" />
+          <link rel="canonical" href={canonical} />
+          {LOCALES.map((code) => (
+            <link rel="alternate" hreflang={code} href={new URL(localePath(code, path), site)} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={new URL(path, site)} />
+        </>
+      )
+    }
     <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="alternate" type="text/plain" href={localePath(locale, "/llms.txt")} title="llms.txt" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:locale" content={locale === "id" ? "id_ID" : "en_US"} />
+    <meta property="og:locale:alternate" content={locale === "id" ? "en_US" : "id_ID"} />
+    {
+      ogImage && (
+        <>
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:image:type" content="image/png" />
+          <meta property="og:image:width" content={String(OG_SIZE.width)} />
+          <meta property="og:image:height" content={String(OG_SIZE.height)} />
+          <meta property="og:image:alt" content={fullTitle} />
+        </>
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {graph.length > 0 && <script type="application/ld+json" is:inline set:html={serializeGraph(graph)} />}
     <meta name="theme-color" content={hero ? "#151915" : "#ffffff"} />
     <script is:inline>
       // Tema dan framework dipasang sebelum render pertama, dan dipasang ulang setiap navigasi
@@ -62,14 +118,24 @@ const path = stripLocale(Astro.url.pathname);
             return null;
           }
         };
-        const apply = (root) => {
-          const framework = read("markas-framework");
-          if (["blade", "react", "vue", "svelte", "astro", "angular"].includes(framework)) root.dataset.framework = framework;
+        const FRAMEWORKS = ["blade", "react", "vue", "svelte", "astro", "angular"];
+        // ?framework=<fw> (tautan dari hub /frameworks/<fw>) memilih framework itu dan menyimpannya.
+        const fromUrl = (url) => {
+          const framework = new URL(url).searchParams.get("framework");
+          if (!FRAMEWORKS.includes(framework)) return;
+          try {
+            localStorage.setItem("markas-framework", framework);
+          } catch {}
+          return framework;
+        };
+        const apply = (root, url) => {
+          const framework = fromUrl(url) || read("markas-framework");
+          if (FRAMEWORKS.includes(framework)) root.dataset.framework = framework;
           const theme = read("markas-theme");
           root.classList.toggle("dark", theme ? theme === "dark" : root.hasAttribute("data-landing"));
         };
-        apply(document.documentElement);
-        document.addEventListener("astro:before-swap", (event) => apply(event.newDocument.documentElement));
+        apply(document.documentElement, location.href);
+        document.addEventListener("astro:before-swap", (event) => apply(event.newDocument.documentElement, event.to));
       })();
     </script>
     {

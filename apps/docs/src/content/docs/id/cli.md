@@ -1,6 +1,8 @@
 ---
 title: CLI
 description: Tambahkan komponen MarkasUI ke project lewat npx markasui.
+seoTitle: "CLI markasui: tambah komponen Tailwind dari terminal"
+seoDescription: "Pakai npx markasui untuk mendeteksi framework, menyiapkan markas.css, dan menambah komponen Tailwind ke Laravel, React, Vue, Svelte, Astro, atau Angular."
 ---
 
 CLI `markasui` mengambil komponen dari registry dan menulisnya ke project Anda. Tidak perlu dipasang, cukup jalankan lewat `npx`. Project Laravel juga bisa memakainya karena sudah memakai Node lewat Vite.

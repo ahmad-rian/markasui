@@ -10,6 +10,7 @@ export const DOC_SLUGS = [
   "introduction",
   "installation",
   "theming",
+  "livewire",
   "cli",
   "mcp",
   "skills",

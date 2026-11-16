@@ -1,14 +1,27 @@
 ---
 import "../../../styles/global.css";
+import { FRAMEWORKS } from "@markasui/registry/schema";
+import FrameworkIcon from "../../../components/FrameworkIcon.astro";
 import Base from "../../../layouts/Base.astro";
+import { FRAMEWORK_LABELS } from "../../../lib/frameworks";
 import { localeParams, localePath, t, toLocale } from "../../../lib/i18n";
 import { CATEGORIES, categoryLabel, freshness, getComponents } from "../../../lib/registry";
+import { collectionPage } from "../../../lib/seo";
 
 export const getStaticPaths = localeParams;
 
 const locale = toLocale(Astro.params.lang);
-const strings = t(locale).list;
+const dictionary = t(locale);
+const strings = dictionary.list;
 const items = await getComponents();
+const absolute = (path: string) => new URL(localePath(locale, path), Astro.site).toString();
+const seoDescription = dictionary.seo.componentsDescription(items.length);
+const jsonLd = [
+  collectionPage(
+    { url: absolute("/components"), name: dictionary.seo.componentsTitle, description: seoDescription, locale },
+    items.map((item) => ({ name: item.title, url: absolute(`/components/${item.name}`) })),
+  ),
+];
 const thumbs = import.meta.glob<string>("../../../../public/thumbs/*.webp", { query: "?url", import: "default", eager: true });
 const hasThumb = (name: string) => `../../../../public/thumbs/${name}.webp` in thumbs;
 const categories = CATEGORIES.filter((category) => items.some((item) => item.category === category)).map((category) => [category, categoryLabel(category, locale)] as const);
@@ -16,7 +29,7 @@ const control =
   "h-10 rounded-lg bg-subtle px-3 text-sm text-ink transition-colors hover:bg-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 ---
 
-<Base title={strings.title} description={strings.subtitle(items.length)}>
+<Base title={dictionary.seo.componentsTitle} description={seoDescription} breadcrumbs={[{ name: strings.title, path: "/components" }]} jsonLd={jsonLd}>
   <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-20 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
     <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <div>
@@ -26,6 +39,21 @@ const control =
         </p>
       </div>
     </div>
+
+    <nav aria-label={dictionary.hub.byFramework} class="mt-6 flex flex-wrap items-center gap-2" data-pagefind-ignore>
+      <span class="mr-1 text-sm text-muted">{dictionary.hub.byFramework}</span>
+      {
+        FRAMEWORKS.map((fw) => (
+          <a
+            href={localePath(locale, `/frameworks/${fw}`)}
+            class="inline-flex h-8 items-center gap-2 rounded-lg bg-subtle px-3 text-sm text-ink transition-colors hover:bg-line"
+          >
+            <FrameworkIcon framework={fw} class="size-4" />
+            {dictionary.hub.link(FRAMEWORK_LABELS[fw])}
+          </a>
+        ))
+      }
+    </nav>
 
     <form class="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap" role="search" data-filters data-pagefind-ignore>
       <label class="sr-only" for="filter-query">{strings.search}</label>

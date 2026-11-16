@@ -105,6 +105,7 @@ const en = {
     introduction: "Introduction",
     installation: "Installation",
     theming: "Theming",
+    livewire: "Livewire",
     cli: "CLI",
     mcp: "MCP",
     skills: "Agent Skill",
@@ -276,6 +277,61 @@ const en = {
     reply:
       "Added Input and Button, then wrote the login page. Validation errors show under each field.",
   },
+  seo: {
+    homeEyebrow: "Open source component library",
+    homeTitle:
+      "MarkasUI - Tailwind CSS components for React, Vue, Blade and more",
+    homeDescription:
+      "Free, open source Tailwind CSS v4 components for React, Vue, Laravel Blade, Svelte, Astro, and Angular. Copy them into your project with one CLI command.",
+    componentsTitle: "Tailwind CSS components for React, Vue, Blade and more",
+    componentsDescription: (n: number) =>
+      `${n} free Tailwind CSS v4 components, from forms and modals to animations, with the same classes in React, Vue, Blade, Svelte, Astro, and Angular.`,
+    templatesTitle: "Tailwind dashboard templates for React, Vue and Laravel",
+    templatesDescription:
+      "Free admin dashboard templates built from MarkasUI components, with full source in Laravel Blade, React, and Vue. Preview them live and copy the code.",
+    pagesTitle: "Tailwind landing page templates for React, Vue and Laravel",
+    pagesDescription:
+      "Free welcome and landing pages with a navbar, hero, sections, and footer, built from MarkasUI components in Laravel Blade, React, and Vue.",
+    componentTitle: (title: string, frameworks: string) =>
+      `${title} component for ${frameworks}`,
+    componentTails: (frameworks: string) => [
+      `Copy-paste Tailwind CSS code for ${frameworks}, with props and accessibility notes.`,
+      `Tailwind CSS code for ${frameworks}.`,
+    ],
+    dashboardTitle: (title: string, frameworks: string) =>
+      `${title}: Tailwind dashboard template for ${frameworks}`,
+    pageTitle: (title: string, frameworks: string) =>
+      `${title}: Tailwind landing page for ${frameworks}`,
+    templateTails: (frameworks: string) => [
+      `Free source code in ${frameworks}, built from MarkasUI components.`,
+      `Free source in ${frameworks}.`,
+    ],
+    and: "and",
+    breadcrumb: "Breadcrumb",
+    related: "Related components",
+    relatedText: (category: string) =>
+      `More ${category.toLowerCase()} components with the same classes in every framework.`,
+    notFound: "Page not found",
+  },
+  hub: {
+    byFramework: "Browse by framework",
+    link: (framework: string) => `${framework} components`,
+    footer: "Frameworks",
+    install: "Install",
+    installText:
+      "Run init once in the project root. The CLI detects the framework, saves markas.css, and writes markas.json. Then add components by name.",
+    usage: "Usage",
+    details: "How the components are built",
+    components: (n: number) => `${n} components`,
+    componentsText: (framework: string) =>
+      `Every link opens the component page with the ${framework} code selected.`,
+    templates: "Templates and pages",
+    templatesText: (framework: string) =>
+      `Full pages built from the same components, with ${framework} source you can copy.`,
+    templatesPending: (framework: string) =>
+      `Full-page templates ship in Blade, React, and Vue today. ${framework} versions are in progress; every component they use already works in ${framework}.`,
+    others: "Other frameworks",
+  },
 };
 
 type Dictionary = typeof en;
@@ -351,6 +407,7 @@ const id: Dictionary = {
     introduction: "Pengenalan",
     installation: "Instalasi",
     theming: "Theming",
+    livewire: "Livewire",
     cli: "CLI",
     mcp: "MCP",
     skills: "Agent Skill",
@@ -525,6 +582,61 @@ const id: Dictionary = {
     files: "File yang ditulis",
     reply:
       "Input dan Button sudah ditambahkan, lalu halaman login ditulis. Pesan error validasi tampil di bawah setiap field.",
+  },
+  seo: {
+    homeEyebrow: "Library komponen open source",
+    homeTitle: "MarkasUI - Komponen Tailwind CSS untuk React, Vue, dan Blade",
+    homeDescription:
+      "Komponen Tailwind CSS v4 gratis dan open source untuk React, Vue, Laravel Blade, Svelte, Astro, dan Angular. Salin ke project Anda dengan satu perintah CLI.",
+    componentsTitle:
+      "Komponen Tailwind CSS untuk React, Vue, Blade, dan lainnya",
+    componentsDescription: (n: number) =>
+      `${n} komponen Tailwind CSS v4 gratis, dari form dan modal sampai animasi, dengan class yang sama di React, Vue, Blade, Svelte, Astro, dan Angular.`,
+    templatesTitle: "Template dashboard Tailwind untuk React, Vue, dan Laravel",
+    templatesDescription:
+      "Template dashboard admin gratis dari komponen MarkasUI, dengan source lengkap dalam Laravel Blade, React, dan Vue. Coba langsung lalu salin kodenya.",
+    pagesTitle: "Template landing page Tailwind untuk React, Vue, dan Laravel",
+    pagesDescription:
+      "Welcome page dan landing page gratis dengan navbar, hero, section, dan footer, dari komponen MarkasUI dalam Laravel Blade, React, dan Vue.",
+    componentTitle: (title: string, frameworks: string) =>
+      `Komponen ${title} untuk ${frameworks}`,
+    componentTails: (frameworks: string) => [
+      `Kode Tailwind CSS siap salin untuk ${frameworks}, lengkap dengan props dan catatan aksesibilitas.`,
+      `Kode Tailwind CSS untuk ${frameworks}.`,
+    ],
+    dashboardTitle: (title: string, frameworks: string) =>
+      `${title}: template dashboard Tailwind untuk ${frameworks}`,
+    pageTitle: (title: string, frameworks: string) =>
+      `${title}: landing page Tailwind untuk ${frameworks}`,
+    templateTails: (frameworks: string) => [
+      `Source gratis dalam ${frameworks}, disusun dari komponen MarkasUI.`,
+      `Source gratis dalam ${frameworks}.`,
+    ],
+    and: "dan",
+    breadcrumb: "Breadcrumb",
+    related: "Komponen terkait",
+    relatedText: (category: string) =>
+      `Komponen ${category.toLowerCase()} lain dengan class yang sama di setiap framework.`,
+    notFound: "Halaman tidak ditemukan",
+  },
+  hub: {
+    byFramework: "Lihat per framework",
+    link: (framework: string) => `Komponen ${framework}`,
+    footer: "Framework",
+    install: "Instalasi",
+    installText:
+      "Jalankan init sekali di root project. CLI mendeteksi framework, menyimpan markas.css, dan menulis markas.json. Lalu tambahkan komponen berdasarkan nama.",
+    usage: "Pemakaian",
+    details: "Cara komponennya dibuat",
+    components: (n: number) => `${n} komponen`,
+    componentsText: (framework: string) =>
+      `Setiap tautan membuka halaman komponen dengan kode ${framework} terpilih.`,
+    templates: "Template dan halaman",
+    templatesText: (framework: string) =>
+      `Halaman utuh dari komponen yang sama, dengan source ${framework} yang bisa disalin.`,
+    templatesPending: (framework: string) =>
+      `Template halaman penuh saat ini tersedia dalam Blade, React, dan Vue. Versi ${framework} sedang dikerjakan; semua komponen yang dipakainya sudah jalan di ${framework}.`,
+    others: "Framework lain",
   },
 };
 

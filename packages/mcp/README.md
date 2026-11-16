@@ -1,8 +1,8 @@
 # @markasui/mcp
 
-MCP server lokal (stdio) untuk [MarkasUI](https://markasui.pages.dev). Agent AI memakainya untuk mencari komponen, mengambil kode Blade, React, atau Vue, dan membaca langkah setup.
+A local MCP server (stdio) for [MarkasUI](https://markasui.pages.dev), the Tailwind CSS v4 component library for Laravel Blade, React, Vue, Svelte, Astro, and Angular. AI coding agents use it to search components, fetch the code for your project's framework, and read the setup steps.
 
-## Pasang
+## Install
 
 Claude Code:
 
@@ -10,7 +10,7 @@ Claude Code:
 claude mcp add markasui -- npx -y @markasui/mcp
 ```
 
-Cursor (`.cursor/mcp.json`) atau VS Code (`.vscode/mcp.json`):
+Cursor (`.cursor/mcp.json`) or VS Code (`.vscode/mcp.json`):
 
 ```json
 {
@@ -20,16 +20,21 @@ Cursor (`.cursor/mcp.json`) atau VS Code (`.vscode/mcp.json`):
 }
 ```
 
-## Tool
+## Tools
 
-| Tool                | Input               | Output                                                  |
-| ------------------- | ------------------- | ------------------------------------------------------- |
-| `list_components`   | `category?`         | Nama, judul, kategori, deskripsi                        |
-| `search_components` | `query`             | Komponen yang cocok                                     |
-| `get_component`     | `name`, `framework` | Kode, target path, dependensi, props, aturan AI, contoh |
-| `get_theme`         |                     | Isi `markas.css` dan token                              |
-| `get_setup`         | `framework`         | Langkah instalasi Tailwind dan `markas.css`             |
+| Tool                | Input               | Output                                                    |
+| ------------------- | ------------------- | --------------------------------------------------------- |
+| `list_components`   | `category?`         | Name, title, category, description                        |
+| `search_components` | `query`             | Matching components                                       |
+| `get_component`     | `name`, `framework` | Code, target path, dependencies, props, AI rules, example |
+| `get_theme`         |                     | `markas.css` contents and tokens                          |
+| `get_setup`         | `framework`         | Tailwind and `markas.css` setup steps                     |
 
-Data diambil dari `https://markasui.pages.dev/r/` dan di-cache selama proses berjalan. Arahkan ke mirror atau folder lokal dengan `MARKASUI_REGISTRY`.
+`framework` is one of `blade`, `react`, `vue`, `svelte`, `astro`, or `angular`.
 
-Lisensi MIT.
+Data comes from `https://markasui.pages.dev/r/` and is cached while the process runs. Point it at a mirror or a local folder with `MARKASUI_REGISTRY`.
+
+- Docs: https://markasui.pages.dev/docs/mcp
+- Source and issues: https://github.com/ahmad-rian/markasui
+
+MIT license. Made by CV Jenderal Solusi Digital, Purwokerto.
