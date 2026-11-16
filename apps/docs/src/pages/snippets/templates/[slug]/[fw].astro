@@ -6,7 +6,7 @@ import { getTemplates } from "../../../../lib/templates";
 /** Potongan HTML kode template, dimuat halaman detail template saat tombol "View code" diklik. */
 export function getStaticPaths() {
   return getTemplates().flatMap((template) =>
-    (["blade", "react", "vue"] as const).map((fw) => ({ params: { slug: template.name, fw }, props: { source: template.sources[fw], fw } })),
+    template.frameworks.map((fw) => ({ params: { slug: template.name, fw }, props: { source: template.sources[fw]!, fw } })),
   );
 }
 

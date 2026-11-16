@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const port = 5173;
+/** PLAYGROUND_PORT: jalankan tes terhadap playground lain (mis. agen paralel) tanpa mengganggu :5173. */
+const port = Number(process.env.PLAYGROUND_PORT ?? 5173);
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -27,6 +28,7 @@ export default defineConfig({
     command: `pnpm blade:playground && pnpm astro:playground && pnpm exec vite playground --port ${port}`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
+    // Render awal: 1 + 14 proses PHP (contoh dan template Blade) ditambah contoh Astro sebelum Vite jalan.
+    timeout: 180_000,
   },
 });

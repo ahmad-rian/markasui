@@ -9,7 +9,10 @@ import {
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 import {
-  frameworks,
+  templateAxeTimeout,
+  templateFrameworks,
+  templateParityFrameworks,
+  templateParityTimeout,
   MAX_DIFF_RATIO,
   themes,
   type Framework,
@@ -119,7 +122,7 @@ async function expectSameAsReact(
   theme: Theme,
 ) {
   const reference = await capture(browser, viewport, "react", pageId, theme);
-  for (const framework of ["blade", "vue"] as const) {
+  for (const framework of templateParityFrameworks(SLUG)) {
     const candidate = await capture(
       browser,
       viewport,
@@ -166,6 +169,8 @@ async function expectNoAxeViolations(page: Page, label: string) {
 }
 
 test.describe("kesamaan tampilan", () => {
+  test.describe.configure({ timeout: templateParityTimeout(SLUG) });
+
   for (const pageId of pageIds) {
     test(`desktop light ${pageId}`, async ({ browser }, testInfo) => {
       await expectSameAsReact(browser, DESKTOP, testInfo, pageId, "light");
@@ -185,7 +190,7 @@ test.describe("kesamaan tampilan", () => {
   }
 });
 
-for (const framework of frameworks) {
+for (const framework of templateFrameworks(SLUG)) {
   test.describe(framework, () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize(DESKTOP);
@@ -193,6 +198,7 @@ for (const framework of frameworks) {
 
     for (const theme of themes) {
       test(`lolos axe-core di setiap halaman (${theme})`, async ({ page }) => {
+        test.setTimeout(templateAxeTimeout(pageIds.length));
         await openTemplate(page, framework, "404", theme);
         for (const pageId of pageIds) {
           await switchTo(page, pageId);
@@ -272,7 +278,7 @@ for (const framework of frameworks) {
 
     test("419: penjelasan CSRF bisa dibuka", async ({ page }) => {
       await openTemplate(page, framework, "419");
-      const reason = page.getByText(/CSRF token tied to your session/);
+      const reason = page.getByText(/CSRF token tied to your\s+session/);
       await expect(reason).toBeHidden();
       await page.getByText("Why did this happen?").click();
       await expect(reason).toBeVisible();

@@ -14,7 +14,9 @@ import { TEMPLATE_FRAMEWORKS } from "../../lib/templates";
 import { localePath, t, type Locale } from "../../lib/i18n";
 import { getComponents, localized } from "../../lib/registry";
 import { SITE } from "../../lib/site";
-import { KIND_BASE, type Template } from "../../lib/templates";
+import { KIND_BASE, templateDetailPath, type Template } from "../../lib/templates";
+import { fitDescription, frameworkList, sourceCode } from "../../lib/seo";
+import { ogImagePath } from "../../lib/seo-files";
 
 interface Props {
   template: Template;
@@ -33,17 +35,34 @@ const used = template.components.flatMap((name) => {
 const thumbs = import.meta.glob<string>("../../../public/thumbs/*.webp", { query: "?url", import: "default", eager: true });
 const hasThumb = (name: string) => `../../../public/thumbs/${name}.webp` in thumbs;
 const demo = `/demo/templates/${template.name}/blade`;
-const frameworks = TEMPLATE_FRAMEWORKS;
-/** Template belum di-porting ke Svelte, Astro, dan Angular: preview memakai React, kode diberi pesan. */
-const pending = ["svelte", "astro", "angular"] as const;
+const frameworks = template.frameworks;
+/** Versi yang belum di-porting: preview memakai React, kode diberi pesan "belum tersedia". */
+const pending = TEMPLATE_FRAMEWORKS.filter((fw) => !frameworks.includes(fw));
+
+const path = templateDetailPath(template);
+const sourceList = frameworkList(frameworks, locale);
+const seoTitle = (template.kind === "page" ? dictionary.seo.pageTitle : dictionary.seo.dashboardTitle)(template.title, sourceList);
+const seoDescription = fitDescription(template.description[locale], dictionary.seo.templateTails(sourceList));
+const ogImage = ogImagePath(locale, path);
+const jsonLd = [
+  sourceCode({
+    url: new URL(localePath(locale, path), Astro.site).toString(),
+    name: template.title,
+    description: seoDescription,
+    locale,
+    repository: `${SITE.repo}/tree/main/templates/${template.name}`,
+    image: ogImage && new URL(ogImage, Astro.site).toString(),
+    published: template.addedAt,
+  }),
+];
+const breadcrumbs = [
+  { name: template.kind === "page" ? dictionary.nav.pages : dictionary.nav.templates, path: KIND_BASE[template.kind] },
+  { name: template.title, path },
+];
 ---
 
-<Docs title={template.title} description={template.description[locale]} wide>
-  <a href={localePath(locale, KIND_BASE[template.kind])} class="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-ink">
-    <Icon name="arrowLeft" class="size-4" />
-    {strings.back}
-  </a>
-  <div class="mt-4 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+<Docs title={seoTitle} description={seoDescription} wide breadcrumbs={breadcrumbs} jsonLd={jsonLd}>
+  <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
     <div class="max-w-2xl">
       <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{template.title}</h1>
       <p class="mt-3 text-lg leading-8 text-muted">{template.description[locale]}</p>
@@ -78,7 +97,7 @@ const pending = ["svelte", "astro", "angular"] as const;
         </div>
       </div>
       <div class="frame-panel overflow-hidden">
-        <iframe data-template-frame={template.name} src={demo} title={`${template.title}: ${strings.preview}`} class="h-[min(860px,80dvh)] w-full border-0" loading="lazy"></iframe>
+        <iframe data-template-frame={template.name} data-template-frameworks={frameworks.join(",")} src={demo} title={`${template.title}: ${strings.preview}`} class="h-[min(860px,80dvh)] w-full border-0" loading="lazy"></iframe>
       </div>
     </div>
   </section>
@@ -88,8 +107,8 @@ const pending = ["svelte", "astro", "angular"] as const;
       frameworks.map((fw) => (
         <div data-fw={fw} data-template-code={`/snippets/templates/${template.name}/${fw}`} class="frame">
           <div class="flex items-center justify-between gap-3 px-3 py-2">
-            <span class="truncate font-mono text-[13px] text-muted">{template.sources[fw].path}</span>
-            <span class="shrink-0 text-xs text-muted">{strings.lines(template.sources[fw].code.split("\n").length)}</span>
+            <span class="truncate font-mono text-[13px] text-muted">{template.sources[fw]!.path}</span>
+            <span class="shrink-0 text-xs text-muted">{strings.lines(template.sources[fw]!.code.split("\n").length)}</span>
           </div>
           <div class="frame-panel flex items-center justify-center px-4 py-8">
             <button type="button" data-template-code-load class="soft-button">
@@ -161,7 +180,7 @@ const pending = ["svelte", "astro", "angular"] as const;
 
 <script>
   import { onPageLoad } from "../../scripts/lifecycle";
-  import { TEMPLATE_FRAMEWORKS } from "../../lib/template-frameworks";
+  import { TEMPLATE_FALLBACK_FRAMEWORK } from "../../lib/template-frameworks";
   import { getFramework } from "../../scripts/prefs";
 
   const ACCENT_KEY = "markas-template-accent";
@@ -173,17 +192,21 @@ const pending = ["svelte", "astro", "angular"] as const;
     }
   };
   const themeOf = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
-  /** Template hanya ada dalam Blade, React, dan Vue; framework lain melihat versi React. */
-  const demoFramework = () => (TEMPLATE_FRAMEWORKS.includes(getFramework() as (typeof TEMPLATE_FRAMEWORKS)[number]) ? getFramework() : "react");
-  const demoUrl = (name: string) => `/demo/templates/${name}/${demoFramework()}?accent=${readAccent()}&theme=${themeOf()}`;
+  /** Versi framework terpilih kalau template ini sudah punya (data-template-frameworks), selain itu React. */
+  const demoFramework = (frame: HTMLIFrameElement) => {
+    const available = (frame.dataset.templateFrameworks ?? "").split(",");
+    return available.includes(getFramework()) ? getFramework() : TEMPLATE_FALLBACK_FRAMEWORK;
+  };
+  const demoUrl = (frame: HTMLIFrameElement) =>
+    `/demo/templates/${frame.dataset.templateFrame}/${demoFramework(frame)}?accent=${readAccent()}&theme=${themeOf()}`;
   const post = (data: object) =>
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => frame.contentWindow?.postMessage(data, location.origin));
 
   /** Iframe dan tombol layar penuh mengikuti framework, warna aksen, dan tema yang dipilih. */
   function sync() {
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => {
-      const url = demoUrl(frame.dataset.templateFrame!);
-      const framework = `/${demoFramework()}?`;
+      const url = demoUrl(frame);
+      const framework = `/${demoFramework(frame)}?`;
       if (!frame.src.includes(framework)) frame.src = url;
       document.querySelectorAll<HTMLAnchorElement>("[data-template-open]").forEach((link) => (link.href = url));
     });

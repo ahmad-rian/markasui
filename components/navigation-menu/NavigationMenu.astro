@@ -209,6 +209,8 @@ const svg = {
           const panel = event.target as HTMLElement;
           const open = (event as ToggleEvent).newState === "open";
           panel.previousElementSibling!.setAttribute("aria-expanded", `${open}`);
+          // Event toggle baru datang di task berikutnya; atur posisi sebelum frame pertama panel dilukis.
+          if (open) requestAnimationFrame(this.update);
         },
         true,
       );

@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -7,13 +7,28 @@ import { describe, expect, it } from "vitest";
  * Bug ini sudah muncul di beberapa port: `[class]="panel"` lalu memakai elemen, bukan string class,
  * sehingga semua class hilang. Tes ini menolak ref yang namanya sama dengan properti kelas.
  */
-const componentsDir = resolve(import.meta.dirname, "../../components");
+const repoRoot = resolve(import.meta.dirname, "../..");
+const componentsDir = join(repoRoot, "components");
+const templatesDir = join(repoRoot, "templates");
 
-const angularFiles = readdirSync(componentsDir).flatMap((name) =>
-  readdirSync(join(componentsDir, name))
-    .filter((file) => file.endsWith(".component.ts"))
-    .map((file) => join(componentsDir, name, file)),
-);
+const componentFiles = (dir: string) =>
+  existsSync(dir)
+    ? readdirSync(dir)
+        .filter((file) => file.endsWith(".component.ts"))
+        .map((file) => join(dir, file))
+    : [];
+
+/** Komponen (components/<nama>/) dan template (templates/<slug>/angular/). */
+const angularFiles = [
+  ...readdirSync(componentsDir).flatMap((name) =>
+    componentFiles(join(componentsDir, name)),
+  ),
+  ...readdirSync(templatesDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) =>
+      componentFiles(join(templatesDir, entry.name, "angular")),
+    ),
+];
 
 const templateOf = (source: string) =>
   source.match(/template:\s*`([\s\S]*?)`\s*,?\s*\n\s*(?:\w+:|\})/)?.[1] ?? "";
@@ -28,9 +43,12 @@ const refsIn = (template: string) =>
 /** Query ke ref itu sendiri (viewChild("nama")) memang harus memakai nama yang sama, jadi bukan bentrok. */
 const QUERY = /^\s*(?:viewChild|viewChildren|contentChild|contentChildren)\b/;
 
-/** Hanya isi kelas komponen: kunci objek di konstanta modul (mis. `list:` di peta tata letak) bukan properti. */
+/**
+ * Hanya isi kelas komponen: kunci objek di konstanta modul (mis. `list:` di peta tata letak) bukan
+ * properti. Template memakai `export default class`.
+ */
 const classBodyOf = (source: string) =>
-  source.slice(source.search(/export class \w+/));
+  source.slice(Math.max(0, source.search(/export (?:default )?class \w+/)));
 
 const membersIn = (source: string) =>
   new Set(
@@ -66,7 +84,7 @@ describe("template ref Angular", () => {
   });
 
   for (const file of angularFiles) {
-    it(`${file.slice(componentsDir.length + 1)}: ref tidak menimpa properti komponen`, () => {
+    it(`${file.slice(repoRoot.length + 1)}: ref tidak menimpa properti komponen`, () => {
       const source = readFileSync(file, "utf8");
       const members = membersIn(source);
       const clashes = [...refsIn(templateOf(source))].filter((ref) =>

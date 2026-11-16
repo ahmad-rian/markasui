@@ -3,7 +3,8 @@
 import Icon from "../Icon.astro";
 import Base from "../../layouts/Base.astro";
 import { localePath, type Locale } from "../../lib/i18n";
-import { templateDetailPath, type Template } from "../../lib/templates";
+import { collectionPage } from "../../lib/seo";
+import { KIND_BASE, templateDetailPath, type Template } from "../../lib/templates";
 
 interface Props {
   title: string;
@@ -12,12 +13,23 @@ interface Props {
   locale: Locale;
   /** Teks saat belum ada isi. */
   empty: string;
+  /** Judul dan deskripsi untuk mesin pencari. */
+  seo: { title: string; description: string };
+  kind: Template["kind"];
 }
 
-const { title, subtitle, templates, locale, empty } = Astro.props;
+const { title, subtitle, templates, locale, empty, seo, kind } = Astro.props;
+const absolute = (path: string) => new URL(localePath(locale, path), Astro.site).toString();
+const base = KIND_BASE[kind];
+const jsonLd = [
+  collectionPage(
+    { url: absolute(base), name: seo.title, description: seo.description, locale },
+    templates.map((template) => ({ name: template.title, url: absolute(templateDetailPath(template)) })),
+  ),
+];
 ---
 
-<Base title={title} description={subtitle}>
+<Base title={seo.title} description={seo.description} breadcrumbs={[{ name: title, path: base }]} jsonLd={jsonLd}>
   <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-24 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
     <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{title}</h1>
     <p class="mt-3 max-w-2xl text-lg leading-8 text-muted">{subtitle}</p>

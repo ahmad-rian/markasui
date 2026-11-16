@@ -3,7 +3,10 @@ import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 import {
-  frameworks,
+  templateAxeTimeout,
+  templateFrameworks,
+  templateParityFrameworks,
+  templateParityTimeout,
   MAX_DIFF_RATIO,
   themes,
   type Framework,
@@ -56,7 +59,7 @@ async function expectSameAsReact(
 ) {
   await openTemplate(page, "react", target);
   const reference = await capture(page);
-  for (const framework of ["blade", "vue"] as const) {
+  for (const framework of templateParityFrameworks(SLUG)) {
     await openTemplate(page, framework, target);
     const candidate = await capture(page);
     expect([candidate.width, candidate.height]).toEqual([
@@ -100,6 +103,8 @@ const customerNames = (page: Page) =>
     .allInnerTexts();
 
 test.describe("kesamaan tampilan", () => {
+  test.describe.configure({ timeout: templateParityTimeout(SLUG) });
+
   for (const target of pageKeys) {
     test(`desktop ${target}: Blade dan Vue sama dengan React`, async ({
       page,
@@ -118,7 +123,7 @@ test.describe("kesamaan tampilan", () => {
   }
 });
 
-for (const framework of frameworks) {
+for (const framework of templateFrameworks(SLUG)) {
   test(`${framework}: tanpa overflow horizontal di 390px`, async ({ page }) => {
     await page.setViewportSize(viewports.mobile);
     for (const target of pageKeys) {
@@ -134,6 +139,7 @@ for (const framework of frameworks) {
     test(`${framework} (${theme}): setiap halaman lolos axe-core`, async ({
       page,
     }) => {
+      test.setTimeout(templateAxeTimeout(pageKeys.length));
       await page.setViewportSize(viewports.desktop);
       for (const target of pageKeys) {
         await openTemplate(page, framework, target, theme);

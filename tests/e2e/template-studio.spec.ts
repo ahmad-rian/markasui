@@ -3,7 +3,9 @@ import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 import {
-  frameworks,
+  templateFrameworks,
+  templateParityFrameworks,
+  templateParityTimeout,
   MAX_DIFF_RATIO,
   themes,
   type Framework,
@@ -53,7 +55,7 @@ async function capture(page: Page, framework: Framework, theme: Theme) {
 
 async function expectSameAsReact(page: Page, testInfo: TestInfo, theme: Theme) {
   const reference = await capture(page, "react", theme);
-  for (const framework of ["blade", "vue"] as const) {
+  for (const framework of templateParityFrameworks(SLUG)) {
     const candidate = await capture(page, framework, theme);
     expect([candidate.width, candidate.height], `ukuran ${framework}`).toEqual([
       reference.width,
@@ -98,6 +100,8 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("kesamaan tampilan", () => {
+  test.describe.configure({ timeout: templateParityTimeout(SLUG) });
+
   for (const theme of themes) {
     test(`desktop ${theme}`, async ({ page }, testInfo) => {
       await page.setViewportSize(DESKTOP);
@@ -111,7 +115,7 @@ test.describe("kesamaan tampilan", () => {
   });
 });
 
-for (const framework of frameworks) {
+for (const framework of templateFrameworks(SLUG)) {
   test.describe(framework, () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize(DESKTOP);

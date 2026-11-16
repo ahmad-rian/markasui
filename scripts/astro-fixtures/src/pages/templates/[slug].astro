@@ -1,0 +1,29 @@
+---
+/**
+ * Satu halaman per template yang punya versi Astro (templates/<slug>/astro/<Pascal>.astro).
+ * Dibangun oleh scripts/render-astro.ts ke /astro/templates/<slug>.html untuk playground dan tes e2e.
+ */
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+export function getStaticPaths() {
+  const templates = import.meta.glob<{ default: AstroComponentFactory }>(
+    "../../../../../templates/*/astro/*.astro",
+    { eager: true },
+  );
+  // MARKAS_ASTRO_ONLY="rambu": hanya template itu (scripts/render-astro.ts).
+  const only = (process.env.MARKAS_ASTRO_ONLY ?? "").split(",").filter(Boolean);
+  return Object.entries(templates)
+    .map(([path, module]) => ({
+      params: { slug: path.split("/").at(-3)! },
+      props: { Template: module.default },
+    }))
+    .filter(({ params }) => only.length === 0 || only.includes(params.slug));
+}
+
+const { Template } = Astro.props;
+---
+
+<html lang="en">
+  <head><meta charset="utf-8" /></head>
+  <body><Template /></body>
+</html>

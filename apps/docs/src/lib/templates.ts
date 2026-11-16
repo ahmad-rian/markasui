@@ -1,7 +1,10 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { exampleForDisplay } from "./frameworks";
 import {
+  REQUIRED_TEMPLATE_FRAMEWORKS,
   TEMPLATE_FRAMEWORKS,
+  templateFilePath,
   type TemplateFramework,
 } from "./template-frameworks";
 import type { Locale } from "./i18n";
@@ -19,33 +22,32 @@ export type TemplateMeta = {
   addedAt: string;
 };
 
+export type TemplateSource = { path: string; code: string };
+
 export type Template = TemplateMeta & {
-  sources: Record<TemplateFramework, { path: string; code: string }>;
+  /** Framework yang punya versi template ini, urut seperti TEMPLATE_FRAMEWORKS. */
+  frameworks: TemplateFramework[];
+  sources: Partial<Record<TemplateFramework, TemplateSource>>;
 };
 
 export { TEMPLATE_FRAMEWORKS };
 
 const templatesDir = resolve(REPO_ROOT, "templates");
-const pascal = (slug: string) =>
-  slug.replace(/(^|-)([a-z])/g, (_, __, char: string) => char.toUpperCase());
 
-/** Template yang lengkap (meta.json + tiga versi). Template setengah jadi dilewati. */
+/**
+ * Template yang lengkap (meta.json + versi Blade, React, Vue). Template setengah jadi dilewati.
+ * Versi Svelte, Astro, dan Angular ikut terdeteksi kalau file-nya ada.
+ */
 export function getTemplates(): Template[] {
   if (!existsSync(templatesDir)) return [];
   return readdirSync(templatesDir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .flatMap((entry) => {
       const dir = join(templatesDir, entry.name);
-      const files: Record<TemplateFramework, string> = {
-        blade: `blade/${entry.name}.blade.php`,
-        react: `react/${pascal(entry.name)}.tsx`,
-        vue: `vue/${pascal(entry.name)}.vue`,
-      };
       const metaPath = join(dir, "meta.json");
-      if (
-        !existsSync(metaPath) ||
-        Object.values(files).some((file) => !existsSync(join(dir, file)))
-      )
+      const exists = (fw: TemplateFramework) =>
+        existsSync(join(dir, templateFilePath(fw, entry.name)));
+      if (!existsSync(metaPath) || !REQUIRED_TEMPLATE_FRAMEWORKS.every(exists))
         return [];
       const raw = JSON.parse(readFileSync(metaPath, "utf8")) as Omit<
         TemplateMeta,
@@ -55,21 +57,15 @@ export function getTemplates(): Template[] {
         ...raw,
         kind: raw.kind === "page" ? "page" : "dashboard",
       };
+      const frameworks = TEMPLATE_FRAMEWORKS.filter(exists);
       const sources = Object.fromEntries(
-        (Object.entries(files) as [TemplateFramework, string][]).map(
-          ([fw, file]) => [
-            fw,
-            {
-              path: file,
-              code: readFileSync(join(dir, file), "utf8").replace(
-                /(["'])(?:\.\.\/)+components\/[a-z-]+\/([A-Za-z]+(?:\.vue)?)\1/g,
-                "$1@/components/markas/$2$1",
-              ),
-            },
-          ],
-        ),
-      ) as Template["sources"];
-      return [{ ...meta, sources }];
+        frameworks.map((fw) => {
+          const path = templateFilePath(fw, entry.name);
+          const code = readFileSync(join(dir, path), "utf8");
+          return [fw, { path, code: `${exampleForDisplay(code, fw)}\n` }];
+        }),
+      );
+      return [{ ...meta, frameworks, sources }];
     })
     .sort((a, b) => a.title.localeCompare(b.title));
 }

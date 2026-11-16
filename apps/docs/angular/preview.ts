@@ -14,11 +14,16 @@ import { createApplication } from "@angular/platform-browser";
 const examples = import.meta.glob<{ default: Type<unknown> }>(
   "../../../examples/angular/*.ts",
 );
+/** Template (templates/<slug>/angular/<slug>.component.ts), dipakai halaman /demo/templates/<slug>/angular. */
+const templates = import.meta.glob<{ default: Type<unknown> }>(
+  "../../../templates/*/angular/*.component.ts",
+);
 let app: Promise<ApplicationRef> | undefined;
 
-/** Pasang contoh `name` di dalam `host`. False kalau contohnya belum ada. */
-export async function mount(host: HTMLElement, name: string): Promise<boolean> {
-  const load = examples[`../../../examples/angular/${name}.ts`];
+async function attach(
+  host: HTMLElement,
+  load: (() => Promise<{ default: Type<unknown> }>) | undefined,
+): Promise<boolean> {
   if (!load) return false;
   app ??= createApplication({
     providers: [provideZonelessChangeDetection()],
@@ -32,3 +37,17 @@ export async function mount(host: HTMLElement, name: string): Promise<boolean> {
   ref.changeDetectorRef.detectChanges();
   return true;
 }
+
+/** Pasang contoh `name` di dalam `host`. False kalau contohnya belum ada. */
+export const mount = (host: HTMLElement, name: string): Promise<boolean> =>
+  attach(host, examples[`../../../examples/angular/${name}.ts`]);
+
+/** Pasang template `slug` di dalam `host`. False kalau versi Angular-nya belum ada. */
+export const mountTemplate = (
+  host: HTMLElement,
+  slug: string,
+): Promise<boolean> =>
+  attach(
+    host,
+    templates[`../../../templates/${slug}/angular/${slug}.component.ts`],
+  );

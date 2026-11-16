@@ -173,6 +173,8 @@
         "aria-expanded",
         `${open}`,
       );
+      // Event toggle baru datang di task berikutnya; atur posisi sebelum frame pertama panel dilukis.
+      if (open) requestAnimationFrame(sync);
     };
 
     // Indikator dan panel terbuka mengikuti perubahan, gulir, ukuran jendela, dan font yang selesai dimuat.

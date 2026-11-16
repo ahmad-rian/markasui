@@ -17,8 +17,8 @@ const errorClass = "text-sm text-danger";
 let nextId = 0;
 
 /**
- * Host stays out of layout (display: contents). id, name, aria-label, placeholder, and class
- * move to the input, so the host attributes are cleared.
+ * Host stays out of layout (display: contents). id, name, aria-label, aria-invalid,
+ * aria-describedby, placeholder, and class move to the input, so the host attributes are cleared.
  */
 @Component({
   selector: "markas-input",
@@ -28,6 +28,8 @@ let nextId = 0;
     "[attr.id]": "null",
     "[attr.name]": "null",
     "[attr.aria-label]": "null",
+    "[attr.aria-invalid]": "null",
+    "[attr.aria-describedby]": "null",
     "[attr.placeholder]": "null",
   },
   template: `
@@ -48,7 +50,7 @@ let nextId = 0;
         [attr.autocomplete]="autocomplete() ?? null"
         [attr.inputmode]="inputmode() ?? null"
         [attr.aria-label]="ariaLabel() ?? null"
-        [attr.aria-invalid]="error() ? 'true' : null"
+        [attr.aria-invalid]="invalid()"
         [attr.aria-describedby]="describedBy()"
         [class]="fieldClass()"
         (input)="value.set(field.value)"
@@ -78,6 +80,15 @@ export class Input {
   readonly ariaLabel = input<string | undefined>(undefined, {
     alias: "aria-label",
   });
+  /** Marks the field invalid without an error text, for example when the message sits elsewhere. */
+  readonly ariaInvalid = input<boolean | "true" | "false" | undefined>(
+    undefined,
+    { alias: "aria-invalid" },
+  );
+  /** Extra description id, used when there is no error or hint. */
+  readonly ariaDescribedby = input<string | undefined>(undefined, {
+    alias: "aria-describedby",
+  });
   readonly userClass = input("", { alias: "class" });
   /** Two-way bindable with [(value)]. */
   readonly value = model("");
@@ -93,7 +104,10 @@ export class Input {
       ? `${this.inputId()}-error`
       : this.hint()
         ? `${this.inputId()}-hint`
-        : null,
+        : (this.ariaDescribedby() ?? null),
+  );
+  protected readonly invalid = computed(() =>
+    this.error() ? "true" : (this.ariaInvalid()?.toString() ?? null),
   );
   protected readonly fieldClass = computed(() =>
     [field, this.userClass()].filter(Boolean).join(" "),

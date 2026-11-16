@@ -3,6 +3,7 @@
   "include": [
     "components/*/*.component.ts",
     "examples/angular/*.ts",
+    "templates/*/angular/*.component.ts",
     "tests/unit/**/*.angular.test.ts",
     "tests/unit/setup.ts"
   ]

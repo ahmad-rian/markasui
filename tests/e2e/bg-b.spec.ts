@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
+  fixtureLoadTimeout,
   frameworks,
   frameworksFor,
   openFixture,
@@ -108,6 +109,8 @@ for (const framework of frameworks) {
 test("meteors, shooting-stars, sparkles, and wavy-background place the same layers in every framework", async ({
   page,
 }) => {
+  // Satu tes membuka setiap latar di setiap framework.
+  test.setTimeout(fixtureLoadTimeout(backgrounds.length * frameworks.length));
   for (const { name, items } of backgrounds) {
     const layout = async (framework: Framework) => {
       await openFixture(page, framework, name);

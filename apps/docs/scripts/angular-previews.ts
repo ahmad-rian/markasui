@@ -1,6 +1,6 @@
 /**
  * Bangun bundle preview Angular (AOT) ke public/angular/: preview.js plus satu chunk per contoh di
- * examples/angular. Dipisah dari build Astro supaya kompiler Angular tidak menyentuh file situs.
+ * examples/angular dan per template di templates/<slug>/angular. Dipisah dari build Astro supaya kompiler Angular tidak menyentuh file situs.
  * Pemakaian (dari apps/docs): node scripts/angular-previews.ts
  */
 import { resolve } from "node:path";

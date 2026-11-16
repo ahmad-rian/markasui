@@ -1,0 +1,1255 @@
+---
+/**
+ * Versi Astro: markup dirender di server, interaksi lewat custom element <pipeline-template> di bawah.
+ * Isi tiap halaman disimpan di <template> dan diklon saat dibuka, jadi state halaman selalu mulai
+ * dari awal, sama seperti React yang me-mount ulang halaman. Lead, rapat, dan panel call bersama.
+ */
+import Avatar from "../../../components/avatar/Avatar.astro";
+import Button from "../../../components/button/Button.astro";
+import Drawer from "../../../components/drawer/Drawer.astro";
+import DropdownMenu, {
+  type DropdownMenuItem,
+} from "../../../components/dropdown-menu/DropdownMenu.astro";
+import Input from "../../../components/input/Input.astro";
+import Toaster from "../../../components/toast/Toast.astro";
+
+// prettier-ignore
+const icons = {
+  grid: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
+  users: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  board: "M4 4h4v16H4zM10 4h4v10h-4zM16 4h4v13h-4z",
+  calendar: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2",
+  chat: "M7.9 20A9 9 0 1 0 4 16.1L2 22z",
+  settings: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1",
+  bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0",
+  plus: "M12 5v14M5 12h14",
+  search: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16M21 21l-4.3-4.3",
+  filter: "M3 6h18M7 12h10M10 18h4",
+  flame: "M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3.2.3 1.6 1.3 2.7 2.5 2.7",
+  arrow: "M7 17 17 7M7 7h10v10",
+  video: "M15 10l5-3v10l-5-3M4 6h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2",
+  mic: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3M19 10v2a7 7 0 0 1-14 0v-2M12 19v3",
+  speaker: "M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14",
+  end: "M10.7 13.3a16 16 0 0 0 3.4 2.6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.8.7a2 2 0 0 1 1.7 2v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 4.2 2 2 0 0 1 5.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.9.7 2.8a2 2 0 0 1-.4 2.1L9.1 9.9M22 2 2 22",
+  file: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h5",
+  mail: "M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2M22 6l-10 7L2 6",
+  check: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0M8.5 12l2.5 2.5 4.5-5",
+  clock: "M12 6v6l4 2M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20",
+  menu: "M4 6h16M4 12h16M4 18h16",
+  send: "m22 2-7 20-4-9-9-4zM22 2 11 13",
+  next: "m9 18 6-6-6-6",
+};
+type IconName = keyof typeof icons;
+
+// prettier-ignore
+const pages = {
+  workspace: { label: "Workspace", title: "Workspace", icon: "grid" },
+  leads: { label: "Leads", title: "Leads", icon: "users" },
+  pipeline: { label: "Pipeline", title: "Pipeline", icon: "board" },
+  calendar: { label: "Calendar", title: "Calendar", icon: "calendar" },
+  messages: { label: "Messages", title: "Messages", icon: "chat" },
+} as const;
+type PageId = keyof typeof pages;
+const pageIds = Object.keys(pages) as PageId[];
+const DEFAULT_PAGE: PageId = "workspace";
+const TITLE_ID = "pipeline-page-title";
+const LEAD_DRAWER = "pipeline-lead-drawer";
+const LEAD_PREVIEW = 3;
+
+// prettier-ignore
+const stats = [
+  { value: "34", unit: "Deals", badge: "+6", tone: "lime" },
+  { value: "20", unit: "won", badge: "59%", tone: "lime" },
+  { value: "3", unit: "lost", badge: "-2", tone: "rose" },
+];
+
+/* Jadwal hari ini: jendela 12:00 sampai 18:00. */
+const DAY_START = 12;
+const DAY_HOURS = 6;
+const hourMarks = ["12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm"];
+const NOW = 13 + 20 / 60;
+// prettier-ignore
+const meetings = [
+  { id: "m1", start: 12, title: "Discovery Call", time: "12:00 pm", who: "Rina Wijaya" },
+  { id: "m2", start: 14, title: "Video Call", time: "2:00 pm", who: "Bagus Hartono" },
+  { id: "m3", start: 15, title: "Contract Review", time: "3:00 pm", who: "Sinta Maharani" },
+  { id: "m4", start: 16, title: "Payment Terms", time: "4:00 pm", who: "Yudi Pranoto" },
+  { id: "m5", start: 17, title: "Demo Recap", time: "5:00 pm", who: "Wulan Sari" },
+];
+const MEETING_SPAN = 0.75;
+const at = (hour: number) => `${((hour - DAY_START) / DAY_HOURS) * 100}%`;
+
+/* Leads */
+// prettier-ignore
+const interests = {
+  hot: { label: "Hot Client", dot: "bg-(--tpl-hot)" },
+  great: { label: "Great interest", dot: "bg-(--tpl-great)" },
+  medium: { label: "Medium", dot: "bg-(--tpl-medium)" },
+  low: { label: "Low", dot: "bg-(--tpl-low)" },
+  none: { label: "Non interest", dot: "bg-(--tpl-none)" },
+};
+type Interest = keyof typeof interests;
+const interestIds = Object.keys(interests) as Interest[];
+// prettier-ignore
+const leads: { id: string; name: string; role: string; company: string; source: string; interest: Interest; value: number; email: string; phone: string }[] = [
+  { id: "l1", name: "Bagus Hartono", role: "Head of Sales", company: "Sinar Retail", source: "Website", interest: "hot", value: 85000000, email: "bagus@sinarretail.id", phone: "+62 812 3301 4410" },
+  { id: "l2", name: "Rina Wijaya", role: "Operations Lead", company: "Kopi Lereng", source: "Referral", interest: "great", value: 45000000, email: "rina@kopilereng.id", phone: "+62 813 2290 1175" },
+  { id: "l3", name: "Dodi Saputra", role: "Founder", company: "Rumah Tenun", source: "Event", interest: "medium", value: 18500000, email: "dodi@rumahtenun.id", phone: "+62 811 4502 8830" },
+  { id: "l4", name: "Sinta Maharani", role: "Marketing Manager", company: "Arunika Travel", source: "Social", interest: "hot", value: 120000000, email: "sinta@arunika.id", phone: "+62 812 7781 0042" },
+  { id: "l5", name: "Yudi Pranoto", role: "Finance Director", company: "Baja Mulia", source: "Cold email", interest: "low", value: 32000000, email: "yudi@bajamulia.id", phone: "+62 815 6610 2297" },
+  { id: "l6", name: "Wulan Sari", role: "Product Owner", company: "Lumbung Data", source: "Website", interest: "great", value: 64000000, email: "wulan@lumbungdata.id", phone: "+62 817 1203 5546" },
+  { id: "l7", name: "Hendra Gunawan", role: "Procurement", company: "Kertas Nusa", source: "Referral", interest: "none", value: 12000000, email: "hendra@kertasnusa.id", phone: "+62 819 8830 1204" },
+  { id: "l8", name: "Maya Puspita", role: "Chief Executive", company: "Studio Rupa", source: "Event", interest: "medium", value: 27500000, email: "maya@studiorupa.id", phone: "+62 812 0045 7718" },
+];
+type Lead = (typeof leads)[number];
+const leadFilters = ["all", ...interestIds] as const;
+type LeadFilter = (typeof leadFilters)[number];
+const filterLabel = (id: LeadFilter) =>
+  id === "all" ? "All" : interests[id].label;
+
+/* Tugas hari ini */
+// prettier-ignore
+const tasks = [
+  { id: "t1", lead: "l1", meeting: "m2", title: "Video Call", app: "video", date: "Mon, 9 Nov", time: "2:00 pm - 2:45 pm", amount: 0, status: "Call scheduled", tags: ["hot", "today"] },
+  { id: "t2", lead: "l2", meeting: "m1", title: "Send Proposal", app: "file", date: "Mon, 9 Nov", time: "Before 5:00 pm", amount: 45000000, status: "Waiting Proposal", tags: ["today"] },
+  { id: "t3", lead: "l4", meeting: "m3", title: "Contract Review", app: "file", date: "Tue, 10 Nov", time: "10:00 am", amount: 120000000, status: "In progress", tags: ["hot"] },
+  { id: "t4", lead: "l5", meeting: "m4", title: "Follow-up Email", app: "mail", date: "Fri, 6 Nov", time: "9:00 am", amount: 0, status: "Not started", tags: ["overdue"] },
+  { id: "t5", lead: "l6", meeting: "m5", title: "Demo Recap", app: "check", date: "Mon, 9 Nov", time: "11:00 am", amount: 0, status: "Done", tags: [] as string[] },
+] satisfies { app: IconName; [key: string]: unknown }[];
+// prettier-ignore
+const taskFilters = [
+  { id: "all", label: "All" }, { id: "hot", label: "Hot" }, { id: "today", label: "Due Today" },
+  { id: "overdue", label: "Overdue" }, { id: "done", label: "Completed" },
+];
+const statuses = [
+  "Call scheduled",
+  "Waiting Proposal",
+  "In progress",
+  "Not started",
+  "Done",
+];
+const statusMenu: DropdownMenuItem[] = statuses.map((label) => ({
+  label,
+  value: label,
+}));
+
+// prettier-ignore
+const summary = [
+  { time: "00:00", text: "Intro and the tools Sinar Retail uses today" },
+  { time: "06:40", text: "Follow-ups are slow across their three branches" },
+  { time: "14:15", text: "Pricing for 40 seats on the annual plan" },
+];
+// prettier-ignore
+const documents = [{ name: "Proposal.pdf", size: "2,4 MB" }, { name: "Pricing.xlsx", size: "860 KB" }];
+
+/* Pipeline board */
+const stages = ["Qualified", "Proposal", "Negotiation", "Won"];
+// prettier-ignore
+const dealList = [
+  { id: "d1", company: "Sinar Retail", who: "Bagus Hartono", value: 85000000, stage: "Negotiation" },
+  { id: "d2", company: "Kopi Lereng", who: "Rina Wijaya", value: 45000000, stage: "Proposal" },
+  { id: "d3", company: "Arunika Travel", who: "Sinta Maharani", value: 120000000, stage: "Negotiation" },
+  { id: "d4", company: "Rumah Tenun", who: "Dodi Saputra", value: 18500000, stage: "Qualified" },
+  { id: "d5", company: "Lumbung Data", who: "Wulan Sari", value: 64000000, stage: "Won" },
+  { id: "d6", company: "Studio Rupa", who: "Maya Puspita", value: 27500000, stage: "Qualified" },
+];
+
+/* Calendar */
+// prettier-ignore
+const week = [
+  { day: "9", label: "Mon", items: meetings.map(({ time, title, who }) => ({ time, title, who })) },
+  { day: "10", label: "Tue", items: [{ time: "10:00 am", title: "Contract Review", who: "Sinta Maharani" }, { time: "1:30 pm", title: "Pipeline Sync", who: "Dodi Saputra" }] },
+  { day: "11", label: "Wed", items: [] as { time: string; title: string; who: string }[] },
+  { day: "12", label: "Thu", items: [{ time: "9:30 am", title: "Onboarding Kickoff", who: "Wulan Sari" }] },
+  { day: "13", label: "Fri", items: [{ time: "3:00 pm", title: "Quarterly Review", who: "Maya Puspita" }] },
+];
+
+/* Messages */
+// prettier-ignore
+const threadList = [
+  { id: "c1", who: "Bagus Hartono", messages: [
+    { mine: false, text: "Can we move the call to 2 pm? Our branch heads want to join.", time: "9:12 am" },
+    { mine: true, text: "Sure, 2 pm works. I will send the new invite.", time: "9:20 am" },
+  ] },
+  { id: "c2", who: "Rina Wijaya", messages: [
+    { mine: false, text: "Looking forward to the proposal. Please include the training cost.", time: "Yesterday" },
+  ] },
+  { id: "c3", who: "Sinta Maharani", messages: [
+    { mine: true, text: "The contract draft is ready for your legal team.", time: "Fri" },
+    { mine: false, text: "Thanks, we will review it on Tuesday.", time: "Fri" },
+  ] },
+];
+
+/* Gaya */
+// Palet lokal referensi, nilai terang dan gelap. Hex hanya di sini.
+const palette =
+  "[--tpl-bg:#eceef0] [--tpl-night:#121412] [--tpl-on-night:#f4f5f2] [--tpl-night-muted:#a8aea8] [--tpl-night-line:#2d322d] [--tpl-night-soft:#1f231f] [--tpl-lime:#d7f36c] [--tpl-lime-ink:#1b2208] [--tpl-lime-muted:#3d4a14] [--tpl-white:#ffffff] [--tpl-rose:#fde2e2] [--tpl-rose-ink:#8a1c1c] [--tpl-hot:#ef4444] [--tpl-great:#16a34a] [--tpl-medium:#f59e0b] [--tpl-low:#3b82f6] [--tpl-none:#a1a1aa] [--tpl-portrait-a:#d9e4ff] [--tpl-portrait-b:#f6dccb] [--tpl-av1:#c7dafd] [--tpl-av2:#fbd0da] [--tpl-av3:#fde68a] [--tpl-av4:#bfecd6] [--tpl-av5:#ddd3fb] [--tpl-av-ink:#1f2937] [--tpl-shadow:0_16px_40px_-24px_#0f172a40] dark:[--tpl-bg:#0b0d0b] dark:[--tpl-night:#000000] dark:[--tpl-night-line:#2a2f2a] dark:[--tpl-night-soft:#171a17] dark:[--tpl-lime:#c9e862] dark:[--tpl-rose:#3b1717] dark:[--tpl-rose-ink:#fecaca] dark:[--tpl-portrait-a:#28344f] dark:[--tpl-portrait-b:#4a3426] dark:[--tpl-shadow:0_16px_40px_-24px_#00000099]";
+const shell = `${palette} min-h-dvh bg-(--tpl-bg) text-ink`;
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const roundButton = `relative inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-surface text-ink transition-colors duration-150 hover:bg-subtle ${focusRing}`;
+const railBase = `inline-flex size-12 items-center justify-center rounded-full transition-colors duration-150 ${focusRing}`;
+const railActive = "bg-primary text-on-primary";
+const railIdle = "bg-surface text-muted hover:text-ink";
+const menuItem = `flex h-11 w-full items-center gap-3 rounded-full px-4 text-left text-sm font-medium transition-colors duration-150 ${focusRing}`;
+const menuIdle = "text-ink hover:bg-subtle";
+const chip = `inline-flex h-9 items-center gap-1.5 rounded-full px-4 text-sm font-medium whitespace-nowrap transition-colors duration-150 ${focusRing}`;
+const chipOn = "bg-surface text-ink shadow-(--tpl-shadow)";
+const chipOff = "text-muted ring-1 ring-line ring-inset hover:text-ink";
+const face =
+  "inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-(--tpl-av-ink) select-none";
+const faceTones = [
+  "bg-(--tpl-av1)",
+  "bg-(--tpl-av2)",
+  "bg-(--tpl-av3)",
+  "bg-(--tpl-av4)",
+  "bg-(--tpl-av5)",
+];
+const statBadges: Record<string, string> = {
+  lime: "bg-(--tpl-lime) text-(--tpl-lime-ink)",
+  rose: "bg-(--tpl-rose) text-(--tpl-rose-ink)",
+};
+const card = "relative flex flex-col rounded-[28px] p-5";
+// Potongan sudut kanan atas: soket berwarna latar dengan dua lengkung cekung, tombol ↗ duduk di dalamnya.
+const socket =
+  "absolute top-0 right-0 z-10 flex size-[58px] items-start justify-end rounded-bl-[26px] bg-(--tpl-bg) before:absolute before:top-0 before:right-full before:size-6 before:bg-[radial-gradient(circle_at_0_100%,transparent_24px,var(--tpl-bg)_24.5px)] after:absolute after:top-full after:right-0 after:size-6 after:bg-[radial-gradient(circle_at_0_100%,transparent_24px,var(--tpl-bg)_24.5px)]";
+const cornerButton = `inline-flex size-12 items-center justify-center rounded-full bg-surface text-ink shadow-(--tpl-shadow) transition-colors duration-150 hover:bg-subtle ${focusRing}`;
+const selectable =
+  "text-left after:absolute after:inset-0 after:rounded-[28px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary";
+const sourceChip =
+  "inline-flex h-7 items-center rounded-full bg-subtle px-3 text-xs font-medium";
+const darkButton = `inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-(--tpl-night) text-(--tpl-on-night) transition-opacity duration-150 hover:opacity-85 ${focusRing}`;
+const callControl = `inline-flex size-11 items-center justify-center rounded-full transition-colors duration-150 ${focusRing}`;
+const controlOn = "bg-subtle text-ink hover:bg-line";
+const controlOff = "bg-(--tpl-night) text-(--tpl-on-night)";
+const statusTrigger =
+  "[&>button]:h-9 [&>button]:rounded-full [&>button]:border-0 [&>button]:px-3.5";
+// prettier-ignore
+const taskTones = {
+  lime: { card: "bg-(--tpl-lime) text-(--tpl-lime-ink)", sub: "text-(--tpl-lime-muted)", soft: "bg-(--tpl-white) text-(--tpl-lime-ink)", menu: "[&>button]:bg-(--tpl-white) [&>button]:text-(--tpl-lime-ink)" },
+  plain: { card: "bg-surface text-ink", sub: "text-muted", soft: "bg-subtle text-ink", menu: "[&>button]:bg-subtle [&>button]:text-ink" },
+};
+const panel = "rounded-[28px] bg-surface p-5";
+const pillButton = `inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium whitespace-nowrap text-on-primary transition-colors duration-150 hover:bg-primary-strong ${focusRing}`;
+const slotBase = `absolute top-0 flex h-8 items-center gap-1.5 rounded-full bg-(--tpl-lime) pr-2.5 pl-1 text-[11px] font-semibold whitespace-nowrap text-(--tpl-lime-ink) transition-shadow duration-150 ${focusRing}`;
+const slotOn =
+  "ring-2 ring-(--tpl-on-night) ring-offset-2 ring-offset-(--tpl-night)";
+const h2 = "text-2xl font-semibold tracking-tight";
+
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+const rupiah = (value: number) => `Rp ${value.toLocaleString("id-ID")}`;
+const plural = (count: number, word: string) =>
+  `${count} ${word}${count === 1 ? "" : "s"}`;
+/** Huruf pertama kata pertama dan terakhir, sama dengan Avatar. */
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .filter((_, index, words) => index === 0 || index === words.length - 1)
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase();
+/** Warna avatar inisial yang selalu sama untuk nama yang sama. */
+const faceTone = (name: string) =>
+  faceTones[
+    [...name].reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+      faceTones.length
+  ];
+const leadById = (id: string) => leads.find((item) => item.id === id)!;
+const meetingById = (id: string) => meetings.find((item) => item.id === id)!;
+
+const endButton = `inline-flex h-11 w-16 items-center justify-center rounded-full bg-danger text-(--tpl-white) transition-opacity duration-150 hover:opacity-90 ${focusRing}`;
+const summaryButton = `inline-flex size-9 items-center justify-center rounded-full bg-(--tpl-night-soft) ${focusRing}`;
+const dayIdle = "bg-subtle text-ink hover:bg-line";
+const sortOn = "bg-primary text-on-primary hover:bg-primary";
+const threadOn = "bg-subtle";
+const threadOff = "hover:bg-subtle";
+const mineBubble = "justify-self-end bg-(--tpl-night) text-(--tpl-on-night)";
+const theirBubble = "justify-self-start bg-subtle";
+const bubble = "max-w-[80%] rounded-3xl px-4 py-2.5 text-sm";
+const callControls: { key: string; label: string; icon: IconName }[] = [
+  { key: "camera", label: "Camera", icon: "video" },
+  { key: "mic", label: "Microphone", icon: "mic" },
+  { key: "speaker", label: "Speaker", icon: "speaker" },
+];
+const leadChips = leadFilters.map((id) => ({ id, label: filterLabel(id) }));
+const meeting = meetingById("m2");
+const firstLead = leadById("l1");
+
+/** Ikon garis 24px sebagai HTML, seperti di versi Blade. */
+const icon = (name: IconName, className = "size-5") =>
+  `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[name]}"></path></svg>`;
+const faceHtml = (name: string, className: string) =>
+  `<span aria-hidden="true" class="${cx(face, faceTone(name), className)}" data-face>${initials(name)}</span>`;
+const cornerHtml = (label: string, leadId: string) =>
+  `<span class="${socket}"><button type="button" aria-label="${label}" class="${cornerButton}" data-pipe-lead="${leadId}">${icon("arrow")}</button></span>`;
+const leadCardHtml = (lead: Lead) =>
+  `<li data-lead="${lead.id}" class="${cx(card, "min-h-48 bg-surface")}"><div class="flex items-center gap-3 pr-14">${faceHtml(lead.name, "size-12 text-sm")}<div class="min-w-0"><h3 class="truncate text-xl font-semibold tracking-tight"><button type="button" class="${selectable}" data-pipe-lead="${lead.id}">${lead.name}</button></h3><p class="text-sm text-muted">${lead.role} @ ${lead.company}</p></div></div>${cornerHtml(`Open ${lead.name}`, lead.id)}<dl class="mt-auto grid grid-cols-2 gap-3 pt-6"><div><dt class="text-xs text-muted">Source</dt><dd class="mt-1.5"><span class="${sourceChip}">${lead.source}</span></dd></div><div><dt class="text-xs text-muted">Interest</dt><dd class="mt-1.5 flex h-7 items-center gap-2 text-sm font-medium"><span aria-hidden="true" class="${cx("size-2 rounded-full", interests[lead.interest].dot)}"></span>${interests[lead.interest].label}</dd></div></dl></li>`;
+const chipsHtml = (label: string, items: { id: string; label: string }[], name: string) =>
+  `<div role="group" aria-label="${label}" class="flex flex-wrap gap-2" data-pipe-chips="${name}">${items
+    .map(
+      (item) =>
+        `<button type="button" aria-pressed="${item.id === "all"}" data-value="${item.id}" class="${cx(chip, item.id === "all" ? chipOn : chipOff)}">${item.id === "hot" ? icon("flame", "size-4 text-(--tpl-hot)") : ""}${item.label}</button>`,
+    )
+    .join("")}</div>`;
+const leadFields = (lead: Lead) => [
+  ["Interest", interests[lead.interest].label],
+  ["Source", lead.source],
+  ["Deal value", rupiah(lead.value)],
+  ["Phone", lead.phone],
+];
+
+/** Data dan class yang dipakai script di klien. */
+const config = JSON.stringify({
+  pages,
+  defaultPage: DEFAULT_PAGE,
+  titleId: TITLE_ID,
+  drawerId: LEAD_DRAWER,
+  preview: LEAD_PREVIEW,
+  leads: leads.map((lead) => ({
+    ...lead,
+    interestLabel: interests[lead.interest].label,
+    fields: leadFields(lead),
+  })),
+  interestIds,
+  meetings,
+  tasks: tasks.map(({ id, title, time, meeting, status, tags }) => ({ id, title, time, meeting, status, tags })),
+  stages,
+  deals: dealList,
+  week,
+  threads: threadList,
+  faceTones,
+  classes: {
+    railActive, railIdle, menuIdle, chipOn, chipOff, sortOn, slotOn, controlOn, controlOff,
+    dayIdle, threadOn, threadOff, mineBubble, theirBubble, bubble,
+    tones: taskTones,
+  },
+});
+---
+
+<pipeline-template class="contents" data-config={config}>
+  <div class={shell}>
+    <header class="flex h-20 items-center gap-4 px-4 lg:px-6">
+      <Drawer title="Menu" side="left">
+        <button slot="trigger" type="button" aria-label="Open menu" class={cx(roundButton, "lg:hidden")} set:html={icon("menu")} />
+        <form method="dialog" class="grid gap-1">
+          {pageIds.map((id) => (
+            <button type="submit" aria-current={id === DEFAULT_PAGE ? "page" : undefined} data-pipe-go={id} data-pipe-idle={menuIdle} class={cx(menuItem, id === DEFAULT_PAGE ? railActive : menuIdle)}><Fragment set:html={icon(pages[id].icon)} />{pages[id].label}</button>
+          ))}
+        </form>
+      </Drawer>
+      <div class="flex shrink-0 items-center gap-2.5">
+        <span aria-hidden="true" class="flex size-11 items-center justify-center rounded-full bg-(--tpl-night) text-(--tpl-lime) dark:ring-1 dark:ring-line">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 17V7M12 17V4M19 17v-6" /></svg>
+        </span>
+        <p class="text-lg font-bold tracking-tight">Pipeline</p>
+      </div>
+      <section aria-labelledby="pipeline-schedule-title" class="mx-auto hidden h-16 max-w-[880px] min-w-0 flex-1 items-center gap-5 rounded-full bg-(--tpl-night) pr-4 pl-6 text-(--tpl-on-night) xl:flex dark:ring-1 dark:ring-line">
+        <div class="shrink-0 leading-tight">
+          <h2 id="pipeline-schedule-title" class="text-sm font-semibold">Your Schedule</h2>
+          <p class="text-xs text-(--tpl-night-muted)">Mon, 9 Nov 2026</p>
+        </div>
+        <div class="relative h-12 min-w-0 flex-1">
+          <div aria-hidden="true" class="absolute inset-x-0 top-0 flex text-[10px] text-(--tpl-night-muted)">
+            {hourMarks.map((mark) => <span class="flex-1 border-l border-(--tpl-night-line) pl-1.5">{mark}</span>)}
+          </div>
+          <ul aria-label="Meetings today" class="absolute inset-x-0 bottom-0 h-8">
+            {meetings.map((item) => (
+              <li>
+                <button type="button" aria-pressed={item.id === meeting.id ? "true" : "false"} data-pipe-meeting={item.id} class={cx(slotBase, item.id === meeting.id && slotOn)} style={`left: ${at(item.start)}; width: calc(${(MEETING_SPAN / DAY_HOURS) * 100}% - 4px)`}><Fragment set:html={faceHtml(item.who, "size-6 text-[9px]")} />{item.time}<span class="sr-only">{`, ${item.title} with ${item.who}`}</span></button>
+              </li>
+            ))}
+          </ul>
+          <span aria-hidden="true" class="absolute -top-1 bottom-0 w-0.5 rounded-full bg-(--tpl-lime) before:absolute before:-top-1 before:-left-[3px] before:size-2 before:rounded-full before:bg-(--tpl-lime)" style={`left: ${at(NOW)}`}></span>
+          <span class="sr-only">Now 1:20 pm</span>
+        </div>
+      </section>
+      <div class="ml-auto flex shrink-0 items-center gap-2 xl:ml-0">
+        <button type="button" aria-label="Notifications, 3 unread" class={roundButton} data-pipe-toast="3 unread notifications" data-description="Sinta Maharani signed the NDA">
+          <Fragment set:html={icon("bell")} />
+          <span aria-hidden="true" class="absolute top-2.5 right-2.5 size-2 rounded-full bg-danger ring-2 ring-surface"></span>
+        </button>
+        <Avatar name="Ahmad Fauzi" size="md" class="ring-2 ring-surface" />
+      </div>
+    </header>
+
+    <div class="px-4 pb-10 lg:grid lg:grid-cols-[48px_minmax(0,1fr)] lg:gap-6 lg:px-6">
+      <div class="hidden lg:block">
+        <nav aria-label="Workspace" class="sticky top-6 flex flex-col items-center gap-2">
+          {pageIds.map((id) => (
+            <button type="button" aria-label={pages[id].label} aria-current={id === DEFAULT_PAGE ? "page" : undefined} data-pipe-go={id} data-pipe-idle={railIdle} class={cx(railBase, id === DEFAULT_PAGE ? railActive : railIdle)} set:html={icon(pages[id].icon)} />
+          ))}
+          <span aria-hidden="true" class="my-1 h-px w-6 bg-line"></span>
+          <button type="button" aria-label="Settings" class={cx(railBase, railIdle)} data-pipe-toast="Settings" data-description="Workspace settings are up to date" set:html={icon("settings")} />
+        </nav>
+      </div>
+
+      <main class="grid min-w-0 content-start gap-8">
+        <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-5 pt-2">
+          <div class="flex flex-wrap items-end gap-4">
+            <div>
+              <p class="text-sm text-muted" data-pipe-crumb>{`Pipeline / ${pages[DEFAULT_PAGE].label}`}</p>
+              <h1 id={TITLE_ID} tabindex="-1" class="mt-1 text-[34px] leading-none font-extrabold tracking-[0.14em] uppercase focus:outline-none sm:text-[56px]">{pages[DEFAULT_PAGE].title}</h1>
+            </div>
+            <button type="button" class={cx(pillButton, "mb-1")} data-pipe-new-task><Fragment set:html={icon("plus", "size-4")} />New Task</button>
+          </div>
+          <dl class="flex flex-wrap gap-x-8 gap-y-3">
+            {stats.map((stat) => (
+              <div class="flex items-start gap-2">
+                <dt class="sr-only">{stat.unit}</dt>
+                <dd class="flex items-baseline gap-1.5">
+                  <span class="text-[44px] leading-none font-semibold tracking-tight tabular-nums">{stat.value}</span>
+                  <span class="text-base text-muted">{stat.unit}</span>
+                </dd>
+                <dd class={cx("rounded-full px-2 py-0.5 text-xs font-semibold", statBadges[stat.tone])}>{stat.badge}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        {
+          /* Halaman bawaan dirender langsung (tanpa JS tetap tampil), lalu semua halaman sebagai <template>. */
+          [{ live: true, id: DEFAULT_PAGE }, ...pageIds.map((id) => ({ live: false, id }))].map(({ live, id }) => {
+            const Wrapper = live ? "div" : "template";
+            return (
+              <Wrapper class={live ? "contents" : undefined} data-pipe-view={live ? "" : undefined} data-pipe-page={live ? undefined : id}>
+                {id === "workspace" && (
+                  <div class="grid min-w-0 content-start gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+                    <div class="grid min-w-0 content-start gap-8">
+                      <section aria-labelledby="pipeline-leads-title" class="grid gap-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                          <h2 id="pipeline-leads-title" class={h2}>New Leads <span class="ml-1 text-muted underline decoration-2 underline-offset-[6px]">{leads.length}</span></h2>
+                          <div class="flex gap-2">
+                            <button type="button" aria-label="Search leads" aria-expanded="false" class={roundButton} data-pipe-search-toggle set:html={icon("search")} />
+                            <button type="button" aria-label="Sort by interest" aria-pressed="false" class={roundButton} data-pipe-sort set:html={icon("filter")} />
+                          </div>
+                        </div>
+                        <div class="contents" hidden data-pipe-search>
+                          <Input label="Search by name" type="search" class="max-w-sm" data-pipe-query="name" />
+                        </div>
+                        <Fragment set:html={chipsHtml("Filter leads by interest", leadChips, "leads")} />
+                        <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" data-pipe-leads={LEAD_PREVIEW} set:html={leads.slice(0, LEAD_PREVIEW).map(leadCardHtml).join("")} />
+                        <p class="text-sm text-muted" hidden data-pipe-leads-empty>No leads match this filter.</p>
+                        <template data-pipe-lead-cards set:html={leads.map(leadCardHtml).join("")} />
+                      </section>
+
+                      <section aria-labelledby="pipeline-tasks-title" class="grid gap-4">
+                        <h2 id="pipeline-tasks-title" class={h2}>Your Days Tasks <span class="ml-1 text-muted underline decoration-2 underline-offset-[6px]">{tasks.length}</span></h2>
+                        <Fragment set:html={chipsHtml("Filter tasks", taskFilters, "tasks")} />
+                        <p class="text-sm text-muted" hidden data-pipe-tasks-empty>No tasks in this view.</p>
+                        <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" data-pipe-tasks>
+                          {tasks.map((task, index) => {
+                            const owner = leadById(task.lead);
+                            const style = taskTones[index === 0 ? "lime" : "plain"];
+                            return (
+                              <li data-task={task.id} class={cx(card, "min-h-64", style.card)} data-tone="card">
+                                <div class="flex items-center gap-3 pr-24">
+                                  <Fragment set:html={faceHtml(owner.name, "size-11 text-sm")} />
+                                  <div class="min-w-0">
+                                    <p class="truncate font-semibold">{owner.name}</p>
+                                    <p class={cx("truncate text-xs", style.sub)} data-tone="sub">{owner.role}</p>
+                                  </div>
+                                </div>
+                                <button type="button" aria-label={`Remind me about ${task.title}`} class={cx("absolute top-1 right-[66px] inline-flex size-10 items-center justify-center rounded-full", style.soft, focusRing)} data-tone="soft" data-pipe-toast="Reminder set" data-description={`${task.title}, ${task.time}`} set:html={icon("bell", "size-4")} />
+                                <Fragment set:html={cornerHtml(`Open ${task.title}`, task.lead)} />
+                                <span aria-hidden="true" class={cx("mt-5 inline-flex size-11 items-center justify-center rounded-2xl", style.soft)} data-tone="soft" set:html={icon(task.app)} />
+                                <h3 class="mt-3 text-2xl font-semibold tracking-tight">{task.title}</h3>
+                                <p class={cx("mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm", style.sub)} data-tone="sub">
+                                  <span class="inline-flex items-center gap-1.5"><Fragment set:html={icon("calendar", "size-4")} />{task.date}</span>
+                                  <span class="inline-flex items-center gap-1.5"><Fragment set:html={icon("clock", "size-4")} />{task.time}</span>
+                                </p>
+                                {task.amount > 0 && <p class="mt-2 text-lg font-semibold tabular-nums">{rupiah(task.amount)}</p>}
+                                <div class="mt-auto flex items-center justify-between gap-2 pt-5">
+                                  <DropdownMenu items={statusMenu} class={cx(statusTrigger, style.menu)} data-tone="menu" data-pipe-status={task.id}>
+                                    <Fragment slot="trigger"><span class="sr-only">{`${task.title} status: `}</span><span data-status>{task.status}</span></Fragment>
+                                  </DropdownMenu>
+                                  <div class="flex gap-2">
+                                    <button type="button" aria-label={`Message ${owner.name}`} class={darkButton} data-pipe-goto="messages" set:html={icon("chat", "size-4")} />
+                                    <button type="button" aria-label={`Video call with ${owner.name}`} aria-pressed={task.meeting === meeting.id ? "true" : "false"} class={darkButton} data-pipe-video={task.meeting} set:html={icon("video", "size-4")} />
+                                  </div>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </section>
+                    </div>
+
+                    <aside aria-label="Call and summary" class="grid content-start gap-4 xl:sticky xl:top-6">
+                      <div class="contents" data-pipe-call-slot>
+                        <section aria-labelledby="pipeline-call-title" data-call class="rounded-[28px] bg-surface p-3 shadow-(--tpl-shadow)">
+                          <div class="relative aspect-[4/3] overflow-hidden rounded-3xl bg-linear-160 from-(--tpl-portrait-a) to-(--tpl-portrait-b)">
+                            <span aria-hidden="true" class="absolute bottom-0 left-1/2 h-[34%] w-[62%] -translate-x-1/2 rounded-t-full bg-(--tpl-white)/45"></span>
+                            <Fragment set:html={faceHtml(meeting.who, "absolute top-[22%] left-1/2 size-24 -translate-x-1/2 text-2xl ring-4 ring-(--tpl-white)/60").replace("data-face", "data-face data-pipe-who-face")} />
+                            <span class="absolute top-3 left-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-(--tpl-night) px-2.5 text-xs font-medium text-(--tpl-on-night) tabular-nums"><span aria-hidden="true" class="size-2 rounded-full bg-danger"></span>12:48</span>
+                            <span class="absolute top-3 right-3 inline-flex size-14 items-center justify-center rounded-2xl bg-(--tpl-night)" set:html={faceHtml("Ahmad Fauzi", "size-8 text-[11px]")} />
+                            <span class="absolute bottom-3 left-3 inline-flex h-7 items-center rounded-full bg-surface px-3 text-xs font-semibold" data-pipe-who>{meeting.who}</span>
+                          </div>
+                          <div class="px-2 pt-3">
+                            <h2 id="pipeline-call-title" class="font-semibold" data-pipe-meeting-title>{meeting.title}</h2>
+                            <p class="text-xs text-muted" data-pipe-meeting-time>{`${meeting.time} with ${meeting.who}`}</p>
+                          </div>
+                          <div class="flex items-center justify-center gap-2 pt-3 pb-1">
+                            {callControls.map((item) => (
+                              <button type="button" aria-label={item.label} aria-pressed="true" class={cx(callControl, controlOn)} data-pipe-control set:html={icon(item.icon, "size-5")} />
+                            ))}
+                            <button type="button" aria-label="End call" class={endButton} data-pipe-end set:html={icon("end", "size-5")} />
+                          </div>
+                        </section>
+                      </div>
+                      <template data-pipe-call-closed>
+                        <section aria-labelledby="pipeline-call-title" data-call-closed class={panel}>
+                          <h2 id="pipeline-call-title" class="font-semibold">No active call</h2>
+                          <p class="mt-1 text-sm text-muted">Pick a meeting from your schedule or start a video call from a task.</p>
+                          <button type="button" class={cx(pillButton, "mt-4")} data-pipe-join><Fragment set:html={icon("video", "size-4")} /><span class="contents" data-pipe-join-text>{`Join ${meeting.title}`}</span></button>
+                        </section>
+                      </template>
+                      <section aria-labelledby="pipeline-summary-title" class="rounded-[28px] bg-(--tpl-night) p-5 text-(--tpl-on-night) dark:ring-1 dark:ring-line">
+                        <div class="flex items-start justify-between gap-3">
+                          <div>
+                            <h2 id="pipeline-summary-title" class="text-lg font-semibold">Summary</h2>
+                            <p class="text-xs text-(--tpl-night-muted)">Last call with Bagus Hartono</p>
+                          </div>
+                          <button type="button" aria-label="Open summary" class={summaryButton} data-pipe-toast="Summary opened" data-description="Call notes, 3 highlights" set:html={icon("arrow", "size-4")} />
+                        </div>
+                        <ol class="mt-4 grid gap-3">
+                          {summary.map((item) => (
+                            <li class="grid grid-cols-[44px_1fr] gap-3">
+                              <span class="pt-0.5 text-xs text-(--tpl-night-muted) tabular-nums">{item.time}</span>
+                              <p class="border-l border-(--tpl-night-line) pl-3 text-sm">{item.text}</p>
+                            </li>
+                          ))}
+                        </ol>
+                        <h3 class="mt-5 text-sm font-semibold">Documents</h3>
+                        <ul class="mt-2 grid grid-cols-2 gap-3">
+                          {documents.map((doc) => (
+                            <li class="rounded-2xl bg-(--tpl-night-soft) p-3">
+                              <span aria-hidden="true" class="grid h-16 content-start gap-1.5 rounded-xl bg-(--tpl-night-line) p-2.5">
+                                <span class="h-1.5 w-3/4 rounded-full bg-(--tpl-night-muted)"></span>
+                                <span class="h-1.5 w-full rounded-full bg-(--tpl-night-soft)"></span>
+                                <span class="h-1.5 w-2/3 rounded-full bg-(--tpl-night-soft)"></span>
+                              </span>
+                              <p class="mt-2 truncate text-xs font-medium">{doc.name}</p>
+                              <p class="text-xs text-(--tpl-night-muted)">{doc.size}</p>
+                            </li>
+                          ))}
+                        </ul>
+                        <h3 class="mt-5 text-sm font-semibold">Goal</h3>
+                        <p class="mt-1 text-sm text-(--tpl-night-muted)">Close the 40 seat annual plan before 30 Nov, starting with a pilot in the Bandung branch.</p>
+                      </section>
+                    </aside>
+                  </div>
+                )}
+                {id === "leads" && (
+                  <section aria-labelledby="pipeline-all-leads" class="grid gap-4">
+                    <div class="flex flex-wrap items-end justify-between gap-3">
+                      <h2 id="pipeline-all-leads" class={h2} data-pipe-lead-count>{plural(leads.length, "lead")}</h2>
+                      <div class="w-full max-w-xs">
+                        <Input label="Search leads" type="search" data-pipe-query="company" />
+                      </div>
+                    </div>
+                    <Fragment set:html={chipsHtml("Filter leads by interest", leadChips, "leads")} />
+                    <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" data-pipe-leads="all" set:html={leads.map(leadCardHtml).join("")} />
+                    <p class="text-sm text-muted" hidden data-pipe-leads-empty>No leads match this filter.</p>
+                    <template data-pipe-lead-cards set:html={leads.map(leadCardHtml).join("")} />
+                  </section>
+                )}
+
+                {id === "pipeline" && (
+                  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    {stages.map((stage) => {
+                      const items = dealList.filter((deal) => deal.stage === stage);
+                      const total = items.reduce((sum, deal) => sum + deal.value, 0);
+                      return (
+                        <section aria-label={stage} data-stage={stage} class="grid content-start gap-3 rounded-[28px] p-3 ring-1 ring-line ring-inset">
+                          <div class="flex items-baseline justify-between gap-2 px-2 pt-1">
+                            <h2 class="font-semibold">{stage}</h2>
+                            <p class="text-xs text-muted tabular-nums" data-pipe-stage-total>{`${items.length} · ${rupiah(total)}`}</p>
+                          </div>
+                          {items.map((deal) => (
+                            <article data-deal={deal.id} class="grid gap-3 rounded-3xl bg-surface p-4">
+                              <div class="flex items-center gap-3">
+                                <Fragment set:html={faceHtml(deal.who, "size-9 text-xs")} />
+                                <div class="min-w-0">
+                                  <h3 class="truncate font-semibold">{deal.company}</h3>
+                                  <p class="truncate text-xs text-muted">{deal.who}</p>
+                                </div>
+                              </div>
+                              <div class="flex items-center justify-between gap-2">
+                                <p class="font-semibold tabular-nums">{rupiah(deal.value)}</p>
+                                {stage !== "Won" && (
+                                  <button type="button" aria-label={`Move ${deal.company} to ${stages[stages.indexOf(stage) + 1]}`} class={darkButton} data-pipe-move={deal.id} set:html={icon("next", "size-4")} />
+                                )}
+                              </div>
+                            </article>
+                          ))}
+                        </section>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {id === "calendar" && (
+                  <section aria-labelledby="pipeline-agenda-title" class={cx(panel, "grid gap-5")}>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <h2 id="pipeline-agenda-title" class={h2} data-pipe-day-title>November 9</h2>
+                      <button type="button" class={pillButton} data-pipe-add-meeting><Fragment set:html={icon("plus", "size-4")} />Add meeting</button>
+                    </div>
+                    <div role="group" aria-label="Pick a day" class="grid grid-cols-5 gap-2">
+                      {week.map((item) => (
+                        <button type="button" aria-pressed={item.day === "9" ? "true" : "false"} data-pipe-day={item.day} class={cx("grid h-16 place-content-center rounded-2xl text-center transition-colors duration-150", focusRing, item.day === "9" ? railActive : dayIdle)}>
+                          <span class="text-xs">{item.label}</span>
+                          <span class="text-lg font-semibold tabular-nums">{item.day}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div class="contents" data-pipe-agenda></div>
+                    {week.map((item) => (
+                      <template data-pipe-agenda-day={item.day}>
+                        {item.items.length === 0 ? (
+                          <p data-agenda class="text-sm text-muted">No meetings on this day.</p>
+                        ) : (
+                          <ul data-agenda class="grid gap-2">
+                            {item.items.map((entry) => (
+                              <li class="flex items-center gap-3 rounded-2xl bg-subtle p-3">
+                                <span class="w-20 shrink-0 text-sm font-semibold tabular-nums">{entry.time}</span>
+                                <Fragment set:html={faceHtml(entry.who, "size-8 text-[11px]")} />
+                                <div class="min-w-0">
+                                  <p class="truncate text-sm font-medium">{entry.title}</p>
+                                  <p class="truncate text-xs text-muted">{entry.who}</p>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </template>
+                    ))}
+                  </section>
+                )}
+
+                {id === "messages" && (
+                  <div class="grid gap-4 md:grid-cols-[280px_minmax(0,1fr)]">
+                    <ul aria-label="Conversations" class={cx(panel, "grid grid-cols-1 content-start gap-1 p-2")}>
+                      {threadList.map((item) => (
+                        <li>
+                          <button type="button" aria-pressed={item.id === "c1" ? "true" : "false"} data-pipe-thread={item.id} class={cx("flex w-full items-center gap-3 rounded-3xl p-3 text-left transition-colors duration-150", focusRing, item.id === "c1" ? threadOn : threadOff)}>
+                            <Fragment set:html={faceHtml(item.who, "size-10 text-xs")} />
+                            <span class="min-w-0">
+                              <span class="block truncate text-sm font-semibold">{item.who}</span>
+                              <span class="block truncate text-xs text-muted" data-pipe-last>{item.messages[item.messages.length - 1]!.text}</span>
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                    <section aria-labelledby="pipeline-thread-title" class={cx(panel, "grid content-start gap-4")}>
+                      <h2 id="pipeline-thread-title" class="text-lg font-semibold" data-pipe-thread-title>{threadList[0]!.who}</h2>
+                      <ol data-thread class="grid gap-2">
+                        {threadList[0]!.messages.map((message) => (
+                          <li class={cx(bubble, message.mine ? mineBubble : theirBubble)}>
+                            <p>{message.text}</p>
+                            <p class={cx("mt-1 text-xs", message.mine ? "text-(--tpl-night-muted)" : "text-muted")}>{message.time}</p>
+                          </li>
+                        ))}
+                      </ol>
+                      <form class="flex items-end gap-2" data-pipe-send>
+                        <div class="min-w-0 flex-1">
+                          <Input label="Message" data-pipe-draft />
+                        </div>
+                        <button type="submit" class={pillButton}><Fragment set:html={icon("send", "size-4")} />Send</button>
+                      </form>
+                    </section>
+                  </div>
+                )}
+              </Wrapper>
+            );
+          })
+        }
+      </main>
+    </div>
+
+    <Drawer id={LEAD_DRAWER} title="Lead details">
+      <div class="grid gap-5 text-ink">
+        <div class="flex items-center gap-3">
+          <Fragment set:html={faceHtml(firstLead.name, "size-14 text-base").replace("data-face", "data-face data-pipe-drawer-face")} />
+          <div class="min-w-0">
+            <p class="text-lg font-semibold" data-pipe-drawer-name>{firstLead.name}</p>
+            <p class="text-sm text-muted" data-pipe-drawer-role>{`${firstLead.role} @ ${firstLead.company}`}</p>
+          </div>
+        </div>
+        <dl class="grid grid-cols-2 gap-3">
+          {leadFields(firstLead).map(([label, value]) => (
+            <div class="rounded-2xl bg-subtle p-3">
+              <dt class="text-xs text-muted">{label}</dt>
+              <dd data-field={label} class="mt-1 text-sm font-medium">{value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="text-sm text-muted" data-pipe-drawer-email>{`Email ${firstLead.email}`}</p>
+      </div>
+      <Fragment slot="footer">
+        <Button variant="secondary" type="submit" value="close">Close</Button>
+        <Button type="submit" value="schedule" data-pipe-schedule>Schedule call</Button>
+      </Fragment>
+    </Drawer>
+    <Toaster />
+  </div>
+</pipeline-template>
+
+<script>
+  type Pair = { card: string; sub: string; soft: string; menu: string };
+  type Lead = {
+    id: string;
+    name: string;
+    role: string;
+    company: string;
+    interest: string;
+    email: string;
+    fields: string[][];
+  };
+  type Meeting = { id: string; title: string; time: string; who: string };
+  type Task = {
+    id: string;
+    title: string;
+    time: string;
+    meeting: string;
+    status: string;
+    tags: string[];
+  };
+  type Deal = { id: string; company: string; value: number; stage: string };
+  type Message = { mine: boolean; text: string; time: string };
+  type Thread = { id: string; who: string; messages: Message[] };
+  type Config = {
+    pages: Record<string, { label: string; title: string }>;
+    defaultPage: string;
+    titleId: string;
+    drawerId: string;
+    preview: number;
+    leads: Lead[];
+    interestIds: string[];
+    meetings: Meeting[];
+    tasks: Task[];
+    stages: string[];
+    deals: Deal[];
+    week: { day: string; label: string }[];
+    threads: Thread[];
+    faceTones: string[];
+    classes: {
+      railActive: string;
+      chipOn: string;
+      chipOff: string;
+      sortOn: string;
+      slotOn: string;
+      controlOn: string;
+      controlOff: string;
+      dayIdle: string;
+      threadOn: string;
+      threadOff: string;
+      mineBubble: string;
+      theirBubble: string;
+      bubble: string;
+      tones: { lime: Pair; plain: Pair };
+    };
+  };
+
+  const toast = (title: string, description = "", variant?: string) =>
+    window.dispatchEvent(
+      new CustomEvent("markas-toast", {
+        detail: { title, description, variant },
+      }),
+    );
+  const swap = (element: Element, add: string, remove: string) => {
+    if (remove) element.classList.remove(...remove.split(" "));
+    if (add) element.classList.add(...add.split(" "));
+  };
+  const rupiah = (value: number) => `Rp ${value.toLocaleString("id-ID")}`;
+  const plural = (count: number, word: string) =>
+    `${count} ${word}${count === 1 ? "" : "s"}`;
+  const initials = (name: string) =>
+    name
+      .split(" ")
+      .filter((_, index, words) => index === 0 || index === words.length - 1)
+      .map((word) => word.charAt(0))
+      .join("")
+      .toUpperCase();
+
+  /** Satu elemen per template: navigasi hash, lead, rapat, panel call, dan interaksi tiap halaman. */
+  class PipelineTemplate extends HTMLElement {
+    private readonly config = JSON.parse(this.dataset.config ?? "{}") as Config;
+    private leadId = "l1";
+    private meetingId = "m2";
+    private callOpen = true;
+    /* State halaman, direset setiap kali halaman dibuka. */
+    private leadFilter = "all";
+    private taskFilter = "all";
+    private byInterest = false;
+    private query = "";
+    private status: Record<string, string> = {};
+    private deals: Deal[] = [];
+    private day = "9";
+    private threads: Thread[] = [];
+    private activeId = "c1";
+    private leadCards: HTMLElement[] = [];
+    private callNode: Node | undefined;
+    private readonly onHashChange = () => {
+      this.open(this.readHash());
+      document.getElementById(this.config.titleId)?.focus();
+    };
+    private readonly onClick = (event: Event) => this.handleClick(event);
+    private readonly onInput = (event: Event) => this.handleInput(event);
+    private readonly onSubmit = (event: Event) => this.handleSubmit(event);
+    private readonly onSelect = (event: Event) => this.changeStatus(event);
+
+    connectedCallback() {
+      this.open(this.readHash());
+      window.addEventListener("hashchange", this.onHashChange);
+      this.addEventListener("click", this.onClick);
+      this.addEventListener("input", this.onInput);
+      this.addEventListener("submit", this.onSubmit);
+      this.addEventListener("markas-select", this.onSelect);
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener("hashchange", this.onHashChange);
+      this.removeEventListener("click", this.onClick);
+      this.removeEventListener("input", this.onInput);
+      this.removeEventListener("submit", this.onSubmit);
+      this.removeEventListener("markas-select", this.onSelect);
+    }
+
+    private find<T extends Element = HTMLElement>(selector: string) {
+      return this.querySelector<T>(`[data-pipe-view] ${selector}`);
+    }
+
+    private findAll<T extends Element = HTMLElement>(selector: string) {
+      return [...this.querySelectorAll<T>(`[data-pipe-view] ${selector}`)];
+    }
+
+    /** Halaman aktif disimpan di hash URL supaya bisa dibagikan dan tombol Back bekerja. */
+    private readHash() {
+      const id = window.location.hash.slice(1);
+      return id in this.config.pages ? id : this.config.defaultPage;
+    }
+
+    private faceTone(name: string) {
+      const tones = this.config.faceTones;
+      const sum = [...name].reduce((total, char) => total + char.charCodeAt(0), 0);
+      return tones[sum % tones.length]!;
+    }
+
+    /** Ganti inisial dan warna avatar inisial untuk nama lain. */
+    private setFace(element: Element | null, name: string) {
+      if (!element) return;
+      element.classList.remove(...this.config.faceTones);
+      element.classList.add(this.faceTone(name));
+      element.textContent = initials(name);
+    }
+
+    /** Ganti isi halaman dengan klon baru dari <template>, lalu siapkan state-nya. */
+    private open(id: string) {
+      const template = this.querySelector<HTMLTemplateElement>(
+        `template[data-pipe-page="${id}"]`,
+      );
+      const view = this.querySelector("[data-pipe-view]");
+      if (!template || !view) return;
+      view.replaceChildren(template.content.cloneNode(true));
+      const { pages, classes } = this.config;
+      this.querySelectorAll<HTMLElement>("[data-pipe-go]").forEach((button) => {
+        const active = button.dataset.pipeGo === id;
+        if (active) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
+        const idle = button.dataset.pipeIdle ?? "";
+        swap(button, active ? classes.railActive : idle, active ? idle : classes.railActive);
+      });
+      this.querySelector("[data-pipe-crumb]")!.textContent =
+        `Pipeline / ${pages[id]!.label}`;
+      document.getElementById(this.config.titleId)!.textContent =
+        pages[id]!.title;
+      this.leadFilter = "all";
+      this.taskFilter = "all";
+      this.byInterest = false;
+      this.query = "";
+      this.status = Object.fromEntries(
+        this.config.tasks.map((task) => [task.id, task.status]),
+      );
+      this.deals = this.config.deals.map((deal) => ({ ...deal }));
+      this.day = "9";
+      this.threads = structuredClone(this.config.threads);
+      this.activeId = "c1";
+      const cards = this.find<HTMLTemplateElement>("template[data-pipe-lead-cards]");
+      this.leadCards = cards
+        ? [...cards.content.children].map((card) => card as HTMLElement)
+        : [];
+      const slot = this.find("[data-pipe-call-slot]");
+      this.callNode = slot?.firstElementChild?.cloneNode(true);
+      if (id === "workspace") {
+        this.renderTasks();
+        this.renderCall(true);
+      }
+      if (id === "calendar") this.renderDay();
+    }
+
+    private handleClick(event: Event) {
+      const target = event.target as Element;
+      const closest = (selector: string) => target.closest<HTMLElement>(selector);
+      const go = closest("[data-pipe-go], [data-pipe-goto]");
+      if (go)
+        return window.location.assign(
+          `#${go.dataset.pipeGo ?? go.dataset.pipeGoto}`,
+        );
+      const lead = closest("[data-pipe-lead]");
+      if (lead) return this.openLead(lead.dataset.pipeLead!);
+      const meeting = closest("[data-pipe-meeting]");
+      if (meeting) {
+        this.meetingId = meeting.dataset.pipeMeeting!;
+        return this.setCallOpen(true);
+      }
+      const chip = closest("[data-pipe-chips] > button");
+      if (chip) return this.pickChip(chip);
+      const video = closest("[data-pipe-video]");
+      if (video) {
+        const same = this.callOpen && this.meetingId === video.dataset.pipeVideo;
+        this.meetingId = video.dataset.pipeVideo!;
+        return this.setCallOpen(!same);
+      }
+      const control = closest("[data-pipe-control]");
+      if (control) {
+        const { controlOn, controlOff } = this.config.classes;
+        const on = control.getAttribute("aria-pressed") !== "true";
+        control.setAttribute("aria-pressed", String(on));
+        return swap(control, on ? controlOn : controlOff, on ? controlOff : controlOn);
+      }
+      const move = closest("[data-pipe-move]");
+      if (move) return this.move(move.dataset.pipeMove!);
+      const day = closest("[data-pipe-day]");
+      if (day) {
+        this.day = day.dataset.pipeDay!;
+        return this.renderDay();
+      }
+      const thread = closest("[data-pipe-thread]");
+      if (thread) {
+        this.activeId = thread.dataset.pipeThread!;
+        return this.renderThread();
+      }
+      const message = closest("[data-pipe-toast]");
+      if (message)
+        return toast(message.dataset.pipeToast!, message.dataset.description);
+      if (closest("[data-pipe-search-toggle]")) return this.toggleSearch();
+      if (closest("[data-pipe-sort]")) {
+        this.byInterest = !this.byInterest;
+        const button = this.find("[data-pipe-sort]")!;
+        button.setAttribute("aria-pressed", String(this.byInterest));
+        swap(
+          button,
+          this.byInterest ? this.config.classes.sortOn : "",
+          this.byInterest ? "" : this.config.classes.sortOn,
+        );
+        return this.renderLeads();
+      }
+      if (closest("[data-pipe-end]")) {
+        const current = this.meeting();
+        this.setCallOpen(false);
+        return toast("Call ended", `${current.title} with ${current.who}`);
+      }
+      if (closest("[data-pipe-join]")) return this.setCallOpen(true);
+      if (closest("[data-pipe-new-task]"))
+        return toast(
+          "Task created",
+          "Follow up with Maya Puspita, tomorrow 10:00 am",
+          "success",
+        );
+      if (closest("[data-pipe-add-meeting]")) {
+        const current = this.config.week.find((item) => item.day === this.day);
+        return toast(
+          "Meeting added",
+          `${current?.label}, ${this.day} Nov at 4:00 pm`,
+        );
+      }
+      if (closest("[data-pipe-schedule]")) {
+        const current = this.lead();
+        toast("Call scheduled", `${current.name}, tomorrow 10:00 am`, "success");
+      }
+    }
+
+    private handleInput(event: Event) {
+      const field = event.target as HTMLInputElement;
+      if (!field.matches("[data-pipe-query]")) return;
+      this.query = field.value;
+      this.renderLeads();
+    }
+
+    private handleSubmit(event: Event) {
+      const form = event.target as HTMLFormElement;
+      if (!form.matches("[data-pipe-send]")) return;
+      event.preventDefault();
+      const field = form.querySelector("input")!;
+      const text = field.value.trim();
+      if (!text) return;
+      const active = this.threads.find((item) => item.id === this.activeId)!;
+      active.messages = [...active.messages, { mine: true, text, time: "Now" }];
+      field.value = "";
+      this.renderThread();
+      toast("Message sent", active.who);
+    }
+
+    /* Lead dan drawer */
+    private lead() {
+      return (
+        this.config.leads.find((item) => item.id === this.leadId) ??
+        this.config.leads[0]!
+      );
+    }
+
+    private openLead(id: string) {
+      this.leadId = id;
+      const lead = this.lead();
+      this.setFace(this.querySelector("[data-pipe-drawer-face]"), lead.name);
+      this.querySelector("[data-pipe-drawer-name]")!.textContent = lead.name;
+      this.querySelector("[data-pipe-drawer-role]")!.textContent =
+        `${lead.role} @ ${lead.company}`;
+      for (const [label, value] of lead.fields)
+        this.querySelector(`[data-field="${label}"]`)!.textContent = value ?? "";
+      this.querySelector("[data-pipe-drawer-email]")!.textContent =
+        `Email ${lead.email}`;
+      const dialog = document.getElementById(this.config.drawerId);
+      if (dialog instanceof HTMLDialogElement) {
+        dialog.showModal();
+        dialog.dataset.state = "open";
+      }
+    }
+
+    private toggleSearch() {
+      const wrap = this.find("[data-pipe-search]")!;
+      wrap.hidden = !wrap.hidden;
+      this.find("[data-pipe-search-toggle]")!.setAttribute(
+        "aria-expanded",
+        String(!wrap.hidden),
+      );
+    }
+
+    private pickChip(button: HTMLElement) {
+      const group = button.parentElement!;
+      const value = button.dataset.value!;
+      const { chipOn, chipOff } = this.config.classes;
+      group.querySelectorAll<HTMLElement>(":scope > button").forEach((item) => {
+        const on = item === button;
+        item.setAttribute("aria-pressed", String(on));
+        swap(item, on ? chipOn : chipOff, on ? chipOff : chipOn);
+      });
+      if (group.dataset.pipeChips === "tasks") {
+        this.taskFilter = value;
+        this.renderTasks();
+      } else {
+        this.leadFilter = value;
+        this.renderLeads();
+      }
+    }
+
+    /** Kartu lead dipasang ulang (bukan disembunyikan), seperti daftar di React. */
+    private renderLeads() {
+      const list = this.find("[data-pipe-leads]");
+      if (!list) return;
+      const workspace = list.dataset.pipeLeads !== "all";
+      const needle = this.query.trim().toLowerCase();
+      const { leads, interestIds, preview } = this.config;
+      const leadOf = (card: HTMLElement) =>
+        leads.find((item) => item.id === card.dataset.lead)!;
+      let shown = this.leadCards.filter((card) => {
+        const lead = leadOf(card);
+        const text = workspace ? lead.name : `${lead.name} ${lead.company}`;
+        return (
+          (this.leadFilter === "all" || lead.interest === this.leadFilter) &&
+          text.toLowerCase().includes(needle)
+        );
+      });
+      if (workspace) {
+        if (this.byInterest)
+          shown = [...shown].sort(
+            (a, b) =>
+              interestIds.indexOf(leadOf(a).interest) -
+              interestIds.indexOf(leadOf(b).interest),
+          );
+        shown = shown.slice(0, preview);
+      } else {
+        this.find("[data-pipe-lead-count]")!.textContent = plural(
+          shown.length,
+          "lead",
+        );
+      }
+      list.replaceChildren(...shown);
+      list.hidden = shown.length === 0;
+      this.find("[data-pipe-leads-empty]")!.hidden = shown.length > 0;
+    }
+
+    /* Tugas: kartu pertama yang tampil memakai nada lime, sisanya polos. */
+    private renderTasks() {
+      const list = this.find("[data-pipe-tasks]");
+      if (!list) return;
+      const { tones } = this.config.classes;
+      let index = 0;
+      for (const task of this.config.tasks) {
+        const item = list.querySelector<HTMLElement>(`[data-task="${task.id}"]`)!;
+        const status = this.status[task.id]!;
+        const shown =
+          this.taskFilter === "all" ||
+          (this.taskFilter === "done"
+            ? status === "Done"
+            : task.tags.includes(this.taskFilter));
+        item.hidden = !shown;
+        const [tone, other] =
+          shown && index === 0 ? [tones.lime, tones.plain] : [tones.plain, tones.lime];
+        if (shown) index += 1;
+        [item, ...item.querySelectorAll("[data-tone]")].forEach((part) => {
+          const key = (part as HTMLElement).dataset.tone as keyof Pair;
+          swap(part, tone[key], other[key]);
+        });
+        item.querySelector("[data-status]")!.textContent = status;
+        item
+          .querySelector("[data-pipe-video]")!
+          .setAttribute(
+            "aria-pressed",
+            String(this.callOpen && this.meetingId === task.meeting),
+          );
+      }
+      list.hidden = index === 0;
+      this.find("[data-pipe-tasks-empty]")!.hidden = index > 0;
+    }
+
+    private changeStatus(event: Event) {
+      const menu = (event.target as Element).closest<HTMLElement>(
+        "[data-pipe-status]",
+      );
+      const value = String((event as CustomEvent).detail);
+      const task = this.config.tasks.find(
+        (item) => item.id === menu?.dataset.pipeStatus,
+      );
+      if (!task) return;
+      this.status = { ...this.status, [task.id]: value };
+      this.renderTasks();
+      toast("Status updated", `${task.title}: ${value}`, "success");
+    }
+
+    /* Rapat dan panel call */
+    private meeting() {
+      return (
+        this.config.meetings.find((item) => item.id === this.meetingId) ??
+        this.config.meetings[0]!
+      );
+    }
+
+    private setCallOpen(open: boolean) {
+      // Panel yang baru dibuka mulai dengan kamera, mikrofon, dan speaker menyala.
+      const fresh = open && !this.callOpen;
+      this.callOpen = open;
+      this.renderCall(fresh);
+      this.renderTasks();
+    }
+
+    private renderCall(fresh: boolean) {
+      const { slotOn } = this.config.classes;
+      this.querySelectorAll<HTMLElement>("[data-pipe-meeting]").forEach(
+        (button) => {
+          const on = button.dataset.pipeMeeting === this.meetingId;
+          button.setAttribute("aria-pressed", String(on));
+          swap(button, on ? slotOn : "", on ? "" : slotOn);
+        },
+      );
+      const slot = this.find("[data-pipe-call-slot]");
+      if (!slot) return;
+      const meeting = this.meeting();
+      if (!this.callOpen) {
+        const closed = this.find<HTMLTemplateElement>(
+          "template[data-pipe-call-closed]",
+        )!;
+        slot.replaceChildren(closed.content.cloneNode(true));
+        slot.querySelector("[data-pipe-join-text]")!.textContent =
+          `Join ${meeting.title}`;
+        return;
+      }
+      if (fresh || !slot.querySelector("[data-call]"))
+        slot.replaceChildren(this.callNode!.cloneNode(true));
+      this.setFace(slot.querySelector("[data-pipe-who-face]"), meeting.who);
+      slot.querySelector("[data-pipe-who]")!.textContent = meeting.who;
+      slot.querySelector("[data-pipe-meeting-title]")!.textContent =
+        meeting.title;
+      slot.querySelector("[data-pipe-meeting-time]")!.textContent =
+        `${meeting.time} with ${meeting.who}`;
+    }
+
+    /* Papan pipeline: kartu dipindah ke kolom tahap berikutnya. */
+    private move(id: string) {
+      const { stages } = this.config;
+      const deal = this.deals.find((item) => item.id === id)!;
+      const next = stages[stages.indexOf(deal.stage) + 1]!;
+      deal.stage = next;
+      for (const stage of stages) {
+        const column = this.find(`[data-stage="${stage}"]`)!;
+        const items = this.deals.filter((item) => item.stage === stage);
+        const total = items.reduce((sum, item) => sum + item.value, 0);
+        column.querySelector("[data-pipe-stage-total]")!.textContent =
+          `${items.length} · ${rupiah(total)}`;
+        for (const item of items) {
+          const card = this.find(`[data-deal="${item.id}"]`)!;
+          const button = card.querySelector("[data-pipe-move]");
+          const after = stages[stages.indexOf(stage) + 1];
+          if (!after) button?.remove();
+          else
+            button?.setAttribute(
+              "aria-label",
+              `Move ${item.company} to ${after}`,
+            );
+          column.append(card);
+        }
+      }
+      toast(`Moved to ${next}`, deal.company, "success");
+    }
+
+    /* Kalender */
+    private renderDay() {
+      const { railActive, dayIdle } = this.config.classes;
+      this.findAll("[data-pipe-day]").forEach((button) => {
+        const on = button.dataset.pipeDay === this.day;
+        button.setAttribute("aria-pressed", String(on));
+        swap(button, on ? railActive : dayIdle, on ? dayIdle : railActive);
+      });
+      this.find("[data-pipe-day-title]")!.textContent = `November ${this.day}`;
+      const agenda = this.find<HTMLTemplateElement>(
+        `template[data-pipe-agenda-day="${this.day}"]`,
+      )!;
+      this.find("[data-pipe-agenda]")!.replaceChildren(
+        agenda.content.cloneNode(true),
+      );
+    }
+
+    /* Pesan */
+    private renderThread() {
+      const { threadOn, threadOff, bubble, mineBubble, theirBubble } =
+        this.config.classes;
+      const active = this.threads.find((item) => item.id === this.activeId)!;
+      for (const thread of this.threads) {
+        const button = this.find(`[data-pipe-thread="${thread.id}"]`)!;
+        const on = thread.id === this.activeId;
+        button.setAttribute("aria-pressed", String(on));
+        swap(button, on ? threadOn : threadOff, on ? threadOff : threadOn);
+        button.querySelector("[data-pipe-last]")!.textContent =
+          thread.messages[thread.messages.length - 1]!.text;
+      }
+      this.find("[data-pipe-thread-title]")!.textContent = active.who;
+      this.find("[data-thread]")!.replaceChildren(
+        ...active.messages.map((message) => {
+          const item = document.createElement("li");
+          const text = document.createElement("p");
+          const time = document.createElement("p");
+          item.className = `${bubble} ${message.mine ? mineBubble : theirBubble}`;
+          time.className = `mt-1 text-xs ${message.mine ? "text-(--tpl-night-muted)" : "text-muted"}`;
+          text.textContent = message.text;
+          time.textContent = message.time;
+          item.append(text, time);
+          return item;
+        }),
+      );
+    }
+  }
+
+  if (!customElements.get("pipeline-template"))
+    customElements.define("pipeline-template", PipelineTemplate);
+</script>

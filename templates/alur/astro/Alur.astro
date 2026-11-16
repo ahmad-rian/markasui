@@ -1,0 +1,1739 @@
+---
+/**
+ * Versi Astro: markup dirender di server, interaksi lewat custom element <alur-template> di bawah.
+ * Setiap halaman disimpan di <template> dan diklon saat dibuka (state halaman mulai dari awal, seperti
+ * React yang me-mount ulang view). Data bersama (workflow, folder, trash, notifikasi) disimpan di
+ * script; daftar dinamis diisi ulang dari data itu, kartu baru diklon dari <template data-alur-proto>.
+ */
+import AlertDialog from "../../../components/alert-dialog/AlertDialog.astro";
+import Badge from "../../../components/badge/Badge.astro";
+import Button from "../../../components/button/Button.astro";
+import Drawer from "../../../components/drawer/Drawer.astro";
+import DropdownMenu from "../../../components/dropdown-menu/DropdownMenu.astro";
+import Input from "../../../components/input/Input.astro";
+import Kbd from "../../../components/kbd/Kbd.astro";
+import Modal from "../../../components/modal/Modal.astro";
+import Select from "../../../components/select/Select.astro";
+import Switch from "../../../components/switch/Switch.astro";
+import Toaster from "../../../components/toast/Toast.astro";
+import ToggleGroup from "../../../components/toggle-group/ToggleGroup.astro";
+
+// prettier-ignore
+const icons = {
+  home: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z",
+  flow: "M3 4h6v6H3zM15 14h6v6h-6zM6 10v4a3 3 0 0 0 3 3h6",
+  layout: "M4 3h16a1 1 0 0 1 1 1v5H3V4a1 1 0 0 1 1-1M3 13h8v8H4a1 1 0 0 1-1-1zM15 13h6v7a1 1 0 0 1-1 1h-5z",
+  tool: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z",
+  book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5",
+  store: "M3 9l1.5-5h15L21 9M3 9h18M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M5 12v8h14v-8",
+  more: "M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M19 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M5 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2",
+  dots: "M12 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M12 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2",
+  bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0",
+  panel: "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2M9 3v18",
+  search: "m21 21-4.3-4.3M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16",
+  plus: "M12 5v14M5 12h14",
+  star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z",
+  trash: "M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6",
+  sliders: "M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6",
+  chevron: "m6 9 6 6 6-6",
+  menu: "M4 6h16M4 12h16M4 18h16",
+  play: "M7 4v16l13-8z",
+  mail: "M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2M22 6l-10 7L2 6",
+  chat: "M7.9 20A9 9 0 1 0 4 16.1L2 22z",
+  sheets: "M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1M3 9h18M3 15h18M9 3v18",
+  calendar: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2",
+  notes: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h5",
+};
+type IconName = keyof typeof icons;
+
+/** Palet lokal untuk kartu, sampul, avatar, dan ikon integrasi. Hex hanya boleh di sini. */
+// prettier-ignore
+const palette = [
+  "[--tpl-violet:#ece6fd] [--tpl-blue:#e0ebfb] [--tpl-peach:#fde6d6] [--tpl-sun:#e9a100]",
+  "[--tpl-sky:#d6e4f0] [--tpl-sea:#7fa6c9] [--tpl-deep:#355f86] [--tpl-fog:#eef1f3] [--tpl-lilac:#d4c6f4] [--tpl-plum:#7b5fc9]",
+  "[--tpl-dusk:#f3c0cf] [--tpl-stone:#9aa1a8] [--tpl-mint:#d3efdf] [--tpl-moss:#4d9873] [--tpl-amber:#f8d892] [--tpl-rust:#d8774b]",
+  "[--tpl-a1:#cfdcf6] [--tpl-a2:#f7d3c0] [--tpl-a3:#d0eadb] [--tpl-a4:#e2d6f8] [--tpl-a5:#f4e3ad]",
+  "[--tpl-red:#e5484d] [--tpl-indigo:#5b5bd6] [--tpl-green:#2f9e6a] [--tpl-orange:#ee7a2b] [--tpl-teal:#1a9a9a] [--tpl-glyph:#ffffff]",
+  "dark:[--tpl-violet:#2a2440] dark:[--tpl-blue:#1d2a3c] dark:[--tpl-peach:#3a2a21] dark:[--tpl-sun:#f5c542]",
+  "dark:[--tpl-sky:#2a4258] dark:[--tpl-sea:#2c5677] dark:[--tpl-deep:#132b42] dark:[--tpl-fog:#30363b] dark:[--tpl-lilac:#3f3468] dark:[--tpl-plum:#56409a]",
+  "dark:[--tpl-dusk:#5b3448] dark:[--tpl-stone:#596066] dark:[--tpl-mint:#1f3d2f] dark:[--tpl-moss:#2f6e50] dark:[--tpl-amber:#5d4a1f] dark:[--tpl-rust:#8a4628]",
+  "dark:[--tpl-a1:#2c3f5c] dark:[--tpl-a2:#5a3a2a] dark:[--tpl-a3:#284a37] dark:[--tpl-a4:#41345f] dark:[--tpl-a5:#53461f]",
+  "dark:[--tpl-red:#d93f45] dark:[--tpl-indigo:#6e6ade] dark:[--tpl-green:#2a8f60] dark:[--tpl-orange:#e06e22] dark:[--tpl-teal:#178c8c] dark:[--tpl-glyph:#ffffff]",
+].join(" ");
+
+/** Sampul abstrak deterministik: gradien berlapis dari palet lokal. */
+// prettier-ignore
+const covers = [
+  "bg-[image:radial-gradient(80%_60%_at_15%_100%,var(--tpl-deep),transparent_70%),radial-gradient(60%_50%_at_85%_15%,var(--tpl-fog),transparent_70%),linear-gradient(180deg,var(--tpl-sky),var(--tpl-sea))]",
+  "bg-[image:radial-gradient(70%_70%_at_80%_20%,var(--tpl-dusk),transparent_65%),radial-gradient(90%_60%_at_10%_100%,var(--tpl-plum),transparent_70%),linear-gradient(160deg,var(--tpl-lilac),var(--tpl-plum))]",
+  "bg-[image:radial-gradient(60%_60%_at_30%_30%,var(--tpl-fog),transparent_70%),radial-gradient(80%_70%_at_90%_100%,var(--tpl-stone),transparent_70%),linear-gradient(135deg,var(--tpl-fog),var(--tpl-stone))]",
+  "bg-[image:radial-gradient(120%_60%_at_20%_110%,var(--tpl-moss),transparent_60%),radial-gradient(100%_50%_at_90%_100%,var(--tpl-mint),transparent_70%),linear-gradient(180deg,var(--tpl-fog),var(--tpl-mint))]",
+  "bg-[image:radial-gradient(40%_45%_at_70%_40%,var(--tpl-amber),transparent_70%),linear-gradient(180deg,var(--tpl-peach),var(--tpl-rust))]",
+  "bg-[image:radial-gradient(70%_60%_at_20%_20%,var(--tpl-dusk),transparent_70%),linear-gradient(200deg,var(--tpl-lilac),var(--tpl-sea))]",
+  "bg-[image:radial-gradient(90%_50%_at_50%_100%,var(--tpl-sea),transparent_70%),linear-gradient(180deg,var(--tpl-fog),var(--tpl-sky))]",
+];
+// prettier-ignore
+const folderTones = [
+  { bg: "bg-(--tpl-violet)", ring: "ring-(--tpl-violet)" },
+  { bg: "bg-(--tpl-blue)", ring: "ring-(--tpl-blue)" },
+  { bg: "bg-(--tpl-peach)", ring: "ring-(--tpl-peach)" },
+];
+// prettier-ignore
+const avatarTones = ["bg-(--tpl-a1)", "bg-(--tpl-a2)", "bg-(--tpl-a3)", "bg-(--tpl-a4)", "bg-(--tpl-a5)"];
+// prettier-ignore
+const apps = {
+  mail: { label: "Mail", tone: "bg-(--tpl-red)" }, chat: { label: "Chat", tone: "bg-(--tpl-indigo)" },
+  sheets: { label: "Sheets", tone: "bg-(--tpl-green)" }, calendar: { label: "Calendar", tone: "bg-(--tpl-orange)" },
+  notes: { label: "Notes", tone: "bg-(--tpl-teal)" },
+};
+type AppId = keyof typeof apps;
+const appIds = Object.keys(apps) as AppId[];
+
+// prettier-ignore
+const pages = {
+  home: { label: "Home", title: "Good morning, Andi", icon: "home" },
+  workflows: { label: "My Workflows", title: "My Workflows", icon: "flow" },
+  templates: { label: "Templates", title: "Templates", icon: "layout" },
+  tools: { label: "Tools", title: "Tools", icon: "tool" },
+  knowledge: { label: "Knowledge Base", title: "Knowledge Base", icon: "book" },
+  marketplace: { label: "Marketplace", title: "Marketplace", icon: "store" },
+  notifications: { label: "Notifications", title: "Notifications", icon: "bell" },
+  trash: { label: "Trash", title: "Trash", icon: "trash" },
+  settings: { label: "Settings", title: "Settings", icon: "sliders" },
+} satisfies Record<string, { label: string; title: string; icon: IconName }>;
+type PageId = keyof typeof pages;
+const DEFAULT_PAGE: PageId = "workflows";
+const TITLE_ID = "alur-page-title";
+// prettier-ignore
+const mainNav: PageId[] = ["home", "workflows", "templates", "tools", "knowledge", "marketplace"];
+const moreNav: PageId[] = ["trash", "settings"];
+const DETAIL_ID = "alur-detail";
+const RENAME_ID = "alur-rename";
+const DELETE_ID = "alur-delete";
+const RUN_COST = 5;
+
+type Status = "active" | "paused" | "draft";
+type Workflow = {
+  id: string;
+  name: string;
+  status: Status;
+  days: number;
+  runs: number;
+  cover: number;
+  folder: string;
+  tags: string[];
+  apps: AppId[];
+  team: string[];
+};
+type Folder = {
+  id: string;
+  name: string;
+  items: number;
+  tone: number;
+  team: string[];
+};
+// prettier-ignore
+const initialWorkflows: Workflow[] = [
+  { id: "w1", name: "Email Responder", status: "active", days: 1, runs: 12, cover: 0, folder: "f1", tags: ["Productivity", "Clients"], apps: ["mail", "chat", "notes"], team: ["Andi Wijaya", "Rina Kusuma", "Budi Santoso"] },
+  { id: "w2", name: "Mental Health Tracker", status: "active", days: 2, runs: 4, cover: 1, folder: "f2", tags: ["Personal"], apps: ["notes", "calendar"], team: ["Sari Wulandari", "Dewi Lestari"] },
+  { id: "w3", name: "Budgeting", status: "paused", days: 3, runs: 8, cover: 2, folder: "f3", tags: ["Finance", "Personal"], apps: ["sheets", "mail"], team: ["Agus Pratama", "Dewi Lestari", "Fajar Nugroho"] },
+  { id: "w4", name: "Habit Tracker", status: "draft", days: 6, runs: 2, cover: 3, folder: "f2", tags: ["Personal", "Productivity"], apps: ["calendar"], team: ["Maya Putri"] },
+  { id: "w5", name: "Idea Vault", status: "active", days: 12, runs: 6, cover: 4, folder: "f2", tags: ["Productivity"], apps: ["notes", "chat"], team: ["Rina Kusuma", "Hendra Gunawan"] },
+  { id: "w6", name: "Package Tracker", status: "paused", days: 20, runs: 3, cover: 5, folder: "f1", tags: ["Personal"], apps: ["mail", "sheets"], team: ["Budi Santoso"] },
+  { id: "w7", name: "Client Onboarding", status: "active", days: 45, runs: 9, cover: 6, folder: "f3", tags: ["Clients", "Finance"], apps: ["mail", "calendar", "sheets", "chat"], team: ["Andi Wijaya", "Maya Putri", "Yusuf Hidayat"] },
+];
+// prettier-ignore
+const initialTrash: Workflow[] = [
+  { id: "w8", name: "Newsletter Digest", status: "paused", days: 60, runs: 0, cover: 2, folder: "f2", tags: ["Productivity"], apps: ["mail"], team: ["Andi Wijaya"] },
+];
+// prettier-ignore
+const initialFolders: Folder[] = [
+  { id: "f1", name: "Task Automation", items: 5, tone: 0, team: ["Andi Wijaya", "Rina Kusuma", "Budi Santoso"] },
+  { id: "f2", name: "Notes & Highlights", items: 17, tone: 1, team: ["Sari Wulandari", "Maya Putri"] },
+  { id: "f3", name: "Billing & Invoicing", items: 9, tone: 2, team: ["Dewi Lestari", "Agus Pratama", "Fajar Nugroho"] },
+];
+const INITIAL_FAVOURITES = ["w1", "w3", "w2", "w7"];
+const statusLabels: Record<Status, string> = {
+  active: "Active",
+  paused: "Paused",
+  draft: "Draft",
+};
+const tags = ["Productivity", "Finance", "Personal", "Clients"];
+const option = (label: string, value = label) => ({ label, value });
+// prettier-ignore
+const filterDefs = [
+  { key: "status", label: "Status", items: [option("All", "all"), option("Active", "active"), option("Paused", "paused"), option("Draft", "draft")] },
+  { key: "app", label: "Integrations", items: [option("Any", "any"), ...appIds.map((id) => option(apps[id].label, id))] },
+  { key: "date", label: "Date", items: [option("Any", "any"), option("Last 3 days", "3"), option("Last 7 days", "7"), option("Last 30 days", "30")] },
+  { key: "tag", label: "Tags", items: [option("All", "all"), ...tags.map((tag) => option(tag))] },
+] as const;
+type FilterKey = (typeof filterDefs)[number]["key"];
+type Filters = Record<FilterKey, string>;
+const DEFAULT_FILTERS: Filters = {
+  status: "all",
+  app: "any",
+  date: "any",
+  tag: "all",
+};
+// prettier-ignore
+const workflowMenu = [option("Rename", "rename"), option("Duplicate", "duplicate"), { separator: true as const }, { label: "Delete", value: "delete", danger: true }];
+// prettier-ignore
+const folderMenu = [option("Rename", "rename"), { separator: true as const }, { label: "Delete", value: "delete", danger: true }];
+
+/* Home */
+// prettier-ignore
+const runs = [
+  { id: "r1", workflow: "Email Responder", time: "09:12", duration: "14 s", ok: true },
+  { id: "r2", workflow: "Budgeting", time: "08:40", duration: "6 s", ok: false },
+  { id: "r3", workflow: "Idea Vault", time: "08:05", duration: "9 s", ok: true },
+  { id: "r4", workflow: "Client Onboarding", time: "Yesterday", duration: "32 s", ok: true },
+  { id: "r5", workflow: "Package Tracker", time: "Yesterday", duration: "11 s", ok: false },
+  { id: "r6", workflow: "Mental Health Tracker", time: "Nov 3", duration: "5 s", ok: true },
+];
+// prettier-ignore
+const runFilters = [option("All runs", "all"), option("Succeeded", "ok"), option("Failed", "failed")];
+
+/* Templates */
+// prettier-ignore
+const templates = [
+  { id: "t1", name: "Invoice Chaser", tag: "Finance", cover: 4, apps: ["mail", "sheets"] as AppId[], text: "Reminds clients about unpaid invoices every Monday." },
+  { id: "t2", name: "Meeting Notes", tag: "Productivity", cover: 6, apps: ["calendar", "notes"] as AppId[], text: "Turns every calendar meeting into a shared note." },
+  { id: "t3", name: "Weekly Review", tag: "Personal", cover: 1, apps: ["notes"] as AppId[], text: "Collects your highlights into one Friday summary." },
+  { id: "t4", name: "Lead Router", tag: "Clients", cover: 0, apps: ["mail", "chat"] as AppId[], text: "Sends new leads to the right teammate in chat." },
+  { id: "t5", name: "Expense Splitter", tag: "Finance", cover: 2, apps: ["sheets", "chat"] as AppId[], text: "Splits shared bills and posts who owes what." },
+  { id: "t6", name: "Reading List", tag: "Personal", cover: 3, apps: ["notes", "mail"] as AppId[], text: "Saves links from your inbox to a reading list." },
+];
+const templateFilters = [
+  option("All", "all"),
+  ...tags.map((tag) => option(tag)),
+];
+
+/* Tools */
+// prettier-ignore
+const tools: { id: AppId; text: string }[] = [
+  { id: "mail", text: "Send and read email from any inbox" }, { id: "chat", text: "Post messages to team channels" },
+  { id: "sheets", text: "Read and write spreadsheet rows" }, { id: "calendar", text: "Create events and reminders" },
+  { id: "notes", text: "Save highlights and meeting notes" },
+];
+const DEFAULT_TOOLS: AppId[] = ["mail", "chat", "sheets", "notes"];
+
+/* Knowledge Base */
+// prettier-ignore
+const articles = [
+  { title: "Build your first workflow", category: "Getting started", minutes: 4 },
+  { title: "Trigger a workflow from email", category: "Mail", minutes: 6 },
+  { title: "Use variables between steps", category: "Advanced", minutes: 8 },
+  { title: "Schedule runs with Calendar", category: "Calendar", minutes: 5 },
+  { title: "Share folders with your team", category: "Collaboration", minutes: 3 },
+  { title: "Understand credit usage", category: "Billing", minutes: 4 },
+];
+
+/* Marketplace */
+// prettier-ignore
+const addons = [
+  { id: "m1", name: "Smart Summaries", maker: "Alur Labs", price: 0, cover: 1 },
+  { id: "m2", name: "Invoice Parser", maker: "Kas Kecil", price: 49000, cover: 4 },
+  { id: "m3", name: "Sentiment Check", maker: "Rasa Data", price: 29000, cover: 5 },
+  { id: "m4", name: "Daily Digest", maker: "Alur Labs", price: 0, cover: 6 },
+  { id: "m5", name: "Receipt Scanner", maker: "Struk Pintar", price: 59000, cover: 2 },
+  { id: "m6", name: "Lead Enricher", maker: "Prospek", price: 99000, cover: 0 },
+];
+
+/* Notifications */
+// prettier-ignore
+const notifications = [
+  { id: "n1", text: "Email Responder finished 12 runs this morning", time: "09:12" },
+  { id: "n2", text: "Rina Kusuma commented on Client Onboarding", time: "08:51" },
+  { id: "n3", text: "Budgeting paused after a Sheets error", time: "08:40" },
+  { id: "n4", text: "Your credits renew on December 1", time: "Yesterday" },
+  { id: "n5", text: "Budi Santoso shared Notes & Highlights with you", time: "Nov 3" },
+  { id: "n6", text: "Idea Vault saved 6 new notes", time: "Nov 2" },
+];
+const INITIAL_READ = ["n5", "n6"];
+
+/* Settings */
+// prettier-ignore
+const prefOptions = [
+  { key: "summary", label: "Email summaries", text: "A short report after every run" },
+  { key: "failures", label: "Run failure alerts", text: "Tell me when a workflow fails" },
+  { key: "digest", label: "Weekly digest", text: "Usage and credits every Monday" },
+];
+const DEFAULT_PREFS = ["summary", "failures"];
+const DEFAULT_WORKSPACE = "Alur Studio";
+
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const navItem = `flex h-9 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 ${focusRing}`;
+const navActive = "bg-primary-soft text-ink";
+const navIdle = "text-muted hover:bg-subtle hover:text-ink";
+const iconButton = `inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors duration-150 hover:bg-subtle hover:text-ink ${focusRing}`;
+const navBadge =
+  "ml-auto rounded-full bg-danger px-1.5 text-[11px] leading-5 font-semibold text-surface tabular-nums";
+const countBadge =
+  "rounded-full bg-subtle px-2 py-0.5 text-xs font-medium text-muted tabular-nums";
+const mono = "font-mono text-[15px] font-semibold tracking-tight";
+const pill =
+  "shrink-0 [&>button]:h-8 [&>button]:gap-1 [&>button]:rounded-full [&>button]:px-3 [&>button]:text-[13px] [&>button>svg:last-child]:size-3.5";
+const kebab =
+  "relative z-10 [&>button]:size-8 [&>button]:rounded-full [&>button]:border-0 [&>button]:bg-transparent [&>button]:px-0 [&>button]:text-muted [&>button]:hover:bg-ink/5 [&>button]:hover:text-ink [&>button>svg:last-child]:hidden";
+const selectable = `text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary`;
+const card =
+  "group relative flex flex-col rounded-2xl border border-line bg-surface p-1.5 transition-shadow duration-150 hover:shadow-overlay";
+const panel = "rounded-2xl border border-line bg-surface p-5";
+const tile = "rounded-2xl border border-line bg-surface px-4 py-3";
+const gridCols = "grid gap-4 sm:grid-cols-2 xl:grid-cols-3";
+const avatarBase =
+  "inline-flex size-7 shrink-0 items-center justify-center rounded-full text-[9px] font-semibold tracking-tighter text-ink ring-2";
+const appBase =
+  "inline-flex size-6 items-center justify-center rounded-full text-(--tpl-glyph) ring-2 ring-surface";
+const empty =
+  "rounded-2xl border border-dashed border-line p-6 text-center text-sm text-muted";
+const starOn = "fill-(--tpl-sun) stroke-(--tpl-sun)";
+
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+const formatNumber = (value: number) => value.toLocaleString("id-ID");
+const rupiah = (value: number) => `Rp ${formatNumber(value)}`;
+const plural = (count: number, word: string) =>
+  `${count} ${word}${count === 1 ? "" : "s"}`;
+const ago = (days: number) =>
+  days === 0 ? "Just now" : days === 1 ? "1 day ago" : `${days} days ago`;
+const metaOf = (workflow: Workflow) =>
+  `${ago(workflow.days)} · ${statusLabels[workflow.status]}`;
+/** Huruf pertama kata pertama dan terakhir. */
+function initials(name: string) {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  const picked = words.length > 1 ? [words[0]!, words.at(-1)!] : words;
+  return picked
+    .map((word) => Array.from(word)[0] ?? "")
+    .join("")
+    .toUpperCase();
+}
+/** Warna avatar tetap untuk nama yang sama. */
+const avatarTone = (name: string) =>
+  avatarTones[
+    Array.from(name).reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+      avatarTones.length
+  ];
+const appNames = (list: AppId[]) => list.map((id) => apps[id].label).join(", ");
+
+const escape = (value: string | number) =>
+  String(value).replace(/[&<>"]/g, (char) => `&#${char.charCodeAt(0)};`);
+const icon = (name: IconName, className = "size-5") =>
+  `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[name]}"></path></svg>`;
+const avatars = (team: string[], ring: string) =>
+  `<div class="flex -space-x-1">${team.map((name) => `<span role="img" aria-label="${escape(name)}" class="${cx(avatarBase, avatarTone(name), ring)}">${escape(initials(name))}</span>`).join("")}</div>`;
+const appIcons = (list: AppId[]) =>
+  `<div role="img" aria-label="Integrations: ${escape(appNames(list))}" class="flex -space-x-1">${list.map((id) => `<span class="${cx(appBase, apps[id].tone)}">${icon(id, "size-3.5")}</span>`).join("")}</div>`;
+
+const unread = notifications.length - INITIAL_READ.length;
+const navButton = (id: PageId) =>
+  `<button type="submit" data-alur-go="${id}"${id === DEFAULT_PAGE ? ' aria-current="page"' : ""} class="${cx(navItem, id === DEFAULT_PAGE ? navActive : navIdle)}">${icon(pages[id].icon, "size-4.5 shrink-0")}<span class="truncate">${pages[id].label}</span>${id === "notifications" ? `<span class="${navBadge}" data-alur-badge>${unread}<span class="sr-only"> unread</span></span>` : ""}</button>`;
+const favouriteButton = (item: Workflow) =>
+  `<button type="submit" data-alur-open="${item.id}" class="${cx(navItem, "text-ink hover:bg-subtle")}"><span aria-hidden="true" class="${cx("size-4.5 shrink-0 rounded-md", covers[item.cover])}"></span><span class="truncate">${escape(item.name)}</span>${icon("star", cx("ml-auto size-3.5", starOn))}</button>`;
+const favouriteList = INITIAL_FAVOURITES.map(
+  (id) => initialWorkflows.find((item) => item.id === id)!,
+);
+/** Isi sidebar dipakai di aside desktop dan Drawer menu mobile; form dialog menutup Drawer saat item dipilih. */
+const sideNav = `<form method="dialog" class="grid gap-6"><nav aria-label="Main" class="grid gap-0.5">${mainNav.map(navButton).join("")}<details class="group/more"><summary class="${cx(navItem, navIdle, "cursor-pointer list-none [&::-webkit-details-marker]:hidden")}">${icon("more", "size-4.5 shrink-0")}More${icon("chevron", "ml-auto size-4 transition-transform duration-150 group-open/more:rotate-180")}</summary><div class="mt-0.5 grid gap-0.5 pl-4">${moreNav.map(navButton).join("")}</div></details><hr class="my-2 border-line">${navButton("notifications")}</nav><div class="grid gap-1" data-alur-favourites><h2 class="px-3 text-xs font-medium text-muted">Favourites</h2>${favouriteList.map(favouriteButton).join("")}</div></form>`;
+
+const recentCard = (item: Workflow) =>
+  `<li class="${card}"><div aria-hidden="true" class="${cx("h-24 rounded-xl", covers[item.cover])}"></div><div class="grid gap-0.5 px-2 pt-2.5 pb-1.5"><h3 class="${cx(mono, "truncate")}"><button type="button" class="${selectable}" data-alur-open="${item.id}">${escape(item.name)}</button></h3><p class="text-xs text-muted">${escape(metaOf(item))}</p></div></li>`;
+const recent = [...initialWorkflows].sort((a, b) => a.days - b.days).slice(0, 3);
+const homeTiles: [string, string | number][] = [
+  [
+    "Active workflows",
+    initialWorkflows.filter((item) => item.status === "active").length,
+  ],
+  ["Runs today", initialWorkflows.reduce((sum, item) => sum + item.runs, 0)],
+  ["Credits available", formatNumber(2450)],
+  ["Unread notifications", unread],
+];
+const detail = initialWorkflows[0]!;
+const detailRows: [string, string][] = [
+  ["Status", statusLabels[detail.status]],
+  ["Runs today", String(detail.runs)],
+  ["Folder", initialFolders.find((f) => f.id === detail.folder)?.name ?? "None"],
+  ["Tags", detail.tags.join(", ") || "None"],
+  ["Integrations", appNames(detail.apps) || "None"],
+  ["Owner", detail.team[0] ?? "Andi Wijaya"],
+];
+/** Kartu contoh untuk workflow baru (buat, duplikat, template, restore). */
+const proto: Workflow = { ...initialWorkflows[0]!, id: "proto" };
+
+/** Data dan class yang dipakai script di klien. */
+const config = JSON.stringify({
+  icons,
+  covers,
+  apps,
+  avatarTones,
+  statusLabels,
+  titles: Object.fromEntries(
+    Object.entries(pages).map(([id, page]) => [id, page.title]),
+  ),
+  defaultPage: DEFAULT_PAGE,
+  titleId: TITLE_ID,
+  detailId: DETAIL_ID,
+  renameId: RENAME_ID,
+  deleteId: DELETE_ID,
+  runCost: RUN_COST,
+  workflows: initialWorkflows,
+  trash: initialTrash,
+  folders: initialFolders,
+  favourites: INITIAL_FAVOURITES,
+  read: INITIAL_READ,
+  notifications: notifications.map((item) => item.id),
+  templates: templates.map(({ id, name, tag, cover, apps }) => ({ id, name, tag, cover, apps })),
+  filterDefs,
+  defaultFilters: DEFAULT_FILTERS,
+  cls: {
+    navItem,
+    navActive,
+    navIdle,
+    avatarBase,
+    appBase,
+    starOn,
+    card,
+    mono,
+    selectable,
+  },
+});
+---
+
+<alur-template class="contents" data-config={config}>
+  <div class={cx(palette, "flex min-h-dvh bg-surface text-ink")}>
+    <aside class={cx("hidden w-60 shrink-0 border-r border-line bg-surface", "lg:block")} data-alur-aside>
+      <div class="sticky top-0 flex h-dvh flex-col gap-4 overflow-y-auto px-3 pb-6">
+        <div class="flex h-16 items-center justify-between px-3">
+          <p class="text-lg font-bold tracking-tight"><span class="mr-1 font-mono text-muted" aria-hidden="true">#</span>Alur</p>
+          <button type="button" aria-label="Hide sidebar" class={iconButton} data-alur-sidebar="hide"><Fragment set:html={icon("panel", "size-4.5")} /></button>
+        </div>
+        <Fragment set:html={sideNav} />
+      </div>
+    </aside>
+
+    <div class="min-w-0 flex-1">
+      <header class="sticky top-0 z-20 flex h-16 items-center gap-3 bg-surface px-4 lg:px-8">
+        <Drawer title="Menu" side="left">
+          <button slot="trigger" type="button" aria-label="Open menu" class={cx(iconButton, "size-10 lg:hidden")}><Fragment set:html={icon("menu")} /></button>
+          <Fragment set:html={sideNav} />
+        </Drawer>
+        <button type="button" aria-label="Show sidebar" class={cx(iconButton, "hidden lg:inline-flex")} data-alur-sidebar="show" hidden><Fragment set:html={icon("panel", "size-4.5")} /></button>
+        <div role="search" class="relative min-w-0 flex-1 lg:max-w-xl">
+          <Fragment set:html={icon("search", "pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted")} />
+          <Input id="alur-search" type="search" aria-label="Search folders and workflows" placeholder="Search..." class="rounded-full! pr-16 pl-10" data-alur-search />
+          <Kbd size="sm" class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">⌘ F</Kbd>
+        </div>
+        <p class="ml-auto hidden shrink-0 text-sm text-muted sm:block">Credits available <span class="font-semibold text-ink tabular-nums" data-alur-credits>{formatNumber(2450)}</span></p>
+      </header>
+
+      <main class="px-4 pt-4 pb-12 lg:px-8">
+        <div class="mb-8 flex flex-wrap items-center gap-3">
+          <h1 id={TITLE_ID} tabindex="-1" class="mr-auto text-[28px] leading-tight font-bold tracking-tight focus:outline-none">{pages[DEFAULT_PAGE].title}</h1>
+          <div class="contents" data-alur-workflow-tools>
+            <div class="order-last -mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 pb-1 lg:order-none lg:mx-0 lg:w-auto lg:px-0">
+              {filterDefs.map((def) => (
+                <DropdownMenu class={pill} items={[...def.items]} data-alur-filter={def.key}>
+                  <Fragment slot="trigger"><span class="text-muted">{def.label}:</span><span data-alur-filter-label>{def.items.find((item) => item.value === DEFAULT_FILTERS[def.key])?.label}</span></Fragment>
+                </DropdownMenu>
+              ))}
+            </div>
+            <Modal title="New workflow" data-alur-create>
+              <Button slot="trigger" size="sm" class="rounded-full" data-alur-new><Fragment set:html={icon("plus", "size-4")} />New workflow</Button>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <Input label="Name" name="name" placeholder="Untitled workflow" />
+                </div>
+                <Select label="Folder" name="folder" data-alur-folders>
+                  {initialFolders.map((folder) => <option value={folder.id}>{folder.name}</option>)}
+                </Select>
+                <Select label="Tag" name="tag">
+                  {tags.map((tag) => <option selected={tag === "Productivity"}>{tag}</option>)}
+                </Select>
+                <Select label="Status" name="status">
+                  <option value="draft">Draft</option>
+                  <option value="active">Active</option>
+                </Select>
+              </div>
+              <Fragment slot="footer">
+                <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+                <Button type="submit" value="create">Create workflow</Button>
+              </Fragment>
+            </Modal>
+          </div>
+        </div>
+        {
+          /* Halaman bawaan dirender langsung (tanpa JS tetap tampil), lalu semua halaman sebagai <template>. */
+          [{ live: true, id: DEFAULT_PAGE }, ...(Object.keys(pages) as PageId[]).map((id) => ({ live: false, id }))].map(({ live, id }) => {
+            const Wrapper = live ? "div" : "template";
+            return (
+              <Wrapper class={live ? "contents" : undefined} data-alur-view={live ? "" : undefined} data-alur-page={live ? undefined : id}>
+                {id === "home" && (
+                  <div class="grid gap-8">
+                    <dl class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                      {homeTiles.map(([label, value]) => (
+                        <div class={tile}>
+                          <dt class="text-xs text-muted">{label}</dt>
+                          <dd class="mt-1 text-xl font-semibold tracking-tight tabular-nums" data-alur-tile>{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <div class="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
+                      <section aria-labelledby="alur-recent-title" class="grid gap-4">
+                        <h2 id="alur-recent-title" class="text-base font-semibold">Recently edited</h2>
+                        <ul role="list" class="grid gap-3 sm:grid-cols-3 xl:grid-cols-3" data-alur-recent set:html={recent.map(recentCard).join("")} />
+                      </section>
+                      <section aria-labelledby="alur-runs-title" class={panel}>
+                        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <h2 id="alur-runs-title" class="text-base font-semibold">Recent runs</h2>
+                            <p class="text-sm text-muted" data-alur-run-count>{plural(runs.length, "run")}</p>
+                          </div>
+                          <ToggleGroup label="Filter runs" items={runFilters} value="all" data-alur-runs />
+                        </div>
+                        <ul class="divide-y divide-line" data-alur-run-list>
+                          {runs.map((run) => (
+                            <li data-run={run.id} data-ok={String(run.ok)} class="flex items-center gap-3 py-3">
+                              <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-medium">{run.workflow}</p>
+                                <p class="text-xs text-muted">{run.time}, {run.duration}</p>
+                              </div>
+                              <Badge variant={run.ok ? "success" : "danger"}>{run.ok ? "Succeeded" : "Failed"}</Badge>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    </div>
+                  </div>
+                )}
+
+                {id === "workflows" && (
+                  <div class="grid gap-10">
+                    <section aria-labelledby="alur-folders-title" class="grid gap-4">
+                      <h2 id="alur-folders-title" class="flex items-center gap-2 text-base font-semibold">Folders<span class={countBadge} data-alur-folder-count>{initialFolders.length}</span></h2>
+                      <ul role="list" class={gridCols} data-alur-folder-list>
+                        {initialFolders.map((folder) => {
+                          const tone = folderTones[folder.tone]!;
+                          return (
+                            <li data-folder={folder.id}>
+                              <div aria-hidden="true" class={cx("h-4 w-32 rounded-t-xl [clip-path:polygon(0_0,82%_0,100%_100%,0_100%)]", tone.bg)} />
+                              <div class={cx("flex h-40 flex-col justify-between rounded-2xl rounded-tl-none p-4", tone.bg)}>
+                                <div class="flex items-start justify-between gap-2">
+                                  <h3 class={cx(mono, "pt-1")} data-alur-name>{folder.name}</h3>
+                                  <DropdownMenu class={kebab} items={folderMenu} data-alur-menu="folder">
+                                    <Fragment slot="trigger"><Fragment set:html={icon("dots", "size-4.5")} /><span class="sr-only" data-alur-options>Options for {folder.name}</span></Fragment>
+                                  </DropdownMenu>
+                                </div>
+                                <div class="flex items-end justify-between gap-2">
+                                  <Fragment set:html={avatars(folder.team, tone.ring)} />
+                                  <p class="text-sm text-muted">{folder.items} Items</p>
+                                </div>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                      <p class={empty} data-alur-folder-empty hidden>No folders match your search.</p>
+                    </section>
+                    <section aria-labelledby="alur-workflows-title" class="grid gap-4">
+                      <h2 id="alur-workflows-title" class="flex items-center gap-2 text-base font-semibold">Workflows<span class={countBadge} data-alur-workflow-count>{initialWorkflows.length}</span></h2>
+                      <ul role="list" class={gridCols} data-alur-workflow-list>
+                        {[...initialWorkflows, proto].map((item) => {
+                          const starred = INITIAL_FAVOURITES.includes(item.id);
+                          const card_ = (
+                            <li data-workflow={item.id} class={card}>
+                              <div aria-hidden="true" class={cx("h-40 rounded-xl", covers[item.cover])} data-alur-cover />
+                              <span class="absolute top-3.5 right-3.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-surface px-1.5 text-xs font-semibold text-ink tabular-nums" data-alur-runs-today>{item.runs}<span class="sr-only"> runs today</span></span>
+                              <div class="grid gap-4 px-2.5 pt-3 pb-2">
+                                <div class="flex items-start justify-between gap-2">
+                                  <div class="min-w-0">
+                                    <p class="text-xs text-muted" data-alur-meta>{metaOf(item)}</p>
+                                    <h3 class={cx(mono, "mt-1 truncate")}><button type="button" class={selectable} data-alur-open={item.id}>{item.name}</button></h3>
+                                  </div>
+                                  <div class="relative z-10 -mt-1 -mr-1 flex items-center">
+                                    <button type="button" aria-pressed={starred ? "true" : "false"} aria-label={`Favourite ${item.name}`} class={cx(iconButton, "rounded-full")} data-alur-star={item.id}><Fragment set:html={icon("star", cx("size-4", starred && starOn))} /></button>
+                                    <DropdownMenu class={kebab} items={workflowMenu} data-alur-menu="workflow">
+                                      <Fragment slot="trigger"><Fragment set:html={icon("dots", "size-4.5")} /><span class="sr-only" data-alur-options>Options for {item.name}</span></Fragment>
+                                    </DropdownMenu>
+                                  </div>
+                                </div>
+                                <div class="flex items-center justify-between gap-2" data-alur-people>
+                                  <Fragment set:html={avatars(item.team, "ring-surface")} />
+                                  <Fragment set:html={appIcons(item.apps)} />
+                                </div>
+                              </div>
+                            </li>
+                          );
+                          return item === proto ? <template data-alur-proto="workflow">{card_}</template> : card_;
+                        })}
+                      </ul>
+                      <div class={cx(empty, "grid justify-items-center gap-3")} data-alur-workflow-empty hidden>
+                        <p>No workflows match your search or filters.</p>
+                        <Button size="sm" variant="secondary" data-alur-clear>Clear filters</Button>
+                      </div>
+                    </section>
+                  </div>
+                )}
+
+                {id === "templates" && (
+                  <div class="grid gap-6">
+                    <div class="flex min-w-0 flex-wrap items-center justify-between gap-3">
+                      <p class="text-sm text-muted" data-alur-template-count>{plural(templates.length, "template")}</p>
+                      <ToggleGroup label="Filter templates" class="max-w-full overflow-x-auto" items={templateFilters} value="all" data-alur-templates />
+                    </div>
+                    <ul role="list" class={gridCols} data-alur-template-list>
+                      {templates.map((item) => (
+                        <li data-template={item.id} data-tag={item.tag} class={card}>
+                          <div aria-hidden="true" class={cx("h-28 rounded-xl", covers[item.cover])} />
+                          <div class="grid flex-1 gap-3 px-2.5 pt-3 pb-2">
+                            <div class="grid gap-1">
+                              <p class="text-xs text-muted">{item.tag}</p>
+                              <h2 class={mono}>{item.name}</h2>
+                              <p class="text-sm text-muted">{item.text}</p>
+                            </div>
+                            <div class="mt-auto flex items-center justify-between gap-2">
+                              <Fragment set:html={appIcons(item.apps)} />
+                              <Button size="sm" variant="secondary" data-alur-use={item.id}>Use template<span class="sr-only">{item.name}</span></Button>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {id === "tools" && (
+                  <section aria-labelledby="alur-tools-title" class={panel}>
+                    <h2 id="alur-tools-title" class="text-base font-semibold">Connected tools</h2>
+                    <p class="text-sm text-muted" data-alur-tool-count>{DEFAULT_TOOLS.length} of {tools.length} connected</p>
+                    <ul class="mt-2 divide-y divide-line">
+                      {tools.map((tool) => (
+                        <li class="flex items-center gap-4 py-4">
+                          <span class={cx(appBase, "size-10 ring-0", apps[tool.id].tone)} set:html={icon(tool.id)} />
+                          <div class="min-w-0 flex-1">
+                            <p class="font-medium">{apps[tool.id].label}</p>
+                            <p class="text-sm text-muted">{tool.text}</p>
+                          </div>
+                          <Switch aria-label={apps[tool.id].label} checked={DEFAULT_TOOLS.includes(tool.id)} data-alur-tool />
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {id === "knowledge" && (
+                  <div class="grid gap-6">
+                    <div class="flex flex-wrap items-center gap-3">
+                      <div class="w-full sm:w-80">
+                        <Input type="search" aria-label="Search articles" placeholder="Search articles" data-alur-articles />
+                      </div>
+                      <p class="text-sm text-muted" data-alur-article-count>{articles.length} of {articles.length} articles</p>
+                    </div>
+                    <ul role="list" class={gridCols} data-alur-article-list>
+                      {articles.map((item) => (
+                        <li class={cx(panel, "grid gap-2")} data-search={`${item.title} ${item.category}`.toLowerCase()}>
+                          <p class="text-xs text-muted">{item.category}</p>
+                          <h2 class="font-semibold">{item.title}</h2>
+                          <p class="text-sm text-muted">{item.minutes} min read</p>
+                        </li>
+                      ))}
+                    </ul>
+                    <p class={empty} data-alur-article-empty hidden>No articles match your search.</p>
+                  </div>
+                )}
+
+                {id === "marketplace" && (
+                  <div class="grid gap-6">
+                    <p class="text-sm text-muted" data-alur-installed-count>1 installed</p>
+                    <ul role="list" class={gridCols}>
+                      {addons.map((item) => (
+                        <li class={cx(card, "flex-row gap-3 p-3")}>
+                          <div aria-hidden="true" class={cx("size-14 shrink-0 rounded-xl", covers[item.cover])} />
+                          <div class="min-w-0 flex-1">
+                            <h2 class={cx(mono, "truncate")}>{item.name}</h2>
+                            <p class="truncate text-xs text-muted">{item.maker}</p>
+                            <p class="mt-1 text-sm font-medium tabular-nums">{item.price ? `${rupiah(item.price)}/month` : "Free"}</p>
+                          </div>
+                          <Button size="sm" variant="secondary" class="self-center" data-alur-install={item.id} data-name={item.name} data-on hidden={item.id !== "m1"}>Installed<span class="sr-only">{item.name}</span></Button>
+                          <Button size="sm" variant="primary" class="self-center" data-alur-install={item.id} data-name={item.name} hidden={item.id === "m1"}>Install<span class="sr-only">{item.name}</span></Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {id === "notifications" && (
+                  <section aria-labelledby="alur-inbox-title" class={panel}>
+                    <div class="flex min-w-0 flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <h2 id="alur-inbox-title" class="text-base font-semibold">Inbox</h2>
+                        <p class="text-sm text-muted" data-alur-unread>{unread} unread</p>
+                      </div>
+                      <Button size="sm" variant="secondary" data-alur-read-all>Mark all as read</Button>
+                    </div>
+                    <ul class="mt-2 divide-y divide-line">
+                      {notifications.map((item) => {
+                        const isRead = INITIAL_READ.includes(item.id);
+                        return (
+                          <li data-unread={String(!isRead)} data-note={item.id} class="flex items-center gap-3 py-3">
+                            <span aria-hidden="true" class={cx("size-2 shrink-0 rounded-full", isRead ? "bg-line" : "bg-danger")} />
+                            <div class="min-w-0 flex-1">
+                              <p class={cx("text-sm", !isRead && "font-medium")}>{item.text}</p>
+                              <p class="text-xs text-muted">{item.time}</p>
+                            </div>
+                            <Button size="sm" variant="ghost" data-alur-read={item.id} hidden={isRead}>Mark read<span class="sr-only">: {item.text}</span></Button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </section>
+                )}
+
+                {id === "trash" && (
+                  <section aria-labelledby="alur-trash-title" class={panel}>
+                    <h2 id="alur-trash-title" class="text-base font-semibold">Deleted workflows</h2>
+                    <p class="text-sm text-muted" data-alur-trash-count>{plural(initialTrash.length, "item")}</p>
+                    <ul class="mt-2 divide-y divide-line" data-alur-trash-list>
+                      {[...initialTrash, proto].map((item) => {
+                        const row = (
+                          <li data-trash={item.id} class="flex items-center gap-3 py-3">
+                            <span aria-hidden="true" class={cx("size-9 shrink-0 rounded-lg", covers[item.cover])} data-alur-cover />
+                            <p class={cx(mono, "min-w-0 flex-1 truncate")} data-alur-name>{item.name}</p>
+                            <Button size="sm" variant="secondary" data-alur-restore={item.id}>Restore<span class="sr-only" data-alur-options>{item.name}</span></Button>
+                          </li>
+                        );
+                        return item === proto ? <template data-alur-proto="trash">{row}</template> : row;
+                      })}
+                    </ul>
+                    <p class={cx(empty, "mt-4")} data-alur-trash-empty hidden>Trash is empty.</p>
+                  </section>
+                )}
+
+                {id === "settings" && (
+                  <form class={cx(panel, "grid max-w-2xl gap-5")} data-alur-settings>
+                    <Input label="Workspace name" name="workspace" value={DEFAULT_WORKSPACE} />
+                    <ul class="divide-y divide-line">
+                      {prefOptions.map((item) => (
+                        <li class="flex items-center justify-between gap-4 py-3">
+                          <div>
+                            <p class="text-sm font-medium">{item.label}</p>
+                            <p class="text-xs text-muted">{item.text}</p>
+                          </div>
+                          <Switch aria-label={item.label} checked={DEFAULT_PREFS.includes(item.key)} data-alur-pref />
+                        </li>
+                      ))}
+                    </ul>
+                    <div class="flex justify-end">
+                      <Button type="submit">Save changes</Button>
+                    </div>
+                  </form>
+                )}
+              </Wrapper>
+            );
+          })
+        }
+      </main>
+    </div>
+
+    <Drawer id={DETAIL_ID} title="Workflow details">
+      <div class="grid gap-5 text-ink" data-alur-detail>
+        <div aria-hidden="true" class={cx("h-32 rounded-xl", covers[detail.cover])} data-alur-cover />
+        <div>
+          <h3 class={cx(mono, "text-lg")} data-alur-name>{detail.name}</h3>
+          <p class="text-sm text-muted" data-alur-meta>{metaOf(detail)}</p>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line p-3">
+          <Switch label="Active" checked={detail.status === "active"} data-alur-active />
+          <div class="flex gap-2">
+            <Button size="sm" variant="secondary" aria-pressed={INITIAL_FAVOURITES.includes(detail.id) ? "true" : "false"} data-alur-detail-star><Fragment set:html={icon("star", cx("size-4", INITIAL_FAVOURITES.includes(detail.id) && starOn))} />Favourite</Button>
+            <Button size="sm" data-alur-run><Fragment set:html={icon("play", "size-4")} />Run now</Button>
+          </div>
+        </div>
+        <dl class="divide-y divide-line text-sm">
+          {detailRows.map(([label, value]) => (
+            <div class="flex items-center justify-between gap-4 py-2.5">
+              <dt class="shrink-0 text-muted">{label}</dt>
+              <dd class="min-w-0 truncate text-right font-medium" data-alur-row>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <Button slot="footer" variant="secondary" type="submit">Close</Button>
+    </Drawer>
+
+    <Modal id={RENAME_ID} title="Rename" data-alur-rename>
+      <Input label="Name" name="rename" />
+      <Fragment slot="footer">
+        <Button variant="secondary" type="submit" value="cancel">Cancel</Button>
+        <Button type="submit" value="save">Save</Button>
+      </Fragment>
+    </Modal>
+
+    <AlertDialog id={DELETE_ID} title="Delete this item?" variant="danger" actionLabel="Delete"><span data-alur-delete-text>{`${initialWorkflows[0]!.name} moves to Trash. You can restore it later.`}</span></AlertDialog>
+    <Toaster />
+  </div>
+</alur-template>
+
+<script>
+  type AppId = "mail" | "chat" | "sheets" | "calendar" | "notes";
+  type Status = "active" | "paused" | "draft";
+  type Workflow = {
+    id: string;
+    name: string;
+    status: Status;
+    days: number;
+    runs: number;
+    cover: number;
+    folder: string;
+    tags: string[];
+    apps: AppId[];
+    team: string[];
+  };
+  type Folder = {
+    id: string;
+    name: string;
+    items: number;
+    tone: number;
+    team: string[];
+  };
+  type Template = {
+    id: string;
+    name: string;
+    tag: string;
+    cover: number;
+    apps: AppId[];
+  };
+  type FilterDef = {
+    key: string;
+    label: string;
+    items: { label: string; value: string }[];
+  };
+  type Config = {
+    icons: Record<string, string>;
+    covers: string[];
+    apps: Record<AppId, { label: string; tone: string }>;
+    avatarTones: string[];
+    statusLabels: Record<Status, string>;
+    titles: Record<string, string>;
+    defaultPage: string;
+    titleId: string;
+    detailId: string;
+    renameId: string;
+    deleteId: string;
+    runCost: number;
+    workflows: Workflow[];
+    trash: Workflow[];
+    folders: Folder[];
+    favourites: string[];
+    read: string[];
+    notifications: string[];
+    templates: Template[];
+    filterDefs: FilterDef[];
+    defaultFilters: Record<string, string>;
+    cls: Record<
+      | "navItem"
+      | "navActive"
+      | "navIdle"
+      | "avatarBase"
+      | "appBase"
+      | "starOn"
+      | "card"
+      | "mono"
+      | "selectable",
+      string
+    >;
+  };
+  type ToastDetail = { title: string; description?: string; variant?: string };
+
+  const toast = (detail: ToastDetail) =>
+    window.dispatchEvent(new CustomEvent("markas-toast", { detail }));
+  const cx = (...c: (string | false | null | undefined)[]) =>
+    c.filter(Boolean).join(" ");
+  const entities: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+  };
+  const escape = (value: string | number) =>
+    String(value).replace(/[&<>"]/g, (char) => entities[char]!);
+  const formatNumber = (value: number) => value.toLocaleString("id-ID");
+  const plural = (count: number, word: string) =>
+    `${count} ${word}${count === 1 ? "" : "s"}`;
+  const toggleIn = <T,>(list: T[], item: T) =>
+    list.includes(item)
+      ? list.filter((entry) => entry !== item)
+      : [...list, item];
+  const ago = (days: number) =>
+    days === 0 ? "Just now" : days === 1 ? "1 day ago" : `${days} days ago`;
+  function initials(name: string) {
+    const words = name.trim().split(/\s+/).filter(Boolean);
+    const picked = words.length > 1 ? [words[0]!, words.at(-1)!] : words;
+    return picked
+      .map((word) => Array.from(word)[0] ?? "")
+      .join("")
+      .toUpperCase();
+  }
+  const setClasses = (element: Element, add: string, remove: string) => {
+    element.classList.remove(...remove.split(" "));
+    element.classList.add(...add.split(" "));
+  };
+  /** Ganti isi hanya kalau berubah, supaya fokus di dalamnya tidak hilang. */
+  const setHtml = (element: Element | null, html: string) => {
+    if (element && element.innerHTML !== html) element.innerHTML = html;
+  };
+  /** Pasang ulang anak elemen hanya kalau urutan atau isinya berubah. */
+  const setChildren = (parent: Element | null, children: Element[]) => {
+    if (!parent) return;
+    const current = Array.from(parent.children);
+    const same =
+      current.length === children.length &&
+      current.every((child, index) => child === children[index]);
+    if (!same) parent.replaceChildren(...children);
+  };
+  /** Buka dialog native setelah menu pemicu selesai menutup. */
+  function openDialog(id: string) {
+    requestAnimationFrame(() => {
+      const dialog = document.getElementById(id);
+      if (!(dialog instanceof HTMLDialogElement) || dialog.open) return;
+      dialog.returnValue = "";
+      dialog.showModal();
+      dialog.dataset.state = "open";
+    });
+  }
+
+  /** Satu elemen per template: navigasi hash, data bersama, dan interaksi setiap halaman. */
+  class AlurTemplate extends HTMLElement {
+    private readonly config = JSON.parse(this.dataset.config ?? "{}") as Config;
+    private page = this.config.defaultPage;
+    private workflows = this.config.workflows;
+    private folders = this.config.folders;
+    private trash = this.config.trash;
+    private favourites = this.config.favourites;
+    private read = this.config.read;
+    private credits = 2450;
+    private nextId = 9;
+    private sidebarOpen = true;
+    private query = "";
+    private filters = this.config.defaultFilters;
+    private selectedId = "w1";
+    private target = { kind: "workflow", id: "w1" };
+    /* Status per halaman, mulai dari awal setiap kali halaman dibuka. */
+    private runFilter = "all";
+    private installed = ["m1"];
+    /** Elemen daftar di klon yang sedang tampil, dipakai ulang per id. */
+    private cache = new Map<string, HTMLElement>();
+    private protos = new Map<string, HTMLTemplateElement>();
+
+    private readonly onHashChange = () => {
+      this.open(this.readHash());
+      document.getElementById(this.config.titleId)?.focus();
+    };
+    private readonly onKeydown = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "f")
+        return;
+      event.preventDefault();
+      document.getElementById("alur-search")?.focus();
+    };
+    private readonly onClick = (event: Event) => this.handleClick(event);
+    private readonly onInput = (event: Event) => this.handleInput(event);
+    private readonly onChange = (event: Event) => this.handleChange(event);
+    private readonly onSubmit = (event: Event) => this.handleSubmit(event);
+    private readonly onSelect = (event: Event) => this.handleSelect(event);
+    private readonly onClose = (event: Event) => this.handleClose(event);
+    private readonly onAction = () => this.onDelete();
+
+    connectedCallback() {
+      this.open(this.readHash());
+      window.addEventListener("hashchange", this.onHashChange);
+      window.addEventListener("keydown", this.onKeydown);
+      this.addEventListener("click", this.onClick);
+      this.addEventListener("input", this.onInput);
+      this.addEventListener("change", this.onChange);
+      this.addEventListener("submit", this.onSubmit);
+      this.addEventListener("markas-select", this.onSelect);
+      this.addEventListener("markas-action", this.onAction);
+      // close tidak bubble: didengar di fase capture.
+      this.addEventListener("close", this.onClose, true);
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener("hashchange", this.onHashChange);
+      window.removeEventListener("keydown", this.onKeydown);
+      this.removeEventListener("click", this.onClick);
+      this.removeEventListener("input", this.onInput);
+      this.removeEventListener("change", this.onChange);
+      this.removeEventListener("submit", this.onSubmit);
+      this.removeEventListener("markas-select", this.onSelect);
+      this.removeEventListener("markas-action", this.onAction);
+      this.removeEventListener("close", this.onClose, true);
+    }
+
+    private find<T extends Element = HTMLElement>(selector: string) {
+      return this.querySelector<T>(`[data-alur-view] ${selector}`);
+    }
+
+    private findAll<T extends Element = HTMLElement>(selector: string) {
+      return Array.from(this.querySelectorAll<T>(selector));
+    }
+
+    /** Halaman aktif disimpan di hash URL supaya bisa dibagikan dan tombol Back bekerja. */
+    private readHash() {
+      const id = window.location.hash.slice(1);
+      return id in this.config.titles ? id : this.config.defaultPage;
+    }
+
+    // Halaman yang sama tidak memicu hashchange, jadi fokus judul langsung.
+    private go(id: string) {
+      if (id === this.page)
+        document.getElementById(this.config.titleId)?.focus();
+      else window.location.assign(`#${id}`);
+    }
+
+    /** Ganti isi halaman dengan klon baru dari <template>, lalu isi dari data bersama. */
+    private open(id: string) {
+      const template = this.querySelector<HTMLTemplateElement>(
+        `template[data-alur-page="${id}"]`,
+      );
+      const view = this.querySelector("[data-alur-view]");
+      if (!template || !view) return;
+      this.page = id;
+      this.runFilter = "all";
+      this.installed = ["m1"];
+      view.replaceChildren(template.content.cloneNode(true));
+      this.cache.clear();
+      view
+        .querySelectorAll<HTMLTemplateElement>("template[data-alur-proto]")
+        .forEach((proto) => {
+          this.protos.set(proto.dataset.alurProto!, proto);
+          proto.remove();
+        });
+      view
+        .querySelectorAll<HTMLElement>(
+          "li[data-workflow], li[data-folder], li[data-trash], li[data-run], li[data-template], li[data-search]",
+        )
+        .forEach((item) => {
+          const key =
+            item.dataset.workflow ??
+            item.dataset.folder ??
+            item.dataset.trash ??
+            item.dataset.run ??
+            item.dataset.template ??
+            item.dataset.search;
+          const kind = Object.keys(item.dataset)[0];
+          this.cache.set(`${kind}:${key}`, item);
+        });
+      const title = document.getElementById(this.config.titleId);
+      if (title) title.textContent = this.config.titles[id] ?? "";
+      this.render();
+    }
+
+    /* Data turunan */
+    private get unread() {
+      return this.config.notifications.length - this.read.length;
+    }
+
+    private nameMatches(name: string) {
+      return name.toLowerCase().includes(this.query.trim().toLowerCase());
+    }
+
+    private get visible() {
+      const { filters } = this;
+      return this.workflows.filter(
+        (item) =>
+          this.nameMatches(item.name) &&
+          (filters.status === "all" || item.status === filters.status) &&
+          (filters.app === "any" ||
+            item.apps.includes(filters.app as AppId)) &&
+          (filters.date === "any" || item.days <= Number(filters.date)) &&
+          (filters.tag === "all" || item.tags.includes(filters.tag!)),
+      );
+    }
+
+    private get detail() {
+      return this.workflows.find((item) => item.id === this.selectedId);
+    }
+
+    private metaOf(workflow: Workflow) {
+      return `${ago(workflow.days)} · ${this.config.statusLabels[workflow.status]}`;
+    }
+
+    private appNames(list: AppId[]) {
+      return list.map((id) => this.config.apps[id].label).join(", ");
+    }
+
+    private icon(name: string, className = "size-5") {
+      return `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${this.config.icons[name]}"></path></svg>`;
+    }
+
+    private avatars(team: string[], ring: string) {
+      const { avatarTones, cls } = this.config;
+      const tone = (name: string) =>
+        avatarTones[
+          Array.from(name).reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+            avatarTones.length
+        ];
+      return `<div class="flex -space-x-1">${team.map((name) => `<span role="img" aria-label="${escape(name)}" class="${cx(cls.avatarBase, tone(name), ring)}">${escape(initials(name))}</span>`).join("")}</div>`;
+    }
+
+    private appIcons(list: AppId[]) {
+      const { apps, cls } = this.config;
+      return `<div role="img" aria-label="Integrations: ${escape(this.appNames(list))}" class="flex -space-x-1">${list.map((id) => `<span class="${cx(cls.appBase, apps[id].tone)}">${this.icon(id, "size-3.5")}</span>`).join("")}</div>`;
+    }
+
+    /** Tampilkan semua yang bergantung pada data bersama. */
+    private render() {
+      this.renderShell();
+      this.renderDetail();
+      const renderers: Record<string, (() => void) | undefined> = {
+        home: () => this.renderHome(),
+        workflows: () => this.renderWorkflows(),
+        notifications: () => this.renderNotifications(),
+        trash: () => this.renderTrash(),
+      };
+      renderers[this.page]?.();
+    }
+
+    private renderShell() {
+      const { cls, covers } = this.config;
+      this.findAll<HTMLElement>("[data-alur-go]").forEach((button) => {
+        const active = button.dataset.alurGo === this.page;
+        if (active) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
+        setClasses(
+          button,
+          active ? cls.navActive : cls.navIdle,
+          active ? cls.navIdle : cls.navActive,
+        );
+      });
+      const unread = this.unread;
+      this.findAll<HTMLElement>("[data-alur-badge]").forEach((badge) => {
+        badge.hidden = unread === 0;
+        badge.firstChild!.nodeValue = String(unread);
+      });
+      const favourites = this.favourites
+        .map((id) => this.workflows.find((item) => item.id === id))
+        .filter((item) => item !== undefined);
+      const list = favourites.length
+        ? favourites
+            .map(
+              (item) =>
+                `<button type="submit" data-alur-open="${item.id}" class="${cx(cls.navItem, "text-ink hover:bg-subtle")}"><span aria-hidden="true" class="${cx("size-4.5 shrink-0 rounded-md", covers[item.cover])}"></span><span class="truncate">${escape(item.name)}</span>${this.icon("star", cx("ml-auto size-3.5", cls.starOn))}</button>`,
+            )
+            .join("")
+        : '<p class="px-3 text-xs text-muted">Star a workflow to pin it.</p>';
+      this.findAll("[data-alur-favourites]").forEach((element) =>
+        setHtml(
+          element,
+          `<h2 class="px-3 text-xs font-medium text-muted">Favourites</h2>${list}`,
+        ),
+      );
+      this.querySelector("[data-alur-aside]")?.classList.toggle(
+        "lg:block",
+        this.sidebarOpen,
+      );
+      this.querySelector<HTMLElement>('[data-alur-sidebar="show"]')!.hidden =
+        this.sidebarOpen;
+      this.querySelector("[data-alur-credits]")!.textContent = formatNumber(
+        this.credits,
+      );
+      this.querySelector<HTMLElement>("[data-alur-workflow-tools]")!.hidden =
+        this.page !== "workflows";
+      this.findAll<HTMLElement>("[data-alur-filter]").forEach((menu) => {
+        const def = this.config.filterDefs.find(
+          (entry) => entry.key === menu.dataset.alurFilter,
+        )!;
+        menu.querySelector("[data-alur-filter-label]")!.textContent =
+          def.items.find((item) => item.value === this.filters[def.key])
+            ?.label ?? "";
+      });
+      const folderSelect = this.querySelector<HTMLSelectElement>(
+        "select[data-alur-folders]",
+      );
+      if (folderSelect) {
+        const value = folderSelect.value;
+        setHtml(
+          folderSelect,
+          this.folders
+            .map(
+              (folder) =>
+                `<option value="${folder.id}">${escape(folder.name)}</option>`,
+            )
+            .join(""),
+        );
+        folderSelect.value = value;
+        if (!folderSelect.value && this.folders[0])
+          folderSelect.value = this.folders[0].id;
+      }
+      const deleting =
+        this.target.kind === "folder"
+          ? this.folders.find((item) => item.id === this.target.id)?.name
+          : this.workflows.find((item) => item.id === this.target.id)?.name;
+      this.querySelector("[data-alur-delete-text]")!.textContent =
+        this.target.kind === "folder"
+          ? `${deleting ?? "This folder"} will be removed. Its workflows stay in My Workflows.`
+          : `${deleting ?? "This workflow"} moves to Trash. You can restore it later.`;
+    }
+
+    private renderDetail() {
+      const root = this.querySelector<HTMLElement>("[data-alur-detail]");
+      const detail = this.detail;
+      if (!root) return;
+      root.hidden = !detail;
+      if (!detail) return;
+      const { covers, cls, statusLabels } = this.config;
+      root.querySelector("[data-alur-cover]")!.className = cx(
+        "h-32 rounded-xl",
+        covers[detail.cover],
+      );
+      root.querySelector("[data-alur-name]")!.textContent = detail.name;
+      root.querySelector("[data-alur-meta]")!.textContent = this.metaOf(detail);
+      root.querySelector<HTMLInputElement>("[data-alur-active]")!.checked =
+        detail.status === "active";
+      const starred = this.favourites.includes(detail.id);
+      const star = root.querySelector("[data-alur-detail-star]")!;
+      star.setAttribute("aria-pressed", String(starred));
+      star
+        .querySelector("svg")!
+        .setAttribute("class", cx("size-4", starred && cls.starOn));
+      const rows = [
+        statusLabels[detail.status],
+        String(detail.runs),
+        this.folders.find((f) => f.id === detail.folder)?.name ?? "None",
+        detail.tags.join(", ") || "None",
+        this.appNames(detail.apps) || "None",
+        detail.team[0] ?? "Andi Wijaya",
+      ];
+      root
+        .querySelectorAll("[data-alur-row]")
+        .forEach((row, index) => (row.textContent = rows[index] ?? ""));
+    }
+
+    private renderHome() {
+      const { covers, cls } = this.config;
+      const tiles = [
+        this.workflows.filter((item) => item.status === "active").length,
+        this.workflows.reduce((sum, item) => sum + item.runs, 0),
+        formatNumber(this.credits),
+        this.unread,
+      ];
+      this.querySelectorAll("[data-alur-view] [data-alur-tile]").forEach(
+        (tile, index) => (tile.textContent = String(tiles[index])),
+      );
+      const recent = [...this.workflows]
+        .sort((a, b) => a.days - b.days)
+        .slice(0, 3);
+      setHtml(
+        this.find("[data-alur-recent]"),
+        recent
+          .map(
+            (item) =>
+              `<li class="${cls.card}"><div aria-hidden="true" class="${cx("h-24 rounded-xl", covers[item.cover])}"></div><div class="grid gap-0.5 px-2 pt-2.5 pb-1.5"><h3 class="${cx(cls.mono, "truncate")}"><button type="button" class="${cls.selectable}" data-alur-open="${item.id}">${escape(item.name)}</button></h3><p class="text-xs text-muted">${escape(this.metaOf(item))}</p></div></li>`,
+          )
+          .join(""),
+      );
+      const runs = Array.from(this.cache.entries())
+        .filter(([key]) => key.startsWith("run:"))
+        .map(([, item]) => item)
+        .filter(
+          (item) =>
+            this.runFilter === "all" ||
+            (item.dataset.ok === "true") === (this.runFilter === "ok"),
+        );
+      setChildren(this.find("[data-alur-run-list]"), runs);
+      this.find("[data-alur-run-count]")!.textContent = plural(
+        runs.length,
+        "run",
+      );
+    }
+
+    private renderWorkflows() {
+      const folders = this.folders.filter((folder) =>
+        this.nameMatches(folder.name),
+      );
+      const folderItems = folders.flatMap((folder) => {
+        const item = this.cache.get(`folder:${folder.id}`);
+        if (!item) return [];
+        item.querySelector("[data-alur-name]")!.textContent = folder.name;
+        item.querySelector("[data-alur-options]")!.textContent =
+          `Options for ${folder.name}`;
+        return [item];
+      });
+      const folderList = this.find("[data-alur-folder-list]")!;
+      setChildren(folderList, folderItems);
+      folderList.hidden = folderItems.length === 0;
+      this.find("[data-alur-folder-empty]")!.hidden = folderItems.length > 0;
+      this.find("[data-alur-folder-count]")!.textContent = String(
+        folderItems.length,
+      );
+
+      const cards = this.visible.map((item) => this.workflowCard(item));
+      const list = this.find("[data-alur-workflow-list]")!;
+      setChildren(list, cards);
+      list.hidden = cards.length === 0;
+      this.find("[data-alur-workflow-empty]")!.hidden = cards.length > 0;
+      this.find("[data-alur-workflow-count]")!.textContent = String(
+        cards.length,
+      );
+    }
+
+    /** Kartu workflow: dipakai ulang kalau sudah ada, atau diklon dari kartu contoh. */
+    private workflowCard(item: Workflow) {
+      const { covers, cls } = this.config;
+      let card = this.cache.get(`workflow:${item.id}`);
+      if (!card) {
+        const proto = this.protos.get("workflow")!;
+        card = (proto.content.cloneNode(true) as DocumentFragment)
+          .firstElementChild as HTMLElement;
+        card.dataset.workflow = item.id;
+        this.renameMenu(card, `alur-menu-${item.id}`);
+        const people = card.querySelector("[data-alur-people]")!;
+        people.innerHTML =
+          this.avatars(item.team, "ring-surface") + this.appIcons(item.apps);
+        this.cache.set(`workflow:${item.id}`, card);
+      }
+      const starred = this.favourites.includes(item.id);
+      card.querySelector("[data-alur-cover]")!.className = cx(
+        "h-40 rounded-xl",
+        covers[item.cover],
+      );
+      card.querySelector("[data-alur-runs-today]")!.firstChild!.nodeValue =
+        String(item.runs);
+      card.querySelector("[data-alur-meta]")!.textContent = this.metaOf(item);
+      const name = card.querySelector<HTMLElement>("[data-alur-open]")!;
+      name.textContent = item.name;
+      name.dataset.alurOpen = item.id;
+      const star = card.querySelector<HTMLElement>("[data-alur-star]")!;
+      star.dataset.alurStar = item.id;
+      star.setAttribute("aria-pressed", String(starred));
+      star.setAttribute("aria-label", `Favourite ${item.name}`);
+      star
+        .querySelector("svg")!
+        .setAttribute("class", cx("size-4", starred && cls.starOn));
+      card.querySelector("[data-alur-options]")!.textContent =
+        `Options for ${item.name}`;
+      return card;
+    }
+
+    /** Menu hasil klon butuh id unik: trigger, popover, dan relasi aria-nya. */
+    private renameMenu(root: Element, id: string) {
+      const trigger = root.querySelector("[data-markas-dropdown-menu-trigger]");
+      const menu = root.querySelector("[data-markas-dropdown-menu]");
+      if (!trigger || !menu) return;
+      trigger.id = `${id}-trigger`;
+      trigger.setAttribute("popovertarget", id);
+      trigger.setAttribute("aria-controls", id);
+      menu.id = id;
+      menu.setAttribute("aria-labelledby", `${id}-trigger`);
+    }
+
+    private renderNotifications() {
+      const unread = this.unread;
+      this.find("[data-alur-unread]")!.textContent = `${unread} unread`;
+      this.find<HTMLButtonElement>("[data-alur-read-all]")!.disabled =
+        unread === 0;
+      this.querySelectorAll<HTMLElement>("[data-alur-view] [data-note]").forEach(
+        (item) => {
+          const isRead = this.read.includes(item.dataset.note!);
+          item.dataset.unread = String(!isRead);
+          const dot = item.firstElementChild!;
+          setClasses(
+            dot,
+            isRead ? "bg-line" : "bg-danger",
+            isRead ? "bg-danger" : "bg-line",
+          );
+          item.querySelector("p")!.classList.toggle("font-medium", !isRead);
+          item.querySelector<HTMLElement>("[data-alur-read]")!.hidden = isRead;
+        },
+      );
+    }
+
+    private renderTrash() {
+      const { covers } = this.config;
+      const rows = this.trash.map((item) => {
+        let row = this.cache.get(`trash:${item.id}`);
+        if (!row) {
+          const proto = this.protos.get("trash")!;
+          row = (proto.content.cloneNode(true) as DocumentFragment)
+            .firstElementChild as HTMLElement;
+          row.dataset.trash = item.id;
+          row.querySelector("[data-alur-cover]")!.className = cx(
+            "size-9 shrink-0 rounded-lg",
+            covers[item.cover],
+          );
+          row.querySelector("[data-alur-name]")!.textContent = item.name;
+          row.querySelector("[data-alur-options]")!.textContent = item.name;
+          row.querySelector<HTMLElement>("[data-alur-restore]")!.dataset.alurRestore =
+            item.id;
+          this.cache.set(`trash:${item.id}`, row);
+        }
+        return row;
+      });
+      const list = this.find("[data-alur-trash-list]")!;
+      setChildren(list, rows);
+      list.hidden = rows.length === 0;
+      this.find("[data-alur-trash-empty]")!.hidden = rows.length > 0;
+      this.find("[data-alur-trash-count]")!.textContent = plural(
+        rows.length,
+        "item",
+      );
+    }
+
+    /* Aksi */
+    private handleClick(event: Event) {
+      const target = event.target as Element;
+      const pick = <T extends HTMLElement = HTMLElement>(selector: string) =>
+        target.closest<T>(selector);
+      const go = pick("[data-alur-go]");
+      if (go) return this.go(go.dataset.alurGo!);
+      const open = pick("[data-alur-open]");
+      if (open) return this.openDetail(open.dataset.alurOpen!);
+      const star = pick("[data-alur-star]");
+      if (star) return this.toggleFavourite(star.dataset.alurStar!);
+      const sidebar = pick("[data-alur-sidebar]");
+      if (sidebar) {
+        this.sidebarOpen = sidebar.dataset.alurSidebar === "show";
+        return this.render();
+      }
+      if (pick("[data-alur-new]")) return this.resetDraft();
+      if (pick("[data-alur-clear]")) return this.resetFilters();
+      if (pick("[data-alur-detail-star]") && this.detail)
+        return this.toggleFavourite(this.detail.id);
+      if (pick("[data-alur-run]")) return this.runNow();
+      const use = pick("[data-alur-use]");
+      if (use) return this.applyTemplate(use.dataset.alurUse!);
+      const restore = pick("[data-alur-restore]");
+      if (restore) return this.restore(restore.dataset.alurRestore!);
+      const install = pick("[data-alur-install]");
+      if (install)
+        return this.toggleAddon(install.dataset.alurInstall!, install.dataset.name!);
+      const read = pick("[data-alur-read]");
+      if (read) {
+        this.read = [...this.read, read.dataset.alurRead!];
+        return this.render();
+      }
+      if (pick("[data-alur-read-all]")) {
+        this.read = this.config.notifications;
+        return this.render();
+      }
+      const toggle = pick<HTMLButtonElement>(
+        "[data-markas-toggle-group] > button",
+      );
+      if (toggle) this.pickToggle(toggle);
+    }
+
+    /** ToggleGroup tidak boleh kosong: klik item aktif mempertahankan pilihan, seperti React. */
+    private pickToggle(button: HTMLButtonElement) {
+      const group = button.parentElement!;
+      const value = button.dataset.value!;
+      if (group.matches("[data-alur-runs]")) {
+        this.runFilter = value;
+        this.renderHome();
+      } else if (group.matches("[data-alur-templates]")) {
+        const items = Array.from(this.cache.entries())
+          .filter(([key]) => key.startsWith("template:"))
+          .map(([, item]) => item)
+          .filter((item) => value === "all" || item.dataset.tag === value);
+        setChildren(this.find("[data-alur-template-list]"), items);
+        this.find("[data-alur-template-count]")!.textContent = plural(
+          items.length,
+          "template",
+        );
+      } else return;
+      // Komponen ToggleGroup memproses klik sesudah ini; pilihan disamakan lagi setelahnya.
+      setTimeout(() =>
+        group
+          .querySelectorAll<HTMLElement>(":scope > button")
+          .forEach((item) => {
+            const on = item.dataset.value === value;
+            item.setAttribute("aria-pressed", String(on));
+            item.dataset.state = on ? "on" : "off";
+          }),
+      );
+    }
+
+    private handleInput(event: Event) {
+      const field = event.target as HTMLInputElement;
+      if (field.matches("[data-alur-search]")) {
+        this.query = field.value;
+        if (this.page !== "workflows") this.go("workflows");
+        else this.render();
+      } else if (field.matches("[data-alur-articles]")) {
+        const needle = field.value.trim().toLowerCase();
+        const all = Array.from(this.cache.entries())
+          .filter(([key]) => key.startsWith("search:"))
+          .map(([, item]) => item);
+        const items = all.filter((item) =>
+          item.dataset.search!.includes(needle),
+        );
+        const list = this.find("[data-alur-article-list]")!;
+        setChildren(list, items);
+        list.hidden = items.length === 0;
+        this.find("[data-alur-article-empty]")!.hidden = items.length > 0;
+        this.find("[data-alur-article-count]")!.textContent =
+          `${items.length} of ${all.length} articles`;
+      }
+    }
+
+    private handleChange(event: Event) {
+      const field = event.target as HTMLInputElement;
+      if (field.matches("[data-alur-tool]")) {
+        const switches = this.findAll<HTMLInputElement>(
+          "[data-alur-view] [data-alur-tool]",
+        );
+        this.find("[data-alur-tool-count]")!.textContent =
+          `${switches.filter((item) => item.checked).length} of ${switches.length} connected`;
+      } else if (field.matches("[data-alur-active]")) this.setActive(field.checked);
+    }
+
+    private handleSubmit(event: Event) {
+      const form = event.target as HTMLFormElement;
+      if (!form.matches("[data-alur-settings]")) return;
+      event.preventDefault();
+      const workspace = form.querySelector<HTMLInputElement>(
+        "input[name=workspace]",
+      )!.value;
+      const prefs = Array.from(
+        form.querySelectorAll<HTMLInputElement>("[data-alur-pref]"),
+      ).filter((item) => item.checked).length;
+      toast({
+        title: "Settings saved",
+        description: `${workspace}, ${plural(prefs, "alert")} on`,
+        variant: "success",
+      });
+    }
+
+    private handleSelect(event: Event) {
+      const value = (event as CustomEvent<string>).detail;
+      const target = event.target as Element;
+      const filter = target.closest<HTMLElement>("[data-alur-filter]");
+      if (filter) {
+        this.filters = { ...this.filters, [filter.dataset.alurFilter!]: value };
+        return this.render();
+      }
+      const menu = target.closest<HTMLElement>("[data-alur-menu]");
+      const item = target.closest<HTMLElement>("li[data-workflow], li[data-folder]");
+      if (!menu || !item)
+        return;
+      this.onMenu(
+        menu.dataset.alurMenu!,
+        item.dataset.workflow ?? item.dataset.folder!,
+        value,
+      );
+    }
+
+    private handleClose(event: Event) {
+      const dialog = event.target;
+      if (!(dialog instanceof HTMLDialogElement)) return;
+      if (dialog.matches("[data-alur-create]")) this.onCreateClose(dialog);
+      else if (dialog.matches("[data-alur-rename]")) this.onRenameClose(dialog);
+    }
+
+    private openDetail(id: string) {
+      this.selectedId = id;
+      this.renderDetail();
+      openDialog(this.config.detailId);
+    }
+
+    private toggleFavourite(id: string) {
+      this.favourites = toggleIn(this.favourites, id);
+      this.render();
+    }
+
+    private createWorkflow(fields: Partial<Workflow>) {
+      const created: Workflow = {
+        name: "Untitled workflow",
+        status: "draft",
+        days: 0,
+        runs: 0,
+        cover: this.nextId % this.config.covers.length,
+        folder: "f1",
+        tags: [],
+        apps: ["mail"],
+        team: ["Andi Wijaya"],
+        ...fields,
+        id: `w${this.nextId}`,
+      };
+      this.nextId += 1;
+      return created;
+    }
+
+    private onMenu(kind: string, id: string, action: string) {
+      const source = this.workflows.find((item) => item.id === id);
+      this.target = { kind, id };
+      this.render();
+      if (action === "rename") {
+        const list = kind === "folder" ? this.folders : this.workflows;
+        document
+          .getElementById(this.config.renameId)!
+          .querySelector<HTMLInputElement>("input[name=rename]")!.value =
+          list.find((item) => item.id === id)?.name ?? "";
+        return openDialog(this.config.renameId);
+      }
+      if (action === "delete") return openDialog(this.config.deleteId);
+      if (!source) return;
+      const copy = this.createWorkflow({
+        ...source,
+        name: `${source.name} copy`,
+        status: "draft",
+        days: 0,
+        runs: 0,
+      });
+      const index = this.workflows.indexOf(source);
+      this.workflows = [
+        ...this.workflows.slice(0, index + 1),
+        copy,
+        ...this.workflows.slice(index + 1),
+      ];
+      this.render();
+      toast({ title: "Workflow duplicated", description: copy.name });
+    }
+
+    private onRenameClose(dialog: HTMLDialogElement) {
+      const name = dialog
+        .querySelector<HTMLInputElement>("input[name=rename]")!
+        .value.trim();
+      if (dialog.returnValue === "save" && name) {
+        const { kind, id } = this.target;
+        const rename = <T extends { id: string; name: string }>(list: T[]) =>
+          list.map((item) => (item.id === id ? { ...item, name } : item));
+        if (kind === "folder") this.folders = rename(this.folders);
+        else this.workflows = rename(this.workflows);
+        this.render();
+        toast({ title: "Renamed", description: name, variant: "success" });
+      }
+      dialog.returnValue = "";
+    }
+
+    private onDelete() {
+      const { kind, id } = this.target;
+      if (kind === "folder") {
+        const name = this.folders.find((item) => item.id === id)?.name;
+        this.folders = this.folders.filter((item) => item.id !== id);
+        this.render();
+        return toast({ title: "Folder deleted", description: name });
+      }
+      const removed = this.workflows.find((item) => item.id === id);
+      if (!removed) return;
+      this.workflows = this.workflows.filter((item) => item.id !== id);
+      this.favourites = this.favourites.filter((entry) => entry !== id);
+      this.trash = [removed, ...this.trash];
+      this.render();
+      toast({ title: "Moved to Trash", description: removed.name });
+    }
+
+    /** Tombol New workflow mengosongkan nama dan status, seperti React. */
+    private resetDraft() {
+      const dialog = this.querySelector("dialog[data-alur-create]");
+      if (!dialog) return;
+      dialog.querySelector<HTMLInputElement>("input[name=name]")!.value = "";
+      dialog.querySelector<HTMLSelectElement>("select[name=status]")!.value =
+        "draft";
+    }
+
+    private onCreateClose(dialog: HTMLDialogElement) {
+      if (dialog.returnValue === "create") {
+        const field = (name: string) =>
+          dialog.querySelector<HTMLInputElement | HTMLSelectElement>(
+            `[name=${name}]`,
+          )!.value;
+        const created = this.createWorkflow({
+          name: field("name").trim() || "Untitled workflow",
+          status: field("status") as Status,
+          folder: field("folder"),
+          tags: [field("tag")],
+        });
+        this.workflows = [created, ...this.workflows];
+        this.render();
+        toast({
+          title: "Workflow created",
+          description: created.name,
+          variant: "success",
+        });
+      }
+      dialog.returnValue = "";
+    }
+
+    private applyTemplate(id: string) {
+      const source = this.config.templates.find((item) => item.id === id)!;
+      const created = this.createWorkflow({
+        name: source.name,
+        cover: source.cover,
+        tags: [source.tag],
+        apps: source.apps,
+      });
+      this.workflows = [created, ...this.workflows];
+      this.render();
+      toast({
+        title: "Template added",
+        description: `${source.name} is in My Workflows`,
+        variant: "success",
+      });
+    }
+
+    private restore(id: string) {
+      const item = this.trash.find((entry) => entry.id === id)!;
+      this.trash = this.trash.filter((entry) => entry.id !== id);
+      this.workflows = [...this.workflows, item];
+      this.render();
+      toast({ title: "Restored", description: item.name, variant: "success" });
+    }
+
+    private setActive(on: boolean) {
+      const detail = this.detail;
+      if (!detail) return;
+      this.workflows = this.workflows.map((item) =>
+        item.id === detail.id
+          ? { ...item, status: on ? "active" : "paused" }
+          : item,
+      );
+      this.render();
+      toast({
+        title: on ? "Workflow activated" : "Workflow paused",
+        description: detail.name,
+      });
+    }
+
+    private runNow() {
+      const detail = this.detail;
+      if (!detail) return;
+      this.workflows = this.workflows.map((item) =>
+        item.id === detail.id ? { ...item, runs: item.runs + 1 } : item,
+      );
+      this.credits -= this.config.runCost;
+      this.render();
+      toast({
+        title: "Run started",
+        description: `${detail.name}, ${this.config.runCost} credits`,
+      });
+    }
+
+    private resetFilters() {
+      this.filters = this.config.defaultFilters;
+      this.query = "";
+      const search = document.getElementById("alur-search") as HTMLInputElement;
+      search.value = "";
+      this.render();
+    }
+
+    private toggleAddon(id: string, name: string) {
+      const adding = !this.installed.includes(id);
+      this.installed = toggleIn(this.installed, id);
+      this.find("[data-alur-installed-count]")!.textContent =
+        `${this.installed.length} installed`;
+      this.querySelectorAll<HTMLElement>(
+        `[data-alur-view] [data-alur-install="${id}"]`,
+      ).forEach((button) => {
+        button.hidden = (button.dataset.on !== undefined) !== adding;
+      });
+      toast({
+        title: adding ? "Add-on installed" : "Add-on removed",
+        description: name,
+        variant: adding ? "success" : "default",
+      });
+    }
+  }
+
+  if (!customElements.get("alur-template"))
+    customElements.define("alur-template", AlurTemplate);
+</script>

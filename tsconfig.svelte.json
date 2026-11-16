@@ -3,6 +3,7 @@
   "include": [
     "components/*/*.svelte",
     "examples/svelte/*.svelte",
+    "templates/*/svelte/*.svelte",
     "tests/unit/**/*.svelte",
     "tests/unit/**/*.svelte.test.ts",
     "playground/src/svelte.ts",

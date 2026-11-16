@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { frameworks, openFixture } from "./helpers";
+import { fixtureLoadTimeout, frameworks, openFixture } from "./helpers";
 
 const VARIANTS = [
   "footer",
@@ -116,6 +116,7 @@ for (const framework of frameworks) {
     test("footer: semua variasi muat di layar 390px tanpa overflow", async ({
       page,
     }) => {
+      test.setTimeout(fixtureLoadTimeout(VARIANTS.length));
       await page.setViewportSize(MOBILE);
       for (const name of VARIANTS) {
         await openFixture(page, framework, name);

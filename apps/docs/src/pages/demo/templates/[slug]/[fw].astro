@@ -1,20 +1,26 @@
 ---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import TemplateReact from "../../../../components/templates/TemplateReact";
+import TemplateSvelte from "../../../../components/templates/TemplateSvelte.svelte";
 import TemplateVue from "../../../../components/templates/TemplateVue.vue";
 import { accentCss } from "../../../../lib/accents";
 import { getTemplates } from "../../../../lib/templates";
 
-/** Halaman demo layar penuh tanpa chrome situs, dipakai iframe di halaman detail template. */
+/**
+ * Halaman demo layar penuh tanpa chrome situs, dipakai iframe di halaman detail template. Satu halaman
+ * per versi yang ada (template.frameworks): Svelte hydrate sebagai island, Astro dirender langsung,
+ * Angular dipasang di klien dari /angular/preview.js (scripts/angular-previews.ts).
+ */
 export function getStaticPaths() {
-  return getTemplates().flatMap((template) =>
-    (["blade", "react", "vue"] as const).map((fw) => ({ params: { slug: template.name, fw }, props: { template } })),
-  );
+  return getTemplates().flatMap((template) => template.frameworks.map((fw) => ({ params: { slug: template.name, fw }, props: { template } })));
 }
 
 const { template } = Astro.props;
 const { fw } = Astro.params;
 const bladeFiles = import.meta.glob<string>("../../../../generated/templates/*.html", { query: "?raw", import: "default", eager: true });
 const bladeHtml = bladeFiles[`../../../../generated/templates/${template.name}.html`] ?? "";
+const astroTemplates = import.meta.glob<{ default: AstroComponentFactory }>("../../../../../../../templates/*/astro/*.astro", { eager: true });
+const AstroTemplate = Object.entries(astroTemplates).find(([path]) => path.includes(`/templates/${template.name}/astro/`))?.[1].default;
 /** CSS per template dari scripts/page-css.ts: token, font, template ini, dan komponen yang dipakainya. */
 const stylesheets = import.meta.glob<string>("../../../../generated/css/templates/*.css", { query: "?url", import: "default", eager: true });
 const stylesheet = stylesheets[`../../../../generated/css/templates/${template.name}.css`];
@@ -51,11 +57,28 @@ if (!stylesheet) throw new Error(`CSS untuk template ${template.name} belum diba
     {fw === "blade" && <Fragment set:html={bladeHtml} />}
     {fw === "react" && <TemplateReact client:load name={template.name} />}
     {fw === "vue" && <TemplateVue client:load name={template.name} />}
+    {fw === "svelte" && <TemplateSvelte client:load name={template.name} />}
+    {fw === "astro" && AstroTemplate && <AstroTemplate />}
+    {fw === "angular" && <div class="contents" data-angular-template={template.name} />}
     {
       fw === "blade" && (
         <script>
           import Alpine from "alpinejs";
           Alpine.start();
+        </script>
+      )
+    }
+    {
+      fw === "angular" && (
+        <script>
+          type Bundle = { mountTemplate: (host: HTMLElement, slug: string) => Promise<boolean> };
+          // Bundle AOT dari scripts/angular-previews.ts; runtime Angular hanya dimuat di halaman ini.
+          const bundle = "/angular/preview.js";
+          const host = document.querySelector<HTMLElement>("[data-angular-template]");
+          if (host) {
+            const { mountTemplate } = (await import(/* @vite-ignore */ bundle)) as Bundle;
+            await mountTemplate(host, host.dataset.angularTemplate!);
+          }
         </script>
       )
     }

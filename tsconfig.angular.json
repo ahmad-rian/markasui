@@ -13,6 +13,10 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true
   },
-  "include": ["components/*/*.component.ts", "examples/angular/*.ts"],
+  "include": [
+    "components/*/*.component.ts",
+    "examples/angular/*.ts",
+    "templates/*/angular/*.component.ts"
+  ],
   "exclude": []
 }

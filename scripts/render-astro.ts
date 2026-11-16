@@ -1,11 +1,13 @@
 /**
- * Render examples/astro/*.astro ke HTML statis (plus script klien yang diproses Astro) untuk
- * playground dan tes e2e, seperti scripts/render-blade.php untuk Blade.
+ * Render examples/astro/*.astro dan templates/<slug>/astro/*.astro ke HTML statis (plus script klien
+ * yang diproses Astro) untuk playground dan tes e2e, seperti scripts/render-blade.php untuk Blade.
  *
  * Pemakaian: node scripts/render-astro.ts [folder-output] [nama...]
- * Default output: playground/public/astro (dilayani di /astro/<nama>.html).
- * Dengan nama (mis. "modal switch"), hanya contoh <nama> dan <nama>--* yang dirender: lebih cepat,
- * dan aman dijalankan beberapa agen sekaligus karena hasil disalin tanpa menghapus file lain.
+ * Default output: playground/public/astro (dilayani di /astro/<nama>.html dan
+ * /astro/templates/<slug>.html).
+ * Dengan nama (mis. "modal switch" atau "rambu"), hanya contoh <nama> dan <nama>--* serta template
+ * <nama> yang dirender: lebih cepat, dan aman dijalankan beberapa agen sekaligus karena hasil disalin
+ * tanpa menghapus file lain.
  */
 import { cp, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

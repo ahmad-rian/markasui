@@ -9,7 +9,8 @@ import {
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 import {
-  frameworks,
+  templateFrameworks,
+  templateParityFrameworks,
   MAX_DIFF_RATIO,
   themes,
   type Framework,
@@ -75,7 +76,7 @@ async function expectSameAsReact(
   theme: Theme,
 ) {
   const reference = await capture(browser, viewport, "react", theme);
-  for (const framework of ["blade", "vue"] as const) {
+  for (const framework of templateParityFrameworks(SLUG)) {
     const candidate = await capture(browser, viewport, framework, theme);
     expect([candidate.width, candidate.height], `ukuran ${framework}`).toEqual([
       reference.width,
@@ -126,7 +127,7 @@ test.describe("kesamaan tampilan", () => {
   });
 });
 
-for (const framework of frameworks) {
+for (const framework of templateFrameworks(SLUG)) {
   test.describe(framework, () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize(DESKTOP);
