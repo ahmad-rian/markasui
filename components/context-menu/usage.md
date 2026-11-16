@@ -16,6 +16,16 @@
 
 Needs Alpine.js. Selecting an item dispatches a `markas-select` event with the item value in `$event.detail`. In Livewire: `x-on:markas-select="$wire.handle($event.detail)"`.
 
+### Livewire
+
+```blade
+<x-markas.context-menu :items="$actions" wire:markas-select="run($event.detail)">
+    ...
+</x-markas.context-menu>
+```
+
+`wire:markas-select` calls a Livewire action with the picked value.
+
 ## React
 
 ```tsx

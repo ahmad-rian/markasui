@@ -4,7 +4,11 @@
     $root = 'inline-block';
     $card = 'inset-auto m-0 w-72 max-w-[calc(100vw-16px)] rounded-xl border border-line bg-surface p-4 text-sm text-ink shadow-overlay';
 
-    $id = $attributes->get('id') ?? 'markas-hover-card-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-hover-card|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-hover-card-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 <span
@@ -13,6 +17,8 @@
         timer: null,
         show() {
             clearTimeout(this.timer);
+            {{-- Link again in case a re-render (Livewire morph) dropped aria-describedby from the trigger. --}}
+            this.describe();
             this.$refs.card.showPopover();
         },
         showLater() {
@@ -87,6 +93,7 @@
         x-ref="card"
         id="{{ $id }}"
         popover="manual"
+        wire:ignore.self
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @toggle="onToggle($event)"

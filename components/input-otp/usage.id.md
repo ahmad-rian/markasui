@@ -11,6 +11,14 @@
 
 Butuh Alpine.js. Setiap perubahan memancarkan `markas-change` dan kode yang lengkap memancarkan `markas-complete`, keduanya membawa kode di `$event.detail`. Isi kode awal lewat `value`.
 
+### Livewire
+
+```blade
+<x-markas.input-otp label="Code" wire:model.live="code" x-on:markas-complete="$wire.verify()" />
+```
+
+`wire:model` terhubung ke kode gabungan sebagai satu string. Dengarkan `markas-complete` untuk verifikasi setelah semua kotak terisi.
+
 ## React
 
 ```tsx

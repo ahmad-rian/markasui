@@ -20,7 +20,15 @@ window.dispatchEvent(
 );
 ```
 
-Needs Alpine.js. Livewire 3 already ships it.
+Needs Alpine.js. Livewire 3 and 4 already ship it.
+
+### Livewire
+
+```php
+$this->dispatch('markas-toast', title: 'Saved', variant: 'success');
+```
+
+Livewire 3 and 4 dispatch browser events on `window`, so a toast can come straight from a component action. Place `<x-markas.toast />` once in the layout.
 
 ## React
 

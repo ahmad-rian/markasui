@@ -13,6 +13,14 @@
 
 Needs Alpine.js. The form receives `amount=100000`, a plain number without separators.
 
+### Livewire
+
+```blade
+<x-markas.currency-input label="Amount" wire:model.live.debounce.400ms="amount" :presets="[50000, 100000]" />
+```
+
+`wire:model` binds the plain number (for example `12500000`), not the formatted text. Server changes reformat the field. Preset chips update the property as well.
+
 ## React
 
 ```tsx

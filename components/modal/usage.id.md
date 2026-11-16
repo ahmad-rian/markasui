@@ -15,7 +15,17 @@
 </x-markas.modal>
 ```
 
-Butuh Alpine.js. Livewire 3 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+Butuh Alpine.js. Livewire 3 dan 4 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+
+### Livewire
+
+```blade
+<x-markas.modal title="Edit profile" wire:model="showEdit">
+    ...
+</x-markas.modal>
+```
+
+`wire:model` terhubung ke status terbuka: set `$showEdit = true` di action untuk membuka dialog, `false` untuk menutup. Menutup dengan Escape, tombol tutup, atau backdrop mengembalikannya ke `false`. Dialog tetap terbuka saat komponen dirender ulang.
 
 ## React
 

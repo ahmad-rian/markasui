@@ -24,6 +24,14 @@
         focused: @js($tabStop),
         multiple: @js($type === 'multiple'),
         values: @js($values),
+        {{-- Bound value for wire:model and x-model: a string (or null) for single, an array for multiple. --}}
+        value: @js($type === 'multiple' ? $selected : ($selected[0] ?? null)),
+        init() {
+            this.$watch('value', (next) => {
+                const list = (Array.isArray(next) ? next : next === null || next === '' ? [] : [next]).map(String);
+                this.selected = this.values.filter((entry) => list.includes(entry));
+            });
+        },
         toggle(key) {
             this.focused = key;
             if (this.selected.includes(key)) {
@@ -32,6 +40,7 @@
                 const next = this.multiple ? [...this.selected, key] : [key];
                 this.selected = this.values.filter((entry) => next.includes(entry));
             }
+            this.value = this.multiple ? [...this.selected] : (this.selected[0] ?? null);
         },
         move(step) {
             const buttons = Array.from($root.querySelectorAll(':scope > button'));
@@ -42,6 +51,7 @@
             target.focus();
         },
     }"
+    x-modelable="value"
     x-on:keydown.right.prevent="move(1)"
     x-on:keydown.left.prevent="move(-1)"
     @if ($label) aria-label="{{ $label }}" @endif

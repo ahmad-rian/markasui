@@ -10,7 +10,17 @@
 </x-markas.alert-dialog>
 ```
 
-Needs Alpine.js. Livewire 3 already ships it.
+Needs Alpine.js. Livewire 3 and 4 already ship it.
+
+### Livewire
+
+```blade
+<x-markas.alert-dialog title="Delete project?" wire:model="confirming" wire:markas-action="delete">
+    This cannot be undone.
+</x-markas.alert-dialog>
+```
+
+`wire:model` binds the open state. `wire:markas-action` runs a Livewire action when the action button is pressed; `wire:markas-cancel` for any other close.
 
 ## React
 

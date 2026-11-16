@@ -21,10 +21,16 @@
     $labelClass = 'text-sm font-medium text-ink';
     $descriptionClass = 'text-sm text-muted';
 
-    $id = $attributes->get('id') ?? 'markas-radio-group-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-radio-group|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $name).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-radio-group-'.hash('xxh32', $idKey.$idIndex);
+    // wire:model and x-model go on every radio, the rest on the fieldset.
+    $model = $attributes->whereStartsWith(['wire:model', 'x-model']);
 @endphp
 
-<fieldset {{ $attributes->merge(['id' => $id])->class([$root]) }}>
+<fieldset {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model'])->merge(['id' => $id])->class([$root]) }}>
     @if ($label)
         <legend class="{{ $legendClass }}">{{ $label }}</legend>
     @endif
@@ -44,6 +50,7 @@
                         @checked((string) $option['value'] === (string) $value)
                         @if ($description) aria-describedby="{{ $optionId }}-description" @endif
                         class="{{ $radio }}"
+                        {{ $model }}
                     />
                     <span class="{{ $dot }}" aria-hidden="true"></span>
                 </span>

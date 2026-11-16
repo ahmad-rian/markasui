@@ -16,9 +16,14 @@
 
     $current = $value ?? $min;
     $percent = $max > $min ? (($current - $min) / ($max - $min)) * 100 : 0;
-    $id = $attributes->get('id') ?? 'markas-slider-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-slider|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-slider-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
+{{-- wire:model and x-model bind to `value` on the root (x-modelable); other attributes land on the range input. --}}
 <div
     x-data="{
         value: @js($current),
@@ -28,6 +33,8 @@
             return this.max > this.min ? ((this.value - this.min) / (this.max - this.min)) * 100 : 0;
         },
     }"
+    x-modelable="value"
+    {{ $attributes->whereStartsWith(['wire:model', 'x-model']) }}
     class="{{ $root }}"
 >
     @if ($label || $showValue)
@@ -47,8 +54,9 @@
         step="{{ $step }}"
         value="{{ $current }}"
         style="--value: {{ $percent }}%"
+        x-bind:value="value"
         x-bind:style="'--value: ' + percent + '%'"
         x-on:input="value = $event.target.valueAsNumber"
-        {{ $attributes->merge(['id' => $id])->class([$range]) }}
+        {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model'])->merge(['id' => $id])->class([$range]) }}
     />
 </div>

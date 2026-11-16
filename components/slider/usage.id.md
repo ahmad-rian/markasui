@@ -7,6 +7,14 @@
 
 Butuh Alpine.js untuk memperbarui isian dan nilai saat digeser.
 
+### Livewire
+
+```blade
+<x-markas.slider label="Volume" wire:model.live="volume" />
+```
+
+`wire:model` terhubung ke nilai slider lewat `x-modelable` di pembungkus, jadi label angka ikut berubah saat server mengubah nilai. Pakai `wire:model.live.debounce.300ms` agar request lebih sedikit saat menggeser. Atribut lain jatuh ke input range.
+
 ## React
 
 ```tsx

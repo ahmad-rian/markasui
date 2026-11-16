@@ -48,7 +48,13 @@
         'remove' => 'M6 6l12 12M18 6 6 18',
     ];
 
-    $id = $attributes->get('id') ?? 'markas-file-dropzone-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-file-dropzone|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $name).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-file-dropzone-'.hash('xxh32', $idKey.$idIndex);
+    // wire:model goes on a hidden file input that only receives the accepted files.
+    $model = $attributes->whereStartsWith('wire:model');
     $initial = array_map(fn (array $file, int $key) => [
         'key' => $key,
         'name' => (string) $file['name'],
@@ -108,6 +114,21 @@
             picked.forEach((file) => transfer.items.add(file));
             this.$refs.input.files = transfer.files;
             this.$dispatch('files-change', picked);
+            this.sync(picked);
+        },
+        {{-- Livewire: upload the accepted files through the hidden wire:model input, or clear the property when none are left. --}}
+        sync(picked) {
+            const target = this.$refs.wire;
+            if (! target) return;
+            const transfer = new DataTransfer();
+            picked.forEach((file) => transfer.items.add(file));
+            target.files = transfer.files;
+            if (picked.length > 0) return target.dispatchEvent(new Event('change'));
+            const property = [...target.attributes].find((attr) => attr.name.startsWith('wire:model'))?.value;
+            if (property) this.$wire.$set(property, this.multiple ? [] : null);
+        },
+        uploading(progress) {
+            this.items = this.items.map((i) => (i.file && ! i.error ? { ...i, progress } : i));
         },
         add(incoming) {
             const limit = this.multiple ? (this.maxFiles ?? Infinity) : 1;
@@ -138,7 +159,10 @@
         },
     }"
     x-on:file-progress="progressed($event.detail)"
-    {{ $attributes->except('id')->class([$root]) }}
+    x-on:livewire-upload-progress="uploading($event.detail.progress)"
+    x-on:livewire-upload-finish="uploading(100)"
+    x-on:livewire-upload-error="uploading(null)"
+    {{ $attributes->except('id')->whereDoesntStartWith('wire:model')->class([$root]) }}
 >
     <label
         data-state="idle"
@@ -167,6 +191,9 @@
             <span class="{{ $hintClass }}">{{ $hint }}</span>
         @endif
     </label>
+    @if ($model->isNotEmpty())
+        <input x-ref="wire" type="file" hidden tabindex="-1" aria-hidden="true" @if ($multiple) multiple @endif {{ $model }} />
+    @endif
     <ul x-show="items.length > 0" @if (count($initial) === 0) style="display: none" @endif class="{{ $list }}">
         <template x-for="file in items" x-bind:key="file.key">
             <li x-bind:data-state="file.error ? 'error' : 'ok'" class="{{ $item }}">

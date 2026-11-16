@@ -58,7 +58,11 @@
         (string) $html,
     );
 
-    $id = $attributes->get('id') ?? 'markas-sidebar-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-sidebar|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-sidebar-'.hash('xxh32', $idKey.$idIndex);
     $asideId = $id.'-aside';
     $dialogId = $id.'-dialog';
 
@@ -105,6 +109,7 @@
                 @endisset
         @else
             <dialog
+                wire:ignore.self
                 x-ref="dialog"
                 id="{{ $dialogId }}"
                 aria-label="{{ $navLabel }}"

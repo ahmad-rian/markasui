@@ -34,6 +34,7 @@
 
 {{-- Mark the root visible the first time it scrolls into view, which starts drawing the marks. The pointer position is stored so the bright dots gather around it. --}}
 <div
+    wire:ignore.self
     x-data="{
         observer: null,
         init() {

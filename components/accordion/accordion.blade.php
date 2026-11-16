@@ -13,12 +13,17 @@
 
     $defaults = array_map('strval', (array) ($defaultValue ?? []));
     $openValues = $type === 'single' ? array_slice($defaults, 0, 1) : $defaults;
-    $name = $type === 'single' ? 'markas-accordion-'.\Illuminate\Support\Str::random(8) : null;
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-accordion|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $name = $type === 'single' ? 'markas-accordion-'.hash('xxh32', $idKey.$idIndex) : null;
 @endphp
 
 <div {{ $attributes->class([$root]) }}>
     @foreach ($items as $key => $title)
         <details
+            wire:ignore.self
             class="{{ $item }}"
             @if ($name) name="{{ $name }}" @endif
             @if (in_array((string) $key, $openValues, true)) open @endif

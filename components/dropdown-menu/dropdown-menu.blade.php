@@ -23,7 +23,11 @@
         return $hasScheme && preg_match('/^(https?|mailto|tel):/i', $value) !== 1 ? '#' : $href;
     };
 
-    $id = $attributes->get('id') ?? 'markas-dropdown-menu-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-dropdown-menu|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-dropdown-menu-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 <div
@@ -129,6 +133,7 @@
         x-ref="menu"
         id="{{ $id }}"
         popover="auto"
+        wire:ignore.self
         role="menu"
         aria-labelledby="{{ $id }}-trigger"
         data-state="closed"

@@ -7,6 +7,14 @@
 
 Needs Alpine.js to update the fill and the value while dragging.
 
+### Livewire
+
+```blade
+<x-markas.slider label="Volume" wire:model.live="volume" />
+```
+
+`wire:model` binds to the slider value through `x-modelable` on the wrapper, so the number label follows server changes too. Use `wire:model.live.debounce.300ms` to send fewer requests while dragging. Other attributes land on the range input.
+
 ## React
 
 ```tsx

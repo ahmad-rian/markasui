@@ -51,6 +51,7 @@
 
 {{-- Mark the root visible the first time it scrolls into view, which starts the entrance. --}}
 <div
+    wire:ignore.self
     x-data="{
         observer: null,
         init() {

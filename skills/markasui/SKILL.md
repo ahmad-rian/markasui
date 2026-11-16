@@ -33,7 +33,7 @@ Use the first available source:
 2. CLI: `npx markasui@latest add <name...>`.
 3. Registry JSON: `https://markasui.pages.dev/r/<name>.json`, field `frameworks.<framework>.code`, saved to `frameworks.<framework>.target`.
 
-List available names with `list_components`, `npx markasui@latest list`, or `/r/index.json`. Install any `deps` the component reports (Blade overlays need Alpine.js; Livewire 3 already ships it).
+List available names with `list_components`, `npx markasui@latest list`, or `/r/index.json`. Install any `deps` the component reports (Blade overlays need Alpine.js; Livewire 3 and 4 already ship it, so do not load Alpine twice).
 
 Done when every component the page uses exists as a file in the components folder, byte-identical to the registry copy.
 

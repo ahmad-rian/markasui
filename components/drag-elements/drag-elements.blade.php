@@ -7,11 +7,16 @@
 
 @php
     $base = 'relative isolate overflow-hidden [&>*]:absolute [&>*]:cursor-grab [&>*]:touch-none [&>*]:select-none [&>*]:transition-[translate,scale,box-shadow] [&>*]:duration-500 [&>*]:ease-[cubic-bezier(0.34,1.56,0.64,1)] [&>*]:focus-visible:outline-2 [&>*]:focus-visible:outline-offset-2 [&>*]:focus-visible:outline-primary [&>[data-dragging]]:scale-105 [&>[data-dragging]]:cursor-grabbing [&>[data-dragging]]:shadow-overlay [&>[data-dragging]]:transition-[scale,box-shadow] [&>[data-dragging]]:duration-150 [&>[data-gliding]]:transition-none motion-reduce:[&>*]:transition-none!';
-    $hintId = 'markas-drag-elements-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-drag-elements|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $hintId = 'markas-drag-elements-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 {{-- Scatters the children, then lets pointer and keyboard move each one inside the area. data-x, data-y (percent) and data-rotate (deg) on a child override the seeded spot. --}}
 <div
+    wire:ignore
     x-data="{
         stop: null,
         init() {

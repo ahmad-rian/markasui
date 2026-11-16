@@ -25,7 +25,11 @@
     ));
     $total = count($cards);
     $format = fn (string $template, int $index) => str_replace(['{index}', '{total}'], [$index, $total], $template);
-    $stackId = ($attributes->get('id') ?? 'markas-card-stack-'.\Illuminate\Support\Str::random(8)).'-cards';
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-card-stack|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $stackId = ($attributes->get('id') ?? 'markas-card-stack-'.hash('xxh32', $idKey.$idIndex)).'-cards';
 @endphp
 
 {{-- Arrow keys, the buttons, or a horizontal drag throw the top card; the next one rises. The stack loops. --}}

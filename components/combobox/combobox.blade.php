@@ -24,7 +24,11 @@
     $options = array_values(array_map(fn ($option) => ['value' => (string) $option['value'], 'label' => (string) $option['label']], $options));
     $value = (string) $value;
     $text = collect($options)->firstWhere('value', $value)['label'] ?? '';
-    $id = $attributes->get('id') ?? 'markas-combobox-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-combobox|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $name).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-combobox-'.hash('xxh32', $idKey.$idIndex);
     $listId = $id.'-listbox';
     $describedBy = $error ? $id.'-error' : ($hint ? $id.'-hint' : null);
 @endphp
@@ -38,6 +42,14 @@
         active: -1,
         open: false,
         unfollow: null,
+        {{-- value is bound by wire:model and x-model (x-modelable): show the matching label when it changes from outside. --}}
+        init() {
+            this.$watch('value', (next) => {
+                const option = this.options.find((entry) => entry.value === String(next ?? ''));
+                if (option) this.text = option.label;
+                else if (document.activeElement !== this.$refs.input) this.text = this.filter = '';
+            });
+        },
         {{-- Indeks opsi (di daftar asli) yang labelnya memuat teks filter. --}}
         get visible() {
             const query = this.filter.trim().toLowerCase();
@@ -47,12 +59,13 @@
             return @js($id) + '-option-' + index;
         },
         isChecked(index) {
-            return this.value !== '' && this.options[index].value === this.value;
+            return this.value !== '' && this.options[index].value === String(this.value ?? '');
         },
         commit(next) {
-            if (next === this.value) return;
+            if (next === String(this.value ?? '')) return;
             this.value = next;
-            this.$dispatch('markas-change', next);
+            {{-- Dispatch from the input: it carries the user's attributes (x-on:, wire:), the list is outside it. --}}
+            this.$refs.input.dispatchEvent(new CustomEvent('markas-change', { detail: next, bubbles: true }));
         },
         show() {
             if (!this.open) this.$refs.panel.showPopover();
@@ -146,6 +159,8 @@
             this.follow();
         },
     }"
+    x-modelable="value"
+    {{ $attributes->whereStartsWith(['wire:model', 'x-model']) }}
     class="{{ $wrapper }}"
 >
     @if ($label)
@@ -154,7 +169,7 @@
     <div class="{{ $control }}">
         <input
             x-ref="input"
-            {{ $attributes->merge([
+            {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model'])->merge([
                 'id' => $id,
                 'type' => 'text',
                 'role' => 'combobox',
@@ -185,6 +200,7 @@
         x-ref="panel"
         id="{{ $id }}-popup"
         popover="manual"
+        wire:ignore.self
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"
         @beforetoggle="onBeforeToggle($event)"

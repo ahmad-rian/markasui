@@ -10,6 +10,7 @@
 
 {{-- Pulls the element toward (or pushes it away from) a mouse within radius px of its edges, then lets it spring back. Children with data-depth="0.5" travel that much further. Listens only while on screen. --}}
 <div
+    wire:ignore.self
     x-data="{
         stop: null,
         init() {

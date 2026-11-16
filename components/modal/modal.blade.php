@@ -12,19 +12,39 @@
     $footerClass = 'flex flex-wrap justify-end gap-2';
     $close = 'inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none';
 
-    $id = $attributes->get('id') ?? 'markas-modal-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-modal|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-modal-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
-<div class="contents" x-data="{ open: false }">
+{{-- wire:model and x-model bind the open state (x-modelable), so a boolean property can open and close the dialog. --}}
+<div
+    class="contents"
+    x-data="{
+        open: false,
+        init() {
+            this.$watch('open', (value) => {
+                const dialog = this.$refs.dialog;
+                if (value && ! dialog.open) dialog.showModal();
+                if (! value && dialog.open) dialog.close();
+            });
+        },
+    }"
+    x-modelable="open"
+    {{ $attributes->whereStartsWith(['wire:model', 'x-model']) }}
+>
     @isset($trigger)
         <div class="contents" @click="$refs.dialog.showModal(); open = true">{{ $trigger }}</div>
     @endisset
     <dialog
+        wire:ignore.self
         x-ref="dialog"
         :data-state="open ? 'open' : 'closed'"
         @close="open = false"
         @click.self="$refs.dialog.close()"
-        {{ $attributes->merge(['id' => $id, 'aria-labelledby' => $id.'-title', 'data-state' => 'closed'])->class([$dialog]) }}
+        {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model'])->merge(['id' => $id, 'aria-labelledby' => $id.'-title', 'data-state' => 'closed'])->class([$dialog]) }}
     >
         <div class="{{ $panel }}">
             <div class="{{ $header }}">

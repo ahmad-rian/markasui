@@ -17,8 +17,10 @@
     ];
 @endphp
 
+{{-- wire:model and x-model bind to the pressed state (x-modelable). --}}
 <button
     x-data="{ pressed: @js((bool) $pressed) }"
+    x-modelable="pressed"
     x-on:click="pressed = !pressed"
     x-bind:aria-pressed="pressed ? 'true' : 'false'"
     x-bind:data-state="pressed ? 'on' : 'off'"

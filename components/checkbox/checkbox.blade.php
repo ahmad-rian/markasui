@@ -12,7 +12,11 @@
     $labelClass = 'text-sm font-medium text-ink';
     $descriptionClass = 'text-sm text-muted';
 
-    $id = $attributes->get('id') ?? 'markas-checkbox-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-checkbox|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|'.$attributes->get('value').'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-checkbox-'.hash('xxh32', $idKey.$idIndex);
     $describedBy = $description ? $id.'-description' : null;
 @endphp
 

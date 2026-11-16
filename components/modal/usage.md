@@ -15,7 +15,17 @@
 </x-markas.modal>
 ```
 
-Needs Alpine.js. Livewire 3 already ships it.
+Needs Alpine.js. Livewire 3 and 4 already ship it.
+
+### Livewire
+
+```blade
+<x-markas.modal title="Edit profile" wire:model="showEdit">
+    ...
+</x-markas.modal>
+```
+
+`wire:model` binds the open state: set `$showEdit = true` in an action to open the dialog, `false` to close it. Closing with Escape, the close button, or the backdrop sets it back to `false`. The dialog keeps its open state across re-renders.
 
 ## React
 

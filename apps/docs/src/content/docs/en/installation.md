@@ -1,6 +1,8 @@
 ---
 title: Installation
 description: Set up Tailwind CSS v4 and markas.css in Laravel, React, or Vue.
+seoTitle: "Install Tailwind CSS components in Laravel, React and Vue"
+seoDescription: "Set up Tailwind CSS v4 and markas.css in a Laravel, React, or Vue project, then add MarkasUI components with the CLI or by copying the source."
 ---
 
 Every MarkasUI component needs two things: Tailwind CSS v4 and the `markas.css` file with the color tokens.
@@ -56,7 +58,7 @@ window.Alpine = Alpine;
 Alpine.start();
 ```
 
-Skip the Alpine step if you use Livewire 3, which already ships it.
+Skip the Alpine step if you use Livewire 4 or 3, which already ships and starts Alpine. Loading it twice breaks `wire:model`. See [Livewire](/docs/livewire) for `wire:model`, re-renders, and `wire:navigate`.
 
 ## React (Vite)
 

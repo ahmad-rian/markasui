@@ -49,13 +49,17 @@
     };
 
     $value = $value === null || $value === '' ? null : (float) $value;
-    $id = $attributes->get('id') ?? 'markas-currency-input-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-currency-input|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $name).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-currency-input-'.hash('xxh32', $idKey.$idIndex);
     $currencyId = $id.'-currency';
     $messageId = $error ? $id.'-error' : ($hint ? $id.'-hint' : null);
     $disabled = (bool) $attributes->get('disabled');
 @endphp
 
-{{-- Formats as you type, keeps the caret in place, and posts the plain number through a hidden input named `name`. --}}
+{{-- Formats as you type, keeps the caret in place, and posts the plain number through a hidden input named `name`. wire:model and x-model bind that number on the root (x-modelable). --}}
 <div
     class="{{ $wrapper }}"
     x-data="{
@@ -63,7 +67,18 @@
         min: @js($min === null ? null : (float) $min),
         max: @js($max === null ? null : (float) $max),
         value: @js($value),
+        {{-- Amount the field shows or is animating to. When value changes from outside (wire:model, x-model), the field follows. --}}
+        shown: @js($value),
         frame: 0,
+        init() {
+            this.$watch('value', (next) => {
+                const amount = next === null || next === '' ? null : Number(next);
+                if (amount === this.shown) return;
+                cancelAnimationFrame(this.frame);
+                this.shown = amount;
+                this.$refs.field.value = amount === null || Number.isNaN(amount) ? '' : this.format(amount);
+            });
+        },
         group(digits) {
             return digits.replace(/\B(?=(\d{3})+(?!\d))/g, this.c.group);
         },
@@ -94,6 +109,7 @@
             let position = 0;
             for (let seen = 0; position < parsed.text.length && seen < count; position++) if (this.significant(parsed.text[position])) seen++;
             field.setSelectionRange(position, position);
+            this.shown = parsed.value;
             this.value = parsed.value;
         },
         skipSeparator(event) {
@@ -104,14 +120,16 @@
             if (event.key === 'Delete' && field.value[at] === this.c.group) field.setSelectionRange(at + 1, at + 1);
         },
         blur() {
-            if (this.value === null) return;
-            this.value = this.clamp(this.value);
+            if (this.value === null || this.value === '') return;
+            this.shown = this.clamp(Number(this.value));
+            this.value = this.shown;
             this.$refs.field.value = this.format(this.value);
         },
         pick(preset) {
             const target = this.clamp(preset);
-            const from = this.value ?? 0;
+            const from = Number(this.value ?? 0);
             const field = this.$refs.field;
+            this.shown = target;
             this.value = target;
             cancelAnimationFrame(this.frame);
             if (matchMedia('(prefers-reduced-motion: reduce)').matches) return (field.value = this.format(target));
@@ -129,6 +147,8 @@
             cancelAnimationFrame(this.frame);
         },
     }"
+    x-modelable="value"
+    {{ $attributes->whereStartsWith(['wire:model', 'x-model']) }}
 >
     @if ($label)
         <label for="{{ $id }}" class="{{ $labelClass }}">{{ $label }}</label>
@@ -140,7 +160,7 @@
             x-on:input="input($event)"
             x-on:keydown="skipSeparator($event)"
             x-on:blur="blur()"
-            {{ $attributes->merge([
+            {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model'])->merge([
                 'id' => $id,
                 'type' => 'text',
                 'inputmode' => $c['fraction'] ? 'decimal' : 'numeric',
@@ -165,7 +185,7 @@
                 <button
                     type="button"
                     aria-pressed="{{ $value !== null && (float) $preset === $value ? 'true' : 'false' }}"
-                    x-bind:aria-pressed="String(value === {{ (float) $preset }})"
+                    x-bind:aria-pressed="String(value !== null && value !== '' && Number(value) === {{ (float) $preset }})"
                     @if ($disabled) disabled @endif
                     x-on:click="pick({{ (float) $preset }})"
                     class="{{ $chip }}"

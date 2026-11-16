@@ -33,7 +33,11 @@
         $groups[(string) ($entry['group'] ?? '')][$index] = $entry;
     }
 
-    $id = $attributes->get('id') ?? 'markas-command-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-command|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-command-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 <div
@@ -46,7 +50,7 @@
             return label.toLowerCase().includes(this.query.trim().toLowerCase());
         },
         visible() {
-            return Array.from(this.$refs.list.querySelectorAll('[role=option]')).filter((el) => this.matches(el.dataset.label));
+            return Array.from(this.$root.querySelectorAll('[role=listbox] [role=option]')).filter((el) => this.matches(el.dataset.label));
         },
         get activeId() {
             const list = this.visible();
@@ -94,6 +98,7 @@
         <div class="contents" @click="show()">{{ $trigger }}</div>
     @endisset
     <dialog
+        wire:ignore.self
         x-ref="dialog"
         aria-label="{{ $dialogLabel }}"
         :data-state="open ? 'open' : 'closed'"
@@ -122,7 +127,6 @@
             />
         </div>
         <div
-            x-ref="list"
             id="{{ $id }}-list"
             role="listbox"
             aria-label="{{ $dialogLabel }}"

@@ -15,7 +15,17 @@
 </x-markas.drawer>
 ```
 
-Butuh Alpine.js. Livewire 3 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+Butuh Alpine.js. Livewire 3 dan 4 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+
+### Livewire
+
+```blade
+<x-markas.drawer title="Filters" wire:model="showFilters">
+    ...
+</x-markas.drawer>
+```
+
+`wire:model` terhubung ke status terbuka, sama seperti modal. Menutup drawer mengembalikan properti ke `false`.
 
 ## React
 

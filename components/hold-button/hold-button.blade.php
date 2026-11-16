@@ -29,7 +29,11 @@
     $srOnly = 'sr-only';
 
     $duration = (int) $duration;
-    $hintId = 'markas-hold-button-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-hold-button|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $hintId = 'markas-hold-button-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 {{-- Holding Space, Enter, or the pointer for the full duration dispatches a "complete" event. Releasing early cancels. --}}

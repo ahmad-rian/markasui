@@ -10,6 +10,7 @@
 
 {{-- Rotates toward the pointer, moves the glare, and shifts [data-depth] layers by their value in px. --}}
 <div
+    wire:ignore.self
     x-data="{
         max: {{ (float) $maxAngle }},
         stop: null,

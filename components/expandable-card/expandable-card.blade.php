@@ -23,7 +23,11 @@
     $close = 'absolute top-3 right-3 z-10 inline-flex size-8 items-center justify-center rounded-full border border-line bg-surface text-muted transition-colors duration-150 ease-out hover:bg-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none';
     $icon = 'size-4';
 
-    $id = $attributes->get('id') ?? 'markas-expandable-card-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-expandable-card|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-expandable-card-'.hash('xxh32', $idKey.$idIndex);
     $hasDetails = $slot->isNotEmpty();
 @endphp
 
@@ -95,6 +99,7 @@
         </span>
     </button>
     <dialog
+        wire:ignore.self
         x-ref="dialog"
         id="{{ $id }}-dialog"
         aria-labelledby="{{ $id }}-title"

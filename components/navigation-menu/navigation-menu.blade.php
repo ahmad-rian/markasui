@@ -36,7 +36,11 @@
         }
     }
 
-    $id = $attributes->get('id') ?? 'markas-navigation-menu-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-navigation-menu|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-navigation-menu-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 <nav
@@ -156,6 +160,7 @@
                     <div
                         id="{{ $panelId }}"
                         popover="auto"
+                        wire:ignore.self
                         class="{{ $panel }}{{ $featured ? ' '.$featuredLayout : '' }}"
                         @beforetoggle="onToggle({{ $index }}, $event)"
                     >
@@ -197,5 +202,5 @@
             </li>
         @endforeach
     </ul>
-    <span x-ref="bar" aria-hidden="true" data-state="hidden" hidden class="{{ $indicatorClass }}"></span>
+    <span x-ref="bar" wire:ignore aria-hidden="true" data-state="hidden" hidden class="{{ $indicatorClass }}"></span>
 </nav>

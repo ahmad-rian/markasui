@@ -20,6 +20,14 @@
 <fieldset
     x-data="{
         chars: @js($chars),
+        {{-- Bound value for wire:model and x-model (x-modelable). --}}
+        value: @js(implode('', $chars)),
+        init() {
+            this.$watch('value', (next) => {
+                const text = String(next ?? '');
+                if (text !== this.joined) this.chars = this.chars.map((_, index) => text[index] ?? '');
+            });
+        },
         get joined() {
             return this.chars.join('');
         },
@@ -32,6 +40,7 @@
             this.chars = next;
             const value = next.join('');
             if (value === previous) return;
+            this.value = value;
             this.$dispatch('markas-change', value);
             if (next.every(Boolean)) this.$dispatch('markas-complete', value);
         },
@@ -75,6 +84,7 @@
             this.fill(digits.length >= this.chars.length ? 0 : index, digits);
         },
     }"
+    x-modelable="value"
     {{ $attributes->class([$root]) }}
 >
     @if ($label)

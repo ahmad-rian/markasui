@@ -14,6 +14,14 @@
 
 Butuh Alpine.js. Form menerima `amount=100000`, angka murni tanpa pemisah.
 
+### Livewire
+
+```blade
+<x-markas.currency-input label="Amount" wire:model.live.debounce.400ms="amount" :presets="[50000, 100000]" />
+```
+
+`wire:model` terhubung ke angka polos (misalnya `12500000`), bukan teks berformat. Perubahan dari server memformat ulang field. Chip preset juga memperbarui properti.
+
 ## React
 
 ```tsx

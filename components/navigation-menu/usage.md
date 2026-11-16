@@ -20,7 +20,7 @@
 />
 ```
 
-Needs Alpine.js. Livewire 3 already ships Alpine, so there is nothing else to install.
+Needs Alpine.js. Livewire 3 and 4 already ship Alpine, so there is nothing else to install.
 
 ## React
 

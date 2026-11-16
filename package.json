@@ -1,7 +1,7 @@
 {
   "name": "markasui-monorepo",
   "private": true,
-  "description": "Markas komponen UI ringan untuk Blade, React, Vue, Svelte, Astro, dan Angular.",
+  "description": "Tailwind CSS v4 UI components for Laravel Blade, React, Vue, Svelte, Astro, and Angular.",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@12.16.1",
@@ -20,8 +20,10 @@
     "dev": "pnpm --filter @markasui/docs dev",
     "build": "pnpm --filter @markasui/docs build",
     "test:docs": "playwright test -c playwright.docs.config.ts",
+    "test:livewire": "node tests/livewire/run.ts",
     "size": "node scripts/check-budget.ts",
     "thumbs": "node scripts/thumbnails.ts",
+    "og": "node scripts/og-images.ts",
     "build:packages": "pnpm --filter markasui build && pnpm --filter @markasui/mcp build",
     "astro:playground": "node scripts/render-astro.ts playground/public/astro"
   },

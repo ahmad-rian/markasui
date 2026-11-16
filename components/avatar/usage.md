@@ -6,7 +6,7 @@
 <x-markas.avatar name="Emma Wilson" src="/img/emma.jpg" size="lg" alt="" />
 ```
 
-The fallback for an image that fails to load needs Alpine.js. Livewire 3 already ships it. Without `src`, the initials render with no JavaScript.
+The fallback for an image that fails to load needs Alpine.js. Livewire 3 and 4 already ship it. Without `src`, the initials render with no JavaScript.
 
 ## React
 

@@ -6,7 +6,7 @@
 <x-markas.avatar name="Dewi Lestari" src="/img/dewi.jpg" size="lg" alt="" />
 ```
 
-Fallback saat gambar gagal dimuat butuh Alpine.js. Livewire 3 sudah membawa Alpine. Tanpa `src`, inisial dirender tanpa JavaScript.
+Fallback saat gambar gagal dimuat butuh Alpine.js. Livewire 3 dan 4 sudah membawa Alpine. Tanpa `src`, inisial dirender tanpa JavaScript.
 
 ## React
 

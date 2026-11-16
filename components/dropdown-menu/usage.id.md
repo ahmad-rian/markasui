@@ -15,6 +15,14 @@
 
 Butuh Alpine.js. Item yang dipilih memancarkan event `markas-select` dengan `$event.detail` berisi value item. Di Livewire: `x-on:markas-select="$wire.aksi($event.detail)"`.
 
+### Livewire
+
+```blade
+<x-markas.dropdown-menu label="Actions" :items="$actions" wire:markas-select="run($event.detail)" />
+```
+
+Memilih item memancarkan `markas-select` dengan value; `wire:markas-select` memanggil action Livewire dengan value itu. Menu yang terbuka tetap di posisinya saat komponen dirender ulang.
+
 ## React
 
 ```tsx

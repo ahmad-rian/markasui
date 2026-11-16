@@ -13,6 +13,14 @@
 
 Needs Alpine.js. Inside a form with `enctype="multipart/form-data"` the valid files post as `attachments[]`.
 
+### Livewire
+
+```blade
+<x-markas.file-dropzone multiple accept="image/*" :max-size="5242880" wire:model="photos" />
+```
+
+Add `use WithFileUploads;` to the component. Only files that pass `accept`, `maxSize`, and `maxFiles` are uploaded, through a hidden file input that carries `wire:model`. Upload progress fills the bars, and removing every file sets the property back to `null` (or `[]` with `multiple`). Validate again on the server.
+
 ## React
 
 ```tsx

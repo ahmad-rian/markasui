@@ -160,6 +160,6 @@
     }"
     {{ $attributes->merge(['style' => '--cell: '.(float) $cellSize.'px'])->class([$base]) }}
 >
-    <canvas x-ref="canvas" aria-hidden="true" @class([$canvasClass, $colors[$color] ?? $colors['primary'], $gridClass => $showGrid])></canvas>
+    <canvas x-ref="canvas" wire:ignore aria-hidden="true" @class([$canvasClass, $colors[$color] ?? $colors['primary'], $gridClass => $showGrid])></canvas>
     {{ $slot }}
 </div>

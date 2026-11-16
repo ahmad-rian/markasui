@@ -43,6 +43,7 @@
 
 {{-- Mark the root visible the first time it scrolls into view, which starts the entrance. With follow, the light source leans a little toward the pointer. --}}
 <div
+    wire:ignore.self
     x-data="{
         observer: null,
         init() {

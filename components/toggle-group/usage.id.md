@@ -14,6 +14,14 @@
 
 Butuh Alpine.js. Ganti label dengan ikon lewat slot bernama sesuai value, misalnya `<x-slot:kiri>`, dan isi `ariaLabel` di item tersebut.
 
+### Livewire
+
+```blade
+<x-markas.toggle-group label="View" wire:model.live="view" :items="$views" />
+```
+
+`wire:model` terhubung ke string (atau `null`) untuk `type="single"` dan array untuk `type="multiple"`.
+
 ## React
 
 ```tsx

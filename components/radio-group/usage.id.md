@@ -12,6 +12,14 @@
 />
 ```
 
+### Livewire
+
+```blade
+<x-markas.radio-group name="plan" wire:model.live="plan" :options="$plans" />
+```
+
+`wire:model` (dan `x-model`) disalin ke setiap radio, jadi Livewire membaca nilai yang dicentang. Atribut lain tetap di `fieldset`.
+
 ## React
 
 ```tsx

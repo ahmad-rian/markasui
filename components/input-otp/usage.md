@@ -10,6 +10,14 @@
 
 Needs Alpine.js. Every change dispatches `markas-change` and a full code dispatches `markas-complete`, both with the code in `$event.detail`. Start with a code through `value`.
 
+### Livewire
+
+```blade
+<x-markas.input-otp label="Code" wire:model.live="code" x-on:markas-complete="$wire.verify()" />
+```
+
+`wire:model` binds the joined code as one string. Listen for `markas-complete` to verify once every box is filled.
+
 ## React
 
 ```tsx

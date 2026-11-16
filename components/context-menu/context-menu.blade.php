@@ -23,7 +23,11 @@
         return $hasScheme && preg_match('/^(https?|mailto|tel):/i', $value) !== 1 ? '#' : $href;
     };
 
-    $id = $attributes->get('id') ?? 'markas-context-menu-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-context-menu|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-context-menu-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 <div
@@ -79,7 +83,8 @@
             this.$refs.area.focus();
         },
         select(value) {
-            this.$dispatch('markas-select', value);
+            {{-- Dispatch from the area: it carries the user's attributes (x-on:, wire:), the menu is its sibling. --}}
+            this.$refs.area.dispatchEvent(new CustomEvent('markas-select', { detail: value, bubbles: true }));
             this.close();
         },
         onContextMenu(event) {
@@ -133,6 +138,7 @@
         x-ref="menu"
         id="{{ $id }}"
         popover="auto"
+        wire:ignore.self
         role="menu"
         aria-label="{{ $menuLabel }}"
         data-state="closed"

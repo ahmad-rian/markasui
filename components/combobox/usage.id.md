@@ -19,6 +19,14 @@
 
 Butuh Alpine.js. Mengubah pilihan memancarkan event `markas-change` dengan value di `$event.detail` (string kosong saat dikosongkan).
 
+### Livewire
+
+```blade
+<x-markas.combobox label="Country" wire:model.live="country" :options="$countries" />
+```
+
+`wire:model` terhubung ke value terpilih (bukan teks ketikan) lewat `x-modelable`. Mengubah properti di server menampilkan label yang cocok. `.live` mengirim request hanya saat opsi dipilih atau dikosongkan, bukan setiap ketikan.
+
 ## React
 
 ```tsx

@@ -12,6 +12,14 @@
 />
 ```
 
+### Livewire
+
+```blade
+<x-markas.radio-group name="plan" wire:model.live="plan" :options="$plans" />
+```
+
+`wire:model` (and `x-model`) is copied to every radio, so Livewire reads the checked value. Other attributes stay on the `fieldset`.
+
 ## React
 
 ```tsx

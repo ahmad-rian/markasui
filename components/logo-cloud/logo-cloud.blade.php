@@ -33,7 +33,11 @@
 
     $layout = $layouts[$variant] ?? $layouts['row'];
     $tone = $grayscale ? $tones['gray'] : $tones['color'];
-    $id = $attributes->get('id') ?? 'markas-logo-cloud-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-logo-cloud|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-logo-cloud-'.hash('xxh32', $idKey.$idIndex);
     $copies = $variant === 'marquee' ? [0, 1] : [0];
     // Href berskema selain http, https, mailto, dan tel (misalnya javascript:) diganti "#". Spasi dan karakter kontrol diabaikan seperti di browser.
     $safeHref = fn (?string $href): string => preg_match('/^(?!https?:|mailto:|tel:)[a-z][\w+.\-]*:/i', preg_replace('/[\x00-\x20]/', '', (string) $href)) === 1 ? '#' : (string) ($href ?? '#');

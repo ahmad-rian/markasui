@@ -19,6 +19,14 @@
 
 Butuh Alpine.js. Di dalam form dengan `enctype="multipart/form-data"` file yang valid terkirim sebagai `attachments[]`.
 
+### Livewire
+
+```blade
+<x-markas.file-dropzone multiple accept="image/*" :max-size="5242880" wire:model="photos" />
+```
+
+Tambahkan `use WithFileUploads;` di komponen. Hanya file yang lolos `accept`, `maxSize`, dan `maxFiles` yang diunggah, lewat input file tersembunyi yang membawa `wire:model`. Progres unggah mengisi bar, dan menghapus semua file mengembalikan properti ke `null` (atau `[]` dengan `multiple`). Tetap validasi lagi di server.
+
 ## React
 
 ```tsx

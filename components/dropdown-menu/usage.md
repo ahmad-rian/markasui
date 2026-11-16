@@ -15,6 +15,14 @@
 
 Needs Alpine.js. Selecting an item dispatches a `markas-select` event with the item value in `$event.detail`. In Livewire: `x-on:markas-select="$wire.handle($event.detail)"`.
 
+### Livewire
+
+```blade
+<x-markas.dropdown-menu label="Actions" :items="$actions" wire:markas-select="run($event.detail)" />
+```
+
+Picking an item dispatches `markas-select` with the value; `wire:markas-select` calls a Livewire action with it. The open menu keeps its position across re-renders.
+
 ## React
 
 ```tsx

@@ -18,6 +18,14 @@
 
 Needs Alpine.js. Changing the selection dispatches a `markas-change` event with the value in `$event.detail` (an empty string when cleared).
 
+### Livewire
+
+```blade
+<x-markas.combobox label="Country" wire:model.live="country" :options="$countries" />
+```
+
+`wire:model` binds the selected value (not the typed text) through `x-modelable`. Setting the property on the server shows the matching label. `.live` sends a request only when an option is picked or cleared, not on every keystroke.
+
 ## React
 
 ```tsx

@@ -9,6 +9,14 @@
 
 Butuh Alpine.js.
 
+### Livewire
+
+```blade
+<x-markas.toggle wire:model.live="bold" aria-label="Bold">B</x-markas.toggle>
+```
+
+`wire:model` terhubung ke status ditekan sebagai boolean.
+
 ## React
 
 ```tsx

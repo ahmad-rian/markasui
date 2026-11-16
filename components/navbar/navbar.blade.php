@@ -42,7 +42,11 @@
     $svg = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
     $links = array_values($links);
 
-    $id = $attributes->get('id') ?? 'markas-navbar-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-navbar|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-navbar-'.hash('xxh32', $idKey.$idIndex);
     $menuId = $id.'-menu';
 @endphp
 
@@ -137,6 +141,7 @@
                             <div
                                 id="{{ $panelId }}"
                                 popover="auto"
+                                wire:ignore.self
                                 class="{{ $panel }}"
                                 @beforetoggle="onToggle($event)"
                                 @toggle="onToggle($event)"
@@ -194,7 +199,7 @@
         <nav aria-label="{{ $mobileNavLabel }}" class="{{ $mobileList }}">
             @foreach ($links as $entry)
                 @if (count($entry['children'] ?? []) > 0)
-                    <details>
+                    <details wire:ignore.self>
                         <summary class="{{ $item }}">{{ $entry['label'] }}<svg class="{{ $chevron }}" {!! $svg !!}><path d="m6 9 6 6 6-6" /></svg></summary>
                         <div class="{{ $groupList }}">
                             @foreach ($entry['children'] as $child)

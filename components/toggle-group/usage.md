@@ -14,6 +14,14 @@
 
 Needs Alpine.js. Replace a label with an icon through a slot named after its value, such as `<x-slot:left>`, and pass `ariaLabel` in that item.
 
+### Livewire
+
+```blade
+<x-markas.toggle-group label="View" wire:model.live="view" :items="$views" />
+```
+
+`wire:model` binds a string (or `null`) for `type="single"` and an array for `type="multiple"`.
+
 ## React
 
 ```tsx

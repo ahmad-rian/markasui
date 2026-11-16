@@ -7,7 +7,11 @@
     $root = 'inline-flex';
     $tooltip = 'inset-auto m-0 max-w-64 rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas shadow-overlay';
 
-    $id = $attributes->get('id') ?? 'markas-tooltip-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-tooltip|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-tooltip-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
 <span
@@ -16,6 +20,8 @@
         timer: null,
         show() {
             clearTimeout(this.timer);
+            {{-- Link again in case a re-render (Livewire morph) dropped aria-describedby from the trigger. --}}
+            this.describe();
             this.$refs.tip.showPopover();
         },
         showLater() {
@@ -81,6 +87,7 @@
         x-ref="tip"
         id="{{ $id }}"
         popover="manual"
+        wire:ignore.self
         role="tooltip"
         data-state="closed"
         :data-state="open ? 'open' : 'closed'"

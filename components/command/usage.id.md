@@ -23,6 +23,14 @@
 
 Butuh Alpine.js. Perintah yang dipilih memancarkan event `markas-select` dengan `$event.detail` berisi value. Di Livewire: `x-on:markas-select="$wire.jalankan($event.detail)"`.
 
+### Livewire
+
+```blade
+<x-markas.command hotkey :items="$commands" wire:markas-select="go($event.detail)" />
+```
+
+`wire:markas-select` memanggil action Livewire dengan value yang dipilih. Listener Ctrl+K dilepas saat komponen meninggalkan halaman, jadi `wire:navigate` tidak menumpuk listener.
+
 ## React
 
 ```tsx

@@ -9,6 +9,14 @@
 
 Needs Alpine.js.
 
+### Livewire
+
+```blade
+<x-markas.toggle wire:model.live="bold" aria-label="Bold">B</x-markas.toggle>
+```
+
+`wire:model` binds the pressed state as a boolean.
+
 ## React
 
 ```tsx

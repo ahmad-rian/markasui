@@ -1,0 +1,175 @@
+---
+title: Livewire
+description: Pakai komponen Blade di Livewire 4 (dan 3) dengan wire:model, render ulang, dan wire:navigate.
+seoTitle: "Komponen UI Livewire 4 untuk Laravel Blade"
+seoDescription: "Pakai komponen Blade MarkasUI di Livewire 4 dan 3: wire:model di setiap kontrol form, dialog tetap terbuka saat render ulang, id stabil, dan dukungan wire:navigate."
+---
+
+Komponen Blade jalan di Livewire 4 tanpa setup tambahan, dan di Livewire 3 dengan cara yang sama. Kontrol form menerima `wire:model`, dialog dan menu yang terbuka tetap terbuka saat komponen dirender ulang, dan tidak ada yang rusak setelah `wire:navigate`.
+
+## Setup
+
+Ikuti [instalasi Laravel (Blade)](/id/docs/installation) dengan satu perubahan: **jangan pasang atau jalankan Alpine.js sendiri.** Livewire sudah membawa Alpine dan menjalankannya. Memuat salinan kedua membuat setiap `x-data` berjalan dua kali dan merusak `wire:model`.
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+
+Biarkan `resources/js/app.js` tanpa import Alpine. Livewire menyisipkan script-nya di halaman yang merender komponen. Kalau layout tidak punya komponen Livewire, tambahkan `@livewireScripts` sebelum `</body>`.
+
+Untuk mendaftarkan data atau plugin Alpine sendiri, dengarkan `alpine:init`, yang berjalan sebelum Alpine mulai:
+
+```js
+document.addEventListener("alpine:init", () => {
+  Alpine.data("counter", () => ({ count: 0 }));
+});
+```
+
+Kalau Anda membundel Livewire sendiri, pakai `@livewireScriptConfig` di layout lalu jalankan dari `app.js`:
+
+```js
+import {
+  Livewire,
+  Alpine,
+} from "../../vendor/livewire/livewire/dist/livewire.esm";
+
+Alpine.data("counter", () => ({ count: 0 }));
+Livewire.start();
+```
+
+Tidak ada komponen yang butuh plugin Alpine. Livewire sudah membawa morph, intersect, collapse, focus, anchor, mask, dan resize (Livewire 4 menambah sort), jadi direktif itu bisa dipakai di markup Anda tanpa memasang apa pun.
+
+## wire:model
+
+Setiap komponen form menerima `wire:model` dengan modifier biasa (`.live`, `.blur`, `.change`, `.debounce.300ms`, `.throttle`). Ada dua pola, tergantung di mana nilainya disimpan.
+
+**Kontrol native.** Atribut jatuh ke `input`, `textarea`, atau `select` asli, jadi Livewire memperlakukannya seperti HTML biasa.
+
+| Komponen                | Terhubung ke           | Contoh                                                       |
+| ----------------------- | ---------------------- | ------------------------------------------------------------ |
+| Input, Textarea, Select | string                 | `<x-markas.input label="Nama" wire:model.live="name" />`     |
+| Checkbox, Switch        | boolean                | `<x-markas.switch label="Notifikasi" wire:model="notify" />` |
+| Checkbox dengan `value` | array nilai tercentang | `<x-markas.checkbox value="vue" wire:model="tags" />`        |
+| Radio group             | nilai terpilih         | `<x-markas.radio-group name="plan" wire:model="plan" ... />` |
+
+Radio group menyalin `wire:model` ke setiap radio.
+
+**Kontrol Alpine.** Nilainya ada di state Alpine, jadi `wire:model` dipasang di root komponen yang punya `x-modelable`. Perubahan dari server ikut masuk: set `$this->country = 'jp'` menampilkan "Jepang" di combobox.
+
+| Komponen                    | Terhubung ke                                           |
+| --------------------------- | ------------------------------------------------------ |
+| Slider                      | angka                                                  |
+| Combobox                    | value terpilih (bukan teks ketikan)                    |
+| Currency input              | angka polos, misalnya `12500000`                       |
+| Input OTP                   | kode gabungan sebagai satu string                      |
+| Toggle                      | boolean                                                |
+| Toggle group                | string atau `null` (single), array (`type="multiple"`) |
+| Modal, Drawer, Alert dialog | status terbuka (boolean)                               |
+| File dropzone               | file terunggah, atau array dengan `multiple`           |
+
+`x-model` bekerja dengan cara yang sama untuk Alpine biasa.
+
+Di kontrol Alpine, `.blur` dan `.enter` mendengarkan elemen root dan tidak terpicu oleh input di dalamnya. Pakai `.live`, `.live.debounce`, atau `.change`.
+
+### Membuka dialog dari server
+
+```blade
+<x-markas.modal title="Ubah profil" wire:model="showEdit">
+    ...
+</x-markas.modal>
+```
+
+```php
+public bool $showEdit = false;
+
+public function save(): void
+{
+    // ...
+    $this->showEdit = false;
+}
+```
+
+Menutup dengan Escape, tombol tutup, atau backdrop mengembalikan properti ke `false`.
+
+### Unggah file
+
+Tambahkan `use WithFileUploads;` di komponen lalu hubungkan dropzone:
+
+```blade
+<x-markas.file-dropzone multiple accept="image/*" :max-size="5242880" wire:model="photos" />
+```
+
+Hanya file yang lolos `accept`, `maxSize`, dan `maxFiles` yang diunggah. Progres unggah mengisi setiap bar. Tetap validasi lagi di server.
+
+## Event
+
+Komponen memancarkan event browser seperti `markas-select`, `markas-change`, `markas-action`, dan `markas-cancel`. Livewire bisa mendengarkan event apa pun dengan `wire:` ditambah nama event:
+
+```blade
+<x-markas.dropdown-menu label="Aksi" :items="$actions" wire:markas-select="run($event.detail)" />
+
+<x-markas.alert-dialog title="Hapus project?" wire:model="confirming" wire:markas-action="delete">
+    Tindakan ini tidak bisa dibatalkan.
+</x-markas.alert-dialog>
+```
+
+`x-on:markas-select="$wire.run($event.detail)"` sama hasilnya. `wire:click`, `wire:loading`, dan atribut `wire:` lain diteruskan apa adanya. Event yang dipancarkan tiap komponen tercantum di halamannya.
+
+Untuk menampilkan toast dari action, kirim event toast. Livewire memancarkannya di `window`, tempat `<x-markas.toast />` mendengarkan:
+
+```php
+$this->dispatch('markas-toast', title: 'Tersimpan', variant: 'success');
+```
+
+## Render ulang
+
+Livewire memperbarui halaman dengan menggabungkan (morph) HTML baru ke HTML lama. Komponen disusun agar render ulang mempertahankan apa yang dilihat user:
+
+- **Id tidak berubah.** Id otomatis berasal dari `wire:model` komponen (atau `wire:key`, atau `name`) ditambah urutannya, bukan dari nilai acak. Livewire mencocokkan elemen lewat id, jadi id yang berubah akan mengganti elemen dan menghilangkan fokus saat mengetik. Isi `id` sendiri kalau butuh nilai tetap, misalnya untuk `<label>` atau `aria-describedby`.
+- **Yang terbuka tetap terbuka.** Dialog, drawer, accordion `details`, dan panel Popover API (dropdown, popover, tooltip, daftar combobox) memakai `wire:ignore.self`. Livewire tetap memperbarui isinya, tapi tidak menyentuh status terbuka dan posisinya.
+- **State Alpine tetap.** Tab aktif, slide carousel, item yang di-toggle, dan state animasi tidak di-reset.
+
+Komponen yang menggambar dengan JavaScript (drag elements, stacking cards, canvas pixel trail) dilewati morph sepenuhnya lewat `wire:ignore`.
+
+### Island
+
+`@island` di Livewire 4 dirender ulang sendiri, jadi id otomatis di dalamnya tidak bisa bergantung pada komponen di sekitarnya. Beri komponen di dalam island yang tidak punya `wire:model` sebuah `id` atau `wire:key`:
+
+```blade
+@island(name: 'stats')
+    <x-markas.tabs wire:key="stats-tabs" :items="$periods">...</x-markas.tabs>
+@endisland
+```
+
+### wire:key di daftar
+
+Beri setiap item di loop sebuah `wire:key`, seperti anjuran Livewire. Di komponen MarkasUI, `wire:key` juga menjadi dasar id otomatis:
+
+```blade
+@foreach ($users as $user)
+    <x-markas.checkbox wire:key="user-{{ $user->id }}" :label="$user->name" value="{{ $user->id }}" wire:model="selected" />
+@endforeach
+```
+
+## wire:navigate
+
+Komponen dengan listener global (scroll, resize, hotkey Ctrl+K, event toast) melepasnya di `destroy()` milik Alpine saat halaman berganti, jadi bolak-balik halaman tidak menumpuk listener atau membuka dua dialog. Komponen yang mulai saat dimuat, seperti number ticker atau typing text, mulai lagi di halaman baru.
+
+Letakkan bagian bersama seperti `<x-markas.toast />` atau navbar di layout. Bungkus dengan `@persist('toast')` kalau state-nya harus bertahan saat navigasi.
+
+## Kecepatan
+
+- Kerja Blade per komponen kecil: beberapa string class dan satu pencarian id. Tidak ada query atau akses file per render.
+- Array `:options` atau `:items` yang besar dicetak sebagai JSON inline di setiap render. Batasi ke pilihan yang memang dibutuhkan user, dan pakai computed property agar daftar dibuat sekali per request.
+- Pakai `wire:model.live.debounce` untuk field teks yang memanggil server, dan `wire:model` biasa (ditunda) kalau nilainya baru penting saat submit.
+
+## Livewire 3
+
+Semua di atas jalan di Livewire 3.6 ke atas. Perbedaannya ada di sisi Livewire:
+
+- Livewire 4 mendaftarkan route halaman penuh dengan `Route::livewire()`. Di Livewire 3 pakai `Route::get('/path', Component::class)`.
+- Livewire 4 menambah island, single file component, dan `wire:ref`. Fitur itu tidak mengubah perilaku komponen.
+- Kedua versi mencocokkan elemen saat morph lewat `wire:key`, `wire:id`, lalu `id` (Livewire 3 memeriksa `wire:key` dulu, Livewire 4 `wire:id` dulu), karena itu id yang stabil penting di keduanya.
+- Livewire 3 tidak membawa plugin sort Alpine. Tidak ada komponen yang memakainya.
+
+Setiap perubahan diuji di CI terhadap Livewire 3 dan 4 di app Laravel baru: setiap komponen dirender ulang tanpa kehilangan elemen atau state, kontrol form terhubung dua arah, dan `wire:navigate` tidak menambah listener. Jalankan pengecekan yang sama dengan `pnpm test:livewire` (`LIVEWIRE=3` untuk versi 3).

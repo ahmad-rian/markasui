@@ -21,6 +21,7 @@ Library komponen UI open source untuk Blade, React, Vue, Svelte, Astro, dan Angu
 - pnpm test: Vitest per proyek (unit React/Vue/registry, svelte, angular, astro), dipilih dari akhiran file `*.svelte.test.ts`, `*.angular.test.ts`, `*.astro.test.ts`
 - pnpm test:e2e: Playwright komponen (kesamaan tampilan, axe, keyboard)
 - pnpm test:docs: Playwright website (butuh pnpm build dulu)
+- pnpm test:livewire: komponen Blade di app Laravel + Livewire sementara di folder tmp (`LIVEWIRE=3` atau `4`, default 4; butuh PHP dan Composer): morph, state terbuka, wire:model, wire:navigate, island
 - pnpm typecheck: vue-tsc + svelte-check + ngc (template Angular strict) + astro check (termasuk components/*.astro)
 - pnpm registry: build registry ke apps/docs/public/r
 - pnpm thumbs: thumbnail WebP untuk /components

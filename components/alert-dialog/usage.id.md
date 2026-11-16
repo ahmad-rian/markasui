@@ -10,7 +10,17 @@
 </x-markas.alert-dialog>
 ```
 
-Butuh Alpine.js. Livewire 3 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+Butuh Alpine.js. Livewire 3 dan 4 sudah membawa Alpine, jadi tidak perlu dipasang lagi.
+
+### Livewire
+
+```blade
+<x-markas.alert-dialog title="Delete project?" wire:model="confirming" wire:markas-action="delete">
+    This cannot be undone.
+</x-markas.alert-dialog>
+```
+
+`wire:model` terhubung ke status terbuka. `wire:markas-action` menjalankan action Livewire saat tombol aksi ditekan; `wire:markas-cancel` untuk penutupan lainnya.
 
 ## React
 

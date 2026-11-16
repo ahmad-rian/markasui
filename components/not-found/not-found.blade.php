@@ -65,7 +65,11 @@
     $safeHref = fn (?string $href): string => preg_match('/^(?!https?:|mailto:|tel:)[a-z][\w+.\-]*:/i', preg_replace('/[\x00-\x20]/', '', (string) $href)) === 1 ? '#' : (string) ($href ?? '#');
     $variant = array_key_exists($variant, $layouts) ? $variant : 'minimal';
     $links = array_values(array_map(fn ($link) => ['label' => (string) $link['label'], 'href' => $safeHref($link['href'] ?? '#')], $links));
-    $titleId = ($attributes->get('id') ?? 'markas-not-found-'.\Illuminate\Support\Str::random(8)).'-title';
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-not-found|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $titleId = ($attributes->get('id') ?? 'markas-not-found-'.hash('xxh32', $idKey.$idIndex)).'-title';
     $home = $safeHref($homeHref);
 @endphp
 

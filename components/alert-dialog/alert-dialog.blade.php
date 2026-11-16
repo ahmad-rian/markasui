@@ -18,13 +18,24 @@
         'danger' => 'bg-danger text-on-primary hover:bg-danger/90',
     ];
 
-    $id = $attributes->get('id') ?? 'markas-alert-dialog-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-alert-dialog|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-alert-dialog-'.hash('xxh32', $idKey.$idIndex);
 @endphp
 
+{{-- wire:model and x-model bind the open state (x-modelable), so a boolean property can open and close the dialog. --}}
 <div
     class="contents"
     x-data="{
         open: false,
+        init() {
+            this.$watch('open', (value) => {
+                if (value && ! this.$refs.dialog.open) this.show();
+                if (! value && this.$refs.dialog.open) this.$refs.dialog.close();
+            });
+        },
         show() {
             this.$refs.dialog.returnValue = '';
             this.$refs.dialog.showModal();
@@ -39,16 +50,19 @@
             this.$dispatch(isAction ? 'markas-action' : 'markas-cancel');
         },
     }"
+    x-modelable="open"
+    {{ $attributes->whereStartsWith(['wire:model', 'x-model']) }}
 >
     @isset($trigger)
         <div class="contents" @click="show()">{{ $trigger }}</div>
     @endisset
     <dialog
+        wire:ignore.self
         x-ref="dialog"
         role="alertdialog"
         :data-state="open ? 'open' : 'closed'"
         @close="onClose()"
-        {{ $attributes->merge(['id' => $id, 'aria-labelledby' => $id.'-title', 'aria-describedby' => $id.'-description', 'data-state' => 'closed'])->class([$dialog]) }}
+        {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model'])->merge(['id' => $id, 'aria-labelledby' => $id.'-title', 'aria-describedby' => $id.'-description', 'data-state' => 'closed'])->class([$dialog]) }}
     >
         <div class="{{ $panel }}">
             <h2 id="{{ $id }}-title" class="{{ $titleClass }}">{{ $title }}</h2>

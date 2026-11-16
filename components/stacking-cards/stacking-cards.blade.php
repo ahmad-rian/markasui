@@ -16,6 +16,7 @@
 
 {{-- Every card gets its index; while on screen, --stack-depth says how much the later cards already cover it. --}}
 <div
+    wire:ignore
     x-data="{
         frame: 0,
         observer: null,

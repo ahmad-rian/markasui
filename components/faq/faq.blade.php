@@ -38,7 +38,11 @@
     $tab = 'inline-flex h-8 items-center rounded-full border border-line px-3 text-sm font-medium text-muted transition-colors duration-150 ease-out hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-on-primary motion-reduce:transition-none';
 
     $layout = $layouts[$variant] ?? $layouts['simple'];
-    $id = $attributes->get('id') ?? 'markas-faq-'.\Illuminate\Support\Str::random(8);
+    // Same id on every render, so Livewire's morph (which matches elements by id) keeps the element. Pass `id` to set it.
+    $idKey = 'markas-faq|'.(isset($this) && $this instanceof \Livewire\Component ? $this->getId() : '').'|'.($attributes->get('wire:key') ?? $attributes->whereStartsWith('wire:model')->first() ?? $attributes->get('name')).'|';
+    for ($idIndex = 0; $__env->hasRenderedOnce($idKey.$idIndex); $idIndex++);
+    $__env->markAsRenderedOnce($idKey.$idIndex);
+    $id = $attributes->get('id') ?? 'markas-faq-'.hash('xxh32', $idKey.$idIndex);
     $searchable = $variant === 'searchable';
     $interactive = $searchable || $variant === 'categories';
     $hasContact = filled(trim((string) $contact));
@@ -140,6 +144,7 @@
                 >
                     @foreach ($group as $index => $item)
                         <details
+                            wire:ignore.self
                             class="{{ $details }} {{ $layout['item'] }}"
                             @if ($exclusive) name="{{ $id }}-item" @endif
                             @if ($searchable) :hidden="! shows({{ $index }})" @endif
