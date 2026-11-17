@@ -78,7 +78,7 @@
 
 <div {{ $attributes->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
-    <div aria-hidden="true" @class([$layer, $colors[$color] ?? $colors['warning']])>
+    <div aria-hidden="true" wire:ignore @class([$layer, $colors[$color] ?? $colors['warning']])>
         @foreach ($items as $item)
             <svg class="{{ $sparkle }} {{ $variants[$key] }}" style="{{ $item['style'] }}" viewBox="0 0 24 24">
                 @if ($item['dot'])

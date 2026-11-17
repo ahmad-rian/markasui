@@ -126,10 +126,10 @@ $this->dispatch('markas-toast', title: 'Tersimpan', variant: 'success');
 Livewire memperbarui halaman dengan menggabungkan (morph) HTML baru ke HTML lama. Komponen disusun agar render ulang mempertahankan apa yang dilihat user:
 
 - **Id tidak berubah.** Id otomatis berasal dari `wire:model` komponen (atau `wire:key`, atau `name`) ditambah urutannya, bukan dari nilai acak. Livewire mencocokkan elemen lewat id, jadi id yang berubah akan mengganti elemen dan menghilangkan fokus saat mengetik. Isi `id` sendiri kalau butuh nilai tetap, misalnya untuk `<label>` atau `aria-describedby`.
-- **Yang terbuka tetap terbuka.** Dialog, drawer, accordion `details`, dan panel Popover API (dropdown, popover, tooltip, daftar combobox) memakai `wire:ignore.self`. Livewire tetap memperbarui isinya, tapi tidak menyentuh status terbuka dan posisinya.
+- **Yang terbuka tetap terbuka.** Dialog, drawer, accordion `details`, dan panel Popover API (dropdown, popover, tooltip, daftar combobox) memakai `wire:ignore.self`. Livewire tetap memperbarui isinya, tapi tidak menyentuh status terbuka dan posisinya. Pengecualiannya daftar opsi combobox: setelah render pertama daftar itu dipegang Alpine (lihat [Performa](#performa)).
 - **State Alpine tetap.** Tab aktif, slide carousel, item yang di-toggle, dan state animasi tidak di-reset.
 
-Komponen yang menggambar dengan JavaScript (drag elements, stacking cards, canvas pixel trail) dilewati morph sepenuhnya lewat `wire:ignore`.
+Komponen yang menggambar dengan JavaScript (drag elements, stacking cards, canvas pixel trail, ikon theme toggle) dan lapisan dekoratif yang dibangkitkan dilewati morph sepenuhnya lewat `wire:ignore`.
 
 ### Island
 
@@ -157,11 +157,48 @@ Komponen dengan listener global (scroll, resize, hotkey Ctrl+K, event toast) mel
 
 Letakkan bagian bersama seperti `<x-markas.toast />` atau navbar di layout. Bungkus dengan `@persist('toast')` kalau state-nya harus bertahan saat navigasi.
 
-## Kecepatan
+## Performa
 
-- Kerja Blade per komponen kecil: beberapa string class dan satu pencarian id. Tidak ada query atau akses file per render.
-- Array `:options` atau `:items` yang besar dicetak sebagai JSON inline di setiap render. Batasi ke pilihan yang memang dibutuhkan user, dan pakai computed property agar daftar dibuat sekali per request.
-- Pakai `wire:model.live.debounce` untuk field teks yang memanggil server, dan `wire:model` biasa (ditunda) kalau nilainya baru penting saat submit.
+Setiap update merender ulang seluruh komponen Livewire di server lalu menggabungkan (morph) HTML barunya ke halaman. Tiga hal menentukan kecepatannya: kerja Blade di server, ukuran HTML yang dikirim balik, dan jumlah elemen yang dilewati morph di browser.
+
+### Di server
+
+Kerja Blade per komponen kecil: beberapa string class dan satu pencarian id, tanpa query atau akses file. Sebagian besar waktu per komponen adalah penanganan anonymous component milik Laravel sendiri (sekitar 0,05 sampai 0,1 ms per komponen di laptop), jadi aktifkan semua cache saat deploy:
+
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan optimize
+```
+
+`optimize` menyimpan cache config, route, event, dan view Blade yang sudah dikompilasi (`php artisan view:cache` saja untuk view). Biarkan OPcache aktif di production. Komponen yang disalin CLI ada di `resources/views/components/markas`, yang sudah dikenali Laravel sebagai `<x-markas.*>`. Kalau disimpan di folder lain, daftarkan folder itu sekali dengan prefix, jangan include view lewat path:
+
+```php
+// AppServiceProvider::boot()
+Blade::anonymousComponentPath(resource_path('views/ui/markas'), 'markas');
+```
+
+### Lebih sedikit yang dikirim dan di-morph
+
+- Batasi `:options` dan `:items` ke pilihan yang memang dibutuhkan user. Keduanya dicetak ke HTML (dan ke state Alpine) di setiap render. Buat di property `#[Computed]` agar daftar dibuat sekali per request.
+- Komponen Livewire mengirim seluruh HTML-nya di setiap update, walau yang berubah hanya satu property yang tidak terkait. Pecah halaman menjadi komponen yang lebih kecil, atau pakai `@island` di Livewire 4 agar render ulang hanya mencakup bagian yang berubah. Muat bagian yang berat dengan `lazy` (atau `defer` di Livewire 4).
+- Lapisan dekoratif (stars, sparkles, meteors, beams, background lines dan boxes), ikon theme toggle, dan daftar opsi combobox dilewati morph dengan `wire:ignore`. Semuanya digambar sekali lalu dipegang CSS atau Alpine, jadi props yang membentuknya (`count`, `seed`, `cols`, `options`) dibaca di render pertama. Untuk menggambar ulang dengan props baru, ganti `wire:key`-nya.
+
+### Mengetik
+
+`wire:model.live` di input teks menunggu 150 ms setelah tombol terakhir sebelum memanggil server (bawaan Livewire). Kontrol Alpine yang nilainya berubah saat diketik atau digeser (currency input, input OTP, slider) mendapat debounce 150 ms yang sama kalau ditulis `wire:model.live` tanpa waktu sendiri, jadi satu rentetan ketikan mengirim satu request, bukan satu per tombol. Tulis `.debounce.500ms` atau `.throttle` untuk memilih sendiri, dan pakai `wire:model` biasa kalau nilainya baru penting saat submit:
+
+```blade
+<x-markas.input label="Cari" wire:model.live.debounce.250ms="search" />
+<x-markas.currency-input label="Jumlah" wire:model.live="amount" />
+```
+
+### x-model di dalam komponen Livewire
+
+Hubungkan kontrol Alpine ke Livewire dengan `wire:model`. Kalau dihubungkan ke state Alpine lokal dengan `x-model` di dalam komponen Livewire, setiap update Livewire menyisakan salinan elemen yang sudah terlepas (masalah Alpine pada `x-modelable` saat morph, masih ada sampai Alpine 3.17), jadi memori bertambah di setiap update. Pakai `wire:model`, atau letakkan state Alpine itu di luar komponen Livewire.
+
+### Budget
+
+`pnpm test:livewire` mengukur setiap komponen di app Laravel dengan cache di atas aktif: waktu render Blade, ukuran HTML (mentah dan gzip), ukuran atribut Alpine, elemen yang dilewati morph, waktu init Alpine dan morph, pertambahan listener dan node DOM selama 20 update, dan jumlah request per rentetan ketikan. Ukuran byte dan jumlah elemen diberi budget pasti di `tests/livewire/perf-budgets.json`, waktu diberi batas longgar.
 
 ## Livewire 3
 

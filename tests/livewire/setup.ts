@@ -108,6 +108,8 @@ export async function setupApp(major: number): Promise<string> {
   cpSync(fixtures, appDir, { recursive: true, force: true });
   linkRepo(appDir);
   await buildCss(appDir);
-  run("php", ["artisan", "view:clear", "--quiet"], appDir);
+  // Production caches (config, routes, events, compiled views), so timings match a deployed app.
+  run("php", ["artisan", "optimize:clear", "--quiet"], appDir);
+  run("php", ["artisan", "optimize", "--quiet"], appDir);
   return appDir;
 }

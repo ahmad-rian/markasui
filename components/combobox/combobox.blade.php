@@ -208,7 +208,8 @@
         @mousedown.prevent
         class="{{ $panel }}"
     >
-        <ul id="{{ $listId }}" role="listbox" @if ($label) aria-labelledby="{{ $id }}-label" @endif>
+        {{-- Alpine owns the options (and their state) after the first render, so Livewire skips the list when it re-renders. --}}
+        <ul id="{{ $listId }}" role="listbox" wire:ignore @if ($label) aria-labelledby="{{ $id }}-label" @endif>
             @foreach ($options as $index => $option)
                 <li
                     id="{{ $id }}-option-{{ $index }}"
@@ -223,7 +224,7 @@
                 >{{ $option['label'] }}<svg x-show="isChecked({{ $index }})" @if (! ($value !== '' && $option['value'] === $value)) style="display: none" @endif class="{{ $check }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7" /></svg></li>
             @endforeach
         </ul>
-        <p x-show="visible.length === 0" @if (count($options) > 0) style="display: none" @endif class="{{ $emptyClass }}">{{ $emptyLabel }}</p>
+        <p x-show="visible.length === 0" wire:ignore @if (count($options) > 0) style="display: none" @endif class="{{ $emptyClass }}">{{ $emptyLabel }}</p>
     </div>
     @if ($error)
         <p id="{{ $id }}-error" class="{{ $errorClass }}">{{ $error }}</p>

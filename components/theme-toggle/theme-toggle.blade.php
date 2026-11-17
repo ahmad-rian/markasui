@@ -132,7 +132,8 @@
     x-bind:data-state="state"
     {{ $attributes->merge(['type' => 'button'])->class([$base, $variants[$variant], $sizes[$size][$showText ? 1 : 0]]) }}
 >
-    <svg class="{{ $sizes[$size][2] }} {{ $icon }}" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    {{-- The icon parts are animated from JavaScript, so Livewire skips them when it re-renders. --}}
+    <svg class="{{ $sizes[$size][2] }} {{ $icon }}" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" wire:ignore>
         <mask id="{{ $maskId }}">
             <rect width="24" height="24" fill="white" />
             <circle cy="12" r="5" fill="black" />

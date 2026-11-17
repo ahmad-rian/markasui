@@ -5,6 +5,8 @@ use App\Livewire\Harness;
 use App\Livewire\Islands;
 use App\Livewire\NavA;
 use App\Livewire\NavB;
+use App\Livewire\Perf;
+use App\Livewire\PerfTyping;
 use Illuminate\Support\Facades\Route;
 
 // Livewire 4 registers full page components with Route::livewire(), Livewire 3 with Route::get().
@@ -22,3 +24,7 @@ $page('/nav/b', NavB::class);
 if (Route::hasMacro('livewire')) {
     $page('/islands', Islands::class);
 }
+
+// Perf audit pages.
+$page('/perf/{name}', Perf::class);
+$page('/perf-typing', PerfTyping::class);

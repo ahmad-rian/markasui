@@ -1,0 +1,766 @@
+{
+  "limits": {
+    "serverMsPerInstance": 8,
+    "morphMsPerInstance": 40,
+    "alpineInitMsPerInstance": 40,
+    "navigateMsPerInstance": 50,
+    "updateRatio": 1.15
+  },
+  "exceptions": {
+    "dynamic-island": {
+      "nodeGrowth": "Its examples bind with x-model inside the Livewire component; Alpine's x-modelable keeps each morph clone alive (upstream, Alpine <= 3.17)."
+    }
+  },
+  "html": {
+    "accordion": {
+      "raw": 3300,
+      "gzip": 741,
+      "alpine": 0,
+      "morphElements": 19,
+      "cloneDirectives": 0
+    },
+    "alert": {
+      "raw": 2617,
+      "gzip": 650,
+      "alpine": 0,
+      "morphElements": 25,
+      "cloneDirectives": 0
+    },
+    "alert-dialog": {
+      "raw": 3115,
+      "gzip": 1023,
+      "alpine": 814,
+      "morphElements": 10,
+      "cloneDirectives": 2
+    },
+    "aurora-background": {
+      "raw": 2579,
+      "gzip": 885,
+      "alpine": 0,
+      "morphElements": 12,
+      "cloneDirectives": 0
+    },
+    "avatar": {
+      "raw": 2144,
+      "gzip": 655,
+      "alpine": 92,
+      "morphElements": 7,
+      "cloneDirectives": 2
+    },
+    "avatar-group": {
+      "raw": 5903,
+      "gzip": 991,
+      "alpine": 0,
+      "morphElements": 20,
+      "cloneDirectives": 0
+    },
+    "background-beams": {
+      "raw": 5581,
+      "gzip": 1263,
+      "alpine": 0,
+      "morphElements": 8,
+      "cloneDirectives": 0
+    },
+    "background-boxes": {
+      "raw": 45379,
+      "gzip": 1347,
+      "alpine": 0,
+      "morphElements": 8,
+      "cloneDirectives": 0
+    },
+    "background-lines": {
+      "raw": 5002,
+      "gzip": 1196,
+      "alpine": 0,
+      "morphElements": 8,
+      "cloneDirectives": 0
+    },
+    "badge": {
+      "raw": 1665,
+      "gzip": 356,
+      "alpine": 0,
+      "morphElements": 11,
+      "cloneDirectives": 0
+    },
+    "bottom-navigation": {
+      "raw": 14978,
+      "gzip": 2308,
+      "alpine": 1613,
+      "morphElements": 84,
+      "cloneDirectives": 7
+    },
+    "breadcrumb": {
+      "raw": 2033,
+      "gzip": 485,
+      "alpine": 0,
+      "morphElements": 12,
+      "cloneDirectives": 0
+    },
+    "button": {
+      "raw": 3580,
+      "gzip": 443,
+      "alpine": 0,
+      "morphElements": 11,
+      "cloneDirectives": 0
+    },
+    "card": {
+      "raw": 1681,
+      "gzip": 549,
+      "alpine": 0,
+      "morphElements": 8,
+      "cloneDirectives": 0
+    },
+    "card-stack": {
+      "raw": 14965,
+      "gzip": 2733,
+      "alpine": 3647,
+      "morphElements": 51,
+      "cloneDirectives": 13
+    },
+    "carousel": {
+      "raw": 7664,
+      "gzip": 1637,
+      "alpine": 1284,
+      "morphElements": 29,
+      "cloneDirectives": 8
+    },
+    "chat-message": {
+      "raw": 20275,
+      "gzip": 2537,
+      "alpine": 6442,
+      "morphElements": 63,
+      "cloneDirectives": 11
+    },
+    "checkbox": {
+      "raw": 4209,
+      "gzip": 790,
+      "alpine": 0,
+      "morphElements": 23,
+      "cloneDirectives": 0
+    },
+    "code-block": {
+      "raw": 3303,
+      "gzip": 1091,
+      "alpine": 749,
+      "morphElements": 18,
+      "cloneDirectives": 4
+    },
+    "collapsible": {
+      "raw": 946,
+      "gzip": 532,
+      "alpine": 0,
+      "morphElements": 6,
+      "cloneDirectives": 0
+    },
+    "combobox": {
+      "raw": 15539,
+      "gzip": 2947,
+      "alpine": 6601,
+      "morphElements": 11,
+      "cloneDirectives": 8
+    },
+    "command": {
+      "raw": 11867,
+      "gzip": 2299,
+      "alpine": 3134,
+      "morphElements": 30,
+      "cloneDirectives": 20
+    },
+    "context-menu": {
+      "raw": 8269,
+      "gzip": 1854,
+      "alpine": 3793,
+      "morphElements": 11,
+      "cloneDirectives": 2
+    },
+    "copy-button": {
+      "raw": 2605,
+      "gzip": 995,
+      "alpine": 524,
+      "morphElements": 12,
+      "cloneDirectives": 2
+    },
+    "currency-input": {
+      "raw": 10945,
+      "gzip": 2491,
+      "alpine": 4715,
+      "morphElements": 18,
+      "cloneDirectives": 7
+    },
+    "dock": {
+      "raw": 16714,
+      "gzip": 2418,
+      "alpine": 2751,
+      "morphElements": 48,
+      "cloneDirectives": 7
+    },
+    "dot-pattern": {
+      "raw": 1917,
+      "gzip": 740,
+      "alpine": 0,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "drag-elements": {
+      "raw": 8021,
+      "gzip": 2532,
+      "alpine": 6136,
+      "morphElements": 1,
+      "cloneDirectives": 0
+    },
+    "drawer": {
+      "raw": 3658,
+      "gzip": 1164,
+      "alpine": 402,
+      "morphElements": 15,
+      "cloneDirectives": 2
+    },
+    "dropdown-menu": {
+      "raw": 7683,
+      "gzip": 1836,
+      "alpine": 3472,
+      "morphElements": 10,
+      "cloneDirectives": 3
+    },
+    "dynamic-island": {
+      "raw": 7774,
+      "gzip": 1652,
+      "alpine": 577,
+      "morphElements": 30,
+      "cloneDirectives": 13
+    },
+    "elastic-line": {
+      "raw": 5217,
+      "gzip": 1709,
+      "alpine": 4156,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "expandable-card": {
+      "raw": 30698,
+      "gzip": 2898,
+      "alpine": 9144,
+      "morphElements": 129,
+      "cloneDirectives": 8
+    },
+    "faq": {
+      "raw": 7495,
+      "gzip": 1215,
+      "alpine": 0,
+      "morphElements": 33,
+      "cloneDirectives": 0
+    },
+    "file-dropzone": {
+      "raw": 10068,
+      "gzip": 3195,
+      "alpine": 5888,
+      "morphElements": 10,
+      "cloneDirectives": 3
+    },
+    "flip-button": {
+      "raw": 1879,
+      "gzip": 490,
+      "alpine": 0,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "float": {
+      "raw": 7219,
+      "gzip": 2185,
+      "alpine": 4639,
+      "morphElements": 23,
+      "cloneDirectives": 0
+    },
+    "footer": {
+      "raw": 10725,
+      "gzip": 2019,
+      "alpine": 0,
+      "morphElements": 81,
+      "cloneDirectives": 0
+    },
+    "github-stars-button": {
+      "raw": 3048,
+      "gzip": 1339,
+      "alpine": 1323,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "gradient-border": {
+      "raw": 1716,
+      "gzip": 839,
+      "alpine": 0,
+      "morphElements": 11,
+      "cloneDirectives": 0
+    },
+    "grid-pattern": {
+      "raw": 2862,
+      "gzip": 922,
+      "alpine": 0,
+      "morphElements": 14,
+      "cloneDirectives": 0
+    },
+    "hero-highlight": {
+      "raw": 3933,
+      "gzip": 1390,
+      "alpine": 863,
+      "morphElements": 13,
+      "cloneDirectives": 0
+    },
+    "hold-button": {
+      "raw": 2198,
+      "gzip": 822,
+      "alpine": 701,
+      "morphElements": 5,
+      "cloneDirectives": 1
+    },
+    "hover-card": {
+      "raw": 4590,
+      "gzip": 1631,
+      "alpine": 2816,
+      "morphElements": 17,
+      "cloneDirectives": 1
+    },
+    "image-compare": {
+      "raw": 5631,
+      "gzip": 1713,
+      "alpine": 1736,
+      "morphElements": 21,
+      "cloneDirectives": 4
+    },
+    "image-trail": {
+      "raw": 5861,
+      "gzip": 1790,
+      "alpine": 4697,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "input": {
+      "raw": 2472,
+      "gzip": 581,
+      "alpine": 0,
+      "morphElements": 12,
+      "cloneDirectives": 0
+    },
+    "input-otp": {
+      "raw": 7848,
+      "gzip": 1455,
+      "alpine": 3301,
+      "morphElements": 10,
+      "cloneDirectives": 8
+    },
+    "kbd": {
+      "raw": 1006,
+      "gzip": 293,
+      "alpine": 0,
+      "morphElements": 6,
+      "cloneDirectives": 0
+    },
+    "label": {
+      "raw": 559,
+      "gzip": 243,
+      "alpine": 0,
+      "morphElements": 7,
+      "cloneDirectives": 0
+    },
+    "lamp-effect": {
+      "raw": 4634,
+      "gzip": 1315,
+      "alpine": 567,
+      "morphElements": 15,
+      "cloneDirectives": 0
+    },
+    "letter-swap": {
+      "raw": 14525,
+      "gzip": 1416,
+      "alpine": 9682,
+      "morphElements": 61,
+      "cloneDirectives": 0
+    },
+    "logo-cloud": {
+      "raw": 8377,
+      "gzip": 826,
+      "alpine": 0,
+      "morphElements": 34,
+      "cloneDirectives": 0
+    },
+    "magnet": {
+      "raw": 4126,
+      "gzip": 1546,
+      "alpine": 2547,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "marquee": {
+      "raw": 3575,
+      "gzip": 860,
+      "alpine": 1353,
+      "morphElements": 15,
+      "cloneDirectives": 0
+    },
+    "menubar": {
+      "raw": 22971,
+      "gzip": 2586,
+      "alpine": 6398,
+      "morphElements": 29,
+      "cloneDirectives": 16
+    },
+    "meteors": {
+      "raw": 11992,
+      "gzip": 1284,
+      "alpine": 0,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "modal": {
+      "raw": 3457,
+      "gzip": 1088,
+      "alpine": 402,
+      "morphElements": 15,
+      "cloneDirectives": 2
+    },
+    "navbar": {
+      "raw": 32713,
+      "gzip": 3874,
+      "alpine": 2695,
+      "morphElements": 127,
+      "cloneDirectives": 3
+    },
+    "navigation-menu": {
+      "raw": 17681,
+      "gzip": 2693,
+      "alpine": 4242,
+      "morphElements": 61,
+      "cloneDirectives": 2
+    },
+    "noise-background": {
+      "raw": 2725,
+      "gzip": 1116,
+      "alpine": 0,
+      "morphElements": 12,
+      "cloneDirectives": 0
+    },
+    "not-found": {
+      "raw": 2381,
+      "gzip": 947,
+      "alpine": 424,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "number-ticker": {
+      "raw": 6035,
+      "gzip": 909,
+      "alpine": 4649,
+      "morphElements": 22,
+      "cloneDirectives": 9
+    },
+    "pagination": {
+      "raw": 6694,
+      "gzip": 781,
+      "alpine": 0,
+      "morphElements": 26,
+      "cloneDirectives": 0
+    },
+    "pinned-list": {
+      "raw": 7368,
+      "gzip": 2249,
+      "alpine": 4016,
+      "morphElements": 3,
+      "cloneDirectives": 2
+    },
+    "pixel-trail": {
+      "raw": 7518,
+      "gzip": 2357,
+      "alpine": 6403,
+      "morphElements": 5,
+      "cloneDirectives": 0
+    },
+    "popover": {
+      "raw": 4558,
+      "gzip": 1462,
+      "alpine": 2651,
+      "morphElements": 8,
+      "cloneDirectives": 3
+    },
+    "progress": {
+      "raw": 3455,
+      "gzip": 556,
+      "alpine": 0,
+      "morphElements": 15,
+      "cloneDirectives": 0
+    },
+    "prompt-input": {
+      "raw": 6755,
+      "gzip": 2128,
+      "alpine": 1565,
+      "morphElements": 18,
+      "cloneDirectives": 7
+    },
+    "radio-group": {
+      "raw": 8120,
+      "gzip": 926,
+      "alpine": 0,
+      "morphElements": 40,
+      "cloneDirectives": 0
+    },
+    "retro-grid": {
+      "raw": 1717,
+      "gzip": 804,
+      "alpine": 0,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "ripple-background": {
+      "raw": 3531,
+      "gzip": 1050,
+      "alpine": 0,
+      "morphElements": 19,
+      "cloneDirectives": 0
+    },
+    "ripple-button": {
+      "raw": 3516,
+      "gzip": 888,
+      "alpine": 2236,
+      "morphElements": 5,
+      "cloneDirectives": 0
+    },
+    "screensaver": {
+      "raw": 6096,
+      "gzip": 2095,
+      "alpine": 4541,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "scroll-area": {
+      "raw": 1750,
+      "gzip": 441,
+      "alpine": 0,
+      "morphElements": 15,
+      "cloneDirectives": 0
+    },
+    "scroll-progress": {
+      "raw": 2526,
+      "gzip": 1049,
+      "alpine": 1210,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "select": {
+      "raw": 3762,
+      "gzip": 788,
+      "alpine": 0,
+      "morphElements": 28,
+      "cloneDirectives": 0
+    },
+    "separator": {
+      "raw": 774,
+      "gzip": 312,
+      "alpine": 0,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "shimmer-button": {
+      "raw": 1777,
+      "gzip": 780,
+      "alpine": 1051,
+      "morphElements": 3,
+      "cloneDirectives": 0
+    },
+    "shooting-stars": {
+      "raw": 21828,
+      "gzip": 2055,
+      "alpine": 0,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "sidebar": {
+      "raw": 50166,
+      "gzip": 3889,
+      "alpine": 918,
+      "morphElements": 187,
+      "cloneDirectives": 7
+    },
+    "skeleton": {
+      "raw": 576,
+      "gzip": 246,
+      "alpine": 0,
+      "morphElements": 6,
+      "cloneDirectives": 0
+    },
+    "slider": {
+      "raw": 4771,
+      "gzip": 893,
+      "alpine": 559,
+      "morphElements": 11,
+      "cloneDirectives": 8
+    },
+    "sparkles": {
+      "raw": 20237,
+      "gzip": 1722,
+      "alpine": 0,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "spotlight-beam": {
+      "raw": 4304,
+      "gzip": 1453,
+      "alpine": 1074,
+      "morphElements": 14,
+      "cloneDirectives": 0
+    },
+    "spotlight-card": {
+      "raw": 1875,
+      "gzip": 787,
+      "alpine": 219,
+      "morphElements": 11,
+      "cloneDirectives": 0
+    },
+    "stacking-cards": {
+      "raw": 5175,
+      "gzip": 1629,
+      "alpine": 2080,
+      "morphElements": 5,
+      "cloneDirectives": 0
+    },
+    "stars-background": {
+      "raw": 34530,
+      "gzip": 2647,
+      "alpine": 0,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "switch": {
+      "raw": 2950,
+      "gzip": 583,
+      "alpine": 0,
+      "morphElements": 16,
+      "cloneDirectives": 0
+    },
+    "table": {
+      "raw": 3491,
+      "gzip": 601,
+      "alpine": 0,
+      "morphElements": 25,
+      "cloneDirectives": 0
+    },
+    "tabs": {
+      "raw": 5771,
+      "gzip": 1095,
+      "alpine": 1198,
+      "morphElements": 8,
+      "cloneDirectives": 15
+    },
+    "text-highlighter": {
+      "raw": 9124,
+      "gzip": 1326,
+      "alpine": 5499,
+      "morphElements": 6,
+      "cloneDirectives": 6
+    },
+    "text-rotate": {
+      "raw": 4871,
+      "gzip": 1541,
+      "alpine": 4012,
+      "morphElements": 10,
+      "cloneDirectives": 0
+    },
+    "text-scramble": {
+      "raw": 6504,
+      "gzip": 1353,
+      "alpine": 5463,
+      "morphElements": 12,
+      "cloneDirectives": 2
+    },
+    "textarea": {
+      "raw": 1845,
+      "gzip": 548,
+      "alpine": 0,
+      "morphElements": 9,
+      "cloneDirectives": 0
+    },
+    "theme-toggle": {
+      "raw": 30566,
+      "gzip": 2490,
+      "alpine": 17335,
+      "morphElements": 33,
+      "cloneDirectives": 12
+    },
+    "tilt-card": {
+      "raw": 4016,
+      "gzip": 1502,
+      "alpine": 1891,
+      "morphElements": 13,
+      "cloneDirectives": 0
+    },
+    "toast": {
+      "raw": 5380,
+      "gzip": 1741,
+      "alpine": 2525,
+      "morphElements": 5,
+      "cloneDirectives": 1
+    },
+    "toggle": {
+      "raw": 3096,
+      "gzip": 670,
+      "alpine": 278,
+      "morphElements": 10,
+      "cloneDirectives": 9
+    },
+    "toggle-group": {
+      "raw": 4377,
+      "gzip": 1116,
+      "alpine": 1804,
+      "morphElements": 5,
+      "cloneDirectives": 10
+    },
+    "tooltip": {
+      "raw": 3586,
+      "gzip": 1278,
+      "alpine": 2575,
+      "morphElements": 4,
+      "cloneDirectives": 1
+    },
+    "typing-text": {
+      "raw": 2397,
+      "gzip": 961,
+      "alpine": 1968,
+      "morphElements": 5,
+      "cloneDirectives": 1
+    },
+    "underline-link": {
+      "raw": 3933,
+      "gzip": 749,
+      "alpine": 0,
+      "morphElements": 18,
+      "cloneDirectives": 0
+    },
+    "variable-weight-text": {
+      "raw": 5205,
+      "gzip": 1211,
+      "alpine": 2800,
+      "morphElements": 14,
+      "cloneDirectives": 0
+    },
+    "vertical-cut-reveal": {
+      "raw": 3793,
+      "gzip": 988,
+      "alpine": 1754,
+      "morphElements": 21,
+      "cloneDirectives": 0
+    },
+    "wavy-background": {
+      "raw": 3273,
+      "gzip": 993,
+      "alpine": 0,
+      "morphElements": 17,
+      "cloneDirectives": 0
+    }
+  },
+  "typing": {
+    "input": 1,
+    "input-debounced": 1,
+    "textarea": 1,
+    "currency": 1,
+    "currency-debounced": 1,
+    "combobox": 1
+  }
+}

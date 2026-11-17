@@ -53,7 +53,7 @@
 
 <div {{ $attributes->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
-    <div aria-hidden="true" @class([$layer, $colors[$color] ?? $colors['primary']]) style="--markas-meteor-angle: {{ $turn }}deg">
+    <div aria-hidden="true" wire:ignore @class([$layer, $colors[$color] ?? $colors['primary']]) style="--markas-meteor-angle: {{ $turn }}deg">
         @foreach ($meteors as $style)
             <span class="{{ $meteor }} {{ $variants[$key]['meteor'] }}" style="{{ $style }}"></span>
         @endforeach

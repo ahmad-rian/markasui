@@ -58,7 +58,7 @@
 
 <div {{ $attributes->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
-    <div aria-hidden="true" @class([$layer, $trail])>
+    <div aria-hidden="true" wire:ignore @class([$layer, $trail])>
         @if ($config['glow'])
             <div class="{{ $config['glow'] }}"></div>
         @endif

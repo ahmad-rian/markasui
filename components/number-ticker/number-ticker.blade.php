@@ -24,9 +24,10 @@
         current: @js((float) $from),
         frame: 0,
         observer: null,
+        {{-- Built once: text() runs on every frame and on every Livewire re-render. --}}
+        formatter: new Intl.NumberFormat(@js($locale), { minimumFractionDigits: @js((int) $decimals), maximumFractionDigits: @js((int) $decimals) }),
         text(n) {
-            const formatter = new Intl.NumberFormat(@js($locale), { minimumFractionDigits: @js((int) $decimals), maximumFractionDigits: @js((int) $decimals) });
-            return @js($prefix) + formatter.format(n) + @js($suffix);
+            return @js($prefix) + this.formatter.format(n) + @js($suffix);
         },
         {{-- Hitung dari angka awal ke value dengan ease-out eksponensial saat elemen pertama kali terlihat. --}}
         run() {

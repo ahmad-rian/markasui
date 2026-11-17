@@ -47,7 +47,7 @@
 
 <div {{ $attributes->merge(['style' => '--markas-lines-duration: '.($speeds[$speed] ?? $speeds['normal'])])->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
-    <svg aria-hidden="true" @class([$layer, $colors[$color] ?? $colors['primary']]) viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="1.5">
+    <svg aria-hidden="true" wire:ignore @class([$layer, $colors[$color] ?? $colors['primary']]) viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="1.5">
         @foreach ($lines as $item)
             <path class="{{ $line }}" d="{{ $item['d'] }}" pathLength="100" stroke-dasharray="100" style="{{ $item['style'] }}"></path>
         @endforeach

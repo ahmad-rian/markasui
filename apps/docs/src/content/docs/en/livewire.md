@@ -126,10 +126,10 @@ $this->dispatch('markas-toast', title: 'Saved', variant: 'success');
 Livewire updates the page by morphing the new HTML into the old one. The components are built so a re-render keeps what the user sees:
 
 - **Ids stay the same.** Generated ids come from the component's `wire:model` (or `wire:key`, or `name`) plus its position, never from a random value. Livewire matches elements by id, so a changing id would replace the element and drop focus while typing. Pass `id` yourself when you need a fixed value, for example to point a `<label>` or `aria-describedby` at it.
-- **Open things stay open.** Dialogs, drawers, `details` accordions, and Popover API panels (dropdowns, popovers, tooltips, combobox lists) carry `wire:ignore.self`. Livewire still updates their content, but leaves their open state and position alone.
+- **Open things stay open.** Dialogs, drawers, `details` accordions, and Popover API panels (dropdowns, popovers, tooltips, combobox lists) carry `wire:ignore.self`. Livewire still updates their content, but leaves their open state and position alone. The combobox option list is the exception: Alpine owns it after the first render (see [Performance](#performance)).
 - **Alpine state stays.** Active tabs, carousel slides, toggled items, and animation state are not reset.
 
-Components that draw with JavaScript (drag elements, stacking cards, the pixel trail canvas) are skipped by the morph entirely with `wire:ignore`.
+Components that draw with JavaScript (drag elements, stacking cards, the pixel trail canvas, the theme toggle icon) and generated decorative layers are skipped by the morph entirely with `wire:ignore`.
 
 ### Islands
 
@@ -157,11 +157,48 @@ Components with global listeners (scroll, resize, the Ctrl+K hotkey, toast event
 
 Put shared pieces such as `<x-markas.toast />` or the navbar in the layout. Wrap them in `@persist('toast')` if their state should survive navigation.
 
-## Speed
+## Performance
 
-- Blade work per component is small: a handful of class strings and one id lookup. There is no per-render query or file access.
-- Large `:options` or `:items` arrays are printed inline as JSON on every render. Keep them to what the user can pick from, and use a computed property so the list is built once per request.
-- Use `wire:model.live.debounce` for text fields that call the server, and plain `wire:model` (deferred) when the value only matters on submit.
+Every update re-renders the whole Livewire component on the server and morphs the new HTML into the page. Three things decide how fast that feels: Blade work on the server, the size of the HTML sent back, and how many elements the morph walks in the browser.
+
+### On the server
+
+Blade work per component is small: a few class strings and one id lookup, with no query or file access. Most of the time per component is Laravel's own anonymous component handling (about 0.05 to 0.1 ms each on a laptop), so cache everything on deploy:
+
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan optimize
+```
+
+`optimize` caches config, routes, events, and compiled Blade views (`php artisan view:cache` on its own does the views). Keep OPcache on in production. Components copied by the CLI live in `resources/views/components/markas`, which Laravel already resolves as `<x-markas.*>`. If you keep them somewhere else, register that folder once with a prefix instead of including views by path:
+
+```php
+// AppServiceProvider::boot()
+Blade::anonymousComponentPath(resource_path('views/ui/markas'), 'markas');
+```
+
+### Less to send and morph
+
+- Keep `:options` and `:items` to what the user can pick from. They are printed into the HTML (and into Alpine state) on every render. Build them in a `#[Computed]` property so the list is made once per request.
+- A Livewire component sends all of its HTML back on every update, even when one unrelated property changed. Split pages into smaller components, or use Livewire 4 `@island` so a re-render only covers the part that changed. Load slow, heavy parts with `lazy` (or Livewire 4 `defer`).
+- Decorative layers (stars, sparkles, meteors, beams, background lines and boxes), the theme toggle icon, and the combobox option list are skipped by the morph with `wire:ignore`. They are drawn once and owned by CSS or Alpine after that, so props that shape them (`count`, `seed`, `cols`, `options`) are read on the first render. To redraw one with new props, change its `wire:key`.
+
+### Typing
+
+`wire:model.live` on a text input waits 150 ms after the last key before it calls the server (Livewire's default). The Alpine controls whose value changes while you type or drag (currency input, input OTP, slider) get the same 150 ms debounce when you write `wire:model.live` without your own timing, so a burst of typing sends one request instead of one per key. Write `.debounce.500ms` or `.throttle` to choose your own, and use plain `wire:model` when the value only matters on submit:
+
+```blade
+<x-markas.input label="Search" wire:model.live.debounce.250ms="search" />
+<x-markas.currency-input label="Amount" wire:model.live="amount" />
+```
+
+### x-model inside a Livewire component
+
+Bind Alpine controls to Livewire with `wire:model`. If you bind one to local Alpine state with `x-model` inside a Livewire component, every Livewire update keeps a detached copy of the element alive (an Alpine issue with `x-modelable` during morphs, present up to Alpine 3.17), so memory grows with each update. Prefer `wire:model`, or keep that Alpine state outside the Livewire component.
+
+### Budgets
+
+`pnpm test:livewire` measures every component in a Laravel app with these caches on: Blade render time, HTML bytes (raw and gzip), Alpine attribute bytes, elements the morph walks, Alpine init and morph time, listener and DOM growth over 20 updates, and requests per typing burst. Byte and element counts are budgeted exactly in `tests/livewire/perf-budgets.json`, timings with generous limits.
 
 ## Livewire 3
 

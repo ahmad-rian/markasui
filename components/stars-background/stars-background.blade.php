@@ -37,7 +37,7 @@
 
 <div {{ $attributes->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
-    <div aria-hidden="true" @class([$layer, $colors[$color] ?? $colors['primary']])>
+    <div aria-hidden="true" wire:ignore @class([$layer, $colors[$color] ?? $colors['primary']])>
         @foreach ($stars as $style)
             <span class="{{ $star }}" style="{{ $style }}"></span>
         @endforeach

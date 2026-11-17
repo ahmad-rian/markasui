@@ -63,14 +63,14 @@
 <div {{ $attributes->merge(['style' => '--markas-beams-duration: '.($speeds[$speed] ?? $speeds['normal'])])->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
     @if ($isCollide)
-        <div aria-hidden="true" @class([$rainLayer, $tone])>
+        <div aria-hidden="true" wire:ignore @class([$rainLayer, $tone])>
             <span class="{{ $floor }}"></span>
             @foreach ($drops as $item)
                 <span><span class="{{ $drop }}" style="{{ $item['drop'] }}"></span><span class="{{ $splash }}" style="{{ $item['splash'] }}"></span></span>
             @endforeach
         </div>
     @else
-        <svg aria-hidden="true" @class([$layer, $tone]) viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-linecap="round">
+        <svg aria-hidden="true" wire:ignore @class([$layer, $tone]) viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-linecap="round">
             @foreach ($curves as $item)
                 <g>
                     <path class="{{ $track }}" d="{{ $item['d'] }}" stroke-width="1"></path>

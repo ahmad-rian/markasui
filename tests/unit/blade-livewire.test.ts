@@ -38,6 +38,15 @@ const parse = (html: string) =>
 const modelOf = (el: Element | null) =>
   el?.getAttribute("wire:model.live") ?? null;
 
+/** The wire:model attribute of an element, with whatever modifiers it carries. */
+const modelAttribute = (el: Element | null) =>
+  [...(el?.attributes ?? [])].find((attribute) =>
+    attribute.name.startsWith("wire:model"),
+  ) ?? null;
+
+/** Alpine controls whose value changes while typing or dragging. */
+const debouncedByDefault = ["slider", "currency-input", "input-otp"];
+
 const modelable: Record<string, string> = {
   slider: '<x-markas.slider label="Volume" wire:model.live="value" />',
   combobox: `<x-markas.combobox wire:model.live="value" :options="[['value' => 'id', 'label' => 'Indonesia']]" />`,
@@ -66,6 +75,8 @@ const fixtures: Record<string, string> = {
   radio: `<x-markas.radio-group name="plan" wire:model.live="plan" :options="[['value' => 'a', 'label' => 'A'], ['value' => 'b', 'label' => 'B']]" />`,
   dropzone:
     '<x-markas.file-dropzone name="files[]" multiple wire:model="files" />',
+  "timed-slider":
+    '<x-markas.slider label="Volume" wire:model.live.throttle.500ms="value" />',
   ignored: `
 <x-markas.modal title="T">Body</x-markas.modal>
 <x-markas.collapsible title="More">Body</x-markas.collapsible>
@@ -144,12 +155,28 @@ describe("Blade + Livewire", { timeout: PHP_TIMEOUT_MS }, () => {
     (name) => {
       const doc = parse(pages[`modelable-${name}`] ?? "");
       const bound = [...doc.querySelectorAll("*")].filter(
-        (el) => modelOf(el) !== null,
+        (el) => modelAttribute(el) !== null,
       );
       expect(bound).toHaveLength(1);
       expect(bound[0]?.hasAttribute("x-modelable")).toBe(true);
+      expect(modelAttribute(bound[0] ?? null)?.value).toBe("value");
     },
   );
+
+  it.each(debouncedByDefault)(
+    "%s gives wire:model.live the 150 ms debounce of text inputs",
+    (name) => {
+      const doc = parse(pages[`modelable-${name}`] ?? "");
+      const root = doc.querySelector("[x-modelable]");
+      expect(modelAttribute(root)?.name).toBe("wire:model.live.debounce.150ms");
+    },
+  );
+
+  it("keeps an explicit wire:model timing as written", () => {
+    const doc = parse(pages["timed-slider"] ?? "");
+    const root = doc.querySelector("[x-modelable]");
+    expect(modelAttribute(root)?.name).toBe("wire:model.live.throttle.500ms");
+  });
 
   it("file-dropzone puts wire:model on a hidden file input only", () => {
     const page = pages.dropzone ?? "";

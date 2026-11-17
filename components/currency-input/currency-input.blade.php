@@ -12,6 +12,10 @@
 ])
 
 @php
+    // wire:model.live without its own timing gets the 150 ms debounce Livewire gives text inputs, so a burst of changes sends one request, not one per change.
+    $liveModel = fn (string $key) => preg_match('/^wire:model(\.[\w-]+)*\.live(\.|$)/', $key) && ! preg_match('/\.(debounce|throttle|blur|change|lazy|enter)(\.|$)/', $key);
+    $attributes = new \Illuminate\View\ComponentAttributeBag(collect($attributes->getAttributes())->mapWithKeys(fn ($bound, $key) => [$liveModel($key) ? $key.'.debounce.150ms' : $key => $bound])->all());
+
     $wrapper = 'grid gap-1.5';
     $labelClass = 'text-sm font-medium text-ink';
     $control = 'flex h-11 w-full items-center gap-2 rounded-md border border-line bg-surface px-3 text-base transition-colors duration-150 ease-out has-[:disabled]:cursor-not-allowed has-[:disabled]:bg-subtle has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary has-[[aria-invalid=true]]:border-danger motion-reduce:transition-none';

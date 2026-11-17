@@ -48,7 +48,7 @@
 
 <div {{ $attributes->merge(['style' => $vars])->class([$base]) }}>
     <style>{!! $keyframes !!}</style>
-    <div aria-hidden="true" @class([$layer, $shape['layer'], $colors[$color] ?? $colors['primary']])>
+    <div aria-hidden="true" wire:ignore @class([$layer, $shape['layer'], $colors[$color] ?? $colors['primary']])>
         <div @class([$grid, $shape['grid']])>
             @foreach ($cells as $item)
                 <span class="{{ $item['class'] }}" @if ($item['style']) style="{{ $item['style'] }}" @endif></span>

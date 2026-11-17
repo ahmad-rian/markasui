@@ -6,12 +6,16 @@
  *   LIVEWIRE=3|4          Livewire major version (default 4)
  *   LIVEWIRE_PORT=8351    port for the PHP server
  *   LIVEWIRE_APP_DIR=...  where the app is created (default: <tmp>/markas-livewire-<major>)
+ *   LIVEWIRE_AUDITS=perf  run only these audits (comma separated: morph, state, forms, navigate, islands, perf)
+ *   LIVEWIRE_PERF_ONLY=a,b  perf audit for these components only (no budget rewrite)
+ *   LIVEWIRE_PERF_WRITE=1   rewrite tests/livewire/perf-budgets.json byte and typing budgets from this run
  */
 import { spawn, type ChildProcess } from "node:child_process";
 import { join } from "node:path";
 import { chromium } from "@playwright/test";
 import { formsAudit } from "./audits/forms.ts";
 import { morphAudit } from "./audits/morph.ts";
+import { perfAudit } from "./audits/perf.ts";
 import { islandsAudit, navigateAudit } from "./audits/navigate.ts";
 import { stateAudit } from "./audits/state.ts";
 import type { Audit, AuditResult } from "./lib.ts";
@@ -74,6 +78,22 @@ function report(results: AuditResult[]): boolean {
   return results.every((r) => r.failures.length === 0);
 }
 
+/** Audits in run order. Perf runs last, on an app with every Laravel cache warm like production. */
+function selectAudits(): Audit[] {
+  const all: [string, Audit][] = [
+    ["morph", morphAudit],
+    ["state", stateAudit],
+    ["forms", formsAudit],
+    ["navigate", navigateAudit],
+    ...(major >= 4 ? ([["islands", islandsAudit]] as [string, Audit][]) : []),
+    ["perf", perfAudit],
+  ];
+  const only = process.env.LIVEWIRE_AUDITS?.split(",");
+  return all
+    .filter(([name]) => !only || only.includes(name))
+    .map(([, audit]) => audit);
+}
+
 async function main(): Promise<number> {
   if (!SUPPORTED.includes(major)) {
     console.error(
@@ -86,8 +106,7 @@ async function main(): Promise<number> {
   const browser = await chromium.launch();
   try {
     await waitForServer();
-    const audits: Audit[] = [morphAudit, stateAudit, formsAudit, navigateAudit];
-    if (major >= 4) audits.push(islandsAudit);
+    const audits = selectAudits();
     const results: AuditResult[] = [];
     for (const audit of audits) {
       const started = Date.now();
