@@ -83,6 +83,8 @@ const headings = [
   ...(related.length > 0 ? [{ depth: 2, slug: "terkait", text: dictionary.seo.related }] : []),
 ];
 const pager = "icon-button size-9 bg-subtle text-ink hover:bg-line";
+/** Tipe dan default hanya patah di spasi: `("a" | "b")[]` tidak menyisakan `[]` sendirian di baris baru. */
+const words = (value: string) => value.split(/(\s+)/);
 const hasPlayground = item.name in PLAYGROUNDS;
 
 /** CSS halaman ini: CSS situs plus class komponen dan contohnya saja (scripts/page-css.ts). */
@@ -211,8 +213,8 @@ const example = (fw: Framework) => {
     {notesHtml && <Fragment set:html={notesHtml} />}
 
     <h2 id="props">{strings.props}</h2>
-    <div class="overflow-x-auto" tabindex="0" role="region" aria-label={strings.table.label}>
-      <table>
+    <div class="table-wrap props-wrap" tabindex="0" role="region" aria-label={strings.table.label}>
+      <table class="props-table">
         <thead>
           <tr><th>{strings.table.name}</th><th>{strings.table.type}</th><th>{strings.table.default}</th><th>{strings.table.description}</th></tr>
         </thead>
@@ -221,8 +223,8 @@ const example = (fw: Framework) => {
             text.props.map((prop) => (
               <tr>
                 <td><code>{prop.name}</code></td>
-                <td><code>{prop.type}</code></td>
-                <td class="font-mono text-[13px] text-muted">{prop.default}</td>
+                <td data-label={strings.table.type}><code>{words(prop.type).map((word) => (/\s/.test(word) ? word : <span class="whitespace-nowrap">{word}</span>))}</code></td>
+                <td data-label={strings.table.default} class="font-mono text-[13px] text-muted">{words(prop.default).map((word) => (/\s/.test(word) ? word : <span class="whitespace-nowrap">{word}</span>))}</td>
                 <td>{prop.description}</td>
               </tr>
             ))

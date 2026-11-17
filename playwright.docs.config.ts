@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const port = 4321;
+/** DOCS_PORT: uji build lain (mis. agen paralel) tanpa mengganggu preview di :4321. */
+const port = Number(process.env.DOCS_PORT ?? 4321);
 
 export default defineConfig({
   testDir: "tests/docs",

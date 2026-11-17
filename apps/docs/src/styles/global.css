@@ -65,6 +65,17 @@
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Kotak pencarian lebar di header: tablet (menu utama masih di laci) dan layar lebar. Di lg..xl menu
+ * utama tampil, jadi pencarian cukup ikon agar kontrol kanan tidak terdorong keluar layar. */
+@custom-variant search-wide {
+  @media (48rem <= width < 64rem) {
+    @slot;
+  }
+  @media (width >= 80rem) {
+    @slot;
+  }
+}
+
 /* Latar titik halus, hanya untuk kotak preview komponen. */
 @utility dot-grid {
   background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
@@ -183,6 +194,46 @@
   }
   .prose td {
     @apply border-b border-line py-2.5 pr-4 align-top;
+  }
+  /* Tabel lebar bergeser di wadahnya sendiri; halaman tidak ikut melebar. */
+  .prose .table-wrap {
+    @apply max-w-full overflow-x-auto;
+  }
+  /* Di tabel, kode hanya patah di spasi: nama prop tidak terpotong per huruf. */
+  .prose td code {
+    overflow-wrap: normal;
+  }
+  .prose td:first-child code {
+    @apply whitespace-nowrap;
+  }
+  /* Tabel props di kolom sempit (ponsel, juga lg..xl saat sidebar dan TOC tampil): satu kartu per
+   * prop (nama, tipe, default, lalu keterangan), supaya kolom keterangan tidak tergencet. */
+  .props-wrap {
+    container-type: inline-size;
+  }
+  @container (width < 44rem) {
+    .props-table thead {
+      @apply sr-only;
+    }
+    .props-table,
+    .props-table tbody,
+    .props-table tr,
+    .props-table td {
+      @apply block;
+    }
+    .props-table tr {
+      @apply border-b border-line py-3;
+    }
+    .props-table td {
+      @apply border-0 py-0.5 pr-0;
+    }
+    .props-table td[data-label]::before {
+      @apply mr-2 font-sans text-xs text-muted;
+      content: attr(data-label);
+    }
+    .props-table td:last-child {
+      @apply mt-1.5;
+    }
   }
   .prose blockquote {
     @apply border-brand-line border-l-2 pl-4 text-muted;

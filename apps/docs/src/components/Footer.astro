@@ -14,7 +14,7 @@ const landing = variant === "landing";
 const locale = getLocale(Astro.url);
 const strings = t(locale);
 const copy = strings.landing;
-const link = "text-muted transition-colors hover:text-ink";
+const link = "py-0.5 text-muted transition-colors hover:text-ink";
 const meta = "mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8";
 ---
 
@@ -62,7 +62,7 @@ const meta = "mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:
   <div class:list={[meta, landing && "lp-foot-meta"]}>
     <p class="text-muted">{strings.footer.madeBy}</p>
     <div class="flex flex-col gap-3 sm:items-end">
-      <nav aria-label={strings.nav.footer} class="flex flex-wrap gap-x-6 gap-y-2">
+      <nav aria-label={strings.nav.footer} class="flex flex-wrap gap-x-6 gap-y-1">
         <a href={SITE.repo} class={link}>GitHub</a>
         <a href={localePath(locale, "/docs/introduction")} class={link}>Docs</a>
         <a href={`${SITE.repo}/blob/main/LICENSE`} class={link}>{strings.footer.license}</a>

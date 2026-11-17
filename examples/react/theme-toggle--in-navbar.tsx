@@ -41,7 +41,7 @@ export default function ThemeToggleInNavbarExample() {
       </a>
       <nav
         aria-label="Main"
-        className="flex items-center gap-4 text-sm text-muted"
+        className="hidden items-center gap-4 text-sm text-muted sm:flex"
       >
         <a href="#docs" className={link}>
           Docs

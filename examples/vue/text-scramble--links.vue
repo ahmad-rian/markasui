@@ -32,7 +32,7 @@ const mark = [
         /></svg
       >MarkasUI</span
     >
-    <div class="flex gap-5">
+    <div class="flex gap-4 sm:gap-5">
       <a
         href="#"
         class="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"

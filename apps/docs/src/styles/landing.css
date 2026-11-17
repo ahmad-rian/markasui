@@ -639,7 +639,8 @@ html.dark :is(.lp-accent, .hero-rotator) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@media (min-width: 64rem) {
+/* Menu tengah baru muncul di xl: di lg ia bertabrakan dengan pencarian dan tombol bahasa. */
+@media (min-width: 80rem) {
   .hero-nav {
     position: absolute;
     left: 50%;
@@ -651,6 +652,8 @@ html.dark :is(.lp-accent, .hero-rotator) {
     background: var(--lp-glass);
     box-shadow: inset 0 0 0 1px var(--lp-edge);
   }
+}
+@media (min-width: 64rem) {
   .lp-strip {
     grid-template-columns: repeat(5, 1fr);
   }

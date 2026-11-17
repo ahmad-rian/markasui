@@ -32,7 +32,7 @@
         ['name' => 'Footer', 'note' => 'Newsletter and sitemap', 'tag' => 'New'],
         ['name' => 'Theme toggle', 'note' => 'Six transition styles', 'tag' => 'Updated'],
     ];
-    $phone = 'relative mx-auto flex h-[560px] w-[360px] flex-col overflow-hidden rounded-[2.5rem] border border-line bg-canvas';
+    $phone = 'relative mx-auto flex h-[560px] w-full max-w-[360px] flex-col overflow-hidden rounded-[2.5rem] border border-line bg-canvas';
     $top = 'shrink-0 pt-3 [&_[aria-controls$=-menu]]:hidden';
     $brand = 'flex items-center gap-2 rounded-md';
     $logoClass = 'size-6';

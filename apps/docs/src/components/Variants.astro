@@ -34,8 +34,8 @@ const slugs = Object.keys(sources)
       {slugs.map((slug) => {
         const title = variantTitle(slug, locale);
         return (
-          <section class="relative" aria-label={title} data-variant={slug}>
-            <h3 class="absolute top-0 left-0 flex h-10 items-center text-lg font-semibold tracking-[-0.01em]">{title}</h3>
+          <section class="relative min-w-0" aria-label={title} data-variant={slug}>
+            <h3 class="py-2 text-lg leading-snug font-semibold tracking-[-0.01em] sm:absolute sm:top-0 sm:left-0 sm:max-w-[calc(100%-9rem)] sm:truncate sm:py-0 sm:leading-10">{title}</h3>
             <Tabs label={strings.viewOrCode(title)} pills items={[{ value: "view", label: strings.view }, { value: "code", label: strings.code }]}>
               <div slot="view">
                 <Preview name={slug} />

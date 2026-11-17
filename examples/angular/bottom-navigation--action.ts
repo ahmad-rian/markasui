@@ -6,7 +6,7 @@ import { BottomNavigation } from "../../components/bottom-navigation/bottom-navi
   imports: [BottomNavigation],
   template: `
     <div
-      class="relative mx-auto h-[420px] w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface"
+      class="relative mx-auto h-[420px] w-full max-w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface"
     >
       <div class="grid gap-3 p-5">
         <p class="text-lg font-semibold text-ink">Moments</p>

@@ -19,7 +19,8 @@ const bladeHtml = bladeFiles[`../../generated/blade/${name}.html`];
 /** Komponen selebar halaman (navigasi situs) butuh panggung penuh supaya tampil versi desktop. */
 const WIDE = ["navbar", "navigation-menu", "sidebar", "footer", "faq", "logo-cloud", "not-found"];
 const isWide = WIDE.some((wide) => name === wide || name.startsWith(`${wide}--`));
-const pane = isWide ? "w-full" : "w-full max-w-md";
+// min-w-0: contoh yang lebih lebar dari panggung tidak ikut melebarkan pane di layar sempit.
+const pane = isWide ? "w-full min-w-0" : "w-full max-w-md min-w-0";
 const strings = t(getLocale(Astro.url)).component;
 ---
 
@@ -32,7 +33,7 @@ const strings = t(getLocale(Astro.url)).component;
         </button>
       )
     }
-    <div class:list={["flex items-center justify-center", bare ? "px-6 py-8 sm:px-10" : "dot-grid min-h-80 px-4 py-14 sm:px-8"]} data-preview-stage>
+    <div class:list={["flex items-center justify-center", bare ? "px-6 py-8 sm:px-10" : "dot-grid min-h-80 px-2 py-14 sm:px-8"]} data-preview-stage>
       <div data-fw="blade" class={pane}>
         {bladeHtml ? <Fragment set:html={bladeHtml} /> : <p class="text-sm text-danger">{strings.bladeMissing}</p>}
       </div>

@@ -11,14 +11,14 @@ const locale = getLocale(Astro.url);
 ---
 
 <nav aria-label={t(locale).seo.breadcrumb} class="mb-4 text-sm text-muted" data-pagefind-ignore>
-  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+  <ol class="flex flex-wrap items-center gap-x-2">
     {
       trail.map((crumb, index) =>
         index === trail.length - 1 ? (
           <li aria-current="page" class="text-ink">{crumb.name}</li>
         ) : (
           <li class="flex items-center gap-2">
-            <a href={localePath(locale, crumb.path)} class="transition-colors hover:text-ink">
+            <a href={localePath(locale, crumb.path)} class="py-0.5 transition-colors hover:text-ink">
               {crumb.name}
             </a>
             <span aria-hidden="true" class="text-faint">/</span>

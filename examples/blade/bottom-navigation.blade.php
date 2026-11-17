@@ -19,7 +19,7 @@
     ];
 @endphp
 
-<div class="relative mx-auto h-[560px] w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface">
+<div class="relative mx-auto h-[560px] w-full max-w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface">
     <div role="region" aria-label="Transactions" tabindex="0" class="h-full overflow-y-auto px-5 pt-8 pb-28 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary">
         <p class="text-sm text-muted">Total balance</p>
         <p class="mt-1 text-3xl font-semibold text-ink tabular-nums">Rp 12.480.000</p>

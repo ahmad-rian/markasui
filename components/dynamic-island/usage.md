@@ -135,4 +135,4 @@ Elements with the `idle`, `leading`, `trailing`, or `expanded` attribute fill th
 - Width, height, and corner radius move with one springy CSS transition. The incoming content fades and sharpens in a beat later.
 - Each state's content keeps its final size and is revealed by the growing pill, so text never reflows mid-animation.
 - The island adds the dark class to itself, so it is a black pill on light pages and a ringed one on dark pages, and nested components use dark tokens.
-- Sizes come from --island-idle-width, --island-compact-width, --island-expanded-width, and --island-expanded-height (defaults 7.5rem, 15rem, 22rem, 9.5rem).
+- Sizes come from `--island-idle-width`, `--island-compact-width`, `--island-expanded-width`, and `--island-expanded-height` (defaults 7.5rem, 15rem, 22rem, 9.5rem).

@@ -88,7 +88,7 @@ export default class NavbarBottomTabsExample {
     { name: "Theme toggle", note: "Six transition styles", tag: "Updated" },
   ];
   protected readonly phone =
-    "relative mx-auto flex h-[560px] w-[360px] flex-col overflow-hidden rounded-[2.5rem] border border-line bg-canvas";
+    "relative mx-auto flex h-[560px] w-full max-w-[360px] flex-col overflow-hidden rounded-[2.5rem] border border-line bg-canvas";
   /** Bottom tabs replace the menu button on small screens. */
   protected readonly top = "shrink-0 pt-3 [&_[aria-controls$=-menu]]:hidden";
   protected readonly brand = "flex items-center gap-2 rounded-md";

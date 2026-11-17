@@ -20,7 +20,7 @@ import { TextScramble } from "../../components/text-scramble/text-scramble.compo
         </svg>
         MarkasUI
       </span>
-      <div class="flex gap-5">
+      <div class="flex gap-4 sm:gap-5">
         @for (link of links; track link) {
           <a
             href="#"

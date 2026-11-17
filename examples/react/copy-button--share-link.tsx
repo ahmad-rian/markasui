@@ -2,7 +2,7 @@ import { CopyButton } from "../../components/copy-button/CopyButton";
 
 export default function CopyButtonShareLinkExample() {
   return (
-    <div className="grid gap-4 rounded-xl border border-line bg-surface p-6">
+    <div className="grid grid-cols-1 gap-4 rounded-xl border border-line bg-surface p-6">
       <div className="grid gap-1">
         <p className="text-base font-semibold text-ink">Share this board</p>
         <p className="text-sm text-muted">

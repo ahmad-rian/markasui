@@ -3,7 +3,9 @@ import CopyButton from "../../components/copy-button/CopyButton.vue";
 </script>
 
 <template>
-  <div class="grid gap-4 rounded-xl border border-line bg-surface p-6">
+  <div
+    class="grid grid-cols-1 gap-4 rounded-xl border border-line bg-surface p-6"
+  >
     <div class="grid gap-1">
       <p class="text-base font-semibold text-ink">Share this board</p>
       <p class="text-sm text-muted">

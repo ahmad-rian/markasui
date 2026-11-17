@@ -27,11 +27,11 @@ const iconOnly = part === "trigger";
 <button
   type="button"
   data-search-open
-  class="icon-button md:h-9 md:w-64 md:justify-start md:gap-2 md:bg-subtle md:px-3 md:text-muted md:hover:bg-line/70"
+  class="icon-button search-wide:h-9 search-wide:w-64 search-wide:justify-start search-wide:gap-2 search-wide:bg-subtle search-wide:px-3 search-wide:text-muted search-wide:hover:bg-line/70"
 >
-  <Icon name="search" class="size-4 md:hidden" />
-  <span class="sr-only text-sm md:not-sr-only">{strings.trigger}</span>
-  <span aria-hidden="true" class="ml-auto hidden items-center gap-1 md:inline-flex">
+  <Icon name="search" class="size-4 search-wide:hidden" />
+  <span class="sr-only text-sm search-wide:not-sr-only">{strings.trigger}</span>
+  <span aria-hidden="true" class="ml-auto hidden items-center gap-1 search-wide:inline-flex">
     <kbd data-shortcut-mod class="inline-flex h-5 min-w-5 px-1 items-center justify-center rounded-md bg-surface font-sans text-[11px] text-muted shadow-[0_0_0_1px_var(--color-line)]">Ctrl</kbd>
     <kbd class="inline-flex size-5 items-center justify-center rounded-md bg-surface font-sans text-[11px] text-muted shadow-[0_0_0_1px_var(--color-line)]">K</kbd>
   </span>

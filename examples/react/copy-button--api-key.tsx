@@ -2,7 +2,7 @@ import { CopyButton } from "../../components/copy-button/CopyButton";
 
 export default function CopyButtonApiKeyExample() {
   return (
-    <div className="grid gap-2">
+    <div className="grid grid-cols-1 gap-2">
       <p className="text-sm font-medium text-ink">Secret key</p>
       <div className="flex gap-2">
         <input

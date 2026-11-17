@@ -30,7 +30,7 @@ const items = [
 
 export default function BottomNavigationLinksExample() {
   return (
-    <div className="mx-auto grid w-[360px] gap-4 rounded-[2rem] border border-line bg-surface p-4">
+    <div className="mx-auto grid w-full max-w-[360px] gap-4 rounded-[2rem] border border-line bg-surface p-4">
       <div className="grid gap-1 px-2 pt-2">
         <p className="text-base font-semibold text-ink">Orders</p>
         <p className="text-sm text-muted">2 parcels on the way to Bandung</p>

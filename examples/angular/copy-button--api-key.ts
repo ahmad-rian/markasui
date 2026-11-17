@@ -5,7 +5,7 @@ import { CopyButton } from "../../components/copy-button/copy-button.component";
   selector: "markas-example",
   imports: [CopyButton],
   template: `
-    <div class="grid gap-2">
+    <div class="grid grid-cols-1 gap-2">
       <p class="text-sm font-medium text-ink">Secret key</p>
       <div class="flex gap-2">
         <input

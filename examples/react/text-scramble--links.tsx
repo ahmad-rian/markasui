@@ -36,7 +36,7 @@ export default function TextScrambleLinksExample() {
         </svg>
         MarkasUI
       </span>
-      <div className="flex gap-5">
+      <div className="flex gap-4 sm:gap-5">
         <a
           href="#"
           className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"

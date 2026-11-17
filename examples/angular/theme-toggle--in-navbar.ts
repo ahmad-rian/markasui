@@ -19,7 +19,10 @@ import { ThemeToggle } from "../../components/theme-toggle/theme-toggle.componen
         </svg>
         MarkasUI
       </a>
-      <nav aria-label="Main" class="flex items-center gap-4 text-sm text-muted">
+      <nav
+        aria-label="Main"
+        class="hidden items-center gap-4 text-sm text-muted sm:flex"
+      >
         <a href="#docs" [class]="link">Docs</a>
         <a href="#components" [class]="link">Components</a>
         <a href="#pricing" [class]="link">Pricing</a>

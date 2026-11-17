@@ -84,13 +84,63 @@ const frame = (pre: Element, copyLabel: string): Element => ({
   ],
 });
 
+/** Kode inline sepanjang ini atau lebih diberi titik patah <wbr>; yang lebih pendek tidak dipatah. */
+const LONG_INLINE_CODE = 24;
+/** Setelah / atau \ (kecuali "</"), dan sebelum . atau < yang menyambung kata. */
+const BREAK_AT = /(?<=[^<][/\\])(?=[^/\\\s])|(?<=[\w)\]>])(?=[.<])/;
+
+/**
+ * Path, URL, dan potongan HTML panjang di kode inline dipatahkan di pemisahnya (/, ., <), bukan
+ * di tengah kata seperti overflow-wrap: anywhere. <wbr> tidak ikut tersalin.
+ */
+const withBreakHints = (code: Element): Element => {
+  const [only] = code.children;
+  if (code.children.length !== 1 || only?.type !== "text") return code;
+  // Token pendek seperti #[Computed] tidak boleh patah sama sekali (browser boleh patah sebelum "[").
+  if (only.value.length < LONG_INLINE_CODE)
+    return /\s/.test(only.value)
+      ? code
+      : {
+          ...code,
+          properties: { ...code.properties, className: ["whitespace-nowrap"] },
+        };
+  const parts = only.value.split(BREAK_AT);
+  if (parts.length < 2) return code;
+  return {
+    ...code,
+    children: parts.flatMap((value, index): ElementContent[] => [
+      ...(index > 0
+        ? [
+            {
+              type: "element",
+              tagName: "wbr",
+              properties: {},
+              children: [],
+            } as Element,
+          ]
+        : []),
+      { type: "text", value },
+    ]),
+  };
+};
+
 export function rehypeCodeFrame(options: { copyLabel?: string } = {}) {
   const copyLabel = options.copyLabel ?? "Copy code";
   const walk = (node: Root | Element) => {
     node.children = node.children.map((child): ElementContent => {
       if (child.type !== "element") return child as ElementContent;
       if (child.tagName === "pre") return frame(child, copyLabel);
+      if (child.tagName === "code") return withBreakHints(child);
       walk(child);
+      // Tabel lebar bergeser di dalam wadahnya sendiri, bukan melebarkan halaman di layar sempit.
+      if (child.tagName === "table")
+        return {
+          type: "element",
+          tagName: "div",
+          // tabindex: wadah yang bisa digeser wajib terjangkau keyboard (axe scrollable-region-focusable).
+          properties: { className: ["table-wrap"], tabIndex: 0 },
+          children: [child],
+        };
       return child;
     }) as typeof node.children;
   };

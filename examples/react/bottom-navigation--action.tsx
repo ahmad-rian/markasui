@@ -34,7 +34,7 @@ const plus = (
 
 export default function BottomNavigationActionExample() {
   return (
-    <div className="relative mx-auto h-[420px] w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface">
+    <div className="relative mx-auto h-[420px] w-full max-w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface">
       <div className="grid gap-3 p-5">
         <p className="text-lg font-semibold text-ink">Moments</p>
         <div className="h-40 rounded-2xl bg-subtle" />

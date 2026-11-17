@@ -31,7 +31,7 @@
 </script>
 
 <div
-  class="mx-auto grid w-[360px] gap-4 rounded-[2rem] border border-line bg-surface p-4"
+  class="mx-auto grid w-full max-w-[360px] gap-4 rounded-[2rem] border border-line bg-surface p-4"
 >
   <div class="grid gap-1 px-2 pt-2">
     <p class="text-base font-semibold text-ink">Orders</p>

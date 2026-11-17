@@ -6,7 +6,7 @@ import { BottomNavigation } from "../../components/bottom-navigation/bottom-navi
   imports: [BottomNavigation],
   template: `
     <div
-      class="relative mx-auto h-[560px] w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface"
+      class="relative mx-auto h-[560px] w-full max-w-[360px] overflow-hidden rounded-[2.5rem] border border-line bg-surface"
     >
       <div
         role="region"
