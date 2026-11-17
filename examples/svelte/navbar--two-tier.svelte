@@ -60,7 +60,7 @@
   const main = "[&>div:first-child]:h-16";
   const brandClass = "flex items-center gap-2.5 rounded-md text-base";
   const logoClass = "size-7";
-  const sales = "hidden @2xl:block";
+  const sales = "hidden @3xl:block";
 </script>
 
 <div class={shell}>

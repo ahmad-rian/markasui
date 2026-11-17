@@ -1512,7 +1512,7 @@ const startChat = () =>
                           <button
                             type="button"
                             :class="[
-                              'inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none',
+                              '-my-0.5 inline-flex min-h-6 items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none',
                               column.key === sortKey && 'text-ink',
                               focusRing,
                             ]"

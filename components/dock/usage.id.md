@@ -110,3 +110,4 @@ export class AppDock {
 - Dock adalah toolbar dengan roving tabindex: Tab masuk sekali, panah berpindah antar item.
 - Menekan item memutar pantulan singkat dan memicu select. Item dengan href berpindah halaman seperti link biasa.
 - Reduced motion menjaga setiap item di ukuran dasar dan melewati pantulan.
+- Dock tidak pernah lebih lebar dari wadahnya. Di wadah yang sempit, item mengecil merata supaya semuanya tetap terlihat.

@@ -173,7 +173,7 @@
       <span aria-hidden="true" class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-linear-135 from-(--tpl-blue) to-(--tpl-teal) text-(--tpl-on)"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></span>
       <div class="min-w-0 leading-tight">
         <p class="text-lg font-bold tracking-tight">Kirana</p>
-        <p class="truncate text-xs text-muted">Grow. Connect. Succeed.</p>
+        <p class="truncate text-xs text-muted max-[390px]:hidden">Grow. Connect. Succeed.</p>
       </div>
     </div>
     <nav aria-label="Main" class="mx-auto hidden items-center gap-1 rounded-full p-1 xl:flex {{ $glass }}">

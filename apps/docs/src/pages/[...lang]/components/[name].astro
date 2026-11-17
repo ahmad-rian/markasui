@@ -85,6 +85,9 @@ const headings = [
 const pager = "icon-button size-9 bg-subtle text-ink hover:bg-line";
 /** Tipe dan default hanya patah di spasi: `("a" | "b")[]` tidak menyisakan `[]` sendirian di baris baru. */
 const words = (value: string) => value.split(/(\s+)/);
+/** Token deskripsi yang mirip kode (`"{index}`, `let-item`, `aria-current="page"`) tidak boleh patah di tengah. */
+const CODE_LIKE = /^(?:-\w|\S*(?:[{}<>="]|\w-\w))\S*$/;
+const codeSafe = (text: string) => words(text).map((word) => ({ word, keep: CODE_LIKE.test(word) }));
 const hasPlayground = item.name in PLAYGROUNDS;
 
 /** CSS halaman ini: CSS situs plus class komponen dan contohnya saja (scripts/page-css.ts). */
@@ -225,7 +228,7 @@ const example = (fw: Framework) => {
                 <td><code>{prop.name}</code></td>
                 <td data-label={strings.table.type}><code>{words(prop.type).map((word) => (/\s/.test(word) ? word : <span class="whitespace-nowrap">{word}</span>))}</code></td>
                 <td data-label={strings.table.default} class="font-mono text-[13px] text-muted">{words(prop.default).map((word) => (/\s/.test(word) ? word : <span class="whitespace-nowrap">{word}</span>))}</td>
-                <td>{prop.description}</td>
+                <td>{codeSafe(prop.description).map(({ word, keep }) => (keep ? <span class="whitespace-nowrap">{word}</span> : word))}</td>
               </tr>
             ))
           }
@@ -235,7 +238,7 @@ const example = (fw: Framework) => {
 
     <h2 id="aksesibilitas">{strings.accessibility}</h2>
     <ul>
-      {text.a11y.map((note) => <li>{note}</li>)}
+      {text.a11y.map((note) => <li>{codeSafe(note).map(({ word, keep }) => (keep ? <span class="whitespace-nowrap">{word}</span> : word))}</li>)}
     </ul>
   </section>
 

@@ -875,7 +875,9 @@ function resetSettings() {
             Lumen
             <span class="size-1.5 rounded-full bg-success" aria-hidden="true" />
           </p>
-          <p class="truncate text-xs text-muted">Sales workspace</p>
+          <p class="truncate text-xs text-muted max-[390px]:hidden">
+            Sales workspace
+          </p>
         </div>
       </div>
       <nav

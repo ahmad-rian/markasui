@@ -5,8 +5,8 @@
 ])
 
 @php
-    $root = 'relative inline-flex h-[60px] items-end gap-2 rounded-2xl border border-line bg-surface/80 px-2.5 pb-2.5 shadow-overlay backdrop-blur-md';
-    $itemWrap = 'relative h-10 w-[calc(2.5rem*var(--dock-scale,1))] shrink-0 transition-[width] duration-150 ease-out motion-reduce:transition-none';
+    $root = 'relative inline-flex h-[60px] max-w-full min-w-0 items-end gap-2 rounded-2xl border border-line bg-surface/80 px-2.5 pb-2.5 shadow-overlay backdrop-blur-md';
+    $itemWrap = 'relative h-10 w-[calc(2.5rem*var(--dock-scale,1))] transition-[width] duration-150 ease-out motion-reduce:transition-none';
     $itemClass = 'group/dock absolute bottom-0 left-0 grid aspect-square w-full place-items-center rounded-xl border border-line bg-linear-to-b from-surface to-subtle text-ink transition-colors duration-150 ease-out hover:to-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none';
     $iconClass = 'size-[55%]';
     $tooltip = 'pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 translate-y-1 rounded-md bg-primary px-2 py-1 text-xs font-medium whitespace-nowrap text-on-primary opacity-0 shadow-overlay transition-[opacity,translate] duration-150 ease-out group-hover/dock:translate-y-0 group-hover/dock:opacity-100 group-focus-visible/dock:translate-y-0 group-focus-visible/dock:opacity-100 motion-reduce:transition-none';

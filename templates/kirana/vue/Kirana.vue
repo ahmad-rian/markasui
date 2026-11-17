@@ -786,7 +786,9 @@ const visibleProjects = computed(() =>
         </span>
         <div class="min-w-0 leading-tight">
           <p class="text-lg font-bold tracking-tight">Kirana</p>
-          <p class="truncate text-xs text-muted">Grow. Connect. Succeed.</p>
+          <p class="truncate text-xs text-muted max-[390px]:hidden">
+            Grow. Connect. Succeed.
+          </p>
         </div>
       </div>
       <nav

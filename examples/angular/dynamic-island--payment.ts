@@ -71,7 +71,7 @@ import {
 export default class DynamicIslandPaymentExample {
   protected readonly panel = "grid gap-4";
   protected readonly stage =
-    "h-[190px] rounded-[2rem] border border-line bg-surface pt-3";
+    "@container h-[190px] rounded-[2rem] border border-line bg-surface px-3 pt-3";
   protected readonly controls = "flex justify-center gap-1.5";
   protected readonly demoButton =
     "h-8 rounded-full border border-line bg-surface px-3 text-sm font-medium text-ink transition-colors duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-on-primary motion-reduce:transition-none";

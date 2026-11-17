@@ -81,7 +81,7 @@ import {
 export default class DynamicIslandMusicExample {
   protected readonly panel = "grid gap-4";
   protected readonly stage =
-    "h-[220px] rounded-[2rem] border border-line bg-surface pt-3";
+    "@container h-[220px] rounded-[2rem] border border-line bg-surface px-3 pt-3";
   protected readonly island = "[--island-expanded-height:11rem]";
   protected readonly controls = "flex justify-center gap-1.5";
   protected readonly demoButton =

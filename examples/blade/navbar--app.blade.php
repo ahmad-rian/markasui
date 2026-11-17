@@ -27,7 +27,7 @@
     $home = 'rounded-md';
     $logoClass = 'size-6';
     $slash = 'hidden size-5 text-line @md:block';
-    $crumbs = 'font-normal';
+    $crumbs = 'font-normal @max-xs:hidden';
     $bell = 'relative size-9 px-0!';
     $icon = 'size-5';
     $count = 'absolute top-1 right-1 grid h-4 min-w-4 place-items-center rounded-full bg-danger px-1 text-[10px] font-semibold text-on-primary ring-2 ring-surface';

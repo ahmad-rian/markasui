@@ -92,7 +92,7 @@ export default class DynamicIslandExample {
   protected readonly panel = "grid gap-4";
   protected readonly stage =
     "relative h-[220px] overflow-hidden rounded-[2rem] border border-line bg-surface";
-  protected readonly top = "absolute inset-x-0 top-3";
+  protected readonly top = "@container absolute inset-x-0 top-3 px-3";
   protected readonly clock =
     "pt-24 text-center text-5xl font-semibold text-ink tabular-nums";
   protected readonly date = "pt-1 text-center text-sm text-muted";

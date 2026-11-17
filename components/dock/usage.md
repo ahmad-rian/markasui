@@ -103,3 +103,4 @@ export class AppDock {
 - The dock is a toolbar with roving tabindex: Tab enters it once, arrows move between items.
 - Pressing an item plays a short bounce and fires select. Items with href navigate as normal links.
 - Reduced motion keeps every item at its base size and skips the bounce.
+- The dock never grows wider than its container. In a narrow one the items shrink evenly so every item stays visible.

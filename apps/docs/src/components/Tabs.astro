@@ -33,7 +33,7 @@ const first = items[0]?.value;
           tabindex={item.value === first ? 0 : -1}
           data-value={item.value}
           class:list={[
-            "shrink-0 text-sm text-muted transition-colors hover:text-ink aria-selected:font-medium aria-selected:text-ink",
+            "min-w-6 shrink-0 text-sm text-muted transition-colors hover:text-ink aria-selected:font-medium aria-selected:text-ink",
             pills
               ? "inline-flex h-8 items-center gap-1.5 rounded-md px-3 aria-selected:bg-surface aria-selected:shadow-[0_1px_2px_rgb(0_0_0/0.06)]"
               : "border-b-2 border-transparent aria-selected:border-ink",

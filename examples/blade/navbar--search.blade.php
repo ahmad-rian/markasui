@@ -26,6 +26,8 @@
     $search = 'mx-auto flex h-10 max-w-md min-w-0 flex-1 items-center gap-2.5 rounded-full border border-line bg-canvas pr-2 pl-4 text-sm text-muted transition-colors duration-150 ease-out hover:border-primary-line hover:bg-subtle motion-reduce:transition-none';
     $searchIcon = 'size-4 shrink-0';
     $placeholder = 'min-w-0 flex-1 truncate text-left';
+    // Phones have no hotkey, and the label needs the room in a narrow bar.
+    $shortcut = '@max-xs:hidden';
 @endphp
 
 <x-markas.navbar :links="$links" class="{{ $layout }}">
@@ -45,7 +47,7 @@
                 <button type="button" aria-keyshortcuts="Meta+K" class="{{ $search }}">
                     <svg class="{{ $searchIcon }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.3-4.3" /><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z" /></svg>
                     <span class="{{ $placeholder }}">Search components</span>
-                    <x-markas.kbd size="sm">⌘K</x-markas.kbd>
+                    <x-markas.kbd size="sm" class="{{ $shortcut }}">⌘K</x-markas.kbd>
                 </button>
             </x-slot:trigger>
         </x-markas.command>

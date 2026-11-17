@@ -15,7 +15,7 @@
         'blur' => 'top-0 border-b border-line/60 bg-surface/70 backdrop-blur-md',
     ];
     $stickyClass = 'sticky z-40';
-    $bar = 'flex h-14 items-center gap-4 px-4';
+    $bar = 'flex h-14 items-center gap-4 px-3 @sm:px-4';
     $brandClass = 'flex shrink-0 items-center gap-2 text-sm font-semibold text-ink';
     $desktopNav = 'relative hidden items-center @2xl:flex';
     $indicator = 'absolute inset-y-0 left-0 rounded-md bg-subtle transition-[translate,width] duration-200 ease-out';

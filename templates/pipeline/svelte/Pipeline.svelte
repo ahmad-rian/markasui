@@ -215,7 +215,7 @@
     "absolute top-0 right-0 z-10 flex size-[58px] items-start justify-end rounded-bl-[26px] bg-(--tpl-bg) before:absolute before:top-0 before:right-full before:size-6 before:bg-[radial-gradient(circle_at_0_100%,transparent_24px,var(--tpl-bg)_24.5px)] after:absolute after:top-full after:right-0 after:size-6 after:bg-[radial-gradient(circle_at_0_100%,transparent_24px,var(--tpl-bg)_24.5px)]";
   const cornerButton = `inline-flex size-12 items-center justify-center rounded-full bg-surface text-ink shadow-(--tpl-shadow) transition-colors duration-150 hover:bg-subtle ${focusRing}`;
   const selectable =
-    "text-left after:absolute after:inset-0 after:rounded-[28px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary";
+    "block max-w-full truncate text-left after:absolute after:inset-0 after:rounded-[28px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary";
   const sourceChip =
     "inline-flex h-7 items-center rounded-full bg-subtle px-3 text-xs font-medium";
   const darkButton = `inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-(--tpl-night) text-(--tpl-on-night) transition-opacity duration-150 hover:opacity-85 ${focusRing}`;
@@ -498,7 +498,7 @@
   {#if items.length === 0}
     <p class="text-sm text-muted">No leads match this filter.</p>
   {:else}
-    <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <ul class="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
       {#each items as item (item.id)}
         <li data-lead={item.id} class={cx(card, "min-h-48 bg-surface")}>
           <div class="flex items-center gap-3 pr-14">
@@ -884,7 +884,7 @@
               {#if shownTasks.length === 0}
                 <p class="text-sm text-muted">No tasks in this view.</p>
               {:else}
-                <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <ul class="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
                   {#each shownTasks as task, index (task.id)}
                     {@render taskCard(task, index === 0 ? "lime" : "plain")}
                   {/each}

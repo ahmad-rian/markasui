@@ -980,7 +980,7 @@ const config = JSON.stringify({
                                 <tr class={headRow}>
                                   {columns.map((column) => (
                                     <th scope="col" aria-sort={column.key === "total" ? "descending" : undefined} data-larisa-sort={column.key} class={cx(headCell, column.numeric ? "text-right" : "text-left")}>
-                                      <button type="button" data-numeric={column.numeric ? "true" : undefined} class={cx("inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none", column.key === "total" && "text-ink", focusRing)}>{column.label}<Fragment set:html={icon(column.key === "total" ? icons.desc : icons.sort, "size-3.5")} /></button>
+                                      <button type="button" data-numeric={column.numeric ? "true" : undefined} class={cx("-my-0.5 inline-flex min-h-6 items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none", column.key === "total" && "text-ink", focusRing)}>{column.label}<Fragment set:html={icon(column.key === "total" ? icons.desc : icons.sort, "size-3.5")} /></button>
                                     </th>
                                   ))}
                                 </tr>

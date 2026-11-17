@@ -64,7 +64,7 @@
     $kickerDot = 'size-1.5 rounded-full bg-primary';
     $h2 = 'text-[34px] leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[56px]';
     $lead = 'max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg';
-    $arrowLink = 'inline-flex w-fit items-center gap-2 rounded-full text-sm font-semibold underline decoration-line underline-offset-4 hover:decoration-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+    $arrowLink = 'inline-flex min-h-6 w-fit items-center gap-2 rounded-full text-sm font-semibold underline decoration-line underline-offset-4 hover:decoration-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
     $tabList = 'grid grid-cols-3 border-b border-line';
     $tab = '-mb-px flex flex-col items-start gap-1 border-b-2 pt-2 pr-3 pb-4 text-left text-base font-semibold tracking-tight transition-colors duration-150 motion-reduce:transition-none sm:flex-row sm:items-center sm:gap-3 sm:text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
     $tabIdle = 'border-transparent text-muted hover:text-ink';

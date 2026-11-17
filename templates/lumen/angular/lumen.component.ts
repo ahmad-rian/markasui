@@ -750,7 +750,9 @@ class BarChart {
                 aria-hidden="true"
               ></span>
             </p>
-            <p class="truncate text-xs text-muted">Sales workspace</p>
+            <p class="truncate text-xs text-muted max-[390px]:hidden">
+              Sales workspace
+            </p>
           </div>
         </div>
         <nav

@@ -5,7 +5,8 @@ import {
 } from "../../components/dynamic-island/DynamicIsland";
 
 const panel = "grid gap-4";
-const stage = "h-[150px] rounded-[2rem] border border-line bg-surface pt-3";
+const stage =
+  "@container h-[150px] rounded-[2rem] border border-line bg-surface px-3 pt-3";
 const island = "[--island-expanded-height:4.75rem]";
 const controls = "flex justify-center gap-1.5";
 const demoButton =

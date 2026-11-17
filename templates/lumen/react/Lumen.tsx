@@ -2064,7 +2064,9 @@ export default function Lumen() {
                 aria-hidden="true"
               />
             </p>
-            <p className="truncate text-xs text-muted">Sales workspace</p>
+            <p className="truncate text-xs text-muted max-[390px]:hidden">
+              Sales workspace
+            </p>
           </div>
         </div>
         <nav

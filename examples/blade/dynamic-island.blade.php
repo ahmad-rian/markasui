@@ -1,7 +1,7 @@
 @php
     $panel = 'grid gap-4';
     $stage = 'relative h-[220px] overflow-hidden rounded-[2rem] border border-line bg-surface';
-    $top = 'absolute inset-x-0 top-3';
+    $top = '@container absolute inset-x-0 top-3 px-3';
     $clock = 'pt-24 text-center text-5xl font-semibold text-ink tabular-nums';
     $date = 'pt-1 text-center text-sm text-muted';
     $controls = 'flex justify-center gap-1.5';

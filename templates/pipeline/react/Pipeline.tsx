@@ -217,7 +217,7 @@ const socket =
   "absolute top-0 right-0 z-10 flex size-[58px] items-start justify-end rounded-bl-[26px] bg-(--tpl-bg) before:absolute before:top-0 before:right-full before:size-6 before:bg-[radial-gradient(circle_at_0_100%,transparent_24px,var(--tpl-bg)_24.5px)] after:absolute after:top-full after:right-0 after:size-6 after:bg-[radial-gradient(circle_at_0_100%,transparent_24px,var(--tpl-bg)_24.5px)]";
 const cornerButton = `inline-flex size-12 items-center justify-center rounded-full bg-surface text-ink shadow-(--tpl-shadow) transition-colors duration-150 hover:bg-subtle ${focusRing}`;
 const selectable =
-  "text-left after:absolute after:inset-0 after:rounded-[28px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary";
+  "block max-w-full truncate text-left after:absolute after:inset-0 after:rounded-[28px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary";
 const sourceChip =
   "inline-flex h-7 items-center rounded-full bg-subtle px-3 text-xs font-medium";
 const darkButton = `inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-(--tpl-night) text-(--tpl-on-night) transition-opacity duration-150 hover:opacity-85 ${focusRing}`;
@@ -416,7 +416,7 @@ function LeadGrid({
   if (items.length === 0)
     return <p className="text-sm text-muted">No leads match this filter.</p>;
   return (
-    <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <ul className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
       {items.map((lead) => (
         <LeadCard key={lead.id} lead={lead} onOpen={() => onOpen(lead.id)} />
       ))}
@@ -797,7 +797,7 @@ function WorkspacePage({
           {shownTasks.length === 0 ? (
             <p className="text-sm text-muted">No tasks in this view.</p>
           ) : (
-            <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
               {shownTasks.map((task, index) => (
                 <TaskCard
                   key={task.id}

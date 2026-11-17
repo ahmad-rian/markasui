@@ -26,9 +26,9 @@ const props = withDefaults(
 const emit = defineEmits<{ select: [value: string] }>();
 
 const root =
-  "relative inline-flex h-[60px] items-end gap-2 rounded-2xl border border-line bg-surface/80 px-2.5 pb-2.5 shadow-overlay backdrop-blur-md";
+  "relative inline-flex h-[60px] max-w-full min-w-0 items-end gap-2 rounded-2xl border border-line bg-surface/80 px-2.5 pb-2.5 shadow-overlay backdrop-blur-md";
 const itemWrap =
-  "relative h-10 w-[calc(2.5rem*var(--dock-scale,1))] shrink-0 transition-[width] duration-150 ease-out motion-reduce:transition-none";
+  "relative h-10 w-[calc(2.5rem*var(--dock-scale,1))] transition-[width] duration-150 ease-out motion-reduce:transition-none";
 const itemClass =
   "group/dock absolute bottom-0 left-0 grid aspect-square w-full place-items-center rounded-xl border border-line bg-linear-to-b from-surface to-subtle text-ink transition-colors duration-150 ease-out hover:to-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
 const iconClass = "size-[55%]";

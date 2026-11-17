@@ -43,7 +43,7 @@
   const brandMark =
     "flex size-8 items-center justify-center rounded-lg bg-primary text-on-primary";
   const quietLink =
-    "rounded-md text-sm font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+    "inline-flex min-h-6 items-center rounded-md text-sm font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
   const navWrap = "sticky top-3 z-20 mt-4 flex justify-center px-4";
   const nav =
     "flex max-w-full gap-0.5 overflow-x-auto rounded-full border border-line bg-surface/90 p-1 shadow-overlay backdrop-blur";

@@ -66,9 +66,10 @@ const dashSide =
   "hidden gap-1 border-r border-line bg-subtle/60 p-4 md:grid md:content-start";
 const dashSideItem =
   "flex h-9 items-center gap-2.5 rounded-xl px-3 text-sm font-medium";
-const dashMain = "grid min-w-0 content-start gap-4 p-4 sm:p-5";
-const dashStat = "grid gap-1 rounded-2xl border border-line p-3";
-const dashCard = "grid content-start gap-3 rounded-2xl border border-line p-4";
+const dashMain = "grid min-w-0 grid-cols-1 content-start gap-4 p-4 sm:p-5";
+const dashStat = "grid gap-1 rounded-2xl border border-line p-2.5 sm:p-3";
+const dashCard =
+  "grid grid-cols-1 content-start gap-3 rounded-2xl border border-line p-4";
 const float =
   "absolute z-10 hidden rounded-2xl border border-(--tpl-glass-line) bg-(--tpl-glass) p-4 text-left shadow-(--tpl-shadow) backdrop-blur-xl lg:block animate-[tender-float_3.4s_ease-in-out_infinite_alternate] motion-reduce:animate-none";
 const pill =
@@ -438,23 +439,25 @@ function Dashboard() {
                 <Face name="Rizky Pratama" index={0} />
               </div>
             </div>
-            <dl className="grid grid-cols-3 gap-3">
+            <dl className="grid grid-cols-3 gap-2 sm:gap-3">
               {dashStats.map((stat) => (
                 <div key={stat.label} className={dashStat}>
-                  <dt className="truncate text-xs text-muted">{stat.label}</dt>
-                  <dd className="text-lg font-semibold tracking-tight tabular-nums sm:text-xl">
+                  <dt className="text-xs text-muted sm:truncate">
+                    {stat.label}
+                  </dt>
+                  <dd className="text-base font-semibold tracking-tight whitespace-nowrap tabular-nums sm:text-xl">
                     {stat.value}
                   </dd>
-                  <dd className="truncate text-xs text-(--tpl-blue-ink)">
+                  <dd className="text-xs text-(--tpl-blue-ink) sm:truncate">
                     {stat.note}
                   </dd>
                 </div>
               ))}
             </dl>
-            <div className="grid gap-3 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
               <div className={dashCard}>
                 <p className="text-sm font-semibold">Open tenders</p>
-                <ul className="grid gap-2">
+                <ul className="grid grid-cols-1 gap-2">
                   {dashRows.map((row) => (
                     <li
                       key={row.title}

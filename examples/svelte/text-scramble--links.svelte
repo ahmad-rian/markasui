@@ -14,7 +14,7 @@
 
 <nav
   aria-label="Main"
-  class="flex items-center justify-between rounded-xl border border-line bg-surface px-5 py-3 font-mono text-sm text-ink"
+  class="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 font-mono text-sm text-ink sm:px-5"
 >
   <span class="flex items-center gap-2 font-sans font-semibold">
     <svg class="size-6 shrink-0" viewBox="0 0 1464 1430" aria-hidden="true">
@@ -24,7 +24,7 @@
     </svg>
     MarkasUI
   </span>
-  <div class="flex gap-4 sm:gap-5">
+  <div class="flex gap-3 sm:gap-5">
     {#each links as link (link)}
       <!-- svelte-ignore a11y_invalid_attribute -->
       <a

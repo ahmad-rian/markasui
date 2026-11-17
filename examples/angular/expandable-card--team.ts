@@ -31,7 +31,7 @@ import {
   `,
 })
 export default class ExpandableCardTeamExample {
-  protected readonly grid = "grid grid-cols-3 gap-3";
+  protected readonly grid = "grid grid-cols-2 gap-3 sm:grid-cols-3";
   protected readonly portrait =
     "flex h-full items-center justify-center bg-primary-soft";
   protected readonly avatar =

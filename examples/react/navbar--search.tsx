@@ -35,6 +35,8 @@ const search =
   "mx-auto flex h-10 max-w-md min-w-0 flex-1 items-center gap-2.5 rounded-full border border-line bg-canvas pr-2 pl-4 text-sm text-muted transition-colors duration-150 ease-out hover:border-primary-line hover:bg-subtle motion-reduce:transition-none";
 const searchIcon = "size-4 shrink-0";
 const placeholder = "min-w-0 flex-1 truncate text-left";
+// Phones have no hotkey, and the label needs the room in a narrow bar.
+const shortcut = "@max-xs:hidden";
 
 export default function NavbarSearchExample() {
   return (
@@ -75,7 +77,9 @@ export default function NavbarSearchExample() {
                 <path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z" />
               </svg>
               <span className={placeholder}>Search components</span>
-              <Kbd size="sm">⌘K</Kbd>
+              <Kbd size="sm" className={shortcut}>
+                ⌘K
+              </Kbd>
             </button>
           }
         />

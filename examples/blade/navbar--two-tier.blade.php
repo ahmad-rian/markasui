@@ -50,7 +50,7 @@
     $main = '[&>div:first-child]:h-16';
     $brand = 'flex items-center gap-2.5 rounded-md text-base';
     $logoClass = 'size-7';
-    $sales = 'hidden @2xl:block';
+    $sales = 'hidden @3xl:block';
 @endphp
 
 <div class="{{ $shell }}">

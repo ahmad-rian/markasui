@@ -636,7 +636,7 @@
                       <tr class="{{ $headRow }}">
                         @foreach ($columns as [$key, $label, $numeric])
                           <th scope="col" class="{{ $headCell }} {{ $numeric ? 'text-right' : 'text-left' }}" :aria-sort="ariaSort('{{ $key }}')">
-                            <button type="button" class="inline-flex items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none {{ $focusRing }}" :class="sortKey === '{{ $key }}' && 'text-ink'" @click="sortBy('{{ $key }}', {{ $numeric ? 'true' : 'false' }})">{{ $label }}{{ $icon('', 'size-3.5', "sortIcon('{$key}')") }}</button>
+                            <button type="button" class="-my-0.5 inline-flex min-h-6 items-center gap-1 rounded-sm transition-colors duration-150 ease-out hover:text-ink motion-reduce:transition-none {{ $focusRing }}" :class="sortKey === '{{ $key }}' && 'text-ink'" @click="sortBy('{{ $key }}', {{ $numeric ? 'true' : 'false' }})">{{ $label }}{{ $icon('', 'size-3.5', "sortIcon('{$key}')") }}</button>
                           </th>
                         @endforeach
                       </tr>

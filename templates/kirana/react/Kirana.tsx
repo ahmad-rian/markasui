@@ -1641,7 +1641,7 @@ export default function Kirana() {
           </span>
           <div className="min-w-0 leading-tight">
             <p className="text-lg font-bold tracking-tight">Kirana</p>
-            <p className="truncate text-xs text-muted">
+            <p className="truncate text-xs text-muted max-[390px]:hidden">
               Grow. Connect. Succeed.
             </p>
           </div>

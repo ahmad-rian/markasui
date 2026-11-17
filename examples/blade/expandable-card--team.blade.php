@@ -1,5 +1,5 @@
 @php
-    $grid = 'grid grid-cols-3 gap-3';
+    $grid = 'grid grid-cols-2 gap-3 sm:grid-cols-3';
     $portrait = 'flex h-full items-center justify-center bg-primary-soft';
     $avatar = 'inline-flex size-14 items-center justify-center rounded-full bg-primary text-base font-semibold text-on-primary';
     $contact = 'text-muted';

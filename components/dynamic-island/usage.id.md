@@ -138,3 +138,4 @@ Elemen dengan atribut `idle`, `leading`, `trailing`, atau `expanded` mengisi slo
 - Isi setiap keadaan tetap di ukuran akhirnya dan terungkap oleh pill yang membesar, jadi teks tidak bergeser selama animasi.
 - Island menambahkan class dark ke dirinya, jadi tampil sebagai pill hitam di halaman terang dan pill bercincin di halaman gelap, dan komponen di dalamnya memakai token gelap.
 - Ukuran diambil dari `--island-idle-width`, `--island-compact-width`, `--island-expanded-width`, dan `--island-expanded-height` (default 7.5rem, 15rem, 22rem, 9.5rem).
+- Island tidak pernah lebih lebar dari induknya. Isinya dibatasi oleh size container terdekat, atau layar kalau tidak ada, jadi beri induk yang sempit class `@container` (seperti di contoh) supaya isinya ikut muat.

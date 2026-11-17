@@ -7,7 +7,7 @@ import {
 const panel = "grid gap-4";
 const stage =
   "relative h-[220px] overflow-hidden rounded-[2rem] border border-line bg-surface";
-const top = "absolute inset-x-0 top-3";
+const top = "@container absolute inset-x-0 top-3 px-3";
 const clock = "pt-24 text-center text-5xl font-semibold text-ink tabular-nums";
 const date = "pt-1 text-center text-sm text-muted";
 const controls = "flex justify-center gap-1.5";

@@ -18,7 +18,7 @@ export default function TextScrambleLinksExample() {
   return (
     <nav
       aria-label="Main"
-      className="flex items-center justify-between rounded-xl border border-line bg-surface px-5 py-3 font-mono text-sm text-ink"
+      className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 font-mono text-sm text-ink sm:px-5"
     >
       <span className="flex items-center gap-2 font-sans font-semibold">
         <svg
@@ -36,7 +36,7 @@ export default function TextScrambleLinksExample() {
         </svg>
         MarkasUI
       </span>
-      <div className="flex gap-4 sm:gap-5">
+      <div className="flex gap-3 sm:gap-5">
         <a
           href="#"
           className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"

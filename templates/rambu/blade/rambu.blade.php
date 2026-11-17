@@ -10,7 +10,7 @@
     $header = 'mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 pt-5 lg:px-8';
     $brand = 'flex items-center gap-2.5 text-base font-semibold tracking-tight';
     $brandMark = 'flex size-8 items-center justify-center rounded-lg bg-primary text-on-primary';
-    $quietLink = 'rounded-md text-sm font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+    $quietLink = 'inline-flex min-h-6 items-center rounded-md text-sm font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
     $navWrap = 'sticky top-3 z-20 mt-4 flex justify-center px-4';
     $nav = 'flex max-w-full gap-0.5 overflow-x-auto rounded-full border border-line bg-surface/90 p-1 shadow-overlay backdrop-blur';
     $navItem = 'inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-2.5 text-xs font-medium whitespace-nowrap transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none sm:px-3 sm:text-sm';

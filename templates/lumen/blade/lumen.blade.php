@@ -428,7 +428,7 @@
       <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-on-primary" aria-hidden="true">L</span>
       <div class="min-w-0 leading-tight">
         <p class="flex items-center gap-1.5 text-base font-semibold tracking-tight">Lumen<span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span></p>
-        <p class="truncate text-xs text-muted">Sales workspace</p>
+        <p class="truncate text-xs text-muted max-[390px]:hidden">Sales workspace</p>
       </div>
     </div>
     <nav aria-label="Main" class="mx-auto hidden items-center gap-1 rounded-full border border-line bg-canvas p-1 lg:flex">

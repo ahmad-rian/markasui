@@ -67,9 +67,10 @@ const dashSide =
   "hidden gap-1 border-r border-line bg-subtle/60 p-4 md:grid md:content-start";
 const dashSideItem =
   "flex h-9 items-center gap-2.5 rounded-xl px-3 text-sm font-medium";
-const dashMain = "grid min-w-0 content-start gap-4 p-4 sm:p-5";
-const dashStat = "grid gap-1 rounded-2xl border border-line p-3";
-const dashCard = "grid content-start gap-3 rounded-2xl border border-line p-4";
+const dashMain = "grid min-w-0 grid-cols-1 content-start gap-4 p-4 sm:p-5";
+const dashStat = "grid gap-1 rounded-2xl border border-line p-2.5 sm:p-3";
+const dashCard =
+  "grid grid-cols-1 content-start gap-3 rounded-2xl border border-line p-4";
 const float =
   "absolute z-10 hidden rounded-2xl border border-(--tpl-glass-line) bg-(--tpl-glass) p-4 text-left shadow-(--tpl-shadow) backdrop-blur-xl lg:block animate-[tender-float_3.4s_ease-in-out_infinite_alternate] motion-reduce:animate-none";
 const pill =
@@ -633,31 +634,31 @@ function submit() {
                     <Face name="Rizky Pratama" :index="0" />
                   </div>
                 </div>
-                <dl class="grid grid-cols-3 gap-3">
+                <dl class="grid grid-cols-3 gap-2 sm:gap-3">
                   <div
                     v-for="stat in dashStats"
                     :key="stat.label"
                     :class="dashStat"
                   >
-                    <dt class="truncate text-xs text-muted">
+                    <dt class="text-xs text-muted sm:truncate">
                       {{ stat.label }}
                     </dt>
                     <dd
-                      class="text-lg font-semibold tracking-tight tabular-nums sm:text-xl"
+                      class="text-base font-semibold tracking-tight whitespace-nowrap tabular-nums sm:text-xl"
                     >
                       {{ stat.value }}
                     </dd>
-                    <dd class="truncate text-xs text-(--tpl-blue-ink)">
+                    <dd class="text-xs text-(--tpl-blue-ink) sm:truncate">
                       {{ stat.note }}
                     </dd>
                   </div>
                 </dl>
                 <div
-                  class="grid gap-3 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]"
+                  class="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]"
                 >
                   <div :class="dashCard">
                     <p class="text-sm font-semibold">Open tenders</p>
-                    <ul class="grid gap-2">
+                    <ul class="grid grid-cols-1 gap-2">
                       <li
                         v-for="row in dashRows"
                         :key="row.title"

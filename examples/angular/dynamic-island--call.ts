@@ -96,7 +96,7 @@ import {
 export default class DynamicIslandCallExample {
   protected readonly panel = "grid gap-4";
   protected readonly stage =
-    "h-[150px] rounded-[2rem] border border-line bg-surface pt-3";
+    "@container h-[150px] rounded-[2rem] border border-line bg-surface px-3 pt-3";
   protected readonly island = "[--island-expanded-height:4.75rem]";
   protected readonly controls = "flex justify-center gap-1.5";
   protected readonly demoButton =

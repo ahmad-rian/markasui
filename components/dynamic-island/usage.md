@@ -136,3 +136,4 @@ Elements with the `idle`, `leading`, `trailing`, or `expanded` attribute fill th
 - Each state's content keeps its final size and is revealed by the growing pill, so text never reflows mid-animation.
 - The island adds the dark class to itself, so it is a black pill on light pages and a ringed one on dark pages, and nested components use dark tokens.
 - Sizes come from `--island-idle-width`, `--island-compact-width`, `--island-expanded-width`, and `--island-expanded-height` (defaults 7.5rem, 15rem, 22rem, 9.5rem).
+- The island never grows wider than its parent. Its content is capped at the nearest size container, or the screen when there is none, so give a narrow parent the `@container` class (as the examples do) and the content fits too.
