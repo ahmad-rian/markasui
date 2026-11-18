@@ -23,6 +23,8 @@ const { title, subtitle, templates, locale, empty, seo, kind } = Astro.props;
 const absolute = (path: string) => new URL(localePath(locale, path), Astro.site).toString();
 const base = KIND_BASE[kind];
 const sectorsLabel = t(locale).templates.sectors;
+/** Nada latar kartu, bergiliran per urutan (lihat .template-card di global.css). */
+const TONES = ["sky", "sand", "mint", "rose", "lilac", "stone"] as const;
 const jsonLd = [
   collectionPage(
     { url: absolute(base), name: seo.title, description: seo.description, locale },
@@ -47,9 +49,13 @@ const jsonLd = [
         </div>
       ) : (
         <ul class="mt-10 grid gap-6 md:grid-cols-2">
-          {templates.map((template) => (
+          {templates.map((template, index) => (
             <li>
-              <a href={localePath(locale, templateDetailPath(template))} class="frame group block transition-colors hover:bg-line">
+              <a
+                href={localePath(locale, templateDetailPath(template))}
+                data-tone={TONES[index % TONES.length]}
+                class="frame template-card group block transition-colors"
+              >
                 <div class="frame-panel relative aspect-[16/10] overflow-hidden">
                   <iframe
                     src={`/demo/templates/${template.name}/react`}

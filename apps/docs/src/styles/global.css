@@ -366,6 +366,59 @@
 @utility frame-panel {
   @apply rounded-xl bg-surface shadow-[0_0_0_1px_var(--color-line)];
 }
+/*
+ * Kartu template di /templates dan /pages: tiap kartu punya nada latar lembut sendiri (bergiliran),
+ * supaya deretan kartu tidak seragam abu-abu. Nada dicampur dari subtle agar tetap tenang di dua tema.
+ */
+.template-card {
+  --tone: var(--color-subtle);
+  background-color: var(--tone);
+}
+.template-card[data-tone="sky"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 55%, oklch(0.86 0.07 240));
+}
+.template-card[data-tone="sand"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 52%, oklch(0.9 0.08 85));
+}
+.template-card[data-tone="mint"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 55%, oklch(0.88 0.07 160));
+}
+.template-card[data-tone="rose"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 56%, oklch(0.88 0.06 15));
+}
+.template-card[data-tone="lilac"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 55%, oklch(0.87 0.06 300));
+}
+.template-card[data-tone="stone"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 65%, oklch(0.86 0.03 60));
+}
+.dark .template-card[data-tone="sky"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 68%, oklch(0.4 0.08 240));
+}
+.dark .template-card[data-tone="sand"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 68%, oklch(0.42 0.07 80));
+}
+.dark .template-card[data-tone="mint"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 68%, oklch(0.4 0.07 160));
+}
+.dark .template-card[data-tone="rose"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 68%, oklch(0.4 0.08 15));
+}
+.dark .template-card[data-tone="lilac"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 68%, oklch(0.4 0.08 300));
+}
+.dark .template-card[data-tone="stone"] {
+  --tone: color-mix(in oklab, var(--color-subtle) 74%, oklch(0.4 0.03 60));
+}
+/* Di luar @layer: utility frame (bg-subtle) ada di lapisan utilities dan akan menang atas @layer components. */
+/* Hover menggelapkan nada kartu itu sendiri, bukan mengganti ke abu-abu (chip tetap terlihat). */
+.template-card:hover {
+  background-color: color-mix(in oklab, var(--tone) 88%, var(--color-ink));
+}
+.dark .template-card:hover {
+  background-color: color-mix(in oklab, var(--tone) 90%, white);
+}
+
 @utility soft-button {
   @apply inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-subtle px-3 text-sm font-medium text-ink transition-colors duration-150 ease-out hover:bg-line;
 }
