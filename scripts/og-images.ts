@@ -30,6 +30,10 @@ import {
 const WIDTH = 1200;
 const HEIGHT = 630;
 const MAX_BYTES = 60 * 1024;
+/** Landing memakai tangkapan hero asli (kaca beralur, gradien): butuh palet penuh, batas lebih longgar. */
+const HERO_MAX_BYTES = 250 * 1024;
+/** Situs yang hero-nya difoto. Default produksi; isi OG_HERO_URL untuk build lokal (mis. http://localhost:4321). */
+const HERO_BASE = process.env.OG_HERO_URL || "https://markas.jenderalcorp.com";
 /** Warna PNG berpalet: cukup untuk teks halus di latar polos, jauh lebih kecil dari PNG penuh. */
 const PALETTE_COLORS = 96;
 
@@ -302,6 +306,38 @@ async function renderCard(page: Page, card: Card): Promise<number> {
   return size;
 }
 
+/**
+ * Gambar share landing (WhatsApp, X, Slack): foto hero landing sungguhan, bukan kartu teks, karena
+ * kaca beralur dan judulnya yang paling mewakili MarkasUI. Splash dan animasi dimatikan.
+ */
+async function renderHero(page: Page, locale: Locale, files: string[]) {
+  await page.addInitScript(() => {
+    try {
+      sessionStorage.setItem("markas-splash", "1");
+    } catch {}
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${HERO_BASE}${locale === "en" ? "/" : `/${locale}`}`, {
+    waitUntil: "networkidle",
+  });
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForFunction(() => "serif" in document.documentElement.dataset);
+  // Baris statistik terpotong di tepi bawah 630 px: disembunyikan supaya bingkai rapi.
+  await page.addStyleTag({ content: ".lp-stats{visibility:hidden}" });
+  const png = await page.screenshot({ type: "png" });
+  for (const name of files) {
+    const file = join(outDir, `${name}.png`);
+    await mkdir(dirname(file), { recursive: true });
+    await sharp(png)
+      .png({ palette: true, colors: 256, dither: 1, compressionLevel: 9, effort: 10 })
+      .toFile(file);
+    const { size } = await stat(file);
+    if (size > HERO_MAX_BYTES)
+      throw new Error(`${file} ${size} byte, lebih dari batas ${HERO_MAX_BYTES}`);
+    console.log(`og: ${name} (hero) ${(size / 1024).toFixed(1)} KB`);
+  }
+}
+
 /** Ikon aplikasi: simbol di latar terang dengan ruang tepi, untuk iOS dan web manifest. */
 async function renderIcons() {
   const icon = (size: number, padding: number) =>
@@ -356,6 +392,13 @@ async function main() {
     console.log(
       `og: ${cards.length} gambar, rata-rata ${(total / cards.length / 1024).toFixed(1)} KB`,
     );
+    const heroPage = await browser.newPage({
+      viewport: { width: WIDTH, height: HEIGHT },
+      deviceScaleFactor: 1,
+    });
+    // Menimpa kartu teks landing yang dibuat di atas.
+    await renderHero(heroPage, "en", [localized("en", "home"), "default"]);
+    await renderHero(heroPage, "id", [localized("id", "home")]);
   } finally {
     await browser.close();
   }
