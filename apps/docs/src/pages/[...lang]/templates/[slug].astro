@@ -27,10 +27,10 @@ const target = localePath(locale, templateDetailPath(template));
         <meta name="robots" content="noindex" />
         <meta http-equiv="refresh" content={`0; url=${target}`} />
         <link rel="canonical" href={new URL(target, Astro.site)} />
-        <title>{template.title} - MarkasUI</title>
+        <title>{template.headline[locale]} - MarkasUI</title>
       </head>
       <body>
-        <a href={target}>{template.title}</a>
+        <a href={target}>{template.headline[locale]}</a>
       </body>
     </html>
   ) : (

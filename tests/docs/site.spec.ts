@@ -870,3 +870,40 @@ test.describe("tema landing", () => {
     await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
   });
 });
+
+test("template memakai judul deskriptif, label merek, dan sektor yang cocok", async ({
+  page,
+}) => {
+  await page.goto("/templates/larisa");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "E-commerce Store Dashboard",
+  );
+  await expect(page).toHaveTitle(/^E-commerce Store Dashboard: /);
+  const main = page.locator("main");
+  await expect(main.getByText("Larisa", { exact: true })).toBeVisible();
+  const sectors = main.getByRole("list", { name: "Recommended for" });
+  await expect(sectors.getByRole("listitem")).toHaveText([
+    "Online stores",
+    "Retail",
+    "UMKM",
+    "F&B",
+  ]);
+
+  await page.goto("/id/pages/konsultan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Website Firma Konsultan",
+  );
+  await expect(
+    page.locator("main").getByRole("list", { name: "Cocok untuk" }),
+  ).toContainText("Firma hukum");
+
+  await page.goto("/pages");
+  const card = page.locator("main a[href='/pages/belajar']");
+  await expect(card.getByRole("heading", { level: 2 })).toHaveText(
+    "Online Course Landing Page",
+  );
+  await expect(card).toContainText("Belajar");
+  await expect(
+    card.getByRole("list", { name: "Recommended for" }).getByRole("listitem"),
+  ).toHaveCount(3);
+});

@@ -2,9 +2,17 @@
   "name": "catatan",
   "kind": "page",
   "title": "Catatan",
+  "headline": {
+    "en": "Productivity App Landing Page",
+    "id": "Landing Page Aplikasi Produktivitas"
+  },
   "description": {
-    "en": "Welcome page for a notes app called Lembar: a soft blue sky hero with drifting clouds, a torn paper collage around the app, five tabs that swap the mockup, a stories carousel, a monthly or yearly pricing toggle, FAQ, and an email form with a toast.",
-    "id": "Halaman sambutan untuk aplikasi catatan bernama Lembar: hero langit biru dengan awan yang bergerak pelan, kolase kertas sobek di sekitar aplikasi, lima tab yang mengganti mockup, carousel cerita pengguna, toggle harga bulanan atau tahunan, FAQ, dan form email dengan toast."
+    "en": "Catatan is a landing page for SaaS startups and productivity apps: walk visitors through the product feature by feature, share user stories, compare monthly or yearly pricing, answer questions, and collect email sign-ups.",
+    "id": "Catatan adalah landing page untuk startup SaaS dan aplikasi produktivitas: kenalkan produk fitur demi fitur, bagikan cerita pengguna, bandingkan harga bulanan atau tahunan, jawab pertanyaan, dan kumpulkan pendaftar email."
+  },
+  "sectors": {
+    "en": ["SaaS startups", "Productivity apps"],
+    "id": ["Startup SaaS", "Aplikasi produktivitas"]
   },
   "components": ["button", "faq", "input", "toast"],
   "addedAt": "2026-11-09"

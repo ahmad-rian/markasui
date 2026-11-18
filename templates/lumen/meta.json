@@ -1,9 +1,17 @@
 {
   "name": "lumen",
   "title": "Lumen",
+  "headline": {
+    "en": "B2B Sales CRM",
+    "id": "CRM Penjualan B2B"
+  },
   "description": {
-    "en": "Complete CRM workspace with ten pages: home with tasks and monthly target, selectable customer profiles, a deals pipeline board, finance with sortable invoices, growth funnel by period, projects with a detail drawer, a month calendar with new events, reports, files, and settings.",
-    "id": "Ruang kerja CRM lengkap dengan sepuluh halaman: beranda berisi tugas dan target bulanan, profil pelanggan yang bisa dipilih, papan pipeline deal, keuangan dengan invoice yang bisa diurutkan, funnel pertumbuhan per periode, proyek dengan drawer detail, kalender bulanan dengan agenda baru, laporan, berkas, dan pengaturan."
+    "en": "Lumen is a sales CRM for B2B sales teams, distributors, and logistics companies: move deals through a pipeline, keep customer profiles, follow up on invoices, hit monthly targets, and plan projects, meetings, and reports.",
+    "id": "Lumen adalah CRM penjualan untuk tim sales B2B, distributor, dan perusahaan logistik: gerakkan deal di pipeline, simpan profil pelanggan, tagih invoice, kejar target bulanan, serta atur proyek, jadwal, dan laporan."
+  },
+  "sectors": {
+    "en": ["B2B sales", "Distributors", "Logistics"],
+    "id": ["Sales B2B", "Distributor", "Logistik"]
   },
   "components": [
     "avatar",

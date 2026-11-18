@@ -4,25 +4,29 @@ import { expect, test } from "@playwright/test";
 const DETAILS = [
   {
     path: "/templates/larisa",
-    title: "Larisa",
+    slug: "larisa",
+    title: "E-commerce Store Dashboard",
     components: "## Components used",
     more: "More options",
   },
   {
     path: "/id/templates/larisa",
-    title: "Larisa",
+    slug: "larisa",
+    title: "Dashboard Toko E-commerce",
     components: "## Komponen yang dipakai",
     more: "Opsi lain",
   },
   {
     path: "/pages/belajar",
-    title: "Belajar",
+    slug: "belajar",
+    title: "Online Course Landing Page",
     components: "## Components used",
     more: "More options",
   },
   {
     path: "/id/pages/belajar",
-    title: "Belajar",
+    slug: "belajar",
+    title: "Landing Page Kursus Online",
     components: "## Komponen yang dipakai",
     more: "Opsi lain",
   },
@@ -63,9 +67,7 @@ for (const detail of DETAILS) {
     const locale = detail.path.startsWith("/id/") ? "/id" : "";
     expect(markdown).toContain(`${locale}/components/modal)`);
     expect(markdown).toContain("npx markasui@latest add ");
-    expect(markdown).toContain(
-      `/demo/templates/${detail.title.toLowerCase()}/react`,
-    );
+    expect(markdown).toContain(`/demo/templates/${detail.slug}/react`);
   });
 }
 
@@ -79,7 +81,7 @@ test("Copy prompt template berisi file source dan demo", async ({
   await page.getByRole("menuitem", { name: "Copy prompt" }).click();
   const prompt = await page.evaluate(() => navigator.clipboard.readText());
   expect(prompt).toMatch(
-    /^Build the Larisa dashboard template from MarkasUI in my \w+ project\./,
+    /^Build the E-commerce Store Dashboard template \(Larisa\) from MarkasUI in my \w+ project\./,
   );
   expect(prompt).toContain("https://raw.githubusercontent.com/");
   expect(prompt).toContain("/demo/templates/larisa/");
@@ -96,7 +98,7 @@ test("llms.txt dan llms-full.txt memuat template dan page", async ({
     "/id/pages/belajar.md",
   );
   expect(await (await request.get("/llms-full.txt")).text()).toContain(
-    "# Larisa",
+    "# E-commerce Store Dashboard",
   );
 
   const sitemap = await (await request.get("/sitemap.xml")).text();

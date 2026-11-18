@@ -2,9 +2,17 @@
   "name": "pipeline",
   "kind": "dashboard",
   "title": "Pipeline",
+  "headline": {
+    "en": "Lead & Call Center CRM",
+    "id": "CRM Lead & Call Center"
+  },
   "description": {
-    "en": "Workspace CRM in clean grey with five pages: a workspace with a clickable schedule timeline, new lead cards with interest filters and a detail drawer, day tasks with status menus, and a live call panel with a summary, plus searchable leads, a pipeline board, a week calendar, and messages.",
-    "id": "Ruang kerja CRM bernuansa abu bersih dengan lima halaman: workspace berisi timeline jadwal yang bisa diklik, kartu lead baru dengan filter minat dan drawer detail, tugas harian dengan menu status, serta panel panggilan langsung dengan ringkasan, ditambah daftar lead yang bisa dicari, papan pipeline, kalender mingguan, dan pesan."
+    "en": "Pipeline is a lead and call center CRM for property agents, insurance teams, and telesales: sort new leads by interest, schedule follow-ups, handle calls from a live call panel, and move every lead through the pipeline.",
+    "id": "Pipeline adalah CRM lead dan call center untuk agen properti, tim asuransi, dan telesales: saring lead baru berdasarkan minat, jadwalkan follow-up, tangani panggilan dari panel panggilan langsung, dan gerakkan setiap lead di pipeline."
+  },
+  "sectors": {
+    "en": ["Property", "Insurance", "Telesales teams"],
+    "id": ["Properti", "Asuransi", "Tim telesales"]
   },
   "components": [
     "avatar",

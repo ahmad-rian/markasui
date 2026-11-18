@@ -31,7 +31,8 @@ const STRINGS = {
       dashboard: "Dashboard template",
       page: "Welcome page",
     } satisfies Record<TemplateKind, string>,
-    noun: { dashboard: "dashboard template", page: "welcome page" },
+    name: "Template name",
+    sectors: "Recommended for",
     type: "Type",
     frameworks: "Frameworks",
     page: "Page",
@@ -41,8 +42,8 @@ const STRINGS = {
     getCodeText:
       "Add every component with the CLI, then copy the page file for your framework from GitHub. The live demo shows the finished page.",
     table: "| Framework | Source file | Live demo |",
-    intro: (title: string, noun: string, framework: string) =>
-      `Build the ${title} ${noun} from MarkasUI in my ${framework} project.`,
+    intro: (headline: string, name: string, framework: string) =>
+      `Build the ${headline} template (${name}) from MarkasUI in my ${framework} project.`,
     rules: "Rules:",
     install: (command: string) =>
       `Install the components it uses first: \`${command}\`.`,
@@ -58,7 +59,8 @@ const STRINGS = {
       dashboard: "Template dashboard",
       page: "Welcome page",
     } satisfies Record<TemplateKind, string>,
-    noun: { dashboard: "template dashboard", page: "welcome page" },
+    name: "Nama template",
+    sectors: "Cocok untuk",
     type: "Jenis",
     frameworks: "Framework",
     page: "Halaman",
@@ -68,8 +70,8 @@ const STRINGS = {
     getCodeText:
       "Tambahkan semua komponennya lewat CLI, lalu salin file halaman untuk framework kamu dari GitHub. Demo langsung menampilkan halaman jadinya.",
     table: "| Framework | File source | Demo langsung |",
-    intro: (title: string, noun: string, framework: string) =>
-      `Buatkan ${noun} ${title} dari MarkasUI di project ${framework} saya.`,
+    intro: (headline: string, name: string, framework: string) =>
+      `Buatkan template ${headline} (${name}) dari MarkasUI di project ${framework} saya.`,
     rules: "Aturan:",
     install: (command: string) =>
       `Pasang dulu komponen yang dipakainya: \`${command}\`.`,
@@ -117,10 +119,12 @@ export function templateMarkdown(
     return `| ${FRAMEWORK_LABELS[fw]} | [\`${path}\`](${SITE.repo}/blob/${BRANCH}/${path}) | ${demoUrl(template, fw, siteUrl)} |`;
   });
 
-  return `# ${template.title}
+  return `# ${template.headline[locale]}
 
 ${template.description[locale]}
 
+- ${strings.name}: ${template.title}
+- ${strings.sectors}: ${template.sectors[locale].join(", ")}
 - ${strings.type}: ${strings.kind[template.kind]}
 - ${strings.frameworks}: ${frameworkList(frameworks, locale)}
 - ${strings.page}: ${url(templateDetailPath(template))}
@@ -162,7 +166,7 @@ export function templatePrompt(
     strings.demo(demoUrl(template, framework, siteUrl)),
     strings.keep,
   ];
-  return `${strings.intro(template.title, strings.noun[template.kind], FRAMEWORK_LABELS[framework])}
+  return `${strings.intro(template.headline[locale], template.title, FRAMEWORK_LABELS[framework])}
 
 ${template.description[locale]}
 

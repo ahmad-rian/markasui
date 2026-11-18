@@ -29,7 +29,7 @@ const small = "h-[400%] w-[400%] scale-25";
             <div class="frame-panel relative aspect-[16/10] overflow-hidden">
               <iframe
                 data-lazy-src={`/demo/templates/${template.name}/blade`}
-                title={template.title}
+                title={template.headline[locale]}
                 loading="lazy"
                 tabindex="-1"
                 aria-hidden="true"
@@ -37,9 +37,9 @@ const small = "h-[400%] w-[400%] scale-25";
               />
             </div>
           </div>
-          <p class="mt-3 flex items-baseline gap-2 px-1">
-            <span class="font-medium text-ink">{template.title}</span>
-            <span class="truncate text-sm text-muted">{template.description[locale]}</span>
+          <p class="mt-3 flex items-baseline justify-between gap-3 px-1">
+            <span class="min-w-0 font-medium text-ink">{template.headline[locale]}</span>
+            <span class="shrink-0 text-sm text-muted">{template.title}</span>
           </p>
         </a>
       </li>

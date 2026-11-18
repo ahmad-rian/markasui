@@ -159,6 +159,14 @@ function docCards(): Card[] {
   });
 }
 
+const TEMPLATE_EYEBROWS: Record<
+  Locale,
+  Record<"dashboard" | "page", string>
+> = {
+  en: { dashboard: "Dashboard template", page: "Landing page" },
+  id: { dashboard: "Template dashboard", page: "Landing page" },
+};
+
 /** Template yang tampil di situs (versi wajib lengkap), sama dengan apps/docs/src/lib/templates.ts. */
 function templateCards(): Card[] {
   const dir = join(root, "templates");
@@ -176,18 +184,17 @@ function templateCards(): Card[] {
       const meta = readJson<{
         title: string;
         kind?: string;
+        headline: Record<Locale, string>;
         description: Record<Locale, string>;
       }>(join(dir, slug, "meta.json"));
       const page = meta.kind === "page";
-      return [
-        {
-          file: `${page ? "pages" : "templates"}/${slug}`,
-          eyebrow: page ? "Landing page" : "Dashboard template",
-          title: meta.title,
-          description: meta.description.en,
-          frameworks: TEMPLATE_FRAMEWORKS.filter(exists),
-        },
-      ];
+      return LOCALES.map((locale) => ({
+        file: localized(locale, `${page ? "pages" : "templates"}/${slug}`),
+        eyebrow: `${meta.title} · ${TEMPLATE_EYEBROWS[locale][page ? "page" : "dashboard"]}`,
+        title: meta.headline[locale],
+        description: meta.description[locale],
+        frameworks: TEMPLATE_FRAMEWORKS.filter(exists),
+      }));
     });
 }
 

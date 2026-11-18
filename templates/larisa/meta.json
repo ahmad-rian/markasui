@@ -1,9 +1,17 @@
 {
   "name": "larisa",
   "title": "Larisa",
+  "headline": {
+    "en": "E-commerce Store Dashboard",
+    "id": "Dashboard Toko E-commerce"
+  },
   "description": {
-    "en": "Complete store dashboard with seven pages: business overview with period filter and sortable best sellers, analytics with traffic trend, funnel and channels, customers with segments and a detail drawer, integrations with switches, a messages inbox with replies, reviews with star filter and reply modal, and a searchable help center.",
-    "id": "Dashboard toko lengkap dengan tujuh halaman: ringkasan bisnis dengan filter periode dan tabel penjual terlaris yang bisa diurutkan, analitik dengan tren trafik, funnel, dan kanal, pelanggan dengan segmen dan drawer detail, integrasi dengan switch, kotak pesan dengan balasan, ulasan dengan filter bintang dan modal balasan, serta pusat bantuan yang bisa dicari."
+    "en": "Larisa is a store dashboard for online shops, retail, UMKM, and F&B businesses: track sales and best sellers, read traffic and funnel analytics, segment customers, answer messages and reviews, and connect sales channels.",
+    "id": "Larisa adalah dashboard toko untuk toko online, ritel, UMKM, dan bisnis F&B: pantau penjualan dan produk terlaris, baca analitik trafik dan funnel, kelompokkan pelanggan, balas pesan dan ulasan, serta hubungkan kanal penjualan."
+  },
+  "sectors": {
+    "en": ["Online stores", "Retail", "UMKM", "F&B"],
+    "id": ["Toko online", "Ritel", "UMKM", "F&B"]
   },
   "components": [
     "accordion",

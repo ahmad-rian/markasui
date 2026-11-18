@@ -1,8 +1,9 @@
 ---
 /** Daftar kartu template (dashboard atau page) dengan thumbnail iframe lazy. Dipakai /templates dan /pages. */
 import Icon from "../Icon.astro";
+import TemplateSectors from "./TemplateSectors.astro";
 import Base from "../../layouts/Base.astro";
-import { localePath, type Locale } from "../../lib/i18n";
+import { localePath, t, type Locale } from "../../lib/i18n";
 import { collectionPage } from "../../lib/seo";
 import { KIND_BASE, templateDetailPath, type Template } from "../../lib/templates";
 
@@ -21,10 +22,11 @@ interface Props {
 const { title, subtitle, templates, locale, empty, seo, kind } = Astro.props;
 const absolute = (path: string) => new URL(localePath(locale, path), Astro.site).toString();
 const base = KIND_BASE[kind];
+const sectorsLabel = t(locale).templates.sectors;
 const jsonLd = [
   collectionPage(
     { url: absolute(base), name: seo.title, description: seo.description, locale },
-    templates.map((template) => ({ name: template.title, url: absolute(templateDetailPath(template)) })),
+    templates.map((template) => ({ name: template.headline[locale], url: absolute(templateDetailPath(template)) })),
   ),
 ];
 ---
@@ -51,16 +53,20 @@ const jsonLd = [
                 <div class="frame-panel relative aspect-[16/10] overflow-hidden">
                   <iframe
                     src={`/demo/templates/${template.name}/react`}
-                    title={template.title}
+                    title={template.headline[locale]}
                     loading="lazy"
                     tabindex="-1"
                     aria-hidden="true"
                     class="pointer-events-none absolute top-0 left-0 h-[900px] w-[1440px] origin-top-left scale-[0.4] border-0 sm:scale-[0.42] lg:scale-[0.41]"
                   />
                 </div>
-                <div class="px-3 pt-3 pb-2">
-                  <h2 class="font-medium text-ink">{template.title}</h2>
+                <div class="px-3 pt-3 pb-2.5">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <h2 class="font-medium text-ink">{template.headline[locale]}</h2>
+                    <span class="shrink-0 text-sm text-muted">{template.title}</span>
+                  </div>
                   <p class="mt-1 text-sm text-muted">{template.description[locale]}</p>
+                  <TemplateSectors label={sectorsLabel} sectors={template.sectors[locale]} class="mt-3" />
                 </div>
               </a>
             </li>

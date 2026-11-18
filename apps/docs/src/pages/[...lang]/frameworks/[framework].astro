@@ -134,7 +134,10 @@ const card = "block h-full rounded-xl border border-line p-4 transition-colors h
             {templates.map((template) => (
               <li>
                 <a href={`${localePath(locale, templateDetailPath(template))}?framework=${framework}`} class={card}>
-                  <span class="font-medium text-ink">{template.title}</span>
+                  <span class="flex items-baseline justify-between gap-3">
+                    <span class="font-medium text-ink">{template.headline[locale]}</span>
+                    <span class="shrink-0 text-sm text-muted">{template.title}</span>
+                  </span>
                   <span class="mt-1 line-clamp-2 block text-sm text-muted">{template.description[locale]}</span>
                 </a>
               </li>

@@ -1,9 +1,17 @@
 {
   "name": "kirana",
   "title": "Kirana",
+  "headline": {
+    "en": "Agency CRM Dashboard",
+    "id": "Dashboard CRM Agensi"
+  },
   "description": {
-    "en": "Glassy CRM workspace in soft blue with seven pages: customer information with colorful deal cards, a task calendar, a stage funnel and an editable profile, plus home tasks, book summaries, a founders network, finance with sortable invoices, growth by period, and projects.",
-    "id": "Ruang kerja CRM bergaya kaca bernuansa biru lembut dengan tujuh halaman: informasi pelanggan berisi kartu deal berwarna, kalender tugas, funnel tahap, dan profil yang bisa diedit, ditambah tugas beranda, ringkasan buku, jaringan founder, keuangan dengan invoice yang bisa diurutkan, pertumbuhan per periode, dan proyek."
+    "en": "Kirana is a CRM dashboard for agencies, consultants, startups, and finance teams: track clients and deals through a funnel, plan tasks on a calendar, manage invoices and growth, and keep projects and contacts in one place.",
+    "id": "Kirana adalah dashboard CRM untuk agensi, konsultan, startup, dan tim keuangan: pantau klien dan deal lewat funnel, rencanakan tugas di kalender, kelola invoice dan pertumbuhan, serta simpan proyek dan kontak di satu tempat."
+  },
+  "sectors": {
+    "en": ["Agencies", "Consultants", "Startups", "Finance teams"],
+    "id": ["Agensi", "Konsultan", "Startup", "Tim keuangan"]
   },
   "components": [
     "avatar",

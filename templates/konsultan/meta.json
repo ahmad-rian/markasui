@@ -1,10 +1,18 @@
 {
   "name": "konsultan",
-  "title": "Pranata",
   "kind": "page",
+  "title": "Pranata",
+  "headline": {
+    "en": "Consulting Firm Website",
+    "id": "Website Firma Konsultan"
+  },
   "description": {
-    "en": "Consulting firm welcome page with a deep green editorial hero, a floating growth chart card, service tabs with key numbers, three feature cards with a lime recognition card, practice cards filtered by industry, case studies with big metrics, a testimonial slider, client logos, and a consultation form with a toast.",
-    "id": "Halaman sambutan firma konsultan dengan hero editorial hijau tua, kartu grafik pertumbuhan mengambang, tab layanan dengan angka utama, tiga kartu fitur dengan kartu penghargaan lime, kartu praktik yang bisa disaring per industri, studi kasus dengan metrik besar, slider testimoni, logo klien, dan form konsultasi dengan toast."
+    "en": "Pranata is a website for business consulting, financial advisory, and law firms: present services and practice areas by industry, back them with case studies and client testimonials, and turn visitors into consultation requests.",
+    "id": "Pranata adalah website untuk konsultan bisnis, penasihat keuangan, dan firma hukum: sajikan layanan dan bidang praktik per industri, perkuat dengan studi kasus dan testimoni klien, lalu ubah pengunjung menjadi permintaan konsultasi."
+  },
+  "sectors": {
+    "en": ["Business consulting", "Financial advisory", "Law firms"],
+    "id": ["Konsultan bisnis", "Penasihat keuangan", "Firma hukum"]
   },
   "components": ["button", "input", "select", "textarea", "toast"],
   "addedAt": "2026-11-09"

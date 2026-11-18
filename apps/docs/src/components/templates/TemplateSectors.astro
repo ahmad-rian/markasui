@@ -1,0 +1,19 @@
+---
+/** Baris "Recommended for" berisi chip sektor yang cocok untuk satu template. Dipakai kartu dan halaman detail. */
+interface Props {
+  label: string;
+  sectors: string[];
+  class?: string;
+}
+
+const { label, sectors, class: className } = Astro.props;
+const row = "flex flex-wrap items-center gap-x-2 gap-y-1.5";
+const chip = "inline-flex h-6 items-center rounded-md px-2 text-xs text-ink/80 shadow-[0_0_0_1px_var(--color-line)]";
+---
+
+<div class:list={[row, className]}>
+  <span class="text-sm text-muted">{label}</span>
+  <ul class="flex flex-wrap gap-1.5" aria-label={label}>
+    {sectors.map((sector) => <li class={chip}>{sector}</li>)}
+  </ul>
+</div>

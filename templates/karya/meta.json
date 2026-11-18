@@ -1,10 +1,18 @@
 {
   "name": "karya",
-  "title": "Karya",
   "kind": "page",
+  "title": "Karya",
+  "headline": {
+    "en": "Product Designer Portfolio",
+    "id": "Portofolio Desainer Produk"
+  },
   "description": {
-    "en": "Product designer portfolio on light gray: a small pill navbar with a yellow mail button, a serif hero with a pile of colorful sticker pills that fall into place and can be dragged around, case study cards with UI mockups and a modal, a playground with a radius slider, a primary token tint and a pop switch, an about section with an experience timeline, and a contact form with a toast.",
-    "id": "Portofolio desainer produk berlatar abu terang: navbar pill kecil dengan tombol surat kuning, hero serif dengan tumpukan stiker pill warna-warni yang berjatuhan dan bisa diseret, kartu studi kasus dengan mockup UI dan modal, playground berisi slider radius, campuran token primary, dan switch pop, bagian about dengan timeline pengalaman, serta form kontak dengan toast."
+    "en": "Karya is a portfolio for product designers and UI/UX freelancers: present case studies with project details, show interactive design experiments, list your experience, and let clients reach you through a contact form.",
+    "id": "Karya adalah portofolio untuk desainer produk dan freelancer UI/UX: tampilkan studi kasus beserta detail proyek, pamerkan eksperimen desain interaktif, cantumkan pengalaman, dan terima pesan klien lewat form kontak."
+  },
+  "sectors": {
+    "en": ["Designers", "UI/UX freelancers"],
+    "id": ["Desainer", "Freelancer UI/UX"]
   },
   "components": [
     "button",

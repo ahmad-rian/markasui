@@ -29,7 +29,7 @@ export const GET: APIRoute = async ({ site, params }) => {
 ${getTemplatesByKind(kind)
   .map(
     (template) =>
-      `- [${template.title}](${url(`${KIND_BASE[kind]}/${template.name}.md`)}): ${template.description[locale]}`,
+      `- [${template.headline[locale]}](${url(`${KIND_BASE[kind]}/${template.name}.md`)}): ${template.description[locale]}`,
   )
   .join("\n")}`;
 

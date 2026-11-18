@@ -37,7 +37,9 @@ const overviews: Link[] = [
   { href: localePath(locale, KIND_BASE.page), label: strings.pages, tag: null },
 ];
 const kindLinks = (kind: TemplateKind): Link[] =>
-  getTemplatesByKind(kind).map((template) => ({ href: localePath(locale, templateDetailPath(template)), label: template.title, tag: null }));
+  getTemplatesByKind(kind)
+    .map((template) => ({ href: localePath(locale, templateDetailPath(template)), label: template.headline[locale], tag: null }))
+    .sort((a, b) => a.label.localeCompare(b.label, locale));
 const groups = groupByCategory(await getComponents(), locale);
 
 const allSections: Section[] = [
@@ -77,7 +79,7 @@ const sections = allSections.filter((section) => section.links.length > 0);
               <a
                 href={link.href}
                 aria-current={path === link.href ? "page" : undefined}
-                class="relative -ml-px flex h-9 items-center justify-between gap-2 border-l-2 border-transparent pr-2 pl-5 text-[15px] text-ink/75 transition-colors duration-150 ease-out hover:text-ink aria-[current=page]:border-ink aria-[current=page]:font-medium aria-[current=page]:text-ink"
+                class="relative -ml-px flex min-h-9 items-center py-1.5 justify-between gap-2 border-l-2 border-transparent pr-2 pl-5 text-[15px] text-ink/75 transition-colors duration-150 ease-out hover:text-ink aria-[current=page]:border-ink aria-[current=page]:font-medium aria-[current=page]:text-ink"
               >
                 {link.label}
                 {link.tag && <span class="font-tag text-[15px] text-muted italic">{link.tag}</span>}

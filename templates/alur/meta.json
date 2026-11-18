@@ -1,9 +1,17 @@
 {
   "name": "alur",
   "title": "Alur",
+  "headline": {
+    "en": "Workflow Automation Dashboard",
+    "id": "Dashboard Otomasi Workflow"
+  },
   "description": {
-    "en": "Workflow automation workspace with nine pages: My Workflows with pastel folders, filter pills, search, card menus, favourites, and a detail drawer, plus home, templates, tools, knowledge base, marketplace, notifications, trash, and settings.",
-    "id": "Ruang kerja otomasi alur kerja dengan sembilan halaman: My Workflows berisi folder pastel, filter pill, pencarian, menu kartu, favorit, dan drawer detail, ditambah beranda, template, tools, knowledge base, marketplace, notifikasi, sampah, dan pengaturan."
+    "en": "Alur is a workflow automation dashboard for SaaS products, operations teams, and agencies: organize workflows in folders, start from templates, connect tools, and manage alerts, a knowledge base, and settings in one workspace.",
+    "id": "Alur adalah dashboard otomasi workflow untuk produk SaaS, tim operasional, dan agensi: atur workflow dalam folder, mulai dari template, hubungkan tools, serta kelola notifikasi, knowledge base, dan pengaturan dalam satu ruang kerja."
+  },
+  "sectors": {
+    "en": ["SaaS", "Operations teams", "Agencies"],
+    "id": ["SaaS", "Tim operasional", "Agensi"]
   },
   "components": [
     "alert-dialog",

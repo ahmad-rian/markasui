@@ -5,7 +5,7 @@ dan Angular di-porting bertahap (panduan: .cache/templates-port-brief.md).
 
 ```
 templates/<slug>/
-  meta.json                     judul dan deskripsi (Inggris + Indonesia), daftar komponen yang dipakai
+  meta.json                     title (nama merek), headline, description, dan sectors (en + id), komponen yang dipakai
   blade/<slug>.blade.php
   react/<Pascal>.tsx            export default
   vue/<Pascal>.vue

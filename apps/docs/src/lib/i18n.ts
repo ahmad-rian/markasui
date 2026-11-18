@@ -245,6 +245,7 @@ const en = {
       "Add every component this template uses, then copy the page itself from GitHub.",
     source: "View source on GitHub",
     back: "All templates",
+    sectors: "Recommended for",
   },
   pages: {
     title: "Pages",
@@ -300,10 +301,8 @@ const en = {
       `Copy-paste Tailwind CSS code for ${frameworks}, with props and accessibility notes.`,
       `Tailwind CSS code for ${frameworks}.`,
     ],
-    dashboardTitle: (title: string, frameworks: string) =>
-      `${title}: Tailwind dashboard template for ${frameworks}`,
-    pageTitle: (title: string, frameworks: string) =>
-      `${title}: Tailwind landing page for ${frameworks}`,
+    templateTitle: (headline: string, frameworks: string) =>
+      `${headline}: free Tailwind template for ${frameworks}`,
     templateTails: (frameworks: string) => [
       `Free source code in ${frameworks}, built from MarkasUI components.`,
       `Free source in ${frameworks}.`,
@@ -551,6 +550,7 @@ const id: Dictionary = {
       "Tambahkan semua komponen yang dipakai template ini, lalu salin halamannya dari GitHub.",
     source: "Lihat source di GitHub",
     back: "Semua template",
+    sectors: "Cocok untuk",
   },
   pages: {
     title: "Halaman",
@@ -607,10 +607,8 @@ const id: Dictionary = {
       `Kode Tailwind CSS siap salin untuk ${frameworks}, lengkap dengan props dan catatan aksesibilitas.`,
       `Kode Tailwind CSS untuk ${frameworks}.`,
     ],
-    dashboardTitle: (title: string, frameworks: string) =>
-      `${title}: template dashboard Tailwind untuk ${frameworks}`,
-    pageTitle: (title: string, frameworks: string) =>
-      `${title}: landing page Tailwind untuk ${frameworks}`,
+    templateTitle: (headline: string, frameworks: string) =>
+      `${headline}: template Tailwind gratis untuk ${frameworks}`,
     templateTails: (frameworks: string) => [
       `Source gratis dalam ${frameworks}, disusun dari komponen MarkasUI.`,
       `Source gratis dalam ${frameworks}.`,

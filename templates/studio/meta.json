@@ -1,10 +1,18 @@
 {
   "name": "studio",
-  "title": "Studio",
   "kind": "page",
+  "title": "Studio",
+  "headline": {
+    "en": "Playful Creative Portfolio",
+    "id": "Portofolio Kreatif Ceria"
+  },
   "description": {
-    "en": "Product designer portfolio on lined notebook paper: pill navbar with coloured tabs and a mobile menu, a pixel name box with sticky notes, a what's up section with taped polaroids and skill tags, folder style case studies with a filter and a case study modal, a playground grid, and a contact form with validation and a toast.",
-    "id": "Portofolio desainer produk di atas kertas buku bergaris: navbar pill dengan tab berwarna dan menu mobile, kotak nama piksel dengan sticky note, bagian what's up dengan polaroid berselotip dan tag keahlian, studi kasus bergaya map dengan filter dan modal studi kasus, grid playground, serta form kontak dengan validasi dan toast."
+    "en": "Studio is a playful portfolio for students, illustrators, and junior creatives: introduce yourself and your skills, filter case studies by type, show side projects, and receive messages through a validated contact form.",
+    "id": "Studio adalah portofolio ceria untuk pelajar, ilustrator, dan kreatif junior: perkenalkan diri dan keahlian, saring studi kasus per jenis, pamerkan proyek sampingan, dan terima pesan lewat form kontak yang tervalidasi."
+  },
+  "sectors": {
+    "en": ["Students", "Illustrators", "Junior creatives"],
+    "id": ["Pelajar", "Ilustrator", "Kreatif junior"]
   },
   "components": ["button", "input", "modal", "textarea", "toast"],
   "addedAt": "2026-11-09"

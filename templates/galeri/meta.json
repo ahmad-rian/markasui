@@ -1,10 +1,18 @@
 {
   "name": "galeri",
-  "title": "Galeri",
   "kind": "page",
+  "title": "Galeri",
+  "headline": {
+    "en": "Creative Marketplace Landing Page",
+    "id": "Landing Page Marketplace Kreatif"
+  },
   "description": {
-    "en": "Art marketplace landing page on soft gray: a fan carousel of abstract artworks you can drag, step, or use with arrow keys, floating collaborator cursors, media categories, featured artists with a medium filter and follow buttons, three steps, monthly or yearly Rupiah pricing, an FAQ, and a weekly drop signup with Toast.",
-    "id": "Landing page marketplace karya seni berlatar abu lembut: carousel kipas berisi karya abstrak yang bisa digeser, dipindah dengan tombol, atau tombol panah, kursor kolaborator mengambang, kategori medium, seniman unggulan dengan filter medium dan tombol follow, tiga langkah, harga Rupiah bulanan atau tahunan, FAQ, dan pendaftaran kabar mingguan dengan Toast."
+    "en": "Galeri is a landing page for art marketplaces, galleries, and creator communities: showcase featured works and artists, browse by medium, explain how buying works, compare plans, and grow a weekly newsletter.",
+    "id": "Galeri adalah landing page untuk marketplace seni, galeri, dan komunitas kreator: pamerkan karya dan seniman unggulan, telusuri per medium, jelaskan cara membeli, bandingkan paket, dan kembangkan newsletter mingguan."
+  },
+  "sectors": {
+    "en": ["Art marketplaces", "Galleries", "Creator communities"],
+    "id": ["Marketplace seni", "Galeri", "Komunitas kreator"]
   },
   "components": ["accordion", "button", "input", "toast"],
   "addedAt": "2026-11-09"
