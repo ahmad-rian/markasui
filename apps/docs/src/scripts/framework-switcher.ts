@@ -1,5 +1,14 @@
+import type { Framework } from "@markasui/registry/frameworks";
+import { showFrameworkSplash } from "./framework-splash";
 import { onPageLoad } from "./lifecycle";
 import { getFramework, isFramework, setFramework } from "./prefs";
+
+/** Pilihan eksplisit pengunjung: simpan, lalu beri tanda kalau framework-nya memang berganti. */
+function choose(framework: Framework) {
+  if (framework === getFramework()) return;
+  setFramework(framework);
+  showFrameworkSplash(framework);
+}
 
 function sync() {
   const current = getFramework();
@@ -23,8 +32,7 @@ document.addEventListener("click", (event) => {
   const radio = (event.target as HTMLElement).closest<HTMLElement>(
     "[data-framework-switcher] [role=radio]",
   );
-  if (radio && isFramework(radio.dataset.value))
-    setFramework(radio.dataset.value);
+  if (radio && isFramework(radio.dataset.value)) choose(radio.dataset.value);
 });
 document.addEventListener("keydown", (event) => {
   const group = (event.target as HTMLElement).closest<HTMLElement>(
@@ -38,7 +46,7 @@ document.addEventListener("keydown", (event) => {
     (radio) => radio.getAttribute("aria-checked") === "true",
   );
   const next = radios[(index + step + radios.length) % radios.length]!;
-  if (isFramework(next.dataset.value)) setFramework(next.dataset.value);
+  if (isFramework(next.dataset.value)) choose(next.dataset.value);
   next.focus();
 });
 

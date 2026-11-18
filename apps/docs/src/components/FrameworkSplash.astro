@@ -1,0 +1,134 @@
+---
+import { FRAMEWORKS } from "@markasui/registry/schema";
+import FrameworkIcon from "./FrameworkIcon.astro";
+import { FRAMEWORK_LABELS } from "../lib/frameworks";
+import { getLocale, t } from "../lib/i18n";
+
+/**
+ * Tanda singkat setelah pengunjung memilih framework lain di switcher: kartu kecil di atas tengah layar
+ * (tidak menangkap klik) plus pengumuman aria-live untuk pembaca layar. Popover manual supaya tampil di
+ * top layer, juga di atas laci menu (dialog modal) di ponsel. Dikendalikan oleh scripts/framework-splash.ts;
+ * tidak tampil saat load pertama atau saat pilihan tersimpan dipasang.
+ */
+const nowShowing = t(getLocale(Astro.url)).framework.nowShowing;
+---
+
+<div class="fw-splash" popover="manual" aria-hidden="true" data-framework-splash>
+  <div class="fw-splash-card">
+    {
+      FRAMEWORKS.map((framework) => (
+        <div class="fw-splash-item" data-splash-fw={framework} data-message={`${nowShowing} ${FRAMEWORK_LABELS[framework]}`} hidden>
+          <span class="fw-splash-logo">
+            <FrameworkIcon framework={framework} brand class="size-6" />
+          </span>
+          <span class="fw-splash-text">
+            <span class="fw-splash-kicker">{nowShowing}</span>
+            <span class="fw-splash-name">{FRAMEWORK_LABELS[framework]}</span>
+          </span>
+        </div>
+      ))
+    }
+  </div>
+</div>
+<p class="sr-only" role="status" aria-live="polite" data-framework-announce></p>
+
+<style is:global>
+  .fw-splash {
+    /* Reset gaya bawaan [popover]: posisi atas tengah, tanpa border dan latar. */
+    inset: 76px 0 auto;
+    margin: 0 auto;
+    width: fit-content;
+    max-width: calc(100vw - 32px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .fw-splash:popover-open {
+    animation: fw-splash 900ms var(--ease-out-quint) forwards;
+  }
+  .fw-splash-card {
+    border-radius: 18px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    padding: 14px 22px 14px 14px;
+    box-shadow:
+      0 0 0 1px var(--color-line),
+      0 12px 32px rgb(0 0 0 / 0.12),
+      0 2px 6px rgb(0 0 0 / 0.06);
+  }
+  .fw-splash-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .fw-splash-item[hidden] {
+    display: none;
+  }
+  .fw-splash-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--color-subtle);
+  }
+  .fw-splash-text {
+    display: grid;
+    gap: 1px;
+  }
+  .fw-splash-kicker {
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--color-muted);
+  }
+  .fw-splash-name {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  /* Bingkai preview dan kode yang barusan berganti: cincin brand tipis yang memudar. Outline, jadi tanpa geser layout. */
+  [data-fw-pulse] {
+    animation: fw-pulse 900ms ease-out;
+  }
+  @keyframes fw-splash {
+    0% {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+    }
+    18%,
+    72% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+  @keyframes fw-pulse {
+    0% {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+    20% {
+      outline: 2px solid color-mix(in oklab, var(--color-brand) 60%, transparent);
+      outline-offset: 2px;
+    }
+    100% {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fw-splash:popover-open {
+      animation: none;
+    }
+    [data-fw-pulse] {
+      animation: none;
+    }
+  }
+</style>

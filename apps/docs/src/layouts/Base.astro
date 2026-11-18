@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import Footer from "../components/Footer.astro";
+import FrameworkSplash from "../components/FrameworkSplash.astro";
 import Header from "../components/Header.astro";
 import LanguageOverlay from "../components/LanguageOverlay.astro";
 import { LOCALES, getLocale, localePath, pagePath, stripLocale, t } from "../lib/i18n";
@@ -172,6 +173,7 @@ const graph = [...jsonLd, ...(breadcrumbs ? [breadcrumbList(site, locale, breadc
     <div class="flex-1"><slot /></div>
     <Footer variant={hero ? "landing" : "default"} />
     <LanguageOverlay />
+    <FrameworkSplash />
     <script>
       // Satu bundle untuk semua skrip situs: lebih sedikit request saat halaman dimuat.
       // preview dulu: HTML asli preview disimpan sebelum Alpine mengubah DOM.

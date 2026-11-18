@@ -83,7 +83,11 @@ const en = {
     fresh: "new",
     updated: "updated",
   },
-  framework: { label: "Framework", example: "Example framework" },
+  framework: {
+    label: "Framework",
+    example: "Example framework",
+    nowShowing: "Now showing",
+  },
   toc: "On this page",
   footer: {
     madeBy: "Made by CV Jenderal Solusi Digital, Purwokerto",
@@ -384,7 +388,11 @@ const id: Dictionary = {
     fresh: "baru",
     updated: "diperbarui",
   },
-  framework: { label: "Framework", example: "Framework contoh" },
+  framework: {
+    label: "Framework",
+    example: "Framework contoh",
+    nowShowing: "Sekarang menampilkan",
+  },
   toc: "Di halaman ini",
   footer: {
     madeBy: "Dibuat oleh CV Jenderal Solusi Digital, Purwokerto",
