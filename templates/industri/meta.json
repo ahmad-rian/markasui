@@ -1,0 +1,29 @@
+{
+  "name": "industri",
+  "kind": "page",
+  "title": "Bahtera",
+  "headline": {
+    "en": "Industrial Supplier Website",
+    "id": "Website Pemasok Industri"
+  },
+  "description": {
+    "en": "Bahtera is a company profile website for manufacturers, oil and gas suppliers, and industrial distributors: present product lines and an equipment catalogue, explain the sourcing process, show certifications and project references, and collect quotation requests.",
+    "id": "Bahtera adalah website profil perusahaan untuk manufaktur, pemasok migas, dan distributor industri: sajikan lini produk dan katalog peralatan, jelaskan proses pengadaan, tampilkan sertifikasi dan referensi proyek, lalu kumpulkan permintaan penawaran."
+  },
+  "sectors": {
+    "en": ["Manufacturing", "Oil and gas suppliers", "Industrial distributors"],
+    "id": ["Manufaktur", "Pemasok migas", "Distributor industri"]
+  },
+  "components": [
+    "badge",
+    "button",
+    "footer",
+    "input",
+    "navbar",
+    "select",
+    "textarea",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

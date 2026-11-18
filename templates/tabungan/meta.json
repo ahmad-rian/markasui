@@ -1,0 +1,30 @@
+{
+  "name": "tabungan",
+  "kind": "page",
+  "title": "Tunas",
+  "headline": {
+    "en": "Savings and Investing Landing Page",
+    "id": "Landing Page Tabungan dan Investasi"
+  },
+  "description": {
+    "en": "Tunas is a landing page for fintech apps, banks and BPR, cooperatives, and investment platforms: explain savings and investment products, let visitors project their savings with a live simulator, show security and licensing, and drive app sign-ups.",
+    "id": "Tunas adalah landing page untuk aplikasi fintech, bank dan BPR, koperasi, dan platform investasi: jelaskan produk tabungan dan investasi, biarkan pengunjung memproyeksikan tabungan lewat simulator langsung, tampilkan keamanan dan perizinan, lalu dorong pendaftaran aplikasi."
+  },
+  "sectors": {
+    "en": ["Fintech", "Banks and BPR", "Cooperatives", "Investment platforms"],
+    "id": ["Fintech", "Bank dan BPR", "Koperasi", "Platform investasi"]
+  },
+  "components": [
+    "badge",
+    "button",
+    "currency-input",
+    "faq",
+    "footer",
+    "input",
+    "navbar",
+    "slider",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

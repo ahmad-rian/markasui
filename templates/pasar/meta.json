@@ -1,0 +1,29 @@
+{
+  "name": "pasar",
+  "kind": "page",
+  "title": "Pasarloka",
+  "headline": {
+    "en": "Online Marketplace Storefront",
+    "id": "Etalase Marketplace Online"
+  },
+  "description": {
+    "en": "Pasarloka is a storefront for online stores, marketplaces, retail chains, and UMKM sellers: browse categories, run a flash deal with a live countdown, add products to a cart and wishlist, and invite small businesses to open a shop.",
+    "id": "Pasarloka adalah etalase untuk toko online, marketplace, jaringan ritel, dan penjual UMKM: jelajahi kategori, jalankan flash deal dengan hitung mundur, tambahkan produk ke keranjang dan wishlist, lalu ajak usaha kecil membuka toko."
+  },
+  "sectors": {
+    "en": ["Online stores", "Marketplaces", "Retail chains", "UMKM"],
+    "id": ["Toko online", "Marketplace", "Jaringan ritel", "UMKM"]
+  },
+  "components": [
+    "avatar",
+    "bottom-navigation",
+    "button",
+    "carousel",
+    "drawer",
+    "footer",
+    "input",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

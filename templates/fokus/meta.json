@@ -1,0 +1,29 @@
+{
+  "name": "fokus",
+  "kind": "page",
+  "title": "Teduh",
+  "headline": {
+    "en": "Focus App Landing Page",
+    "id": "Landing Page Aplikasi Fokus"
+  },
+  "description": {
+    "en": "Teduh is a landing page for productivity apps, digital wellbeing startups, and tools for remote teams: explain how it works, show features and an app preview, share user stories, compare plans, and grow a waitlist.",
+    "id": "Teduh adalah landing page untuk aplikasi produktivitas, startup kesejahteraan digital, dan tool tim remote: jelaskan cara kerja, tampilkan fitur dan pratinjau aplikasi, bagikan cerita pengguna, bandingkan paket, dan kumpulkan waitlist."
+  },
+  "sectors": {
+    "en": ["Productivity apps", "Wellbeing startups", "Remote teams"],
+    "id": ["Aplikasi produktivitas", "Startup wellbeing", "Tim remote"]
+  },
+  "components": [
+    "avatar",
+    "badge",
+    "button",
+    "faq",
+    "footer",
+    "input",
+    "navbar",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

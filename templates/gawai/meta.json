@@ -1,0 +1,31 @@
+{
+  "name": "gawai",
+  "kind": "page",
+  "title": "Lintang",
+  "headline": {
+    "en": "Electronics Store Landing Page",
+    "id": "Landing Page Toko Elektronik"
+  },
+  "description": {
+    "en": "Lintang is a landing page for electronics retailers, gadget stores, and authorised resellers: show devices by category, compare options in a quick view, explain delivery and after-sales service, and connect buyers with a consultant.",
+    "id": "Lintang adalah landing page untuk ritel elektronik, toko gawai, dan reseller resmi: tampilkan perangkat per kategori, bandingkan opsi lewat quick view, jelaskan pengiriman dan purnajual, lalu hubungkan pembeli dengan konsultan."
+  },
+  "sectors": {
+    "en": ["Electronics retailers", "Gadget stores", "Authorised resellers"],
+    "id": ["Ritel elektronik", "Toko gawai", "Reseller resmi"]
+  },
+  "components": [
+    "avatar",
+    "badge",
+    "button",
+    "drawer",
+    "faq",
+    "footer",
+    "input",
+    "modal",
+    "navbar",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

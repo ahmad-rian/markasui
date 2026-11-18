@@ -1,0 +1,36 @@
+{
+  "name": "armada",
+  "kind": "page",
+  "title": "Haluan",
+  "headline": {
+    "en": "Fleet Management SaaS Landing Page",
+    "id": "Landing Page SaaS Manajemen Armada Kapal"
+  },
+  "description": {
+    "en": "Haluan is a landing page for maritime software, shipping lines, and port operators: show a live fleet dashboard, explain tracking, fuel, maintenance, and crew modules, share a customer result, and collect demo requests.",
+    "id": "Haluan adalah landing page untuk software maritim, perusahaan pelayaran, dan operator pelabuhan: tampilkan dasbor armada langsung, jelaskan modul pelacakan, bahan bakar, perawatan, dan kru, bagikan hasil pelanggan, dan kumpulkan permintaan demo."
+  },
+  "sectors": {
+    "en": ["Shipping lines", "Ports and logistics", "Offshore operators"],
+    "id": [
+      "Perusahaan pelayaran",
+      "Pelabuhan dan logistik",
+      "Operator lepas pantai"
+    ]
+  },
+  "components": [
+    "avatar",
+    "avatar-group",
+    "badge",
+    "button",
+    "faq",
+    "footer",
+    "input",
+    "logo-cloud",
+    "navbar",
+    "select",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}
