@@ -25,10 +25,38 @@ const templateLottie: Plugin = {
   },
 };
 
+/** Sajikan templates/<slug>/images/<file> di /template-images/<slug>/<file>, sama seperti situs docs. */
+const IMAGE_TYPES: Record<string, string> = {
+  webp: "image/webp",
+  avif: "image/avif",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  svg: "image/svg+xml",
+};
+const templateImages: Plugin = {
+  name: "template-images",
+  configureServer(server) {
+    server.middlewares.use("/template-images", (req, res, next) => {
+      const match =
+        /^\/([a-z0-9-]+)\/([a-z0-9-]+)\.(webp|avif|jpe?g|png|svg)$/.exec(
+          req.url ?? "",
+        );
+      const file =
+        match &&
+        `${workspace}templates/${match[1]}/images/${match[2]}.${match[3]}`;
+      if (!match || !file || !existsSync(file)) return next();
+      res.setHeader("content-type", IMAGE_TYPES[match[3]!]!);
+      res.end(readFileSync(file));
+    });
+  },
+};
+
 export default defineConfig({
   root,
   plugins: [
     templateLottie,
+    templateImages,
     tailwindcss(),
     react(),
     vue(),
