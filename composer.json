@@ -15,7 +15,7 @@
   },
   "require-dev": {
     "illuminate/events": "13.40.0",
-    "illuminate/filesystem": "13.40.0",
+    "illuminate/filesystem": "13.43.0",
     "illuminate/view": "13.40.0",
     "laravel/pint": "1.32.1"
   }
