@@ -18,6 +18,24 @@ const nearDirective = {
   },
 };
 
+/**
+ * ClientRouter memakai <script type="module" src="data:..."> kosong untuk menunggu skrip module inline. CSP situs
+ * (scripts/csp-policy.ts) tidak mengizinkan data: di script-src, jadi diarahkan ke modul kosong same-origin.
+ */
+const ROUTER_DUMMY = 'src="data:application/javascript,"';
+const cspSafeRouter = {
+  name: "markas-csp-safe-router",
+  transform(code, id) {
+    if (!/astro\/dist\/transitions\/router\.js$/.test(id)) return;
+    if (!code.includes(ROUTER_DUMMY)) {
+      throw new Error(
+        "Astro router no longer uses the data: dummy script: review cspSafeRouter",
+      );
+    }
+    return code.replace(ROUTER_DUMMY, 'src="/empty-module.js"');
+  },
+};
+
 /** Batas CSS landing yang masih disisipkan ke HTML (byte, sebelum gzip). */
 const LANDING_CSS_LIMIT = 16 * 1024;
 
@@ -32,7 +50,7 @@ export default defineConfig({
   build: { format: "file" },
   integrations: [react(), vue(), svelte(), nearDirective],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), cspSafeRouter],
     build: {
       // CSS khusus landing (bingkai hero, kaca beralur) disisipkan ke HTML: tanpa request
       // render-blocking tambahan untuk LCP. Aset lain tetap memakai batas bawaan 4 KB.

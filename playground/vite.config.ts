@@ -1,17 +1,34 @@
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import angular from "@analogjs/vite-plugin-angular";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import vue from "@vitejs/plugin-vue";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const workspace = fileURLToPath(new URL("..", import.meta.url));
 
+/** Sajikan templates/<slug>/lottie/<nama>.json di /lottie/<slug>/<nama>.json untuk versi Blade. */
+const templateLottie: Plugin = {
+  name: "template-lottie",
+  configureServer(server) {
+    server.middlewares.use("/lottie", (req, res, next) => {
+      const match = /^\/([a-z0-9-]+)\/([a-z0-9-]+)\.json$/.exec(req.url ?? "");
+      const file =
+        match && `${workspace}templates/${match[1]}/lottie/${match[2]}.json`;
+      if (!file || !existsSync(file)) return next();
+      res.setHeader("content-type", "application/json");
+      res.end(readFileSync(file));
+    });
+  },
+};
+
 export default defineConfig({
   root,
   plugins: [
+    templateLottie,
     tailwindcss(),
     react(),
     vue(),
@@ -33,6 +50,7 @@ export default defineConfig({
       "react/jsx-runtime",
       "vue",
       "alpinejs",
+      "lottie-web/build/player/lottie_light",
       "svelte",
       "svelte/internal/client",
       "@angular/core",

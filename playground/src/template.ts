@@ -76,6 +76,11 @@ if (framework === "react") {
       `Template Blade "${slug}" belum dirender (${response.status})`,
     );
   root.innerHTML = await response.text();
+  // Template Blade dengan Lottie (belajar) memanggil window.loadLottie; dimuat hanya saat dipakai.
+  Object.assign(window, {
+    loadLottie: () =>
+      import("lottie-web/build/player/lottie_light").then((m) => m.default),
+  });
   const { default: Alpine } = await import("alpinejs");
   Alpine.start();
 }

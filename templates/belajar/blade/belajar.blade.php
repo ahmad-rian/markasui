@@ -1,342 +1,346 @@
 @php
-    use Illuminate\Support\HtmlString;
-
-    // Kelas Tailwind, data contoh, dan bentuk ilustrasi, identik dengan versi React dan Vue (dibagi lewat satu blok JSON).
+    // Kelas Tailwind dan data contoh, identik dengan versi React (satu blok JSON hasil salinan konstanta React).
     $data = json_decode(<<<'JSON'
-    {"palette":"[--tpl-blue:#2449f2] [--tpl-blue-deep:#1a35c2] [--tpl-on:#ffffff] [--tpl-blue-text:#2449f2] [--tpl-lime:#d2f65a] [--tpl-lime-ink:#1c2a06] [--tpl-sky:#e9eeff] [--tpl-peach:#ffe2d1] [--tpl-lilac:#ece4ff] [--tpl-mint:#dcf6e8] [--tpl-skin:#f6c7a6] [--tpl-hair:#1f2240] [--tpl-star:#f5a524] [--tpl-paper:#ffffff] [--tpl-clip:#9aa3b5] [--tpl-av1:#c7d3ff] [--tpl-av2:#ffd3c2] [--tpl-av3:#e2f7a1] [--tpl-av4:#e0d4ff] [--tpl-av-ink:#1f2937] [--tpl-error:#b42318] [--tpl-rose:#ff7d8f] [--tpl-violet:#7a5cf5] [--tpl-green:#2c9f64] [--tpl-shade:#0f1b5c26] [--tpl-shadow:0_24px_48px_-24px_#1a35c240] dark:[--tpl-blue-text:#9db0ff] dark:[--tpl-sky:#161d3a] dark:[--tpl-peach:#3a2519] dark:[--tpl-lilac:#251d3d] dark:[--tpl-mint:#12301f] dark:[--tpl-paper:#1a1d24] dark:[--tpl-clip:#6b7385] dark:[--tpl-shadow:0_24px_48px_-24px_#00000099]","keyframes":"@keyframes belajar-bob{to{transform:translateY(-10px) rotate(-4deg)}}@keyframes belajar-float{to{transform:translateY(-8px)}}@media (prefers-reduced-motion:no-preference){[data-reveal-ready] [data-reveal]:not([data-shown]){opacity:0;transform:translateY(24px)}}[data-reveal]{transition:opacity .7s ease-out,transform .7s ease-out}","focusRing":"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","root":"[--tpl-blue:#2449f2] [--tpl-blue-deep:#1a35c2] [--tpl-on:#ffffff] [--tpl-blue-text:#2449f2] [--tpl-lime:#d2f65a] [--tpl-lime-ink:#1c2a06] [--tpl-sky:#e9eeff] [--tpl-peach:#ffe2d1] [--tpl-lilac:#ece4ff] [--tpl-mint:#dcf6e8] [--tpl-skin:#f6c7a6] [--tpl-hair:#1f2240] [--tpl-star:#f5a524] [--tpl-paper:#ffffff] [--tpl-clip:#9aa3b5] [--tpl-av1:#c7d3ff] [--tpl-av2:#ffd3c2] [--tpl-av3:#e2f7a1] [--tpl-av4:#e0d4ff] [--tpl-av-ink:#1f2937] [--tpl-error:#b42318] [--tpl-rose:#ff7d8f] [--tpl-violet:#7a5cf5] [--tpl-green:#2c9f64] [--tpl-shade:#0f1b5c26] [--tpl-shadow:0_24px_48px_-24px_#1a35c240] dark:[--tpl-blue-text:#9db0ff] dark:[--tpl-sky:#161d3a] dark:[--tpl-peach:#3a2519] dark:[--tpl-lilac:#251d3d] dark:[--tpl-mint:#12301f] dark:[--tpl-paper:#1a1d24] dark:[--tpl-clip:#6b7385] dark:[--tpl-shadow:0_24px_48px_-24px_#00000099] relative min-h-dvh overflow-x-clip bg-canvas text-ink","headerBar":"sticky top-0 z-30 border-b border-line/60 bg-canvas/85 backdrop-blur-xl","headerInner":"relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 lg:px-8","brand":"flex items-center gap-2 rounded-full text-lg font-bold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","brandMark":"flex size-9 items-center justify-center rounded-full bg-(--tpl-blue)","navList":"hidden items-center gap-1 md:flex","navLink":"inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","navIdle":"text-muted hover:text-ink","navActive":"bg-primary-soft text-primary","signIn":"hidden h-10 items-center rounded-full px-4 text-sm font-medium hover:bg-subtle sm:inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","pillButton":"inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold whitespace-nowrap text-on-primary transition-colors duration-150 hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","bigButton":"inline-flex h-14 items-center justify-center gap-3 rounded-full bg-primary pr-2 pl-7 text-base font-semibold whitespace-nowrap text-on-primary transition-colors duration-150 hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","bigButtonIcon":"flex size-10 items-center justify-center rounded-full bg-(--tpl-lime) text-(--tpl-lime-ink)","ghostButton":"inline-flex h-14 items-center justify-center gap-2 rounded-full border border-line px-6 text-base font-semibold whitespace-nowrap hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","menuButton":"inline-flex size-10 items-center justify-center rounded-full hover:bg-subtle md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","mobileMenu":"absolute inset-x-4 top-16 grid gap-1 rounded-3xl border border-line bg-surface p-3 shadow-overlay md:hidden","mobileLink":"flex h-11 items-center rounded-2xl px-4 text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","hero":"mx-auto grid max-w-7xl items-center gap-12 px-4 pt-12 pb-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:px-8 lg:pt-16","heroCopy":"grid justify-items-start gap-6","heroBadge":"inline-flex items-center gap-2 rounded-full border border-line bg-surface py-1 pr-4 pl-1 text-sm font-medium","heroBadgeDot":"rounded-full bg-(--tpl-lime) px-2.5 py-0.5 text-xs font-bold text-(--tpl-lime-ink)","heroTitle":"text-5xl leading-[0.98] font-bold tracking-tight text-balance sm:text-7xl xl:text-[88px]","marker":"relative isolate inline-block text-(--tpl-blue-text) before:absolute before:inset-x-[-4px] before:bottom-[0.08em] before:-z-10 before:h-[0.32em] before:-rotate-1 before:rounded-full before:bg-(--tpl-lime)","heroLead":"max-w-lg text-lg text-pretty text-muted","heroStatsGrid":"mt-2 grid w-full max-w-lg grid-cols-3 gap-4 border-t border-line pt-6","art":"relative mx-auto aspect-square w-full max-w-[520px]","blob":"absolute inset-[4%] fill-(--tpl-lime)","photo":"absolute inset-[14%] rotate-6 overflow-hidden rounded-[36px] bg-(--tpl-blue) shadow-(--tpl-shadow)","mascot":"absolute bottom-[4%] left-[2%] w-[26%] animate-[belajar-bob_2.6s_ease-in-out_infinite_alternate] motion-reduce:animate-none","infoCard":"absolute top-[8%] right-0 w-56 -rotate-3 rounded-3xl border border-line bg-surface p-4 shadow-(--tpl-shadow) animate-[belajar-float_3.2s_ease-in-out_infinite_alternate] motion-reduce:animate-none max-sm:w-48","face":"inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-(--tpl-av-ink) select-none","faceTones":["bg-(--tpl-av1)","bg-(--tpl-av2)","bg-(--tpl-av3)","bg-(--tpl-av4)"],"tracksWrap":"scroll-mt-20 px-4 lg:px-8","tracksPanel":"mx-auto max-w-7xl rounded-[40px] bg-(--tpl-blue) px-5 py-14 text-(--tpl-on) sm:px-10 lg:rounded-[56px] lg:px-14 lg:py-20","tracksHead":"grid gap-4 lg:grid-cols-2 lg:items-end","tracksGrid":"mt-14 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4","trackCard":"group relative grid w-full gap-4 rounded-[28px] bg-(--tpl-paper) p-4 pt-7 text-left text-ink shadow-(--tpl-shadow) transition-transform duration-200 hover:rotate-0 hover:-translate-y-1 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--tpl-on)","trackTilt":["-rotate-3","rotate-2","-rotate-2","rotate-3"],"clip":"absolute -top-6 left-8 h-14 w-6 -rotate-12","trackArt":"flex h-40 items-center justify-center rounded-[20px] bg-(--tpl-sky)","countPill":"inline-flex items-center rounded-full bg-(--tpl-lime) px-3 py-1 text-xs font-bold text-(--tpl-lime-ink)","section":"mx-auto max-w-7xl scroll-mt-20 px-4 py-20 lg:px-8 lg:py-28","h2":"text-4xl font-bold tracking-tight text-balance sm:text-6xl","lead":"max-w-xl text-lg text-pretty text-muted","filterBar":"flex gap-2 overflow-x-auto pb-1","filterItem":"inline-flex h-11 shrink-0 items-center rounded-full border px-5 text-sm font-semibold whitespace-nowrap transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","filterOn":"border-primary bg-primary text-on-primary","filterOff":"border-line bg-surface text-ink hover:bg-subtle","courseGrid":"mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4","courseCard":"flex flex-col gap-4 rounded-[28px] border border-line bg-surface p-3 pb-4 shadow-(--tpl-shadow)","courseArt":"relative h-44 overflow-hidden rounded-[20px]","tag":"inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold","category":"inline-flex items-center rounded-full bg-(--tpl-sky) px-2.5 py-1 text-xs font-semibold text-(--tpl-blue) dark:text-(--tpl-on)","meta":"flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted","detailsButton":"inline-flex h-10 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-on-primary transition-colors duration-150 hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","slider":"relative mt-10 overflow-hidden rounded-[36px]","slideTrack":"flex transition-transform duration-500 ease-out motion-reduce:transition-none","slide":"grid w-full shrink-0 gap-8 rounded-[36px] bg-(--tpl-sky) p-6 sm:p-10 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center lg:p-14","roundButton":"inline-flex size-12 items-center justify-center rounded-full border border-line bg-surface transition-colors duration-150 hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","dot":"box-content h-2.5 rounded-full bg-clip-content p-[7px] transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","faqLayout":"grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]","faqItem":"group border-b border-line","faqSummary":"flex cursor-pointer list-none items-center justify-between gap-6 rounded-xl py-6 text-left text-lg font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden","faqIcon":"flex size-10 shrink-0 items-center justify-center rounded-full border border-line transition-all duration-200 group-open:rotate-45 group-open:border-(--tpl-lime) group-open:bg-(--tpl-lime) group-open:text-(--tpl-lime-ink) motion-reduce:transition-none","faqBody":"-mt-2 pr-14 pb-6 text-base text-pretty text-muted","helpCard":"grid gap-4 rounded-[28px] bg-(--tpl-lime) p-6 text-(--tpl-lime-ink)","helpButton":"inline-flex h-11 items-center justify-center justify-self-start rounded-full bg-(--tpl-lime-ink) px-5 text-sm font-semibold text-(--tpl-lime) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-lime-ink)","footer":"px-4 pb-6 lg:px-8","footerPanel":"mx-auto max-w-7xl rounded-[40px] bg-(--tpl-blue-deep) px-6 py-12 text-(--tpl-on) sm:px-10 lg:px-14","footerGrid":"grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,2fr)_minmax(0,2fr)_minmax(0,2fr)]","footerLink":"justify-self-start rounded-sm text-sm text-(--tpl-on)/80 hover:text-(--tpl-on) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-on)","newsField":"h-12 rounded-full border-transparent bg-(--tpl-on) px-5 text-base text-(--tpl-av-ink) placeholder:text-(--tpl-av-ink)/60","newsButton":"inline-flex h-12 items-center justify-center rounded-full bg-(--tpl-lime) px-6 text-base font-semibold text-(--tpl-lime-ink) transition-opacity duration-150 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-on)","newsError":"rounded-full bg-(--tpl-on) px-4 py-1.5 text-sm font-medium text-(--tpl-error) sm:col-span-2","footerBottom":"mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-(--tpl-on)/20 pt-6 text-sm text-(--tpl-on)/80","builtWith":"rounded-sm font-semibold text-(--tpl-on) underline decoration-(--tpl-on)/40 underline-offset-4 hover:decoration-(--tpl-on) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tpl-on)","icons":{"menu":"M4 7h16M4 12h16M4 17h16","close":"M18 6 6 18M6 6l12 12","arrow":"M5 12h14M13 6l6 6-6 6","prev":"m15 18-6-6 6-6","next":"m9 18 6-6-6-6","plus":"M12 5v14M5 12h14","book":"M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5","hand":"M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15","star":"m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z","live":"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2","chat":"M7.9 20A9 9 0 1 0 4 16.1L2 22z","quote":"M3 21c3 0 7-1 7-8V5H3v8h4c0 4-2 5-4 5zM14 21c3 0 7-1 7-8V5h-7v8h4c0 4-2 5-4 5z"},"BRAND":"Benak","MENU_ID":"belajar-mobile-menu","MODAL_ID":"belajar-course-modal","EMAIL_PATTERN":{},"nav":[{"id":"courses","label":"Courses"},{"id":"tracks","label":"Tracks"},{"id":"reviews","label":"Reviews"},{"id":"faq","label":"FAQ"}],"heroStats":[{"value":"18.000+","label":"students"},{"value":"4,9","label":"average rating"},{"value":"120+","label":"courses"}],"lineCap":"[stroke-linecap:round] [stroke-linejoin:round]","blobShape":[{"t":"path","a":{"d":"M54 3C77 5 98 23 96 48C94 72 79 96 53 97C27 98 5 83 3 57C1 31 30 1 54 3Z"}}],"couple":[{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":236,"cy":64,"r":26}},{"t":"path","c":"fill-none stroke-(--tpl-on)/40 stroke-[3] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M30 70c10-14 24-14 34 0M44 40l4 10M262 140l10 4"}},{"t":"circle","c":"fill-(--tpl-hair)","a":{"cx":82,"cy":126,"r":15}},{"t":"path","c":"fill-(--tpl-on)","a":{"d":"M36 300C36 222 66 192 108 192C150 192 176 222 176 300Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M70 156C66 120 86 108 108 108C134 108 148 124 146 158C146 176 138 196 128 204H88C76 194 70 176 70 156Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":108,"cy":152,"r":32}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M76 146C78 124 94 114 112 116C128 118 138 128 140 142C126 134 104 130 76 146Z"}},{"t":"path","c":"fill-(--tpl-lime)","a":{"d":"M138 300C138 232 164 206 202 206C242 206 264 236 264 300Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":202,"cy":166,"r":31}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M170 162C170 140 186 130 204 130C222 130 236 142 234 162C224 150 196 146 170 162Z"}},{"t":"path","c":"fill-(--tpl-rose)","a":{"d":"M156 116c-15-10-23-18-23-28a11.5 11.5 0 0 1 23-4 11.5 11.5 0 0 1 23 4c0 10-8 18-23 28z"}},{"t":"path","c":"fill-none stroke-(--tpl-hair) stroke-[3] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M98 160q4 4 8 0M114 160q4 4 8 0M104 172q6 5 12 0M192 172q4 4 8 0M208 172q4 4 8 0M198 184q6 5 12 0"}}],"mascotShapes":[{"t":"path","c":"fill-none stroke-(--tpl-green) stroke-[4] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M50 14C50 6 54 2 60 0"}},{"t":"ellipse","c":"fill-(--tpl-green)","a":{"cx":66,"cy":4,"rx":9,"ry":5,"transform":"rotate(-20 66 4)"}},{"t":"ellipse","c":"fill-(--tpl-blue-deep)","a":{"cx":14,"cy":66,"rx":8,"ry":12,"transform":"rotate(30 14 66)"}},{"t":"ellipse","c":"fill-(--tpl-blue-deep)","a":{"cx":86,"cy":66,"rx":8,"ry":12,"transform":"rotate(-30 86 66)"}},{"t":"path","c":"fill-(--tpl-blue) stroke-(--tpl-on) stroke-[3]","a":{"d":"M50 14C78 14 92 34 92 60C92 88 74 102 50 102C26 102 8 88 8 60C8 34 22 14 50 14Z"}},{"t":"circle","c":"fill-(--tpl-on)","a":{"cx":36,"cy":54,"r":10}},{"t":"circle","c":"fill-(--tpl-on)","a":{"cx":64,"cy":54,"r":10}},{"t":"circle","c":"fill-(--tpl-hair)","a":{"cx":38,"cy":56,"r":5}},{"t":"circle","c":"fill-(--tpl-hair)","a":{"cx":66,"cy":56,"r":5}},{"t":"circle","c":"fill-(--tpl-rose)/70","a":{"cx":26,"cy":72,"r":6}},{"t":"circle","c":"fill-(--tpl-rose)/70","a":{"cx":74,"cy":72,"r":6}},{"t":"path","c":"fill-none stroke-(--tpl-on) stroke-[4] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M40 74q10 10 20 0"}},{"t":"ellipse","c":"fill-(--tpl-blue-deep)","a":{"cx":36,"cy":104,"rx":10,"ry":5}},{"t":"ellipse","c":"fill-(--tpl-blue-deep)","a":{"cx":64,"cy":104,"rx":10,"ry":5}}],"clipShapes":[{"t":"path","c":"fill-none stroke-(--tpl-clip) stroke-[3.5] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M8 40V12a8 8 0 0 1 16 0v38a12 12 0 0 1-24 0V18"}}],"shadowEllipse":{"t":"ellipse","c":"fill-(--tpl-shade)","a":{"cx":60,"cy":108,"rx":34,"ry":6}},"trackArtShapes":{"foundations":[{"t":"ellipse","c":"fill-(--tpl-shade)","a":{"cx":60,"cy":108,"rx":34,"ry":6}},{"t":"path","c":"fill-none stroke-(--tpl-blue-deep) stroke-[10] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M34 30v18a26 26 0 0 0 52 0V30M60 22v76M44 98h32"}},{"t":"path","c":"fill-none stroke-(--tpl-blue) stroke-[10] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M30 26v18a26 26 0 0 0 52 0V26M56 18v76M40 94h32"}},{"t":"path","c":"fill-none stroke-(--tpl-on)/60 stroke-[4] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M28 30v8M54 24v14"}}],"child":[{"t":"ellipse","c":"fill-(--tpl-shade)","a":{"cx":60,"cy":108,"rx":34,"ry":6}},{"t":"ellipse","c":"fill-(--tpl-rose)","a":{"cx":60,"cy":76,"rx":30,"ry":32}},{"t":"circle","c":"fill-(--tpl-rose)","a":{"cx":60,"cy":38,"r":24}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":60,"cy":40,"r":15}},{"t":"ellipse","c":"fill-(--tpl-lime)","a":{"cx":60,"cy":82,"rx":18,"ry":16}},{"t":"circle","c":"fill-(--tpl-rose)","a":{"cx":60,"cy":82,"r":6}},{"t":"circle","c":"fill-(--tpl-hair)","a":{"cx":55,"cy":39,"r":2}},{"t":"circle","c":"fill-(--tpl-hair)","a":{"cx":65,"cy":39,"r":2}},{"t":"path","c":"fill-none stroke-(--tpl-hair) stroke-2 [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M56 46q4 3 8 0"}},{"t":"ellipse","c":"fill-(--tpl-on)/50","a":{"cx":46,"cy":64,"rx":5,"ry":12}}],"clinical":[{"t":"ellipse","c":"fill-(--tpl-shade)","a":{"cx":60,"cy":108,"rx":34,"ry":6}},{"t":"path","c":"fill-none stroke-(--tpl-hair) stroke-[12] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M74 74l22 24"}},{"t":"circle","c":"fill-(--tpl-sky) stroke-(--tpl-violet) stroke-[10]","a":{"cx":54,"cy":52,"r":30}},{"t":"circle","c":"fill-none stroke-(--tpl-on)/70 stroke-[3]","a":{"cx":54,"cy":52,"r":20}},{"t":"path","c":"fill-none stroke-(--tpl-on) stroke-[5] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M40 44a16 16 0 0 1 12-10"}}],"wellbeing":[{"t":"ellipse","c":"fill-(--tpl-shade)","a":{"cx":60,"cy":108,"rx":34,"ry":6}},{"t":"path","c":"fill-none stroke-(--tpl-green) stroke-[4] [stroke-linecap:round] [stroke-linejoin:round]","a":{"d":"M60 64V30M60 52C52 44 44 44 38 46M60 46c8-8 16-8 22-6"}},{"t":"circle","c":"fill-(--tpl-rose)","a":{"cx":60,"cy":26,"r":10}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":36,"cy":44,"r":8}},{"t":"circle","c":"fill-(--tpl-star)","a":{"cx":84,"cy":38,"r":8}},{"t":"path","c":"fill-(--tpl-blue)","a":{"d":"M44 62h32c0 10 8 14 8 26 0 12-10 20-24 20s-24-8-24-20c0-12 8-16 8-26z"}},{"t":"path","c":"fill-(--tpl-on)/40","a":{"d":"M50 70h6c-2 8-6 12-6 22h-6c0-10 4-14 6-22z"}}]},"tracks":[{"id":"foundations","label":"Foundations","text":"How memory, emotion, and behaviour work.","count":32},{"id":"child","label":"Child and family","text":"Development, parenting, and family systems.","count":18},{"id":"clinical","label":"Clinical practice","text":"Assessment, CBT, and counselling skills.","count":24},{"id":"wellbeing","label":"Wellbeing","text":"Stress, sleep, and everyday resilience.","count":21}],"filters":[{"id":"all","label":"All courses"},{"id":"foundations","label":"Foundations"},{"id":"child","label":"Child and family"},{"id":"clinical","label":"Clinical practice"},{"id":"wellbeing","label":"Wellbeing"}],"artTones":{"foundations":{"bg":"bg-(--tpl-sky)","fill":"fill-(--tpl-blue)"},"child":{"bg":"bg-(--tpl-peach)","fill":"fill-(--tpl-rose)"},"clinical":{"bg":"bg-(--tpl-lilac)","fill":"fill-(--tpl-violet)"},"wellbeing":{"bg":"bg-(--tpl-mint)","fill":"fill-(--tpl-green)"}},"bigX":[212,92,226,74,204,106,238,84],"smallX":[78,228,70,222,92,226,60,212],"courseList":[{"id":"c1","title":"Introduction to psychology","track":"foundations","price":0,"rating":"4,9","reviews":"1.204","theory":12,"practice":4,"lessons":24,"mentor":"Dr. Ayu Lestari","text":"A friendly tour of the field: perception, memory, motivation, and the research methods behind them.","art":[{"t":"circle","c":"fill-(--tpl-blue)","a":{"cx":212,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":78,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M131 108c-2-16 8-24 19-24 12 0 20 8 19 24 0 10-4 18-8 22h-22c-5-4-8-12-8-22z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":14}}]},{"id":"c2","title":"Cognitive behavioural therapy basics","track":"clinical","price":649000,"rating":"4,8","reviews":"532","theory":16,"practice":10,"lessons":32,"mentor":"Rahmat Hidayat, M.Psi.","text":"Learn the CBT model, thought records, and behavioural experiments through guided role plays.","art":[{"t":"circle","c":"fill-(--tpl-violet)","a":{"cx":92,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":228,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M132 104c0-14 8-20 18-20s18 6 18 20c-6-6-24-8-36 0z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":0}}]},{"id":"c3","title":"Child development from 0 to 12","track":"child","price":449000,"rating":"4,9","reviews":"318","theory":14,"practice":6,"lessons":28,"mentor":"Nadia Putri, M.Psi.","text":"Milestones, attachment, and play, with observation tasks you can do at home or in class.","art":[{"t":"circle","c":"fill-(--tpl-rose)","a":{"cx":226,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":70,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M131 108c-2-16 8-24 19-24 12 0 20 8 19 24 0 10-4 18-8 22h-22c-5-4-8-12-8-22z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":14}}]},{"id":"c4","title":"Stress and burnout recovery","track":"wellbeing","price":299000,"rating":"4,7","reviews":"884","theory":6,"practice":8,"lessons":18,"mentor":"Dimas Saputra, M.Psi.","text":"Spot the early signs of burnout and build a weekly recovery plan that fits real work.","art":[{"t":"circle","c":"fill-(--tpl-green)","a":{"cx":74,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":222,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M132 104c0-14 8-20 18-20s18 6 18 20c-6-6-24-8-36 0z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":0}}]},{"id":"c5","title":"Couples counselling skills","track":"clinical","price":749000,"rating":"4,8","reviews":"207","theory":18,"practice":12,"lessons":36,"mentor":"Dr. Sekar Wulandari","text":"Structure a first session, map conflict cycles, and practise repair conversations.","art":[{"t":"circle","c":"fill-(--tpl-violet)","a":{"cx":204,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":92,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M131 108c-2-16 8-24 19-24 12 0 20 8 19 24 0 10-4 18-8 22h-22c-5-4-8-12-8-22z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":14}}]},{"id":"c6","title":"Social psychology in daily life","track":"foundations","price":249000,"rating":"4,6","reviews":"419","theory":10,"practice":4,"lessons":20,"mentor":"Bima Prakoso, M.Si.","text":"Why groups conform, how first impressions form, and what persuasion research really shows.","art":[{"t":"circle","c":"fill-(--tpl-blue)","a":{"cx":106,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":226,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M132 104c0-14 8-20 18-20s18 6 18 20c-6-6-24-8-36 0z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":0}}]},{"id":"c7","title":"Parenting teenagers","track":"child","price":349000,"rating":"4,7","reviews":"261","theory":8,"practice":6,"lessons":16,"mentor":"Nadia Putri, M.Psi.","text":"Talk so teenagers listen, set limits without fights, and support their growing independence.","art":[{"t":"circle","c":"fill-(--tpl-rose)","a":{"cx":238,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":60,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M131 108c-2-16 8-24 19-24 12 0 20 8 19 24 0 10-4 18-8 22h-22c-5-4-8-12-8-22z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":14}}]},{"id":"c8","title":"Mindfulness for beginners","track":"wellbeing","price":0,"rating":"4,9","reviews":"1.530","theory":4,"practice":6,"lessons":12,"mentor":"Dimas Saputra, M.Psi.","text":"Short daily practices for attention and calm, with audio guides in Bahasa Indonesia.","art":[{"t":"circle","c":"fill-(--tpl-green)","a":{"cx":84,"cy":118,"r":72}},{"t":"circle","c":"fill-(--tpl-lime)","a":{"cx":212,"cy":52,"r":24}},{"t":"path","c":"fill-(--tpl-on)/50","a":{"d":"M0 150C60 122 120 170 180 142S270 120 300 134V176H0Z"}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M116 176C116 142 131 126 150 126C169 126 184 142 184 176Z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":18}},{"t":"path","c":"fill-(--tpl-hair)","a":{"d":"M132 104c0-14 8-20 18-20s18 6 18 20c-6-6-24-8-36 0z"}},{"t":"circle","c":"fill-(--tpl-skin)","a":{"cx":150,"cy":106,"r":0}}]}],"reviews":[{"name":"Putri Anggraini","role":"HR specialist, Surabaya","course":"Stress and burnout recovery","quote":"I finally understand why my team burns out every quarter. The practice tasks were things I could try on Monday morning."},{"name":"Fajar Ramadhan","role":"Psychology student, UGM","course":"Cognitive behavioural therapy basics","quote":"The role plays made CBT click for me. My mentor gave feedback on every recording within two days."},{"name":"Melati Kusuma","role":"Kindergarten teacher, Bandung","course":"Child development from 0 to 12","quote":"I use the observation sheets with my class every week. Parents notice the difference in how I explain things."},{"name":"Arif Nugroho","role":"Software engineer, Jakarta","course":"Mindfulness for beginners","quote":"Ten minutes a day, no jargon. I sleep better and I stopped checking Slack at midnight."},{"name":"Lestari Handayani","role":"Counsellor, Yogyakarta","course":"Couples counselling skills","quote":"Clear structure for first sessions and honest examples from real practice. Worth every rupiah."}],"faqs":[{"q":"Do I need a psychology background?","a":"No. Foundations courses start from zero. Clinical practice courses list what you should know first on each course page."},{"q":"What is the difference between theory and practice hours?","a":"Theory hours are short video lessons and readings. Practice hours are guided exercises, role plays, and case studies that a mentor reviews."},{"q":"Will I get a certificate?","a":"Yes. Finish all lessons and practice tasks to receive a certificate with a verification link you can add to your CV or LinkedIn."},{"q":"Can I study on my phone?","a":"Every lesson works in the browser on phones and laptops, and you can download audio guides to listen offline."},{"q":"Is this a replacement for therapy?","a":"No. Our courses teach knowledge and skills. If you are struggling, please reach out to a licensed psychologist or call 119 ext 8."}],"footerCols":[{"title":"Learn","links":[["Courses","#courses"],["Tracks","#tracks"],["Free lessons","/free"]]},{"title":"Company","links":[["About","/about"],["Mentors","/mentors"],["Careers","/careers"]]},{"title":"Help","links":[["FAQ","#faq"],["Contact","/contact"],["Privacy","/privacy"]]}]}
+    {"focusRing":"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","root":"min-h-dvh bg-canvas text-ink","container":"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8","navbarEdge":"px-[max(0rem,calc((100%-70rem)/2))]","footerEdge":"px-[max(0rem,calc((100%-72rem)/2))]","brandLink":"flex items-center gap-2 rounded-md text-base font-semibold tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","brandMark":"flex size-7 items-center justify-center rounded-lg bg-primary text-on-primary","signIn":"hidden h-8 items-center rounded-md px-3 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink sm:inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","startLink":"inline-flex h-8 items-center rounded-md bg-primary px-3 text-sm font-medium whitespace-nowrap text-on-primary transition-colors duration-150 hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","heroLink":"inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-base font-medium whitespace-nowrap text-on-primary transition-colors duration-150 hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary","lottieInk":"[&_path]:stroke-current [&_path[fill^=rgb]]:fill-current [&_svg]:block","hero":"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 grid items-center gap-12 pt-12 pb-16 sm:pt-20 lg:grid-cols-2 lg:gap-16 lg:pt-24 lg:pb-24","eyebrow":"flex items-center gap-2 text-sm text-muted","eyebrowDot":"size-1.5 shrink-0 rounded-full bg-primary","h1":"mt-5 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl","heroLead":"mt-5 max-w-xl text-lg leading-relaxed text-pretty text-muted","heroActions":"mt-8 flex flex-wrap gap-3","factList":"mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-muted","fact":"flex items-center gap-2","checkIcon":"size-4 shrink-0 text-primary","heroCard":"rounded-2xl border border-line bg-surface p-2 shadow-overlay","heroStage":"grid aspect-[4/3] place-items-center rounded-xl bg-primary-soft bg-[linear-gradient(var(--grid-line)_1px,transparent_1px),linear-gradient(90deg,var(--grid-line)_1px,transparent_1px)] bg-size-[28px_28px] bg-center [--grid-line:color-mix(in_oklab,var(--color-primary)_8%,transparent)]","heroLottie":"size-[64%] text-primary [&_path]:stroke-current [&_path[fill^=rgb]]:fill-current [&_svg]:block","nextRow":"flex items-center gap-3 px-3 pt-4","nextLabel":"text-xs text-muted","nextTitle":"text-sm font-medium","progressRow":"flex items-center gap-3 px-3 pt-4 pb-3","progressTrack":"h-1.5 flex-1 overflow-hidden rounded-full bg-subtle","progressBar":"h-full w-3/8 rounded-full bg-primary","progressText":"text-xs whitespace-nowrap text-muted","logoWrap":"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20","section":"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 scroll-mt-16 py-16 sm:py-24","sectionHead":"grid max-w-2xl gap-4","h2":"text-3xl font-semibold tracking-tight text-balance sm:text-4xl","lead":"text-lg leading-relaxed text-pretty text-muted","toolbar":"mt-10 flex flex-wrap items-center justify-between gap-4","filterScroll":"max-w-full overflow-x-auto","countText":"text-sm text-muted","courseGrid":"mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4","courseCard":"flex flex-col rounded-xl border border-line bg-surface","courseBody":"flex flex-1 flex-col p-5","courseTop":"flex items-center justify-between gap-2","topicText":"text-sm font-medium text-primary","courseTitle":"mt-4 text-lg leading-snug font-semibold tracking-tight","courseText":"mt-2 text-sm leading-relaxed text-pretty text-muted","courseMeta":"mt-auto pt-4 text-sm text-muted","courseFoot":"flex items-center justify-between gap-3 border-t border-line px-5 py-4","priceText":"text-base font-semibold","modalBody":"grid gap-5 text-ink","modalTitle":"mt-2 text-xl font-semibold tracking-tight","modalText":"mt-2 text-sm leading-relaxed text-muted","factGrid":"grid grid-cols-3 gap-2 text-sm","factCell":"rounded-lg bg-subtle p-3","factTerm":"text-xs text-muted","factValue":"mt-1 font-medium","projectBox":"rounded-lg border border-line p-4 text-sm","projectTerm":"font-medium","projectText":"mt-1 leading-relaxed text-muted","modalMentor":"flex items-center justify-between gap-4","person":"flex items-center gap-3","personName":"text-sm font-medium","personRole":"text-sm text-muted","modalPrice":"text-lg font-semibold whitespace-nowrap","stepGrid":"mt-12 grid gap-10 md:grid-cols-3 md:gap-8","stepArt":"flex size-28 items-center justify-center rounded-xl border border-line bg-surface","stepLottie":"size-24 text-ink [&_path]:stroke-current [&_path[fill^=rgb]]:fill-current [&_svg]:block","stepLabel":"mt-6 text-sm font-medium text-primary","stepTitle":"mt-2 text-lg font-semibold tracking-tight","stepText":"mt-2 text-base leading-relaxed text-pretty text-muted","mentorGrid":"mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4","mentorCard":"grid content-start gap-4 rounded-xl border border-line bg-surface p-5","mentorName":"text-base font-semibold","mentorBio":"text-sm leading-relaxed text-pretty text-muted","mentorTeaches":"border-t border-line pt-4 text-sm text-muted","storyGrid":"mt-12 grid gap-4 lg:grid-cols-3","storyCard":"flex h-full flex-col justify-between gap-8 rounded-xl bg-subtle p-6","quoteText":"text-base leading-relaxed text-pretty","pricingHead":"flex flex-wrap items-end justify-between gap-6","billingRow":"flex flex-wrap items-center gap-3","saveNote":"text-sm text-muted","planGrid":"mt-10 grid gap-4 lg:grid-cols-3","planCard":"flex flex-col rounded-xl border border-line bg-surface p-6","planFeatured":"flex flex-col rounded-xl border-2 border-primary bg-surface p-[23px]","planHead":"flex items-center justify-between gap-2","planName":"text-base font-semibold","planPrice":"mt-6 flex items-baseline gap-1","planAmount":"text-3xl font-semibold tracking-tight","planUnit":"text-sm text-muted","planNote":"mt-1 text-sm text-muted","planText":"mt-4 text-sm leading-relaxed text-muted","featureList":"mt-6 mb-8 grid flex-1 content-start gap-3 border-t border-line pt-6 text-sm","featureItem":"flex gap-2","featureIcon":"mt-0.5 size-4 shrink-0 text-primary","planButton":"w-full","faqLayout":"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 scroll-mt-16 py-16 sm:py-24 grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16","faqAside":"grid content-start justify-items-start gap-4","faqList":"[&>div]:max-w-none [&>div]:gap-0","bandWrap":"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24","band":"grid gap-8 rounded-2xl bg-subtle p-6 sm:p-10 lg:grid-cols-2 lg:items-center lg:gap-12 lg:p-12","bandTitle":"text-2xl font-semibold tracking-tight text-balance sm:text-3xl","bandText":"mt-3 text-base leading-relaxed text-pretty text-muted","form":"grid gap-2","fieldLabel":"text-sm font-medium","fieldRow":"flex flex-col gap-2 sm:flex-row","field":"h-11 bg-surface text-base sm:text-sm","fieldButton":"h-11 shrink-0","fieldError":"text-sm text-danger","fieldHint":"text-sm text-muted","footer":"px-[max(0rem,calc((100%-72rem)/2))] bg-canvas","icons":{"book":"M4 6.5c2.5-1.3 5-1.3 8 .7 3-2 5.5-2 8-.7v11c-2.5-1.3-5-1.3-8 .7-3-2-5.5-2-8-.7zM12 7.2v11","check":"m5 12.5 4.5 4.5L19 7.5","arrow":"M5 12h14m-6-6 6 6-6 6"},"TITLE":"Learn the job from people who do it","MODAL_ID":"belajar-course-modal","EMAIL_ID":"belajar-email","nav":[{"label":"Courses","href":"#courses"},{"label":"How it works","href":"#how"},{"label":"Mentors","href":"#mentors"},{"label":"Pricing","href":"#pricing"},{"label":"FAQ","href":"#faq"}],"heroFacts":["8 to 10 weeks","2 live sessions a week","Reviewed final project"],"logos":[{"name":"Sagara","path":"M3 15a9 9 0 0 1 18 0Z"},{"name":"Kopi Kita","path":"M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"},{"name":"Nusantara Labs","path":"M12 2 21 7v10l-9 5-9-5V7Z"},{"name":"Arunika","path":"M12 3 22 20H2Z"},{"name":"Lumbung","path":"M12 2 22 12 12 22 2 12Z"},{"name":"Teras Data","path":"M4 4h7v16H4ZM13 9h7v11h-7Z"}],"topics":[{"value":"all","label":"All"},{"value":"data","label":"Data"},{"value":"product","label":"Product"},{"value":"design","label":"Design"},{"value":"marketing","label":"Marketing"}],"mentors":[{"id":"rina","name":"Rina Siregar","role":"Senior Data Analyst","bio":"Nine years of analytics in retail and fintech. Still writes SQL every morning."},{"id":"ayu","name":"Ayu Lestari","role":"Group Product Manager","bio":"Has shipped payment and lending products used by millions of Indonesians."},{"id":"nadia","name":"Nadia Putri","role":"Lead Product Designer","bio":"Runs a design team of twelve and hires junior designers every year."},{"id":"bayu","name":"Bayu Saputra","role":"Head of Growth","bio":"Grew two consumer apps from launch to their first million users."}],"courses":[{"id":"sql","title":"SQL for data analysis","topic":"data","level":"Beginner","weeks":8,"starts":"12 Jan","price":2400000,"mentor":"rina","text":"Query real sales data, join messy tables, and answer the questions your manager asks every week.","project":"A weekly sales report built from a retail dataset of 2 million orders."},{"id":"python","title":"Python for analysts","topic":"data","level":"Intermediate","weeks":10,"starts":"2 Feb","price":3200000,"mentor":"rina","text":"Clean data with pandas, automate the spreadsheets you rebuild by hand, and chart the results.","project":"A notebook that cleans, analyses, and charts a year of ride booking data."},{"id":"pm","title":"Product management fundamentals","topic":"product","level":"Beginner","weeks":10,"starts":"19 Jan","price":3500000,"mentor":"ayu","text":"Find the problem worth solving, write a clear spec, and work with engineers and designers.","project":"A product spec and launch plan for a feature in an app you use daily."},{"id":"experiments","title":"Product analytics and experiments","topic":"product","level":"Intermediate","weeks":8,"starts":"9 Feb","price":2900000,"mentor":"ayu","text":"Choose the right metrics, design A/B tests, and explain the results to people who decide.","project":"An experiment plan and readout for a checkout flow change."},{"id":"figma","title":"UI design with Figma","topic":"design","level":"Beginner","weeks":8,"starts":"12 Jan","price":2700000,"mentor":"nadia","text":"Layout, type, and components in Figma, from the first wireframe to a clickable prototype.","project":"A mobile app redesign with a small component library."},{"id":"research","title":"UX research in practice","topic":"design","level":"Intermediate","weeks":6,"starts":"26 Jan","price":2200000,"mentor":"nadia","text":"Plan interviews, run usability tests, and turn what you hear into decisions a team can act on.","project":"A usability study with five participants and a findings report."},{"id":"ads","title":"Performance marketing","topic":"marketing","level":"Beginner","weeks":8,"starts":"19 Jan","price":2500000,"mentor":"bayu","text":"Plan paid campaigns, set budgets, and read the numbers that show what is working.","project":"A one month campaign plan with budget, targeting, and reporting."},{"id":"seo","title":"Content strategy and SEO","topic":"marketing","level":"Beginner","weeks":6,"starts":"2 Feb","price":1900000,"mentor":"bayu","text":"Research what people search for, plan a content calendar, and write pages that rank.","project":"A three month content plan and two published articles."}],"SCHEDULE":"Tue and Thu, 19.30 WIB","steps":[{"lottie":"study","label":"At your own pace","title":"Watch and read before class","text":"Short lessons of 15 to 20 minutes that fit a commute. Each one ends with a small exercise."},{"lottie":"mentor","label":"Live, twice a week","title":"Work through it with a mentor","text":"Evening sessions with your mentor and up to 24 classmates. Bring your questions and your exercise."},{"lottie":"certificate","label":"Final two weeks","title":"Finish with a reviewed project","text":"Your mentor reviews your project in detail. Pass the review to get a certificate with a public link."}],"stories":[{"name":"Putri Anggraini","role":"Data Analyst, Medan","course":"SQL for data analysis","quote":"I used to build reports by hand in Excel. Eight weeks later I wrote the queries for our weekly sales review, and the notes on my project were more useful than anything I had read online."},{"name":"Fajar Ramadhan","role":"Associate Product Manager, Jakarta","course":"Product management fundamentals","quote":"The live sessions felt like a real product team. We argued about scope, wrote specs, and got honest feedback. I talked about my final project in three interviews."},{"name":"Melati Kusuma","role":"UI Designer, Bandung","course":"UI design with Figma","quote":"I could follow along after work, and the recordings saved me twice when my shift ran late. Nadia reviewed every screen I made, not just the final one."}],"billingOptions":[{"value":"monthly","label":"Monthly"},{"value":"yearly","label":"Yearly"}],"plans":[{"id":"free","name":"Free","tag":"","monthly":0,"yearly":0,"text":"Try the format before you commit.","features":["One free lesson from every course","Community forum","Monthly live Q&A with a mentor"]},{"id":"plus","name":"Plus","tag":"","monthly":249000,"yearly":199000,"text":"Self-paced learning across every course.","features":["All recorded lessons and exercises","Project templates and datasets","Certificates for self-paced tracks"]},{"id":"cohort","name":"Cohort","tag":"Most chosen","monthly":899000,"yearly":719000,"text":"Live cohorts with a mentor, all year.","features":["Everything in Plus","Join any live cohort, one at a time","Mentor review of every project","A career session with a recruiter"]}],"faqs":[{"question":"Do I need experience before joining?","answer":"Not for beginner courses. Intermediate courses list what you should know first, and a short placement quiz tells you if you are ready."},{"question":"How much time does a course take each week?","answer":"Plan for six to eight hours: two live sessions of 90 minutes, plus lessons and exercises at your own pace."},{"question":"What if I miss a live session?","answer":"Every session is recorded and posted within a few hours. Your mentor also answers questions in the cohort chat."},{"question":"Can my company pay for the course?","answer":"Yes. We issue invoices with full tax details and offer team plans for five or more people."},{"question":"Can I get a refund?","answer":"Yes. You get a full refund if you cancel before the end of the first week of your cohort."}],"footerColumns":[{"title":"Learn","links":[{"label":"Courses","href":"#courses"},{"label":"How it works","href":"#how"},{"label":"Pricing","href":"#pricing"}]},{"title":"Company","links":[{"label":"About","href":"/about"},{"label":"Mentors","href":"#mentors"},{"label":"Careers","href":"/careers"}]},{"title":"Support","links":[{"label":"FAQ","href":"#faq"},{"label":"Contact","href":"/contact"},{"label":"For teams","href":"/teams"}]}],"legal":[{"label":"Privacy","href":"/privacy"},{"label":"Terms","href":"/terms"}]}
     JSON, true);
     extract($data);
 
-    $cx = fn (...$classes) => implode(' ', array_filter($classes));
-    $icon = fn (string $name, string $class = 'size-4') => new HtmlString(
+    $icon = fn (string $name, string $class) => new Illuminate\Support\HtmlString(
         '<svg class="'.$class.'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'.$icons[$name].'" /></svg>'
     );
-    $shapes = function (array $list): HtmlString {
-        $html = '';
-        foreach ($list as $shape) {
-            $attrs = isset($shape['c']) ? ' class="'.e($shape['c']).'"' : '';
-            foreach ($shape['a'] ?? [] as $key => $value) {
-                $attrs .= ' '.$key.'="'.e($value).'"';
-            }
-            $html .= '<'.$shape['t'].$attrs.'></'.$shape['t'].'>';
-        }
-
-        return new HtmlString($html);
-    };
-    $initials = fn (string $name) => mb_substr(implode('', array_map(fn ($part) => mb_substr($part, 0, 1), explode(' ', $name))), 0, 2);
-    $avatar = fn (string $name, int $index, string $class = 'size-10 text-sm') => new HtmlString(
-        '<span aria-hidden="true" class="'.$cx($face, $faceTones[$index % count($faceTones)], $class).'">'.e($initials($name)).'</span>'
-    );
-    $stars = new HtmlString('<span class="flex text-(--tpl-star)" aria-hidden="true">'.str_repeat('<svg viewBox="0 0 24 24" class="size-3.5 fill-current"><path d="'.$icons['star'].'"></path></svg>', 5).'</span>');
-    $rupiah = fn (int $value) => $value ? 'Rp '.number_format($value, 0, ',', '.') : 'Free';
-    $trackLabels = array_column($tracks, 'label', 'id');
-    // Data kursus untuk modal: teks, harga, dan SVG ilustrasi yang sudah dirender.
+    $rupiah = fn (int $value) => 'Rp '.number_format($value, 0, ',', '.');
+    $mentorById = array_column($mentors, null, 'id');
+    $topicLabels = array_column($topics, 'label', 'value');
+    $coursesBy = fn (string $id) => implode(', ', array_column(array_filter($courses, fn ($course) => $course['mentor'] === $id), 'title'));
+    $planNoteOf = fn (array $plan, string $billing) => $plan['monthly'] === 0
+        ? 'No card needed'
+        : ($billing === 'yearly' ? 'Billed '.$rupiah($plan['yearly'] * 12).' a year' : 'Billed monthly, cancel anytime');
+    // Data kursus untuk modal: teks dan harga yang sudah diformat.
     $courseData = array_map(fn ($course) => [
-        'id' => $course['id'], 'title' => $course['title'], 'track' => $course['track'], 'trackLabel' => $trackLabels[$course['track']],
-        'text' => $course['text'], 'lessons' => $course['lessons'], 'theory' => $course['theory'], 'practice' => $course['practice'],
-        'mentor' => $course['mentor'], 'price' => $rupiah($course['price']), 'bg' => $artTones[$course['track']]['bg'], 'svg' => (string) $shapes($course['art']),
-    ], $courseList);
-    $mascotSvg = fn (string $class) => new HtmlString('<svg viewBox="-4 -6 108 118" class="'.$class.'">'.$shapes($mascotShapes).'</svg>');
+        'id' => $course['id'], 'title' => $course['title'], 'topic' => $course['topic'], 'topicLabel' => $topicLabels[$course['topic']],
+        'level' => $course['level'], 'text' => $course['text'], 'weeks' => $course['weeks'].' weeks', 'starts' => $course['starts'],
+        'project' => $course['project'], 'mentor' => $course['mentor'], 'price' => $rupiah($course['price']),
+    ], $courses);
+    $total = count($courses);
+    $brand = new Illuminate\Support\HtmlString('<a href="#top" class="'.$brandLink.'"><span class="'.$brandMark.'">'.$icon('book', 'size-4').'</span>Benak</a>');
+    // Lottie: butuh window.loadLottie yang mengembalikan lottie-web (lihat templates/belajar/lottie/CREDITS.md).
+    $lottie = <<<'JS'
+    {
+      animation: null,
+      observer: null,
+      async init() {
+        const load = window.loadLottie;
+        if (!load) return;
+        try {
+          const [lottie, data] = await Promise.all([
+            load(),
+            fetch(this.$el.dataset.src).then((response) => {
+              if (!response.ok) throw new Error(response.statusText);
+              return response.json();
+            }),
+          ]);
+          if (!this.$el.isConnected) return;
+          const item = lottie.loadAnimation({ container: this.$el, renderer: 'svg', loop: false, autoplay: false, animationData: data });
+          this.animation = item;
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+            item.goToAndStop(item.totalFrames - 1, true);
+          } else {
+            this.observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? item.play() : item.pause()), { threshold: 0.4 });
+            this.observer.observe(this.$el);
+          }
+          this.$el.dataset.lottie = 'ready';
+        } catch {
+          this.$el.dataset.lottie = 'error';
+        }
+      },
+      destroy() {
+        this.observer?.disconnect();
+        this.animation?.destroy();
+      },
+    }
+    JS;
+    $lottieBox = fn (string $name, string $class) => new Illuminate\Support\HtmlString(
+        '<div x-data="'.e($lottie).'" data-src="/lottie/belajar/'.$name.'.json" data-lottie-name="'.$name.'" aria-hidden="true" class="'.$class.'"></div>'
+    );
 @endphp
 
 {{-- Indentasi HTML keluaran dibuang supaya halaman tetap ringan; tampilan tidak berubah. --}}
 @php ob_start(); @endphp
 <div
+  id="top"
   class="{{ $root }}"
   x-data="{
-    active: 'courses',
-    menuOpen: false,
-    filter: 'all',
+    topic: 'all',
+    billing: 'monthly',
     courses: @js($courseData),
     selected: @js($courseData[0]),
-    review: 0,
-    total: {{ count($reviews) }},
     email: '',
     emailError: '',
-    get visibleCount() { return this.courses.filter((course) => this.filter === 'all' || course.track === this.filter).length; },
+    init() {
+      {{-- ToggleGroup mengosongkan pilihan saat item aktif diklik lagi; kembalikan pilihan sebelumnya. --}}
+      this.$watch('topic', (value, previous) => { if (!value) this.topic = previous; });
+      this.$watch('billing', (value, previous) => { if (!value) this.billing = previous; });
+    },
+    get visibleCount() { return this.courses.filter((course) => this.topic === 'all' || course.topic === this.topic).length; },
     notify(title, description, variant = 'default') {
       this.$dispatch('markas-toast', { title, description, variant });
     },
-    pick(id) { this.active = id; this.menuOpen = false; },
-    pickTrack(id) { this.filter = id; this.active = 'courses'; document.getElementById('courses')?.scrollIntoView(); },
     openCourse(id) { this.selected = this.courses.find((course) => course.id === id); document.getElementById(@js($MODAL_ID)).showModal(); },
     onModalClose(dialog) {
-      if (dialog.returnValue === 'enroll') this.notify('You are enrolled', this.selected.title + ' is waiting in your dashboard.', 'success');
+      if (dialog.returnValue === 'apply') this.notify('Application started', 'We saved a seat for you in ' + this.selected.title + '. Finish your application within 48 hours.', 'success');
       dialog.returnValue = '';
-    },
-    go(next) { this.review = (next + this.total) % this.total; },
-    {{-- Animasi masuk saat scroll; tidak aktif bila pengguna memilih reduced motion. --}}
-    reveal(rootEl) {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-      const observer = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.setAttribute('data-shown', '');
-          observer.unobserve(entry.target);
-        }
-      }, { rootMargin: '0px 0px -10% 0px' });
-      rootEl.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
-      rootEl.setAttribute('data-reveal-ready', '');
     },
     submit() {
       const value = this.email.trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { this.emailError = 'Enter a valid email, like nama@email.com.'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { this.emailError = 'Enter a valid email address, like nama@email.com.'; return; }
       this.emailError = '';
       this.email = '';
-      this.notify('Check your inbox', 'Your free mini course is on its way to ' + value + '.', 'success');
+      this.notify('You are subscribed', 'The first lesson is on its way to ' + value + '.', 'success');
     },
   }"
-  x-init="reveal($el)"
-  x-on:keydown.escape.window="menuOpen = false"
 >
-  <style>{!! $keyframes !!}</style>
-  <header class="{{ $headerBar }}">
-    <div class="{{ $headerInner }}">
-      <a href="#top" class="{{ $brand }}"><span class="{{ $brandMark }}" aria-hidden="true">{{ $mascotSvg('size-7') }}</span>{{ $BRAND }}</a>
-      <nav aria-label="Main" class="{{ $navList }}">
-        @foreach ($nav as $item)
-          <a href="#{{ $item['id'] }}" class="{{ $navLink }}" :class="active === @js($item['id']) ? @js($navActive) : @js($navIdle)" :aria-current="active === @js($item['id']) ? 'true' : null" x-on:click="pick(@js($item['id']))">{{ $item['label'] }}</a>
-        @endforeach
-      </nav>
-      <div class="flex items-center gap-1">
-        <a href="/login" class="{{ $signIn }}">Sign in</a>
-        <a href="#courses" class="{{ $cx($pillButton, 'max-sm:hidden') }}" x-on:click="pick('courses')">Choose a course</a>
-        <button type="button" class="{{ $menuButton }}" aria-label="Open menu" :aria-label="menuOpen ? 'Close menu' : 'Open menu'" aria-expanded="false" :aria-expanded="menuOpen ? 'true' : 'false'" aria-controls="{{ $MENU_ID }}" x-on:click="menuOpen = !menuOpen">
-          <span x-show="!menuOpen" class="contents">{{ $icon('menu', 'size-5') }}</span>
-          <span x-show="menuOpen" x-cloak class="contents">{{ $icon('close', 'size-5') }}</span>
-        </button>
-      </div>
-      <template x-if="menuOpen">
-        <nav id="{{ $MENU_ID }}" aria-label="Mobile" class="{{ $mobileMenu }}">
-          @foreach ($nav as $item)
-            <a href="#{{ $item['id'] }}" class="{{ $mobileLink }}" :class="active === @js($item['id']) ? @js($navActive) : 'hover:bg-subtle'" :aria-current="active === @js($item['id']) ? 'true' : null" x-on:click="pick(@js($item['id']))">{{ $item['label'] }}</a>
-          @endforeach
-          <a href="/login" class="{{ $cx($mobileLink, 'mt-2 justify-center border border-line') }}">Sign in</a>
-        </nav>
-      </template>
-    </div>
-  </header>
+  <x-markas.navbar variant="blur" :sticky="true" :links="$nav" class="{{ $navbarEdge }}" x-on:click="if ($event.target.closest('[data-state=open] a')) open = false">
+    <x-slot:brand>{{ $brand }}</x-slot:brand>
+    <x-slot:actions>
+      <a href="/login" class="{{ $signIn }}">Sign in</a>
+      <a href="#courses" class="{{ $startLink }}">Start learning</a>
+    </x-slot:actions>
+  </x-markas.navbar>
 
-  <main id="top">
+  <main>
     <section aria-labelledby="belajar-title" class="{{ $hero }}">
-      <div class="{{ $heroCopy }}" data-reveal="">
-        <p class="{{ $heroBadge }}"><span class="{{ $heroBadgeDot }}">New</span> 120+ courses by practising psychologists</p>
-        <h1 id="belajar-title" class="{{ $heroTitle }}">Online <span class="{{ $marker }}">psychology</span> courses</h1>
-        <p class="{{ $heroLead }}">Learn how the mind works from people who use it at work every day. Short theory, real practice with a mentor, and a certificate you can show.</p>
-        <div class="flex flex-wrap gap-3">
-          <a href="#courses" class="{{ $bigButton }}" x-on:click="pick('courses')">Choose a course <span class="{{ $bigButtonIcon }}">{{ $icon('arrow') }}</span></a>
-          <button type="button" class="{{ $ghostButton }}" x-on:click="notify('Free lesson unlocked', 'Start with How memory works, 12 minutes.')">Try a free lesson</button>
+      <div>
+        <p class="{{ $eyebrow }}"><span aria-hidden="true" class="{{ $eyebrowDot }}"></span>Next cohorts start 12 January 2027</p>
+        <h1 id="belajar-title" class="{{ $h1 }}">{{ $TITLE }}</h1>
+        <p class="{{ $heroLead }}">Live, mentor-led courses in data, product, design, and marketing. Small cohorts, weekly projects, and feedback in Bahasa Indonesia, planned around a full-time job.</p>
+        <div class="{{ $heroActions }}">
+          <a href="#courses" class="{{ $heroLink }}">Browse courses{{ $icon('arrow', 'size-4') }}</a>
+          <x-markas.button variant="secondary" size="lg" x-on:click="notify('Free lesson unlocked', 'Lesson 1 of SQL for data analysis is ready. It takes about 15 minutes.')">Try a free lesson</x-markas.button>
         </div>
-        <dl class="{{ $heroStatsGrid }}">
-          @foreach ($heroStats as $stat)
-            <div class="flex flex-col"><dt class="text-sm text-muted">{{ $stat['label'] }}</dt><dd class="order-first text-2xl font-bold tracking-tight sm:text-3xl">{{ $stat['value'] }}</dd></div>
+        <ul class="{{ $factList }}">
+          @foreach ($heroFacts as $item)
+            <li class="{{ $fact }}">{{ $icon('check', $checkIcon) }}{{ $item }}</li>
           @endforeach
-        </dl>
+        </ul>
       </div>
-
-      <div class="{{ $art }}" data-reveal="">
-        <svg viewBox="0 0 100 100" class="{{ $blob }}" aria-hidden="true">{{ $shapes($blobShape) }}</svg>
-        <div class="{{ $photo }}">
-          <svg viewBox="0 0 300 300" class="size-full" role="img" aria-label="Illustration of two people talking warmly, with a heart between them">{{ $shapes($couple) }}</svg>
-        </div>
-        <svg viewBox="-4 -6 108 118" class="{{ $mascot }}" aria-hidden="true">{{ $shapes($mascotShapes) }}</svg>
-        <div class="{{ $infoCard }}">
-          <p class="flex items-center gap-2 text-xs font-semibold text-danger">{{ $icon('live') }}Live tonight</p>
-          <p class="mt-2 text-sm leading-snug font-semibold">Couples therapy basics</p>
-          <p class="mt-1 text-xs text-muted">Thursday, 19:00 WIB</p>
-          <div class="mt-3 flex items-center gap-2">
-            <span class="flex -space-x-2">
-              @foreach (array_slice($reviews, 0, 3) as $index => $item)
-                {{ $avatar($item['name'], $index, 'size-7 text-[10px] ring-2 ring-surface') }}
-              @endforeach
-            </span>
-            <span class="text-xs text-muted">324 joined</span>
+      <figure class="{{ $heroCard }}">
+        <div class="{{ $heroStage }}">{{ $lottieBox('hero', $heroLottie) }}</div>
+        <figcaption>
+          <div class="{{ $nextRow }}">
+            <x-markas.avatar name="Rina Siregar" size="sm" />
+            <div>
+              <p class="{{ $nextLabel }}">Up next in your cohort</p>
+              <p class="{{ $nextTitle }}">Live review: joining sales tables</p>
+              <p class="{{ $nextLabel }}">Thursday, 19.30 WIB with Rina Siregar</p>
+            </div>
           </div>
-        </div>
-      </div>
+          <div class="{{ $progressRow }}">
+            <div class="{{ $progressTrack }}"><div class="{{ $progressBar }}"></div></div>
+            <span class="{{ $progressText }}">Week 3 of 8</span>
+          </div>
+        </figcaption>
+      </figure>
     </section>
 
-    <section id="tracks" aria-labelledby="belajar-tracks" class="{{ $tracksWrap }}">
-      <div class="{{ $tracksPanel }}">
-        <div class="{{ $tracksHead }}" data-reveal="">
-          <h2 id="belajar-tracks" class="{{ $h2 }}">Learning tracks</h2>
-          <p class="max-w-md text-lg text-pretty text-(--tpl-on)/85 lg:justify-self-end">Four paths from first lecture to confident practice. Pick one to see its courses.</p>
-        </div>
-        <div class="{{ $tracksGrid }}">
-          @foreach ($tracks as $index => $track)
-            <button type="button" class="{{ $cx($trackCard, $trackTilt[$index]) }}" data-reveal="" x-on:click="pickTrack(@js($track['id']))">
-              <svg viewBox="0 0 24 64" class="{{ $clip }}" aria-hidden="true">{{ $shapes($clipShapes) }}</svg>
-              <span class="{{ $trackArt }}"><svg viewBox="0 0 120 120" class="size-32" aria-hidden="true">{{ $shapes($trackArtShapes[$track['id']]) }}</svg></span>
-              <span class="grid gap-1 px-1"><span class="text-xl font-bold tracking-tight">{{ $track['label'] }}</span><span class="text-sm text-muted">{{ $track['text'] }}</span></span>
-              <span class="flex items-center justify-between px-1">
-                <span class="{{ $countPill }}">{{ $track['count'] }} courses</span>
-                <span class="flex size-9 items-center justify-center rounded-full bg-primary text-on-primary transition-transform duration-200 group-hover:translate-x-1">{{ $icon('arrow') }}</span>
-              </span>
-            </button>
-          @endforeach
-        </div>
-      </div>
-    </section>
+    <div class="{{ $logoWrap }}">
+      <x-markas.logo-cloud title="Our graduates work at teams like these" :logos="$logos" />
+    </div>
 
     <section id="courses" aria-labelledby="belajar-courses" class="{{ $section }}">
-      <div class="flex flex-wrap items-end justify-between gap-6" data-reveal="">
-        <div class="grid gap-4">
-          <h2 id="belajar-courses" class="{{ $h2 }}">Courses</h2>
-          <p class="{{ $lead }}">Every course mixes short theory videos with practice tasks a mentor reviews.</p>
-        </div>
-        <p class="text-sm text-muted" aria-live="polite" x-text="'Showing ' + visibleCount + ' of ' + courses.length + ' courses'">Showing {{ count($courseList) }} of {{ count($courseList) }} courses</p>
+      <div class="{{ $sectionHead }}">
+        <h2 id="belajar-courses" class="{{ $h2 }}">Pick a course that fits your week</h2>
+        <p class="{{ $lead }}">Every course runs as a cohort of up to 24 people, with two live evening sessions a week and a project you keep.</p>
       </div>
-      <div role="group" aria-label="Filter by track" class="{{ $cx($filterBar, 'mt-8') }}">
-        @foreach ($filters as $item)
-          <button type="button" class="{{ $filterItem }}" :class="filter === @js($item['id']) ? @js($filterOn) : @js($filterOff)" :aria-pressed="filter === @js($item['id']) ? 'true' : 'false'" x-on:click="filter = @js($item['id'])">{{ $item['label'] }}</button>
-        @endforeach
+      <div class="{{ $toolbar }}">
+        <div class="{{ $filterScroll }}">
+          <x-markas.toggle-group label="Filter courses by topic" :items="$topics" value="all" x-model="topic" />
+        </div>
+        <p aria-live="polite" class="{{ $countText }}" x-text="topic === 'all' ? 'Showing all {{ $total }} courses' : 'Showing ' + visibleCount + ' of {{ $total }} courses'">Showing all {{ $total }} courses</p>
       </div>
       <ul class="{{ $courseGrid }}">
-        @foreach ($courseList as $course)
-          <li class="{{ $courseCard }}" data-course="{{ $course['id'] }}" x-show="filter === 'all' || filter === @js($course['track'])">
-            <div class="{{ $cx($courseArt, $artTones[$course['track']]['bg']) }}">
-              <svg viewBox="0 0 300 176" preserveAspectRatio="xMidYMid slice" class="size-full" aria-hidden="true">{{ $shapes($course['art']) }}</svg>
-              <span class="absolute top-3 left-3 flex gap-1.5">
-                @if ($course['price'] === 0)<span class="{{ $cx($tag, 'bg-(--tpl-lime) text-(--tpl-lime-ink)') }}">Free</span>@endif
-                <span class="{{ $cx($tag, 'bg-(--tpl-on) text-(--tpl-av-ink)') }}">Online</span>
-              </span>
+        @foreach ($courses as $course)
+          <li data-course="{{ $course['id'] }}" class="{{ $courseCard }}" x-show="topic === 'all' || topic === @js($course['topic'])">
+            <div class="{{ $courseBody }}">
+              <div class="{{ $courseTop }}">
+                <span class="{{ $topicText }}">{{ $topicLabels[$course['topic']] }}</span>
+                <x-markas.badge :dot="false">{{ $course['level'] }}</x-markas.badge>
+              </div>
+              <h3 class="{{ $courseTitle }}">{{ $course['title'] }}</h3>
+              <p class="{{ $courseText }}">{{ $course['text'] }}</p>
+              <p class="{{ $courseMeta }}">{{ $course['weeks'] }} weeks, starts {{ $course['starts'] }}</p>
             </div>
-            <div class="grid flex-1 content-start gap-3 px-2">
-              <span class="{{ $cx($category, 'justify-self-start') }}">{{ $trackLabels[$course['track']] }}</span>
-              <h3 class="text-lg leading-snug font-bold tracking-tight">{{ $course['title'] }}</h3>
-              <p class="flex items-center gap-2 text-sm">{{ $stars }}<span class="font-semibold">{{ $course['rating'] }}</span><span class="text-muted">({{ $course['reviews'] }} reviews)</span></p>
-              <p class="{{ $meta }}">
-                <span class="flex items-center gap-1.5">{{ $icon('book', 'size-3.5') }}Theory {{ $course['theory'] }} h</span>
-                <span class="flex items-center gap-1.5">{{ $icon('hand', 'size-3.5') }}Practice {{ $course['practice'] }} h</span>
-              </p>
-            </div>
-            <div class="flex items-center justify-between gap-3 border-t border-line px-2 pt-4">
-              <span class="text-lg font-bold tracking-tight tabular-nums">{{ $rupiah($course['price']) }}</span>
-              <button type="button" class="{{ $detailsButton }}" aria-label="Details, {{ $course['title'] }}" x-on:click="openCourse(@js($course['id']))">Details</button>
+            <div class="{{ $courseFoot }}">
+              <span class="{{ $priceText }}">{{ $rupiah($course['price']) }}</span>
+              <x-markas.button variant="secondary" size="sm" aria-label="Details, {{ $course['title'] }}" x-on:click="openCourse('{{ $course['id'] }}')">Details</x-markas.button>
             </div>
           </li>
         @endforeach
       </ul>
       <x-markas.modal :id="$MODAL_ID" title="Course details" x-on:close="onModalClose($event.currentTarget)">
-        <div class="grid gap-4 text-ink">
-          <div class="h-32 overflow-hidden rounded-2xl" :class="selected.bg">
-            <svg viewBox="0 0 300 176" preserveAspectRatio="xMidYMid slice" class="size-full" aria-hidden="true" x-html="selected.svg"></svg>
+        <div class="{{ $modalBody }}">
+          <div>
+            <div class="{{ $courseTop }}">
+              <span class="{{ $topicText }}" x-text="selected.topicLabel">{{ $courseData[0]['topicLabel'] }}</span>
+              <x-markas.badge :dot="false"><span x-text="selected.level">{{ $courseData[0]['level'] }}</span></x-markas.badge>
+            </div>
+            <p data-modal-title="" class="{{ $modalTitle }}" x-text="selected.title">{{ $courseData[0]['title'] }}</p>
+            <p class="{{ $modalText }}" x-text="selected.text">{{ $courseData[0]['text'] }}</p>
           </div>
-          <div class="grid gap-1">
-            <span class="{{ $cx($category, 'justify-self-start') }}" x-text="selected.trackLabel"></span>
-            <p class="text-lg font-bold" data-modal-title="" x-text="selected.title"></p>
-            <p class="text-sm text-muted" x-text="selected.text"></p>
-          </div>
-          <dl class="grid grid-cols-3 gap-3 text-sm">
-            <div class="rounded-2xl bg-subtle p-3"><dt class="text-muted">Lessons</dt><dd class="font-semibold" x-text="selected.lessons"></dd></div>
-            <div class="rounded-2xl bg-subtle p-3"><dt class="text-muted">Theory</dt><dd class="font-semibold" x-text="selected.theory + ' h'"></dd></div>
-            <div class="rounded-2xl bg-subtle p-3"><dt class="text-muted">Practice</dt><dd class="font-semibold" x-text="selected.practice + ' h'"></dd></div>
+          <dl class="{{ $factGrid }}">
+            <div class="{{ $factCell }}"><dt class="{{ $factTerm }}">Length</dt><dd class="{{ $factValue }}" x-text="selected.weeks">{{ $courseData[0]['weeks'] }}</dd></div>
+            <div class="{{ $factCell }}"><dt class="{{ $factTerm }}">Starts</dt><dd class="{{ $factValue }}" x-text="selected.starts">{{ $courseData[0]['starts'] }}</dd></div>
+            <div class="{{ $factCell }}"><dt class="{{ $factTerm }}">Live</dt><dd class="{{ $factValue }}">{{ $SCHEDULE }}</dd></div>
           </dl>
-          <p class="flex flex-wrap items-center justify-between gap-2 text-sm"><span x-text="'Mentor: ' + selected.mentor"></span><span class="text-lg font-bold" x-text="selected.price"></span></p>
+          <div class="{{ $projectBox }}">
+            <p class="{{ $projectTerm }}">What you will build</p>
+            <p class="{{ $projectText }}" x-text="selected.project">{{ $courseData[0]['project'] }}</p>
+          </div>
+          <div class="{{ $modalMentor }}">
+            @foreach ($mentors as $mentor)
+              <div class="{{ $person }}" x-show="selected.mentor === @js($mentor['id'])" @if (! $loop->first) style="display: none" @endif>
+                <x-markas.avatar :name="$mentor['name']" size="sm" />
+                <div>
+                  <p class="{{ $personName }}">{{ $mentor['name'] }}</p>
+                  <p class="{{ $personRole }}">{{ $mentor['role'] }}</p>
+                </div>
+              </div>
+            @endforeach
+            <p class="{{ $modalPrice }}" x-text="selected.price">{{ $courseData[0]['price'] }}</p>
+          </div>
         </div>
         <x-slot:footer>
-          <button type="submit" value="cancel" class="{{ $cx($ghostButton, 'h-10 text-sm') }}">Close</button>
-          <button type="submit" value="enroll" class="{{ $pillButton }}">Enroll now</button>
+          <x-markas.button variant="secondary" type="submit" value="cancel">Close</x-markas.button>
+          <x-markas.button type="submit" value="apply">Apply for this cohort</x-markas.button>
         </x-slot:footer>
       </x-markas.modal>
     </section>
 
-    <section id="reviews" aria-labelledby="belajar-reviews" class="{{ $section }}">
-      <div class="grid gap-4" data-reveal="">
-        <h2 id="belajar-reviews" class="{{ $h2 }}">Students on <span class="{{ $marker }}">Benak</span></h2>
-        <p class="{{ $lead }}">Teachers, HR teams, engineers, and future psychologists share what changed after their course.</p>
+    <section id="how" aria-labelledby="belajar-how" class="{{ $section }}">
+      <div class="{{ $sectionHead }}">
+        <h2 id="belajar-how" class="{{ $h2 }}">How a course works</h2>
+        <p class="{{ $lead }}">About six to eight hours a week, most of it in the evening. You learn on your own first, then practise with people.</p>
       </div>
-      <div class="mt-10 flex flex-wrap items-center justify-between gap-4">
-        <p class="text-sm font-semibold text-muted" aria-live="polite" x-text="'Review ' + (review + 1) + ' of ' + total">Review 1 of {{ count($reviews) }}</p>
-        <div class="flex gap-2">
-          <button type="button" class="{{ $roundButton }}" aria-label="Previous review" x-on:click="go(review - 1)">{{ $icon('prev', 'size-5') }}</button>
-          <button type="button" class="{{ $roundButton }}" aria-label="Next review" x-on:click="go(review + 1)">{{ $icon('next', 'size-5') }}</button>
-        </div>
-      </div>
-      <div class="{{ $cx($slider, 'mt-6') }}" data-reveal="">
-        <ul class="{{ $slideTrack }}" :style="'transform: translateX(-' + review * 100 + '%)'">
-          @foreach ($reviews as $position => $item)
-            <li class="{{ $slide }}" :aria-hidden="review !== {{ $position }} ? 'true' : 'false'" :inert="review !== {{ $position }}">
-              <blockquote class="grid gap-6">
-                {{ $icon('quote', 'size-10 text-(--tpl-blue)') }}
-                <p class="text-2xl leading-snug font-semibold tracking-tight text-pretty sm:text-3xl">{{ $item['quote'] }}</p>
-                <footer class="flex items-center gap-3">
-                  {{ $avatar($item['name'], $position, 'size-12 text-base') }}
-                  <span><span class="block font-semibold">{{ $item['name'] }}</span><span class="block text-sm text-muted">{{ $item['role'] }}</span></span>
-                </footer>
-              </blockquote>
-              <div class="grid gap-2 rounded-[28px] bg-surface p-5">
-                <span class="text-xs text-muted">Course taken</span>
-                <span class="font-semibold">{{ $item['course'] }}</span>
-                <span class="flex items-center gap-2 text-sm">{{ $stars }} 5,0</span>
-              </div>
-            </li>
-          @endforeach
-        </ul>
-      </div>
-      <div class="mt-6 flex justify-center">
-        @foreach ($reviews as $position => $item)
-          <button type="button" class="{{ $dot }}" :class="review === {{ $position }} ? 'w-8 bg-primary' : 'w-2.5 bg-line hover:bg-muted'" aria-label="Show review {{ $position + 1 }}" :aria-current="review === {{ $position }} ? 'true' : null" x-on:click="go({{ $position }})"></button>
+      <ol class="{{ $stepGrid }}">
+        @foreach ($steps as $step)
+          <li>
+            <div class="{{ $stepArt }}">{{ $lottieBox($step['lottie'], $stepLottie) }}</div>
+            <p class="{{ $stepLabel }}">{{ $step['label'] }}</p>
+            <h3 class="{{ $stepTitle }}">{{ $step['title'] }}</h3>
+            <p class="{{ $stepText }}">{{ $step['text'] }}</p>
+          </li>
         @endforeach
-      </div>
+      </ol>
     </section>
 
-    <section id="faq" aria-labelledby="belajar-faq" class="{{ $section }}">
-      <div class="{{ $faqLayout }}">
-        <div class="grid content-start gap-6" data-reveal="">
-          <h2 id="belajar-faq" class="{{ $h2 }}">Questions, answered</h2>
-          <p class="{{ $lead }}">Everything about courses, certificates, and studying with a mentor.</p>
-          <div class="{{ $helpCard }}">
-            {{ $icon('chat', 'size-8') }}
-            <p class="text-xl font-bold tracking-tight">Still unsure which course fits?</p>
-            <p class="text-sm">Our student advisors reply within minutes, every day from 08:00 to 21:00 WIB.</p>
-            <button type="button" class="{{ $helpButton }}" x-on:click="notify('Chat opened', 'Dewi from student support will reply in a few minutes.')">Chat with an advisor</button>
-          </div>
+    <section id="mentors" aria-labelledby="belajar-mentors" class="{{ $section }}">
+      <div class="{{ $sectionHead }}">
+        <h2 id="belajar-mentors" class="{{ $h2 }}">Taught by people who still do the work</h2>
+        <p class="{{ $lead }}">Every mentor works in the field they teach and leads at most two cohorts a year.</p>
+      </div>
+      <ul class="{{ $mentorGrid }}">
+        @foreach ($mentors as $mentor)
+          <li class="{{ $mentorCard }}">
+            <x-markas.avatar :name="$mentor['name']" size="lg" />
+            <div>
+              <h3 class="{{ $mentorName }}">{{ $mentor['name'] }}</h3>
+              <p class="{{ $personRole }}">{{ $mentor['role'] }}</p>
+            </div>
+            <p class="{{ $mentorBio }}">{{ $mentor['bio'] }}</p>
+            <p class="{{ $mentorTeaches }}">Teaches {{ $coursesBy($mentor['id']) }}</p>
+          </li>
+        @endforeach
+      </ul>
+    </section>
+
+    <section id="stories" aria-labelledby="belajar-stories" class="{{ $section }}">
+      <div class="{{ $sectionHead }}">
+        <h2 id="belajar-stories" class="{{ $h2 }}">From recent graduates</h2>
+      </div>
+      <ul class="{{ $storyGrid }}">
+        @foreach ($stories as $story)
+          <li>
+            <figure class="{{ $storyCard }}">
+              <blockquote class="{{ $quoteText }}">{{ $story['quote'] }}</blockquote>
+              <figcaption class="{{ $person }}">
+                <x-markas.avatar :name="$story['name']" size="md" />
+                <div>
+                  <p class="{{ $personName }}">{{ $story['name'] }}</p>
+                  <p class="{{ $personRole }}">{{ $story['role'] }}, {{ $story['course'] }}</p>
+                </div>
+              </figcaption>
+            </figure>
+          </li>
+        @endforeach
+      </ul>
+    </section>
+
+    <section id="pricing" aria-labelledby="belajar-pricing" class="{{ $section }}">
+      <div class="{{ $pricingHead }}">
+        <div class="{{ $sectionHead }}">
+          <h2 id="belajar-pricing" class="{{ $h2 }}">Pay per course, or learn all year</h2>
+          <p class="{{ $lead }}">Course prices above are one-time. A membership suits you if you plan to keep learning.</p>
         </div>
-        <div class="border-t border-line" data-reveal="">
-          @foreach ($faqs as $index => $item)
-            <details name="belajar-faq" class="{{ $faqItem }}" @if ($index === 0) open @endif>
-              <summary class="{{ $faqSummary }}">{{ $item['q'] }}<span class="{{ $faqIcon }}" aria-hidden="true">{{ $icon('plus') }}</span></summary>
-              <p class="{{ $faqBody }}">{{ $item['a'] }}</p>
-            </details>
-          @endforeach
+        <div class="{{ $billingRow }}">
+          <x-markas.toggle-group label="Billing period" :items="$billingOptions" value="monthly" x-model="billing" />
+          <span class="{{ $saveNote }}">Save 20% with yearly</span>
         </div>
       </div>
+      <ul class="{{ $planGrid }}">
+        @foreach ($plans as $plan)
+          <li data-plan="{{ $plan['id'] }}" class="{{ $plan['tag'] ? $planFeatured : $planCard }}">
+            <div class="{{ $planHead }}">
+              <h3 class="{{ $planName }}">{{ $plan['name'] }}</h3>
+              @if ($plan['tag'])
+                <x-markas.badge variant="primary" :dot="false">{{ $plan['tag'] }}</x-markas.badge>
+              @endif
+            </div>
+            <p class="{{ $planText }}">{{ $plan['text'] }}</p>
+            <p class="{{ $planPrice }}">
+              <span data-price="" class="{{ $planAmount }}" x-text="billing === 'yearly' ? @js($rupiah($plan['yearly'])) : @js($rupiah($plan['monthly']))">{{ $rupiah($plan['monthly']) }}</span>
+              <span class="{{ $planUnit }}">/month</span>
+            </p>
+            <p class="{{ $planNote }}" x-text="billing === 'yearly' ? @js($planNoteOf($plan, 'yearly')) : @js($planNoteOf($plan, 'monthly'))">{{ $planNoteOf($plan, 'monthly') }}</p>
+            <ul class="{{ $featureList }}">
+              @foreach ($plan['features'] as $feature)
+                <li class="{{ $featureItem }}">{{ $icon('check', $featureIcon) }}{{ $feature }}</li>
+              @endforeach
+            </ul>
+            <x-markas.button :variant="$plan['tag'] ? 'primary' : 'secondary'" class="{{ $planButton }}" x-on:click="notify('{{ $plan['name'] }} plan selected', 'Checkout opens in the next step. You can switch plans later.')">Choose {{ $plan['name'] }}</x-markas.button>
+          </li>
+        @endforeach
+      </ul>
     </section>
+
+    <section id="faq" aria-labelledby="belajar-faq" class="{{ $faqLayout }}">
+      <div class="{{ $faqAside }}">
+        <h2 id="belajar-faq" class="{{ $h2 }}">Questions, answered</h2>
+        <p class="{{ $lead }}">Not sure which course fits? An advisor can look at your goals and suggest one.</p>
+        <x-markas.button variant="secondary" x-on:click="notify('Chat opened', 'An advisor usually replies within 10 minutes, 09.00 to 21.00 WIB.')">Chat with an advisor</x-markas.button>
+      </div>
+      <x-markas.faq :items="$faqs" :exclusive="true" class="{{ $faqList }}" />
+    </section>
+
+    <div class="{{ $bandWrap }}">
+      <section aria-labelledby="belajar-newsletter" class="{{ $band }}">
+        <div>
+          <h2 id="belajar-newsletter" class="{{ $bandTitle }}">One free lesson every Tuesday</h2>
+          <p class="{{ $bandText }}">A ten minute lesson from one of our mentors, with an exercise you can finish over coffee.</p>
+        </div>
+        <form class="{{ $form }}" novalidate x-on:submit.prevent="submit()">
+          <label for="{{ $EMAIL_ID }}" class="{{ $fieldLabel }}">Email address</label>
+          <div class="{{ $fieldRow }}">
+            <x-markas.input :id="$EMAIL_ID" type="email" name="email" autocomplete="email" placeholder="nama@email.com" class="{{ $field }}" aria-describedby="{{ $EMAIL_ID }}-note" x-model="email" x-bind:aria-invalid="emailError ? 'true' : null" />
+            <x-markas.button type="submit" class="{{ $fieldButton }}">Subscribe</x-markas.button>
+          </div>
+          <p id="{{ $EMAIL_ID }}-note" class="{{ $fieldHint }}" x-bind:class="emailError ? @js($fieldError) : @js($fieldHint)" x-text="emailError || 'One email a week. Unsubscribe in one click.'">One email a week. Unsubscribe in one click.</p>
+        </form>
+      </section>
+    </div>
   </main>
 
-  <footer class="{{ $footer }}">
-    <div class="{{ $footerPanel }}">
-      <div class="{{ $footerGrid }}">
-        <div>
-          <a href="#top" class="{{ $cx($brand, 'focus-visible:outline-(--tpl-on)') }}"><span class="{{ $cx($brandMark, 'bg-(--tpl-on)') }}" aria-hidden="true">{{ $mascotSvg('size-7') }}</span>{{ $BRAND }}</a>
-          <p class="mt-6 text-2xl font-bold tracking-tight text-balance">Get a free mini course every month.</p>
-          <form class="mt-6 grid max-w-md gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start" novalidate x-on:submit.prevent="submit()">
-            <div>
-              <label for="belajar-email" class="sr-only">Email address</label>
-              <x-markas.input id="belajar-email" type="email" name="email" placeholder="nama@email.com" class="{{ $newsField }}" x-model="email" x-bind:aria-invalid="emailError ? 'true' : null" x-bind:aria-describedby="emailError ? 'belajar-email-error' : null" />
-            </div>
-            <button type="submit" class="{{ $newsButton }}">Subscribe</button>
-            <template x-if="emailError">
-              <p id="belajar-email-error" class="{{ $newsError }}" x-text="emailError"></p>
-            </template>
-          </form>
-        </div>
-        @foreach ($footerCols as $col)
-          <nav aria-label="{{ $col['title'] }}" class="grid content-start gap-3">
-            <p class="font-semibold">{{ $col['title'] }}</p>
-            @foreach ($col['links'] as [$label, $href])
-              <a href="{{ $href }}" class="{{ $footerLink }}">{{ $label }}</a>
-            @endforeach
-          </nav>
-        @endforeach
-      </div>
-      <div class="{{ $footerBottom }}">
-        <p>&copy; 2026 PT Benak Edukasi Nusantara</p>
-        <p>Built with <a href="https://markas.jenderalcorp.com" class="{{ $builtWith }}">MarkasUI</a></p>
-      </div>
-    </div>
-  </footer>
+  <x-markas.footer class="{{ $footer }}" description="Live online courses for working professionals in Indonesia." :columns="$footerColumns" :legal="$legal" copyright="© 2026 Benak. Built with MarkasUI.">
+    <x-slot:brand>{{ $brand }}</x-slot:brand>
+  </x-markas.footer>
   <x-markas.toast />
 </div>
 @php echo preg_replace('/^[ \t]+/m', '', ob_get_clean()); @endphp

@@ -13,3 +13,5 @@ playwright-report/
 playground/public/
 playwright-report-docs/
 apps/docs/public/angular/
+# Animasi Lottie: JSON hasil ekspor, dibiarkan ringkas.
+templates/*/lottie/*.json

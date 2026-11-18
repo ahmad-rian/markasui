@@ -6,8 +6,6 @@ on:
 
 permissions:
   contents: read
-  # Trusted Publishing: npm menerima token OIDC dari GitHub Actions, tanpa secret NPM_TOKEN.
-  id-token: write
 
 jobs:
   ci:
@@ -16,6 +14,11 @@ jobs:
   publish:
     needs: ci
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Trusted Publishing: npm menerima token OIDC dari GitHub Actions, tanpa secret NPM_TOKEN.
+      # Hanya job ini yang butuh token OIDC, job CI tidak.
+      id-token: write
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
@@ -28,10 +31,11 @@ jobs:
           done
       - run: pnpm build:packages
       # pnpm pack mengganti workspace:* dengan versi asli; npm publish memakai Trusted Publishing (npm 11.5.1+)
-      # dan otomatis menambahkan provenance.
+      # dan otomatis menambahkan provenance. npm bawaan Node 26 (11.x) sudah cukup: tidak memasang npm@latest
+      # yang tidak terkunci di job yang memegang token OIDC.
       - name: Publish ke npm
         run: |
-          npm install -g npm@latest
+          npm --version
           mkdir -p .release
           (cd packages/cli && pnpm pack --pack-destination ../../.release)
           (cd packages/mcp && pnpm pack --pack-destination ../../.release)

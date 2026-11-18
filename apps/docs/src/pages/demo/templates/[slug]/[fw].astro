@@ -64,6 +64,8 @@ if (!stylesheet) throw new Error(`CSS untuk template ${template.name} belum diba
       fw === "blade" && (
         <script>
           import Alpine from "alpinejs";
+          // Template Blade dengan Lottie memanggil window.loadLottie; lottie-web hanya diunduh saat dipakai.
+          Object.assign(window, { loadLottie: () => import("lottie-web/build/player/lottie_light").then((m) => m.default) });
           Alpine.start();
         </script>
       )

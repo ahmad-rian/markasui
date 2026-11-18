@@ -2,6 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 /** DOCS_PORT: uji build lain (mis. agen paralel) tanpa mengganggu preview di :4321. */
 const port = Number(process.env.DOCS_PORT ?? 4321);
+/** DOCS_URL: run against a deployed site (e.g. after pnpm deploy:site) instead of astro preview. */
+const remote = process.env.DOCS_URL;
 
 export default defineConfig({
   testDir: "tests/docs",
@@ -14,16 +16,21 @@ export default defineConfig({
         ["html", { open: "never", outputFolder: "playwright-report-docs" }],
       ]
     : "list",
-  use: { baseURL: `http://localhost:${port}`, reducedMotion: "reduce" },
+  use: {
+    baseURL: remote ?? `http://localhost:${port}`,
+    reducedMotion: "reduce",
+  },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile", use: { ...devices["Pixel 7"] }, grep: /@mobile/ },
   ],
-  webServer: {
-    // Situs harus sudah dibangun (pnpm build). Preview menyajikan dist/ apa adanya.
-    command: `pnpm --filter @markasui/docs exec astro preview --port ${port}`,
-    url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
-  },
+  webServer: remote
+    ? undefined
+    : {
+        // Situs harus sudah dibangun (pnpm build). Preview menyajikan dist/ apa adanya.
+        command: `pnpm --filter @markasui/docs exec astro preview --port ${port}`,
+        url: `http://localhost:${port}`,
+        reuseExistingServer: !process.env.CI,
+        timeout: 60_000,
+      },
 });

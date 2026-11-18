@@ -11,6 +11,7 @@ import { PNG } from "pngjs";
 import {
   templateFrameworks,
   templateParityFrameworks,
+  templateParityTimeout,
   MAX_DIFF_RATIO,
   themes,
   type Framework,
@@ -21,19 +22,22 @@ const SLUG = "belajar";
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const DESKTOP = { width: 1440, height: 900 };
 const MOBILE = { width: 390, height: 844 };
-const TITLE = "Online psychology courses";
+const SMALLEST = { width: 360, height: 780 };
+const TITLE = "Learn the job from people who do it";
+const LOTTIE_COUNT = 4;
 
 // Halaman panjang: tangkapan layar penuh dan axe butuh waktu lebih.
 test.describe.configure({ timeout: 120_000 });
 
-/** Aksen biru untuk memastikan sorotan memakai token primary. */
+/** Aksen biru untuk memastikan tombol utama memakai token primary. */
 const BLUE_ACCENT =
   ":root:root{--markas-primary:#1d4ed8;--markas-primary-strong:#1e40af;--markas-on-primary:#fff;--markas-primary-soft:#dbeafe;--markas-primary-line:#93c5fd}";
 
-const mainNav = (page: Page) => page.getByRole("navigation", { name: "Main" });
 const toastRegion = (page: Page) =>
   page.getByRole("status", { name: "Notifications" });
+const courseCards = (page: Page) => page.locator("[data-course]:visible");
 
+/** Buka template dan tunggu keempat animasi Lottie dimuat (gambar diam bila reduced motion). */
 async function openTemplate(
   page: Page,
   framework: Framework,
@@ -42,6 +46,9 @@ async function openTemplate(
   await page.goto(`/template.html?t=${SLUG}&fw=${framework}&theme=${theme}`);
   await page.locator("body[data-ready=true]").waitFor();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(TITLE);
+  await expect(page.locator("[data-lottie=ready] svg")).toHaveCount(
+    LOTTIE_COUNT,
+  );
   await page.evaluate(() => document.fonts.ready);
 }
 
@@ -51,6 +58,7 @@ async function capture(
   framework: Framework,
   theme: Theme,
 ) {
+  // Reduced motion: setiap Lottie langsung berhenti di frame terakhir, jadi hasilnya deterministik.
   const context = await browser.newContext({
     baseURL: test.info().project.use.baseURL,
     viewport,
@@ -116,6 +124,7 @@ async function expectNoAxeViolations(page: Page, label: string) {
 }
 
 test.describe("kesamaan tampilan", () => {
+  test.describe.configure({ timeout: 2 * templateParityTimeout(SLUG) });
   test("desktop light", async ({ browser }, testInfo) => {
     await expectSameAsReact(browser, DESKTOP, testInfo, "light");
   });
@@ -140,34 +149,34 @@ for (const framework of templateFrameworks(SLUG)) {
       });
     }
 
-    test("aksen biru dipakai sorotan dan tetap lolos axe", async ({ page }) => {
+    test("aksen biru dipakai tombol utama dan tetap lolos axe", async ({
+      page,
+    }) => {
       await openTemplate(page, framework);
       await page.addStyleTag({ content: BLUE_ACCENT });
       const blue = "rgb(29, 78, 216)";
       await expect(
-        page.getByRole("banner").getByRole("link", { name: "Choose a course" }),
+        page.getByRole("link", { name: "Browse courses" }),
       ).toHaveCSS("background-color", blue);
-      await expect(page.getByRole("button", { name: "All courses" })).toHaveCSS(
-        "background-color",
-        blue,
-      );
+      await expect(
+        page.getByRole("button", { name: "Choose Cohort" }),
+      ).toHaveCSS("background-color", blue);
       await expectNoAxeViolations(page, "blue");
     });
 
-    test("navbar menandai link aktif dan melompat ke section", async ({
+    test("Lottie dekoratif dimuat ke kotak berukuran tetap", async ({
       page,
     }) => {
-      await openTemplate(page, framework);
-      const courses = mainNav(page).getByRole("link", { name: "Courses" });
-      await expect(courses).toHaveAttribute("aria-current", "true");
-      const faq = mainNav(page).getByRole("link", { name: "FAQ" });
-      await faq.click();
-      await expect(faq).toHaveAttribute("aria-current", "true");
-      await expect(courses).not.toHaveAttribute("aria-current", "true");
-      await expect(page).toHaveURL(/#faq$/);
-      await expect(
-        page.getByRole("heading", { name: "Questions, answered" }),
-      ).toBeInViewport();
+      await page.goto(`/template.html?t=${SLUG}&fw=${framework}`);
+      const hero = page.locator("[data-lottie-name=hero]");
+      await hero.waitFor();
+      const before = await hero.boundingBox();
+      await expect(hero).toHaveAttribute("data-lottie", "ready");
+      expect(await hero.boundingBox()).toEqual(before);
+      const boxes = page.locator("[data-lottie-name]");
+      await expect(boxes).toHaveCount(LOTTIE_COUNT);
+      for (const box of await boxes.all())
+        await expect(box).toHaveAttribute("aria-hidden", "true");
     });
 
     test("menu mobile terbuka, menutup saat link dipilih dan Escape", async ({
@@ -175,59 +184,42 @@ for (const framework of templateFrameworks(SLUG)) {
     }) => {
       await page.setViewportSize(MOBILE);
       await openTemplate(page, framework);
-      const toggle = page.getByRole("button", { name: "Open menu" });
+      const toggle = page.getByRole("button", { name: "Menu" });
+      const menu = page.getByRole("navigation", { name: "Main mobile" });
       await expect(toggle).toHaveAttribute("aria-expanded", "false");
       await toggle.click();
-      const menu = page.locator("#belajar-mobile-menu");
       await expect(menu).toBeVisible();
-      await expect(
-        page.getByRole("button", { name: "Close menu" }),
-      ).toHaveAttribute("aria-expanded", "true");
-      await menu.getByRole("link", { name: "Reviews" }).click();
+      await menu.getByRole("link", { name: "Pricing" }).click();
       await expect(menu).toBeHidden();
-      await expect(page).toHaveURL(/#reviews$/);
-      await page.getByRole("button", { name: "Open menu" }).click();
-      await expect(menu.getByRole("link", { name: "Reviews" })).toHaveAttribute(
-        "aria-current",
-        "true",
-      );
+      await expect(toggle).toHaveAttribute("aria-expanded", "false");
+      await expect(page).toHaveURL(/#pricing$/);
+      await toggle.click();
+      await expect(menu).toBeVisible();
       await page.keyboard.press("Escape");
       await expect(menu).toBeHidden();
     });
 
-    test("tab kategori menyaring kursus", async ({ page }) => {
+    test("filter topik menyaring kursus", async ({ page }) => {
       await openTemplate(page, framework);
-      const cards = page.locator("[data-course]:visible");
-      await expect(cards).toHaveCount(8);
-      const clinical = page.getByRole("button", {
-        name: "Clinical practice",
-        exact: true,
+      await expect(courseCards(page)).toHaveCount(8);
+      await expect(page.getByText("Showing all 8 courses")).toBeVisible();
+      const filters = page.getByRole("group", {
+        name: "Filter courses by topic",
       });
-      await clinical.click();
-      await expect(clinical).toHaveAttribute("aria-pressed", "true");
-      await expect(cards).toHaveCount(2);
+      const design = filters.getByRole("button", { name: "Design" });
+      await design.click();
+      await expect(design).toHaveAttribute("aria-pressed", "true");
+      await expect(courseCards(page)).toHaveCount(2);
       await expect(page.getByText("Showing 2 of 8 courses")).toBeVisible();
-      await expect(cards.first()).toContainText(
-        "Cognitive behavioural therapy basics",
+      await expect(courseCards(page).first()).toContainText(
+        "UI design with Figma",
       );
-      await page.getByRole("button", { name: "All courses" }).click();
-      await expect(cards).toHaveCount(8);
-    });
-
-    test("kartu jalur belajar menyaring kursus dan menggulir", async ({
-      page,
-    }) => {
-      await openTemplate(page, framework);
-      await page
-        .getByRole("button", { name: /^Wellbeing.*21 courses/ })
-        .click();
-      await expect(
-        page.getByRole("button", { name: "Wellbeing", exact: true }),
-      ).toHaveAttribute("aria-pressed", "true");
-      await expect(page.locator("[data-course]:visible")).toHaveCount(2);
-      await expect(
-        page.getByRole("heading", { name: "Courses", exact: true }),
-      ).toBeInViewport();
+      // Mengeklik pilihan aktif tidak mengosongkan filter.
+      await design.click();
+      await expect(design).toHaveAttribute("aria-pressed", "true");
+      await expect(courseCards(page)).toHaveCount(2);
+      await filters.getByRole("button", { name: "All" }).click();
+      await expect(courseCards(page)).toHaveCount(8);
     });
 
     test("Details membuka modal kursus lalu daftar memunculkan toast", async ({
@@ -235,73 +227,74 @@ for (const framework of templateFrameworks(SLUG)) {
     }) => {
       await openTemplate(page, framework);
       await page
-        .getByRole("button", { name: "Details, Couples counselling skills" })
+        .getByRole("button", { name: "Details, UX research in practice" })
         .click();
       const modal = page.getByRole("dialog", { name: "Course details" });
       await expect(modal).toBeVisible();
       await expect(modal.locator("[data-modal-title]")).toHaveText(
-        "Couples counselling skills",
+        "UX research in practice",
       );
-      await expect(modal).toContainText("Rp 749.000");
-      await expect(modal).toContainText("Dr. Sekar Wulandari");
-      await modal.getByRole("button", { name: "Enroll now" }).click();
+      await expect(modal).toContainText("Rp 2.200.000");
+      await expect(modal).toContainText("Nadia Putri");
+      await expect(modal).toContainText("usability study with five");
+      await modal
+        .getByRole("button", { name: "Apply for this cohort" })
+        .click();
       await expect(modal).toBeHidden();
       await expect(toastRegion(page)).toContainText(
-        "Couples counselling skills is waiting",
+        "We saved a seat for you in UX research in practice",
       );
       await page
-        .getByRole("button", { name: "Details, Mindfulness for beginners" })
+        .getByRole("button", { name: "Details, SQL for data analysis" })
         .click();
       await expect(modal.locator("[data-modal-title]")).toHaveText(
-        "Mindfulness for beginners",
+        "SQL for data analysis",
       );
-      await expect(modal).toContainText("Free");
+      await expect(modal).toContainText("Rina Siregar");
       await modal
         .getByRole("button", { name: "Close", exact: true })
-        .first()
+        .last()
         .click();
       await expect(modal).toBeHidden();
     });
 
-    test("slider testimoni maju, mundur, dan lompat lewat titik", async ({
-      page,
-    }) => {
+    test("harga bulanan dan tahunan berganti", async ({ page }) => {
       await openTemplate(page, framework);
-      const counter = page.locator("#reviews [aria-live]");
-      await expect(counter).toHaveText("Review 1 of 5");
-      const active = page.locator("#reviews li:not([inert])");
-      await expect(active).toHaveCount(1);
-      await expect(active).toContainText("Putri Anggraini");
-      await page.getByRole("button", { name: "Next review" }).click();
-      await expect(counter).toHaveText("Review 2 of 5");
-      await expect(active).toContainText("Fajar Ramadhan");
-      await page.getByRole("button", { name: "Previous review" }).click();
-      await page.getByRole("button", { name: "Previous review" }).click();
-      await expect(counter).toHaveText("Review 5 of 5");
-      await page.getByRole("button", { name: "Show review 3" }).click();
-      await expect(counter).toHaveText("Review 3 of 5");
-      await expect(
-        page.getByRole("button", { name: "Show review 3" }),
-      ).toHaveAttribute("aria-current", "true");
-      await expect(active).toContainText("Melati Kusuma");
+      const billing = page.getByRole("group", { name: "Billing period" });
+      const cohort = page.locator("[data-plan=cohort]");
+      await expect(cohort.locator("[data-price]")).toHaveText("Rp 899.000");
+      await expect(cohort).toContainText("Billed monthly, cancel anytime");
+      const yearly = billing.getByRole("button", { name: "Yearly" });
+      await yearly.click();
+      await expect(yearly).toHaveAttribute("aria-pressed", "true");
+      await expect(cohort.locator("[data-price]")).toHaveText("Rp 719.000");
+      await expect(cohort).toContainText("Billed Rp 8.628.000 a year");
+      await expect(page.locator("[data-plan=plus] [data-price]")).toHaveText(
+        "Rp 199.000",
+      );
+      await yearly.click();
+      await expect(yearly).toHaveAttribute("aria-pressed", "true");
+      await billing.getByRole("button", { name: "Monthly" }).click();
+      await expect(cohort.locator("[data-price]")).toHaveText("Rp 899.000");
+      await page.getByRole("button", { name: "Choose Plus" }).click();
+      await expect(toastRegion(page)).toContainText("Plus plan selected");
     });
 
     test("FAQ membuka satu jawaban dalam satu waktu", async ({ page }) => {
       await openTemplate(page, framework);
-      const first = page.getByText(/Foundations courses start from zero/);
-      const second = page.getByText(/Theory hours are short video lessons/);
+      const first = page.getByText(/Intermediate courses list what you/);
+      const second = page.getByText(/two live sessions of 90\s+minutes/);
+      await expect(first).toBeHidden();
+      await page.getByText("Do I need experience before joining?").click();
       await expect(first).toBeVisible();
-      await expect(second).toBeHidden();
       await page
-        .getByText("What is the difference between theory and practice hours?")
+        .getByText("How much time does a course take each week?")
         .click();
       await expect(second).toBeVisible();
       await expect(first).toBeHidden();
     });
 
-    test("tombol pelajaran gratis dan advisor memunculkan toast", async ({
-      page,
-    }) => {
+    test("pelajaran gratis dan advisor memunculkan toast", async ({ page }) => {
       await openTemplate(page, framework);
       await page.getByRole("button", { name: "Try a free lesson" }).click();
       await expect(toastRegion(page)).toContainText("Free lesson unlocked");
@@ -317,7 +310,7 @@ for (const framework of templateFrameworks(SLUG)) {
       const submit = page.getByRole("button", { name: "Subscribe" });
       await field.fill("bukan-email");
       await submit.click();
-      await expect(page.getByText("Enter a valid email")).toBeVisible();
+      await expect(page.getByText("Enter a valid email address")).toBeVisible();
       await expect(field).toHaveAttribute("aria-invalid", "true");
       await field.fill("sari@gmail.com");
       await submit.click();
@@ -325,34 +318,22 @@ for (const framework of templateFrameworks(SLUG)) {
         "on its way to sari@gmail.com",
       );
       await expect(field).toHaveValue("");
-      await expect(page.getByText("Enter a valid email")).toHaveCount(0);
-    });
-
-    test("animasi masuk berjalan saat scroll tanpa reduced motion", async ({
-      browser,
-    }) => {
-      const context = await browser.newContext({
-        baseURL: test.info().project.use.baseURL,
-        viewport: DESKTOP,
-        reducedMotion: "no-preference",
-      });
-      const page = await context.newPage();
-      await openTemplate(page, framework);
-      await expect(page.locator("[data-reveal-ready]")).toHaveCount(1);
-      const faq = page.locator("#faq [data-reveal]").first();
-      await expect(faq).not.toHaveAttribute("data-shown", "");
-      await faq.scrollIntoViewIfNeeded();
-      await expect(faq).toHaveAttribute("data-shown", "");
-      await context.close();
-    });
-
-    test("mobile tanpa overflow horizontal", async ({ page }) => {
-      await page.setViewportSize(MOBILE);
-      await openTemplate(page, framework);
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
+      await expect(field).not.toHaveAttribute("aria-invalid", "true");
+      await expect(page.getByText("Enter a valid email address")).toHaveCount(
+        0,
       );
-      expect(overflow).toBeLessThanOrEqual(0);
     });
+
+    for (const viewport of [MOBILE, SMALLEST])
+      test(`tanpa overflow horizontal di ${viewport.width} px`, async ({
+        page,
+      }) => {
+        await page.setViewportSize(viewport);
+        await openTemplate(page, framework);
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth,
+        );
+        expect(overflow).toBeLessThanOrEqual(0);
+      });
   });
 }

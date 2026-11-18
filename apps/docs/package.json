@@ -17,6 +17,7 @@
     "alpinejs": "3.17.5",
     "astro": "7.4.5",
     "cookie": "2.0.1",
+    "lottie-web": "5.13.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "svelte": "5.57.3",
@@ -28,7 +29,7 @@
     "predev": "pnpm run generate",
     "generate": "node ../../packages/registry/src/build.ts public/r && php ../../scripts/render-blade.php ../../examples/blade src/generated/blade && node scripts/playgrounds.ts && node ../../scripts/render-templates.ts src/generated/templates && node scripts/page-css.ts && node scripts/angular-previews.ts",
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build && pagefind --site dist && node scripts/csp.ts dist",
     "preview": "astro preview"
   },
   "devDependencies": {
