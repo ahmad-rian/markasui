@@ -19,7 +19,7 @@ Options:
                                     (skips framework detection)
   --overwrite                       replace changed files without asking
   -y, --yes                         answer yes to every prompt
-  --registry <url|folder>           another registry (default https://markasui.pages.dev/r)
+  --registry <url|folder>           another registry (default https://markas.jenderalcorp.com/r)
   -h, --help                        show help
   -v, --version                     show version`;
 

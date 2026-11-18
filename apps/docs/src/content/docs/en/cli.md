@@ -55,4 +55,4 @@ Shows every component by category.
 
 ## Another registry
 
-The CLI reads components from `https://markasui.pages.dev/r`. Point it at a mirror or a local folder with `--registry` or the `MARKASUI_REGISTRY` environment variable.
+The CLI reads components from `https://markas.jenderalcorp.com/r`. Point it at a mirror or a local folder with `--registry` or the `MARKASUI_REGISTRY` environment variable.

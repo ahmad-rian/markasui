@@ -1,6 +1,6 @@
 # markasui
 
-The CLI for [MarkasUI](https://markasui.pages.dev): free Tailwind CSS v4 UI components for **Laravel Blade, React, Vue, Svelte, Astro, and Angular**. It copies component source into your project, so you own the code and add nothing to your runtime.
+The CLI for [MarkasUI](https://markas.jenderalcorp.com): free Tailwind CSS v4 UI components for **Laravel Blade, React, Vue, Svelte, Astro, and Angular**. It copies component source into your project, so you own the code and add nothing to your runtime.
 
 ```bash
 npx markasui@latest init          # detect the framework, create markas.json, copy markas.css
@@ -23,8 +23,8 @@ Options: `--cwd`, `--framework blade|react|vue|svelte|astro|angular`, `--overwri
 
 The CLI never overwrites a file you changed without asking. Requires Node 20 or newer.
 
-- Docs: https://markasui.pages.dev/docs/cli
-- Components: https://markasui.pages.dev/components
+- Docs: https://markas.jenderalcorp.com/docs/cli
+- Components: https://markas.jenderalcorp.com/components
 - Source and issues: https://github.com/ahmad-rian/markasui
 
 MIT license. Made by CV Jenderal Solusi Digital, Purwokerto.

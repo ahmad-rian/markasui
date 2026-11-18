@@ -8,18 +8,18 @@ English · [Bahasa Indonesia](README.id.md)
 
 Free, open source **Tailwind CSS v4 UI components for Laravel Blade, React, Vue, Svelte, Astro, and Angular**. Every component has the same classes, variants, and look in all six frameworks. The CLI copies the source into your project, so you own the code and nothing extra ships at runtime.
 
-**Docs and live previews:** https://markasui.pages.dev
+**Docs and live previews:** https://markas.jenderalcorp.com
 
 ## Frameworks
 
-| Framework     | Built with                                        | Guide                                                               |
-| ------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
-| Laravel Blade | Anonymous Blade components + Alpine.js (Livewire) | [Blade components](https://markasui.pages.dev/frameworks/blade)     |
-| React         | React 19, Server Component friendly               | [React components](https://markasui.pages.dev/frameworks/react)     |
-| Vue           | Vue 3 `<script setup>`, Vite and Nuxt             | [Vue components](https://markasui.pages.dev/frameworks/vue)         |
-| Svelte        | Svelte 5 runes, SvelteKit and Vite                | [Svelte components](https://markasui.pages.dev/frameworks/svelte)   |
-| Astro         | Server rendered, small vanilla scripts            | [Astro components](https://markasui.pages.dev/frameworks/astro)     |
-| Angular       | Standalone components with signals                | [Angular components](https://markasui.pages.dev/frameworks/angular) |
+| Framework     | Built with                                        | Guide                                                                    |
+| ------------- | ------------------------------------------------- | ------------------------------------------------------------------------ |
+| Laravel Blade | Anonymous Blade components + Alpine.js (Livewire) | [Blade components](https://markas.jenderalcorp.com/frameworks/blade)     |
+| React         | React 19, Server Component friendly               | [React components](https://markas.jenderalcorp.com/frameworks/react)     |
+| Vue           | Vue 3 `<script setup>`, Vite and Nuxt             | [Vue components](https://markas.jenderalcorp.com/frameworks/vue)         |
+| Svelte        | Svelte 5 runes, SvelteKit and Vite                | [Svelte components](https://markas.jenderalcorp.com/frameworks/svelte)   |
+| Astro         | Server rendered, small vanilla scripts            | [Astro components](https://markas.jenderalcorp.com/frameworks/astro)     |
+| Angular       | Standalone components with signals                | [Angular components](https://markas.jenderalcorp.com/frameworks/angular) |
 
 ## Why MarkasUI
 
@@ -38,9 +38,9 @@ npx markasui@latest init
 npx markasui@latest add button modal
 ```
 
-`init` detects Laravel, Next.js, Vite, Nuxt, SvelteKit, Astro, or Angular, saves `markas.css`, and writes `markas.json`. `add` writes each component into your components folder. Prefer to copy by hand? Every component page has the source. Full guide: [Installation](https://markasui.pages.dev/docs/installation).
+`init` detects Laravel, Next.js, Vite, Nuxt, SvelteKit, Astro, or Angular, saves `markas.css`, and writes `markas.json`. `add` writes each component into your components folder. Prefer to copy by hand? Every component page has the source. Full guide: [Installation](https://markas.jenderalcorp.com/docs/installation).
 
-Browse the [components](https://markasui.pages.dev/components), [dashboard templates](https://markasui.pages.dev/templates), and [landing pages](https://markasui.pages.dev/pages).
+Browse the [components](https://markas.jenderalcorp.com/components), [dashboard templates](https://markas.jenderalcorp.com/templates), and [landing pages](https://markas.jenderalcorp.com/pages).
 
 ### For AI agents
 
@@ -48,7 +48,7 @@ Browse the [components](https://markasui.pages.dev/components), [dashboard templ
 claude mcp add markasui -- npx -y @markasui/mcp
 ```
 
-The MCP server works in Claude Code, Cursor, and VS Code ([setup](https://markasui.pages.dev/docs/mcp)). The Agent Skill lives in [`skills/markasui`](skills/markasui/SKILL.md), and the whole library is summarized in [llms.txt](https://markasui.pages.dev/llms.txt).
+The MCP server works in Claude Code, Cursor, and VS Code ([setup](https://markas.jenderalcorp.com/docs/mcp)). The Agent Skill lives in [`skills/markasui`](skills/markasui/SKILL.md), and the whole library is summarized in [llms.txt](https://markas.jenderalcorp.com/llms.txt).
 
 ## Packages
 

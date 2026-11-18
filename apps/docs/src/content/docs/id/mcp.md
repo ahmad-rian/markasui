@@ -405,7 +405,7 @@ Agent yang mengerjakan issue dan pull request di GitHub membaca server dari peng
 }
 ```
 
-Copilot menjalankan tool ini tanpa bertanya, dan kelimanya hanya membaca registry. Kalau log sesi menampilkan peringatan firewall, tambahkan `markasui.pages.dev` ke allowlist firewall agent.
+Copilot menjalankan tool ini tanpa bertanya, dan kelimanya hanya membaca registry. Kalau log sesi menampilkan peringatan firewall, tambahkan `markas.jenderalcorp.com` ke allowlist firewall agent.
 
 Cek: assign sebuah issue ke Copilot, buka **View session**, lalu buka langkah **Start MCP Servers**. Daftar tool ada di bagian bawah.
 
@@ -423,7 +423,7 @@ Cek: assign sebuah issue ke Copilot, buka **View session**, lalu buka langkah **
 
 ## Registry lain
 
-Set variabel `MARKASUI_REGISTRY` di konfigurasi MCP untuk memakai mirror atau folder lokal. Nilainya adalah folder yang berisi `index.json`: URL `https://` atau path lokal. Bawaannya `https://markasui.pages.dev/r`.
+Set variabel `MARKASUI_REGISTRY` di konfigurasi MCP untuk memakai mirror atau folder lokal. Nilainya adalah folder yang berisi `index.json`: URL `https://` atau path lokal. Bawaannya `https://markas.jenderalcorp.com/r`.
 
 ```bash
 claude mcp add markasui --env MARKASUI_REGISTRY=https://mirror.example.com/r -- npx -y @markasui/mcp

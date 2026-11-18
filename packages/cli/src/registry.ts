@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import type { IndexItem, RegistryItem, Theme } from "./types.ts";
 
-export const DEFAULT_REGISTRY = "https://markasui.pages.dev/r";
+export const DEFAULT_REGISTRY = "https://markas.jenderalcorp.com/r";
 const TIMEOUT_MS = 15_000;
 
 export class RegistryError extends Error {

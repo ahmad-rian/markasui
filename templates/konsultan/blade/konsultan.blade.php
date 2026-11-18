@@ -700,7 +700,7 @@
     </div>
     <div class="{{ $footerBottom }}">
       <p>&copy; 2026 Pranata Advisory. Jakarta, Indonesia.</p>
-      <p>Built with <a href="https://markasui.pages.dev" class="{{ $builtLink }}">MarkasUI</a></p>
+      <p>Built with <a href="https://markas.jenderalcorp.com" class="{{ $builtLink }}">MarkasUI</a></p>
     </div>
   </footer>
   <x-markas.toast />

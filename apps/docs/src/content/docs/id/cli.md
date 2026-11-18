@@ -45,7 +45,7 @@ Menampilkan semua komponen per kategori.
 
 ## Registry lain
 
-CLI mengambil komponen dari `https://markasui.pages.dev/r`. Arahkan ke mirror atau folder lokal dengan `--registry` atau variabel `MARKASUI_REGISTRY`.
+CLI mengambil komponen dari `https://markas.jenderalcorp.com/r`. Arahkan ke mirror atau folder lokal dengan `--registry` atau variabel `MARKASUI_REGISTRY`.
 
 ## Opsi
 

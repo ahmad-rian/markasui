@@ -1366,7 +1366,7 @@ export default function Tender() {
           <p>&copy; 2026 PT Tendera Solusi Indonesia</p>
           <p>
             Built with{" "}
-            <a href="https://markasui.pages.dev" className={builtWith}>
+            <a href="https://markas.jenderalcorp.com" className={builtWith}>
               MarkasUI
             </a>
           </p>

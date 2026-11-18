@@ -1163,7 +1163,7 @@ export default function Belajar() {
             <p>&copy; 2026 PT Benak Edukasi Nusantara</p>
             <p>
               Built with{" "}
-              <a href="https://markasui.pages.dev" className={builtWith}>
+              <a href="https://markas.jenderalcorp.com" className={builtWith}>
                 MarkasUI
               </a>
             </p>

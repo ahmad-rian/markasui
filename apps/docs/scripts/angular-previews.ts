@@ -16,6 +16,8 @@ try {
     root: docs,
     logLevel: "warn",
     publicDir: false,
+    // Bundel disajikan dari /angular/: preload chunk Vite memakai base, tanpa ini jadi /chunks/... (404).
+    base: "/angular/",
     plugins: [
       angular({
         tsconfig: resolve(root, "tsconfig.angular.json"),

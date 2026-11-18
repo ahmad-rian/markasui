@@ -405,7 +405,7 @@ The agent that works on issues and pull requests on GitHub reads its servers fro
 }
 ```
 
-Copilot runs these tools without asking, and all five only read the registry. If the session logs show a firewall warning, add `markasui.pages.dev` to the agent's firewall allowlist.
+Copilot runs these tools without asking, and all five only read the registry. If the session logs show a firewall warning, add `markas.jenderalcorp.com` to the agent's firewall allowlist.
 
 Verify: assign an issue to Copilot, open **View session**, and expand the **Start MCP Servers** step. The tools are listed at the bottom.
 
@@ -423,7 +423,7 @@ Verify: assign an issue to Copilot, open **View session**, and expand the **Star
 
 ## Another registry
 
-Set the `MARKASUI_REGISTRY` environment variable in the MCP config to use a mirror or a local folder. The value is the folder that holds `index.json`: an `https://` URL or a local path. The default is `https://markasui.pages.dev/r`.
+Set the `MARKASUI_REGISTRY` environment variable in the MCP config to use a mirror or a local folder. The value is the folder that holds `index.json`: an `https://` URL or a local path. The default is `https://markas.jenderalcorp.com/r`.
 
 ```bash
 claude mcp add markasui --env MARKASUI_REGISTRY=https://mirror.example.com/r -- npx -y @markasui/mcp

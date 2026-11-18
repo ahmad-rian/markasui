@@ -1491,7 +1491,7 @@ class AppWindow {
           <p>
             Built with
             <a
-              href="https://markasui.pages.dev"
+              href="https://markas.jenderalcorp.com"
               [class]="cx(builtWith, focusRing)"
               >MarkasUI</a
             >

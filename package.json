@@ -25,7 +25,8 @@
     "thumbs": "node scripts/thumbnails.ts",
     "og": "node scripts/og-images.ts",
     "build:packages": "pnpm --filter markasui build && pnpm --filter @markasui/mcp build",
-    "astro:playground": "node scripts/render-astro.ts playground/public/astro"
+    "astro:playground": "node scripts/render-astro.ts playground/public/astro",
+    "deploy:site": "bash scripts/deploy.sh"
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "2.9.6",

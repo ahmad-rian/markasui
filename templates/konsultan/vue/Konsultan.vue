@@ -1215,7 +1215,9 @@ const invalid = (field: string) =>
         <p>© 2026 Pranata Advisory. Jakarta, Indonesia.</p>
         <p>
           Built with
-          <a href="https://markasui.pages.dev" :class="builtLink">MarkasUI</a>
+          <a href="https://markas.jenderalcorp.com" :class="builtLink"
+            >MarkasUI</a
+          >
         </p>
       </div>
     </footer>

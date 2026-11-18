@@ -1246,7 +1246,7 @@ export default function Konsultan() {
           <p>© 2026 Pranata Advisory. Jakarta, Indonesia.</p>
           <p>
             Built with{" "}
-            <a href="https://markasui.pages.dev" className={builtLink}>
+            <a href="https://markas.jenderalcorp.com" className={builtLink}>
               MarkasUI
             </a>
           </p>

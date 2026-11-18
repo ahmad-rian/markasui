@@ -1,6 +1,6 @@
 # @markasui/mcp
 
-A local MCP server (stdio) for [MarkasUI](https://markasui.pages.dev), the Tailwind CSS v4 component library for Laravel Blade, React, Vue, Svelte, Astro, and Angular. AI coding agents use it to search components, fetch the code for your project's framework, and read the setup steps.
+A local MCP server (stdio) for [MarkasUI](https://markas.jenderalcorp.com), the Tailwind CSS v4 component library for Laravel Blade, React, Vue, Svelte, Astro, and Angular. AI coding agents use it to search components, fetch the code for your project's framework, and read the setup steps.
 
 ## Install
 
@@ -32,9 +32,9 @@ Cursor (`.cursor/mcp.json`) or VS Code (`.vscode/mcp.json`):
 
 `framework` is one of `blade`, `react`, `vue`, `svelte`, `astro`, or `angular`.
 
-Data comes from `https://markasui.pages.dev/r/` and is cached while the process runs. Point it at a mirror or a local folder with `MARKASUI_REGISTRY`.
+Data comes from `https://markas.jenderalcorp.com/r/` and is cached while the process runs. Point it at a mirror or a local folder with `MARKASUI_REGISTRY`.
 
-- Docs: https://markasui.pages.dev/docs/mcp
+- Docs: https://markas.jenderalcorp.com/docs/mcp
 - Source and issues: https://github.com/ahmad-rian/markasui
 
 MIT license. Made by CV Jenderal Solusi Digital, Purwokerto.

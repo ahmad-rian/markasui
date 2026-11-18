@@ -26,6 +26,7 @@ Library komponen UI open source untuk Blade, React, Vue, Svelte, Astro, dan Angu
 - pnpm registry: build registry ke apps/docs/public/r
 - pnpm thumbs: thumbnail WebP untuk /components
 - pnpm size: cek budget ukuran (butuh pnpm build dulu)
+- pnpm deploy:site: build untuk https://markas.jenderalcorp.com lalu rsync ke server (host SSH `tencent`, nginx statis di /var/www/markasui, config /etc/nginx/sites-available/markas.jenderalcorp.com, sertifikat certbot)
 
 ## Sebelum menyatakan selesai
 

@@ -333,7 +333,7 @@
       </div>
       <div class="{{ $footerBottom }}">
         <p>&copy; 2026 PT Benak Edukasi Nusantara</p>
-        <p>Built with <a href="https://markasui.pages.dev" class="{{ $builtWith }}">MarkasUI</a></p>
+        <p>Built with <a href="https://markas.jenderalcorp.com" class="{{ $builtWith }}">MarkasUI</a></p>
       </div>
     </div>
   </footer>

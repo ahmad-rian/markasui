@@ -22,7 +22,7 @@ const nearDirective = {
 const LANDING_CSS_LIMIT = 16 * 1024;
 
 export default defineConfig({
-  site: process.env.SITE_URL || "https://markasui.pages.dev",
+  site: process.env.SITE_URL || "https://markas.jenderalcorp.com",
   trailingSlash: "never",
   i18n: {
     locales: ["en", "id"],

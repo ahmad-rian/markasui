@@ -8,18 +8,18 @@
 
 **Komponen UI Tailwind CSS v4 untuk Laravel Blade, React, Vue, Svelte, Astro, dan Angular**, gratis dan open source. Setiap komponen punya class, varian, dan tampilan yang sama di keenam framework. CLI menyalin source-nya ke project Anda, jadi kodenya milik Anda dan tidak ada tambahan di runtime.
 
-**Docs dan preview langsung:** https://markasui.pages.dev/id
+**Docs dan preview langsung:** https://markas.jenderalcorp.com/id
 
 ## Framework
 
-| Framework     | Dibuat dengan                                    | Panduan                                                              |
-| ------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
-| Laravel Blade | Anonymous Blade component + Alpine.js (Livewire) | [Komponen Blade](https://markasui.pages.dev/id/frameworks/blade)     |
-| React         | React 19, ramah Server Component                 | [Komponen React](https://markasui.pages.dev/id/frameworks/react)     |
-| Vue           | Vue 3 `<script setup>`, Vite dan Nuxt            | [Komponen Vue](https://markasui.pages.dev/id/frameworks/vue)         |
-| Svelte        | Svelte 5 runes, SvelteKit dan Vite               | [Komponen Svelte](https://markasui.pages.dev/id/frameworks/svelte)   |
-| Astro         | Dirender di server, script vanilla kecil         | [Komponen Astro](https://markasui.pages.dev/id/frameworks/astro)     |
-| Angular       | Standalone component dengan signals              | [Komponen Angular](https://markasui.pages.dev/id/frameworks/angular) |
+| Framework     | Dibuat dengan                                    | Panduan                                                                   |
+| ------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
+| Laravel Blade | Anonymous Blade component + Alpine.js (Livewire) | [Komponen Blade](https://markas.jenderalcorp.com/id/frameworks/blade)     |
+| React         | React 19, ramah Server Component                 | [Komponen React](https://markas.jenderalcorp.com/id/frameworks/react)     |
+| Vue           | Vue 3 `<script setup>`, Vite dan Nuxt            | [Komponen Vue](https://markas.jenderalcorp.com/id/frameworks/vue)         |
+| Svelte        | Svelte 5 runes, SvelteKit dan Vite               | [Komponen Svelte](https://markas.jenderalcorp.com/id/frameworks/svelte)   |
+| Astro         | Dirender di server, script vanilla kecil         | [Komponen Astro](https://markas.jenderalcorp.com/id/frameworks/astro)     |
+| Angular       | Standalone component dengan signals              | [Komponen Angular](https://markas.jenderalcorp.com/id/frameworks/angular) |
 
 ## Kenapa MarkasUI
 
@@ -38,9 +38,9 @@ npx markasui@latest init
 npx markasui@latest add button modal
 ```
 
-`init` mendeteksi Laravel, Next.js, Vite, Nuxt, SvelteKit, Astro, atau Angular, menyimpan `markas.css`, dan menulis `markas.json`. `add` menulis setiap komponen ke folder komponen Anda. Ingin menyalin manual? Setiap halaman komponen menampilkan source-nya. Panduan lengkap: [Instalasi](https://markasui.pages.dev/id/docs/installation).
+`init` mendeteksi Laravel, Next.js, Vite, Nuxt, SvelteKit, Astro, atau Angular, menyimpan `markas.css`, dan menulis `markas.json`. `add` menulis setiap komponen ke folder komponen Anda. Ingin menyalin manual? Setiap halaman komponen menampilkan source-nya. Panduan lengkap: [Instalasi](https://markas.jenderalcorp.com/id/docs/installation).
 
-Lihat [komponen](https://markasui.pages.dev/id/components), [template dashboard](https://markasui.pages.dev/id/templates), dan [landing page](https://markasui.pages.dev/id/pages).
+Lihat [komponen](https://markas.jenderalcorp.com/id/components), [template dashboard](https://markas.jenderalcorp.com/id/templates), dan [landing page](https://markas.jenderalcorp.com/id/pages).
 
 ### Untuk agent AI
 
@@ -48,7 +48,7 @@ Lihat [komponen](https://markasui.pages.dev/id/components), [template dashboard]
 claude mcp add markasui -- npx -y @markasui/mcp
 ```
 
-MCP server jalan di Claude Code, Cursor, dan VS Code ([setup](https://markasui.pages.dev/id/docs/mcp)). Agent Skill ada di [`skills/markasui`](skills/markasui/SKILL.md), dan ringkasan seluruh library ada di [llms.txt](https://markasui.pages.dev/id/llms.txt).
+MCP server jalan di Claude Code, Cursor, dan VS Code ([setup](https://markas.jenderalcorp.com/id/docs/mcp)). Agent Skill ada di [`skills/markasui`](skills/markasui/SKILL.md), dan ringkasan seluruh library ada di [llms.txt](https://markas.jenderalcorp.com/id/llms.txt).
 
 ## Paket
 

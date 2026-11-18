@@ -643,7 +643,7 @@
     </div>
     <div class="{{ $footerBottom }}">
       <p>&copy; 2026 Lembar Labs. All rights reserved.</p>
-      <p>Built with <a href="https://markasui.pages.dev" class="{{ $cx($builtWith, $focusRing) }}">MarkasUI</a></p>
+      <p>Built with <a href="https://markas.jenderalcorp.com" class="{{ $cx($builtWith, $focusRing) }}">MarkasUI</a></p>
     </div>
   </footer>
   <x-markas.toast />

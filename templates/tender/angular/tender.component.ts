@@ -1305,7 +1305,7 @@ class TenderIcon {
           <p>&copy; 2026 PT Tendera Solusi Indonesia</p>
           <p>
             Built with
-            <a href="https://markasui.pages.dev" [class]="builtWith"
+            <a href="https://markas.jenderalcorp.com" [class]="builtWith"
               >MarkasUI</a
             >
           </p>

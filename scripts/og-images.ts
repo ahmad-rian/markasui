@@ -36,7 +36,8 @@ const PALETTE_COLORS = 96;
 const root = resolve(import.meta.dirname, "..");
 const docs = join(root, "apps/docs");
 const outDir = join(docs, "public/og");
-const host = new URL(process.env.SITE_URL || "https://markasui.pages.dev").host;
+const host = new URL(process.env.SITE_URL || "https://markas.jenderalcorp.com")
+  .host;
 
 /** Token mode gelap dari packages/theme/markas.css. */
 const COLORS = {

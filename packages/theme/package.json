@@ -5,7 +5,7 @@
   "license": "MIT",
   "description": "MarkasUI color tokens for Tailwind CSS v4: light and dark CSS variables shared by every MarkasUI component.",
   "author": "CV Jenderal Solusi Digital (https://jenderalcorp.com)",
-  "homepage": "https://markasui.pages.dev/docs/theming",
+  "homepage": "https://markas.jenderalcorp.com/docs/theming",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ahmad-rian/markasui.git",
