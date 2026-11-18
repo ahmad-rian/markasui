@@ -44,7 +44,7 @@ jobs:
         livewire: [3, 4]
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.cache/composer
           key: composer-livewire-${{ matrix.livewire }}-${{ github.run_id }}
