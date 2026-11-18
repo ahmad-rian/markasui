@@ -29,7 +29,7 @@
     "deploy:site": "bash scripts/deploy.sh"
   },
   "devDependencies": {
-    "@analogjs/vite-plugin-angular": "2.9.6",
+    "@analogjs/vite-plugin-angular": "2.9.7",
     "@angular/build": "22.2.6",
     "@angular/common": "22.2.5",
     "@angular/compiler": "22.2.5",
