@@ -2,6 +2,8 @@ import { localePath, t, type Locale } from "./i18n";
 
 export const SITE = {
   name: "MarkasUI",
+  /** Nama lengkap untuk kartu tautan (og:site_name), mis. pratinjau WhatsApp. */
+  brand: "MarkasUI by JenderalCorp",
   version: "0.1",
   repo: "https://github.com/ahmad-rian/markasui",
 } as const;

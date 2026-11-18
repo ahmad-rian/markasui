@@ -3,6 +3,11 @@ import { getDocs } from "../../lib/docs";
 import { localeParams, localePath, t, toLocale } from "../../lib/i18n";
 import { getComponents, groupByCategory, localized } from "../../lib/registry";
 import { SITE } from "../../lib/site";
+import {
+  KIND_BASE,
+  getTemplatesByKind,
+  type TemplateKind,
+} from "../../lib/templates";
 
 export const getStaticPaths = localeParams;
 
@@ -19,6 +24,14 @@ export const GET: APIRoute = async ({ site, params }) => {
   const absolute = (path: string) => new URL(path, site).toString();
   const docs = await getDocs(locale);
   const groups = groupByCategory(await getComponents(), locale);
+  const templateSection = (kind: TemplateKind, label: string) => `## ${label}
+
+${getTemplatesByKind(kind)
+  .map(
+    (template) =>
+      `- [${template.title}](${url(`${KIND_BASE[kind]}/${template.name}.md`)}): ${template.description[locale]}`,
+  )
+  .join("\n")}`;
 
   const body = `# ${SITE.name}
 
@@ -40,6 +53,10 @@ ${groups
 ${group.items.map((item) => `- [${item.title}](${url(`/components/${item.name}.md`)}): ${localized(item, locale).description}`).join("\n")}`,
   )
   .join("\n\n")}
+
+${templateSection("dashboard", strings.nav.templates)}
+
+${templateSection("page", strings.nav.pages)}
 `;
   return new Response(body, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },

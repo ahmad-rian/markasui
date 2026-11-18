@@ -84,7 +84,7 @@ const graph = [...jsonLd, ...(breadcrumbs ? [breadcrumbList(site, locale, breadc
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:site_name" content={SITE.brand} />
     {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:locale" content={locale === "id" ? "id_ID" : "en_US"} />
     <meta property="og:locale:alternate" content={locale === "id" ? "en_US" : "id_ID"} />

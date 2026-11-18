@@ -5,6 +5,7 @@
  */
 import "../../styles/global.css";
 import CodeBlock from "../CodeBlock.astro";
+import CopyPage from "../CopyPage.astro";
 import Icon from "../Icon.astro";
 import Tabs from "../Tabs.astro";
 import Docs from "../../layouts/Docs.astro";
@@ -17,6 +18,7 @@ import { SITE } from "../../lib/site";
 import { KIND_BASE, templateDetailPath, type Template } from "../../lib/templates";
 import { fitDescription, frameworkList, sourceCode } from "../../lib/seo";
 import { ogImagePath } from "../../lib/seo-files";
+import { templateMarkdown, templatePrompts } from "../../lib/template-ai";
 
 interface Props {
   template: Template;
@@ -28,6 +30,9 @@ const dictionary = t(locale);
 const strings = template.kind === "page" ? { ...dictionary.templates, ...dictionary.pages } : dictionary.templates;
 const component = dictionary.component;
 const registry = new Map((await getComponents()).map((item) => [item.name, item]));
+const site = Astro.site!.toString();
+const markdown = templateMarkdown(template, registry, site, locale);
+const prompts = templatePrompts(template, site, locale, component.unavailable);
 const used = template.components.flatMap((name) => {
   const item = registry.get(name);
   return item ? [{ name, title: item.title, description: localized(item, locale).description }] : [];
@@ -67,10 +72,13 @@ const breadcrumbs = [
       <h1 class="text-[34px] leading-tight font-semibold tracking-[-0.025em] sm:text-[38px]">{template.title}</h1>
       <p class="mt-3 text-lg leading-8 text-muted">{template.description[locale]}</p>
     </div>
-    <a href={demo} data-template-open class="soft-button" target="_blank" rel="noopener">
-      {strings.open}
-      <Icon name="external" />
-    </a>
+    <div class="flex flex-wrap items-center gap-2">
+      <CopyPage markdown={markdown} markdownUrl={localePath(locale, `${path}.md`)} prompts={prompts} ask={dictionary.copyPage.askTemplate} />
+      <a href={demo} data-template-open class="soft-button" target="_blank" rel="noopener">
+        {strings.open}
+        <Icon name="external" />
+      </a>
+    </div>
   </div>
 
   <section class="mt-8" aria-labelledby="preview">

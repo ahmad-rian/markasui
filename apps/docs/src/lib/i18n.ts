@@ -155,6 +155,8 @@ const en = {
     chatgpt: "Open in ChatGPT",
     ask: (url: string) =>
       `Read ${url} and help me use this component in my project.`,
+    askTemplate: (url: string) =>
+      `Read ${url} and help me build this page in my project.`,
   },
   list: {
     title: "Components",
@@ -183,7 +185,7 @@ const en = {
     },
     templatesTitle: (n: number) => [`${n} full pages from the`, "same parts."],
     templatesText:
-      "Every template ships in Blade, React, and Vue. Open one and click around.",
+      "Every template ships in Blade, React, Vue, Svelte, Astro, and Angular. Open one and click around.",
     templatesLink: "All templates",
     pagesTitle: ["Welcome pages,", "ready to ship."],
     pagesText:
@@ -228,7 +230,7 @@ const en = {
   templates: {
     title: "Templates",
     subtitle:
-      "Complete pages built from MarkasUI components, in Blade, React, and Vue. Try them right here.",
+      "Complete pages built from MarkasUI components, in Blade, React, Vue, Svelte, Astro, and Angular. Try them right here.",
     open: "Open full page",
     preview: "Live preview",
     code: "Code",
@@ -247,7 +249,7 @@ const en = {
   pages: {
     title: "Pages",
     subtitle:
-      "Ready-made welcome and landing pages built from MarkasUI components, in Blade, React, and Vue.",
+      "Ready-made welcome and landing pages built from MarkasUI components, in Blade, React, Vue, Svelte, Astro, and Angular.",
     empty: "New pages are on the way. Check back soon.",
     back: "All pages",
     componentsText: (n: number) =>
@@ -280,7 +282,7 @@ const en = {
   seo: {
     homeEyebrow: "Open source component library",
     homeTitle:
-      "MarkasUI - Tailwind CSS components for React, Vue, Blade and more",
+      "MarkasUI by JenderalCorp - Tailwind CSS components for React, Vue, Blade and more",
     homeDescription:
       "Free, open source Tailwind CSS v4 components for React, Vue, Laravel Blade, Svelte, Astro, and Angular. Copy them into your project with one CLI command.",
     componentsTitle: "Tailwind CSS components for React, Vue, Blade and more",
@@ -288,10 +290,10 @@ const en = {
       `${n} free Tailwind CSS v4 components, from forms and modals to animations, with the same classes in React, Vue, Blade, Svelte, Astro, and Angular.`,
     templatesTitle: "Tailwind dashboard templates for React, Vue and Laravel",
     templatesDescription:
-      "Free admin dashboard templates built from MarkasUI components, with full source in Laravel Blade, React, and Vue. Preview them live and copy the code.",
+      "Free admin dashboard templates from MarkasUI components, with full source in Laravel Blade, React, Vue, Svelte, Astro, and Angular. Preview them live.",
     pagesTitle: "Tailwind landing page templates for React, Vue and Laravel",
     pagesDescription:
-      "Free welcome and landing pages with a navbar, hero, sections, and footer, built from MarkasUI components in Laravel Blade, React, and Vue.",
+      "Free welcome and landing pages with a navbar, hero, and footer, built from MarkasUI components in Laravel Blade, React, Vue, Svelte, Astro, and Angular.",
     componentTitle: (title: string, frameworks: string) =>
       `${title} component for ${frameworks}`,
     componentTails: (frameworks: string) => [
@@ -328,8 +330,6 @@ const en = {
     templates: "Templates and pages",
     templatesText: (framework: string) =>
       `Full pages built from the same components, with ${framework} source you can copy.`,
-    templatesPending: (framework: string) =>
-      `Full-page templates ship in Blade, React, and Vue today. ${framework} versions are in progress; every component they use already works in ${framework}.`,
     others: "Other frameworks",
   },
 };
@@ -458,6 +458,8 @@ const id: Dictionary = {
     chatgpt: "Buka di ChatGPT",
     ask: (url: string) =>
       `Baca ${url} lalu bantu saya memakai komponen ini di project saya.`,
+    askTemplate: (url: string) =>
+      `Baca ${url} lalu bantu saya membuat halaman ini di project saya.`,
   },
   list: {
     title: "Komponen",
@@ -489,7 +491,7 @@ const id: Dictionary = {
       "sama.",
     ],
     templatesText:
-      "Setiap template tersedia dalam Blade, React, dan Vue. Buka salah satunya dan coba langsung.",
+      "Setiap template tersedia dalam Blade, React, Vue, Svelte, Astro, dan Angular. Buka salah satunya dan coba langsung.",
     templatesLink: "Semua template",
     pagesTitle: ["Halaman sambutan,", "siap rilis."],
     pagesText:
@@ -534,7 +536,7 @@ const id: Dictionary = {
   templates: {
     title: "Template",
     subtitle:
-      "Halaman lengkap yang disusun dari komponen MarkasUI, dalam Blade, React, dan Vue. Coba langsung di sini.",
+      "Halaman lengkap yang disusun dari komponen MarkasUI, dalam Blade, React, Vue, Svelte, Astro, dan Angular. Coba langsung di sini.",
     open: "Buka layar penuh",
     preview: "Pratinjau langsung",
     code: "Kode",
@@ -553,7 +555,7 @@ const id: Dictionary = {
   pages: {
     title: "Halaman",
     subtitle:
-      "Welcome page dan landing page siap pakai yang disusun dari komponen MarkasUI, dalam Blade, React, dan Vue.",
+      "Welcome page dan landing page siap pakai yang disusun dari komponen MarkasUI, dalam Blade, React, Vue, Svelte, Astro, dan Angular.",
     empty: "Halaman baru sedang disiapkan. Kunjungi lagi nanti.",
     back: "Semua halaman",
     componentsText: (n: number) =>
@@ -585,7 +587,8 @@ const id: Dictionary = {
   },
   seo: {
     homeEyebrow: "Library komponen open source",
-    homeTitle: "MarkasUI - Komponen Tailwind CSS untuk React, Vue, dan Blade",
+    homeTitle:
+      "MarkasUI by JenderalCorp - Komponen Tailwind CSS untuk React, Vue, dan Blade",
     homeDescription:
       "Komponen Tailwind CSS v4 gratis dan open source untuk React, Vue, Laravel Blade, Svelte, Astro, dan Angular. Salin ke project Anda dengan satu perintah CLI.",
     componentsTitle:
@@ -594,10 +597,10 @@ const id: Dictionary = {
       `${n} komponen Tailwind CSS v4 gratis, dari form dan modal sampai animasi, dengan class yang sama di React, Vue, Blade, Svelte, Astro, dan Angular.`,
     templatesTitle: "Template dashboard Tailwind untuk React, Vue, dan Laravel",
     templatesDescription:
-      "Template dashboard admin gratis dari komponen MarkasUI, dengan source lengkap dalam Laravel Blade, React, dan Vue. Coba langsung lalu salin kodenya.",
+      "Template dashboard admin gratis dari komponen MarkasUI, dengan source lengkap dalam Laravel Blade, React, Vue, Svelte, Astro, dan Angular. Coba langsung.",
     pagesTitle: "Template landing page Tailwind untuk React, Vue, dan Laravel",
     pagesDescription:
-      "Welcome page dan landing page gratis dengan navbar, hero, section, dan footer, dari komponen MarkasUI dalam Laravel Blade, React, dan Vue.",
+      "Welcome page dan landing page gratis dengan navbar, hero, dan footer, dari komponen MarkasUI dalam Laravel Blade, React, Vue, Svelte, Astro, dan Angular.",
     componentTitle: (title: string, frameworks: string) =>
       `Komponen ${title} untuk ${frameworks}`,
     componentTails: (frameworks: string) => [
@@ -634,8 +637,6 @@ const id: Dictionary = {
     templates: "Template dan halaman",
     templatesText: (framework: string) =>
       `Halaman utuh dari komponen yang sama, dengan source ${framework} yang bisa disalin.`,
-    templatesPending: (framework: string) =>
-      `Template halaman penuh saat ini tersedia dalam Blade, React, dan Vue. Versi ${framework} sedang dikerjakan; semua komponen yang dipakainya sudah jalan di ${framework}.`,
     others: "Framework lain",
   },
 };

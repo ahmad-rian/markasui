@@ -8,11 +8,13 @@ interface Props {
   markdownUrl: string;
   /** Tanpa prompts (halaman docs), menu Copy prompt disembunyikan. */
   prompts?: Partial<Record<Framework, string>>;
+  /** Teks "Open in Claude/ChatGPT" untuk URL Markdown; bawaannya meminta bantuan memakai komponen. */
+  ask?: (url: string) => string;
 }
-const { markdown, markdownUrl, prompts } = Astro.props;
+const { markdown, markdownUrl, prompts, ask: askText } = Astro.props;
 const absoluteMd = new URL(markdownUrl, Astro.site).toString();
 const strings = t(getLocale(Astro.url)).copyPage;
-const ask = encodeURIComponent(strings.ask(absoluteMd));
+const ask = encodeURIComponent((askText ?? strings.ask)(absoluteMd));
 const item =
   "flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm text-ink transition-colors hover:bg-subtle focus-visible:bg-subtle";
 ---

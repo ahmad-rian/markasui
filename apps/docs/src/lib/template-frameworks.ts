@@ -1,6 +1,6 @@
 /**
- * Framework yang bisa punya versi template (templates/<slug>/<fw>/). Blade, React, dan Vue wajib;
- * Svelte, Astro, dan Angular di-porting bertahap dan terdeteksi dari file yang ada.
+ * Framework yang punya versi template (templates/<slug>/<fw>/). Semua template saat ini tersedia di
+ * keenam framework; Blade, React, dan Vue wajib, sisanya terdeteksi dari file yang ada.
  * Tanpa import Node, aman untuk klien.
  */
 export const TEMPLATE_FRAMEWORKS = [

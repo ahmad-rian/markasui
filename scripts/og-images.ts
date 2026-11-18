@@ -212,7 +212,10 @@ function indexCards(components: number): Card[] {
     const strings = t(locale);
     const home = {
       eyebrow: strings.seo.homeEyebrow,
-      title: strings.seo.homeTitle.replace(/^MarkasUI - /, ""),
+      title: strings.seo.homeTitle.replace(
+        /^MarkasUI( by JenderalCorp)? - /,
+        "",
+      ),
       description: strings.home.description,
       frameworks: FRAMEWORKS,
     };
@@ -314,7 +317,9 @@ async function renderHero(page: Page, locale: Locale, files: string[]) {
   await page.addInitScript(() => {
     try {
       sessionStorage.setItem("markas-splash", "1");
-    } catch {}
+    } catch {
+      // Tanpa sessionStorage splash tetap tampil sebentar; foto diambil setelah networkidle.
+    }
   });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(`${HERO_BASE}${locale === "en" ? "/" : `/${locale}`}`, {
@@ -329,11 +334,19 @@ async function renderHero(page: Page, locale: Locale, files: string[]) {
     const file = join(outDir, `${name}.png`);
     await mkdir(dirname(file), { recursive: true });
     await sharp(png)
-      .png({ palette: true, colors: 256, dither: 1, compressionLevel: 9, effort: 10 })
+      .png({
+        palette: true,
+        colors: 256,
+        dither: 1,
+        compressionLevel: 9,
+        effort: 10,
+      })
       .toFile(file);
     const { size } = await stat(file);
     if (size > HERO_MAX_BYTES)
-      throw new Error(`${file} ${size} byte, lebih dari batas ${HERO_MAX_BYTES}`);
+      throw new Error(
+        `${file} ${size} byte, lebih dari batas ${HERO_MAX_BYTES}`,
+      );
     console.log(`og: ${name} (hero) ${(size / 1024).toFixed(1)} KB`);
   }
 }

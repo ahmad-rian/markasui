@@ -4,6 +4,8 @@ import { getDocs } from "../../lib/docs";
 import { localeParams, t, toLocale } from "../../lib/i18n";
 import { getComponents } from "../../lib/registry";
 import { SITE } from "../../lib/site";
+import { templateMarkdown } from "../../lib/template-ai";
+import { getTemplates } from "../../lib/templates";
 
 export const getStaticPaths = localeParams;
 
@@ -11,6 +13,7 @@ export const GET: APIRoute = async ({ site, params }) => {
   const locale = toLocale(params.lang);
   const docs = await getDocs(locale);
   const items = await getComponents();
+  const registry = new Map(items.map((item) => [item.name, item]));
   const sections = [
     `# ${SITE.name}\n\n${t(locale).meta.description}`,
     ...docs.map(
@@ -18,6 +21,9 @@ export const GET: APIRoute = async ({ site, params }) => {
         `# ${entry.data.title}\n\n${entry.data.description}\n\n${entry.body ?? ""}`,
     ),
     ...items.map((item) => componentMarkdown(item, site!.toString(), locale)),
+    ...getTemplates().map((template) =>
+      templateMarkdown(template, registry, site!.toString(), locale),
+    ),
   ];
   return new Response(`${sections.join("\n\n---\n\n")}\n`, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
