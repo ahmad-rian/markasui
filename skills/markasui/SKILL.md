@@ -1,19 +1,23 @@
 ---
 name: markasui
-description: Build UI with MarkasUI components (Blade, React, Vue on Tailwind v4). Use when the user mentions MarkasUI, or asks for UI in a project that has markas.css or markas.json.
+description: Build UI with MarkasUI components (Blade, React, Vue, Svelte, Astro, Angular on Tailwind v4). Use when the user mentions MarkasUI, or asks for UI in a project that has markas.css or markas.json.
 ---
 
 # MarkasUI
 
-MarkasUI ships each component in three versions (Blade + Alpine.js, React, Vue) with identical Tailwind classes. Components are copied into the project, never installed as a package. All color comes from **tokens** defined in `markas.css`.
+MarkasUI ships each component in six versions (Blade + Alpine.js, React, Vue, Svelte 5, Astro, Angular) with identical Tailwind classes. Components are copied into the project, never installed as a package. All color comes from **tokens** defined in `markas.css`.
 
 ## 1. Detect the framework
 
 Check the project root, first match wins:
 
 - `artisan` and `resources/views/` exist → **blade**
+- `package.json` depends on `astro` → **astro**
+- `package.json` depends on `@angular/core` → **angular**
+- `package.json` depends on `@sveltejs/kit` → **svelte**
 - `package.json` depends on `react` (or `next`) → **react**
 - `package.json` depends on `vue` (or `nuxt`) → **vue**
+- `package.json` depends on `svelte` → **svelte**
 
 `markas.json`, when present, is authoritative: use its `framework` and `componentsDir`.
 
@@ -39,7 +43,7 @@ Done when every component the page uses exists as a file in the components folde
 
 ## 4. Compose the page
 
-- Blade: `<x-markas.button>`. React: `import { Button } from "@/components/markas/Button"`. Vue: `import Button from "@/components/markas/Button.vue"`.
+- Blade: `<x-markas.button>`. React: `import { Button } from "@/components/markas/Button"`. Vue: `import Button from "@/components/markas/Button.vue"`. Svelte: `import Button from "$lib/components/markas/Button.svelte"`. Astro: `import Button from "@/components/markas/Button.astro"`. Angular: `import { Button } from "./markas/button.component"`, added to the component's `imports`.
 - Style your own layout with tokens only: `bg-canvas`, `bg-surface`, `text-ink`, `text-muted`, `border-line`, `bg-primary`, `text-on-primary`. Full list: [tokens.md](tokens.md).
 - One `variant="primary"` button per area; secondary actions use `secondary` or `ghost`; destructive actions use `danger`.
 - Metadata labels use the mono label style: `font-mono text-[11px] uppercase tracking-[0.2em] text-faint`.

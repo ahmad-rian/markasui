@@ -1,8 +1,8 @@
 ---
 title: Installation
-description: Set up Tailwind CSS v4 and markas.css in Laravel, React, or Vue.
-seoTitle: "Install Tailwind CSS components in Laravel, React and Vue"
-seoDescription: "Set up Tailwind CSS v4 and markas.css in a Laravel, React, or Vue project, then add MarkasUI components with the CLI or by copying the source."
+description: Set up Tailwind CSS v4 and markas.css in Laravel, React, Vue, Svelte, Astro, or Angular.
+seoTitle: "Install Tailwind CSS components in Laravel, React, Vue and more"
+seoDescription: "Set up Tailwind CSS v4 and markas.css in a Laravel, React, Vue, Svelte, Astro, or Angular project, then add MarkasUI components with the CLI or by copying the source."
 ---
 
 Every MarkasUI component needs two things: Tailwind CSS v4 and the `markas.css` file with the color tokens.
@@ -126,6 +126,44 @@ export default defineNuxtConfig({
   vite: { plugins: [tailwindcss()] },
 });
 ```
+
+## SvelteKit
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+
+```ts
+// vite.config.ts
+import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({ plugins: [tailwindcss(), sveltekit()] });
+```
+
+Save `markas.css` as `src/markas.css` and import it from `src/routes/+layout.svelte` with `import "../markas.css";`. With plain Vite, import it from `src/main.ts`. Components use Svelte 5 runes.
+
+## Astro
+
+```bash
+npx astro add tailwind
+```
+
+Save `markas.css` as `src/styles/markas.css` and import it from your layout with `import "../styles/markas.css";`. Components render on the server; interactive ones ship a small bundled `<script>` with no framework runtime.
+
+## Angular
+
+```bash
+npm install tailwindcss @tailwindcss/postcss postcss
+```
+
+```jsonc
+// .postcssrc.json
+{ "plugins": { "@tailwindcss/postcss": {} } }
+```
+
+Save `markas.css` as `src/markas.css` and add `@import "./markas.css";` to `src/styles.css`. Components are standalone with signals: add them to the `imports` of the component that uses them.
 
 ## Dark mode
 

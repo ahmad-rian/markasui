@@ -3,6 +3,7 @@
  * /api/donate (deploy/donate/server.mjs) and navigates to the Sumopod checkout URL it returns. CSP: the fetch is
  * same-origin (connect-src 'self'), and navigation is not limited by CSP.
  */
+import { SUPPORT_AMOUNT_PARAM, parseSupportAmount } from "../lib/support";
 import { onPageLoad } from "./lifecycle";
 
 /** Same list as CHECKOUT_PREFIXES in deploy/donate/server.mjs. */
@@ -118,6 +119,14 @@ function setupForm(form: HTMLFormElement) {
       syncPresets();
       setFieldError("amount", "");
     });
+  }
+  // ?amount= from the floating coffee card's chips preselects that amount.
+  const requested = parseSupportAmount(
+    new URLSearchParams(location.search).get(SUPPORT_AMOUNT_PARAM),
+  );
+  if (requested !== null) {
+    amountInput.value = group(String(requested));
+    syncPresets();
   }
   amountInput.addEventListener("input", () => {
     formatAmountInput(amountInput);

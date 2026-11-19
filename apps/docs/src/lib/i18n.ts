@@ -202,7 +202,7 @@ const en = {
     componentsLink: "Browse with previews",
     ctaTitle: ["Start with", "one command."],
     ctaText:
-      "Run init in a Laravel, React, or Vue project, then add components one at a time.",
+      "Run init in your Laravel, React, Vue, Svelte, Astro, or Angular project, then add components one at a time.",
     stackLabel: "Works with",
   },
   home: {
@@ -512,7 +512,7 @@ const id: Dictionary = {
     componentsLink: "Lihat dengan preview",
     ctaTitle: ["Mulai dengan", "satu perintah."],
     ctaText:
-      "Jalankan init di project Laravel, React, atau Vue, lalu tambahkan komponen satu per satu.",
+      "Jalankan init di project Laravel, React, Vue, Svelte, Astro, atau Angular, lalu tambahkan komponen satu per satu.",
     stackLabel: "Bekerja dengan",
   },
   home: {
@@ -598,7 +598,7 @@ const id: Dictionary = {
   seo: {
     homeEyebrow: "Library komponen open source",
     homeTitle:
-      "MarkasUI by JenderalCorp - Komponen Tailwind CSS untuk React, Vue, dan Blade",
+      "MarkasUI by JenderalCorp - Komponen Tailwind CSS untuk React, Vue, Blade, dan lainnya",
     homeDescription:
       "Komponen Tailwind CSS v4 gratis dan open source untuk React, Vue, Laravel Blade, Svelte, Astro, dan Angular. Salin ke project Anda dengan satu perintah CLI.",
     componentsTitle:

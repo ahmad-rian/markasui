@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import CoffeeLauncher from "../components/CoffeeLauncher.astro";
 import Footer from "../components/Footer.astro";
 import FrameworkSplash from "../components/FrameworkSplash.astro";
 import Header from "../components/Header.astro";
@@ -8,6 +9,7 @@ import { LOCALES, getLocale, localePath, pagePath, stripLocale, t } from "../lib
 import { breadcrumbList, breadcrumbTrail, serializeGraph, withSiteName, type Crumb } from "../lib/seo";
 import { OG_SIZE, ogImagePath } from "../lib/seo-files";
 import { SITE } from "../lib/site";
+import { SUPPORT_PATH } from "../lib/support";
 import sansFont from "../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
 
 interface Props {
@@ -52,6 +54,8 @@ const canonical = new URL(pagePath(Astro.url), site);
 const path = stripLocale(Astro.url.pathname);
 const ogPath = ogImagePath(locale, path);
 const ogImage = ogPath && new URL(ogPath, site).toString();
+/** Floating coffee card: not on /support itself, nor on the 404 and the other noindex pages. */
+const coffee = !noindex && path !== SUPPORT_PATH && !path.startsWith(`${SUPPORT_PATH}/`);
 const graph = [...jsonLd, ...(breadcrumbs ? [breadcrumbList(site, locale, breadcrumbTrail(locale, breadcrumbs))] : [])];
 ---
 
@@ -172,6 +176,7 @@ const graph = [...jsonLd, ...(breadcrumbs ? [breadcrumbList(site, locale, breadc
     <Header variant={hero ? "hero" : "default"} />
     <div class="flex-1"><slot /></div>
     <Footer variant={hero ? "landing" : "default"} />
+    {coffee && <CoffeeLauncher />}
     <LanguageOverlay />
     <FrameworkSplash />
     <script>
@@ -189,6 +194,7 @@ const graph = [...jsonLd, ...(breadcrumbs ? [breadcrumbList(site, locale, breadc
       import "../scripts/language-overlay";
       import "../scripts/copy-page";
       import "../scripts/search";
+      import "../scripts/coffee";
     </script>
   </body>
 </html>

@@ -5,129 +5,131 @@ import { FRAMEWORK_LABELS } from "../lib/frameworks";
 import { getLocale, t } from "../lib/i18n";
 
 /**
- * Tanda singkat setelah pengunjung memilih framework lain di switcher: kartu kecil di atas tengah layar
- * (tidak menangkap klik) plus pengumuman aria-live untuk pembaca layar. Popover manual supaya tampil di
- * top layer, juga di atas laci menu (dialog modal) di ponsel. Dikendalikan oleh scripts/framework-splash.ts;
- * tidak tampil saat load pertama atau saat pilihan tersimpan dipasang.
+ * Tanda setelah pengunjung memilih framework lain di switcher: layar penuh seperti overlay ganti bahasa
+ * (LanguageOverlay.astro), dengan logo framework berwarna brand dan "Now showing <framework>", sekitar satu detik.
+ * Tidak menangkap klik, plus pengumuman aria-live untuk pembaca layar. Popover manual supaya tampil di top layer,
+ * juga di atas laci menu (dialog modal) di ponsel. Dikendalikan oleh scripts/framework-splash.ts; tidak tampil saat
+ * load pertama atau saat pilihan tersimpan dipasang.
  */
 const nowShowing = t(getLocale(Astro.url)).framework.nowShowing;
 ---
 
 <div class="fw-splash" popover="manual" aria-hidden="true" data-framework-splash>
-  <div class="fw-splash-card">
-    {
-      FRAMEWORKS.map((framework) => (
-        <div class="fw-splash-item" data-splash-fw={framework} data-message={`${nowShowing} ${FRAMEWORK_LABELS[framework]}`} hidden>
-          <span class="fw-splash-logo">
-            <FrameworkIcon framework={framework} brand class="size-6" />
-          </span>
-          <span class="fw-splash-text">
-            <span class="fw-splash-kicker">{nowShowing}</span>
-            <span class="fw-splash-name">{FRAMEWORK_LABELS[framework]}</span>
-          </span>
-        </div>
-      ))
-    }
+  {
+    FRAMEWORKS.map((framework) => (
+      <div class="fw-splash-item" data-splash-fw={framework} data-message={`${nowShowing} ${FRAMEWORK_LABELS[framework]}`} hidden>
+        <FrameworkIcon framework={framework} brand class="fw-splash-logo" />
+        <p class="fw-splash-text">
+          <span class="fw-splash-kicker">{nowShowing}</span>
+          <span class="fw-splash-name">{FRAMEWORK_LABELS[framework]}</span>
+        </p>
+      </div>
+    ))
+  }
+  <div class="fw-splash-track">
+    <div class="fw-splash-progress"></div>
   </div>
 </div>
 <p class="sr-only" role="status" aria-live="polite" data-framework-announce></p>
 
 <style is:global>
   .fw-splash {
-    /* Reset gaya bawaan [popover]: posisi atas tengah, tanpa border dan latar. */
-    inset: 76px 0 auto;
-    margin: 0 auto;
-    width: fit-content;
-    max-width: calc(100vw - 32px);
-    padding: 0;
+    /* Reset gaya bawaan [popover]: selebar layar, tanpa border. */
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 24px;
     border: 0;
-    background: transparent;
-    overflow: visible;
+    background: var(--color-surface);
+    color: var(--color-ink);
     pointer-events: none;
   }
   .fw-splash:popover-open {
-    animation: fw-splash 900ms var(--ease-out-quint) forwards;
-  }
-  .fw-splash-card {
-    border-radius: 18px;
-    background: var(--color-surface);
-    color: var(--color-ink);
-    padding: 14px 22px 14px 14px;
-    box-shadow:
-      0 0 0 1px var(--color-line),
-      0 12px 32px rgb(0 0 0 / 0.12),
-      0 2px 6px rgb(0 0 0 / 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    text-align: center;
+    animation: fw-splash 1000ms var(--ease-out-quint) forwards;
   }
   .fw-splash-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    display: grid;
+    justify-items: center;
+    gap: 24px;
+    animation: fw-splash-content 1000ms var(--ease-out-quint) forwards;
   }
   .fw-splash-item[hidden] {
     display: none;
   }
   .fw-splash-logo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: var(--color-subtle);
+    width: 96px;
+    height: 96px;
   }
   .fw-splash-text {
     display: grid;
-    gap: 1px;
+    gap: 6px;
   }
   .fw-splash-kicker {
-    font-size: 13px;
-    line-height: 18px;
+    font-size: 15px;
+    line-height: 22px;
     color: var(--color-muted);
   }
   .fw-splash-name {
-    font-size: 20px;
-    line-height: 26px;
+    font-size: 40px;
+    line-height: 1.1;
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.025em;
   }
-  /* Bingkai preview dan kode yang barusan berganti: cincin brand tipis yang memudar. Outline, jadi tanpa geser layout. */
-  [data-fw-pulse] {
-    animation: fw-pulse 900ms ease-out;
+  .fw-splash-track {
+    width: 224px;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: var(--color-subtle);
+  }
+  .fw-splash-progress {
+    height: 100%;
+    border-radius: 9999px;
+    background: var(--color-brand);
+    animation: fw-splash-progress 850ms var(--ease-out-quint) forwards;
   }
   @keyframes fw-splash {
     0% {
       opacity: 0;
-      transform: translateY(-6px) scale(0.96);
     }
-    18%,
-    72% {
+    15%,
+    80% {
       opacity: 1;
-      transform: none;
     }
     100% {
       opacity: 0;
-      transform: scale(0.98);
     }
   }
-  @keyframes fw-pulse {
+  @keyframes fw-splash-content {
     0% {
-      outline: 2px solid transparent;
-      outline-offset: 2px;
+      transform: translateY(8px) scale(0.97);
     }
-    20% {
-      outline: 2px solid color-mix(in oklab, var(--color-brand) 60%, transparent);
-      outline-offset: 2px;
-    }
+    30%,
     100% {
-      outline: 2px solid transparent;
-      outline-offset: 2px;
+      transform: none;
+    }
+  }
+  @keyframes fw-splash-progress {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fw-splash:popover-open {
-      animation: none;
-    }
-    [data-fw-pulse] {
+    .fw-splash:popover-open,
+    .fw-splash-item,
+    .fw-splash-progress {
       animation: none;
     }
   }

@@ -33,9 +33,36 @@ test.describe("with motion", () => {
       1,
     );
     await expect(announcer(page)).toHaveText("Now showing Svelte");
-    await expect(page.locator("[data-fw-pulse]").first()).toBeAttached();
     await expect(splash(page)).toBeHidden({ timeout: 2_000 });
-    await expect(page.locator("[data-fw-pulse]")).toHaveCount(0);
+  });
+
+  test("the splash covers the whole viewport, lets clicks through and fits 360 px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto(COMPONENT);
+    // Below lg the switcher lives in the menu drawer; the splash still covers it (top layer).
+    await page.getByRole("button", { name: "Menu" }).click();
+    await radio(page, "React").click();
+    await expect(
+      splash(page).locator('[data-splash-fw="react"]'),
+    ).toBeVisible();
+    const box = await splash(page).evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        width: rect.width,
+        height: rect.height,
+        pointerEvents: getComputedStyle(element).pointerEvents,
+        scrollWidth: document.documentElement.scrollWidth,
+      };
+    });
+    expect(box).toEqual({
+      width: 360,
+      height: 740,
+      pointerEvents: "none",
+      scrollWidth: 360,
+    });
+    await expect(splash(page)).toBeHidden({ timeout: 2_000 });
   });
 
   test("Indonesian page uses the Indonesian text", async ({ page }) => {
@@ -144,7 +171,7 @@ test.describe("with motion", () => {
   });
 });
 
-test("reduced motion: no animation or pulse, still announced", async ({
+test("reduced motion: static splash without animation, still announced", async ({
   page,
 }) => {
   // playwright.docs.config.ts emulates reduced motion for every test.
@@ -157,7 +184,6 @@ test("reduced motion: no animation or pulse, still announced", async ({
       (element) => getComputedStyle(element).animationName,
     ),
   ).toBe("none");
-  await expect(page.locator("[data-fw-pulse]")).toHaveCount(0);
   await expect(announcer(page)).toHaveText("Now showing Angular");
   await expect(splash(page)).toBeHidden({ timeout: 2_000 });
 });

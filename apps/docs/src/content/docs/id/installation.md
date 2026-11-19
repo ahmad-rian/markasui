@@ -1,8 +1,8 @@
 ---
 title: Instalasi
-description: Siapkan Tailwind CSS v4 dan markas.css di Laravel, React, atau Vue.
-seoTitle: "Instalasi komponen Tailwind CSS di Laravel, React, dan Vue"
-seoDescription: "Siapkan Tailwind CSS v4 dan markas.css di project Laravel, React, atau Vue, lalu tambahkan komponen MarkasUI lewat CLI atau salin source-nya."
+description: Siapkan Tailwind CSS v4 dan markas.css di Laravel, React, Vue, Svelte, Astro, atau Angular.
+seoTitle: "Instalasi komponen Tailwind CSS di Laravel, React, Vue, dan lainnya"
+seoDescription: "Siapkan Tailwind CSS v4 dan markas.css di project Laravel, React, Vue, Svelte, Astro, atau Angular, lalu tambahkan komponen MarkasUI lewat CLI atau salin source-nya."
 ---
 
 Semua komponen MarkasUI membutuhkan dua hal: Tailwind CSS v4 dan file `markas.css` yang berisi token warna.
@@ -126,6 +126,44 @@ export default defineNuxtConfig({
   vite: { plugins: [tailwindcss()] },
 });
 ```
+
+## SvelteKit
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+
+```ts
+// vite.config.ts
+import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({ plugins: [tailwindcss(), sveltekit()] });
+```
+
+Simpan `markas.css` di `src/markas.css`, lalu import dari `src/routes/+layout.svelte` dengan `import "../markas.css";`. Dengan Vite biasa, import dari `src/main.ts`. Komponen memakai rune Svelte 5.
+
+## Astro
+
+```bash
+npx astro add tailwind
+```
+
+Simpan `markas.css` di `src/styles/markas.css`, lalu import dari layout dengan `import "../styles/markas.css";`. Komponen dirender di server; komponen interaktif membawa `<script>` kecil yang dibundel tanpa runtime framework.
+
+## Angular
+
+```bash
+npm install tailwindcss @tailwindcss/postcss postcss
+```
+
+```jsonc
+// .postcssrc.json
+{ "plugins": { "@tailwindcss/postcss": {} } }
+```
+
+Simpan `markas.css` di `src/markas.css`, lalu tambahkan `@import "./markas.css";` ke `src/styles.css`. Komponen bersifat standalone dengan signal: tambahkan ke `imports` komponen yang memakainya.
 
 ## Mode gelap
 

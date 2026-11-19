@@ -1,0 +1,316 @@
+---
+import Icon from "./Icon.astro";
+import { localePath, getLocale } from "../lib/i18n";
+import { SUPPORT_AMOUNT_PARAM, SUPPORT_PATH, SUPPORT_PRESETS, supportStrings } from "../lib/support";
+
+/**
+ * Floating "Buy me a coffee" card at the bottom right of every docs page (Base.astro leaves it out on /support, the
+ * 404 and other noindex pages). Collapsed: a pill with a steaming cup (a round icon button below 640 px). The card is
+ * a native popover (Escape, light dismiss and focus return come from the browser); scripts/coffee.ts handles the
+ * delayed entrance, aria-expanded, focus into the card and the 7-day "hide".
+ */
+const locale = getLocale(Astro.url);
+const copy = supportStrings(locale);
+const text = copy.launcher;
+const supportHref = localePath(locale, SUPPORT_PATH);
+const chips = SUPPORT_PRESETS.map((amount) => ({
+  href: `${supportHref}?${SUPPORT_AMOUNT_PARAM}=${amount}`,
+  label: `Rp ${amount / 1000}${text.thousand}`,
+}));
+---
+
+<div class="coffee" data-coffee data-state="idle">
+  <div id="coffee-card" class="coffee-card" popover="auto" role="dialog" aria-labelledby="coffee-title" tabindex="-1" data-coffee-card>
+    <div class="coffee-head">
+      <h2 id="coffee-title" class="coffee-title">{copy.title}</h2>
+      <button type="button" class="coffee-icon-button" popovertarget="coffee-card" popovertargetaction="hide" aria-label={text.close}>
+        <Icon name="close" class="coffee-close-icon" />
+      </button>
+    </div>
+    <p class="coffee-text">{text.text}</p>
+    <ul class="coffee-chips" aria-label={copy.presets}>
+      {
+        chips.map((chip) => (
+          <li>
+            <a href={chip.href} class="coffee-chip">
+              {chip.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a href={supportHref} class="coffee-cta">
+      <Icon name="coffee" class="coffee-cta-icon" />
+      {text.cta}
+    </a>
+    <button type="button" class="coffee-hide" data-coffee-hide>{text.hide}</button>
+  </div>
+  <button type="button" class="coffee-toggle" popovertarget="coffee-card" aria-controls="coffee-card" aria-expanded="false" aria-label={text.open} data-coffee-toggle>
+    <span class="coffee-cup" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <g class="coffee-steam">
+          <path d="M7 6.5c-.8-1 .8-1.8 0-3"></path>
+          <path d="M10.5 6.5c-.8-1 .8-1.8 0-3"></path>
+          <path d="M14 6.5c-.8-1 .8-1.8 0-3"></path>
+        </g>
+        <path d="M16 9a1 1 0 0 1 1 1v7a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-7a1 1 0 0 1 1-1h12a3.5 3.5 0 1 1 0 7h-1"></path>
+      </svg>
+    </span>
+    <span class="coffee-label">{text.open}</span>
+  </button>
+</div>
+
+<style is:global>
+  .coffee {
+    --coffee-gap: 24px;
+    position: fixed;
+    right: calc(var(--coffee-gap) + env(safe-area-inset-right));
+    bottom: calc(var(--coffee-gap) + env(safe-area-inset-bottom));
+    z-index: 30;
+    transition:
+      opacity 400ms var(--ease-out-quint),
+      transform 400ms var(--ease-out-quint);
+  }
+  .coffee[hidden] {
+    display: none;
+  }
+  .coffee[data-state="idle"] {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .coffee[data-instant] {
+    transition: none;
+  }
+  /* Menu drawer open or a toast demo showing at the same corner: step aside. */
+  html:has(dialog[data-drawer][open]) .coffee,
+  body:has(.fixed.right-4.bottom-4 > :not(template)) .coffee {
+    visibility: hidden;
+    opacity: 0;
+  }
+  /* Room under the footer so the launcher never sits on its last links. */
+  body:has(.coffee) > footer {
+    padding-bottom: 72px;
+  }
+
+  .coffee-toggle {
+    display: inline-flex;
+    height: 44px;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px 0 8px;
+    border-radius: 9999px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow:
+      0 0 0 1px var(--color-line),
+      var(--shadow-overlay);
+    transition: background-color 150ms ease-out;
+  }
+  .coffee-toggle:hover,
+  .coffee-toggle[aria-expanded="true"] {
+    background: var(--color-subtle);
+  }
+  .coffee-cup {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--color-brand-soft);
+    color: var(--color-brand);
+  }
+  .coffee-cup svg {
+    width: 18px;
+    height: 18px;
+    overflow: visible;
+  }
+  .coffee-steam path {
+    opacity: 0;
+    animation: coffee-steam 2.6s ease-in-out infinite;
+  }
+  .coffee-steam path:nth-child(2) {
+    animation-delay: 0.85s;
+  }
+  .coffee-steam path:nth-child(3) {
+    animation-delay: 1.7s;
+  }
+  @keyframes coffee-steam {
+    0% {
+      opacity: 0;
+      transform: translateY(1.5px);
+    }
+    35% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-3px);
+    }
+  }
+
+  .coffee-card {
+    position: fixed;
+    inset: auto calc(var(--coffee-gap, 24px) + env(safe-area-inset-right)) calc(var(--coffee-gap, 24px) + 56px + env(safe-area-inset-bottom))
+      auto;
+    width: min(300px, calc(100vw - 32px));
+    margin: 0;
+    padding: 16px;
+    border: 0;
+    border-radius: 16px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow:
+      0 0 0 1px var(--color-line),
+      0 12px 32px rgb(0 0 0 / 0.12),
+      0 2px 6px rgb(0 0 0 / 0.06);
+    outline: none;
+  }
+  .coffee-card:popover-open {
+    display: grid;
+    gap: 12px;
+    animation: coffee-card 200ms var(--ease-out-quint);
+  }
+  @keyframes coffee-card {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.98);
+    }
+  }
+  .coffee-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .coffee-title {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .coffee-icon-button {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    margin: -6px -6px -6px 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: var(--color-muted);
+    transition: background-color 150ms ease-out;
+  }
+  .coffee-icon-button:hover {
+    background: var(--color-subtle);
+    color: var(--color-ink);
+  }
+  .coffee-close-icon,
+  .coffee-cta-icon {
+    width: 16px;
+    height: 16px;
+  }
+  .coffee-text {
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--color-muted);
+  }
+  .coffee-chips {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .coffee-chip {
+    display: flex;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid var(--color-line);
+    font-size: 13px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transition:
+      background-color 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .coffee-chip:hover {
+    border-color: var(--color-brand-line);
+    background: var(--color-brand-soft);
+  }
+  .coffee-cta {
+    display: inline-flex;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 10px;
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 150ms ease-out;
+  }
+  .coffee-cta:hover {
+    background: var(--color-brand-strong);
+  }
+  .coffee-hide {
+    justify-self: center;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--color-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line);
+    text-underline-offset: 3px;
+  }
+  .coffee-hide:hover {
+    color: var(--color-ink);
+  }
+
+  /* Small screens: a round icon button that keeps clear of the content and the home indicator. */
+  @media (width < 40rem) {
+    .coffee {
+      --coffee-gap: 16px;
+    }
+    .coffee-toggle {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      justify-content: center;
+    }
+    .coffee-cup {
+      width: 36px;
+      height: 36px;
+    }
+    .coffee-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .coffee-card {
+      bottom: calc(var(--coffee-gap, 16px) + 60px + env(safe-area-inset-bottom));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .coffee,
+    .coffee[data-state="idle"] {
+      transition: none;
+      transform: none;
+    }
+    .coffee-steam path {
+      animation: none;
+      opacity: 1;
+    }
+    .coffee-card:popover-open {
+      animation: none;
+    }
+  }
+</style>

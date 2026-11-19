@@ -11,6 +11,15 @@ export const SUPPORT_MAX = 5_000_000;
 export const SUPPORT_NAME_MAX = 40;
 export const SUPPORT_MESSAGE_MAX = 140;
 export const SUPPORT_PATH = "/support";
+/** Query parameter the floating coffee card uses to preselect an amount on /support. */
+export const SUPPORT_AMOUNT_PARAM = "amount";
+
+/** Whole rupiah within the accepted range, or null (used for ?amount= on /support). */
+export function parseSupportAmount(value: string | null): number | null {
+  if (!value || !/^\d{1,9}$/.test(value)) return null;
+  const amount = Number(value);
+  return amount >= SUPPORT_MIN && amount <= SUPPORT_MAX ? amount : null;
+}
 
 /** 25000 -> "25.000" (id-ID grouping in both languages, the amounts are rupiah). */
 export const formatRupiah = (amount: number) =>
@@ -56,6 +65,15 @@ const en = {
       "This payment expired or was not completed, so nothing was charged.",
     again: "Try again",
     home: "Back to MarkasUI",
+  },
+  launcher: {
+    open: "Buy me a coffee",
+    text: "MarkasUI is free and open source. A coffee keeps it going.",
+    /** Suffix for the short amounts on the chips: Rp 10k. */
+    thousand: "k",
+    cta: "Buy me a coffee",
+    close: "Close",
+    hide: "Hide for 7 days",
   },
   cancel: {
     title: "Payment cancelled",
@@ -105,6 +123,14 @@ const id: SupportStrings = {
       "Pembayaran ini kedaluwarsa atau tidak selesai, jadi tidak ada dana yang terpotong.",
     again: "Coba lagi",
     home: "Kembali ke MarkasUI",
+  },
+  launcher: {
+    open: "Traktir kopi",
+    text: "MarkasUI gratis dan open source. Secangkir kopi membuatnya terus berjalan.",
+    thousand: "rb",
+    cta: "Traktir kopi",
+    close: "Tutup",
+    hide: "Sembunyikan 7 hari",
   },
   cancel: {
     title: "Pembayaran dibatalkan",
