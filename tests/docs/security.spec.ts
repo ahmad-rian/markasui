@@ -58,6 +58,9 @@ const PAGES = [
   "/templates/larisa",
   "/pages",
   "/pages/belajar",
+  "/support",
+  "/id/support/thanks?order=KOPI-20261119-ABCDEFGHIJKLMNOP",
+  "/support/cancel",
   "/this-page-does-not-exist",
 ];
 
@@ -167,6 +170,19 @@ test.describe("deployed headers", () => {
       expect((await request.get(path)).status(), path).toBe(404);
     }
     expect((await request.post("/")).status()).toBe(405);
+
+    // Donation service behind nginx: POST only on its own paths, no caching, Origin checked by the service.
+    const health = await request.get("/api/donate/health");
+    expect(health.status()).toBe(200);
+    expect(health.headers()["cache-control"]).toBe("no-store");
+    expect(health.headers()["x-content-type-options"]).toBe("nosniff");
+    expect(
+      (
+        await request.post("/api/donate", { data: { amount: 25_000 } })
+      ).status(),
+    ).toBe(403);
+    expect((await request.post("/api/donate/status")).status()).toBe(405);
+    expect((await request.get("/api/other")).status()).toBe(404);
   });
 });
 
@@ -206,6 +222,30 @@ test.describe("content security policy", () => {
       expect(violations).toEqual([]);
     });
   }
+
+  test("support form posts to /api/donate and opens the checkout without CSP violations", async ({
+    page,
+    context,
+  }) => {
+    const violations = await enforceCsp(context);
+    const checkout = "https://pay.sumopod.com/pay/csp-test";
+    await page.route("**/api/donate", (route) =>
+      route.fulfill({ json: { url: checkout } }),
+    );
+    await page.route("https://pay.sumopod.com/**", (route) =>
+      route.fulfill({
+        contentType: "text/html",
+        body: "<title>Sumopod</title>",
+      }),
+    );
+    // ClientRouter: arrive from another page so the form script runs under the first document's policy.
+    await page.goto("/components");
+    await page.locator('footer a[href="/support"]').click();
+    await page.waitForURL("**/support");
+    await page.getByRole("button", { name: "Buy me a coffee" }).click();
+    await page.waitForURL(checkout);
+    expect(violations).toEqual([]);
+  });
 
   test("navigation, search, theme toggle and copy page run without CSP violations", async ({
     page,

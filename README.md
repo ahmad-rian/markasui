@@ -264,3 +264,5 @@ Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first, and re
 ## License
 
 [MIT](LICENSE). Made by [JenderalCorp](https://jenderalcorp.com) (CV Jenderal Solusi Digital), Purwokerto, Indonesia.
+
+If MarkasUI saves you time, you can [buy us a coffee ☕](https://markas.jenderalcorp.com/support) (QRIS, any Indonesian e-wallet or banking app).

@@ -1,0 +1,30 @@
+---
+/** /support/cancel: Sumopod's cancel return URL. Nothing to check, the donor can start again. */
+import "../../../styles/global.css";
+import Icon from "../../../components/Icon.astro";
+import Base from "../../../layouts/Base.astro";
+import { localeParams, localePath, toLocale } from "../../../lib/i18n";
+import { SUPPORT_PATH, supportStrings } from "../../../lib/support";
+
+export const getStaticPaths = localeParams;
+
+const locale = toLocale(Astro.params.lang);
+const copy = supportStrings(locale).cancel;
+---
+
+<Base title={copy.seoTitle} description={copy.text} noindex>
+  <main id="konten" class="mx-auto flex min-h-[calc(100dvh-12rem)] max-w-xl flex-col justify-center px-4 py-20 sm:px-6">
+    <span class="inline-flex size-11 items-center justify-center rounded-xl bg-subtle text-muted" aria-hidden="true">
+      <Icon name="coffee" class="size-6" />
+    </span>
+    <h1 class="mt-5 text-[34px] leading-tight font-semibold tracking-[-0.025em]">{copy.title}</h1>
+    <p class="mt-4 text-lg leading-8 text-muted">{copy.text}</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href={localePath(locale, SUPPORT_PATH)} class="site-button-primary">
+        <Icon name="coffee" class="size-4" />
+        {copy.again}
+      </a>
+      <a href={localePath(locale, "/")} class="site-button-secondary">{copy.home}</a>
+    </div>
+  </main>
+</Base>

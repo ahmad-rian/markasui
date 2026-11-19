@@ -92,6 +92,7 @@ const en = {
   footer: {
     madeBy: "Made by CV Jenderal Solusi Digital, Purwokerto",
     license: "MIT license",
+    support: "Buy me a coffee",
   },
   categories: {
     form: "Form",
@@ -397,6 +398,7 @@ const id: Dictionary = {
   footer: {
     madeBy: "Dibuat oleh CV Jenderal Solusi Digital, Purwokerto",
     license: "Lisensi MIT",
+    support: "Traktir kopi",
   },
   categories: {
     form: "Form",

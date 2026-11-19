@@ -1,0 +1,148 @@
+---
+/**
+ * /support: "Buy me a coffee". The form posts to /api/donate (deploy/donate/server.mjs), which creates a Sumopod
+ * QRIS payment and returns its checkout URL; src/scripts/support.ts then navigates there.
+ */
+import "../../../styles/global.css";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import Icon from "../../../components/Icon.astro";
+import Base from "../../../layouts/Base.astro";
+import { localeParams, toLocale } from "../../../lib/i18n";
+import { breadcrumbTrail } from "../../../lib/seo";
+import {
+  SUPPORT_DEFAULT_AMOUNT,
+  SUPPORT_MAX,
+  SUPPORT_MESSAGE_MAX,
+  SUPPORT_MIN,
+  SUPPORT_NAME_MAX,
+  SUPPORT_PATH,
+  SUPPORT_PRESETS,
+  formatRupiah,
+  supportStrings,
+} from "../../../lib/support";
+
+export const getStaticPaths = localeParams;
+
+const locale = toLocale(Astro.params.lang);
+const copy = supportStrings(locale);
+const breadcrumbs = [{ name: copy.title, path: SUPPORT_PATH }];
+
+const label = "text-sm font-medium text-ink";
+const hint = "text-sm text-muted";
+const error = "text-sm text-danger";
+const control =
+  "flex h-11 w-full items-center gap-2 rounded-md border border-line bg-surface px-3 text-base transition-colors duration-150 ease-out has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand has-[[aria-invalid=true]]:border-danger motion-reduce:transition-none";
+const field = "h-full min-w-0 flex-1 bg-transparent text-ink outline-none placeholder:text-faint";
+const textarea =
+  "min-h-24 w-full rounded-md border border-line bg-surface px-3 py-2.5 text-base text-ink transition-colors duration-150 ease-out outline-none placeholder:text-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand aria-[invalid=true]:border-danger motion-reduce:transition-none";
+const chip =
+  "inline-flex h-9 items-center rounded-full border border-line bg-surface px-3.5 text-sm font-medium text-ink tabular-nums transition-[background-color,border-color,scale] duration-150 ease-out hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:scale-95 disabled:pointer-events-none disabled:opacity-50 aria-pressed:border-brand aria-pressed:bg-brand-soft motion-reduce:transition-none";
+---
+
+<Base title={copy.seoTitle} description={copy.description} breadcrumbs={breadcrumbs}>
+  <main id="konten" class="mx-auto max-w-screen-xl px-4 pt-10 pb-24 sm:px-6 sm:pt-14 lg:px-8" data-pagefind-body>
+    <Breadcrumbs trail={breadcrumbTrail(locale, breadcrumbs)} />
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:gap-16">
+      <div class="max-w-xl">
+        <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-soft text-brand" aria-hidden="true">
+          <Icon name="coffee" class="size-6" />
+        </span>
+        <h1 class="mt-5 text-[34px] leading-tight font-semibold tracking-[-0.025em] text-balance sm:text-[42px]">{copy.title}</h1>
+        <p class="mt-4 text-lg leading-8 text-muted">{copy.lead}</p>
+        <p class="mt-6 flex gap-3 text-sm leading-6 text-muted">
+          <Icon name="shield" class="mt-0.5 size-5 shrink-0 text-brand" />
+          <span>{copy.qris}</span>
+        </p>
+      </div>
+
+      <form
+        data-support-form
+        data-locale={locale}
+        data-min={SUPPORT_MIN}
+        data-max={SUPPORT_MAX}
+        data-error-amount={copy.errors.amount}
+        data-error-name={copy.errors.name}
+        data-error-message={copy.errors.message}
+        data-error-rate={copy.errors.rate}
+        data-error-generic={copy.errors.generic}
+        novalidate
+        class="grid gap-6 self-start rounded-xl border border-line bg-surface p-5 sm:p-6"
+      >
+        <fieldset class="grid gap-1.5">
+          <legend class:list={[label, "mb-1.5"]}>{copy.amount}</legend>
+          <div role="group" aria-label={copy.presets} class="flex flex-wrap gap-2">
+            {
+              SUPPORT_PRESETS.map((amount) => (
+                <button type="button" data-preset={amount} aria-pressed={amount === SUPPORT_DEFAULT_AMOUNT ? "true" : "false"} class={chip}>
+                  Rp {formatRupiah(amount)}
+                </button>
+              ))
+            }
+          </div>
+          <label for="support-amount" class="sr-only">{copy.amount}</label>
+          <div class:list={[control, "mt-2"]}>
+            <span class="shrink-0 font-medium text-muted select-none" aria-hidden="true">Rp</span>
+            <input
+              id="support-amount"
+              name="amount"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              required
+              value={formatRupiah(SUPPORT_DEFAULT_AMOUNT)}
+              aria-describedby="support-amount-hint support-amount-error"
+              class:list={[field, "font-medium tabular-nums"]}
+            />
+          </div>
+          <p id="support-amount-hint" class={hint}>{copy.amountHint}</p>
+          <p id="support-amount-error" class={error} data-field-error="amount" hidden></p>
+        </fieldset>
+
+        <div class="grid gap-1.5">
+          <label for="support-name" class={label}>{copy.name}</label>
+          <div class={control}>
+            <input
+              id="support-name"
+              name="name"
+              type="text"
+              maxlength={SUPPORT_NAME_MAX}
+              autocomplete="nickname"
+              aria-describedby="support-name-hint support-name-error"
+              class={field}
+            />
+          </div>
+          <p id="support-name-hint" class={hint}>{copy.nameHint}</p>
+          <p id="support-name-error" class={error} data-field-error="name" hidden></p>
+        </div>
+
+        <div class="grid gap-1.5">
+          <label for="support-message" class={label}>{copy.message}</label>
+          <textarea
+            id="support-message"
+            name="message"
+            rows="3"
+            maxlength={SUPPORT_MESSAGE_MAX}
+            aria-describedby="support-message-hint support-message-error"
+            class={textarea}></textarea>
+          <p id="support-message-hint" class={hint}>{copy.messageHint}</p>
+          <p id="support-message-error" class={error} data-field-error="message" hidden></p>
+        </div>
+
+        <p data-support-error role="alert" class="rounded-md bg-danger/10 px-3 py-2.5 text-sm text-danger empty:hidden"></p>
+
+        <button type="submit" disabled data-support-submit class="site-button-primary w-full disabled:cursor-not-allowed disabled:opacity-60">
+          <Icon name="coffee" class="size-4" />
+          <span data-label-idle>{copy.submit}</span>
+          <span data-label-busy hidden>{copy.busy}</span>
+        </button>
+        <noscript>
+          <p class="text-sm text-muted">{copy.noscript}</p>
+        </noscript>
+      </form>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import "../../../scripts/support";
+</script>

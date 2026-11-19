@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Build situs docs untuk domain produksi lalu sinkronkan ke server (nginx statis, /var/www/markasui).
-# Pemakaian: pnpm deploy:site [--nginx]   (butuh host SSH "tencent" di ~/.ssh/config, atau DEPLOY_HOST=user@host)
+# Pemakaian: pnpm deploy:site [--nginx] [--donate]   (butuh host SSH "tencent" di ~/.ssh/config, atau DEPLOY_HOST=user@host)
 #   --nginx      pasang juga deploy/nginx/markas.jenderalcorp.com.conf sebagai config situs nginx
+#   --donate     pasang juga layanan donasi (deploy/donate: server.mjs + unit systemd) lalu restart
 #   DIST_DIR=..  pakai build yang sudah ada (mis. build di folder sementara), tanpa build ulang
 # Setiap deploy memasang snippet CSP hasil build (hash skrip inline berubah) lalu reload nginx. Lihat deploy/README.md.
 set -euo pipefail
@@ -14,9 +15,11 @@ site_conf="$root/deploy/nginx/markas.jenderalcorp.com.conf"
 site_upload=".markas-nginx-site.conf"
 
 sync_nginx=false
+sync_donate=false
 for arg in "$@"; do
   case "$arg" in
     --nginx) sync_nginx=true ;;
+    --donate) sync_donate=true ;;
     *) echo "deploy: opsi tidak dikenal: $arg" >&2 && exit 2 ;;
   esac
 done
@@ -31,6 +34,13 @@ dist="${DIST_DIR:-apps/docs/dist}"
 if [[ ! -f "$dist/.csp-nginx.conf" ]]; then
   echo "deploy: $dist/.csp-nginx.conf tidak ada (build harus menjalankan apps/docs/scripts/csp.ts)" >&2
   exit 1
+fi
+
+# Layanan donasi dipasang sebelum nginx, supaya /api/donate sudah hidup saat config barunya aktif.
+if [[ "$sync_donate" == true ]]; then
+  donate_upload=".markas-donate-upload"
+  rsync -a --delete deploy/donate/server.mjs deploy/donate/markas-donate.service "$DEPLOY_HOST:$donate_upload/"
+  ssh "$DEPLOY_HOST" sudo bash -s -- "$donate_upload" < deploy/donate/install.sh
 fi
 
 remote_args=("$DEPLOY_PATH")

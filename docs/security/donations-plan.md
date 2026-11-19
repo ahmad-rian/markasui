@@ -1,6 +1,6 @@
 # "Buy me a coffee" donations with Sumopod: plan
 
-Status: research and design only. Nothing is implemented, no keys exist yet. Researched 2026-11-18.
+Status: implemented on 2026-11-19 as `/support` + `deploy/donate/server.mjs` (see deploy/README.md, "Donations"). The research below is kept for reference; where it differs (paths `/support` instead of `/donate`, JSONL instead of SQLite, optional name and message), the implementation wins.
 
 ## Ringkasan (Bahasa Indonesia)
 

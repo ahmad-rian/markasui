@@ -73,6 +73,7 @@ export async function indexableRoutes(): Promise<Route[]> {
       path: templateDetailPath(template),
       lastmod,
     })),
+    { path: "/support" },
     ...FRAMEWORKS.map((framework) => ({
       path: `/frameworks/${framework}`,
       lastmod: latest(

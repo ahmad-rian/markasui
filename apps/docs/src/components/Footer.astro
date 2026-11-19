@@ -67,6 +67,10 @@ const meta = "mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-8 text-sm sm:
         <a href={localePath(locale, "/docs/introduction")} class={link}>Docs</a>
         <a href={`${SITE.repo}/blob/main/LICENSE`} class={link}>{strings.footer.license}</a>
         <a href="/llms.txt" class={link}>llms.txt</a>
+        <a href={localePath(locale, "/support")} class:list={[link, "inline-flex items-center gap-1.5"]}>
+          <Icon name="coffee" class="size-4" />
+          {strings.footer.support}
+        </a>
       </nav>
       <nav aria-label={strings.hub.footer} class="flex flex-wrap gap-x-6 gap-y-2">
         {

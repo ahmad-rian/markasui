@@ -1,0 +1,59 @@
+# MarkasUI "Buy me a coffee" service (Sumopod QRIS payments), behind nginx on /api/donate.
+# Installed by deploy/donate/install.sh as /etc/systemd/system/markas-donate.service. See deploy/README.md.
+#
+# Secrets (root:root 0600, never in the repo):
+#   /etc/markas-donate/api-key          required, the service does not start without it
+#   /etc/markas-donate/webhook-secret   Svix signing secret (whsec_...), optional
+#   /etc/markas-donate/webhook-token    X-Webhook-Token (whtok_...), optional
+# Webhooks get 503 until one of the optional files exists; `systemctl restart markas-donate` reloads them.
+[Unit]
+Description=MarkasUI donations (Sumopod)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /opt/markas-donate/server.mjs
+Environment=NODE_ENV=production
+Environment=PORT=8787
+# Live API. For a Sandbox key: systemctl edit markas-donate, then
+# Environment=SUMOPOD_BASE_URL=https://api-pay-sandbox.sumopod.com
+Environment=SUMOPOD_BASE_URL=https://api-pay.sumopod.com
+# A missing file named in LoadCredential= stops the unit, so the optional webhook files come in through the folder
+# (as donate_webhook-secret and donate_webhook-token).
+LoadCredential=api-key:/etc/markas-donate/api-key
+LoadCredential=donate:/etc/markas-donate
+DynamicUser=yes
+StateDirectory=markas-donate
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+MemoryMax=128M
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target
