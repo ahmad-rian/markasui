@@ -81,10 +81,11 @@ const batchItem =
   "flex items-center justify-between gap-3 rounded-xl bg-subtle px-3 py-2.5 text-sm";
 const batchApp = "font-medium";
 const batchCount = "text-muted tabular-nums";
-const timerBox = "mt-auto rounded-2xl bg-subtle p-5";
-const timerValue = "text-4xl font-semibold tracking-tight tabular-nums";
+const timerBox = "mt-auto rounded-2xl bg-primary-soft p-5";
+const timerValue =
+  "text-4xl font-semibold tracking-tight text-primary tabular-nums";
 const timerLabel = "mt-1 text-sm text-muted";
-const timerTrack = "mt-4 h-1.5 overflow-hidden rounded-full bg-line";
+const timerTrack = "mt-4 h-1.5 overflow-hidden rounded-full bg-primary-line";
 const timerBar = "h-full w-[64%] rounded-full bg-primary";
 const chart = "mt-auto grid gap-3";
 const chartBars = "flex h-32 items-end gap-2";
@@ -97,7 +98,7 @@ const previewGrid =
 const profileScroll = "mt-8 max-w-full overflow-x-auto";
 const profileText = "mt-6 text-base leading-relaxed text-pretty text-muted";
 const phoneWrap =
-  "flex justify-center rounded-3xl bg-subtle px-4 py-10 sm:py-14";
+  "flex justify-center rounded-3xl bg-primary-soft px-4 py-10 sm:py-14";
 const phone =
   "w-full max-w-[300px] rounded-[2.75rem] border border-line bg-surface p-2.5 shadow-overlay";
 const screen = "grid gap-4 rounded-[2.25rem] bg-canvas px-5 pt-6 pb-7";
@@ -106,7 +107,8 @@ const screenTitle = "text-xl font-semibold tracking-tight";
 const screenSub = "text-sm text-muted";
 const screenCard = "grid gap-1 rounded-2xl bg-surface p-4";
 const screenLabel = "text-xs text-muted";
-const screenValue = "text-2xl font-semibold tracking-tight tabular-nums";
+const screenValue =
+  "text-2xl font-semibold tracking-tight text-primary tabular-nums";
 const allowList = "grid gap-2";
 const allowItem =
   "flex items-center justify-between gap-3 rounded-xl bg-surface px-3 py-2.5 text-sm";
@@ -141,7 +143,7 @@ const faqAside = "grid content-start justify-items-start gap-4";
 const faqList = "[&>div]:max-w-none [&>div]:gap-0";
 const bandWrap = `${container} pb-20 sm:pb-24`;
 const band =
-  "grid overflow-hidden rounded-3xl bg-subtle lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]";
+  "grid overflow-hidden rounded-3xl bg-primary-soft lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]";
 const bandImage = "aspect-[4/3] size-full bg-line object-cover";
 const bandBody =
   "grid content-center justify-items-start gap-4 p-6 sm:p-10 lg:p-14";

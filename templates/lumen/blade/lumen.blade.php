@@ -596,12 +596,12 @@
                   <ul role="list" class="grid gap-4 sm:grid-cols-2">
                     <template x-for="deal in sortedHistory" :key="deal.id">
                       <li :data-deal="deal.id" class="{{ $dealBase }}" :class="selectedDeal === deal.id ? cls.dealSelected : cls.dealIdle">
-                        <time :datetime="deal.date" class="text-xs font-medium" :class="selectedDeal === deal.id ? 'text-on-primary/80' : 'text-muted'" x-text="shortDate(deal.date)"></time>
+                        <time :datetime="deal.date" class="text-xs font-medium" :class="selectedDeal === deal.id ? 'text-on-primary' : 'text-muted'" x-text="shortDate(deal.date)"></time>
                         <h3 class="text-sm leading-snug font-semibold"><button type="button" class="{{ $selectable }}" :aria-pressed="selectedDeal === deal.id ? 'true' : 'false'" @click="selectedDeal = deal.id" x-text="deal.title"></button></h3>
                         <p class="mt-auto text-xl font-semibold tracking-tight tabular-nums" x-text="rupiah(deal.value)"></p>
                         <div class="flex items-center justify-between gap-2">
                           <div class="flex -space-x-1"><template x-for="member in deal.team" :key="member">{{ $avatar('member', 'size-8 text-xs', 'ring-2 ring-surface') }}</template></div>
-                          <span class="text-xs font-medium" :class="selectedDeal === deal.id ? 'text-on-primary/80' : 'text-muted'" x-text="deal.stage"></span>
+                          <span class="text-xs font-medium" :class="selectedDeal === deal.id ? 'text-on-primary' : 'text-muted'" x-text="deal.stage"></span>
                         </div>
                       </li>
                     </template>

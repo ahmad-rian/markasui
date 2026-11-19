@@ -1,0 +1,29 @@
+{
+  "name": "roti",
+  "kind": "page",
+  "title": "Pawon Ragi",
+  "headline": {
+    "en": "Artisan Bakery Landing Page",
+    "id": "Landing Page Toko Roti Artisan"
+  },
+  "description": {
+    "en": "Pawon Ragi is a landing page for bakeries, cafes, F&B UMKM, and home food businesses: show the menu by category, let customers fill a basket and order on WhatsApp, tell the story behind the kitchen, and grow a mailing list.",
+    "id": "Pawon Ragi adalah landing page untuk toko roti, kafe, UMKM F&B, dan usaha makanan rumahan: tampilkan menu per kategori, biarkan pelanggan mengisi keranjang dan memesan lewat WhatsApp, ceritakan dapur di baliknya, lalu kumpulkan daftar email."
+  },
+  "sectors": {
+    "en": ["Bakeries", "Cafes", "F&B UMKM", "Home food businesses"],
+    "id": ["Toko roti", "Kafe", "UMKM F&B", "Usaha makanan rumahan"]
+  },
+  "accent": "red",
+  "components": [
+    "avatar",
+    "button",
+    "drawer",
+    "faq",
+    "footer",
+    "input",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

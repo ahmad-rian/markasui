@@ -1194,7 +1194,7 @@
                     <h3
                       class={cx(
                         "text-sm font-medium",
-                        highlight ? "text-on-primary/85" : "text-muted",
+                        highlight ? "text-on-primary" : "text-muted",
                       )}
                     >
                       {card.label}
@@ -1240,8 +1240,7 @@
                         dot={false}><span>{stat.change}</span></Badge
                       >
                     </span>
-                    <span
-                      class={highlight ? "text-on-primary/85" : "text-muted"}
+                    <span class={highlight ? "text-on-primary" : "text-muted"}
                       >vs {stat.previous} {current.compare}</span
                     >
                   </div>

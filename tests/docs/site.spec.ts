@@ -596,6 +596,70 @@ test("warna aksen template diteruskan ke pratinjau", async ({ page }) => {
   );
 });
 
+/** Aksen bawaan dari templates/<slug>/meta.json. */
+const defaultAccent = (slug: string): string =>
+  (
+    JSON.parse(readFileSync(join(templatesDir, slug, "meta.json"), "utf8")) as {
+      accent: string;
+    }
+  ).accent;
+
+test("pemilih aksen memulai dari aksen bawaan template dan menyimpan pilihan per template", async ({
+  page,
+}) => {
+  await page.goto("/pages/industri");
+  const picker = page.getByRole("radiogroup", { name: "Accent color" });
+  await expect(picker.getByRole("radio", { checked: true })).toHaveAttribute(
+    "data-accent",
+    defaultAccent("industri"),
+  );
+  const frame = page.frameLocator("[data-template-frame]");
+  await expect(frame.locator("html")).toHaveAttribute(
+    "data-accent",
+    defaultAccent("industri"),
+  );
+
+  await picker.getByRole("radio", { name: "Teal" }).click();
+  await expect(frame.locator("html")).toHaveAttribute("data-accent", "teal");
+
+  // Pilihan di satu template tidak mengubah bawaan template lain.
+  await page.goto("/templates/larisa");
+  await expect(picker.getByRole("radio", { checked: true })).toHaveAttribute(
+    "data-accent",
+    defaultAccent("larisa"),
+  );
+  // Pilihan tersimpan dipakai lagi saat halaman template itu dibuka ulang.
+  await page.goto("/pages/industri");
+  await expect(picker.getByRole("radio", { checked: true })).toHaveAttribute(
+    "data-accent",
+    "teal",
+  );
+  await expect(frame.locator("html")).toHaveAttribute("data-accent", "teal");
+});
+
+test("demo template memakai aksen bawaan, ?accent= menggantinya", async ({
+  page,
+}) => {
+  await page.goto("/demo/templates/gawai/react");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-accent",
+    defaultAccent("gawai"),
+  );
+  await page.goto("/demo/templates/gawai/react?accent=violet");
+  await expect(page.locator("html")).toHaveAttribute("data-accent", "violet");
+});
+
+test("kartu /pages menampilkan template dengan aksen bawaannya", async ({
+  page,
+}) => {
+  await page.goto("/pages");
+  const card = page.locator('a[href="/pages/industri"] iframe');
+  await card.scrollIntoViewIfNeeded();
+  await expect(
+    page.frameLocator('a[href="/pages/industri"] iframe').locator("html"),
+  ).toHaveAttribute("data-accent", defaultAccent("industri"));
+});
+
 test("/pages menampilkan welcome page saja, /templates hanya dashboard", async ({
   page,
 }) => {

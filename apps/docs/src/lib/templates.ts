@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { DEFAULT_ACCENT, isAccentName } from "./accents";
 import { exampleForDisplay } from "./frameworks";
 import {
   REQUIRED_TEMPLATE_FRAMEWORKS,
@@ -25,6 +26,8 @@ export type TemplateMeta = {
   sectors: Record<Locale, string[]>;
   components: string[];
   addedAt: string;
+  /** Warna aksen bawaan (nama di accents.ts, opsional, default neutral): pratinjau, kartu, demo, dan OG memakai ini sampai user memilih lain. */
+  accent: string;
 };
 
 export type TemplateSource = { path: string; code: string };
@@ -61,12 +64,14 @@ function parseMeta(file: string): TemplateMeta {
     !isLocalized(raw.sectors, isTextList) && "sectors",
     !isTextList(raw.components) && "components",
     !isText(raw.addedAt) && "addedAt",
+    raw.accent !== undefined && !isAccentName(raw.accent) && "accent",
   ].filter(Boolean);
   if (problems.length > 0)
     throw new Error(`${file}: field tidak valid: ${problems.join(", ")}`);
   return {
     ...(raw as Omit<TemplateMeta, "kind">),
     kind: raw.kind === "page" ? "page" : "dashboard",
+    accent: isAccentName(raw.accent) ? raw.accent : DEFAULT_ACCENT,
   };
 }
 

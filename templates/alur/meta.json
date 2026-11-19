@@ -1,5 +1,6 @@
 {
   "name": "alur",
+  "accent": "violet",
   "title": "Alur",
   "headline": {
     "en": "Workflow Automation Dashboard",

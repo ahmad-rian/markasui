@@ -1048,7 +1048,7 @@ class BarChart {
                         @for (deal of sortedHistory(); track deal.id) {
                           @let selected = selectedDeal() === deal.id;
                           @let muted =
-                            selected ? "text-on-primary/80" : "text-muted";
+                            selected ? "text-on-primary" : "text-muted";
                           <li
                             [attr.data-deal]="deal.id"
                             [class]="

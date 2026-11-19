@@ -40,7 +40,7 @@ const heroLink = `inline-flex h-12 items-center justify-center gap-2 rounded-lg 
 const lottieInk =
   "[&_path]:stroke-current [&_path[fill^=rgb]]:fill-current [&_svg]:block";
 const hero = `${container} grid items-center gap-12 pt-12 pb-16 sm:pt-20 lg:grid-cols-2 lg:gap-16 lg:pt-24 lg:pb-24`;
-const eyebrow = "flex items-center gap-2 text-sm text-muted";
+const eyebrow = "flex items-center gap-2 text-sm font-medium text-primary";
 const eyebrowDot = "size-1.5 shrink-0 rounded-full bg-primary";
 const h1 =
   "mt-5 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl";
@@ -57,7 +57,8 @@ const nextRow = "flex items-center gap-3 px-3 pt-4";
 const nextLabel = "text-xs text-muted";
 const nextTitle = "text-sm font-medium";
 const progressRow = "flex items-center gap-3 px-3 pt-4 pb-3";
-const progressTrack = "h-1.5 flex-1 overflow-hidden rounded-full bg-subtle";
+const progressTrack =
+  "h-1.5 flex-1 overflow-hidden rounded-full bg-primary-soft";
 const progressBar = "h-full w-3/8 rounded-full bg-primary";
 const progressText = "text-xs whitespace-nowrap text-muted";
 const logoWrap = `${container} pb-16 sm:pb-20`;
@@ -83,7 +84,7 @@ const modalBody = "grid gap-5 text-ink";
 const modalTitle = "mt-2 text-xl font-semibold tracking-tight";
 const modalText = "mt-2 text-sm leading-relaxed text-muted";
 const factGrid = "grid grid-cols-3 gap-2 text-sm";
-const factCell = "rounded-lg bg-subtle p-3";
+const factCell = "rounded-lg bg-primary-soft p-3";
 const factTerm = "text-xs text-muted";
 const factValue = "mt-1 font-medium";
 const projectBox = "rounded-lg border border-line p-4 text-sm";
@@ -96,8 +97,8 @@ const personRole = "text-sm text-muted";
 const modalPrice = "text-lg font-semibold whitespace-nowrap";
 const stepGrid = "mt-12 grid gap-10 md:grid-cols-3 md:gap-8";
 const stepArt =
-  "flex size-28 items-center justify-center rounded-xl border border-line bg-surface";
-const stepLottie = `size-24 text-ink ${lottieInk}`;
+  "flex size-28 items-center justify-center rounded-xl border border-primary-line bg-primary-soft";
+const stepLottie = `size-24 text-primary ${lottieInk}`;
 const stepLabel = "mt-6 text-sm font-medium text-primary";
 const stepTitle = "mt-2 text-lg font-semibold tracking-tight";
 const stepText = "mt-2 text-base leading-relaxed text-pretty text-muted";
@@ -109,7 +110,7 @@ const mentorBio = "text-sm leading-relaxed text-pretty text-muted";
 const mentorTeaches = "border-t border-line pt-4 text-sm text-muted";
 const storyGrid = "mt-12 grid gap-4 lg:grid-cols-3";
 const storyCard =
-  "flex h-full flex-col justify-between gap-8 rounded-xl bg-subtle p-6";
+  "flex h-full flex-col justify-between gap-8 rounded-xl bg-primary-soft p-6";
 const quoteText = "text-base leading-relaxed text-pretty";
 const pricingHead = "flex flex-wrap items-end justify-between gap-6";
 const billingRow = "flex flex-wrap items-center gap-3";
@@ -135,7 +136,7 @@ const faqAside = "grid content-start justify-items-start gap-4";
 const faqList = "[&>div]:max-w-none [&>div]:gap-0";
 const bandWrap = `${container} pb-20 sm:pb-24`;
 const band =
-  "grid gap-8 rounded-2xl bg-subtle p-6 sm:p-10 lg:grid-cols-2 lg:items-center lg:gap-12 lg:p-12";
+  "grid gap-8 rounded-2xl border border-primary-line bg-primary-soft p-6 sm:p-10 lg:grid-cols-2 lg:items-center lg:gap-12 lg:p-12";
 const bandTitle =
   "text-2xl font-semibold tracking-tight text-balance sm:text-3xl";
 const bandText = "mt-3 text-base leading-relaxed text-pretty text-muted";

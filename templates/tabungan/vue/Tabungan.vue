@@ -34,7 +34,7 @@ const statList =
   "mt-12 grid max-w-lg grid-cols-3 divide-x divide-line border-t border-line pt-6";
 const statItem = "grid gap-1 px-4 first:pl-0";
 const statValue =
-  "-order-1 text-lg font-semibold tracking-tight tabular-nums sm:text-xl";
+  "-order-1 text-lg font-semibold tracking-tight text-primary tabular-nums sm:text-xl";
 const statLabel = "text-sm text-muted";
 const heroMedia = "relative lg:pl-8";
 const heroImage =
@@ -46,7 +46,7 @@ const balanceLabel = "text-sm text-muted";
 const balanceAmount = "text-2xl font-semibold tracking-tight tabular-nums";
 const goalRow = "grid gap-2 border-t border-line pt-3";
 const goalText = "flex justify-between gap-2 text-xs text-muted";
-const goalTrack = "h-1.5 overflow-hidden rounded-full bg-subtle";
+const goalTrack = "h-1.5 overflow-hidden rounded-full bg-primary-soft";
 const goalBar = "h-full w-[78%] rounded-full bg-primary";
 const section = `${container} scroll-mt-20 py-16 sm:py-24`;
 const sectionHead = "grid max-w-2xl gap-4";
@@ -94,7 +94,8 @@ const productCard =
   "flex flex-col gap-5 rounded-2xl border border-line bg-surface p-6";
 const productHead = "flex items-center justify-between gap-2";
 const productName = "text-lg font-semibold tracking-tight";
-const productRate = "text-4xl font-semibold tracking-tight tabular-nums";
+const productRate =
+  "text-4xl font-semibold tracking-tight text-primary tabular-nums";
 const productUnit = "mt-1 text-sm text-muted";
 const productText = "text-sm leading-relaxed text-pretty text-muted";
 const featureList =
@@ -103,15 +104,15 @@ const featureItem = "flex gap-2";
 const checkIcon = "mt-0.5 size-4 shrink-0 text-primary";
 const trustWrap = `${container} scroll-mt-20 pb-4`;
 const trustBand =
-  "grid gap-8 rounded-2xl border border-line bg-surface p-6 sm:p-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-12";
+  "grid gap-8 rounded-2xl bg-primary p-6 text-on-primary sm:p-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-12";
 const trustTitle = "text-xl font-semibold tracking-tight";
-const trustText = "mt-2 text-sm leading-relaxed text-pretty text-muted";
+const trustText = "mt-2 text-sm leading-relaxed text-pretty text-on-primary";
 const trustGrid = "grid gap-6 sm:grid-cols-2";
 const trustItem = "flex gap-3";
 const trustIcon =
-  "flex size-9 shrink-0 items-center justify-center rounded-lg bg-subtle text-ink";
+  "flex size-9 shrink-0 items-center justify-center rounded-lg bg-on-primary/15 text-on-primary";
 const trustName = "text-sm font-semibold";
-const trustNote = "mt-1 text-sm leading-relaxed text-pretty text-muted";
+const trustNote = "mt-1 text-sm leading-relaxed text-pretty text-on-primary";
 const faqLayout = `${section} grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16`;
 const faqAside = "grid content-start justify-items-start gap-4";
 const faqList = "[&>div]:max-w-none [&>div]:gap-0";

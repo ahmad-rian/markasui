@@ -1184,7 +1184,7 @@ function resetSettings() {
                       :class="[
                         'text-xs font-medium',
                         selectedDeal === deal.id
-                          ? 'text-on-primary/80'
+                          ? 'text-on-primary'
                           : 'text-muted',
                       ]"
                     >
@@ -1219,7 +1219,7 @@ function resetSettings() {
                         :class="[
                           'text-xs font-medium',
                           selectedDeal === deal.id
-                            ? 'text-on-primary/80'
+                            ? 'text-on-primary'
                             : 'text-muted',
                         ]"
                       >

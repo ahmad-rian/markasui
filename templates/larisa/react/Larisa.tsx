@@ -1395,7 +1395,7 @@ function OverviewPage({ s }: { s: Dashboard }) {
                   <h3
                     className={cx(
                       "text-sm font-medium",
-                      highlight ? "text-on-primary/85" : "text-muted",
+                      highlight ? "text-on-primary" : "text-muted",
                     )}
                   >
                     {card.label}
@@ -1444,7 +1444,7 @@ function OverviewPage({ s }: { s: Dashboard }) {
                     </Badge>
                   </span>
                   <span
-                    className={highlight ? "text-on-primary/85" : "text-muted"}
+                    className={highlight ? "text-on-primary" : "text-muted"}
                   >
                     vs {stat.previous} {current.compare}
                   </span>

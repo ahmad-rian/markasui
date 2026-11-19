@@ -1196,7 +1196,7 @@
           <ul role="list" class="grid gap-4 sm:grid-cols-2">
             {#each sortedHistory as item (item.id)}
               {@const selected = selectedDeal === item.id}
-              {@const muted = selected ? "text-on-primary/80" : "text-muted"}
+              {@const muted = selected ? "text-on-primary" : "text-muted"}
               <li
                 data-deal={item.id}
                 class={cx(dealBase, selected ? dealSelected : dealIdle)}

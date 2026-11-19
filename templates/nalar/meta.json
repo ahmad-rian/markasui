@@ -1,0 +1,32 @@
+{
+  "name": "nalar",
+  "kind": "page",
+  "title": "Nalar",
+  "accent": "indigo",
+  "headline": {
+    "en": "AI Analytics SaaS Landing Page",
+    "id": "Landing Page SaaS Analitik AI"
+  },
+  "description": {
+    "en": "Nalar is a landing page for AI startups, data and analytics SaaS, and developer tools: show a live product dashboard, explain insights, alerts, and workflows, walk through the CLI, compare plans, and collect early access sign-ups.",
+    "id": "Nalar adalah landing page untuk startup AI, SaaS data dan analitik, dan developer tools: tampilkan dasbor produk langsung, jelaskan insight, alert, dan workflow, tunjukkan alur CLI, bandingkan paket, lalu kumpulkan pendaftaran early access."
+  },
+  "sectors": {
+    "en": ["AI startups", "Data and analytics SaaS", "Developer tools"],
+    "id": ["Startup AI", "SaaS data dan analitik", "Developer tools"]
+  },
+  "components": [
+    "badge",
+    "button",
+    "faq",
+    "footer",
+    "input",
+    "logo-cloud",
+    "navbar",
+    "table",
+    "tabs",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-18"
+}

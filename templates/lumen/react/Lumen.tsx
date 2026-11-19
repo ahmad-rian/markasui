@@ -835,7 +835,7 @@ function CustomersPage() {
             <ul role="list" className="grid gap-4 sm:grid-cols-2">
               {[...history].sort(sorters[sort]).map((deal) => {
                 const selected = selectedDeal === deal.id;
-                const muted = selected ? "text-on-primary/80" : "text-muted";
+                const muted = selected ? "text-on-primary" : "text-muted";
                 return (
                   <li
                     key={deal.id}

@@ -28,7 +28,7 @@ const heroTop = "grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-end";
 const h1 =
   "text-[2rem] leading-[1.04] font-bold tracking-tight uppercase sm:text-5xl lg:text-[3.75rem]";
 const h1Line = "block";
-const h1Pale = "block text-primary/70";
+const h1Pale = "block text-primary";
 const heroAside = "grid gap-6";
 const heroLead = "text-base leading-relaxed text-pretty text-muted";
 const heroActions = "flex flex-wrap gap-3";
@@ -47,10 +47,10 @@ const lead = "text-lg leading-relaxed text-pretty text-muted";
 const aboutGrid = "grid gap-10 lg:grid-cols-2 lg:gap-16";
 const aboutText = "mt-4 text-base leading-relaxed text-pretty text-muted";
 const factList =
-  "grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2";
-const factCell = "bg-surface p-5";
+  "grid gap-px overflow-hidden rounded-2xl border border-primary-line bg-primary-line sm:grid-cols-2";
+const factCell = "bg-primary-soft p-5";
 const factTerm = "text-sm text-muted";
-const factValue = "mt-1 text-lg font-semibold tracking-tight";
+const factValue = "mt-1 text-lg font-semibold tracking-tight text-primary";
 const serviceGrid =
   "mt-10 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-10";
 const serviceSide = "grid content-between gap-6";
@@ -60,7 +60,7 @@ const serviceNoteText = "leading-relaxed text-pretty text-muted";
 const inlineLink = `w-fit rounded-sm font-medium underline decoration-line underline-offset-4 hover:decoration-ink ${focusRing}`;
 const serviceRow = `flex w-full cursor-pointer items-center gap-4 rounded-xl border px-4 py-4 text-left transition-colors duration-150 ${focusRing}`;
 const serviceIdle = `${serviceRow} border-transparent hover:bg-subtle`;
-const serviceActive = `${serviceRow} border-line bg-surface`;
+const serviceActive = `${serviceRow} border-primary-line bg-primary-soft`;
 const serviceNumber = "w-6 text-sm font-medium text-muted tabular-nums";
 const serviceName = "flex-1 text-base font-medium";
 const serviceArrow = "size-4 shrink-0 text-muted";
@@ -93,7 +93,7 @@ const specValue = "font-medium";
 const equipmentFoot = "border-t border-line p-4";
 const quoteLink = `inline-flex h-9 w-full items-center justify-center gap-2 rounded-md border border-line bg-surface px-3 text-sm font-medium text-ink transition-colors duration-150 hover:bg-subtle ${focusRing}`;
 const stepGrid = "mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6";
-const stepItem = "grid content-start gap-3 border-t border-line pt-5";
+const stepItem = "grid content-start gap-3 border-t-2 border-primary pt-5";
 const stepNumber = "text-sm font-medium text-primary tabular-nums";
 const stepTitle = "text-lg font-semibold tracking-tight";
 const stepText = "text-sm leading-relaxed text-pretty text-muted";
@@ -106,11 +106,12 @@ const glassCard =
 const glassTitle = "text-base font-semibold";
 const standardsWrap = `${container} pb-4`;
 const standardsBand =
-  "grid gap-4 rounded-2xl border border-line bg-surface p-5 sm:p-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-center";
+  "grid gap-4 rounded-2xl bg-primary p-5 text-on-primary sm:p-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-center";
 const standardsTitle = "text-sm font-semibold";
-const standardsNote = "mt-1 text-sm text-muted";
+const standardsNote = "mt-1 text-sm text-on-primary";
 const standardsList = "flex flex-wrap gap-2 text-sm font-medium tabular-nums";
-const standardItem = "rounded-md border border-line bg-canvas px-3 py-1.5";
+const standardItem =
+  "rounded-md border border-on-primary/25 bg-on-primary/10 px-3 py-1.5";
 const projectGrid = "mt-12 grid gap-4 lg:grid-cols-3";
 const projectCard =
   "flex h-full flex-col gap-4 rounded-2xl border border-line bg-surface p-6";

@@ -542,7 +542,7 @@
               <template x-for="(stat, index) in current().stats" :key="index">
                 <article class="grid gap-4 rounded-xl border p-5" :class="index === 0 ? 'border-primary bg-primary text-on-primary' : 'border-line bg-surface text-ink'">
                   <div class="flex items-center justify-between gap-3">
-                    <h3 class="text-sm font-medium" :class="index === 0 ? 'text-on-primary/85' : 'text-muted'" x-text="statCards[index][0]"></h3>
+                    <h3 class="text-sm font-medium" :class="index === 0 ? 'text-on-primary' : 'text-muted'" x-text="statCards[index][0]"></h3>
                     <span class="grid size-9 place-items-center rounded-lg" :class="index === 0 ? 'bg-on-primary/10' : 'bg-subtle'">{{ $icon('', 'size-4', 'icons[statCards[index][1]]') }}</span>
                   </div>
                   <div class="flex items-end justify-between gap-3">
@@ -556,7 +556,7 @@
                   </div>
                   <div class="flex flex-wrap items-center gap-2 text-xs">
                     <span class="inline-flex rounded-full bg-surface"><x-markas.badge variant="success" :dot="false" x-show="stat.up"><span x-text="stat.change"></span></x-markas.badge><x-markas.badge variant="danger" :dot="false" x-show="! stat.up"><span x-text="stat.change"></span></x-markas.badge></span>
-                    <span :class="index === 0 ? 'text-on-primary/85' : 'text-muted'" x-text="`vs ${stat.previous} ${current().compare}`"></span>
+                    <span :class="index === 0 ? 'text-on-primary' : 'text-muted'" x-text="`vs ${stat.previous} ${current().compare}`"></span>
                   </div>
                 </article>
               </template>

@@ -40,7 +40,7 @@ const used = template.components.flatMap((name) => {
 });
 const thumbs = import.meta.glob<string>("../../../public/thumbs/*.webp", { query: "?url", import: "default", eager: true });
 const hasThumb = (name: string) => `../../../public/thumbs/${name}.webp` in thumbs;
-const demo = `/demo/templates/${template.name}/blade`;
+const demo = `/demo/templates/${template.name}/blade?accent=${template.accent}`;
 const frameworks = template.frameworks;
 /** Versi yang belum di-porting: preview memakai React, kode diberi pesan "belum tersedia". */
 const pending = TEMPLATE_FRAMEWORKS.filter((fw) => !frameworks.includes(fw));
@@ -89,14 +89,14 @@ const breadcrumbs = [
     <h2 id="preview" class="sr-only">{strings.preview}</h2>
     <div class="frame">
       <div class="flex flex-wrap items-center justify-between gap-3 px-2 pt-1 pb-2">
-        <div role="radiogroup" aria-label={strings.accent} data-accent-picker class="flex items-center gap-1.5">
+        <div role="radiogroup" aria-label={strings.accent} data-accent-picker={template.name} data-default-accent={template.accent} class="flex flex-wrap items-center gap-1.5">
           <span class="mr-1.5 text-sm text-muted" aria-hidden="true">{strings.accent}</span>
           {
-            ACCENTS.map((accent, index) => (
+            ACCENTS.map((accent) => (
               <button
                 type="button"
                 role="radio"
-                aria-checked={index === 0 ? "true" : "false"}
+                aria-checked={accent.name === template.accent ? "true" : "false"}
                 aria-label={accent.label}
                 title={accent.label}
                 data-accent={accent.name}
@@ -195,12 +195,19 @@ const breadcrumbs = [
   import { TEMPLATE_FALLBACK_FRAMEWORK } from "../../lib/template-frameworks";
   import { getFramework } from "../../scripts/prefs";
 
+  /** Pilihan aksen disimpan per template, karena setiap template punya aksen bawaan sendiri (meta.json). */
   const ACCENT_KEY = "markas-template-accent";
+  const picker = () => document.querySelector<HTMLElement>("[data-accent-picker]");
+  const accentKey = () => `${ACCENT_KEY}:${picker()?.dataset.accentPicker ?? ""}`;
+  const isPickable = (accent: string | null): accent is string =>
+    !!accent && !!picker()?.querySelector(`[role=radio][data-accent="${accent}"]`);
   const readAccent = () => {
+    const fallback = picker()?.dataset.defaultAccent ?? "neutral";
     try {
-      return localStorage.getItem(ACCENT_KEY) ?? "neutral";
+      const stored = localStorage.getItem(accentKey());
+      return isPickable(stored) ? stored : fallback;
     } catch {
-      return "neutral";
+      return fallback;
     }
   };
   const themeOf = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
@@ -219,7 +226,10 @@ const breadcrumbs = [
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => {
       const url = demoUrl(frame);
       const framework = `/${demoFramework(frame)}?`;
-      if (!frame.src.includes(framework)) frame.src = url;
+      // Sekali saat dimuat: pilihan aksen tersimpan bisa beda dari bawaan di src awal. Setelahnya lewat postMessage.
+      const staleAccent = !frame.dataset.synced && new URL(frame.src).searchParams.get("accent") !== readAccent();
+      frame.dataset.synced = "true";
+      if (!frame.src.includes(framework) || staleAccent) frame.src = url;
       document.querySelectorAll<HTMLAnchorElement>("[data-template-open]").forEach((link) => (link.href = url));
     });
     const accent = readAccent();
@@ -231,7 +241,7 @@ const breadcrumbs = [
 
   function choose(accent: string) {
     try {
-      localStorage.setItem(ACCENT_KEY, accent);
+      localStorage.setItem(accentKey(), accent);
     } catch {
       // Storage diblok: warna tetap berganti untuk sesi ini lewat postMessage.
     }

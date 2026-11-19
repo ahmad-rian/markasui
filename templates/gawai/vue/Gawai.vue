@@ -32,7 +32,7 @@ const heroCard =
   "relative grid overflow-hidden rounded-[2rem] bg-surface lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]";
 const heroCopy =
   "relative z-10 flex flex-col justify-center gap-6 p-6 pt-10 sm:p-12 lg:py-20 lg:pr-0 lg:pl-14";
-const kicker = "text-sm font-medium text-muted";
+const kicker = "text-sm font-medium text-primary";
 const h1 =
   "text-5xl leading-[0.95] font-semibold tracking-tighter text-balance sm:text-7xl lg:text-8xl";
 const heroLead =
@@ -94,7 +94,7 @@ const modalInfo = "grid content-start gap-4";
 const modalName = "text-xl font-semibold tracking-tight";
 const modalSpecs = "grid gap-1.5 text-sm text-muted";
 const specItem = "flex gap-2";
-const specIcon = "mt-0.5 size-4 shrink-0 text-ink";
+const specIcon = "mt-0.5 size-4 shrink-0 text-primary";
 const optionLabel = "mb-2 text-sm font-medium";
 const modalPrice = "text-2xl font-semibold tracking-tight";
 const modalNote = "text-sm text-muted";
@@ -106,7 +106,7 @@ const pointIcon =
   "flex size-11 items-center justify-center rounded-full bg-primary-soft text-primary";
 const pointTitle = "mt-4 text-base font-semibold";
 const pointText = "mt-1 text-sm leading-relaxed text-pretty text-muted";
-const consultCard = "grid gap-5 rounded-[1.5rem] bg-subtle p-6";
+const consultCard = "grid gap-5 rounded-[1.5rem] bg-primary-soft p-6";
 const person = "flex items-center gap-4";
 const personName = "text-base font-semibold";
 const personRole = "text-sm text-muted";
@@ -114,11 +114,11 @@ const consultText = "text-sm leading-relaxed text-pretty text-muted";
 const consultButton = "h-12 w-full rounded-full! text-base";
 const deliveryGrid = "mt-8 grid gap-3 sm:gap-4 md:grid-cols-3";
 const deliveryCard = "flex flex-col gap-3 rounded-[1.75rem] bg-surface p-6";
-const deliveryIcon = "size-6 text-ink";
+const deliveryIcon = "size-6 text-primary";
 const deliveryTitle = "mt-2 text-lg font-semibold tracking-tight";
 const deliveryText = "text-sm leading-relaxed text-pretty text-muted";
 const deliveryMeta =
-  "mt-auto border-t border-line pt-3 text-sm font-medium text-ink";
+  "mt-auto border-t border-line pt-3 text-sm font-medium text-primary";
 const faqLayout = `${section} grid gap-10 pb-24 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16`;
 const faqAside = "grid content-start justify-items-start gap-4";
 const faqList = "[&>div]:max-w-none [&>div]:gap-0";

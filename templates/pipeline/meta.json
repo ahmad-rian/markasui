@@ -1,5 +1,6 @@
 {
   "name": "pipeline",
+  "accent": "teal",
   "kind": "dashboard",
   "title": "Pipeline",
   "headline": {

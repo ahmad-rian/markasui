@@ -1,11 +1,23 @@
 // Pratinjau template: /template.html?t=<slug>&fw=blade|react|vue|svelte|astro|angular
 import type { Type } from "@angular/core";
 import type { Component } from "svelte";
+import { accentCss } from "../../apps/docs/src/lib/accents";
 
 const params = new URLSearchParams(location.search);
 const slug = params.get("t") ?? "larisa";
 const framework = params.get("fw") ?? "react";
 const root = document.getElementById("template")!;
+const metas = import.meta.glob<{ accent?: string }>(
+  "../../templates/*/meta.json",
+  { eager: true, import: "default" },
+);
+// Aksen bawaan template (meta.json), sama seperti demo docs; ?accent= menggantinya.
+const accent =
+  params.get("accent") ?? metas[`../../templates/${slug}/meta.json`]?.accent;
+if (accent) document.documentElement.dataset.accent = accent;
+document.head.append(
+  Object.assign(document.createElement("style"), { textContent: accentCss() }),
+);
 const pascal = slug.replace(/(^|-)([a-z])/g, (_, __, char: string) =>
   char.toUpperCase(),
 );

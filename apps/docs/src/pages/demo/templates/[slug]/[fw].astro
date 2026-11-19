@@ -9,7 +9,8 @@ import { getTemplates } from "../../../../lib/templates";
 /**
  * Halaman demo layar penuh tanpa chrome situs, dipakai iframe di halaman detail template. Satu halaman
  * per versi yang ada (template.frameworks): Svelte hydrate sebagai island, Astro dirender langsung,
- * Angular dipasang di klien dari /angular/preview.js (scripts/angular-previews.ts).
+ * Angular dipasang di klien dari /angular/preview.js (scripts/angular-previews.ts). Aksen bawaan dari meta.json
+ * template (data-accent di html), ?accent= atau postMessage dari halaman detail menggantinya.
  */
 export function getStaticPaths() {
   return getTemplates().flatMap((template) => template.frameworks.map((fw) => ({ params: { slug: template.name, fw }, props: { template } })));
@@ -28,7 +29,7 @@ if (!stylesheet) throw new Error(`CSS untuk template ${template.name} belum diba
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-accent={template.accent}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

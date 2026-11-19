@@ -1267,7 +1267,7 @@ const startChat = () =>
                   <h3
                     :class="[
                       'text-sm font-medium',
-                      index === 0 ? 'text-on-primary/85' : 'text-muted',
+                      index === 0 ? 'text-on-primary' : 'text-muted',
                     ]"
                   >
                     {{ card.label }}
@@ -1313,8 +1313,7 @@ const startChat = () =>
                       ><span>{{ current.stats[index]?.change }}</span></Badge
                     >
                   </span>
-                  <span
-                    :class="index === 0 ? 'text-on-primary/85' : 'text-muted'"
+                  <span :class="index === 0 ? 'text-on-primary' : 'text-muted'"
                     >vs {{ current.stats[index]?.previous }}
                     {{ current.compare }}</span
                   >

@@ -1057,7 +1057,7 @@ class Stars {
                             [class]="
                               cx(
                                 'text-sm font-medium',
-                                highlight ? 'text-on-primary/85' : 'text-muted'
+                                highlight ? 'text-on-primary' : 'text-muted'
                               )
                             "
                           >
@@ -1115,7 +1115,7 @@ class Stars {
                           </span>
                           <span
                             [class]="
-                              highlight ? 'text-on-primary/85' : 'text-muted'
+                              highlight ? 'text-on-primary' : 'text-muted'
                             "
                             [textContent]="
                               'vs ' + stat.previous + ' ' + current().compare

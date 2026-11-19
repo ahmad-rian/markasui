@@ -1,0 +1,39 @@
+{
+  "name": "relasi",
+  "kind": "page",
+  "title": "Relasi",
+  "accent": "sky",
+  "headline": {
+    "en": "DevRel and B2B Growth Agency Landing Page",
+    "id": "Landing Page Agensi DevRel dan Growth B2B"
+  },
+  "description": {
+    "en": "Relasi is a landing page for developer-tool companies, API platforms, and B2B SaaS marketing teams: show DevRel results with pipeline numbers, explain services and process, present case studies and the team, and book strategy calls.",
+    "id": "Relasi adalah landing page untuk perusahaan developer tools, platform API, dan tim marketing SaaS B2B: tampilkan hasil DevRel lewat angka pipeline, jelaskan layanan dan proses, sajikan studi kasus dan tim, lalu jadwalkan panggilan strategi."
+  },
+  "sectors": {
+    "en": [
+      "Developer-tool companies",
+      "API platforms",
+      "B2B SaaS marketing teams"
+    ],
+    "id": [
+      "Perusahaan developer tools",
+      "Platform API",
+      "Tim marketing SaaS B2B"
+    ]
+  },
+  "components": [
+    "avatar",
+    "badge",
+    "button",
+    "faq",
+    "footer",
+    "input",
+    "logo-cloud",
+    "navbar",
+    "select",
+    "toast"
+  ],
+  "addedAt": "2026-11-18"
+}

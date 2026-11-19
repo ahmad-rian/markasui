@@ -769,7 +769,7 @@ const config = JSON.stringify({
                           <ul role="list" class="grid gap-4 sm:grid-cols-2" data-lumen-history>
                             {[...history].sort(sorters.newest).map((deal) => {
                               const selected = deal.id === "d1";
-                              const muted = selected ? "text-on-primary/80" : "text-muted";
+                              const muted = selected ? "text-on-primary" : "text-muted";
                               return (
                                 <li data-deal={deal.id} class={cx(dealBase, selected ? dealSelected : dealIdle)}>
                                   <time datetime={deal.date} class={cx("text-xs font-medium", muted)} data-lumen-muted>{shortDate(deal.date)}</time>
@@ -1580,8 +1580,8 @@ const config = JSON.stringify({
         card.querySelectorAll("[data-lumen-muted]").forEach((text) =>
           setClasses(
             text,
-            selected ? "text-on-primary/80" : "text-muted",
-            selected ? "text-muted" : "text-on-primary/80",
+            selected ? "text-on-primary" : "text-muted",
+            selected ? "text-muted" : "text-on-primary",
           ),
         );
         card

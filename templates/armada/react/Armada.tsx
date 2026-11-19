@@ -80,10 +80,10 @@ const panelHead = "flex items-center justify-between gap-3";
 const panelTitle = "text-sm font-semibold";
 const panelSub = "text-xs text-muted";
 const statGrid = "mt-5 grid grid-cols-3 gap-2 sm:gap-3";
-const statCell = "rounded-xl bg-subtle p-3 sm:p-4";
+const statCell = "rounded-xl bg-primary-soft p-3 sm:p-4";
 const statLabel = "text-xs leading-snug text-muted";
 const statValue =
-  "mt-2 text-lg font-semibold tracking-tight tabular-nums sm:text-2xl";
+  "mt-2 text-lg font-semibold tracking-tight text-primary tabular-nums sm:text-2xl";
 const rowList = "mt-5 divide-y divide-line border-t border-line";
 const row = "flex items-center justify-between gap-4 py-3";
 const rowName = "text-sm font-medium";
@@ -100,23 +100,24 @@ const sectorTitle = "text-lg font-semibold tracking-tight";
 const sectorText = "text-sm leading-relaxed text-pretty text-muted";
 const sectorFacts = "mt-3 grid gap-2 border-t border-line pt-4 text-sm";
 const caseCard =
-  "grid gap-10 rounded-3xl bg-subtle p-6 sm:p-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:p-14";
-const caseLabel = "text-sm font-medium text-muted";
+  "grid gap-10 rounded-3xl bg-primary-soft p-6 sm:p-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:p-14";
+const caseLabel = "text-sm font-medium text-primary";
 const caseQuote =
   "mt-6 text-2xl leading-snug font-medium tracking-tight text-balance sm:text-3xl";
 const person = "mt-8 flex items-center gap-3";
 const personName = "text-sm font-medium";
 const personRole = "text-sm text-muted";
 const metricList = "grid content-end gap-6";
-const metric = "flex flex-col-reverse gap-1 border-t border-line pt-5";
-const metricValue = "text-4xl font-semibold tracking-tight tabular-nums";
+const metric = "flex flex-col-reverse gap-1 border-t border-primary-line pt-5";
+const metricValue =
+  "text-4xl font-semibold tracking-tight text-primary tabular-nums";
 const metricLabel = "text-sm text-muted";
 const demoGrid =
   "grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16";
 const stepList = "mt-10 grid gap-6";
 const stepItem = "grid grid-cols-[auto_minmax(0,1fr)] gap-4";
 const stepNumber =
-  "flex size-8 items-center justify-center rounded-full border border-line bg-surface text-sm font-medium tabular-nums";
+  "flex size-8 items-center justify-center rounded-full border border-primary-line bg-primary-soft text-sm font-medium text-primary tabular-nums";
 const stepTitle = "text-base font-semibold";
 const stepText = "mt-1 text-sm leading-relaxed text-pretty text-muted";
 const formCard =

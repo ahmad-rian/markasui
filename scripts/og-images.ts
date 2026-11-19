@@ -9,6 +9,7 @@ import { mkdir, rm, stat } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { chromium, type Page } from "@playwright/test";
 import sharp from "sharp";
+import { ACCENTS } from "../apps/docs/src/lib/accents.ts";
 import { BRAND_SHAPES, BRAND_VIEWBOX } from "../apps/docs/src/lib/brand.ts";
 import {
   FRAMEWORK_ICONS,
@@ -79,6 +80,8 @@ type Card = {
   frameworks: readonly Framework[];
   /** Framework yang disorot (hub framework). */
   highlight?: Framework;
+  /** Warna aksen bawaan template (token gelap), dipakai titik dan eyebrow. */
+  accent?: string;
 };
 
 const markSvg = (colors: Record<string, string>, attrs = "") =>
@@ -186,14 +189,17 @@ function templateCards(): Card[] {
         kind?: string;
         headline: Record<Locale, string>;
         description: Record<Locale, string>;
+        accent: string;
       }>(join(dir, slug, "meta.json"));
       const page = meta.kind === "page";
+      const accent = ACCENTS.find((item) => item.name === meta.accent)?.dark;
       return LOCALES.map((locale) => ({
         file: localized(locale, `${page ? "pages" : "templates"}/${slug}`),
         eyebrow: `${meta.title} · ${TEMPLATE_EYEBROWS[locale][page ? "page" : "dashboard"]}`,
         title: meta.headline[locale],
         description: meta.description[locale],
         frameworks: TEMPLATE_FRAMEWORKS.filter(exists),
+        accent: accent?.primary,
       }));
     });
 }
@@ -271,7 +277,9 @@ html,body{width:${WIDTH}px;height:${HEIGHT}px;background:${COLORS.canvas};color:
 .brand svg{height:44px;width:auto}
 .host{font-size:22px;color:${COLORS.faint}}
 .body{margin-top:auto;margin-bottom:auto;padding-top:24px}
-.eyebrow{font-size:26px;color:${COLORS.muted}}
+.eyebrow{display:flex;align-items:center;gap:14px;font-size:26px;color:${COLORS.muted}}
+.dot{width:16px;height:16px;border-radius:999px;background:var(--accent)}
+.eyebrow.tinted{color:var(--accent)}
 h1{margin-top:14px;font-size:76px;line-height:1.04;font-weight:600;letter-spacing:-0.035em;max-width:1056px;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 h1.long{font-size:62px}
 p{margin-top:22px;font-size:28px;line-height:1.4;color:${COLORS.muted};max-width:980px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -282,6 +290,12 @@ p{margin-top:22px;font-size:28px;line-height:1.4;color:${COLORS.muted};max-width
 .fw.on svg{fill:var(--brand)}
 </style></head><body><div class="card" id="card"></div></body></html>`;
 
+/** Eyebrow kartu; template memakai warna aksen bawaannya supaya kartu share tidak semuanya abu-abu. */
+const eyebrowHtml = (card: Card) =>
+  card.accent
+    ? `<div class="eyebrow tinted" style="--accent:${card.accent}"><span class="dot"></span>${escapeHtml(card.eyebrow)}</div>`
+    : `<div class="eyebrow">${escapeHtml(card.eyebrow)}</div>`;
+
 function cardHtml(card: Card): string {
   const frameworks = card.frameworks
     .map((fw) => {
@@ -291,7 +305,7 @@ function cardHtml(card: Card): string {
     .join("");
   const long = card.title.length > 34 ? ' class="long"' : "";
   return `<div class="top"><div class="brand">${markSvg(MARK_DARK)}MarkasUI</div><div class="host">${host}</div></div>
-<div class="body"><div class="eyebrow">${escapeHtml(card.eyebrow)}</div><h1${long}>${escapeHtml(card.title)}</h1><p>${escapeHtml(card.description)}</p></div>
+<div class="body">${eyebrowHtml(card)}<h1${long}>${escapeHtml(card.title)}</h1><p>${escapeHtml(card.description)}</p></div>
 <div class="foot">${frameworks}</div>`;
 }
 
