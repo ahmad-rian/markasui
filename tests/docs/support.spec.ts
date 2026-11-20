@@ -275,6 +275,7 @@ test("thanks and cancel pages are not indexed, /support is in the sitemap", asyn
 test("the summary line follows the chosen amount", async ({ page }) => {
   await page.goto("/id/support");
   const summary = page.locator("[data-support-summary]");
+  const breakdown = page.locator("[data-support-breakdown]");
   await expect(summary).toHaveText("Kamu mentraktir 2 kopi, Rp 25.000.");
   await page.getByRole("button", { name: /Traktir tim/ }).click();
   await expect(summary).toHaveText(
@@ -286,6 +287,31 @@ test("the summary line follows the chosen amount", async ({ page }) => {
   await expect(page.locator("[data-preset][aria-pressed=true]")).toHaveCount(0);
   await amount.fill("500");
   await expect(summary).toBeHidden();
+  await expect(breakdown).toBeHidden();
+});
+
+test("shows the QRIS fee the donor adds on top, so the chosen amount arrives in full", async ({
+  page,
+}) => {
+  const bodies = await mockDonate(page);
+  await page.goto("/id/support");
+  const breakdown = page.locator("[data-support-breakdown]");
+  await expect(breakdown).toHaveText(
+    "Kopi Rp 25.000 + biaya layanan QRIS Rp 479 = total Rp 25.479",
+  );
+  await page.getByLabel("Nominal lain", { exact: true }).fill("5000");
+  await expect(breakdown).toHaveText(
+    "Kopi Rp 5.000 + biaya layanan QRIS Rp 338 = total Rp 5.338",
+  );
+  await page.goto("/support");
+  await page.getByRole("button", { name: /Team round/ }).click();
+  await expect(breakdown).toHaveText(
+    "Coffee Rp 100.000 + QRIS service fee Rp 1.008 = total Rp 101.008",
+  );
+  // The service adds the fee itself; the page sends the chosen amount.
+  await page.getByRole("button", { name: "Buy me a coffee" }).click();
+  await page.waitForURL(CHECKOUT);
+  expect(bodies).toEqual([{ amount: 100_000, locale: "en" }]);
 });
 
 test("amount cards show what each amount buys", async ({ page }) => {
@@ -387,7 +413,7 @@ test("desktop: poster beside the order card, the whole form in the first screen"
   const submit = (await page.locator("[data-support-submit]").boundingBox())!;
   expect(form.x).toBeGreaterThan(title.x + title.width);
   expect(submit.y + submit.height).toBeLessThanOrEqual(800);
-  await expect(order.locator("svg.sp-art").first()).toBeVisible();
+  await expect(order.locator("svg.sp-brewer").first()).toBeVisible();
   await expect(order.locator(".sp-stats li")).toHaveText([
     /^\d{2,}\s*components$/,
     /^\d+\s*templates$/,
@@ -396,6 +422,21 @@ test("desktop: poster beside the order card, the whole form in the first screen"
   await expect(order).toContainText("No account needed.");
   // The sticker strip is decoration only.
   await expect(page.locator(".sp-band")).toHaveAttribute("aria-hidden", "true");
+
+  // Full-bleed hero: the band and the sticker strip span the viewport; doodles only once the margins are wide.
+  await expect(page.locator(".sp-doodles")).toBeHidden();
+  for (const width of [1440, 1920]) {
+    await page.setViewportSize({ width, height: width === 1440 ? 900 : 1080 });
+    const band = (await order.boundingBox())!;
+    expect(band.x).toBe(0);
+    expect(band.width).toBe(width);
+    expect((await page.locator(".sp-band").boundingBox())!.width).toBe(width);
+    await expect(page.locator(".sp-doodles svg").first()).toBeVisible();
+    const button = (await page.locator("[data-support-submit]").boundingBox())!;
+    expect(button.y + button.height).toBeLessThanOrEqual(
+      width === 1440 ? 900 : 1080,
+    );
+  }
 });
 
 test("phones: the amount cards follow the headline without a long scroll @mobile", async ({
@@ -413,7 +454,12 @@ test("phones: the amount cards follow the headline without a long scroll @mobile
 test("short FAQ with the GitHub links", async ({ page }) => {
   await mockSupporters(page, { supporters: [] });
   await page.goto("/support");
-  await expect(page.locator(".sp-faq details")).toHaveCount(3);
+  await expect(page.locator(".sp-faq details")).toHaveCount(4);
+  const fee = page.locator("details", {
+    hasText: "Why is there a service fee?",
+  });
+  await fee.locator("summary").click();
+  await expect(fee).toContainText("reaches MarkasUI in full");
   const faq = page.locator("details", { hasText: "Will my name be public?" });
   await faq.locator("summary").click();
   await expect(faq).toContainText("The amount is never shown.");

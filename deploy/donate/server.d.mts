@@ -9,6 +9,8 @@ export const NAME_MAX: number;
 export const MESSAGE_MAX: number;
 export const ORDER_ID_PATTERN: RegExp;
 export const CHECKOUT_PREFIXES: string[];
+export const FEE_PER_MILLE: number;
+export const FEE_FIXED: number;
 export const SUPPORTERS_LIMIT: number;
 export const SUPPORTERS_CACHE_MS: number;
 
@@ -21,7 +23,10 @@ export interface Supporter {
 }
 
 export interface StoredOrder {
+  /** What the donor chose and the owner nets. */
   amount: number;
+  /** What Sumopod charged (amount plus its fee); optional in older test fixtures. */
+  charged?: number;
   status: string;
   name: string;
   message: string;
@@ -36,7 +41,9 @@ export interface Donation {
 }
 
 export interface Store {
-  order(orderId: string): { amount: number; status: string } | null;
+  order(
+    orderId: string,
+  ): { amount: number; charged: number; status: string } | null;
   status(orderId: string): string | null;
   hasEvent(eventId: string): boolean;
   supporters(limit: number): Supporter[];
@@ -57,6 +64,8 @@ export interface HandlerDeps {
   log?: Pick<Console, "info" | "error">;
 }
 
+export function serviceFee(charged: number): number;
+export function grossUp(amount: number): number;
 export function validateAmount(value: unknown): number | null;
 export function cleanText(value: unknown, max: number): string | null;
 export function parseDonation(body: unknown): Donation | { error: string };

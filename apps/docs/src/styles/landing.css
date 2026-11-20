@@ -336,6 +336,27 @@ html[data-splash] :is(.lp-glow, .lp-beam),
   line-height: 1.4;
   color: var(--lp-dim);
 }
+/* Ponsel: dua kolom angka menjadi grid 2 x 2 yang barisnya sejajar (subgrid ke baris .lp-main), dipisah garis tipis
+   dari tombol di atasnya. */
+@media (max-width: 39.99rem) {
+  .lp-main {
+    grid-template-rows: auto auto auto;
+  }
+  .lp-stats {
+    grid-row: 2 / span 2;
+    grid-template-rows: subgrid;
+    row-gap: 24px;
+    padding-top: 28px;
+    border-top: 1px solid var(--lp-edge);
+  }
+  /* column-reverse: flex-end packs value and label to the top, so both columns start on the same line. */
+  .lp-stats div {
+    justify-content: flex-end;
+  }
+  .lp-stats dt {
+    max-width: none;
+  }
+}
 .lp-card {
   display: none;
 }
@@ -810,7 +831,28 @@ html[data-framework="angular"]
   }
 }
 
-/* Pill framework di hero: enam pilihan dalam satu baris mulai tablet. */
+/*
+ * Pilihan framework di hero. Ponsel: segmented control 3 x 2, sel sama lebar, sudut 16px (bukan pill penuh karena
+ * dua baris), sorotan persegi membulat dengan jarak sama ke tepi wadah (padding 4px, radius 16 - 4 = 12px).
+ * Mulai tablet: enam pilihan dalam satu baris pill.
+ */
+@media (max-width: 39.99rem) {
+  .lp-switch {
+    width: min(100%, 22rem);
+  }
+  .lp-switch [data-framework-switcher] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    padding: 4px;
+    border-radius: 16px;
+  }
+  .lp-switch [role="radio"] {
+    height: 40px;
+    gap: 6px;
+    padding-inline: 8px;
+    border-radius: 12px;
+  }
+}
 @media (min-width: 40rem) {
   .lp-switch [data-framework-switcher] {
     grid-template-columns: repeat(6, auto);

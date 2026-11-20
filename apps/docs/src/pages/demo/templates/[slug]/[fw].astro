@@ -10,7 +10,8 @@ import { getTemplates } from "../../../../lib/templates";
  * Halaman demo layar penuh tanpa chrome situs, dipakai iframe di halaman detail template. Satu halaman
  * per versi yang ada (template.frameworks): Svelte hydrate sebagai island, Astro dirender langsung,
  * Angular dipasang di klien dari /angular/preview.js (scripts/angular-previews.ts). Aksen bawaan dari meta.json
- * template (data-accent di html), ?accent= atau postMessage dari halaman detail menggantinya.
+ * template (data-accent di html), ?accent= atau postMessage dari halaman detail menggantinya. Tema selalu terang
+ * (tidak mengikuti tema situs maupun OS); ?theme=dark untuk melihat versi gelap.
  */
 export function getStaticPaths() {
   return getTemplates().flatMap((template) => template.frameworks.map((fw) => ({ params: { slug: template.name, fw }, props: { template } })));
@@ -38,18 +39,15 @@ if (!stylesheet) throw new Error(`CSS untuk template ${template.name} belum diba
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href={stylesheet} />
     <script is:inline>
-      try {
-        const theme = new URLSearchParams(location.search).get("theme") ?? localStorage.getItem("markas-theme");
-        document.documentElement.classList.toggle("dark", theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
-        const accent = new URLSearchParams(location.search).get("accent");
-        if (accent) document.documentElement.dataset.accent = accent;
-      } catch {}
-      // Halaman detail template mengirim warna aksen dan tema tanpa memuat ulang iframe.
+      // Selalu terang, apa pun tema situs atau OS; hanya ?theme=dark yang meminta gelap secara eksplisit.
+      const params = new URLSearchParams(location.search);
+      document.documentElement.classList.toggle("dark", params.get("theme") === "dark");
+      const accent = params.get("accent");
+      if (accent) document.documentElement.dataset.accent = accent;
+      // Halaman detail template mengirim warna aksen tanpa memuat ulang iframe.
       addEventListener("message", (event) => {
         if (event.origin !== location.origin || typeof event.data !== "object" || !event.data) return;
-        const root = document.documentElement;
-        if (event.data.type === "markas:accent" && typeof event.data.accent === "string") root.dataset.accent = event.data.accent;
-        if (event.data.type === "markas:theme") root.classList.toggle("dark", event.data.theme === "dark");
+        if (event.data.type === "markas:accent" && typeof event.data.accent === "string") document.documentElement.dataset.accent = event.data.accent;
       });
     </script>
     <style set:html={accentCss()}></style>

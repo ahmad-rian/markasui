@@ -210,18 +210,17 @@ const breadcrumbs = [
       return fallback;
     }
   };
-  const themeOf = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
   /** Versi framework terpilih kalau template ini sudah punya (data-template-frameworks), selain itu React. */
   const demoFramework = (frame: HTMLIFrameElement) => {
     const available = (frame.dataset.templateFrameworks ?? "").split(",");
     return available.includes(getFramework()) ? getFramework() : TEMPLATE_FALLBACK_FRAMEWORK;
   };
   const demoUrl = (frame: HTMLIFrameElement) =>
-    `/demo/templates/${frame.dataset.templateFrame}/${demoFramework(frame)}?accent=${readAccent()}&theme=${themeOf()}`;
+    `/demo/templates/${frame.dataset.templateFrame}/${demoFramework(frame)}?accent=${readAccent()}`;
   const post = (data: object) =>
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => frame.contentWindow?.postMessage(data, location.origin));
 
-  /** Iframe dan tombol layar penuh mengikuti framework, warna aksen, dan tema yang dipilih. */
+  /** Iframe dan tombol layar penuh mengikuti framework dan warna aksen yang dipilih. Pratinjau selalu terang. */
   function sync() {
     document.querySelectorAll<HTMLIFrameElement>("[data-template-frame]").forEach((frame) => {
       const url = demoUrl(frame);
@@ -264,9 +263,6 @@ const breadcrumbs = [
     choose(next.dataset.accent!);
     next.focus();
   });
-
-  // Tema situs berganti: teruskan ke iframe tanpa memuat ulang.
-  new MutationObserver(() => post({ type: "markas:theme", theme: themeOf() })).observe(document.documentElement, { attributeFilter: ["class"] });
 
   // Kode template besar, jadi dimuat saat diminta dari /snippets/templates/<slug>/<fw>.
   document.addEventListener("click", async (event) => {

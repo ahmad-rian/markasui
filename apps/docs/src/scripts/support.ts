@@ -8,6 +8,7 @@ import {
   SUPPORTERS_SHOWN,
   SUPPORT_AMOUNT_PARAM,
   parseSupportAmount,
+  supportBreakdown,
 } from "../lib/support";
 import { onPageLoad } from "./lifecycle";
 
@@ -63,6 +64,9 @@ function setupForm(form: HTMLFormElement) {
   )!;
   const alert = form.querySelector<HTMLElement>("[data-support-error]")!;
   const summary = form.querySelector<HTMLElement>("[data-support-summary]")!;
+  const breakdown = form.querySelector<HTMLElement>(
+    "[data-support-breakdown]",
+  )!;
   const presets = [
     ...form.querySelectorAll<HTMLButtonElement>("[data-preset]"),
   ];
@@ -91,6 +95,15 @@ function setupForm(form: HTMLFormElement) {
       summary.textContent = inRange()
         ? fill(text("summaryCustom"), values)
         : "";
+    const rupiah = (value: number) => `Rp ${group(String(value))}`;
+    const parts = supportBreakdown(amount());
+    breakdown.textContent = inRange()
+      ? fill(text("breakdown"), {
+          amount: rupiah(parts.amount),
+          fee: rupiah(parts.fee),
+          total: rupiah(parts.total),
+        })
+      : "";
   };
   const syncPresets = () => {
     for (const button of presets)

@@ -31,6 +31,12 @@ DOCS_URL=https://markas.jenderalcorp.com pnpm exec playwright test -c playwright
   - `/etc/markas-donate/webhook-secret` (`whsec_...`) and/or `/etc/markas-donate/webhook-token` (`whtok_...`). Until one exists, webhooks get 503. Read on start, so restart after changing them.
 - nginx: POST is allowed only on `/api/donate` and `/api/donate/webhook`; `/api/donate` has its own 5 per minute zone and a 4 KB body limit; every `/api/` response is `Cache-Control: no-store`; other `/api/*` paths are 404.
 
+### Fee
+
+The donor pays Sumopod's QRIS fee on top, so the owner nets exactly the chosen amount. The fee, derived from live create responses on 2026-11-20, is `ceil(0.7% x charged) + Rp 300` on the charged amount (vectors: 3.000 -> 321, 3.071 -> 322, 3.500 -> 325, 4.500 -> 332, 5.000 -> 335, 5.338 -> 338, 10.000 -> 370, 12.345 -> 387; `net_amount = amount - fee`). The service charges the smallest amount whose net reaches the chosen one (`grossUp` in `server.mjs`, Rp 5.000 -> Rp 5.338), stores both `amount` (chosen) and `charged` in the log, matches webhooks against `charged`, and logs a warning when a create response nets less than the chosen amount. `/support` and the coffee popover show the same breakdown from `apps/docs/src/lib/support.ts` (a unit test keeps the two copies in sync).
+
+**Keep Sumopod Settings > Fee Settings on "merchant pays" (Charge fee to customer: off).** With the toggle on, Sumopod would add its fee on top of an amount that already includes it, and the donor would pay the fee twice. If Sumopod changes its fee, update `FEE_PER_MILLE`/`FEE_FIXED` in `server.mjs` and `SUPPORT_FEE_*` in `lib/support.ts` together.
+
 First install on a new server:
 
 ```sh

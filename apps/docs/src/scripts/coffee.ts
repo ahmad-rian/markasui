@@ -106,6 +106,7 @@ function onScroll() {
 /** Amount cards in the popover: one is pressed at a time, and the button links to /support with that amount. */
 function setupAmounts(card: HTMLElement) {
   const cta = card.querySelector<HTMLAnchorElement>("[data-coffee-cta]")!;
+  const fee = card.querySelector<HTMLElement>("[data-coffee-fee]");
   const buttons = [
     ...card.querySelectorAll<HTMLButtonElement>("[data-coffee-amount]"),
   ];
@@ -114,6 +115,8 @@ function setupAmounts(card: HTMLElement) {
       for (const other of buttons)
         other.setAttribute("aria-pressed", String(other === button));
       cta.href = `${cta.dataset.base}?${SUPPORT_AMOUNT_PARAM}=${button.dataset.coffeeAmount}`;
+      if (fee && button.dataset.feeLine)
+        fee.textContent = button.dataset.feeLine;
     });
 }
 

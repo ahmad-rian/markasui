@@ -14,8 +14,10 @@ import {
   createLimiter,
   createOrderId,
   createStore,
+  grossUp,
   parseDonation,
   publicSupporters,
+  serviceFee,
   SUPPORTERS_LIMIT,
   validateAmount,
   verifySvix,
@@ -24,6 +26,7 @@ import {
   type Store,
   type StoredOrder,
 } from "../../deploy/donate/server.mjs";
+import { supportCharge, supportFee } from "../../apps/docs/src/lib/support";
 
 // Svix's published test vector (docs.svix.com, "Verifying payloads manually").
 const SVIX = {
@@ -105,6 +108,59 @@ describe("validation", () => {
       { error: "invalid_message" },
     );
     expect(parseDonation([])).toEqual({ error: "invalid_body" });
+  });
+});
+
+describe("QRIS fee paid by the donor", () => {
+  // Live Sumopod create responses (2026-11-20): charged amount -> fee; net_amount = amount - fee.
+  const LIVE = [
+    [3_000, 321],
+    [3_071, 322],
+    [3_072, 322],
+    [3_214, 323],
+    [3_500, 325],
+    [4_500, 332],
+    [5_000, 335],
+    [5_338, 338],
+    [10_000, 370],
+    [12_345, 387],
+  ] as const;
+
+  it("matches Sumopod's fee: 0.7% rounded up, plus Rp 300", () => {
+    for (const [charged, fee] of LIVE) expect(serviceFee(charged)).toBe(fee);
+  });
+
+  it("grosses up so the owner nets exactly the chosen amount", () => {
+    // Live: a Rp 5.338 payment returned net_amount 5000.
+    expect(grossUp(5_000)).toBe(5_338);
+    expect(grossUp(3_000)).toBe(3_324);
+    expect(grossUp(25_000)).toBe(25_479);
+    expect(grossUp(5_000_000)).toBe(5_035_549);
+  });
+
+  it("returns the smallest charge whose net reaches the amount", () => {
+    const net = (charged: number) => charged - serviceFee(charged);
+    const amounts = [
+      ...Array.from({ length: 20_000 }, (_, index) => 3_000 + index),
+      99_999,
+      100_000,
+      1_234_567,
+      4_999_999,
+      5_000_000,
+    ];
+    for (const amount of amounts) {
+      const charged = grossUp(amount);
+      expect(net(charged)).toBeGreaterThanOrEqual(amount);
+      expect(net(charged - 1)).toBeLessThan(amount);
+    }
+  });
+
+  it("agrees with the copy on /support (apps/docs/src/lib/support.ts)", () => {
+    for (let amount = 3_000; amount <= 60_000; amount += 7)
+      expect(supportCharge(amount)).toBe(grossUp(amount));
+    for (const amount of [100_000, 1_000_000, 5_000_000])
+      expect(supportCharge(amount)).toBe(grossUp(amount));
+    for (const [charged, fee] of LIVE) expect(supportFee(charged)).toBe(fee);
   });
 });
 
@@ -243,13 +299,18 @@ describe("HTTP handler", () => {
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), "markas-donate-"));
     store = createStore(join(dir, "donations.jsonl"));
-    sumopod = vi.fn(async () =>
-      Response.json({
+    // Answers like Sumopod: the fee comes off the amount it was asked to charge.
+    sumopod = vi.fn(async (_url: string, init: RequestInit) => {
+      const { amount } = JSON.parse(String(init.body));
+      return Response.json({
         payment_id: "pay_1",
+        amount,
+        fee: serviceFee(amount),
+        net_amount: amount - serviceFee(amount),
         payment_link_url: PAY_URL,
         status: "pending",
-      }),
-    );
+      });
+    });
     log.info.mockClear();
     log.error.mockClear();
   });
@@ -288,7 +349,8 @@ describe("HTTP handler", () => {
     const body = JSON.parse(init.body);
     expect(body).toEqual({
       order_id: expect.stringMatching(ORDER_ID_PATTERN),
-      amount: 25_000,
+      // The donor pays the fee on top: 25.479 - (179 + 300) nets exactly 25.000.
+      amount: 25_479,
       currency: "IDR",
       payment_method_type_code: "QRIS",
       expires_in_hours: 1,
@@ -298,6 +360,12 @@ describe("HTTP handler", () => {
     expect((await status(body.order_id)).body).toEqual({ status: "pending" });
     const log = readFileSync(join(dir, "donations.jsonl"), "utf8");
     expect(log).toContain('"name":"Rian"');
+    expect(log).toContain('"amount":25000,"charged":25479');
+    expect(store.order(body.order_id)).toEqual({
+      amount: 25_000,
+      charged: 25_479,
+      status: "pending",
+    });
     expect(log).not.toContain("test-key");
   });
 
@@ -381,7 +449,8 @@ describe("HTTP handler", () => {
       data: {
         payment_id: "pay_1",
         order_id: order,
-        amount: 25_000,
+        // Webhooks carry what Sumopod charged, fee included.
+        amount: 25_479,
         status: "completed",
       },
     };
@@ -419,10 +488,41 @@ describe("HTTP handler", () => {
       },
       "msg_c",
     );
+    // The chosen amount without the fee is not what was charged either.
+    await webhook(
+      {
+        event_type: "payment.completed",
+        data: { order_id: order, amount: 25_000 },
+      },
+      "msg_d",
+    );
     expect((await status(order)).body).toEqual({ status: "pending" });
     expect(log.error).toHaveBeenCalledWith(
       expect.stringContaining("amount mismatch"),
     );
+  });
+
+  it("warns when Sumopod's net is below the chosen amount", async () => {
+    sumopod.mockResolvedValueOnce(
+      Response.json({
+        payment_id: "pay_3",
+        amount: 5_338,
+        fee: 400,
+        net_amount: 4_938,
+        payment_link_url: PAY_URL,
+      }),
+    );
+    await start();
+    expect((await donate({ amount: 5_000 })).status).toBe(200);
+    expect(log.error).toHaveBeenCalledWith(
+      expect.stringMatching(/nets 4938 for 5000 chosen \(charged 5338/),
+    );
+  });
+
+  it("does not warn when the net covers the chosen amount", async () => {
+    await start();
+    await createdOrder({ amount: 5_000 });
+    expect(log.error).not.toHaveBeenCalled();
   });
 
   it("logs payment.test events", async () => {
@@ -492,7 +592,11 @@ describe("HTTP handler", () => {
       webhook(
         {
           event_type: "payment.completed",
-          data: { order_id: order, amount, status: "completed" },
+          data: {
+            order_id: order,
+            amount: grossUp(amount),
+            status: "completed",
+          },
         },
         id,
       );
@@ -501,7 +605,7 @@ describe("HTTP handler", () => {
     await webhook(
       {
         event_type: "payment.failed",
-        data: { order_id: failed, amount: 10_000 },
+        data: { order_id: failed, amount: grossUp(10_000) },
       },
       "msg_failed",
     );

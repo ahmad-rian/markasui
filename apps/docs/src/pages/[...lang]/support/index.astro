@@ -2,7 +2,7 @@
 /**
  * /support: "Buy me a coffee", sized to fit one desktop screen. Own art direction (src/styles/support.css): green
  * hand-drawn line art on cream, a poster headline with one serif italic word, outlined menu cards. Above the fold a
- * compact poster sits beside the order card (on phones the order card follows the headline); below it a slim
+ * full-bleed hero band (doodles in its side margins on wide screens) holds a poster beside the order card (on phones the order card follows the headline); below it a slim
  * sticker strip, the latest supporters and a short FAQ. The form posts to /api/donate (deploy/donate/server.mjs),
  * which creates a Sumopod QRIS payment and returns its checkout URL; src/scripts/support.ts then navigates there,
  * keeps the summary line in sync and fills the supporters list from /api/donate/supporters.
@@ -28,6 +28,7 @@ import {
   SUPPORT_PATH,
   SUPPORT_PRESETS,
   formatRupiah,
+  supportBreakdown,
   supportStrings,
 } from "../../../lib/support";
 import { getTemplates } from "../../../lib/templates";
@@ -54,38 +55,48 @@ const tiers = SUPPORT_PRESETS.map((amount, index) => ({
 const defaultTier = tiers.find((tier) => tier.amount === SUPPORT_DEFAULT_AMOUNT)!;
 const fill = (template: string, values: Record<string, string>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? "");
+const rupiah = (value: number) => `Rp ${formatRupiah(value)}`;
 const initialSummary = fill(copy.summaryPreset, {
   what: defaultTier.phrase,
-  amount: `Rp ${formatRupiah(defaultTier.amount)}`,
+  amount: rupiah(defaultTier.amount),
+});
+const defaultBreakdown = supportBreakdown(defaultTier.amount);
+const initialBreakdown = fill(copy.breakdown, {
+  amount: rupiah(defaultBreakdown.amount),
+  fee: rupiah(defaultBreakdown.fee),
+  total: rupiah(defaultBreakdown.total),
 });
 
 const BREWERS: ArtName[] = ["moka", "press", "pourover"];
 const STICKERS: (ArtName | "word")[] = ["mug", "beans", "sparkle", "takeaway", "word", "croissantSticker", "dripper"];
-/** Enough repeats to fill a wide screen; the strip clips the rest. */
-const STRIP = [...STICKERS, ...STICKERS, ...STICKERS];
+/** Enough repeats to fill a 2560 px screen; the strip clips the rest. */
+const STRIP = Array.from({ length: 6 }, () => STICKERS).flat();
+/** Loose doodles in the hero's side margins on wide screens (support.css places them). */
+const DOODLES: ArtName[] = ["beans", "sparkle", "mug", "sparkle", "takeaway", "beans"];
 const stickerWord = locale === "id" ? "kopi" : "coffee";
 const error = "text-sm text-danger";
 ---
 
 <Base title={copy.seoTitle} description={copy.description} breadcrumbs={breadcrumbs}>
   <main id="konten" class="sp" data-pagefind-body>
-    <div class="mx-auto max-w-6xl px-4 pt-5 sm:px-6 lg:px-8">
-      <Breadcrumbs trail={breadcrumbTrail(locale, breadcrumbs)} />
-    </div>
-
-    <section
-      id="order"
-      aria-labelledby="support-title"
-      class="sp-order mx-auto grid max-w-6xl scroll-mt-20 gap-6 px-4 pt-5 pb-12 sm:px-6 sm:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:grid-rows-[auto_1fr] lg:gap-x-16 lg:gap-y-6 lg:px-8 lg:pb-14"
-    >
+    <section id="order" aria-labelledby="support-title" class="sp-hero scroll-mt-20">
+      <div class="sp-doodles" aria-hidden="true">
+        {DOODLES.map((name) => <SupportArt name={name} />)}
+      </div>
+      <div class="sp-wrap pt-5">
+        <Breadcrumbs trail={breadcrumbTrail(locale, breadcrumbs)} />
+      </div>
+      <div
+        class="sp-order sp-wrap grid gap-6 pt-5 pb-12 sm:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:grid-rows-[1fr_1fr] lg:gap-x-16 lg:gap-y-6 lg:pb-14 2xl:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] 2xl:gap-x-24"
+      >
       <div class="lg:self-end">
         <div class="flex items-end gap-3 sm:gap-5">
-          {BREWERS.map((name) => <SupportArt name={name} class="h-14 w-auto sm:h-20 lg:h-24" />)}
+          {BREWERS.map((name) => <SupportArt name={name} class="sp-brewer" />)}
         </div>
         <h1 id="support-title" class="sp-title mt-4 sm:mt-6">
           {copy.hero.before} <span class="sp-accent-word">{copy.hero.accent}</span>{copy.hero.after && ` ${copy.hero.after}`}
         </h1>
-        <p class="sp-lead mt-3 max-w-lg sm:mt-4">{copy.lead}</p>
+        <p class="sp-lead mt-3 max-w-xl sm:mt-4">{copy.lead}</p>
       </div>
 
       <form
@@ -100,6 +111,7 @@ const error = "text-sm text-danger";
         data-error-generic={copy.errors.generic}
         data-summary-preset={copy.summaryPreset}
         data-summary-custom={copy.summaryCustom}
+        data-breakdown={copy.breakdown}
         novalidate
         aria-labelledby="support-form-title"
         class="sp-slip grid content-start gap-4 p-4 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center"
@@ -174,9 +186,10 @@ const error = "text-sm text-danger";
           <p id="support-message-hint" class="sp-hint">{copy.messageHint}</p>
           <p id="support-message-error" class={error} data-field-error="message" hidden></p>
         </div>
-        <p data-support-summary aria-live="polite" class="border-t-2 border-dashed border-[var(--sp-rule)] pt-4 text-base leading-6 font-semibold text-pretty empty:hidden">
-          {initialSummary}
-        </p>
+        <div aria-live="polite" class="grid gap-1 border-t-2 border-dashed border-[var(--sp-rule)] pt-4">
+          <p data-support-summary class="text-base leading-6 font-semibold text-pretty empty:hidden">{initialSummary}</p>
+          <p data-support-breakdown class="text-sm leading-5 text-pretty text-[var(--sp-muted)] tabular-nums empty:hidden">{initialBreakdown}</p>
+        </div>
         <p data-support-error role="alert" class="rounded-xl bg-danger/10 px-3 py-2.5 text-sm text-danger empty:hidden"></p>
         <button type="submit" disabled data-support-submit class="sp-pill w-full">
           <Icon name="coffee" class="size-5" />
@@ -203,13 +216,14 @@ const error = "text-sm text-danger";
           }
         </ul>
       </div>
+      </div>
     </section>
 
     <div class="sp-band" aria-hidden="true">
       {STRIP.map((name) => (name === "word" ? <span class="sp-sticker-word">{stickerWord}</span> : <SupportArt name={name} />))}
     </div>
 
-    <div class="mx-auto grid max-w-6xl gap-12 px-4 pt-12 pb-16 sm:px-6 sm:pt-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:px-8 lg:pb-20">
+    <div class="sp-wrap grid gap-12 pt-12 pb-16 sm:pt-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:pb-20">
       <section id="supporters" aria-labelledby="supporters-title" class="scroll-mt-20">
         <h2 id="supporters-title" class="sp-h2">{copy.supporters.title}</h2>
         <p class="sp-hint mt-2 max-w-xl">{copy.supporters.lead}</p>

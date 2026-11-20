@@ -1,5 +1,7 @@
 # "Buy me a coffee" donations with Sumopod: plan
 
+Fee (2026-11-20): the donor pays Sumopod's fee on top (`ceil(0.7%) + Rp 300` of the charged amount, grossed up so the owner nets the chosen amount). Keep Fee Settings on "merchant pays" (Charge fee to customer: off), or the donor pays the fee twice. Details and test vectors: deploy/README.md, "Fee". QR data (2026-11-20): the Live create response has only `payment_id`, `order_id`, `amount`, `fee`, `net_amount`, `currency`, `payment_link_url`, `status`, `expires_at`, `created_at`; there is no QR payload or image and no GET-payment endpoint (`/api/v1/payments/<id>` is 404), so a custom QR screen is not possible with the official API.
+
 Status: implemented on 2026-11-19 as `/support` + `deploy/donate/server.mjs` (see deploy/README.md, "Donations"). The research below is kept for reference; where it differs (paths `/support` instead of `/donate`, JSONL instead of SQLite, optional name and message), the implementation wins.
 
 ## Ringkasan (Bahasa Indonesia)

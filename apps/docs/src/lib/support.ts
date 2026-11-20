@@ -18,6 +18,36 @@ export const SUPPORTERS_ENDPOINT = "/api/donate/supporters";
 /** How many supporters /support shows; the endpoint may return more. */
 export const SUPPORTERS_SHOWN = 6;
 
+/**
+ * Sumopod's QRIS fee: 0.7% of the charge rounded up to the rupiah, plus Rp 300 (derived from live create responses).
+ * The donor pays it on top, so the owner nets exactly the chosen amount. Mirrors serviceFee/grossUp in
+ * deploy/donate/server.mjs; tests/unit/donate-server.test.ts checks that both agree.
+ */
+export const SUPPORT_FEE_PER_MILLE = 7;
+export const SUPPORT_FEE_FIXED = 300;
+
+/** Sumopod's fee on a payment of `charged` rupiah. */
+export const supportFee = (charged: number) =>
+  Math.ceil((charged * SUPPORT_FEE_PER_MILLE) / 1000) + SUPPORT_FEE_FIXED;
+
+/** What the donor pays so `amount` arrives in full: the smallest charge whose net reaches it. */
+export function supportCharge(amount: number): number {
+  let charged = Math.max(
+    amount,
+    Math.ceil(
+      ((amount + SUPPORT_FEE_FIXED) * 1000) / (1000 - SUPPORT_FEE_PER_MILLE),
+    ) - 2,
+  );
+  while (charged - supportFee(charged) < amount) charged += 1;
+  return charged;
+}
+
+/** { amount, fee, total } for the breakdown line: the fee shown is what the donor adds on top. */
+export function supportBreakdown(amount: number) {
+  const total = supportCharge(amount);
+  return { amount, fee: total - amount, total };
+}
+
 /** What each preset buys, drawn as small icons on its amount card (same order as SUPPORT_PRESETS). */
 export const SUPPORT_TIER_ICONS = [
   ["cup"],
@@ -70,6 +100,8 @@ const en = {
   /** {what} and {amount} are filled in by scripts/support.ts. */
   summaryPreset: "You are buying {what}, {amount}.",
   summaryCustom: "You are buying us coffee worth {amount}.",
+  /** {amount}, {fee} and {total} are filled in by scripts/support.ts and scripts/coffee.ts. */
+  breakdown: "Coffee {amount} + QRIS service fee {fee} = total {total}",
   name: "Name",
   nameHint: "Optional. Empty shows Anonymous.",
   message: "Message",
@@ -92,6 +124,11 @@ const en = {
         question: "Is the payment safe?",
         answer:
           "You pay with QRIS on Sumopod's checkout, in your own e-wallet or banking app, which also keeps the receipt. We only see the amount, name and message.",
+      },
+      {
+        question: "Why is there a service fee?",
+        answer:
+          "Sumopod charges 0.7% + Rp 300 for each QRIS payment. It is added on top, so the amount you choose reaches MarkasUI in full. The total you pay is shown before you pay.",
       },
       {
         question: "Will my name be public?",
@@ -191,6 +228,7 @@ const id: SupportStrings = {
   amountHint: `Dari ${MIN} sampai ${MAX}.`,
   summaryPreset: "Kamu mentraktir {what}, {amount}.",
   summaryCustom: "Kamu mentraktir kopi senilai {amount}.",
+  breakdown: "Kopi {amount} + biaya layanan QRIS {fee} = total {total}",
   name: "Nama",
   nameHint: "Opsional. Kosong tampil sebagai Anonim.",
   message: "Pesan",
@@ -213,6 +251,11 @@ const id: SupportStrings = {
         question: "Apakah pembayarannya aman?",
         answer:
           "Kamu membayar dengan QRIS di checkout Sumopod, lewat e-wallet atau aplikasi bankmu sendiri yang juga menyimpan bukti bayarnya. Kami hanya melihat nominal, nama, dan pesan.",
+      },
+      {
+        question: "Kenapa ada biaya layanan?",
+        answer:
+          "Sumopod mengenakan 0,7% + Rp 300 untuk setiap pembayaran QRIS. Biaya ini ditambahkan di atas nominal, jadi nominal pilihanmu sampai utuh ke MarkasUI. Total yang dibayar tampil sebelum kamu membayar.",
       },
       {
         question: "Apakah nama saya akan tampil?",

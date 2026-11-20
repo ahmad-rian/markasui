@@ -3,7 +3,15 @@ import CoffeeCup from "./CoffeeCup.astro";
 import Icon from "./Icon.astro";
 import SupportArt from "./support/SupportArt.astro";
 import { localePath, getLocale } from "../lib/i18n";
-import { SUPPORT_AMOUNT_PARAM, SUPPORT_DEFAULT_AMOUNT, SUPPORT_PATH, SUPPORT_PRESETS, supportStrings } from "../lib/support";
+import {
+  SUPPORT_AMOUNT_PARAM,
+  SUPPORT_DEFAULT_AMOUNT,
+  SUPPORT_PATH,
+  SUPPORT_PRESETS,
+  formatRupiah,
+  supportBreakdown,
+  supportStrings,
+} from "../lib/support";
 
 /**
  * Floating "Buy me a coffee" card at the bottom right of every docs page (Base.astro leaves it out on /support, the
@@ -19,10 +27,20 @@ const copy = supportStrings(locale);
 const text = copy.launcher;
 const supportHref = localePath(locale, SUPPORT_PATH);
 const amountHref = (amount: number) => `${supportHref}?${SUPPORT_AMOUNT_PARAM}=${amount}`;
+const rupiah = (value: number) => `Rp ${formatRupiah(value)}`;
+/** "Coffee Rp 25.000 + QRIS service fee Rp 479 = total Rp 25.479" for each amount, swapped in by scripts/coffee.ts. */
+const feeLine = (amount: number) => {
+  const parts = supportBreakdown(amount);
+  return copy.breakdown
+    .replace("{amount}", rupiah(parts.amount))
+    .replace("{fee}", rupiah(parts.fee))
+    .replace("{total}", rupiah(parts.total));
+};
 const amounts = SUPPORT_PRESETS.map((amount, index) => ({
   amount,
   name: copy.tiers[index]!.label,
   price: `Rp ${amount / 1000}${text.thousand}`,
+  feeLine: feeLine(amount),
 }));
 ---
 
@@ -50,6 +68,7 @@ const amounts = SUPPORT_PRESETS.map((amount, index) => ({
             class="coffee-amount"
             aria-pressed={item.amount === SUPPORT_DEFAULT_AMOUNT ? "true" : "false"}
             data-coffee-amount={item.amount}
+            data-fee-line={item.feeLine}
           >
             <span class="coffee-amount-name">{item.name}</span>
             <span class="coffee-amount-price">{item.price}</span>
@@ -57,6 +76,7 @@ const amounts = SUPPORT_PRESETS.map((amount, index) => ({
         ))
       }
     </div>
+    <p class="coffee-fee" data-coffee-fee>{feeLine(SUPPORT_DEFAULT_AMOUNT)}</p>
     <a href={amountHref(SUPPORT_DEFAULT_AMOUNT)} class="coffee-cta" data-coffee-cta data-base={supportHref}>
       <Icon name="coffee" class="coffee-cta-icon" />
       {text.cta}
@@ -405,6 +425,14 @@ const amounts = SUPPORT_PRESETS.map((amount, index) => ({
     font-size: 14px;
     line-height: 20px;
     color: var(--cf-muted);
+  }
+  .coffee-fee {
+    margin-top: -4px;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--cf-muted);
+    font-variant-numeric: tabular-nums;
+    text-wrap: pretty;
   }
   .coffee-amounts {
     display: grid;

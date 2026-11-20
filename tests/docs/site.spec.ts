@@ -649,6 +649,38 @@ test("demo template memakai aksen bawaan, ?accent= menggantinya", async ({
   await expect(page.locator("html")).toHaveAttribute("data-accent", "violet");
 });
 
+test("pratinjau template selalu terang meski situs gelap, ?theme=dark tetap bisa", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("markas-theme", "dark"));
+  await page.goto("/templates/larisa");
+  await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+  const frame = page.frameLocator("[data-template-frame]");
+  await expect(frame.locator("body")).toBeVisible();
+  await expect(frame.locator("html")).not.toHaveClass(/\bdark\b/);
+  await expect(page.locator("[data-template-open]")).not.toHaveAttribute(
+    "href",
+    /theme=/,
+  );
+  // Mengganti tema situs tidak menyentuh pratinjau.
+  await page.evaluate(() => document.documentElement.classList.remove("dark"));
+  await page.evaluate(() => document.documentElement.classList.add("dark"));
+  await expect(frame.locator("html")).not.toHaveClass(/\bdark\b/);
+
+  await page.goto("/pages");
+  const card = page.frameLocator('a[href="/pages/industri"] iframe');
+  await page
+    .locator('a[href="/pages/industri"] iframe')
+    .scrollIntoViewIfNeeded();
+  await expect(card.locator("html")).not.toHaveClass(/\bdark\b/);
+
+  await page.goto("/demo/templates/gawai/react");
+  await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+  await page.goto("/demo/templates/gawai/react?theme=dark");
+  await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+});
+
 test("kartu /pages menampilkan template dengan aksen bawaannya", async ({
   page,
 }) => {

@@ -13,6 +13,10 @@ export const MIN_AMOUNT = 3_000;
 export const MAX_AMOUNT = 5_000_000;
 export const NAME_MAX = 40;
 export const MESSAGE_MAX = 140;
+// Sumopod's QRIS fee, derived from live create responses (deploy/README.md, "Fee"): 0.7% rounded up to the rupiah,
+// plus Rp 300. Mirrored by supportFee/supportCharge in apps/docs/src/lib/support.ts (a unit test checks they agree).
+export const FEE_PER_MILLE = 7;
+export const FEE_FIXED = 300;
 export const ORDER_ID_PATTERN = /^KOPI-\d{8}-[A-Z2-7]{16}$/;
 // Sumopod's checkout hosts. Live payments currently return checkout.pymnt.app links.
 export const CHECKOUT_PREFIXES = [
@@ -46,6 +50,24 @@ export function validateAmount(value) {
   if (!Number.isSafeInteger(value)) return null;
   if (PRESETS.includes(value)) return value;
   return value >= MIN_AMOUNT && value <= MAX_AMOUNT ? value : null;
+}
+
+/** Sumopod's fee on a QRIS payment of `charged` rupiah: ceil(0.7%) + Rp 300. */
+export function serviceFee(charged) {
+  return Math.ceil((charged * FEE_PER_MILLE) / 1000) + FEE_FIXED;
+}
+
+/**
+ * What the donor pays so the owner nets exactly `amount`: the smallest charge whose net (charge minus fee) reaches
+ * it. Net never decreases as the charge grows, so the scan from a start just below the answer stops at the minimum.
+ */
+export function grossUp(amount) {
+  let charged = Math.max(
+    amount,
+    Math.ceil(((amount + FEE_FIXED) * 1000) / (1000 - FEE_PER_MILLE)) - 2,
+  );
+  while (charged - serviceFee(charged) < amount) charged += 1;
+  return charged;
 }
 
 /** Trimmed text without control characters; "" when absent, null when not a string or too long. */
@@ -138,6 +160,8 @@ export function createStore(file) {
     if (entry.kind === "order")
       orders.set(entry.order_id, {
         amount: entry.amount,
+        // What Sumopod charges; older lines predate the gross-up and charged the chosen amount.
+        charged: entry.charged ?? entry.amount,
         status: "pending",
         name: entry.name ?? "",
         message: entry.message ?? "",
@@ -151,7 +175,7 @@ export function createStore(file) {
       order &&
       status &&
       order.status === "pending" &&
-      entry.amount === order.amount
+      entry.amount === order.charged
     ) {
       order.status = status;
       if (status === "completed") order.paidAt = entry.at ?? null;
@@ -170,7 +194,9 @@ export function createStore(file) {
   return {
     order: (orderId) => {
       const order = orders.get(orderId);
-      return order ? { amount: order.amount, status: order.status } : null;
+      return order
+        ? { amount: order.amount, charged: order.charged, status: order.status }
+        : null;
     },
     supporters: (limit) => publicSupporters(orders.values(), limit),
     status: (orderId) => orders.get(orderId)?.status ?? null,
@@ -306,13 +332,14 @@ export function createHandler(deps) {
     const donation = parseDonation(body);
     if (donation.error) throw new HttpError(400, donation.error);
     const orderId = createOrderId(now());
+    const charged = grossUp(donation.amount);
     const back = `${SITE}${donation.locale === "id" ? "/id" : ""}/support`;
     const response = await fetch(`${baseUrl}/api/v1/payments`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Api-Key": apiKey },
       body: JSON.stringify({
         order_id: orderId,
-        amount: donation.amount,
+        amount: charged,
         currency: "IDR",
         payment_method_type_code: "QRIS",
         expires_in_hours: 1,
@@ -339,17 +366,24 @@ export function createHandler(deps) {
       );
       throw new HttpError(502, "payment_unavailable");
     }
+    if (!(payment.net_amount >= donation.amount))
+      log.error(
+        `donate: warning, ${orderId} nets ${payment.net_amount} for ${donation.amount} chosen (charged ${charged}, fee ${payment.fee}); check Sumopod's fee and Fee Settings`,
+      );
     store.record({
       kind: "order",
       order_id: orderId,
       payment_id: payment.payment_id ?? null,
       amount: donation.amount,
+      charged,
       name: donation.name || undefined,
       message: donation.message || undefined,
       locale: donation.locale,
       at: new Date(now()).toISOString(),
     });
-    log.info(`donate: created ${orderId} (${donation.amount} IDR)`);
+    log.info(
+      `donate: created ${orderId} (${donation.amount} IDR + fee, charged ${charged})`,
+    );
     return { status: 200, body: { url } };
   }
 
@@ -382,7 +416,7 @@ export function createHandler(deps) {
     if (store.hasEvent(eventId))
       return { status: 200, body: { ok: true, duplicate: true } };
     const known = store.order(data.order_id);
-    if (known && known.amount !== data.amount)
+    if (known && known.charged !== data.amount)
       log.error(
         `donate: amount mismatch for ${data.order_id}, status not updated`,
       );
