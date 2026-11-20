@@ -1,4 +1,5 @@
 ---
+import CoffeeCup from "./CoffeeCup.astro";
 import Icon from "./Icon.astro";
 import { localePath, getLocale } from "../lib/i18n";
 import { SUPPORT_AMOUNT_PARAM, SUPPORT_PATH, SUPPORT_PRESETS, supportStrings } from "../lib/support";
@@ -56,16 +57,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       aria-describedby="coffee-sub"
       data-coffee-toggle
     >
-      <span class="coffee-art" aria-hidden="true" data-coffee-art>
-        {/* Still cup until the Lottie animation (public/lottie/coffee.json) has loaded, or if it cannot. */}
-        <svg class="coffee-still" viewBox="0 0 170 170">
-          <rect class="coffee-ink-cup" x="52" y="150" width="47" height="14" rx="4"></rect>
-          <path class="coffee-ink-handle" d="M126 80h6a14 14 0 0 1 0 28h-6" fill="none" stroke-width="8"></path>
-          <path class="coffee-ink-cup" d="M25 64h103v38a51.5 51.5 0 0 1-103 0z"></path>
-          <path class="coffee-ink-tile" d="M33 72h87v30a43.5 43.5 0 0 1-87 0z"></path>
-          <path class="coffee-ink-brew" d="M33 81h87v21a43.5 43.5 0 0 1-87 0z"></path>
-        </svg>
-      </span>
+      <CoffeeCup />
       <span class="coffee-copy">
         <span class="coffee-name">{text.open}</span>
         {/* Read as the description, not as part of the name. */}
@@ -86,10 +78,6 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     --coffee-launch-h: 88px;
     /* Sticky site header (64 px) plus a little air: the popover never reaches it. */
     --coffee-header-room: calc(72px + env(safe-area-inset-top));
-    /* Warm tile behind the cup and the colours of the still cup (same as public/lottie/coffee.json). */
-    --coffee-tile: #f6ede2;
-    --coffee-cup: #a86552;
-    --coffee-brew: #673225;
     position: fixed;
     right: calc(var(--coffee-gap) + env(safe-area-inset-right));
     bottom: calc(var(--coffee-gap) + env(safe-area-inset-bottom));
@@ -97,18 +85,6 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     transition:
       opacity 500ms var(--ease-out-quint),
       transform 500ms var(--ease-out-quint);
-  }
-  .dark .coffee {
-    --coffee-tile: #2e2520;
-    --coffee-cup: #c98a70;
-    --coffee-brew: #8f4c37;
-  }
-  /* lottie-web writes the colours of coffee.json as fill attributes; follow the theme's cup colours. */
-  .coffee-art [fill="rgb(168,100,82)"] {
-    fill: var(--coffee-cup);
-  }
-  .coffee-art [fill="rgb(103,50,37)"] {
-    fill: var(--coffee-brew);
   }
   .coffee[hidden] {
     display: none;
@@ -169,36 +145,11 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       0 12px 32px rgb(0 0 0 / 0.1),
       0 2px 6px rgb(0 0 0 / 0.05);
   }
-  .coffee-art {
-    position: relative;
-    display: block;
+  .coffee-toggle .coffee-art {
     width: 64px;
     height: 64px;
     padding: 4px;
     border-radius: 14px;
-    background: var(--coffee-tile);
-    overflow: hidden;
-  }
-  .coffee-art > svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  .coffee-art[data-lottie="ready"] > .coffee-still,
-  .coffee-art[data-lottie="still"] > .coffee-still {
-    display: none;
-  }
-  .coffee-ink-cup {
-    fill: var(--coffee-cup);
-  }
-  .coffee-ink-handle {
-    stroke: var(--coffee-cup);
-  }
-  .coffee-ink-tile {
-    fill: var(--coffee-tile);
-  }
-  .coffee-ink-brew {
-    fill: var(--coffee-brew);
   }
   .coffee-copy {
     display: grid;
@@ -279,7 +230,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     padding: 3px;
     border-radius: 9999px;
   }
-  .coffee[data-compact] .coffee-art {
+  .coffee[data-compact] .coffee-toggle .coffee-art {
     width: 48px;
     height: 48px;
     padding: 2px;
@@ -321,8 +272,8 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     color: var(--color-ink);
     box-shadow:
       0 0 0 1px var(--color-line),
-      0 12px 32px rgb(0 0 0 / 0.12),
-      0 2px 6px rgb(0 0 0 / 0.06);
+      0 24px 48px -12px rgb(0 0 0 / 0.22),
+      0 4px 12px rgb(0 0 0 / 0.08);
     outline: none;
   }
   .coffee-card:popover-open {
@@ -441,7 +392,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       padding: 3px;
       border-radius: 9999px;
     }
-    .coffee .coffee-art {
+    .coffee .coffee-toggle .coffee-art {
       width: 48px;
       height: 48px;
       padding: 2px;

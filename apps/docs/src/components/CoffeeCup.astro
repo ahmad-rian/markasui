@@ -1,0 +1,69 @@
+---
+/**
+ * The coffee cup used by the floating launcher and the /support pages: a warm tile with a still SVG cup that
+ * scripts/coffee-lottie.ts (playCoffeeCup) replaces with the Lottie animation in public/lottie/coffee.json. The
+ * size and corner radius come from the caller's class; the colours below match the animation in both themes.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span class:list={["coffee-art", className]} aria-hidden="true" data-coffee-art>
+  {/* Still cup until the Lottie animation has loaded, or if it cannot. */}
+  <svg class="coffee-still" viewBox="0 0 170 170">
+    <rect class="coffee-ink-cup" x="52" y="150" width="47" height="14" rx="4"></rect>
+    <path class="coffee-ink-handle" d="M126 80h6a14 14 0 0 1 0 28h-6" fill="none" stroke-width="8"></path>
+    <path class="coffee-ink-cup" d="M25 64h103v38a51.5 51.5 0 0 1-103 0z"></path>
+    <path class="coffee-ink-tile" d="M33 72h87v30a43.5 43.5 0 0 1-87 0z"></path>
+    <path class="coffee-ink-brew" d="M33 81h87v21a43.5 43.5 0 0 1-87 0z"></path>
+  </svg>
+</span>
+
+<style is:global>
+  .coffee-art {
+    /* Warm tile and cup colours (the same as public/lottie/coffee.json). */
+    --coffee-tile: #f6ede2;
+    --coffee-cup: #a86552;
+    --coffee-brew: #673225;
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    background: var(--coffee-tile);
+    overflow: hidden;
+  }
+  .dark .coffee-art {
+    --coffee-tile: #2e2520;
+    --coffee-cup: #c98a70;
+    --coffee-brew: #8f4c37;
+  }
+  .coffee-art > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .coffee-art[data-lottie="ready"] > .coffee-still,
+  .coffee-art[data-lottie="still"] > .coffee-still {
+    display: none;
+  }
+  /* lottie-web writes the colours of coffee.json as fill attributes; follow the theme's cup colours. */
+  .coffee-art [fill="rgb(168,100,82)"] {
+    fill: var(--coffee-cup);
+  }
+  .coffee-art [fill="rgb(103,50,37)"] {
+    fill: var(--coffee-brew);
+  }
+  .coffee-ink-cup {
+    fill: var(--coffee-cup);
+  }
+  .coffee-ink-handle {
+    stroke: var(--coffee-cup);
+  }
+  .coffee-ink-tile {
+    fill: var(--coffee-tile);
+  }
+  .coffee-ink-brew {
+    fill: var(--coffee-brew);
+  }
+</style>

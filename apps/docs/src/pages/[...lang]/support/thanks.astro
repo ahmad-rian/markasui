@@ -4,6 +4,7 @@
  * /api/donate/status a few times and only says "received" once the webhook has confirmed the payment.
  */
 import "../../../styles/global.css";
+import CoffeeCup from "../../../components/CoffeeCup.astro";
 import Icon from "../../../components/Icon.astro";
 import Base from "../../../layouts/Base.astro";
 import { localeParams, localePath, toLocale } from "../../../lib/i18n";
@@ -22,24 +23,26 @@ const states = [
 ---
 
 <Base title={copy.seoTitle} description={copy.waiting} noindex>
-  <main id="konten" class="mx-auto flex min-h-[calc(100dvh-12rem)] max-w-xl flex-col justify-center px-4 py-20 sm:px-6">
-    <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-soft text-brand" aria-hidden="true">
-      <Icon name="coffee" class="size-6" />
-    </span>
-    <h1 class="mt-5 text-[34px] leading-tight font-semibold tracking-[-0.025em]">{copy.title}</h1>
-    <div data-support-status="waiting" role="status" class="mt-4">
-      {
-        states.map(({ state, text, icon }) => (
-          <p data-state={state} hidden={state !== "waiting"} class="flex gap-3 text-lg leading-8 text-muted [&[hidden]]:hidden">
-            <Icon name={icon} class:list={["mt-1.5 size-5 shrink-0", state === "received" ? "text-brand" : "text-muted"]} />
-            <span>{text}</span>
-          </p>
-        ))
-      }
-    </div>
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a href={localePath(locale, "/")} class="site-button-primary">{copy.home}</a>
-      <a href={localePath(locale, SUPPORT_PATH)} data-support-again hidden class="site-button-secondary [&[hidden]]:hidden">{copy.again}</a>
+  <main id="konten" class="flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-16 sm:px-6 sm:py-24">
+    <div class="w-full max-w-xl rounded-2xl border border-line bg-surface p-6 text-center shadow-[0_24px_48px_-24px_rgb(0_0_0/0.18)] sm:p-10">
+      <CoffeeCup class="mx-auto size-24 rounded-[28px] p-2.5 sm:size-28" />
+      <h1 class="mt-6 text-[34px] leading-tight font-semibold tracking-[-0.03em] sm:text-[40px]">{copy.title}</h1>
+      <div data-support-status="waiting" role="status" class="mt-4">
+        {
+          states.map(({ state, text, icon }) => (
+            <p data-state={state} hidden={state !== "waiting"} class="text-lg leading-8 text-pretty text-muted [&[hidden]]:hidden">
+              <Icon name={icon} class:list={["mr-1.5 inline size-5 align-[-3px]", state === "received" ? "text-brand" : "text-muted"]} />
+              <span>{text}</span>
+            </p>
+          ))
+        }
+      </div>
+      <p class="mt-4 text-base leading-7 text-muted">{copy.lead}</p>
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href={localePath(locale, "/")} class="site-button-primary h-12 px-5 text-base">{copy.home}</a>
+        <a href={`${localePath(locale, SUPPORT_PATH)}#supporters`} class="site-button-secondary h-12 px-5 text-base">{copy.supporters}</a>
+        <a href={localePath(locale, SUPPORT_PATH)} data-support-again hidden class="site-button-secondary h-12 px-5 text-base [&[hidden]]:hidden">{copy.again}</a>
+      </div>
     </div>
   </main>
 </Base>

@@ -9,6 +9,24 @@ export const NAME_MAX: number;
 export const MESSAGE_MAX: number;
 export const ORDER_ID_PATTERN: RegExp;
 export const CHECKOUT_PREFIXES: string[];
+export const SUPPORTERS_LIMIT: number;
+export const SUPPORTERS_CACHE_MS: number;
+
+/** One paid donation as shown on /support: what the donor typed, or null when they left it empty. */
+export interface Supporter {
+  name: string | null;
+  message: string | null;
+  /** YYYY-MM-DD the payment completed (UTC). */
+  date: string;
+}
+
+export interface StoredOrder {
+  amount: number;
+  status: string;
+  name: string;
+  message: string;
+  paidAt: string | null;
+}
 
 export interface Donation {
   amount: number;
@@ -21,6 +39,7 @@ export interface Store {
   order(orderId: string): { amount: number; status: string } | null;
   status(orderId: string): string | null;
   hasEvent(eventId: string): boolean;
+  supporters(limit: number): Supporter[];
   record(entry: Record<string, unknown>): void;
 }
 
@@ -32,6 +51,8 @@ export interface HandlerDeps {
   store: Store;
   fetch: typeof globalThis.fetch;
   limiter: (ip: string) => boolean;
+  /** Per-IP limit for GET /api/donate/supporters; defaults to 20 per minute. */
+  supportersLimiter?: (ip: string) => boolean;
   now?: () => number;
   log?: Pick<Console, "info" | "error">;
 }
@@ -51,7 +72,14 @@ export function verifyToken(
   header: string | undefined,
 ): boolean;
 export function createStore(file?: string): Store;
-export function createLimiter(now?: () => number): (ip: string) => boolean;
+export function publicSupporters(
+  orders: Iterable<StoredOrder>,
+  limit?: number,
+): Supporter[];
+export function createLimiter(
+  now?: () => number,
+  options?: { perMinute?: number; globalPerMinute?: number },
+): (ip: string) => boolean;
 export function createHandler(
   deps: HandlerDeps,
 ): (req: IncomingMessage, res: ServerResponse) => Promise<void>;

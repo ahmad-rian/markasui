@@ -184,7 +184,7 @@ test("amount chips link to /support?amount= and the support page preselects it",
 
   await chips.getByRole("link", { name: "Rp 50k" }).click();
   await expect(page).toHaveURL(/\/support\?amount=50000$/);
-  await expect(page.getByLabel("Amount", { exact: true })).toHaveValue(
+  await expect(page.getByLabel("Other amount", { exact: true })).toHaveValue(
     "50.000",
   );
   await expect(page.getByRole("button", { name: "Rp 50.000" })).toHaveAttribute(
@@ -212,7 +212,7 @@ test("Indonesian card uses Indonesian text and /id/support links", async ({
   ).toHaveAttribute("href", "/id/support");
   await chip.click();
   await expect(page).toHaveURL(/\/id\/support\?amount=100000$/);
-  await expect(page.getByLabel("Nominal", { exact: true })).toHaveValue(
+  await expect(page.getByLabel("Nominal lain", { exact: true })).toHaveValue(
     "100.000",
   );
 });
@@ -222,7 +222,7 @@ test("the support page ignores an amount outside the accepted range", async ({
 }) => {
   for (const amount of ["999", "abc", "99999999999"]) {
     await page.goto(`/support?amount=${amount}`);
-    await expect(page.getByLabel("Amount", { exact: true })).toHaveValue(
+    await expect(page.getByLabel("Other amount", { exact: true })).toHaveValue(
       "25.000",
     );
   }
@@ -357,6 +357,24 @@ test("desktop: a readable card at the bottom right", async ({ page }) => {
   const cardBox = (await card(page).boundingBox())!;
   expect(cardBox.y + cardBox.height).toBeLessThanOrEqual(box.y);
   expect(cardBox.y).toBeGreaterThanOrEqual(0);
+});
+
+test("desktop popover sits right above the card and closes when the page scrolls", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await openWithLauncher(page, "/id/pages");
+  const button = (await toggle(page).boundingBox())!;
+  await toggle(page).click();
+  const sheet = (await card(page).boundingBox())!;
+  expect(sheet.width).toBe(button.width);
+  expect(sheet.x).toBe(button.x);
+  expect(button.y - (sheet.y + sheet.height)).toBe(12);
+
+  await page.mouse.move(200, 400);
+  await page.mouse.wheel(0, 400);
+  await expect(card(page)).toBeHidden();
+  await expect(toggle(page)).toHaveAttribute("aria-expanded", "false");
 });
 
 test("the x minimizes it to a round button for the rest of the visit", async ({

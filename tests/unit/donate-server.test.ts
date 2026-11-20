@@ -15,11 +15,14 @@ import {
   createOrderId,
   createStore,
   parseDonation,
+  publicSupporters,
+  SUPPORTERS_LIMIT,
   validateAmount,
   verifySvix,
   verifyToken,
   type HandlerDeps,
   type Store,
+  type StoredOrder,
 } from "../../deploy/donate/server.mjs";
 
 // Svix's published test vector (docs.svix.com, "Verifying payloads manually").
@@ -471,5 +474,149 @@ describe("HTTP handler", () => {
     expect(await health.json()).toEqual({ ok: true, webhook: true });
     expect((await fetch(`${base}/api/donate`)).status).toBe(405);
     expect((await fetch(`${base}/api/other`)).status).toBe(404);
+  });
+  it("lists paid supporters only, without amounts, cached for 60 s", async () => {
+    let clock = NOW;
+    await start({ now: () => clock });
+    const paid = await createdOrder({
+      amount: 25_000,
+      name: "Rian",
+      message: "Semangat <b>terus</b>",
+    });
+    await createdOrder({ amount: 50_000, name: "Belum bayar" });
+    const failed = await createdOrder({ amount: 10_000, name: "Gagal" });
+    const anonymous = await createdOrder({ amount: 10_000 });
+    const complete = (order: string, amount: number, id: string) =>
+      webhook(
+        {
+          event_type: "payment.completed",
+          data: { order_id: order, amount, status: "completed" },
+        },
+        id,
+      );
+    await complete(paid, 25_000, "msg_paid");
+    await complete(anonymous, 10_000, "msg_anon");
+    await webhook(
+      {
+        event_type: "payment.failed",
+        data: { order_id: failed, amount: 10_000 },
+      },
+      "msg_failed",
+    );
+
+    const response = await fetch(`${base}/api/donate/supporters`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toBe("public, max-age=60");
+    const body = await response.json();
+    expect(body.supporters).toHaveLength(2);
+    expect(body.supporters).toContainEqual({
+      name: "Rian",
+      // Returned as plain text inside JSON; /support renders it with textContent.
+      message: "Semangat <b>terus</b>",
+      date: "2026-11-19",
+    });
+    expect(body.supporters).toContainEqual({
+      name: null,
+      message: null,
+      date: "2026-11-19",
+    });
+    expect(JSON.stringify(body)).not.toMatch(/amount|order|KOPI|25000/);
+
+    // A payment that lands within the minute shows up on the next refresh, not before.
+    const late = await createdOrder({ amount: 10_000, name: "Nanti" });
+    await complete(late, 10_000, "msg_late");
+    const cached = await (await fetch(`${base}/api/donate/supporters`)).json();
+    expect(cached.supporters).toHaveLength(2);
+    clock += 60_000;
+    const fresh = await (await fetch(`${base}/api/donate/supporters`)).json();
+    expect(fresh.supporters).toHaveLength(3);
+  });
+
+  it("rate limits the supporters list per IP and only allows GET", async () => {
+    await start({ supportersLimiter: () => false });
+    const limited = await fetch(`${base}/api/donate/supporters`);
+    expect(limited.status).toBe(429);
+    expect(await limited.json()).toEqual({ error: "rate_limited" });
+    const post = await fetch(`${base}/api/donate/supporters`, {
+      method: "POST",
+    });
+    expect(post.status).toBe(405);
+  });
+});
+
+describe("public supporters", () => {
+  const order = (overrides: Partial<StoredOrder> = {}): StoredOrder => ({
+    amount: 10_000,
+    status: "completed",
+    name: "Rian",
+    message: "",
+    paidAt: "2026-11-19T05:00:00.000Z",
+    ...overrides,
+  });
+
+  it("keeps completed payments only, newest first, at most 12", () => {
+    const orders = [
+      order({ name: "Pending", status: "pending", paidAt: null }),
+      order({ name: "Failed", status: "failed", paidAt: null }),
+      order({ name: "Expired", status: "expired", paidAt: null }),
+      ...Array.from({ length: 14 }, (_, day) =>
+        order({
+          name: `Day ${day + 1}`,
+          paidAt: `2026-11-${String(day + 1).padStart(2, "0")}T01:00:00.000Z`,
+        }),
+      ),
+    ];
+    const list = publicSupporters(orders);
+    expect(list).toHaveLength(SUPPORTERS_LIMIT);
+    expect(list[0]).toEqual({
+      name: "Day 14",
+      message: null,
+      date: "2026-11-14",
+    });
+    expect(list.at(-1)!.name).toBe("Day 3");
+    expect(list.map((entry) => entry.name)).not.toContain("Pending");
+    expect(list.map((entry) => entry.name)).not.toContain("Failed");
+  });
+
+  it("truncates long text and strips control characters from older log lines", () => {
+    const [entry] = publicSupporters([
+      order({
+        name: `\u202e${"N".repeat(60)}`,
+        message: `${"m".repeat(200)}\u0007`,
+      }),
+    ]);
+    expect(entry!.name).toBe("N".repeat(40));
+    expect(entry!.message).toBe("m".repeat(140));
+  });
+
+  it("shows empty or whitespace-only names as anonymous (null)", () => {
+    const [entry] = publicSupporters([order({ name: "   ", message: " Hi " })]);
+    expect(entry).toEqual({ name: null, message: "Hi", date: "2026-11-19" });
+  });
+
+  it("rebuilds supporters from the JSONL log after a restart", () => {
+    const dir = mkdtempSync(join(tmpdir(), "markas-donate-"));
+    const file = join(dir, "donations.jsonl");
+    const first = createStore(file);
+    first.record({
+      kind: "order",
+      order_id: "KOPI-20261119-AAAAAAAAAAAAAAAA",
+      amount: 25_000,
+      name: "Rian",
+      message: "Mantap",
+      at: "2026-11-19T04:00:00.000Z",
+    });
+    first.record({
+      kind: "event",
+      event_id: "msg_1",
+      event_type: "payment.completed",
+      order_id: "KOPI-20261119-AAAAAAAAAAAAAAAA",
+      amount: 25_000,
+      at: "2026-11-19T04:01:00.000Z",
+    });
+    expect(createStore(file).supporters(SUPPORTERS_LIMIT)).toEqual([
+      { name: "Rian", message: "Mantap", date: "2026-11-19" },
+    ]);
+    rmSync(dir, { recursive: true, force: true });
   });
 });

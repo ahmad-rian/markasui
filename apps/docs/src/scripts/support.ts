@@ -1,9 +1,11 @@
 /**
- * /support form and /support/thanks status (pages in src/pages/[...lang]/support). The form posts JSON to
- * /api/donate (deploy/donate/server.mjs) and navigates to the Sumopod checkout URL it returns. CSP: the fetch is
+ * /support form, supporters list and /support/thanks status (pages in src/pages/[...lang]/support). The form posts
+ * JSON to /api/donate (deploy/donate/server.mjs) and navigates to the Sumopod checkout URL it returns. The supporters
+ * list comes from /api/donate/supporters and is rendered with textContent only, never as HTML. CSP: every fetch is
  * same-origin (connect-src 'self'), and navigation is not limited by CSP.
  */
 import { SUPPORT_AMOUNT_PARAM, parseSupportAmount } from "../lib/support";
+import { playCoffeeCup } from "./coffee-lottie";
 import { onPageLoad } from "./lifecycle";
 
 /** Same list as CHECKOUT_PREFIXES in deploy/donate/server.mjs. */
@@ -23,6 +25,9 @@ type ThanksState = "checking" | "received" | "waiting" | "failed";
 const digits = (text: string) =>
   text.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
 const group = (text: string) => text.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+/** "Kamu mentraktir {what}, {amount}." with the placeholders filled in. */
+const fill = (template: string, values: Record<string, string>) =>
+  template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? "");
 const length = (text: string) => [...text].length;
 
 /** Reformats "25000" as "25.000" while typing, keeping the caret after the same digit. */
@@ -54,6 +59,7 @@ function setupForm(form: HTMLFormElement) {
     "[data-support-submit]",
   )!;
   const alert = form.querySelector<HTMLElement>("[data-support-error]")!;
+  const summary = form.querySelector<HTMLElement>("[data-support-summary]")!;
   const presets = [
     ...form.querySelectorAll<HTMLButtonElement>("[data-preset]"),
   ];
@@ -68,12 +74,28 @@ function setupForm(form: HTMLFormElement) {
   let busy = false;
 
   const amount = () => Number(digits(amountInput.value) || "0");
+  const inRange = () => amount() >= min && amount() <= max;
+  const syncSummary = () => {
+    const chosen = presets.find(
+      (button) => Number(button.dataset.preset) === amount(),
+    );
+    const values = {
+      what: chosen?.dataset.phrase ?? "",
+      amount: `Rp ${group(String(amount()))}`,
+    };
+    if (chosen) summary.textContent = fill(text("summaryPreset"), values);
+    else
+      summary.textContent = inRange()
+        ? fill(text("summaryCustom"), values)
+        : "";
+  };
   const syncPresets = () => {
     for (const button of presets)
       button.setAttribute(
         "aria-pressed",
         String(Number(button.dataset.preset) === amount()),
       );
+    syncSummary();
   };
   const setFieldError = (field: FieldName, message: string) => {
     const element = form.querySelector<HTMLElement>(
@@ -95,9 +117,7 @@ function setupForm(form: HTMLFormElement) {
   const validate = () => {
     const errors: Record<FieldName, string> = {
       amount:
-        Number.isInteger(amount()) && amount() >= min && amount() <= max
-          ? ""
-          : text("errorAmount"),
+        Number.isInteger(amount()) && inRange() ? "" : text("errorAmount"),
       name: length(nameInput.value.trim()) <= NAME_MAX ? "" : text("errorName"),
       message:
         length(messageInput.value.trim()) <= MESSAGE_MAX
@@ -180,6 +200,78 @@ function setupForm(form: HTMLFormElement) {
   setBusy(false);
 }
 
+interface Supporter {
+  name: string | null;
+  message: string | null;
+  date: string;
+}
+
+const isSupporter = (value: unknown): value is Supporter => {
+  if (!value || typeof value !== "object") return false;
+  const entry = value as Record<string, unknown>;
+  const optionalText = (field: unknown) =>
+    field === null || typeof field === "string";
+  return (
+    optionalText(entry.name) &&
+    optionalText(entry.message) &&
+    typeof entry.date === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(entry.date)
+  );
+};
+
+/** Fills the supporters list on /support. Names and messages are set as text, so markup in them stays inert. */
+async function loadSupporters(root: HTMLElement) {
+  const list = root.querySelector<HTMLElement>("[data-supporters-list]")!;
+  const template = document.querySelector<HTMLTemplateElement>(
+    "[data-supporter-template]",
+  )!;
+  const show = (state: "list" | "empty" | "error") => {
+    root.querySelector<HTMLElement>("[data-supporters-empty]")!.hidden =
+      state !== "empty";
+    root.querySelector<HTMLElement>("[data-supporters-error]")!.hidden =
+      state !== "error";
+    root.setAttribute("aria-busy", "false");
+  };
+  const dateFormat = new Intl.DateTimeFormat(
+    root.dataset.locale === "id" ? "id-ID" : "en-GB",
+    { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" },
+  );
+  try {
+    const response = await fetch(root.dataset.endpoint ?? "");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const body = (await response.json()) as { supporters?: unknown };
+    const supporters = Array.isArray(body.supporters)
+      ? body.supporters.filter(isSupporter)
+      : [];
+    if (!root.isConnected) return;
+    list.replaceChildren(
+      ...supporters.map((supporter) => {
+        const item = template.content.firstElementChild!.cloneNode(
+          true,
+        ) as HTMLElement;
+        const name = supporter.name ?? root.dataset.anonymous ?? "";
+        item.querySelector("[data-initial]")!.textContent =
+          [...name][0]?.toUpperCase() ?? "";
+        item.querySelector("[data-name]")!.textContent = name;
+        const time = item.querySelector<HTMLTimeElement>("[data-date]")!;
+        time.dateTime = supporter.date;
+        time.textContent = dateFormat.format(
+          new Date(`${supporter.date}T00:00:00Z`),
+        );
+        const message = item.querySelector<HTMLElement>("[data-message]")!;
+        if (supporter.message) message.textContent = supporter.message;
+        else message.remove();
+        return item;
+      }),
+    );
+    show(supporters.length ? "list" : "empty");
+  } catch (error) {
+    if (!root.isConnected) return;
+    show("error");
+    console.warn("support: supporters list unavailable", error);
+  }
+}
+
 function showThanks(root: HTMLElement, state: ThanksState) {
   root.dataset.supportStatus = state;
   root
@@ -217,8 +309,12 @@ async function pollStatus(root: HTMLElement, order: string) {
 }
 
 onPageLoad(() => {
+  const art = document.querySelector<HTMLElement>("main [data-coffee-art]");
+  if (art) playCoffeeCup(art);
   const form = document.querySelector<HTMLFormElement>("[data-support-form]");
   if (form) setupForm(form);
+  const supporters = document.querySelector<HTMLElement>("[data-supporters]");
+  if (supporters) void loadSupporters(supporters);
   const status = document.querySelector<HTMLElement>("[data-support-status]");
   const order = new URLSearchParams(location.search).get("order") ?? "";
   if (status && ORDER_PATTERN.test(order)) void pollStatus(status, order);

@@ -13,6 +13,8 @@ const HIDE_KEY = "markas-coffee-hidden-until";
 const HIDE_MS = 7 * 24 * 60 * 60 * 1000;
 const ENTRANCE_DELAY_MS = 2000;
 const SCROLL_THRESHOLD_PX = 240;
+/** Scrolling the page this far while the popover is open closes it, so it never rides along over the content. */
+const CLOSE_ON_SCROLL_PX = 48;
 /** sessionStorage: the reader minimized the card, so it stays a round button until the tab closes. */
 const COMPACT_KEY = "markas-coffee-compact";
 
@@ -78,10 +80,23 @@ function setup(element: HTMLElement) {
   const card = element.querySelector<HTMLElement>("[data-coffee-card]")!;
   const toggle = element.querySelector<HTMLElement>("[data-coffee-toggle]")!;
 
+  let openedAt = 0;
+  const closeOnScroll = () => {
+    // ClientRouter removes the popover without a toggle event; stop listening once it is gone.
+    if (!card.isConnected || !card.matches(":popover-open"))
+      return removeEventListener("scroll", closeOnScroll);
+    if (Math.abs(scrollY - openedAt) > CLOSE_ON_SCROLL_PX) card.hidePopover();
+  };
   card.addEventListener("toggle", (event) => {
     const open = (event as ToggleEvent).newState === "open";
     toggle.setAttribute("aria-expanded", String(open));
-    if (open) card.focus();
+    if (open) {
+      openedAt = scrollY;
+      addEventListener("scroll", closeOnScroll, { passive: true });
+      card.focus();
+    } else {
+      removeEventListener("scroll", closeOnScroll);
+    }
   });
   element
     .querySelector<HTMLElement>("[data-coffee-hide]")!

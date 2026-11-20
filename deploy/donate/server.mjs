@@ -24,9 +24,12 @@ const WEBHOOK_BODY_MAX = 64 * 1024;
 const SUMOPOD_TIMEOUT_MS = 10_000;
 const WEBHOOK_TOLERANCE_S = 5 * 60;
 const BUCKET_SIZE = 5;
-const BUCKET_REFILL_MS = 60_000 / BUCKET_SIZE;
 const GLOBAL_PER_MINUTE = 30;
 const JAKARTA_OFFSET_MS = 7 * 3600_000;
+/** Public supporters list: how many, how long one answer is reused, and its own per-IP limit. */
+export const SUPPORTERS_LIMIT = 12;
+export const SUPPORTERS_CACHE_MS = 60_000;
+const SUPPORTERS_PER_MINUTE = 20;
 const FINAL_STATUS = {
   "payment.completed": "completed",
   "payment.failed": "failed",
@@ -127,13 +130,19 @@ export function verifyToken(token, header) {
   return safeEqual(digest(token), digest(header));
 }
 
-/** In-memory state rebuilt from the JSONL log: order statuses and the webhook events already applied. */
+/** In-memory state rebuilt from the JSONL log: orders (status, the donor's name and message) and applied events. */
 export function createStore(file) {
   const orders = new Map();
   const events = new Set();
   const apply = (entry) => {
     if (entry.kind === "order")
-      orders.set(entry.order_id, { amount: entry.amount, status: "pending" });
+      orders.set(entry.order_id, {
+        amount: entry.amount,
+        status: "pending",
+        name: entry.name ?? "",
+        message: entry.message ?? "",
+        paidAt: null,
+      });
     if (entry.kind !== "event") return;
     events.add(entry.event_id);
     const order = orders.get(entry.order_id);
@@ -143,8 +152,10 @@ export function createStore(file) {
       status &&
       order.status === "pending" &&
       entry.amount === order.amount
-    )
+    ) {
       order.status = status;
+      if (status === "completed") order.paidAt = entry.at ?? null;
+    }
   };
   if (file && existsSync(file)) {
     for (const line of readFileSync(file, "utf8").split("\n")) {
@@ -157,7 +168,11 @@ export function createStore(file) {
     }
   }
   return {
-    order: (orderId) => orders.get(orderId) ?? null,
+    order: (orderId) => {
+      const order = orders.get(orderId);
+      return order ? { amount: order.amount, status: order.status } : null;
+    },
+    supporters: (limit) => publicSupporters(orders.values(), limit),
     status: (orderId) => orders.get(orderId)?.status ?? null,
     hasEvent: (eventId) => events.has(eventId),
     record(entry) {
@@ -167,8 +182,33 @@ export function createStore(file) {
   };
 }
 
-/** Per-IP token bucket (5 per minute) plus a global per-minute cap. */
-export function createLimiter(now = Date.now) {
+/**
+ * The latest paid donations, newest first, as the donor chose to show them: the name they typed (null when they left
+ * it empty) and their message. No amount, order id or other data leaves the service. Text is cleaned and capped
+ * again here because older log lines predate the current limits; the page renders it as text, never as HTML.
+ */
+export function publicSupporters(orders, limit = SUPPORTERS_LIMIT) {
+  const shown = (value, max) =>
+    [...(cleanText(String(value ?? ""), Infinity) ?? "")]
+      .slice(0, max)
+      .join("") || null;
+  return [...orders]
+    .filter((order) => order.status === "completed" && order.paidAt)
+    .sort((a, b) => b.paidAt.localeCompare(a.paidAt))
+    .slice(0, limit)
+    .map((order) => ({
+      name: shown(order.name, NAME_MAX),
+      message: shown(order.message, MESSAGE_MAX),
+      date: order.paidAt.slice(0, 10),
+    }));
+}
+
+/** Per-IP token bucket (5 per minute by default) plus a global per-minute cap. */
+export function createLimiter(
+  now = Date.now,
+  { perMinute = BUCKET_SIZE, globalPerMinute = GLOBAL_PER_MINUTE } = {},
+) {
+  const refillMs = 60_000 / perMinute;
   const buckets = new Map();
   let windowStart = 0;
   let windowCount = 0;
@@ -176,12 +216,12 @@ export function createLimiter(now = Date.now) {
     const t = now();
     if (t - windowStart >= 60_000) [windowStart, windowCount] = [t, 0];
     if (buckets.size > 10_000) buckets.clear();
-    const bucket = buckets.get(ip) ?? { tokens: BUCKET_SIZE, at: t };
+    const bucket = buckets.get(ip) ?? { tokens: perMinute, at: t };
     const tokens = Math.min(
-      BUCKET_SIZE,
-      bucket.tokens + (t - bucket.at) / BUCKET_REFILL_MS,
+      perMinute,
+      bucket.tokens + (t - bucket.at) / refillMs,
     );
-    if (tokens < 1 || windowCount >= GLOBAL_PER_MINUTE) {
+    if (tokens < 1 || windowCount >= globalPerMinute) {
       buckets.set(ip, { tokens, at: t });
       return false;
     }
@@ -212,13 +252,16 @@ function readBody(req, limit) {
   });
 }
 
-const send = (res, status, body) => {
+const send = (res, status, body, cache = "no-store") => {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store",
+    "Cache-Control": cache,
   });
   res.end(JSON.stringify(body));
 };
+
+const clientIp = (req) =>
+  req.headers["x-real-ip"] ?? req.socket.remoteAddress ?? "";
 
 /**
  * Request handler. Dependencies are injected so tests run without network or disk:
@@ -236,14 +279,20 @@ export function createHandler(deps) {
     log = console,
   } = deps;
   const now = deps.now ?? Date.now;
+  const supportersLimiter =
+    deps.supportersLimiter ??
+    createLimiter(now, {
+      perMinute: SUPPORTERS_PER_MINUTE,
+      globalPerMinute: Infinity,
+    });
+  let supportersCache = { at: -Infinity, body: null };
 
   async function createPayment(req) {
     if (req.headers.origin !== SITE)
       throw new HttpError(403, "forbidden_origin");
     if (!/^application\/json\b/i.test(req.headers["content-type"] ?? ""))
       throw new HttpError(415, "json_only");
-    if (!limiter(req.headers["x-real-ip"] ?? req.socket.remoteAddress ?? ""))
-      throw new HttpError(429, "rate_limited");
+    if (!limiter(clientIp(req))) throw new HttpError(429, "rate_limited");
     let body;
     try {
       body = JSON.parse(
@@ -362,10 +411,26 @@ export function createHandler(deps) {
     return { status: 200, body: { status: value } };
   }
 
+  function supporters(req) {
+    if (!supportersLimiter(clientIp(req)))
+      throw new HttpError(429, "rate_limited");
+    if (now() - supportersCache.at >= SUPPORTERS_CACHE_MS)
+      supportersCache = {
+        at: now(),
+        body: { supporters: store.supporters(SUPPORTERS_LIMIT) },
+      };
+    return {
+      status: 200,
+      body: supportersCache.body,
+      cache: `public, max-age=${SUPPORTERS_CACHE_MS / 1000}`,
+    };
+  }
+
   const routes = {
     "/api/donate": { POST: createPayment },
     "/api/donate/webhook": { POST: webhook },
     "/api/donate/status": { GET: (req, url) => status(url) },
+    "/api/donate/supporters": { GET: supporters },
     "/api/donate/health": {
       GET: () => ({
         status: 200,
@@ -382,7 +447,7 @@ export function createHandler(deps) {
       if (!route) throw new HttpError(404, "not_found");
       if (!handler) throw new HttpError(405, "method_not_allowed");
       const result = await handler(req, url);
-      send(res, result.status, result.body);
+      send(res, result.status, result.body, result.cache);
     } catch (error) {
       if (error instanceof HttpError)
         return send(res, error.status, { error: error.message });
