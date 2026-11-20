@@ -6,7 +6,7 @@ import type { Locale } from "./i18n";
 
 export const SUPPORT_PRESETS = [10_000, 25_000, 50_000, 100_000] as const;
 export const SUPPORT_DEFAULT_AMOUNT = 25_000;
-export const SUPPORT_MIN = 10_000;
+export const SUPPORT_MIN = 3_000;
 export const SUPPORT_MAX = 5_000_000;
 export const SUPPORT_NAME_MAX = 40;
 export const SUPPORT_MESSAGE_MAX = 140;
@@ -36,13 +36,6 @@ export function parseSupportAmount(value: string | null): number | null {
 export const formatRupiah = (amount: number) =>
   new Intl.NumberFormat("id-ID", { maximumFractionDigits: 0 }).format(amount);
 
-/** Real numbers from the repo for the "what your coffee funds" row on /support. */
-export interface FundCounts {
-  components: number;
-  templates: number;
-  frameworks: number;
-}
-
 const MIN = `Rp ${formatRupiah(SUPPORT_MIN)}`;
 const MAX = `Rp ${formatRupiah(SUPPORT_MAX)}`;
 
@@ -53,24 +46,16 @@ const en = {
   description:
     "MarkasUI is free and open source. Buy the JenderalCorp team a coffee with QRIS from any Indonesian e-wallet or banking app.",
   lead: "MarkasUI is free and open source, built by a small team at JenderalCorp in Purwokerto. There are no paid tiers and no ads. If it saved you some time, a coffee pays for a few of the hours that go into the next release.",
-  funds: {
-    title: "What your coffee funds",
-    items: [
-      {
-        title: "New components and templates",
-        stat: ({ components, templates }: FundCounts) =>
-          `${components} components and ${templates} templates so far`,
-      },
-      {
-        title: "Every framework in sync",
-        stat: ({ frameworks }: FundCounts) =>
-          `Each component ships for ${frameworks} frameworks`,
-      },
-      {
-        title: "Docs in two languages",
-        stat: () => "English and Indonesian, side by side",
-      },
-    ],
+  /** Poster headline: {before} <accent word in serif italic> {after}. */
+  hero: { before: "Buy MarkasUI a", accent: "coffee", after: "" },
+  heroCta: "Choose your coffee",
+  /** Numbers on the green band, from the repo at build time. */
+  stats: {
+    components: "components",
+    templates: "templates",
+    frameworks: "frameworks",
+    caption:
+      "Your coffee funds new components and templates, keeps every framework in sync, and pays for docs in English and Indonesian.",
   },
   form: "Choose your coffee",
   amount: "Amount",
@@ -198,24 +183,14 @@ const id: SupportStrings = {
   description:
     "MarkasUI gratis dan open source. Traktir tim JenderalCorp kopi lewat QRIS dari e-wallet atau aplikasi bank mana pun.",
   lead: "MarkasUI gratis dan open source, dibuat oleh tim kecil JenderalCorp di Purwokerto. Tidak ada paket berbayar dan tidak ada iklan. Kalau MarkasUI menghemat waktumu, secangkir kopi membiayai beberapa jam kerja untuk rilis berikutnya.",
-  funds: {
-    title: "Kopimu dipakai untuk",
-    items: [
-      {
-        title: "Komponen dan template baru",
-        stat: ({ components, templates }: FundCounts) =>
-          `Sejauh ini ${components} komponen dan ${templates} template`,
-      },
-      {
-        title: "Semua framework tetap selaras",
-        stat: ({ frameworks }: FundCounts) =>
-          `Setiap komponen tersedia untuk ${frameworks} framework`,
-      },
-      {
-        title: "Dokumentasi dua bahasa",
-        stat: () => "Inggris dan Indonesia, berdampingan",
-      },
-    ],
+  hero: { before: "Traktir", accent: "kopi", after: "untuk MarkasUI" },
+  heroCta: "Pilih kopimu",
+  stats: {
+    components: "komponen",
+    templates: "template",
+    frameworks: "framework",
+    caption:
+      "Kopimu membiayai komponen dan template baru, menjaga semua framework tetap selaras, dan dokumentasi dalam bahasa Inggris dan Indonesia.",
   },
   form: "Pilih kopimu",
   amount: "Nominal",

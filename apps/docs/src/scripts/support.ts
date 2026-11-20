@@ -5,7 +5,6 @@
  * same-origin (connect-src 'self'), and navigation is not limited by CSP.
  */
 import { SUPPORT_AMOUNT_PARAM, parseSupportAmount } from "../lib/support";
-import { playCoffeeCup } from "./coffee-lottie";
 import { onPageLoad } from "./lifecycle";
 
 /** Same list as CHECKOUT_PREFIXES in deploy/donate/server.mjs. */
@@ -309,8 +308,6 @@ async function pollStatus(root: HTMLElement, order: string) {
 }
 
 onPageLoad(() => {
-  const art = document.querySelector<HTMLElement>("main [data-coffee-art]");
-  if (art) playCoffeeCup(art);
   const form = document.querySelector<HTMLFormElement>("[data-support-form]");
   if (form) setupForm(form);
   const supporters = document.querySelector<HTMLElement>("[data-supporters]");

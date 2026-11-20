@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 
 export const SITE = "https://markas.jenderalcorp.com";
 export const PRESETS = [10_000, 25_000, 50_000, 100_000];
-export const MIN_AMOUNT = 10_000;
+export const MIN_AMOUNT = 3_000;
 export const MAX_AMOUNT = 5_000_000;
 export const NAME_MAX = 40;
 export const MESSAGE_MAX = 140;

@@ -1,6 +1,6 @@
 # MarkasUI
 
-Library komponen UI open source untuk Blade, React, Vue, Svelte, Astro, dan Angular. Spesifikasi lengkap ada di docs/PRD.md. Keputusan yang mengubah PRD: bahasa default Inggris, desain situs mengikuti panduan unslop (tanpa label kapital mono dan serif miring). Pengecualian atas permintaan user: landing page memakai hero gelap berkaca beralur dan satu kata aksen serif miring (Instrument Serif) di judul section; CSS-nya di apps/docs/src/styles/landing.css.
+Library komponen UI open source untuk Blade, React, Vue, Svelte, Astro, dan Angular. Spesifikasi lengkap ada di docs/PRD.md. Keputusan yang mengubah PRD: bahasa default Inggris, desain situs mengikuti panduan unslop (tanpa label kapital mono dan serif miring). Pengecualian atas permintaan user: landing page memakai hero gelap berkaca beralur dan satu kata aksen serif miring (Instrument Serif) di judul section; CSS-nya di apps/docs/src/styles/landing.css. Pengecualian kedua: halaman /support (beserta thanks dan cancel) memakai ilustrasi garis tangan dua warna (hijau brand di atas krem), judul poster tebal kapital dengan satu kata Instrument Serif miring, dan pita hijau bergambar stiker; CSS-nya di apps/docs/src/styles/support.css, gambarnya di apps/docs/src/components/support/SupportArt.astro.
 
 ## Aturan wajib
 

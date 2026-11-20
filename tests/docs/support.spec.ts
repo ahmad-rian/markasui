@@ -52,7 +52,7 @@ test("sends the chosen amount, name and message, then opens the Sumopod checkout
   const bodies = await mockDonate(page);
   await page.goto("/support");
   await expect(
-    page.getByRole("heading", { level: 1, name: "Support MarkasUI" }),
+    page.getByRole("heading", { level: 1, name: "Buy MarkasUI a coffee" }),
   ).toBeVisible();
   const submit = page.getByRole("button", { name: "Buy me a coffee" });
   await expect(submit).toBeEnabled();
@@ -86,10 +86,10 @@ test("formats a custom amount and blocks amounts outside the range", async ({
   await expect(amount).toHaveValue("123.456");
   await expect(page.locator("[data-preset][aria-pressed=true]")).toHaveCount(0);
 
-  await amount.fill("5000");
+  await amount.fill("2000");
   await page.getByRole("button", { name: "Buy me a coffee" }).click();
   await expect(
-    page.getByText("Enter an amount from Rp 10.000 to Rp 5.000.000."),
+    page.getByText("Enter an amount from Rp 3.000 to Rp 5.000.000."),
   ).toBeVisible();
   await expect(amount).toHaveAttribute("aria-invalid", "true");
   await expect(amount).toBeFocused();
@@ -159,7 +159,10 @@ test("Indonesian page sends locale id", async ({ page }) => {
   const bodies = await mockDonate(page);
   await page.goto("/id/support");
   await expect(
-    page.getByRole("heading", { level: 1, name: "Dukung MarkasUI" }),
+    page.getByRole("heading", {
+      level: 1,
+      name: "Traktir kopi untuk MarkasUI",
+    }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Traktir kopi" }).click();
   await page.waitForURL(CHECKOUT);
@@ -358,19 +361,23 @@ test.describe("supporters", () => {
   });
 });
 
-test("hero cup animates, real repo numbers and FAQ", async ({ page }) => {
+test("poster hero with brewer drawings, real repo numbers and FAQ", async ({
+  page,
+}) => {
   await mockSupporters(page, { supporters: [] });
   await page.goto("/support");
-  await expect(page.locator("main [data-coffee-art]").first()).toHaveAttribute(
-    "data-lottie",
-    /^(ready|still)$/,
-  );
   await expect(
-    page.getByText(/^\d+ components and \d+ templates so far$/),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Each component ships for 6 frameworks"),
-  ).toBeVisible();
+    page.locator("main section").first().locator("svg.sp-art"),
+  ).toHaveCount(3);
+  const stats = page.locator(".sp-band li");
+  await expect(stats).toHaveText([
+    /^\d{2,}\s*components$/,
+    /^\d+\s*templates$/,
+    /^6\s*frameworks$/,
+  ]);
+  // Decorative stickers stay out of the accessibility tree.
+  for (const strip of await page.locator(".sp-stickers").all())
+    await expect(strip).toHaveAttribute("aria-hidden", "true");
 
   const faq = page.locator("details", { hasText: "Will my name be public?" });
   await faq.locator("summary").click();

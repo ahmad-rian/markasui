@@ -1,0 +1,236 @@
+---
+/**
+ * Hand-drawn line illustrations for the /support pages (art direction in src/styles/support.css). Every drawing is
+ * stroke-based in currentColor; parts with class "sp-fill" are solid. Decorative only (aria-hidden).
+ *
+ * - Brewers (hero): moka, press, pourover. "sp-steam" and "sp-drip" parts are animated in support.css.
+ * - Tiers (amount cards): cup, cups, croissant, team.
+ * - Stickers (green band): mug, beans, takeaway, dripper, croissantSticker, sparkle.
+ * - thanks, cancel: the cups on the thanks and cancel pages.
+ */
+export type ArtName =
+  | "moka"
+  | "press"
+  | "pourover"
+  | "cup"
+  | "cups"
+  | "croissant"
+  | "team"
+  | "mug"
+  | "beans"
+  | "takeaway"
+  | "dripper"
+  | "croissantSticker"
+  | "sparkle"
+  | "thanks"
+  | "cancel";
+
+interface Props {
+  name: ArtName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const VIEW_BOX: Record<ArtName, string> = {
+  moka: "0 0 120 160",
+  press: "0 0 120 160",
+  pourover: "0 0 120 160",
+  cup: "0 0 120 64",
+  cups: "0 0 120 64",
+  croissant: "0 0 120 64",
+  team: "0 0 120 64",
+  mug: "0 0 64 64",
+  beans: "0 0 64 64",
+  takeaway: "0 0 64 64",
+  dripper: "0 0 64 64",
+  croissantSticker: "0 0 64 64",
+  sparkle: "0 0 64 64",
+  thanks: "0 0 200 170",
+  cancel: "0 0 200 170",
+};
+
+/** A small cup with saucer and steam, drawn in a 40 x 40 box; placed with a transform. */
+const CUP = {
+  body: "M6 14H30V22A12 12 0 0 1 6 22Z",
+  brew: "M9.5 17.5H26.5V22A8.5 8.5 0 0 1 9.5 22Z",
+  handle: "M30 16.5H32.5A5 5 0 0 1 32.5 26.5H30",
+  saucer: "M0 38.5H36",
+  steam: ["M14 1.5q-3 4 0 8", "M22 1.5q-3 4 0 8"],
+};
+const cups: Record<string, { x: number; y: number; s: number }[]> = {
+  cup: [{ x: 41, y: 12, s: 1.2 }],
+  cups: [
+    { x: 22, y: 14, s: 1.1 },
+    { x: 60, y: 14, s: 1.1 },
+  ],
+  croissant: [{ x: 16, y: 14, s: 1.1 }],
+  team: [
+    { x: 8, y: 20, s: 0.8 },
+    { x: 35, y: 20, s: 0.8 },
+    { x: 62, y: 20, s: 0.8 },
+    { x: 89, y: 20, s: 0.8 },
+  ],
+};
+const placed = cups[name] ?? [];
+---
+
+<svg
+  class:list={["sp-art", className]}
+  viewBox={VIEW_BOX[name]}
+  fill="none"
+  stroke="currentColor"
+  stroke-width={name === "moka" || name === "press" || name === "pourover" || name === "thanks" || name === "cancel" ? 3 : 2.5}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    placed.map(({ x, y, s }) => (
+      <g transform={`translate(${x} ${y}) scale(${s})`}>
+        <path class="sp-fill" d={CUP.brew} stroke="none" />
+        <path d={CUP.body} />
+        <path d={CUP.handle} />
+        <path d={CUP.saucer} />
+        {name !== "team" && CUP.steam.map((d) => <path class="sp-steam" d={d} />)}
+      </g>
+    ))
+  }
+  {
+    name === "croissant" && (
+      <g>
+        <path d="M62 52C63 34 100 26 112 48C104 43 97 44 93 50C86 44 72 45 62 52Z" />
+        <path d="M78 36.5L82 48M91 33L91 46M103 35.5L99 47" />
+      </g>
+    )
+  }
+  {name === "team" && <path d="M4 56H116M4 56V52M116 56V52" />}
+
+  {
+    name === "moka" && (
+      <g>
+        <path class="sp-steam" d="M50 4q-5 6 0 12t0 12" />
+        <path class="sp-steam" d="M64 2q-5 6 0 12t0 12" />
+        <path d="M37 42Q60 30 83 42" />
+        <rect class="sp-fill" x="55" y="27" width="10" height="7" rx="2.5" stroke="none" />
+        <path d="M32 44H88L81 82H39Z" />
+        <path d="M32 44L22 37" />
+        <path class="sp-fill" d="M88 46H97Q103 46 103 52V68Q103 74 97 74H86L87.5 66H95V54H87Z" stroke="none" />
+        <rect class="sp-fill" x="36" y="82" width="48" height="9" rx="2" stroke="none" />
+        <path d="M39 91L32 146H88L81 91" />
+        <path d="M53 91L51 146M67 91L69 146" />
+        <path d="M28 150H92" />
+      </g>
+    )
+  }
+
+  {
+    name === "press" && (
+      <g>
+        <path class="sp-steam" d="M44 22q-4 5 0 10" />
+        <path class="sp-steam" d="M74 22q-4 5 0 10" />
+        <circle class="sp-fill" cx="58" cy="10" r="6" stroke="none" />
+        <path d="M58 16V38" />
+        <rect class="sp-fill" x="26" y="36" width="64" height="9" rx="3" stroke="none" />
+        <path d="M31 45V132H85V45" />
+        <path d="M34 62H82" />
+        <path d="M31 92q6.75-5 13.5 0t13.5 0t13.5 0t13.5 0" />
+        <path d="M40 104l6-6M52 110l8-8M66 108l7-7M44 122l7-7M60 124l8-8M74 120l5-5" />
+        <path d="M85 54C104 54 104 112 85 112" />
+        <path d="M31 48L22 42" />
+        <rect class="sp-fill" x="26" y="132" width="64" height="10" rx="3" stroke="none" />
+        <path d="M32 142V150M84 142V150" />
+      </g>
+    )
+  }
+
+  {
+    name === "pourover" && (
+      <g>
+        <rect class="sp-fill" x="22" y="22" width="76" height="7" rx="3" stroke="none" />
+        <path d="M27 29L48 66H72L93 29" />
+        <path d="M41 33L53 62M60 33V62M79 33L67 62" />
+        <path d="M92 32C104 32 104 48 88 50" />
+        <rect class="sp-fill" x="48" y="66" width="24" height="8" rx="2" stroke="none" />
+        <circle class="sp-drip" cx="60" cy="82" r="2.6" fill="currentColor" stroke="none" />
+        <path d="M50 76C32 90 26 118 34 146H86C94 118 88 90 70 76" />
+        <path class="sp-fill" d="M31 124H89C89.5 132 88.5 139 86 146H34C31.5 139 30.5 132 31 124Z" stroke="none" />
+        <path d="M86 92Q98 96 95 112" />
+        <path d="M26 152H94" />
+      </g>
+    )
+  }
+
+  {
+    name === "mug" && (
+      <g>
+        <path d="M24 8q-3 4 0 8M34 8q-3 4 0 8" />
+        <path d="M14 22H44V44A7 7 0 0 1 37 51H21A7 7 0 0 1 14 44Z" />
+        <path d="M44 27H47A7 7 0 0 1 47 41H44" />
+        <path d="M24 34c0-3 5-3 5 0c0-3 5-3 5 0c0 4-5 7-5 7s-5-3-5-7z" />
+      </g>
+    )
+  }
+  {
+    name === "beans" && (
+      <g>
+        <ellipse cx="24" cy="30" rx="11" ry="16" transform="rotate(-25 24 30)" />
+        <path d="M30 16C20 24 30 36 20 44" />
+        <ellipse cx="45" cy="40" rx="8" ry="12" transform="rotate(30 45 40)" />
+        <path d="M40 30C48 36 42 44 50 50" />
+      </g>
+    )
+  }
+  {
+    name === "takeaway" && (
+      <g>
+        <path d="M16 13H48L46 20H18Z" />
+        <path d="M22 9H42L44 13H20Z" />
+        <path d="M18 20L22 56H42L46 20" />
+        <path class="sp-fill" d="M20.5 30H43.5L42.5 42H21.5Z" stroke="none" />
+      </g>
+    )
+  }
+  {
+    name === "dripper" && (
+      <g>
+        <path d="M10 16H54L42 38H22Z" />
+        <path d="M22 20L28 34M32 20V34M42 20L36 34" />
+        <path d="M20 42H44" />
+        <path d="M28 46V48M36 50V52M32 54V56" />
+      </g>
+    )
+  }
+  {
+    name === "croissantSticker" && (
+      <g>
+        <path d="M6 44C8 22 50 12 58 40C50 34 42 36 38 42C32 34 16 36 6 44Z" />
+        <path d="M22 28L26 40M34 22L34 36M46 24L42 37" />
+      </g>
+    )
+  }
+  {name === "sparkle" && <path d="M32 6C34 26 38 30 58 32C38 34 34 38 32 58C30 38 26 34 6 32C26 30 30 26 32 6Z" />}
+
+  {
+    (name === "thanks" || name === "cancel") && (
+      <g>
+        {name === "thanks" && (
+          <g>
+            <path class="sp-steam" d="M86 8q-5 7 0 14t0 14" />
+            <path class="sp-steam" d="M104 4q-5 7 0 14t0 14" />
+            <path class="sp-fill" d="M38 30c0-6 9-6 9 0c0-6 9-6 9 0c0 8-9 13-9 13s-9-5-9-13z" stroke="none" />
+            <path class="sp-accent" d="M150 24l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" />
+            <path class="sp-accent" d="M168 62l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" />
+            <path class="sp-accent" d="M28 74l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" />
+          </g>
+        )}
+        <path d="M52 52H148V92A48 48 0 0 1 52 92Z" />
+        <path class="sp-fill" d="M60 64H140V92A40 40 0 0 1 60 92Z" stroke="none" />
+        <path d="M148 62H156A16 16 0 0 1 156 94H146" />
+        <path d="M30 152H170" />
+        <path d="M70 142Q100 150 130 142" />
+      </g>
+    )
+  }
+</svg>

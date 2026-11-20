@@ -378,8 +378,10 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     color: var(--color-ink);
   }
 
-  /* Phones (portrait or landscape) and other short screens: the round button only, clear of the content and the
-     home indicator, with touch-sized targets in the popover. */
+  /* Phones (portrait or landscape) and other short screens: a round button with the cup and, to its left, a small
+     speech bubble with the title (scripts/coffee.ts hides it after a while and on scroll down), clear of the content
+     and the home indicator, with touch-sized targets in the popover. The bubble is the button's own label, so
+     tapping it opens the popover and the accessible name stays the same. */
   @media (width < 40rem), (height < 32rem) {
     .coffee {
       --coffee-gap: 16px;
@@ -389,22 +391,64 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       width: 56px;
       grid-template-columns: 48px;
       gap: 0;
-      padding: 3px;
+      padding: 4px;
       border-radius: 9999px;
     }
     .coffee .coffee-toggle .coffee-art {
       width: 48px;
       height: 48px;
-      padding: 2px;
+      padding: 5px;
       border-radius: 9999px;
     }
     .coffee .coffee-copy {
       position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
+      top: 50%;
+      right: calc(100% + 10px);
+      display: flex;
+      height: 38px;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 9999px;
+      background: var(--color-surface);
+      color: var(--color-ink);
       white-space: nowrap;
+      box-shadow:
+        0 0 0 1px var(--color-line),
+        0 8px 20px rgb(0 0 0 / 0.1),
+        0 1px 3px rgb(0 0 0 / 0.06);
+      transform: translateY(-50%);
+      transition:
+        opacity 250ms var(--ease-out-quint),
+        transform 250ms var(--ease-out-quint);
+    }
+    /* Tail: the right-hand corner of a rotated square, pointing at the button. */
+    .coffee .coffee-copy::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -5px;
+      width: 10px;
+      height: 10px;
+      border-top: 1px solid var(--color-line);
+      border-right: 1px solid var(--color-line);
+      background: var(--color-surface);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      transform: translateY(-50%) rotate(45deg);
+    }
+    .coffee .coffee-name {
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
+    }
+    .coffee .coffee-sub {
+      display: none;
+    }
+    /* Hidden but still the button's label, so it keeps its accessible name. */
+    .coffee[data-bubble="hidden"] .coffee-copy,
+    .coffee-toggle[aria-expanded="true"] .coffee-copy {
+      opacity: 0;
+      transform: translate(8px, -50%);
+      pointer-events: none;
     }
     .coffee .coffee-chevron,
     .coffee .coffee-minimize {
@@ -491,6 +535,9 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     }
     .coffee-toggle[aria-expanded="true"] .coffee-chevron {
       transform: rotate(-90deg);
+    }
+    .coffee .coffee-copy {
+      transition: none;
     }
     .coffee-card:popover-open {
       animation: none;

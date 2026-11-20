@@ -15,10 +15,16 @@ const ENTRANCE_DELAY_MS = 2000;
 const SCROLL_THRESHOLD_PX = 240;
 /** Scrolling the page this far while the popover is open closes it, so it never rides along over the content. */
 const CLOSE_ON_SCROLL_PX = 48;
+/** Phones: the speech bubble next to the round button hides after this long, and while scrolling down. */
+const BUBBLE_MS = 6000;
+/** Distance from the end of the page at which the bubble comes back. */
+const PAGE_END_PX = 120;
 /** sessionStorage: the reader minimized the card, so it stays a round button until the tab closes. */
 const COMPACT_KEY = "markas-coffee-compact";
 
 let entered = false;
+let bubbleTimer: ReturnType<typeof setTimeout> | undefined;
+let lastScrollY = 0;
 let entranceTimer: ReturnType<typeof setTimeout> | undefined;
 
 const launcher = () => document.querySelector<HTMLElement>("[data-coffee]");
@@ -60,6 +66,28 @@ function stopWaiting() {
   removeEventListener("scroll", onScroll);
 }
 
+function setBubble(shown: boolean) {
+  const element = launcher();
+  if (!element) return;
+  element.dataset.bubble = shown ? "shown" : "hidden";
+  clearTimeout(bubbleTimer);
+  if (shown) bubbleTimer = setTimeout(() => setBubble(false), BUBBLE_MS);
+}
+
+/** Bubble: away while scrolling down, back when scrolling up or at the end of the page. */
+function onBubbleScroll() {
+  const element = launcher();
+  if (!element || element.dataset.state !== "shown") return;
+  const atEnd =
+    innerHeight + scrollY >=
+    document.documentElement.scrollHeight - PAGE_END_PX;
+  const down = scrollY > lastScrollY;
+  lastScrollY = scrollY;
+  if (atEnd || !down) {
+    if (element.dataset.bubble !== "shown") setBubble(true);
+  } else if (element.dataset.bubble !== "hidden") setBubble(false);
+}
+
 function reveal(instant = false) {
   stopWaiting();
   const element = launcher();
@@ -67,6 +95,8 @@ function reveal(instant = false) {
   if (instant) element.dataset.instant = "";
   element.dataset.state = "shown";
   entered = true;
+  lastScrollY = scrollY;
+  setBubble(true);
   playCoffeeCup(element.querySelector<HTMLElement>("[data-coffee-art]")!);
 }
 
@@ -114,8 +144,11 @@ function setup(element: HTMLElement) {
     });
 }
 
+addEventListener("scroll", onBubbleScroll, { passive: true });
+
 onPageLoad(() => {
   stopWaiting();
+  clearTimeout(bubbleTimer);
   const element = launcher();
   if (!element) return;
   if (isDismissed()) {

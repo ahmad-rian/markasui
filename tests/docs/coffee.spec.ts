@@ -593,6 +593,99 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
+const BUBBLE_MS = 6000;
+const bubble = (page: Page) => page.locator("[data-coffee] .coffee-copy");
+const bubbleOpacity = (page: Page) =>
+  bubble(page).evaluate((element) => Number(getComputedStyle(element).opacity));
+
+for (const viewport of [
+  { width: 360, height: 740 },
+  { width: 390, height: 844 },
+  { width: 414, height: 896 },
+  { width: 844, height: 390 },
+]) {
+  test(`phones at ${viewport.width} x ${viewport.height}: a speech bubble next to the round button opens the sheet @mobile`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await openWithLauncher(page, "/id/docs/introduction");
+    await expect(launcher(page)).toHaveAttribute("data-bubble", "shown");
+    await expect(bubble(page).locator(".coffee-name")).toHaveText(
+      "Traktir kopi",
+    );
+    await expect(bubble(page).locator(".coffee-sub")).toBeHidden();
+    expect(await bubbleOpacity(page)).toBe(1);
+    expect(
+      await bubble(page)
+        .locator(".coffee-name")
+        .evaluate((element) => getComputedStyle(element).fontSize),
+    ).toBe("14px");
+
+    const box = (await bubble(page).boundingBox())!;
+    const button = (await toggle(page).boundingBox())!;
+    const header = (await page.locator("body > header").first().boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(SIDE_MARGIN);
+    expect(box.y + box.height).toBeLessThanOrEqual(
+      viewport.height - SIDE_MARGIN,
+    );
+    expect(box.height).toBeGreaterThanOrEqual(36);
+    expect(box.height).toBeLessThanOrEqual(40);
+    // Left of the button with a small gap, centred on it.
+    expect(button.x - (box.x + box.width)).toBe(10);
+    expect(
+      Math.abs(box.y + box.height / 2 - (button.y + button.height / 2)),
+    ).toBeLessThanOrEqual(1);
+    expect(overlaps(box, button)).toBe(false);
+    expect(overlaps(box, header)).toBe(false);
+    // The cup sits centred inside the round button.
+    const cup = (await art(page).boundingBox())!;
+    expect(cup.x - button.x).toBe(
+      button.x + button.width - (cup.x + cup.width),
+    );
+    expect(cup.y - button.y).toBe(
+      button.y + button.height - (cup.y + cup.height),
+    );
+    await expect(toggle(page)).toHaveAccessibleName("Traktir kopi");
+
+    await bubble(page).click();
+    await expect(card(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(card(page)).toBeHidden();
+  });
+}
+
+test("the bubble steps away after a few seconds and while scrolling down, and comes back on scroll up @mobile", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openWithLauncher(page);
+  await expect(launcher(page)).toHaveAttribute("data-bubble", "shown");
+  await page.clock.runFor(BUBBLE_MS);
+  await expect(launcher(page)).toHaveAttribute("data-bubble", "hidden");
+  // Hidden from sight, but still the button's label.
+  await expect(toggle(page)).toHaveAccessibleName("Buy me a coffee");
+
+  await page.mouse.wheel(0, -200);
+  await page.evaluate(() => scrollTo(0, 1200));
+  await page.evaluate(() => scrollTo(0, 800));
+  await expect(launcher(page)).toHaveAttribute("data-bubble", "shown");
+  await page.evaluate(() => scrollTo(0, 1600));
+  await expect(launcher(page)).toHaveAttribute("data-bubble", "hidden");
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await expect(launcher(page)).toHaveAttribute("data-bubble", "shown");
+});
+
+test("desktop shows no bubble, the card carries the title", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await openWithLauncher(page);
+  const box = (await bubble(page).boundingBox())!;
+  const card = (await toggle(page).boundingBox())!;
+  expect(box.x).toBeGreaterThan(card.x);
+  expect(box.x + box.width).toBeLessThan(card.x + card.width);
+});
+
 for (const theme of ["light", "dark"] as const) {
   test(`axe passes with the card closed and open (${theme})`, async ({
     page,

@@ -56,8 +56,10 @@ function sign(secret: string, id: string, timestamp: number, body: string) {
 }
 
 describe("validation", () => {
-  it("accepts presets and whole amounts from 10.000 to 5.000.000", () => {
-    for (const amount of [10_000, 25_000, 50_000, 100_000, 12_345, 5_000_000]) {
+  it("accepts presets and whole amounts from 3.000 to 5.000.000", () => {
+    for (const amount of [
+      3_000, 5_000, 10_000, 25_000, 50_000, 100_000, 12_345, 5_000_000,
+    ]) {
       expect(validateAmount(amount)).toBe(amount);
     }
   });
@@ -65,7 +67,7 @@ describe("validation", () => {
   it("rejects amounts outside the range, fractions and strings", () => {
     for (const amount of [
       0,
-      9_999,
+      2_999,
       5_000_001,
       10_000.5,
       "25000",
@@ -336,7 +338,7 @@ describe("HTTP handler", () => {
         .status,
     ).toBe(415);
     expect((await donate("{nope")).status).toBe(400);
-    const bad = await donate({ amount: 9_000 });
+    const bad = await donate({ amount: 2_000 });
     expect(bad.status).toBe(400);
     expect(await bad.json()).toEqual({ error: "invalid_amount" });
     expect(
