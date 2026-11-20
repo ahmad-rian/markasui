@@ -1,10 +1,11 @@
 ---
 /**
- * /support: "Buy me a coffee". Own art direction (src/styles/support.css): green hand-drawn line art on cream, a
- * poster headline, a green doodle band and outlined menu cards. The form posts to /api/donate
- * (deploy/donate/server.mjs), which creates a Sumopod QRIS payment and returns its checkout URL;
- * src/scripts/support.ts then navigates there, keeps the summary line in sync and fills the supporters list from
- * /api/donate/supporters (paid donations only, name and message as typed).
+ * /support: "Buy me a coffee", sized to fit one desktop screen. Own art direction (src/styles/support.css): green
+ * hand-drawn line art on cream, a poster headline with one serif italic word, outlined menu cards. Above the fold a
+ * compact poster sits beside the order card (on phones the order card follows the headline); below it a slim
+ * sticker strip, the latest supporters and a short FAQ. The form posts to /api/donate (deploy/donate/server.mjs),
+ * which creates a Sumopod QRIS payment and returns its checkout URL; src/scripts/support.ts then navigates there,
+ * keeps the summary line in sync and fills the supporters list from /api/donate/supporters.
  */
 import "../../../styles/global.css";
 import "../../../styles/support.css";
@@ -59,78 +60,34 @@ const initialSummary = fill(copy.summaryPreset, {
 });
 
 const BREWERS: ArtName[] = ["moka", "press", "pourover"];
-const STICKERS: (ArtName | "word")[] = [
-  "mug",
-  "beans",
-  "sparkle",
-  "takeaway",
-  "word",
-  "croissantSticker",
-  "dripper",
-  "beans",
-  "sparkle",
-  "mug",
-  "word",
-  "takeaway",
-  "croissantSticker",
-  "dripper",
-];
+const STICKERS: (ArtName | "word")[] = ["mug", "beans", "sparkle", "takeaway", "word", "croissantSticker", "dripper"];
+/** Enough repeats to fill a wide screen; the strip clips the rest. */
+const STRIP = [...STICKERS, ...STICKERS, ...STICKERS];
 const stickerWord = locale === "id" ? "kopi" : "coffee";
 const error = "text-sm text-danger";
 ---
 
 <Base title={copy.seoTitle} description={copy.description} breadcrumbs={breadcrumbs}>
   <main id="konten" class="sp" data-pagefind-body>
-    <div class="mx-auto max-w-screen-xl px-4 pt-8 sm:px-6 sm:pt-10 lg:px-8">
+    <div class="mx-auto max-w-6xl px-4 pt-5 sm:px-6 lg:px-8">
       <Breadcrumbs trail={breadcrumbTrail(locale, breadcrumbs)} />
     </div>
 
-    <section class="mx-auto max-w-screen-xl px-4 pt-10 pb-16 text-center sm:px-6 sm:pt-14 sm:pb-20 lg:px-8" aria-labelledby="support-title">
-      <div class="mx-auto flex max-w-2xl items-end justify-center gap-4 sm:gap-10">
-        {BREWERS.map((name) => <SupportArt name={name} class="h-auto w-[28%] max-w-40" />)}
+    <section
+      id="order"
+      aria-labelledby="support-title"
+      class="sp-order mx-auto grid max-w-6xl scroll-mt-20 gap-6 px-4 pt-5 pb-12 sm:px-6 sm:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:grid-rows-[auto_1fr] lg:gap-x-16 lg:gap-y-6 lg:px-8 lg:pb-14"
+    >
+      <div class="lg:self-end">
+        <div class="flex items-end gap-3 sm:gap-5">
+          {BREWERS.map((name) => <SupportArt name={name} class="h-14 w-auto sm:h-20 lg:h-24" />)}
+        </div>
+        <h1 id="support-title" class="sp-title mt-4 sm:mt-6">
+          {copy.hero.before} <span class="sp-accent-word">{copy.hero.accent}</span>{copy.hero.after && ` ${copy.hero.after}`}
+        </h1>
+        <p class="sp-lead mt-3 max-w-lg sm:mt-4">{copy.lead}</p>
       </div>
-      <h1 id="support-title" class="sp-title mx-auto mt-8 max-w-5xl sm:mt-10">
-        {copy.hero.before} <span class="sp-accent-word">{copy.hero.accent}</span>{copy.hero.after && ` ${copy.hero.after}`}
-      </h1>
-      <p class="sp-lead mx-auto mt-6 max-w-2xl">{copy.lead}</p>
-      <a href="#order" class="sp-pill mt-8">
-        {copy.heroCta}
-        <Icon name="chevronDown" class="size-5" />
-      </a>
-    </section>
 
-    <section class="sp-band py-8 sm:py-10">
-      <div class="sp-stickers px-4" aria-hidden="true">
-        {
-          STICKERS.map((name) =>
-            name === "word" ? <span class="sp-sticker-word">{stickerWord}</span> : <SupportArt name={name} />,
-          )
-        }
-      </div>
-      <div class="mx-auto max-w-screen-xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-        <ul class="grid grid-cols-3 gap-4 text-center">
-          {
-            stats.map((stat) => (
-              <li class="grid justify-items-center gap-2">
-                <span class="sp-stat">{stat.value}</span>
-                <span class="sp-stat-label">{stat.label}</span>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="mx-auto mt-8 max-w-2xl text-center text-base leading-7 text-pretty opacity-90">{copy.stats.caption}</p>
-      </div>
-      <div class="sp-stickers flex-row-reverse px-4" aria-hidden="true">
-        {
-          STICKERS.map((name) =>
-            name === "word" ? <span class="sp-sticker-word">{stickerWord}</span> : <SupportArt name={name} />,
-          )
-        }
-      </div>
-    </section>
-
-    <section id="order" class="mx-auto max-w-screen-xl scroll-mt-20 px-4 py-16 sm:px-6 sm:py-24 lg:px-8" aria-labelledby="support-form-title">
-      <h2 id="support-form-title" class="sp-h2">{copy.form}</h2>
       <form
         data-support-form
         data-locale={locale}
@@ -144,11 +101,13 @@ const error = "text-sm text-danger";
         data-summary-preset={copy.summaryPreset}
         data-summary-custom={copy.summaryCustom}
         novalidate
-        class="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-10"
+        aria-labelledby="support-form-title"
+        class="sp-slip grid content-start gap-4 p-4 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center"
       >
-        <fieldset class="grid content-start gap-4">
+        <h2 id="support-form-title" class="text-base leading-6 font-semibold">{copy.form}</h2>
+        <fieldset class="grid gap-4">
           <legend class="sr-only">{copy.amount}</legend>
-          <div role="group" aria-label={copy.presets} class="grid grid-cols-2 gap-3 sm:gap-4">
+          <div role="group" aria-label={copy.presets} class="grid grid-cols-2 gap-2.5">
             {
               tiers.map((tier) => (
                 <button
@@ -158,154 +117,153 @@ const error = "text-sm text-danger";
                   aria-pressed={tier.amount === SUPPORT_DEFAULT_AMOUNT ? "true" : "false"}
                   class="sp-menu"
                 >
-                  <SupportArt name={tier.art} />
+                  <SupportArt name={tier.art} class="sp-menu-art" />
                   <span class="sp-menu-name">{tier.label}</span>
                   <span class="sp-tag">Rp {formatRupiah(tier.amount)}</span>
                 </button>
               ))
             }
           </div>
-          <div class="mt-2 grid gap-2">
-            <label for="support-amount" class="sp-label">{copy.custom}</label>
-            <div class="sp-field">
-              <span class="font-semibold text-[var(--sp-muted)] select-none" aria-hidden="true">Rp</span>
-              <input
-                id="support-amount"
-                name="amount"
-                type="text"
-                inputmode="numeric"
-                autocomplete="off"
-                required
-                value={formatRupiah(SUPPORT_DEFAULT_AMOUNT)}
-                aria-describedby="support-amount-hint support-amount-error"
-                class="font-semibold tabular-nums"
-              />
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="grid content-start gap-1.5">
+              <label for="support-amount" class="sp-label">{copy.custom}</label>
+              <div class="sp-field">
+                <span class="font-semibold text-[var(--sp-muted)] select-none" aria-hidden="true">Rp</span>
+                <input
+                  id="support-amount"
+                  name="amount"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  required
+                  value={formatRupiah(SUPPORT_DEFAULT_AMOUNT)}
+                  aria-describedby="support-amount-hint support-amount-error"
+                  class="font-semibold tabular-nums"
+                />
+              </div>
+              <p id="support-amount-hint" class="sp-hint">{copy.amountHint}</p>
+              <p id="support-amount-error" class={error} data-field-error="amount" hidden></p>
             </div>
-            <p id="support-amount-hint" class="sp-hint">{copy.amountHint}</p>
-            <p id="support-amount-error" class={error} data-field-error="amount" hidden></p>
+            <div class="grid content-start gap-1.5">
+              <label for="support-name" class="sp-label">{copy.name}</label>
+              <div class="sp-field">
+                <input
+                  id="support-name"
+                  name="name"
+                  type="text"
+                  maxlength={SUPPORT_NAME_MAX}
+                  autocomplete="nickname"
+                  aria-describedby="support-name-hint support-name-error"
+                />
+              </div>
+              <p id="support-name-hint" class="sp-hint">{copy.nameHint}</p>
+              <p id="support-name-error" class={error} data-field-error="name" hidden></p>
+            </div>
           </div>
         </fieldset>
-
-        <div class="sp-slip grid content-start gap-5 self-start p-5 sm:p-7 lg:sticky lg:top-24">
-          <div class="grid gap-2">
-            <label for="support-name" class="sp-label">{copy.name}</label>
-            <div class="sp-field">
-              <input
-                id="support-name"
-                name="name"
-                type="text"
-                maxlength={SUPPORT_NAME_MAX}
-                autocomplete="nickname"
-                aria-describedby="support-name-hint support-name-error"
-              />
-            </div>
-            <p id="support-name-hint" class="sp-hint">{copy.nameHint}</p>
-            <p id="support-name-error" class={error} data-field-error="name" hidden></p>
+        <div class="grid gap-1.5">
+          <label for="support-message" class="sp-label">{copy.message}</label>
+          <div class="sp-field">
+            <textarea
+              id="support-message"
+              name="message"
+              rows="2"
+              maxlength={SUPPORT_MESSAGE_MAX}
+              aria-describedby="support-message-hint support-message-error"></textarea>
           </div>
-          <div class="grid gap-2">
-            <label for="support-message" class="sp-label">{copy.message}</label>
-            <div class="sp-field">
-              <textarea
-                id="support-message"
-                name="message"
-                rows="3"
-                maxlength={SUPPORT_MESSAGE_MAX}
-                aria-describedby="support-message-hint support-message-error"></textarea>
-            </div>
-            <p id="support-message-hint" class="sp-hint">{copy.messageHint}</p>
-            <p id="support-message-error" class={error} data-field-error="message" hidden></p>
-          </div>
-
-          <hr class="sp-rule" />
-          <p data-support-summary aria-live="polite" class="text-[17px] leading-7 font-semibold text-pretty empty:hidden">
-            {initialSummary}
-          </p>
-          <p data-support-error role="alert" class="rounded-xl bg-danger/10 px-3 py-2.5 text-sm text-danger empty:hidden"></p>
-          <button type="submit" disabled data-support-submit class="sp-pill w-full">
-            <Icon name="coffee" class="size-5" />
-            <span data-label-idle>{copy.submit}</span>
-            <span data-label-busy hidden>{copy.busy}</span>
-          </button>
-          <p class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm leading-6 text-[var(--sp-muted)]">
-            <span class="sp-badge text-[var(--sp-ink)]">{copy.qrisBadge}</span>
-            {copy.trust}
-          </p>
-          <noscript>
-            <p class="sp-hint">{copy.noscript}</p>
-          </noscript>
+          <p id="support-message-hint" class="sp-hint">{copy.messageHint}</p>
+          <p id="support-message-error" class={error} data-field-error="message" hidden></p>
         </div>
+        <p data-support-summary aria-live="polite" class="border-t-2 border-dashed border-[var(--sp-rule)] pt-4 text-base leading-6 font-semibold text-pretty empty:hidden">
+          {initialSummary}
+        </p>
+        <p data-support-error role="alert" class="rounded-xl bg-danger/10 px-3 py-2.5 text-sm text-danger empty:hidden"></p>
+        <button type="submit" disabled data-support-submit class="sp-pill w-full">
+          <Icon name="coffee" class="size-5" />
+          <span data-label-idle>{copy.submit}</span>
+          <span data-label-busy hidden>{copy.busy}</span>
+        </button>
+        <noscript>
+          <p class="sp-hint">{copy.noscript}</p>
+        </noscript>
       </form>
-    </section>
 
-    <section class="mx-auto max-w-screen-xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8" aria-labelledby="steps-title">
-      <h2 id="steps-title" class="sp-h2">{copy.steps.title}</h2>
-      <ol class="mt-8 grid gap-8 sm:mt-10 md:grid-cols-3 md:gap-10">
-        {
-          copy.steps.items.map((step, index) => (
-            <li class="flex gap-4 border-t-2 border-[var(--sp-line)] pt-5">
-              <span class="sp-step-number" aria-hidden="true">
-                {index + 1}
-              </span>
-              <span class="text-base leading-7">{step}</span>
-            </li>
-          ))
-        }
-      </ol>
-    </section>
-
-    <section id="supporters" aria-labelledby="supporters-title" class="mx-auto max-w-screen-xl scroll-mt-20 px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
-      <h2 id="supporters-title" class="sp-h2">{copy.supporters.title}</h2>
-      <p class="sp-lead mt-4 max-w-2xl text-base">{copy.supporters.lead}</p>
-      <div data-supporters data-endpoint={SUPPORTERS_ENDPOINT} data-locale={locale} data-anonymous={copy.supporters.anonymous} aria-busy="true" class="mt-8 sm:mt-10">
-        <ul data-supporters-list class="grid gap-4 empty:hidden sm:grid-cols-2 lg:grid-cols-3"></ul>
-        <div data-supporters-empty hidden class="sp-sticker flex items-center gap-5 p-5 sm:p-6">
-          <SupportArt name="mug" class="size-14 shrink-0" />
-          <p class="text-base leading-7">{copy.supporters.empty}</p>
-        </div>
-        <p data-supporters-error hidden class="sp-sticker p-5 text-base">{copy.supporters.error}</p>
+      <div class="grid content-start gap-3 lg:self-start">
+        <p class="flex items-start gap-2.5 text-sm leading-6 text-[var(--sp-muted)]">
+          <span class="sp-badge shrink-0 text-[var(--sp-ink)]">{copy.qrisBadge}</span>
+          <span>{copy.trust}</span>
+        </p>
+        <ul class="sp-stats">
+          {
+            stats.map((stat) => (
+              <li>
+                <strong>{stat.value}</strong> {stat.label}
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <template data-supporter-template>
-        <li class="sp-sticker flex flex-col p-5">
-          <div class="flex items-center gap-3">
-            <span data-initial class="sp-initial" aria-hidden="true"></span>
-            <div class="min-w-0">
-              <p data-name class="truncate text-base leading-6 font-semibold"></p>
-              <p class="text-sm leading-5 text-[var(--sp-muted)]"><time data-date></time></p>
-            </div>
+    </section>
+
+    <div class="sp-band" aria-hidden="true">
+      {STRIP.map((name) => (name === "word" ? <span class="sp-sticker-word">{stickerWord}</span> : <SupportArt name={name} />))}
+    </div>
+
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 pt-12 pb-16 sm:px-6 sm:pt-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:px-8 lg:pb-20">
+      <section id="supporters" aria-labelledby="supporters-title" class="scroll-mt-20">
+        <h2 id="supporters-title" class="sp-h2">{copy.supporters.title}</h2>
+        <p class="sp-hint mt-2 max-w-xl">{copy.supporters.lead}</p>
+        <div data-supporters data-endpoint={SUPPORTERS_ENDPOINT} data-locale={locale} data-anonymous={copy.supporters.anonymous} aria-busy="true" class="mt-5">
+          <ul data-supporters-list class="grid gap-3 empty:hidden sm:grid-cols-2"></ul>
+          <div data-supporters-empty hidden class="sp-sticker flex items-center gap-4 p-4">
+            <SupportArt name="mug" class="size-10 shrink-0" />
+            <p class="text-base leading-6">{copy.supporters.empty}</p>
           </div>
-          <p data-message class="mt-4 border-t-2 border-dashed border-[var(--sp-rule)] pt-4 text-base leading-7 break-words"></p>
-        </li>
-      </template>
-    </section>
-
-    <section aria-labelledby="faq-title" class="mx-auto grid max-w-screen-xl gap-8 px-4 pb-24 sm:px-6 sm:pb-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16 lg:px-8">
-      <h2 id="faq-title" class="sp-h2">{copy.faq.title}</h2>
-      <div class="sp-faq">
-        {
-          copy.faq.items.map((item) => (
-            <details>
-              <summary class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-[17px] leading-6 font-semibold">
-                {item.question}
-                <span class="sp-plus" aria-hidden="true" />
-              </summary>
-              <div class="pb-6">
-                <p class="sp-lead max-w-2xl text-base">{item.answer}</p>
-                {item.links && (
-                  <p class="mt-5 flex flex-wrap gap-3">
-                    {item.links.map((link) => (
-                      <a href={`${SITE.repo}${link.repoPath}`} class="sp-pill sp-pill-outline min-h-11 px-5 text-[15px]">
-                        {link.label}
-                        <Icon name="external" class="size-4" />
-                      </a>
-                    ))}
-                  </p>
-                )}
+          <p data-supporters-error hidden class="sp-sticker p-4 text-base">{copy.supporters.error}</p>
+        </div>
+        <template data-supporter-template>
+          <li class="sp-sticker flex flex-col p-4">
+            <div class="flex items-center gap-3">
+              <span data-initial class="sp-initial" aria-hidden="true"></span>
+              <div class="min-w-0">
+                <p data-name class="truncate text-[15px] leading-5 font-semibold"></p>
+                <p class="text-sm leading-5 text-[var(--sp-muted)]"><time data-date></time></p>
               </div>
-            </details>
-          ))
-        }
-      </div>
-    </section>
+            </div>
+            <p data-message class="mt-3 border-t-2 border-dashed border-[var(--sp-rule)] pt-3 text-[15px] leading-6 break-words"></p>
+          </li>
+        </template>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <h2 id="faq-title" class="sp-h2">{copy.faq.title}</h2>
+        <div class="sp-faq mt-5">
+          {
+            copy.faq.items.map((item) => (
+              <details>
+                <summary class="flex min-h-13 cursor-pointer list-none items-center justify-between gap-4 py-3 text-base leading-6 font-semibold">
+                  {item.question}
+                  <span class="sp-plus" aria-hidden="true" />
+                </summary>
+                <div class="pb-5">
+                  <p class="sp-hint text-[15px]">{item.answer}</p>
+                  {item.links && (
+                    <p class="mt-4 flex flex-wrap gap-2.5">
+                      {item.links.map((link) => (
+                        <a href={`${SITE.repo}${link.repoPath}`} class="sp-pill sp-pill-outline min-h-11 px-5 text-[15px]">
+                          {link.label}
+                          <Icon name="external" class="size-4" />
+                        </a>
+                      ))}
+                    </p>
+                  )}
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </section>
+    </div>
   </main>
 </Base>
 

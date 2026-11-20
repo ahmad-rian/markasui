@@ -4,7 +4,11 @@
  * list comes from /api/donate/supporters and is rendered with textContent only, never as HTML. CSP: every fetch is
  * same-origin (connect-src 'self'), and navigation is not limited by CSP.
  */
-import { SUPPORT_AMOUNT_PARAM, parseSupportAmount } from "../lib/support";
+import {
+  SUPPORTERS_SHOWN,
+  SUPPORT_AMOUNT_PARAM,
+  parseSupportAmount,
+} from "../lib/support";
 import { onPageLoad } from "./lifecycle";
 
 /** Same list as CHECKOUT_PREFIXES in deploy/donate/server.mjs. */
@@ -240,7 +244,7 @@ async function loadSupporters(root: HTMLElement) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const body = (await response.json()) as { supporters?: unknown };
     const supporters = Array.isArray(body.supporters)
-      ? body.supporters.filter(isSupporter)
+      ? body.supporters.filter(isSupporter).slice(0, SUPPORTERS_SHOWN)
       : [];
     if (!root.isConnected) return;
     list.replaceChildren(
@@ -248,7 +252,7 @@ async function loadSupporters(root: HTMLElement) {
         const item = template.content.firstElementChild!.cloneNode(
           true,
         ) as HTMLElement;
-        const name = supporter.name ?? root.dataset.anonymous ?? "";
+        const name = supporter.name || root.dataset.anonymous || "";
         item.querySelector("[data-initial]")!.textContent =
           [...name][0]?.toUpperCase() ?? "";
         item.querySelector("[data-name]")!.textContent = name;

@@ -8,9 +8,9 @@ import {
 } from "../../apps/docs/scripts/csp-policy.ts";
 
 /**
- * Floating "Buy me a coffee" card (apps/docs/src/components/CoffeeLauncher.astro, src/scripts/coffee.ts and
- * coffee-lottie.ts). It appears after a short delay on docs pages with a Lottie cup, opens a popover with amount
- * chips that link to /support?amount=, can be minimized to a round button for the visit, and hidden for 7 days.
+ * Floating "Buy me a coffee" card (apps/docs/src/components/CoffeeLauncher.astro and src/scripts/coffee.ts). It
+ * appears after a short delay on docs pages with a line-art cup, opens a popover with selectable amount cards whose
+ * button goes to /support?amount=, can be minimized to a round button for the visit, and hidden for 7 days.
  */
 const DOCS = "/docs/introduction";
 const HIDE_KEY = "markas-coffee-hidden-until";
@@ -21,12 +21,15 @@ const launcher = (page: Page) => page.locator("[data-coffee]");
 const toggle = (page: Page) => page.locator("[data-coffee-toggle]");
 const art = (page: Page) => page.locator("[data-coffee-art]");
 const minimize = (page: Page) => page.locator("[data-coffee-minimize]");
-/** The svg lottie-web renders next to the still placeholder cup. */
-const lottieSvg = (page: Page) => art(page).locator("svg:not(.coffee-still)");
-const placeholder = (page: Page) => art(page).locator("svg.coffee-still");
+const steam = (page: Page) => art(page).locator(".coffee-steam").first();
+const steamAnimation = (page: Page) =>
+  steam(page).evaluate((element) => {
+    const style = getComputedStyle(element);
+    return `${style.animationName} ${style.animationIterationCount}`;
+  });
 const COMPACT_SIZE = 56;
 const card = (page: Page) =>
-  page.getByRole("dialog", { name: /Support MarkasUI|Dukung MarkasUI/ });
+  page.getByRole("dialog", { name: /^(Buy a coffee|Traktir kopi)$/ });
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("markas-splash", "1"));
@@ -46,7 +49,7 @@ const activeId = (page: Page) =>
 test.describe("with motion", () => {
   test.use({ reducedMotion: "no-preference" });
 
-  test("appears after a short delay with a gentle entrance and an animated cup", async ({
+  test("appears after a short delay with a gentle entrance and rising steam", async ({
     page,
   }) => {
     await page.clock.install();
@@ -63,25 +66,10 @@ test.describe("with motion", () => {
       "Keep MarkasUI free",
     );
 
-    // The Lottie player and data load after the card shows, then replace the still cup.
-    await expect(art(page)).toHaveAttribute("data-lottie", "ready");
-    await expect(lottieSvg(page)).toBeVisible();
-    await expect(placeholder(page)).toBeHidden();
-    const frame = () => lottieSvg(page).evaluate((svg) => svg.innerHTML);
-    const first = await frame();
-    await page.clock.runFor(400);
-    expect(await frame()).not.toBe(first);
-  });
-
-  test("the steam rises a few times, then the cup rests", async ({ page }) => {
-    await openWithLauncher(page);
-    await expect(art(page)).toHaveAttribute("data-lottie", "ready");
-    const frame = () => lottieSvg(page).evaluate((svg) => svg.innerHTML);
-    // Three loops of 2.2 s each.
-    await page.clock.runFor(8000);
-    const rested = await frame();
-    await page.clock.runFor(1000);
-    expect(await frame()).toBe(rested);
+    // The steam rises three times once the card shows, then the cup rests; hovering plays it once more.
+    expect(await steamAnimation(page)).toBe("coffee-steam 3");
+    await toggle(page).hover();
+    expect(await steamAnimation(page)).toBe("coffee-steam-again 1");
   });
 
   test("appears early once the reader scrolls", async ({ page }) => {
@@ -147,7 +135,9 @@ test("works with the keyboard: focus moves in, Escape closes and returns focus",
   await page.keyboard.press("Tab");
   await expect(card(page).getByRole("button", { name: "Close" })).toBeFocused();
   await page.keyboard.press("Tab");
-  await expect(card(page).getByRole("link", { name: "Rp 10k" })).toBeFocused();
+  await expect(
+    card(page).getByRole("button", { name: "1 coffee Rp 10k" }),
+  ).toBeFocused();
 
   await page.keyboard.press("Escape");
   await expect(card(page)).toBeHidden();
@@ -162,27 +152,35 @@ test("works with the keyboard: focus moves in, Escape closes and returns focus",
   await expect(toggle(page)).toBeFocused();
 });
 
-test("amount chips link to /support?amount= and the support page preselects it", async ({
+test("amount cards pick the amount the button takes to /support, which preselects it", async ({
   page,
 }) => {
   await openWithLauncher(page);
   await toggle(page).click();
-  const chips = card(page).getByRole("list", { name: "Quick amounts" });
-  await expect(chips.getByRole("link")).toHaveText([
-    "Rp 10k",
-    "Rp 25k",
-    "Rp 50k",
-    "Rp 100k",
+  const group = card(page).getByRole("group", { name: "Quick amounts" });
+  await expect(group.getByRole("button")).toHaveText([
+    /1 coffee\s*Rp 10k/,
+    /2 coffees\s*Rp 25k/,
+    /Coffee \+ snack\s*Rp 50k/,
+    /Team round\s*Rp 100k/,
   ]);
-  await expect(chips.getByRole("link", { name: "Rp 10k" })).toHaveAttribute(
-    "href",
-    "/support?amount=10000",
+  const cta = card(page).getByRole("link", { name: "Buy me a coffee" });
+  await expect(group.getByRole("button", { name: /Rp 25k/ })).toHaveAttribute(
+    "aria-pressed",
+    "true",
   );
-  await expect(
-    card(page).getByRole("link", { name: "Buy me a coffee" }),
-  ).toHaveAttribute("href", "/support");
+  await expect(cta).toHaveAttribute("href", "/support?amount=25000");
 
-  await chips.getByRole("link", { name: "Rp 50k" }).click();
+  await group.getByRole("button", { name: /Rp 50k/ }).click();
+  await expect(group.getByRole("button", { name: /Rp 50k/ })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(group.locator("[aria-pressed=true]")).toHaveCount(1);
+  await expect(cta).toHaveAttribute("href", "/support?amount=50000");
+  await expect(card(page)).toBeVisible();
+
+  await cta.click();
   await expect(page).toHaveURL(/\/support\?amount=50000$/);
   await expect(page.getByLabel("Other amount", { exact: true })).toHaveValue(
     "50.000",
@@ -205,12 +203,12 @@ test("Indonesian card uses Indonesian text and /id/support links", async ({
   await expect(toggle(page)).toHaveAccessibleName("Traktir kopi");
   await toggle(page).click();
   await expect(card(page)).toContainText("MarkasUI gratis dan open source.");
-  const chip = card(page).getByRole("link", { name: "Rp 100rb" });
-  await expect(chip).toHaveAttribute("href", "/id/support?amount=100000");
-  await expect(
-    card(page).getByRole("link", { name: "Traktir kopi" }),
-  ).toHaveAttribute("href", "/id/support");
-  await chip.click();
+  await card(page)
+    .getByRole("button", { name: "Traktir tim Rp 100rb" })
+    .click();
+  const cta = card(page).getByRole("link", { name: "Traktir kopi" });
+  await expect(cta).toHaveAttribute("href", "/id/support?amount=100000");
+  await cta.click();
   await expect(page).toHaveURL(/\/id\/support\?amount=100000$/);
   await expect(page.getByLabel("Nominal lain", { exact: true })).toHaveValue(
     "100.000",
@@ -309,30 +307,16 @@ test("stays collapsed across client-side navigation, without duplicate listeners
   await expect(page.locator("[data-coffee]")).toHaveCount(1);
 });
 
-test("reduced motion: a still cup and no entrance motion", async ({ page }) => {
+test("reduced motion: still steam and no entrance motion", async ({ page }) => {
   // playwright.docs.config.ts emulates reduced motion for every test.
   await openWithLauncher(page);
-  await expect(art(page)).toHaveAttribute("data-lottie", "still");
-  await expect(lottieSvg(page)).toBeVisible();
-  const frame = () => lottieSvg(page).evaluate((svg) => svg.innerHTML);
-  const first = await frame();
-  await page.clock.runFor(1000);
-  expect(await frame()).toBe(first);
+  await expect(steam(page)).toBeVisible();
+  expect(await steamAnimation(page)).toMatch(/^none /);
   expect(
     await launcher(page).evaluate(
       (element) => getComputedStyle(element).transform,
     ),
   ).toBe("none");
-});
-
-test("keeps the still cup when the animation cannot load", async ({ page }) => {
-  await page.route("**/lottie/coffee.json", (route) =>
-    route.fulfill({ status: 404 }),
-  );
-  await openWithLauncher(page);
-  await expect(art(page)).toHaveAttribute("data-lottie", "error");
-  await expect(placeholder(page)).toBeVisible();
-  await expect(lottieSvg(page)).toHaveCount(0);
 });
 
 test("desktop: a readable card at the bottom right", async ({ page }) => {
@@ -426,7 +410,7 @@ test("the x minimizes it to a round button for the rest of the visit", async ({
   await fresh.close();
 });
 
-test("loads the animation without CSP violations", async ({
+test("opens without CSP violations or script errors", async ({
   page,
   context,
 }) => {
@@ -464,7 +448,8 @@ test("loads the animation without CSP violations", async ({
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await openWithLauncher(page);
-  await expect(art(page)).toHaveAttribute("data-lottie", /^(ready|still)$/);
+  await toggle(page).click();
+  await expect(card(page)).toBeVisible();
   expect(violations).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -479,8 +464,7 @@ test("small screens: a round button with the cup that fits 360 px and steps asid
   expect(box.height).toBe(COMPACT_SIZE);
   expect(box.x + box.width).toBeLessThanOrEqual(360 - 16);
   await expect(toggle(page)).toHaveAccessibleName("Buy me a coffee");
-  await expect(art(page)).toHaveAttribute("data-lottie", /^(ready|still)$/);
-  await expect(lottieSvg(page)).toBeVisible();
+  await expect(art(page)).toBeVisible();
   await expect(page.locator("[data-coffee] .coffee-sub")).toBeHidden();
   await expect(minimize(page)).toBeHidden();
 
@@ -566,13 +550,15 @@ for (const viewport of VIEWPORTS) {
       expect(sheet.x).toBe(SIDE_MARGIN);
       expect(sheet.width).toBe(width - 2 * SIDE_MARGIN);
       const tops = await card(page)
-        .locator(".coffee-chip")
+        .locator(".coffee-amount")
         .evaluateAll((chips) =>
           chips.map((chip) => chip.getBoundingClientRect().top),
         );
       expect(new Set(tops.map(Math.round)).size).toBe(2);
       const cta = (await card(page).locator(".coffee-cta").boundingBox())!;
-      const chips = (await card(page).locator(".coffee-chips").boundingBox())!;
+      const chips = (await card(page)
+        .locator(".coffee-amounts")
+        .boundingBox())!;
       expect(cta.width).toBe(chips.width);
     }
     if (round) {
@@ -695,7 +681,6 @@ for (const theme of ["light", "dark"] as const) {
       theme,
     );
     await openWithLauncher(page);
-    await expect(art(page)).toHaveAttribute("data-lottie", /^(ready|still)$/);
     const scan = async () =>
       (
         await new AxeBuilder({ page })

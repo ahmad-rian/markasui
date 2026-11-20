@@ -16,19 +16,19 @@ const copy = supportStrings(locale).cancel;
 ---
 
 <Base title={copy.seoTitle} description={copy.text} noindex>
-  <main id="konten" class="sp flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-16 sm:px-6 sm:py-24">
+  <main id="konten" class="sp flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-10 sm:px-6 sm:py-12">
     <div class="w-full max-w-2xl text-center">
-      <SupportArt name="cancel" class="mx-auto h-auto w-48 sm:w-60" />
-      <h1 class="sp-title mt-8 text-[2.25rem] sm:text-[3.25rem]">{copy.title}</h1>
+      <SupportArt name="cancel" class="mx-auto h-auto w-40 sm:w-48" />
+      <h1 class="sp-title mt-5 text-[2.25rem] sm:text-[3rem]">{copy.title}</h1>
       <p class="sp-lead mx-auto mt-5 max-w-xl">{copy.text}</p>
-      <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+      <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
         <a href={localePath(locale, SUPPORT_PATH)} class="sp-pill">
           <Icon name="coffee" class="size-5" />
           {copy.again}
         </a>
         <a href={localePath(locale, "/")} class="sp-pill sp-pill-outline">{copy.home}</a>
       </div>
-      <p class="mt-10 text-[15px] text-[var(--sp-muted)]">
+      <p class="mt-6 text-[15px] text-[var(--sp-muted)]">
         <a href={SITE.repo} class="inline-flex min-h-11 items-center gap-1.5 underline decoration-[var(--sp-rule)] decoration-2 underline-offset-4 hover:text-[var(--sp-ink)]">
           {copy.other}
           <Icon name="external" class="size-4" />

@@ -1,8 +1,8 @@
 /*
  * /support, /support/thanks and /support/cancel: their own art direction (an exception to the site style, like the
  * landing page). Two-colour hand-drawn line art in the site brand green on warm cream, a poster headline with one
- * Instrument Serif italic accent word, a deep green band with cream doodle stickers, outlined menu cards. A little
- * coral is allowed for sparkles only. Colours are page-scoped here, not component tokens.
+ * Instrument Serif italic accent word, outlined menu cards and a slim green sticker strip. A little coral is allowed
+ * for sparkles only. Colours are page-scoped here, not component tokens.
  */
 .sp {
   --sp-paper: #f7f1e6;
@@ -46,8 +46,8 @@
 
 /* Poster headline: heavy uppercase, one serif italic word. */
 .sp-title {
-  font-size: clamp(2.6rem, 0.9rem + 6.6vw, 6.25rem);
-  line-height: 0.92;
+  font-size: clamp(2.25rem, 1.5rem + 2.6vw, 3.75rem);
+  line-height: 0.95;
   font-weight: 800;
   letter-spacing: -0.035em;
   text-transform: uppercase;
@@ -66,16 +66,16 @@
   color: var(--sp-line);
 }
 .sp-h2 {
-  font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3rem);
-  line-height: 1.02;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  line-height: 1.1;
   font-weight: 750;
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
 .sp-lead {
   color: var(--sp-muted);
-  font-size: 18px;
-  line-height: 1.65;
+  font-size: 17px;
+  line-height: 1.6;
   text-wrap: pretty;
 }
 
@@ -165,68 +165,16 @@
   }
 }
 
-/* Deep green band with cream doodles. */
-.sp-band {
-  background: var(--sp-band);
-  color: #f4ede0;
-}
-.sp-band .sp-art {
-  color: #e9dcc3;
-}
-.sp-stickers {
-  display: flex;
-  justify-content: space-between;
-  gap: 28px;
-  overflow: hidden;
-}
-.sp-stickers > * {
-  width: 52px;
-  height: 52px;
-  flex: none;
-}
-.sp-stickers > :nth-child(3n + 1) {
-  transform: rotate(-12deg);
-}
-.sp-stickers > :nth-child(3n + 2) {
-  transform: rotate(9deg) translateY(6px);
-}
-.sp-stickers > :nth-child(3n) {
-  transform: rotate(-4deg) translateY(-4px);
-}
-.sp-sticker-word {
-  width: auto !important;
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-tag);
-  font-style: italic;
-  font-size: 34px;
-  line-height: 1;
-  color: #e9dcc3;
-}
-.sp-stat {
-  font-size: clamp(3rem, 2rem + 4vw, 5.5rem);
-  line-height: 0.9;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;
-}
-.sp-stat-label {
-  font-family: var(--font-tag);
-  font-style: italic;
-  font-size: 26px;
-  line-height: 1.1;
-  color: #e9dcc3;
-}
-
-/* Menu cards for the amounts. */
+/* Menu cards for the amounts: a small line drawing, the name and the price. Phones stack them; wider screens put
+   the drawing on the left. */
 .sp-menu {
-  display: flex;
-  min-height: 186px;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 22px;
+  display: grid;
+  grid-template-areas: "art" "name" "price";
+  justify-items: start;
+  align-items: center;
+  gap: 2px 12px;
+  padding: 10px 14px 11px;
+  border-radius: 16px;
   background: var(--sp-card);
   color: var(--sp-ink);
   text-align: left;
@@ -235,61 +183,63 @@
     background-color 150ms ease-out,
     transform 150ms ease-out;
 }
-.sp-menu:hover {
-  transform: translateY(-2px);
+@media (width >= 40rem) {
+  .sp-menu {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "art name" "art price";
+    padding: 12px 14px;
+  }
 }
 .sp-menu:active {
   transform: scale(0.98);
 }
-.sp-menu .sp-art {
-  width: 100%;
-  height: auto;
-  max-height: 72px;
+.sp-menu .sp-menu-art {
+  grid-area: art;
+  width: auto;
+  height: 24px;
+  margin-bottom: 4px;
+}
+@media (width >= 40rem) {
+  .sp-menu .sp-menu-art {
+    height: 26px;
+    margin-bottom: 0;
+  }
 }
 .sp-menu-name {
-  margin-top: auto;
+  grid-area: name;
   font-size: 15px;
   line-height: 20px;
   font-weight: 600;
 }
 .sp-tag {
-  align-self: flex-start;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  background: var(--sp-green);
-  color: #fbf6ec;
-  font-size: 16px;
-  line-height: 24px;
+  grid-area: price;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 700;
+  color: var(--sp-green);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .dark .sp-tag {
-  background: var(--sp-line);
-  color: var(--sp-on-green);
+  color: var(--sp-line);
 }
 .sp-menu[aria-pressed="true"] {
   background: var(--sp-green);
   color: #fbf6ec;
   box-shadow: inset 0 0 0 2px var(--sp-green);
 }
-.sp-menu[aria-pressed="true"] .sp-art {
-  color: #fbf6ec;
-}
+.sp-menu[aria-pressed="true"] .sp-art,
 .sp-menu[aria-pressed="true"] .sp-tag {
-  background: #fbf6ec;
-  color: var(--sp-green);
+  color: #fbf6ec;
 }
 .dark .sp-menu[aria-pressed="true"] {
   background: var(--sp-line);
   color: var(--sp-on-green);
   box-shadow: inset 0 0 0 2px var(--sp-line);
 }
-.dark .sp-menu[aria-pressed="true"] .sp-art {
-  color: var(--sp-on-green);
-}
+.dark .sp-menu[aria-pressed="true"] .sp-art,
 .dark .sp-menu[aria-pressed="true"] .sp-tag {
-  background: var(--sp-on-green);
-  color: var(--sp-line);
+  color: var(--sp-on-green);
 }
 .sp-menu:disabled {
   pointer-events: none;
@@ -298,13 +248,15 @@
 
 /* Order slip and fields. */
 .sp-slip {
-  border-radius: 26px;
+  border-radius: 24px;
   background: var(--sp-card);
   box-shadow: inset 0 0 0 2px var(--sp-line);
 }
 .sp-field {
   display: flex;
-  min-height: 50px;
+  /* Lets the field shrink in a grid column; an input's intrinsic width would otherwise push it out. */
+  min-width: 0;
+  min-height: 46px;
   width: 100%;
   align-items: center;
   gap: 8px;
@@ -333,8 +285,8 @@
   outline: none;
 }
 .sp-field > textarea {
-  min-height: 92px;
-  padding: 12px 0;
+  min-height: 64px;
+  padding: 10px 0;
   resize: vertical;
 }
 .sp-label {
@@ -342,8 +294,8 @@
   font-weight: 600;
 }
 .sp-hint {
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--sp-muted);
 }
 .sp-rule {
@@ -362,29 +314,62 @@
   letter-spacing: 0.06em;
 }
 
-/* How it works: big serif step numbers. */
-.sp-step-number {
-  font-family: var(--font-tag);
-  font-style: italic;
-  font-size: 64px;
-  line-height: 0.8;
-  color: var(--sp-green);
+/* Real numbers under the trust line: 106 components · 23 templates · 6 frameworks. */
+.sp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--sp-muted);
 }
-.dark .sp-step-number {
-  color: var(--sp-line);
+.sp-stats strong {
+  color: var(--sp-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.sp-stats li + li::before {
+  content: "·";
+  margin-right: 10px;
 }
 
-/* Supporters as little stickers. */
+/* Slim green strip with cream doodle stickers, one row, clipped at the edges. */
+.sp-band {
+  display: flex;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  overflow: hidden;
+  background: var(--sp-band);
+  white-space: nowrap;
+}
+.sp-band .sp-art {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  color: #e9dcc3;
+}
+.sp-band > :nth-child(3n + 1) {
+  transform: rotate(-12deg);
+}
+.sp-band > :nth-child(3n + 2) {
+  transform: rotate(9deg);
+}
+.sp-sticker-word {
+  flex: none;
+  font-family: var(--font-tag);
+  font-style: italic;
+  font-size: 26px;
+  line-height: 1;
+  color: #e9dcc3;
+}
+
+/* Supporters as little outlined cards. */
 .sp-sticker {
-  border-radius: 20px;
+  border-radius: 18px;
   background: var(--sp-card);
   box-shadow: inset 0 0 0 2px var(--sp-line);
-}
-.sp-sticker:nth-child(3n + 1) {
-  rotate: -0.8deg;
-}
-.sp-sticker:nth-child(3n + 2) {
-  rotate: 0.6deg;
 }
 .sp-initial {
   display: inline-flex;
@@ -455,8 +440,5 @@ details[open] .sp-plus::after {
   .sp-plus::before,
   .sp-plus::after {
     transition: none;
-  }
-  .sp-menu:hover {
-    transform: none;
   }
 }

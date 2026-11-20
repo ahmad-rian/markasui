@@ -1,12 +1,12 @@
 /**
  * Floating "Buy me a coffee" card (components/CoffeeLauncher.astro). The popover is native, so Escape, light
  * dismiss and returning focus to the launcher come from the browser. This script adds the one-time entrance (after
- * a short delay or a bit of scrolling), keeps aria-expanded in sync, moves focus into the popover, handles "hide for
- * 7 days" and the small x that shrinks the card to a round button for the rest of the visit, and starts the Lottie
- * cup (scripts/coffee-lottie.ts) once the launcher shows. With ClientRouter every page brings a fresh launcher
- * (closed); once it has appeared, later pages show it straight away without the entrance.
+ * a short delay or a bit of scrolling), keeps aria-expanded in sync, moves focus into the popover, points the button
+ * at the chosen amount (/support?amount=), handles "hide for 7 days" and the small x that shrinks the card to a round
+ * button for the rest of the visit. The cup's steam is CSS only. With ClientRouter every page brings a fresh
+ * launcher (closed); once it has appeared, later pages show it straight away without the entrance.
  */
-import { playCoffeeCup } from "./coffee-lottie";
+import { SUPPORT_AMOUNT_PARAM } from "../lib/support";
 import { onPageLoad } from "./lifecycle";
 
 const HIDE_KEY = "markas-coffee-hidden-until";
@@ -97,11 +97,24 @@ function reveal(instant = false) {
   entered = true;
   lastScrollY = scrollY;
   setBubble(true);
-  playCoffeeCup(element.querySelector<HTMLElement>("[data-coffee-art]")!);
 }
 
 function onScroll() {
   if (scrollY > SCROLL_THRESHOLD_PX) reveal();
+}
+
+/** Amount cards in the popover: one is pressed at a time, and the button links to /support with that amount. */
+function setupAmounts(card: HTMLElement) {
+  const cta = card.querySelector<HTMLAnchorElement>("[data-coffee-cta]")!;
+  const buttons = [
+    ...card.querySelectorAll<HTMLButtonElement>("[data-coffee-amount]"),
+  ];
+  for (const button of buttons)
+    button.addEventListener("click", () => {
+      for (const other of buttons)
+        other.setAttribute("aria-pressed", String(other === button));
+      cta.href = `${cta.dataset.base}?${SUPPORT_AMOUNT_PARAM}=${button.dataset.coffeeAmount}`;
+    });
 }
 
 function setup(element: HTMLElement) {
@@ -128,6 +141,7 @@ function setup(element: HTMLElement) {
       removeEventListener("scroll", closeOnScroll);
     }
   });
+  setupAmounts(card);
   element
     .querySelector<HTMLElement>("[data-coffee-hide]")!
     .addEventListener("click", () => {

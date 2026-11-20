@@ -1,47 +1,63 @@
 ---
 import CoffeeCup from "./CoffeeCup.astro";
 import Icon from "./Icon.astro";
+import SupportArt from "./support/SupportArt.astro";
 import { localePath, getLocale } from "../lib/i18n";
-import { SUPPORT_AMOUNT_PARAM, SUPPORT_PATH, SUPPORT_PRESETS, supportStrings } from "../lib/support";
+import { SUPPORT_AMOUNT_PARAM, SUPPORT_DEFAULT_AMOUNT, SUPPORT_PATH, SUPPORT_PRESETS, supportStrings } from "../lib/support";
 
 /**
  * Floating "Buy me a coffee" card at the bottom right of every docs page (Base.astro leaves it out on /support, the
- * 404 and other noindex pages). Closed: a card with a Lottie cup, title and subtitle that opens the popover; below
- * 640 px, or after the reader presses its x, a round button with the cup. The popover is native (Escape, light dismiss
- * and focus return come from the browser); scripts/coffee.ts handles the delayed entrance, aria-expanded, focus into
- * the popover, minimizing for the visit and the 7-day "hide"; scripts/coffee-lottie.ts plays the cup.
+ * 404 and other noindex pages), in the /support art direction: cream (light) or green-black (dark) with a thin green
+ * outline and green line art. Closed: a card with the line cup, title and subtitle that opens the popover; below
+ * 640 px, or after the reader presses its x, a round button with the cup. The popover holds the amounts as small
+ * menu cards; the chosen one goes to /support?amount=. The popover is native (Escape, light dismiss and focus return
+ * come from the browser); scripts/coffee.ts handles the delayed entrance, aria-expanded, focus into the popover, the
+ * amount choice, minimizing for the visit and the 7-day "hide".
  */
 const locale = getLocale(Astro.url);
 const copy = supportStrings(locale);
 const text = copy.launcher;
 const supportHref = localePath(locale, SUPPORT_PATH);
-const chips = SUPPORT_PRESETS.map((amount) => ({
-  href: `${supportHref}?${SUPPORT_AMOUNT_PARAM}=${amount}`,
-  label: `Rp ${amount / 1000}${text.thousand}`,
+const amountHref = (amount: number) => `${supportHref}?${SUPPORT_AMOUNT_PARAM}=${amount}`;
+const amounts = SUPPORT_PRESETS.map((amount, index) => ({
+  amount,
+  name: copy.tiers[index]!.label,
+  price: `Rp ${amount / 1000}${text.thousand}`,
 }));
 ---
 
 <div class="coffee" data-coffee data-state="idle">
   <div id="coffee-card" class="coffee-card" popover="auto" role="dialog" aria-labelledby="coffee-title" tabindex="-1" data-coffee-card>
     <div class="coffee-head">
-      <h2 id="coffee-title" class="coffee-title">{copy.title}</h2>
+      <div class="coffee-brewers" aria-hidden="true">
+        <SupportArt name="moka" />
+        <SupportArt name="press" />
+        <SupportArt name="pourover" />
+      </div>
       <button type="button" class="coffee-icon-button" popovertarget="coffee-card" popovertargetaction="hide" aria-label={text.close}>
         <Icon name="close" class="coffee-close-icon" />
       </button>
     </div>
+    <h2 id="coffee-title" class="coffee-title">
+      {text.title.before} <span class="coffee-accent">{text.title.accent}</span>
+    </h2>
     <p class="coffee-text">{text.text}</p>
-    <ul class="coffee-chips" aria-label={copy.presets}>
+    <div role="group" aria-label={copy.presets} class="coffee-amounts">
       {
-        chips.map((chip) => (
-          <li>
-            <a href={chip.href} class="coffee-chip">
-              {chip.label}
-            </a>
-          </li>
+        amounts.map((item) => (
+          <button
+            type="button"
+            class="coffee-amount"
+            aria-pressed={item.amount === SUPPORT_DEFAULT_AMOUNT ? "true" : "false"}
+            data-coffee-amount={item.amount}
+          >
+            <span class="coffee-amount-name">{item.name}</span>
+            <span class="coffee-amount-price">{item.price}</span>
+          </button>
         ))
       }
-    </ul>
-    <a href={supportHref} class="coffee-cta">
+    </div>
+    <a href={amountHref(SUPPORT_DEFAULT_AMOUNT)} class="coffee-cta" data-coffee-cta data-base={supportHref}>
       <Icon name="coffee" class="coffee-cta-icon" />
       {text.cta}
     </a>
@@ -73,6 +89,17 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
 
 <style is:global>
   .coffee {
+    /* The /support palette (src/styles/support.css), repeated here because docs pages do not load that file. */
+    --cf-paper: #f7f1e6;
+    --cf-card: #fffbf4;
+    --cf-ink: #14213d;
+    --cf-muted: #4d5a50;
+    --cf-line: #2e6b3a;
+    --cf-tile: #e7efe5;
+    --cf-button: var(--site-brand);
+    --cf-button-hover: var(--site-brand-strong);
+    --cf-on-button: #fbf6ec;
+    --cf-shadow: 0 14px 32px -8px rgb(20 33 20 / 0.22), 0 2px 6px rgb(20 33 20 / 0.08);
     --coffee-gap: 24px;
     /* Height of the launcher; the popover opens above it. */
     --coffee-launch-h: 88px;
@@ -85,6 +112,18 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     transition:
       opacity 500ms var(--ease-out-quint),
       transform 500ms var(--ease-out-quint);
+  }
+  .dark .coffee {
+    --cf-paper: #132018;
+    --cf-card: #0d1710;
+    --cf-ink: #f4ede0;
+    --cf-muted: #b8c2b5;
+    --cf-line: #7fbf8a;
+    --cf-tile: #1b2a1d;
+    --cf-button: #7fbf8a;
+    --cf-button-hover: #93cc9d;
+    --cf-on-button: #0d1710;
+    --cf-shadow: 0 14px 32px -8px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.3);
   }
   .coffee[hidden] {
     display: none;
@@ -120,36 +159,56 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     align-items: center;
     gap: 14px;
     padding: 12px 16px 12px 12px;
-    border-radius: 18px;
-    background: var(--color-surface);
-    color: var(--color-ink);
+    border-radius: 20px;
+    background: var(--cf-paper);
+    color: var(--cf-ink);
     text-align: left;
     box-shadow:
-      0 0 0 1px var(--color-line),
-      0 12px 32px rgb(0 0 0 / 0.1),
-      0 2px 6px rgb(0 0 0 / 0.05);
-    transition:
-      transform 200ms var(--ease-out-quint),
-      box-shadow 200ms var(--ease-out-quint);
+      inset 0 0 0 1.5px var(--cf-line),
+      var(--cf-shadow);
+    transition: transform 200ms var(--ease-out-quint);
   }
   .coffee-toggle:hover {
     transform: translateY(-2px);
-    box-shadow:
-      0 0 0 1px var(--color-brand-line),
-      0 16px 36px rgb(0 0 0 / 0.12),
-      0 2px 6px rgb(0 0 0 / 0.05);
   }
-  .coffee-toggle[aria-expanded="true"] {
-    box-shadow:
-      0 0 0 1px var(--color-brand-line),
-      0 12px 32px rgb(0 0 0 / 0.1),
-      0 2px 6px rgb(0 0 0 / 0.05);
-  }
-  .coffee-toggle .coffee-art {
+  .coffee-art {
+    display: block;
+    flex-shrink: 0;
     width: 64px;
     height: 64px;
-    padding: 4px;
+    padding: 6px;
     border-radius: 14px;
+    background: var(--cf-tile);
+    color: var(--cf-line);
+  }
+  .coffee-art > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  /* The steam rises a few times once the launcher shows, and once more on hover. */
+  .coffee[data-state="shown"] .coffee-steam {
+    animation: coffee-steam 2.4s ease-in-out 3;
+  }
+  .coffee[data-state="shown"] .coffee-toggle:hover .coffee-steam {
+    animation-name: coffee-steam-again;
+    animation-iteration-count: 1;
+  }
+  .coffee[data-state="shown"] .coffee-steam + .coffee-steam {
+    animation-delay: 0.6s;
+  }
+  @keyframes coffee-steam {
+    50% {
+      opacity: 0.25;
+      transform: translateY(-3px);
+    }
+  }
+  @keyframes coffee-steam-again {
+    50% {
+      opacity: 0.25;
+      transform: translateY(-3px);
+    }
   }
   .coffee-copy {
     display: grid;
@@ -159,7 +218,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
   .coffee-name {
     font-size: 15px;
     line-height: 20px;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: -0.01em;
   }
   /* Short enough for one line in English; longer translations wrap to a second line. */
@@ -168,7 +227,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     overflow: hidden;
     font-size: 13px;
     line-height: 17px;
-    color: var(--color-muted);
+    color: var(--cf-muted);
     text-wrap: balance;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -176,7 +235,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
   .coffee-chevron {
     width: 16px;
     height: 16px;
-    color: var(--color-muted);
+    color: var(--cf-line);
     transition: transform 200ms var(--ease-out-quint);
   }
   .coffee-toggle:hover .coffee-chevron {
@@ -197,17 +256,15 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    background: var(--color-surface);
-    color: var(--color-muted);
-    box-shadow:
-      0 0 0 1px var(--color-line),
-      0 2px 6px rgb(0 0 0 / 0.08);
+    background: var(--cf-paper);
+    color: var(--cf-muted);
+    box-shadow: inset 0 0 0 1.5px var(--cf-line);
     transition:
       opacity 150ms ease-out,
       color 150ms ease-out;
   }
   .coffee-minimize:hover {
-    color: var(--color-ink);
+    color: var(--cf-ink);
   }
   .coffee-minimize-icon {
     width: 14px;
@@ -227,14 +284,15 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     width: 56px;
     grid-template-columns: 48px;
     gap: 0;
-    padding: 3px;
+    padding: 4px;
     border-radius: 9999px;
   }
-  .coffee[data-compact] .coffee-toggle .coffee-art {
+  .coffee[data-compact] .coffee-art {
     width: 48px;
     height: 48px;
-    padding: 2px;
+    padding: 5px;
     border-radius: 9999px;
+    background: transparent;
   }
   .coffee[data-compact] .coffee-copy {
     position: absolute;
@@ -267,13 +325,12 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     overflow-y: auto;
     overscroll-behavior: contain;
     border: 0;
-    border-radius: 16px;
-    background: var(--color-surface);
-    color: var(--color-ink);
+    border-radius: 20px;
+    background: var(--cf-paper);
+    color: var(--cf-ink);
     box-shadow:
-      0 0 0 1px var(--color-line),
-      0 24px 48px -12px rgb(0 0 0 / 0.22),
-      0 4px 12px rgb(0 0 0 / 0.08);
+      inset 0 0 0 1.5px var(--cf-line),
+      var(--cf-shadow);
     outline: none;
   }
   .coffee-card:popover-open {
@@ -289,30 +346,54 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
   }
   .coffee-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
   }
+  .coffee-brewers {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    color: var(--cf-line);
+  }
+  .coffee-brewers > svg {
+    width: auto;
+    height: 44px;
+    overflow: visible;
+    /* Thicker than on /support, so the lines hold up at this size. */
+    stroke-width: 6;
+  }
+  .coffee-brewers .sp-fill {
+    fill: currentColor;
+  }
   .coffee-title {
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 600;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .coffee-accent {
+    font-family: var(--font-tag);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.2em;
     letter-spacing: -0.01em;
+    color: var(--cf-line);
   }
   .coffee-icon-button {
     display: inline-flex;
     width: 32px;
     height: 32px;
-    margin: -6px -6px -6px 0;
+    margin: -6px -6px 0 0;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    color: var(--color-muted);
+    border-radius: 9999px;
+    color: var(--cf-muted);
     transition: background-color 150ms ease-out;
   }
   .coffee-icon-button:hover {
-    background: var(--color-subtle);
-    color: var(--color-ink);
+    background: color-mix(in oklab, var(--cf-line) 12%, transparent);
+    color: var(--cf-ink);
   }
   .coffee-close-icon,
   .coffee-cta-icon {
@@ -320,62 +401,89 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     height: 16px;
   }
   .coffee-text {
+    margin-top: -6px;
     font-size: 14px;
-    line-height: 21px;
-    color: var(--color-muted);
+    line-height: 20px;
+    color: var(--cf-muted);
   }
-  .coffee-chips {
+  .coffee-amounts {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
-  .coffee-chip {
-    display: flex;
-    height: 36px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    border: 1px solid var(--color-line);
-    font-size: 13px;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+  .coffee-amount {
+    display: grid;
+    gap: 1px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: var(--cf-card);
+    color: var(--cf-ink);
+    text-align: left;
+    box-shadow: inset 0 0 0 1.5px var(--cf-line);
     transition:
       background-color 150ms ease-out,
-      border-color 150ms ease-out;
+      transform 150ms ease-out;
   }
-  .coffee-chip:hover {
-    border-color: var(--color-brand-line);
-    background: var(--color-brand-soft);
+  .coffee-amount:hover {
+    background: color-mix(in oklab, var(--cf-line) 10%, var(--cf-card));
+  }
+  .coffee-amount:active {
+    transform: scale(0.98);
+  }
+  .coffee-amount-name {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+  }
+  .coffee-amount-price {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 700;
+    color: var(--cf-line);
+    font-variant-numeric: tabular-nums;
+  }
+  .coffee-amount[aria-pressed="true"] {
+    background: var(--cf-button);
+    color: var(--cf-on-button);
+    box-shadow: inset 0 0 0 1.5px var(--cf-button);
+  }
+  .coffee-amount[aria-pressed="true"] .coffee-amount-price {
+    color: var(--cf-on-button);
   }
   .coffee-cta {
     display: inline-flex;
-    height: 40px;
+    height: 44px;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    border-radius: 10px;
-    background: var(--color-brand);
-    color: var(--color-on-brand);
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 150ms ease-out;
+    border-radius: 9999px;
+    background: var(--cf-button);
+    color: var(--cf-on-button);
+    font-size: 15px;
+    font-weight: 600;
+    transition:
+      background-color 150ms ease-out,
+      transform 150ms ease-out;
   }
   .coffee-cta:hover {
-    background: var(--color-brand-strong);
+    background: var(--cf-button-hover);
+  }
+  .coffee-cta:active {
+    transform: scale(0.98);
   }
   .coffee-hide {
     justify-self: center;
+    margin-top: -4px;
     padding: 2px 6px;
     border-radius: 6px;
     font-size: 13px;
-    color: var(--color-muted);
+    color: var(--cf-muted);
     text-decoration: underline;
-    text-decoration-color: var(--color-line);
+    text-decoration-color: color-mix(in oklab, var(--cf-muted) 40%, transparent);
     text-underline-offset: 3px;
   }
   .coffee-hide:hover {
-    color: var(--color-ink);
+    color: var(--cf-ink);
   }
 
   /* Phones (portrait or landscape) and other short screens: a round button with the cup and, to its left, a small
@@ -394,11 +502,12 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       padding: 4px;
       border-radius: 9999px;
     }
-    .coffee .coffee-toggle .coffee-art {
+    .coffee .coffee-art {
       width: 48px;
       height: 48px;
       padding: 5px;
       border-radius: 9999px;
+      background: transparent;
     }
     .coffee .coffee-copy {
       position: absolute;
@@ -409,13 +518,12 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       align-items: center;
       padding: 0 14px;
       border-radius: 9999px;
-      background: var(--color-surface);
-      color: var(--color-ink);
+      background: var(--cf-paper);
+      color: var(--cf-ink);
       white-space: nowrap;
       box-shadow:
-        0 0 0 1px var(--color-line),
-        0 8px 20px rgb(0 0 0 / 0.1),
-        0 1px 3px rgb(0 0 0 / 0.06);
+        inset 0 0 0 1.5px var(--cf-line),
+        var(--cf-shadow);
       transform: translateY(-50%);
       transition:
         opacity 250ms var(--ease-out-quint),
@@ -429,16 +537,16 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
       right: -5px;
       width: 10px;
       height: 10px;
-      border-top: 1px solid var(--color-line);
-      border-right: 1px solid var(--color-line);
-      background: var(--color-surface);
+      border-top: 1.5px solid var(--cf-line);
+      border-right: 1.5px solid var(--cf-line);
+      background: var(--cf-paper);
       clip-path: polygon(0 0, 100% 0, 100% 100%);
       transform: translateY(-50%) rotate(45deg);
     }
     .coffee .coffee-name {
       font-size: 14px;
       line-height: 20px;
-      font-weight: 500;
+      font-weight: 600;
     }
     .coffee .coffee-sub {
       display: none;
@@ -464,15 +572,14 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     .coffee-icon-button {
       width: 44px;
       height: 44px;
-      margin: -12px -12px -12px 0;
+      margin: -10px -10px 0 0;
     }
-    .coffee-chip {
-      height: 44px;
-      font-size: 14px;
+    .coffee-amount {
+      min-height: 52px;
+      align-content: center;
     }
     .coffee-cta {
       height: 48px;
-      font-size: 15px;
     }
     .coffee-hide {
       min-height: 44px;
@@ -481,55 +588,69 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     }
   }
 
-  /* Phones in portrait: a sheet with 16 px side margins above the button, amounts in a 2 x 2 grid. */
+  /* Phones in portrait: a sheet with 16 px side margins above the button. */
   @media (width < 40rem) {
     .coffee-card {
       left: calc(16px + env(safe-area-inset-left));
       width: auto;
       padding: 20px;
-      border-radius: 20px;
+      border-radius: 22px;
     }
     .coffee-card:popover-open {
-      gap: 16px;
+      gap: 14px;
     }
     .coffee-title {
-      font-size: 17px;
+      font-size: 22px;
+      line-height: 28px;
     }
     .coffee-text {
       font-size: 15px;
       line-height: 22px;
     }
-    .coffee-chips {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .coffee-chip {
-      font-size: 15px;
+    .coffee-amount-name,
+    .coffee-amount-price {
+      font-size: 14px;
+      line-height: 20px;
     }
   }
 
-  /* Phones in landscape: little height, so the popover keeps the amounts and buttons and drops the intro line. */
+  /* Phones in landscape: little height, so the popover drops the drawings and the intro line, keeps the close
+     button in the title's corner and lays the amounts out in one row. */
   @media (height < 32rem) {
+    .coffee-brewers,
     .coffee-text {
       display: none;
+    }
+    .coffee-head {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+    }
+    .coffee-title {
+      padding-right: 40px;
     }
   }
   /* Too short to stack above the button without reaching the header: open to its left, bottoms aligned. */
   @media (height < 32rem) and (width >= 40rem) {
+    .coffee-amounts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
     .coffee-card {
+      width: min(440px, calc(100vw - 2 * var(--coffee-gap) - var(--coffee-launch-h) - 12px));
       right: calc(var(--coffee-gap) + var(--coffee-launch-h) + 12px + env(safe-area-inset-right));
       bottom: calc(var(--coffee-gap) + env(safe-area-inset-bottom));
       max-height: calc(100dvh - var(--coffee-gap) - var(--coffee-header-room) - env(safe-area-inset-bottom));
     }
   }
 
-
   @media (prefers-reduced-motion: reduce) {
     .coffee,
     .coffee[data-state="idle"],
     .coffee-toggle,
     .coffee-toggle:hover,
-    .coffee-chevron {
+    .coffee-chevron,
+    .coffee-amount,
+    .coffee-cta {
       transition: none;
       transform: none;
     }
@@ -539,6 +660,7 @@ const chips = SUPPORT_PRESETS.map((amount) => ({
     .coffee .coffee-copy {
       transition: none;
     }
+    .coffee[data-state="shown"] .coffee-steam,
     .coffee-card:popover-open {
       animation: none;
     }

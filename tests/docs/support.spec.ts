@@ -294,8 +294,8 @@ test("amount cards show what each amount buys", async ({ page }) => {
   await expect(group.getByRole("button")).toHaveText([
     /1 coffee\s*Rp 10\.000/,
     /2 coffees\s*Rp 25\.000/,
-    /Coffee and a snack\s*Rp 50\.000/,
-    /Coffee for the team\s*Rp 100\.000/,
+    /Coffee \+ snack\s*Rp 50\.000/,
+    /Team round\s*Rp 100\.000/,
   ]);
 });
 
@@ -359,26 +359,61 @@ test.describe("supporters", () => {
     await page.reload();
     await expect(page.locator("[data-supporters-list] > li")).toHaveCount(1);
   });
+
+  test("shows at most six", async ({ page }) => {
+    await mockSupporters(page, {
+      supporters: Array.from({ length: 9 }, (_, index) => ({
+        name: `Supporter ${index + 1}`,
+        message: null,
+        date: "2026-11-19",
+      })),
+    });
+    await page.goto("/support");
+    const list = page.locator("[data-supporters-list] > li");
+    await expect(list).toHaveCount(6);
+    await expect(list.last()).toContainText("Supporter 6");
+  });
 });
 
-test("poster hero with brewer drawings, real repo numbers and FAQ", async ({
+test("desktop: poster beside the order card, the whole form in the first screen", async ({
   page,
 }) => {
   await mockSupporters(page, { supporters: [] });
+  await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/support");
-  await expect(
-    page.locator("main section").first().locator("svg.sp-art"),
-  ).toHaveCount(3);
-  const stats = page.locator(".sp-band li");
-  await expect(stats).toHaveText([
+  const order = page.locator("#order");
+  const title = (await order.getByRole("heading", { level: 1 }).boundingBox())!;
+  const form = (await order.locator("[data-support-form]").boundingBox())!;
+  const submit = (await page.locator("[data-support-submit]").boundingBox())!;
+  expect(form.x).toBeGreaterThan(title.x + title.width);
+  expect(submit.y + submit.height).toBeLessThanOrEqual(800);
+  await expect(order.locator("svg.sp-art").first()).toBeVisible();
+  await expect(order.locator(".sp-stats li")).toHaveText([
     /^\d{2,}\s*components$/,
     /^\d+\s*templates$/,
     /^6\s*frameworks$/,
   ]);
-  // Decorative stickers stay out of the accessibility tree.
-  for (const strip of await page.locator(".sp-stickers").all())
-    await expect(strip).toHaveAttribute("aria-hidden", "true");
+  await expect(order).toContainText("No account needed.");
+  // The sticker strip is decoration only.
+  await expect(page.locator(".sp-band")).toHaveAttribute("aria-hidden", "true");
+});
 
+test("phones: the amount cards follow the headline without a long scroll @mobile", async ({
+  page,
+}) => {
+  await mockSupporters(page, { supporters: [] });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/id/support");
+  const cards = (await page
+    .getByRole("group", { name: "Nominal cepat" })
+    .boundingBox())!;
+  expect(cards.y + cards.height).toBeLessThanOrEqual(844);
+});
+
+test("short FAQ with the GitHub links", async ({ page }) => {
+  await mockSupporters(page, { supporters: [] });
+  await page.goto("/support");
+  await expect(page.locator(".sp-faq details")).toHaveCount(3);
   const faq = page.locator("details", { hasText: "Will my name be public?" });
   await faq.locator("summary").click();
   await expect(faq).toContainText("The amount is never shown.");

@@ -24,10 +24,10 @@ const states = [
 ---
 
 <Base title={copy.seoTitle} description={copy.waiting} noindex>
-  <main id="konten" class="sp flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-16 sm:px-6 sm:py-24">
+  <main id="konten" class="sp flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-10 sm:px-6 sm:py-12">
     <div class="w-full max-w-2xl text-center">
-      <SupportArt name="thanks" class="mx-auto h-auto w-56 sm:w-72" />
-      <h1 class="sp-accent-word mt-6 text-6xl leading-none sm:text-8xl">{copy.title}</h1>
+      <SupportArt name="thanks" class="mx-auto h-auto w-40 sm:w-48" />
+      <h1 class="sp-accent-word mt-4 text-5xl leading-none sm:text-7xl">{copy.title}</h1>
       <div data-support-status="waiting" role="status" class="mx-auto mt-6 max-w-xl">
         {
           states.map(({ state, text, icon }) => (
@@ -39,7 +39,7 @@ const states = [
         }
       </div>
       <p class="sp-lead mx-auto mt-3 max-w-xl text-base">{copy.lead}</p>
-      <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+      <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
         <a href={localePath(locale, "/")} class="sp-pill">{copy.home}</a>
         <a href={`${localePath(locale, SUPPORT_PATH)}#supporters`} class="sp-pill sp-pill-outline">{copy.supporters}</a>
         <a href={localePath(locale, SUPPORT_PATH)} data-support-again hidden class="sp-pill sp-pill-outline [&[hidden]]:hidden">{copy.again}</a>

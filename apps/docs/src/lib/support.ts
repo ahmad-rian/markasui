@@ -15,6 +15,8 @@ export const SUPPORT_PATH = "/support";
 export const SUPPORT_AMOUNT_PARAM = "amount";
 /** Same-origin endpoint with the latest paid supporters (deploy/donate/server.mjs). */
 export const SUPPORTERS_ENDPOINT = "/api/donate/supporters";
+/** How many supporters /support shows; the endpoint may return more. */
+export const SUPPORTERS_SHOWN = 6;
 
 /** What each preset buys, drawn as small icons on its amount card (same order as SUPPORT_PRESETS). */
 export const SUPPORT_TIER_ICONS = [
@@ -45,17 +47,14 @@ const en = {
   seoTitle: "Support MarkasUI with a coffee",
   description:
     "MarkasUI is free and open source. Buy the JenderalCorp team a coffee with QRIS from any Indonesian e-wallet or banking app.",
-  lead: "MarkasUI is free and open source, built by a small team at JenderalCorp in Purwokerto. There are no paid tiers and no ads. If it saved you some time, a coffee pays for a few of the hours that go into the next release.",
+  lead: "MarkasUI is free and open source, with no paid tiers and no ads. A coffee pays for a few hours of the next release.",
   /** Poster headline: {before} <accent word in serif italic> {after}. */
   hero: { before: "Buy MarkasUI a", accent: "coffee", after: "" },
-  heroCta: "Choose your coffee",
-  /** Numbers on the green band, from the repo at build time. */
+  /** Real numbers under the headline, from the repo at build time. */
   stats: {
     components: "components",
     templates: "templates",
     frameworks: "frameworks",
-    caption:
-      "Your coffee funds new components and templates, keeps every framework in sync, and pays for docs in English and Indonesian.",
   },
   form: "Choose your coffee",
   amount: "Amount",
@@ -63,24 +62,25 @@ const en = {
   tiers: [
     { label: "1 coffee", phrase: "1 coffee" },
     { label: "2 coffees", phrase: "2 coffees" },
-    { label: "Coffee and a snack", phrase: "a coffee and a snack" },
-    { label: "Coffee for the team", phrase: "coffee for the whole team" },
+    { label: "Coffee + snack", phrase: "a coffee and a snack" },
+    { label: "Team round", phrase: "coffee for the whole team" },
   ],
   custom: "Other amount",
-  amountHint: `Any whole amount from ${MIN} to ${MAX}.`,
+  amountHint: `From ${MIN} to ${MAX}.`,
   /** {what} and {amount} are filled in by scripts/support.ts. */
   summaryPreset: "You are buying {what}, {amount}.",
   summaryCustom: "You are buying us coffee worth {amount}.",
   name: "Name",
-  nameHint:
-    "Optional. Shown with your message in the supporters list once the payment goes through. Leave it empty to appear as Anonymous.",
+  nameHint: "Optional. Empty shows Anonymous.",
   message: "Message",
-  messageHint: "Optional, up to 140 characters. Shown with your name.",
+  messageHint:
+    "Optional, up to 140 characters. Shown with your name once paid.",
   qrisBadge: "QRIS",
-  trust: "Secure checkout by Sumopod. No account needed.",
+  trust:
+    "Pay on Sumopod's checkout with any e-wallet or banking app. No account needed.",
   supporters: {
     title: "Supporters",
-    lead: "Recent coffees from people who use MarkasUI, with the name and message they chose. Amounts stay private.",
+    lead: "Recent coffees, with the name and message each person chose. Amounts stay private.",
     anonymous: "Anonymous",
     empty: "No coffees yet. Yours could be the first one here.",
     error: "The supporters list could not be loaded right now.",
@@ -91,22 +91,17 @@ const en = {
       {
         question: "Is the payment safe?",
         answer:
-          "You pay on Sumopod's checkout page with QRIS, using your own e-wallet or banking app. We never see your account or card details, only the amount and the name and message you type here.",
-      },
-      {
-        question: "Can I get a receipt?",
-        answer:
-          "Your e-wallet or banking app keeps the QRIS transaction with its reference number, which works as proof of payment. If you need something more formal, open an issue on GitHub and we will sort it out.",
+          "You pay with QRIS on Sumopod's checkout, in your own e-wallet or banking app, which also keeps the receipt. We only see the amount, name and message.",
       },
       {
         question: "Will my name be public?",
         answer:
-          "Only if the payment goes through, and only the name and message you typed. Leave the name empty to appear as Anonymous. The amount is never shown.",
+          "Only after the payment goes through, with the message you typed. Leave it empty to appear as Anonymous. The amount is never shown.",
       },
       {
         question: "Other ways to help",
         answer:
-          "A star on GitHub, sharing MarkasUI with your team, or reporting a bug helps just as much. Contributions are welcome too.",
+          "A star on GitHub, a bug report or sharing MarkasUI with your team helps just as much.",
         /** Paths under SITE.repo (lib/site.ts). */
         links: [
           { label: "Star on GitHub", repoPath: "" },
@@ -116,14 +111,6 @@ const en = {
           },
         ],
       },
-    ],
-  },
-  steps: {
-    title: "How it works",
-    items: [
-      "Choose an amount and, if you like, leave a name and a message.",
-      "Pay on Sumopod's checkout page by scanning the QRIS code with any Indonesian e-wallet or banking app. The code stays valid for one hour.",
-      "Done. Once the payment goes through, your name and message appear under Supporters.",
     ],
   },
   submit: "Buy me a coffee",
@@ -153,6 +140,8 @@ const en = {
   },
   launcher: {
     open: "Buy me a coffee",
+    /** Popover title: {before} <accent word in serif italic>. */
+    title: { before: "Buy a", accent: "coffee" },
     /** One line under the title on the floating card. */
     subtitle: "Keep MarkasUI free",
     /** The small x on the card: shrinks it to a round button for the rest of the visit. */
@@ -182,15 +171,12 @@ const id: SupportStrings = {
   seoTitle: "Dukung MarkasUI dengan secangkir kopi",
   description:
     "MarkasUI gratis dan open source. Traktir tim JenderalCorp kopi lewat QRIS dari e-wallet atau aplikasi bank mana pun.",
-  lead: "MarkasUI gratis dan open source, dibuat oleh tim kecil JenderalCorp di Purwokerto. Tidak ada paket berbayar dan tidak ada iklan. Kalau MarkasUI menghemat waktumu, secangkir kopi membiayai beberapa jam kerja untuk rilis berikutnya.",
+  lead: "MarkasUI gratis dan open source, tanpa paket berbayar dan tanpa iklan. Secangkir kopi membiayai beberapa jam kerja untuk rilis berikutnya.",
   hero: { before: "Traktir", accent: "kopi", after: "untuk MarkasUI" },
-  heroCta: "Pilih kopimu",
   stats: {
     components: "komponen",
     templates: "template",
     frameworks: "framework",
-    caption:
-      "Kopimu membiayai komponen dan template baru, menjaga semua framework tetap selaras, dan dokumentasi dalam bahasa Inggris dan Indonesia.",
   },
   form: "Pilih kopimu",
   amount: "Nominal",
@@ -202,19 +188,20 @@ const id: SupportStrings = {
     { label: "Traktir tim", phrase: "kopi untuk satu tim" },
   ],
   custom: "Nominal lain",
-  amountHint: `Nominal bulat berapa pun dari ${MIN} sampai ${MAX}.`,
+  amountHint: `Dari ${MIN} sampai ${MAX}.`,
   summaryPreset: "Kamu mentraktir {what}, {amount}.",
   summaryCustom: "Kamu mentraktir kopi senilai {amount}.",
   name: "Nama",
-  nameHint:
-    "Opsional. Tampil bersama pesanmu di daftar pendukung setelah pembayaran berhasil. Kosongkan untuk tampil sebagai Anonim.",
+  nameHint: "Opsional. Kosong tampil sebagai Anonim.",
   message: "Pesan",
-  messageHint: "Opsional, paling banyak 140 karakter. Tampil bersama namamu.",
+  messageHint:
+    "Opsional, paling banyak 140 karakter. Tampil bersama namamu setelah dibayar.",
   qrisBadge: "QRIS",
-  trust: "Checkout aman lewat Sumopod. Tanpa perlu akun.",
+  trust:
+    "Bayar di checkout Sumopod dengan e-wallet atau aplikasi bank apa pun. Tanpa akun.",
   supporters: {
     title: "Para pendukung",
-    lead: "Kopi terbaru dari pengguna MarkasUI, dengan nama dan pesan pilihan mereka. Nominal tidak ditampilkan.",
+    lead: "Kopi terbaru, dengan nama dan pesan pilihan masing-masing. Nominal tidak ditampilkan.",
     anonymous: "Anonim",
     empty: "Belum ada kopi. Kopimu bisa jadi yang pertama di sini.",
     error: "Daftar pendukung belum bisa dimuat sekarang.",
@@ -225,22 +212,17 @@ const id: SupportStrings = {
       {
         question: "Apakah pembayarannya aman?",
         answer:
-          "Kamu membayar di halaman checkout Sumopod dengan QRIS, memakai e-wallet atau aplikasi bank milikmu sendiri. Kami tidak pernah melihat data rekening atau kartumu, hanya nominal serta nama dan pesan yang kamu ketik di sini.",
-      },
-      {
-        question: "Bisakah saya mendapat bukti pembayaran?",
-        answer:
-          "E-wallet atau aplikasi bankmu menyimpan transaksi QRIS beserta nomor referensinya, dan itu bisa dipakai sebagai bukti bayar. Kalau butuh yang lebih formal, buka issue di GitHub dan kami bantu.",
+          "Kamu membayar dengan QRIS di checkout Sumopod, lewat e-wallet atau aplikasi bankmu sendiri yang juga menyimpan bukti bayarnya. Kami hanya melihat nominal, nama, dan pesan.",
       },
       {
         question: "Apakah nama saya akan tampil?",
         answer:
-          "Hanya kalau pembayaran berhasil, dan hanya nama serta pesan yang kamu ketik. Kosongkan nama untuk tampil sebagai Anonim. Nominal tidak pernah ditampilkan.",
+          "Hanya setelah pembayaran berhasil, bersama pesan yang kamu ketik. Kosongkan untuk tampil sebagai Anonim. Nominal tidak pernah ditampilkan.",
       },
       {
         question: "Cara lain untuk membantu",
         answer:
-          "Bintang di GitHub, membagikan MarkasUI ke timmu, atau melaporkan bug sama berartinya. Kontribusi juga sangat diterima.",
+          "Bintang di GitHub, laporan bug, atau membagikan MarkasUI ke timmu sama berartinya.",
         /** Paths under SITE.repo (lib/site.ts). */
         links: [
           { label: "Beri bintang di GitHub", repoPath: "" },
@@ -250,14 +232,6 @@ const id: SupportStrings = {
           },
         ],
       },
-    ],
-  },
-  steps: {
-    title: "Cara kerjanya",
-    items: [
-      "Pilih nominal, lalu kalau mau, tulis nama dan pesan.",
-      "Bayar di halaman checkout Sumopod dengan memindai kode QRIS memakai e-wallet atau aplikasi bank mana pun. Kode berlaku satu jam.",
-      "Selesai. Setelah pembayaran berhasil, nama dan pesanmu tampil di bagian Para pendukung.",
     ],
   },
   submit: "Traktir kopi",
@@ -287,6 +261,7 @@ const id: SupportStrings = {
   },
   launcher: {
     open: "Traktir kopi",
+    title: { before: "Traktir", accent: "kopi" },
     subtitle: "Dukung MarkasUI tetap gratis",
     minimize: "Perkecil",
     text: "MarkasUI gratis dan open source. Secangkir kopi membuatnya terus berjalan.",
