@@ -11,7 +11,7 @@ const headings = Astro.props.headings.filter((heading) => heading.depth === 2);
 
 {
   headings.length > 0 && (
-    <nav aria-labelledby="toc-title" class="sticky top-24 max-h-[calc(100dvh-12rem)] overflow-y-auto" data-toc>
+    <nav aria-labelledby="toc-title" class="sticky top-24 max-h-[calc(100dvh-14rem)] overflow-y-auto" data-toc>
       <h2 id="toc-title" class="mb-3 flex items-center gap-2 text-sm text-muted">
         <Icon name="list" class="size-4" />
         {t(getLocale(Astro.url)).toc}

@@ -68,6 +68,10 @@ const en = {
   },
   launcher: {
     open: "Buy me a coffee",
+    /** One line under the title on the floating card. */
+    subtitle: "Keep MarkasUI free",
+    /** The small x on the card: shrinks it to a round button for the rest of the visit. */
+    minimize: "Minimize",
     text: "MarkasUI is free and open source. A coffee keeps it going.",
     /** Suffix for the short amounts on the chips: Rp 10k. */
     thousand: "k",
@@ -126,6 +130,8 @@ const id: SupportStrings = {
   },
   launcher: {
     open: "Traktir kopi",
+    subtitle: "Dukung MarkasUI tetap gratis",
+    minimize: "Perkecil",
     text: "MarkasUI gratis dan open source. Secangkir kopi membuatnya terus berjalan.",
     thousand: "rb",
     cta: "Traktir kopi",

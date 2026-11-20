@@ -1,16 +1,20 @@
 /**
- * Floating "Buy me a coffee" card (components/CoffeeLauncher.astro). The card is a native popover, so Escape, light
- * dismiss and returning focus to the pill come from the browser. This script adds the one-time entrance (after a
- * short delay or a bit of scrolling), keeps aria-expanded in sync, moves focus into the card and handles "hide for
- * 7 days". With ClientRouter every page brings a fresh launcher (collapsed); once it has appeared, later pages show
- * it straight away without the entrance.
+ * Floating "Buy me a coffee" card (components/CoffeeLauncher.astro). The popover is native, so Escape, light
+ * dismiss and returning focus to the launcher come from the browser. This script adds the one-time entrance (after
+ * a short delay or a bit of scrolling), keeps aria-expanded in sync, moves focus into the popover, handles "hide for
+ * 7 days" and the small x that shrinks the card to a round button for the rest of the visit, and starts the Lottie
+ * cup (scripts/coffee-lottie.ts) once the launcher shows. With ClientRouter every page brings a fresh launcher
+ * (closed); once it has appeared, later pages show it straight away without the entrance.
  */
+import { playCoffeeCup } from "./coffee-lottie";
 import { onPageLoad } from "./lifecycle";
 
 const HIDE_KEY = "markas-coffee-hidden-until";
 const HIDE_MS = 7 * 24 * 60 * 60 * 1000;
 const ENTRANCE_DELAY_MS = 2000;
 const SCROLL_THRESHOLD_PX = 240;
+/** sessionStorage: the reader minimized the card, so it stays a round button until the tab closes. */
+const COMPACT_KEY = "markas-coffee-compact";
 
 let entered = false;
 let entranceTimer: ReturnType<typeof setTimeout> | undefined;
@@ -33,6 +37,22 @@ function dismiss() {
   }
 }
 
+function isCompact(): boolean {
+  try {
+    return sessionStorage.getItem(COMPACT_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function rememberCompact() {
+  try {
+    sessionStorage.setItem(COMPACT_KEY, "1");
+  } catch {
+    // Storage blocked: the card is minimized on this page only.
+  }
+}
+
 function stopWaiting() {
   clearTimeout(entranceTimer);
   removeEventListener("scroll", onScroll);
@@ -45,6 +65,7 @@ function reveal(instant = false) {
   if (instant) element.dataset.instant = "";
   element.dataset.state = "shown";
   entered = true;
+  playCoffeeCup(element.querySelector<HTMLElement>("[data-coffee-art]")!);
 }
 
 function onScroll() {
@@ -69,6 +90,13 @@ function setup(element: HTMLElement) {
       card.hidePopover();
       element.hidden = true;
     });
+  element
+    .querySelector<HTMLElement>("[data-coffee-minimize]")!
+    .addEventListener("click", () => {
+      rememberCompact();
+      element.dataset.compact = "";
+      toggle.focus();
+    });
 }
 
 onPageLoad(() => {
@@ -79,6 +107,7 @@ onPageLoad(() => {
     element.hidden = true;
     return;
   }
+  if (isCompact()) element.dataset.compact = "";
   setup(element);
   if (entered) return reveal(true);
   entranceTimer = setTimeout(reveal, ENTRANCE_DELAY_MS);
