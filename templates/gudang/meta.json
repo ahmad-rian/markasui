@@ -1,0 +1,35 @@
+{
+  "name": "gudang",
+  "accent": "sky",
+  "kind": "dashboard",
+  "title": "Gudang",
+  "headline": {
+    "en": "Inventory & Warehouse Dashboard",
+    "id": "Dashboard Inventori & Gudang"
+  },
+  "description": {
+    "en": "Gudang is an inventory and warehouse dashboard for distributors, retail chains, and small businesses: switch between warehouses, track stock value and reorder points, manage products, record stock movements, receive purchase orders, move shipments from picking to delivered, and review suppliers, reports, and settings.",
+    "id": "Gudang adalah dashboard inventori dan gudang untuk distributor, jaringan ritel, dan UMKM: berpindah antar gudang, pantau nilai stok dan titik pesan ulang, kelola produk, catat mutasi stok, terima purchase order, gerakkan pengiriman dari picking sampai terkirim, serta tinjau pemasok, laporan, dan pengaturan."
+  },
+  "sectors": {
+    "en": ["Distributors", "Retail chains", "Manufacturing"],
+    "id": ["Distributor", "Jaringan ritel", "Manufaktur"]
+  },
+  "components": [
+    "badge",
+    "button",
+    "checkbox",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "modal",
+    "popover",
+    "progress",
+    "select",
+    "switch",
+    "table",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-21"
+}

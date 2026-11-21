@@ -1,0 +1,34 @@
+{
+  "name": "sigap",
+  "accent": "rose",
+  "kind": "dashboard",
+  "title": "Sigap",
+  "headline": {
+    "en": "HR & Payroll Dashboard",
+    "id": "Dashboard HR & Payroll"
+  },
+  "description": {
+    "en": "Sigap is an HR, attendance, and payroll dashboard for Indonesian companies: today's headcount and attendance trend, a searchable employee directory, per-shift clock in and out with corrections, leave approvals with balances, a monthly payroll run with BPJS and PPh 21 payslips, a recruitment board, and company settings.",
+    "id": "Sigap adalah dashboard HR, absensi, dan payroll untuk perusahaan Indonesia: jumlah karyawan dan tren kehadiran hari ini, direktori karyawan yang bisa dicari, jam masuk dan pulang per shift beserta koreksinya, persetujuan cuti dengan saldonya, proses gaji bulanan dengan slip BPJS dan PPh 21, papan rekrutmen, dan pengaturan perusahaan."
+  },
+  "sectors": {
+    "en": ["HR teams", "Small businesses", "Factories & retail"],
+    "id": ["Tim HR", "UMKM", "Pabrik & ritel"]
+  },
+  "components": [
+    "badge",
+    "button",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "modal",
+    "popover",
+    "progress",
+    "select",
+    "switch",
+    "table",
+    "toast",
+    "toggle-group"
+  ],
+  "addedAt": "2026-11-21"
+}

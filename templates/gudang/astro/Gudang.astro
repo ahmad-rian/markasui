@@ -1,0 +1,1886 @@
+---
+/**
+ * Versi Astro: markup dirender di server, interaksi lewat custom element <gudang-template> di bawah.
+ * Tiap halaman dirender sekali per gudang di dalam <template> dan diklon saat dibuka, jadi state halaman
+ * selalu mulai dari awal (sama seperti React yang me-mount ulang) dan ganti gudang cukup mengklon ulang.
+ */
+import Badge from "../../../components/badge/Badge.astro";
+import Button from "../../../components/button/Button.astro";
+import Checkbox from "../../../components/checkbox/Checkbox.astro";
+import Drawer from "../../../components/drawer/Drawer.astro";
+import DropdownMenu, {
+  type DropdownMenuItem,
+} from "../../../components/dropdown-menu/DropdownMenu.astro";
+import Input from "../../../components/input/Input.astro";
+import Modal from "../../../components/modal/Modal.astro";
+import Popover from "../../../components/popover/Popover.astro";
+import Progress from "../../../components/progress/Progress.astro";
+import Select from "../../../components/select/Select.astro";
+import Switch from "../../../components/switch/Switch.astro";
+import Table from "../../../components/table/Table.astro";
+import Toaster from "../../../components/toast/Toast.astro";
+import ToggleGroup from "../../../components/toggle-group/ToggleGroup.astro";
+
+// prettier-ignore
+const icons = {
+  menu: "M4 6h16M4 12h16M4 18h16",
+  box: "M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8",
+  search: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16M21 21l-4.3-4.3",
+  bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0",
+  plus: "M12 5v14M5 12h14",
+  check: "m5 12.5 4.5 4.5L19 7.5",
+  sort: "m6 15 6-6 6 6",
+  next: "M5 12h14M13 6l6 6-6 6",
+  download: "M12 4v11M7 10l5 5 5-5M5 20h14",
+};
+type IconName = keyof typeof icons;
+
+// prettier-ignore
+const pages = {
+  overview: { label: "Overview", title: "Overview" },
+  products: { label: "Products", title: "Products" },
+  movements: { label: "Stock movements", title: "Stock movements" },
+  orders: { label: "Purchase orders", title: "Purchase orders" },
+  shipments: { label: "Shipments", title: "Shipments" },
+  suppliers: { label: "Suppliers", title: "Suppliers" },
+  reports: { label: "Reports", title: "Reports" },
+  settings: { label: "Settings", title: "Settings" },
+} as const;
+type PageId = keyof typeof pages;
+const pageIds = Object.keys(pages) as PageId[];
+const DEFAULT_PAGE: PageId = "overview";
+const TITLE_ID = "gudang-page-title";
+const PRODUCT_DRAWER = "gudang-product-drawer";
+const PRODUCT_MODAL = "gudang-product-modal";
+const ADJUST_MODAL = "gudang-adjust-modal";
+const CONTACT_MODAL = "gudang-contact-modal";
+const TODAY = "2026-11-20";
+const TODAY_LABEL = "Fri, 20 Nov 2026";
+const TAX_RATE = 0.11;
+const NEAR_CAPACITY = 90;
+
+/* Gudang */
+// prettier-ignore
+const warehouses = {
+  jkt: { label: "Jakarta", code: "JKT", site: "Cakung DC" },
+  sby: { label: "Surabaya", code: "SBY", site: "Rungkut DC" },
+  mdn: { label: "Medan", code: "MDN", site: "KIM Mabar DC" },
+};
+type Wh = keyof typeof warehouses;
+const whIds = Object.keys(warehouses) as Wh[];
+const DEFAULT_WH: Wh = "jkt";
+
+/* Produk: stok per gudang, harga pokok per satuan, titik pesan ulang per gudang. */
+type Product = {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  unit: string;
+  price: number;
+  reorder: number;
+  supplier: string;
+  stock: Record<Wh, number>;
+};
+// prettier-ignore
+const productList: Product[] = [
+  { id: "p1", sku: "BEV-1042", name: "Teh Melati Botol 450 ml", category: "Beverages", unit: "carton", price: 86000, reorder: 400, supplier: "s1", stock: { jkt: 1840, sby: 620, mdn: 310 } },
+  { id: "p2", sku: "BEV-1108", name: "Kopi Gayo Bubuk 250 g", category: "Beverages", unit: "carton", price: 412000, reorder: 150, supplier: "s2", stock: { jkt: 96, sby: 240, mdn: 180 } },
+  { id: "p3", sku: "STP-2015", name: "Beras Pandan Wangi 5 kg", category: "Staples", unit: "sack", price: 74500, reorder: 600, supplier: "s3", stock: { jkt: 2460, sby: 1380, mdn: 540 } },
+  { id: "p4", sku: "STP-2033", name: "Minyak Goreng Sawit 2 L", category: "Staples", unit: "carton", price: 198000, reorder: 300, supplier: "s4", stock: { jkt: 0, sby: 410, mdn: 265 } },
+  { id: "p5", sku: "STP-2071", name: "Gula Pasir 1 kg", category: "Staples", unit: "bale", price: 162000, reorder: 250, supplier: "s5", stock: { jkt: 730, sby: 190, mdn: 420 } },
+  { id: "p6", sku: "STP-2096", name: "Mi Instan Ayam Bawang", category: "Staples", unit: "carton", price: 108000, reorder: 500, supplier: "s3", stock: { jkt: 3120, sby: 1760, mdn: 0 } },
+  { id: "p7", sku: "HSH-3004", name: "Deterjen Bubuk 1,8 kg", category: "Household", unit: "carton", price: 236000, reorder: 200, supplier: "s6", stock: { jkt: 540, sby: 88, mdn: 230 } },
+  { id: "p8", sku: "HSH-3027", name: "Sabun Cuci Piring 800 ml", category: "Household", unit: "carton", price: 144000, reorder: 180, supplier: "s6", stock: { jkt: 410, sby: 372, mdn: 96 } },
+];
+const categories = ["Beverages", "Staples", "Household"];
+const SKU_PATTERN = /^[A-Z]{3}-\d{4}$/;
+// prettier-ignore
+const stockStatus = {
+  ok: { label: "In stock", variant: "success" },
+  low: { label: "Low stock", variant: "warning" },
+  out: { label: "Out of stock", variant: "danger" },
+} as const;
+// prettier-ignore
+const productColumns = [
+  { key: "name", label: "Product" }, { key: "category", label: "Category" },
+  { key: "jkt", label: "JKT" }, { key: "sby", label: "SBY" }, { key: "mdn", label: "MDN" },
+];
+
+/* Pemasok */
+// prettier-ignore
+const supplierList = [
+  { id: "s1", name: "PT Tirta Melati Abadi", city: "Bekasi", category: "Beverages", lead: 3, rating: 4.7, onTime: 96, contact: "Hendra Wijaya", phone: "+62 21 8840 1127", email: "hendra@tirtamelati.co.id" },
+  { id: "s2", name: "CV Gayo Lestari", city: "Takengon", category: "Beverages", lead: 9, rating: 4.4, onTime: 88, contact: "Cut Meutia", phone: "+62 643 2210 45", email: "meutia@gayolestari.id" },
+  { id: "s3", name: "PT Lumbung Pangan Nusantara", city: "Karawang", category: "Staples", lead: 4, rating: 4.8, onTime: 97, contact: "Bambang Sutrisno", phone: "+62 267 8455 310", email: "bambang@lumbungpangan.co.id" },
+  { id: "s4", name: "PT Sawit Makmur Sejati", city: "Dumai", category: "Staples", lead: 7, rating: 4.1, onTime: 82, contact: "Rina Siregar", phone: "+62 765 4390 882", email: "rina@sawitmakmur.co.id" },
+  { id: "s5", name: "PT Manis Jaya Rafinasi", city: "Cilegon", category: "Staples", lead: 5, rating: 4.5, onTime: 91, contact: "Yohanes Gunawan", phone: "+62 254 3981 204", email: "yohanes@manisjaya.co.id" },
+  { id: "s6", name: "PT Bersih Cemerlang", city: "Tangerang", category: "Household", lead: 2, rating: 4.6, onTime: 94, contact: "Dewi Lestari", phone: "+62 21 5577 0931", email: "dewi@bersihcemerlang.co.id" },
+];
+type Supplier = (typeof supplierList)[number];
+// prettier-ignore
+const supplierSorts = [
+  { value: "rating", label: "Highest rating" }, { value: "lead", label: "Shortest lead time" }, { value: "onTime", label: "Best on-time rate" },
+];
+
+/* Buku mutasi stok */
+// prettier-ignore
+const moveTypes = {
+  in: { label: "Inbound", variant: "success" },
+  out: { label: "Outbound", variant: "primary" },
+  transfer: { label: "Transfer", variant: "neutral" },
+  adjust: { label: "Adjustment", variant: "warning" },
+} as const;
+type MoveType = keyof typeof moveTypes;
+type Move = {
+  id: string;
+  wh: Wh;
+  date: string;
+  time: string;
+  type: MoveType;
+  product: string;
+  qty: number;
+  ref: string;
+  note: string;
+};
+// prettier-ignore
+const ledger: Move[] = [
+  { id: "m1", wh: "jkt", date: "2026-11-20", time: "09:42", type: "in", product: "p3", qty: 400, ref: "GRN-20418", note: "PO-2611-009 from Lumbung Pangan" },
+  { id: "m2", wh: "jkt", date: "2026-11-20", time: "08:15", type: "out", product: "p6", qty: -260, ref: "SO-48211", note: "Toko Sumber Rejeki, Bandung" },
+  { id: "m3", wh: "jkt", date: "2026-11-19", time: "16:30", type: "transfer", product: "p1", qty: -300, ref: "TRF-0312", note: "To Surabaya" },
+  { id: "m4", wh: "jkt", date: "2026-11-19", time: "11:05", type: "adjust", product: "p2", qty: -4, ref: "ADJ-0088", note: "Damaged in handling" },
+  { id: "m5", wh: "jkt", date: "2026-11-18", time: "14:20", type: "in", product: "p7", qty: 180, ref: "GRN-20402", note: "PO-2611-011 from Bersih Cemerlang" },
+  { id: "m6", wh: "jkt", date: "2026-11-17", time: "10:10", type: "out", product: "p5", qty: -120, ref: "SO-48190", note: "Koperasi Sejahtera, Serang" },
+  { id: "m7", wh: "sby", date: "2026-11-20", time: "10:20", type: "transfer", product: "p1", qty: 300, ref: "TRF-0312", note: "From Jakarta" },
+  { id: "m8", wh: "sby", date: "2026-11-20", time: "07:50", type: "out", product: "p3", qty: -210, ref: "SO-48214", note: "UD Tani Makmur, Malang" },
+  { id: "m9", wh: "sby", date: "2026-11-19", time: "15:10", type: "out", product: "p6", qty: -340, ref: "SO-48203", note: "Koperasi Karya Bakti, Gresik" },
+  { id: "m10", wh: "sby", date: "2026-11-18", time: "09:00", type: "adjust", product: "p7", qty: -6, ref: "ADJ-0087", note: "Cycle count variance" },
+  { id: "m11", wh: "sby", date: "2026-11-17", time: "13:45", type: "in", product: "p4", qty: 200, ref: "GRN-20395", note: "PO-2611-006 from Sawit Makmur" },
+  { id: "m12", wh: "sby", date: "2026-11-16", time: "11:30", type: "transfer", product: "p8", qty: -60, ref: "TRF-0309", note: "To Medan" },
+  { id: "m13", wh: "mdn", date: "2026-11-20", time: "11:15", type: "transfer", product: "p8", qty: 60, ref: "TRF-0309", note: "From Surabaya" },
+  { id: "m14", wh: "mdn", date: "2026-11-20", time: "08:40", type: "out", product: "p2", qty: -36, ref: "SO-48216", note: "Kedai Kopi Horas, Pematangsiantar" },
+  { id: "m15", wh: "mdn", date: "2026-11-19", time: "14:00", type: "out", product: "p6", qty: -150, ref: "SO-48205", note: "UD Maju Bersama, Pekanbaru" },
+  { id: "m16", wh: "mdn", date: "2026-11-18", time: "10:30", type: "adjust", product: "p4", qty: 12, ref: "ADJ-0086", note: "Found during cycle count" },
+  { id: "m17", wh: "mdn", date: "2026-11-17", time: "09:20", type: "in", product: "p5", qty: 160, ref: "GRN-20391", note: "PO-2611-004 from Manis Jaya" },
+  { id: "m18", wh: "mdn", date: "2026-11-16", time: "15:00", type: "out", product: "p1", qty: -90, ref: "SO-48177", note: "Toko Harapan, Padang" },
+];
+// prettier-ignore
+const moveFilters = [
+  { value: "all", label: "All" }, { value: "in", label: "Inbound" }, { value: "out", label: "Outbound" },
+  { value: "transfer", label: "Transfer" }, { value: "adjust", label: "Adjustment" },
+];
+const reasons = ["Cycle count", "Damaged", "Expired", "Found stock"];
+const ADJUST_TIME = "14:05";
+const NEXT_ADJUSTMENT = 89;
+
+/* Arus barang 7 hari terakhir: [masuk, keluar] dalam unit, hari terakhir = hari ini. */
+const days = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+// prettier-ignore
+const flows: Record<Wh, number[][]> = {
+  jkt: [[820, 760], [540, 610], [1100, 910], [760, 1020], [1310, 990], [890, 1140], [1240, 986]],
+  sby: [[480, 520], [310, 290], [690, 640], [850, 700], [560, 780], [640, 590], [720, 815]],
+  mdn: [[260, 240], [120, 180], [380, 310], [300, 420], [450, 330], [340, 290], [410, 362]],
+};
+const AXIS_STEP = 500;
+// prettier-ignore
+const seriesOptions = [
+  { value: "both", label: "Both" }, { value: "in", label: "Inbound" }, { value: "out", label: "Outbound" },
+];
+// prettier-ignore
+const zones: Record<Wh, { label: string; value: number }[]> = {
+  jkt: [{ label: "Zone A, ambient racking", value: 78 }, { label: "Zone B, cold room", value: 64 }, { label: "Zone C, bulk floor", value: 92 }, { label: "Zone D, staging dock", value: 41 }],
+  sby: [{ label: "Zone A, ambient racking", value: 66 }, { label: "Zone B, cold room", value: 48 }, { label: "Zone C, bulk floor", value: 73 }, { label: "Zone D, staging dock", value: 57 }],
+  mdn: [{ label: "Zone A, ambient racking", value: 52 }, { label: "Zone B, cold room", value: 95 }, { label: "Zone C, bulk floor", value: 61 }, { label: "Zone D, staging dock", value: 34 }],
+};
+
+/* Purchase order */
+const poSteps = ["draft", "sent", "received"] as const;
+type PoStatus = (typeof poSteps)[number];
+// prettier-ignore
+const poStatus = {
+  draft: { label: "Draft", variant: "neutral", action: "Send to supplier", done: "Sent to supplier" },
+  sent: { label: "Sent", variant: "primary", action: "Receive goods", done: "Goods received" },
+  received: { label: "Received", variant: "success", action: "", done: "" },
+} as const;
+// prettier-ignore
+const orderList: { id: string; wh: Wh; supplier: string; status: PoStatus; eta: string; lines: { product: string; qty: number }[] }[] = [
+  { id: "PO-2611-014", wh: "jkt", supplier: "s3", status: "sent", eta: "21 Nov 2026", lines: [{ product: "p3", qty: 400 }, { product: "p6", qty: 600 }] },
+  { id: "PO-2611-015", wh: "jkt", supplier: "s4", status: "draft", eta: "24 Nov 2026", lines: [{ product: "p4", qty: 300 }] },
+  { id: "PO-2611-011", wh: "jkt", supplier: "s6", status: "received", eta: "18 Nov 2026", lines: [{ product: "p7", qty: 180 }, { product: "p8", qty: 120 }] },
+  { id: "PO-2611-013", wh: "sby", supplier: "s5", status: "sent", eta: "22 Nov 2026", lines: [{ product: "p5", qty: 240 }] },
+  { id: "PO-2611-012", wh: "sby", supplier: "s6", status: "draft", eta: "25 Nov 2026", lines: [{ product: "p7", qty: 200 }, { product: "p8", qty: 90 }] },
+  { id: "PO-2611-006", wh: "sby", supplier: "s4", status: "received", eta: "17 Nov 2026", lines: [{ product: "p4", qty: 200 }] },
+  { id: "PO-2611-016", wh: "mdn", supplier: "s3", status: "sent", eta: "23 Nov 2026", lines: [{ product: "p6", qty: 500 }, { product: "p3", qty: 300 }] },
+  { id: "PO-2611-017", wh: "mdn", supplier: "s1", status: "draft", eta: "26 Nov 2026", lines: [{ product: "p1", qty: 360 }] },
+  { id: "PO-2611-004", wh: "mdn", supplier: "s5", status: "received", eta: "17 Nov 2026", lines: [{ product: "p5", qty: 160 }] },
+];
+type Order = (typeof orderList)[number];
+// prettier-ignore
+const orderFilters = [
+  { value: "all", label: "All" }, { value: "draft", label: "Draft" }, { value: "sent", label: "Sent" }, { value: "received", label: "Received" },
+];
+// prettier-ignore
+const lineColumns = [
+  { key: "item", label: "Item" }, { key: "qty", label: "Qty", align: "right" }, { key: "cost", label: "Unit cost", align: "right" },
+  { key: "subtotal", label: "Subtotal", align: "right" }, { key: "onHand", label: "On hand", align: "right" },
+] satisfies { key: string; label: string; align?: "right" }[];
+
+/* Pengiriman keluar */
+const stages = ["Picking", "Packed", "Shipped", "Delivered"];
+// prettier-ignore
+const shipmentList: { id: string; wh: Wh; customer: string; city: string; items: number; courier: string; tracking: string; stage: string }[] = [
+  { id: "SO-48211", wh: "jkt", customer: "Toko Sumber Rejeki", city: "Bandung", items: 26, courier: "JNE Trucking", tracking: "JN3390127761", stage: "Picking" },
+  { id: "SO-48212", wh: "jkt", customer: "Mitra Swalayan", city: "Bogor", items: 48, courier: "Armada Gudang", tracking: "AG-B-9214-TXA", stage: "Picking" },
+  { id: "SO-48208", wh: "jkt", customer: "CV Berkah Abadi", city: "Semarang", items: 32, courier: "SiCepat Cargo", tracking: "SC8821904417", stage: "Packed" },
+  { id: "SO-48201", wh: "jkt", customer: "Toko Anugerah", city: "Cirebon", items: 18, courier: "J&T Cargo", tracking: "JT5510982236", stage: "Shipped" },
+  { id: "SO-48190", wh: "jkt", customer: "Koperasi Sejahtera", city: "Serang", items: 12, courier: "JNE Trucking", tracking: "JN3390127754", stage: "Delivered" },
+  { id: "SO-48214", wh: "sby", customer: "UD Tani Makmur", city: "Malang", items: 21, courier: "Armada Gudang", tracking: "AG-L-7730-KC", stage: "Picking" },
+  { id: "SO-48213", wh: "sby", customer: "Toko Barokah", city: "Kediri", items: 15, courier: "SiCepat Cargo", tracking: "SC8821904455", stage: "Packed" },
+  { id: "SO-48209", wh: "sby", customer: "Swalayan Delta", city: "Sidoarjo", items: 40, courier: "J&T Cargo", tracking: "JT5510982301", stage: "Packed" },
+  { id: "SO-48203", wh: "sby", customer: "Koperasi Karya Bakti", city: "Gresik", items: 34, courier: "JNE Trucking", tracking: "JN3390127702", stage: "Shipped" },
+  { id: "SO-48195", wh: "sby", customer: "Toko Lestari", city: "Madiun", items: 9, courier: "SiCepat Cargo", tracking: "SC8821904380", stage: "Delivered" },
+  { id: "SO-48216", wh: "mdn", customer: "Kedai Kopi Horas", city: "Pematangsiantar", items: 6, courier: "JNE Trucking", tracking: "JN3390127790", stage: "Picking" },
+  { id: "SO-48215", wh: "mdn", customer: "Toko Sinar Deli", city: "Binjai", items: 22, courier: "Armada Gudang", tracking: "AG-BK-8102-MD", stage: "Picking" },
+  { id: "SO-48210", wh: "mdn", customer: "Minimarket Tapian", city: "Tebing Tinggi", items: 14, courier: "J&T Cargo", tracking: "JT5510982340", stage: "Packed" },
+  { id: "SO-48205", wh: "mdn", customer: "UD Maju Bersama", city: "Pekanbaru", items: 30, courier: "SiCepat Cargo", tracking: "SC8821904402", stage: "Shipped" },
+  { id: "SO-48177", wh: "mdn", customer: "Toko Harapan", city: "Padang", items: 11, courier: "JNE Trucking", tracking: "JN3390127688", stage: "Delivered" },
+];
+type Shipment = (typeof shipmentList)[number];
+const couriers = [
+  "JNE Trucking",
+  "SiCepat Cargo",
+  "J&T Cargo",
+  "Armada Gudang",
+];
+
+/* Laporan: porsi umur stok (%) dan produk terlaris 30 hari (unit). */
+const ageBuckets = [
+  "0 to 30 days",
+  "31 to 60 days",
+  "61 to 90 days",
+  "Over 90 days",
+];
+// prettier-ignore
+const ageing: Record<Wh, number[]> = { jkt: [58, 24, 12, 6], sby: [49, 28, 15, 8], mdn: [44, 27, 17, 12] };
+// prettier-ignore
+const movers: Record<Wh, { product: string; units: number }[]> = {
+  jkt: [{ product: "p6", units: 4180 }, { product: "p3", units: 3350 }, { product: "p1", units: 2920 }, { product: "p5", units: 1460 }, { product: "p7", units: 980 }],
+  sby: [{ product: "p3", units: 2740 }, { product: "p6", units: 2510 }, { product: "p1", units: 1630 }, { product: "p4", units: 1120 }, { product: "p8", units: 640 }],
+  mdn: [{ product: "p6", units: 1980 }, { product: "p5", units: 1210 }, { product: "p3", units: 1090 }, { product: "p2", units: 520 }, { product: "p1", units: 470 }],
+};
+// prettier-ignore
+const periods = [{ value: "30", label: "30 days" }, { value: "90", label: "90 days" }];
+const QUARTER_FACTOR = 2.8;
+const exportFormats = ["CSV", "PDF"];
+
+/* Pengaturan */
+const stockUnits = ["Carton", "Pallet", "Piece"];
+const weightUnits = ["Kilogram", "Ton"];
+// prettier-ignore
+const alerts = [
+  { key: "low", label: "Low stock alerts", hint: "When an item drops below its reorder point" },
+  { key: "delay", label: "Inbound delays", hint: "When a purchase order misses its arrival date" },
+  { key: "exception", label: "Shipment exceptions", hint: "Failed pickups and returned parcels" },
+  { key: "digest", label: "Daily summary email", hint: "Sent at 07:00 to warehouse managers" },
+];
+const defaultAlerts = ["low", "delay", "exception"];
+const SAFETY_DEFAULT = "14";
+const SAFETY_MAX = 90;
+
+/* Topbar */
+const USER = {
+  name: "Rudi Hartono",
+  initials: "RH",
+  role: "Warehouse manager",
+};
+// prettier-ignore
+const notices = [
+  { title: "Minyak Goreng Sawit 2 L is out of stock in Jakarta", time: "12 minutes ago" },
+  { title: "PO-2611-014 from Lumbung Pangan arrives tomorrow", time: "1 hour ago" },
+  { title: "SO-48190 was delivered to Koperasi Sejahtera", time: "Yesterday, 16:20" },
+];
+// prettier-ignore
+const userMenu: DropdownMenuItem[] = [
+  { label: "Profile", value: "Profile" }, { label: "Team members", value: "Team members" },
+  { separator: true }, { label: "Sign out", value: "Sign out" },
+];
+
+/* Gaya */
+const shell = "min-h-dvh bg-canvas text-ink";
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const iconButton = `inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-ink transition-colors duration-150 hover:bg-subtle ${focusRing}`;
+const whGroup =
+  "flex shrink-0 items-center gap-0.5 rounded-lg bg-subtle p-0.5 max-sm:order-last max-sm:w-full";
+const whBase = `inline-flex h-9 items-center justify-center rounded-md px-2.5 max-sm:flex-1 text-sm font-medium whitespace-nowrap transition-colors duration-150 ${focusRing}`;
+const whOn = "bg-surface text-ink ring-1 ring-line";
+const whOff = "text-muted hover:text-ink";
+const tabBase = `inline-flex h-11 items-center border-b-2 px-3 text-sm whitespace-nowrap transition-colors duration-150 ${focusRing}`;
+const tabOn = "border-primary font-medium text-ink";
+const tabOff = "border-transparent text-muted hover:text-ink";
+const menuItem = `flex h-10 w-full items-center rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150 ${focusRing}`;
+const menuOn = "bg-primary-soft text-primary";
+const menuOff = "text-ink hover:bg-subtle";
+const bellTrigger = "[&>button]:relative [&>button]:size-10 [&>button]:px-0";
+const userTrigger = "[&>button]:gap-1.5 [&>button]:px-1.5";
+const userFace =
+  "inline-flex size-7 items-center justify-center rounded-md bg-primary text-xs font-semibold text-on-primary";
+const card = "rounded-xl border border-line bg-surface";
+const cardHead =
+  "flex min-h-14 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line px-4 py-2.5";
+const cardTitle = "text-sm font-semibold";
+const toolbar = "flex flex-wrap items-center gap-2";
+const toolbarEnd = "flex flex-wrap items-center gap-2 sm:ml-auto";
+const scroller = "overflow-x-auto";
+const table = "w-full border-collapse text-sm";
+const th =
+  "h-10 border-b border-line bg-subtle px-4 text-left text-xs font-medium whitespace-nowrap text-muted";
+const td = "border-b border-line px-4 py-2.5 whitespace-nowrap";
+const sortButton = `-mx-1 inline-flex h-7 items-center gap-1 rounded-sm px-1 hover:text-ink ${focusRing}`;
+const mono = "font-mono text-xs text-muted";
+const linkButton = `rounded-sm text-left font-medium hover:underline ${focusRing}`;
+const kpiGrid =
+  "grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line";
+const kpiCell = "grid content-start gap-1 bg-surface p-4";
+const kpiValue = "text-2xl font-semibold tracking-tight tabular-nums";
+const bar = "w-full max-w-6 rounded-t-sm";
+const barIn = "bg-primary";
+const barOut = "bg-primary-line";
+const legendDot = "size-2 rounded-xs";
+const warnBar =
+  "[&::-moz-progress-bar]:bg-warning [&::-webkit-progress-value]:bg-warning";
+const stepDot =
+  "flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold";
+const stepDone = "border-primary bg-primary text-on-primary";
+const stepNow = "border-primary text-primary";
+const stepNext = "border-line text-muted";
+const orderItem = `grid w-full gap-1 border-b border-line px-4 py-3 text-left transition-colors duration-150 last:border-b-0 ${focusRing} -outline-offset-2`;
+const orderOn = "bg-primary-soft";
+const orderOff = "hover:bg-subtle";
+const meter = "h-2 overflow-hidden rounded-full bg-subtle";
+const fieldGrid = "grid items-start gap-4 sm:grid-cols-2";
+const formFooter = "flex flex-wrap justify-end gap-2 pt-2";
+
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+const num = (value: number) => value.toLocaleString("id-ID");
+const signed = (value: number) => `${value > 0 ? "+" : ""}${num(value)}`;
+const rupiah = (value: number) => `Rp ${num(value)}`;
+/** Rupiah ringkas untuk angka besar: miliar (M) atau juta (jt). */
+const compact = (value: number) =>
+  value >= 1e9
+    ? `Rp ${(value / 1e9).toFixed(2).replace(".", ",")} M`
+    : `Rp ${(value / 1e6).toFixed(1).replace(".", ",")} jt`;
+const plural = (count: number, word: string) =>
+  `${count} ${word}${count === 1 ? "" : "s"}`;
+/** "2026-11-20" menjadi "20 Nov". */
+const shortDate = (iso: string) =>
+  `${Number(iso.slice(8))} ${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][Number(iso.slice(5, 7)) - 1]}`;
+const productById = (id: string) => productList.find((item) => item.id === id)!;
+const supplierById = (id: string) =>
+  supplierList.find((item) => item.id === id)!;
+const statusOf = (product: Product, wh: Wh) =>
+  product.stock[wh] === 0
+    ? "out"
+    : product.stock[wh] <= product.reorder
+      ? "low"
+      : "ok";
+const stockValue = (wh: Wh) =>
+  productList.reduce((sum, item) => sum + item.stock[wh] * item.price, 0);
+const orderTotal = (order: Order) =>
+  order.lines.reduce(
+    (sum, line) => sum + line.qty * productById(line.product).price,
+    0,
+  );
+const toggleIn = (list: string[], id: string) =>
+  list.includes(id) ? list.filter((item) => item !== id) : [...list, id];
+
+const emptyProduct = { name: "", sku: "", category: categories[0]!, stock: "" };
+const emptyAdjustment = { product: "p1", qty: "", reason: reasons[0]! };
+
+/** Ikon garis 24px sebagai string HTML (dipakai lewat set:html). */
+const icon = (name: IconName, className = "size-5", attrs = "") =>
+  `<svg class="${className}" ${attrs} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[name]}" /></svg>`;
+/** Tinggi batang grafik; dihitung di sini karena "/" di dalam atribut membingungkan pemeriksa tipe Astro. */
+const heightOf = (units: number, max: number) =>
+  `height: ${(units / max) * 100}%`;
+const QTY_HINT = "Negative writes stock off";
+const SAFETY_HINT = "Days of average demand kept as a buffer";
+const errorText = "text-sm text-danger";
+const hintText = "text-sm text-muted";
+const contextOf = (wh: Wh) =>
+  `${warehouses[wh].label} · ${warehouses[wh].site} · ${TODAY_LABEL}`;
+/** Halaman yang isinya sama di semua gudang dirender sekali saja. */
+const sharedPages: PageId[] = ["suppliers", "settings"];
+// Halaman bawaan dirender langsung (tanpa JS tetap tampil), lalu semua halaman sebagai <template>.
+const views = [
+  { live: true, id: DEFAULT_PAGE, wh: DEFAULT_WH, scope: "" },
+  ...pageIds.flatMap((id) =>
+    sharedPages.includes(id)
+      ? [{ live: false, id, wh: DEFAULT_WH, scope: "all" }]
+      : whIds.map((wh) => ({ live: false, id, wh, scope: wh as string })),
+  ),
+];
+
+/** Data dan class yang dipakai script di klien. */
+const config = JSON.stringify({
+  pages,
+  defaultPage: DEFAULT_PAGE,
+  defaultWh: DEFAULT_WH,
+  titleId: TITLE_ID,
+  ids: { drawer: PRODUCT_DRAWER, product: PRODUCT_MODAL, adjust: ADJUST_MODAL, contact: CONTACT_MODAL },
+  contexts: Object.fromEntries(whIds.map((wh) => [wh, contextOf(wh)])),
+  warehouses,
+  today: TODAY,
+  adjustDate: `${shortDate(TODAY)}, ${ADJUST_TIME}`,
+  nextAdjustment: NEXT_ADJUSTMENT,
+  skuPattern: SKU_PATTERN.source,
+  products: productList.map((item) => ({ ...item, supplier: supplierById(item.supplier).name })),
+  suppliers: supplierList.map(({ id, name, contact, phone, email }) => ({ id, name, contact, phone, email })),
+  orders: orderList.map((order) => ({
+    id: order.id,
+    wh: order.wh,
+    status: order.status,
+    supplier: supplierById(order.supplier).name,
+    lines: order.lines.map((line) => ({ qty: line.qty, onHand: productById(line.product).stock[order.wh] })),
+  })),
+  poSteps,
+  poStatus,
+  stages,
+  quarterFactor: QUARTER_FACTOR,
+  safetyDefault: SAFETY_DEFAULT,
+  safetyMax: SAFETY_MAX,
+  hints: { qty: QTY_HINT, safety: SAFETY_HINT },
+  defaultAlerts,
+  user: `${USER.name}, ${USER.role}`,
+  notices: notices.length,
+  classes: { tabOn, tabOff, menuOn, menuOff, whOn, whOff, orderOn, orderOff, stepDone, stepNow, stepNext, errorText, hintText },
+});
+---
+
+<gudang-template class="contents" data-config={config}>
+  <div class={shell}>
+    <header class="border-b border-line bg-surface">
+      <div class="mx-auto flex max-w-[1440px] flex-wrap items-center gap-2 px-4 py-2 sm:gap-3 lg:px-6">
+        <Drawer title="Menu" side="left">
+          <button slot="trigger" type="button" aria-label="Open menu" class={cx(iconButton, "lg:hidden")} set:html={icon("menu")} />
+          <form method="dialog" class="grid gap-1">
+            {pageIds.map((id) => (
+              <button type="submit" aria-current={id === DEFAULT_PAGE ? "page" : undefined} data-gd-go={id} data-gd-kind="menu" class={cx(menuItem, id === DEFAULT_PAGE ? menuOn : menuOff)}>{pages[id].label}</button>
+            ))}
+          </form>
+        </Drawer>
+        <div class="flex shrink-0 items-center gap-2">
+          <span aria-hidden="true" class="flex size-8 items-center justify-center rounded-lg bg-primary text-on-primary" set:html={icon("box", "size-4.5")} />
+          <p class="text-base font-semibold tracking-tight">Gudang</p>
+        </div>
+        <div role="group" aria-label="Warehouse" class={whGroup}>
+          {whIds.map((id) => (
+            <button type="button" aria-pressed={id === DEFAULT_WH ? "true" : "false"} data-gd-wh={id} class={cx(whBase, id === DEFAULT_WH ? whOn : whOff)}>{warehouses[id].label}</button>
+          ))}
+        </div>
+        <div class="ml-auto flex items-center gap-2">
+          <form role="search" class="w-64 max-lg:hidden" data-gd-search>
+            <Input type="search" aria-label="Search products" placeholder="Search SKU or product" />
+          </form>
+          <Popover align="end" class={bellTrigger}>
+            <Fragment slot="trigger"><Fragment set:html={icon("bell")} /><span class="sr-only" data-gd-bell-text>{`Notifications, ${notices.length} unread`}</span><span aria-hidden="true" data-gd-bell-dot class="absolute top-2 right-2 size-2 rounded-full bg-danger ring-2 ring-surface" /></Fragment>
+            <p class="font-semibold">Notifications</p>
+            <ul class="mt-2">
+              {notices.map((notice) => (
+                <li class="border-b border-line py-2 last:border-b-0">
+                  <p data-gd-notice class="font-medium">{notice.title}</p>
+                  <p class="text-xs text-muted">{notice.time}</p>
+                </li>
+              ))}
+            </ul>
+            <Button variant="secondary" size="sm" class="mt-2 w-full" data-gd-read>Mark all as read</Button>
+          </Popover>
+          <DropdownMenu items={userMenu} class={userTrigger} data-gd-user>
+            <Fragment slot="trigger"><span aria-hidden="true" class={userFace}>{USER.initials}</span><span class="sr-only">Account menu</span></Fragment>
+          </DropdownMenu>
+        </div>
+      </div>
+      <nav aria-label="Sections" class="mx-auto flex max-w-[1440px] gap-1 px-3 max-lg:hidden">
+        {pageIds.map((id) => (
+          <button type="button" aria-current={id === DEFAULT_PAGE ? "page" : undefined} data-gd-go={id} data-gd-kind="tab" class={cx(tabBase, id === DEFAULT_PAGE ? tabOn : tabOff)}>{pages[id].label}</button>
+        ))}
+      </nav>
+    </header>
+
+    <main class="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)] content-start gap-5 px-4 pt-5 pb-12 lg:px-6">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h1 id={TITLE_ID} tabindex="-1" class="text-xl font-semibold tracking-tight focus:outline-none">{pages[DEFAULT_PAGE].title}</h1>
+        <p data-context class="text-sm text-muted">{contextOf(DEFAULT_WH)}</p>
+      </div>
+      {
+        views.map(({ live, id, wh, scope }) => {
+          const Wrapper = live ? "div" : "template";
+          const flow = flows[wh];
+          const axisMax = Math.ceil(Math.max(...flow.flat()) / AXIS_STEP) * AXIS_STEP;
+          const today = flow[flow.length - 1]!;
+          const yesterday = flow[flow.length - 2]!;
+          const totalIn = flow.reduce((sum, day) => sum + day[0]!, 0);
+          const totalOut = flow.reduce((sum, day) => sum + day[1]!, 0);
+          const short = productList.filter((item) => statusOf(item, wh) !== "ok");
+          const full = zones[wh].filter((zone) => zone.value >= NEAR_CAPACITY);
+          const value = stockValue(wh);
+          const orders = orderList.filter((order) => order.wh === wh);
+          const shipments = shipmentList.filter((item) => item.wh === wh);
+          const moves = ledger.filter((move) => move.wh === wh);
+          // prettier-ignore
+          const kpis = [
+            { label: "Stock value", value: compact(value), note: `${plural(productList.length, "SKU")} on hand` },
+            { label: "Below reorder point", value: String(short.length), note: `${short.filter((item) => statusOf(item, wh) === "out").length} out of stock` },
+            { label: "Inbound today", value: num(today[0]!), note: `${signed(today[0]! - yesterday[0]!)} units vs yesterday` },
+            { label: "Outbound today", value: num(today[1]!), note: `${signed(today[1]! - yesterday[1]!)} units vs yesterday` },
+          ];
+          // prettier-ignore
+          const reportKpis = [
+            { label: "Stock value", value: compact(value) },
+            { label: "Aged over 90 days", value: compact(Math.round((value * ageing[wh].at(-1)!) / 100)) },
+            { label: "Units moved, 30 days", value: num(movers[wh].reduce((sum, item) => sum + item.units, 0)) },
+          ];
+          const sortedProducts = productList.toSorted((a, b) => a.name.localeCompare(b.name));
+          const sortedSuppliers = supplierList.toSorted((a, b) => b.rating - a.rating);
+          const firstProduct = productList[0]!;
+          const firstSupplier = supplierList[0]!;
+          return (
+            <Wrapper class={live ? "contents" : undefined} data-gd-view={live ? "" : undefined} data-gd-page={live ? undefined : id} data-gd-for={live ? undefined : scope}>
+              {id === "overview" && (
+                <>
+                  <dl class={cx(kpiGrid, "lg:grid-cols-4")}>
+                    {kpis.map((kpi) => (
+                      <div class={kpiCell}>
+                        <dt class="text-xs text-muted">{kpi.label}</dt>
+                        <dd data-kpi={kpi.label} class={kpiValue}>{kpi.value}</dd>
+                        <dd class="text-xs text-muted">{kpi.note}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+                    <section class={card} aria-labelledby="gudang-flow-title">
+                      <div class={cardHead}>
+                        <h2 id="gudang-flow-title" class={cardTitle}>Stock movement, last 7 days</h2>
+                        <ToggleGroup label="Chart series" items={seriesOptions} value="both" data-gd-toggle="series" />
+                      </div>
+                      <div class="p-4">
+                        <div role="img" aria-label={`Units per day for the last 7 days. Today: ${num(today[0]!)} inbound and ${num(today[1]!)} outbound.`} class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-2">
+                          <div class="flex h-44 flex-col justify-between text-right text-xs text-muted tabular-nums">
+                            <span>{num(axisMax)}</span>
+                            <span>{num(axisMax / 2)}</span>
+                            <span>0</span>
+                          </div>
+                          <div class="flex h-44 items-end gap-2 border-b border-line bg-[linear-gradient(var(--color-line)_1px,transparent_1px)] bg-size-[100%_50%] sm:gap-4">
+                            {flow.map((day, index) => (
+                              <div data-day={days[index]} class="flex h-full flex-1 items-end justify-center gap-1">
+                                <span data-bar="in" class={cx(bar, barIn)} style={heightOf(day[0]!, axisMax)} />
+                                <span data-bar="out" class={cx(bar, barOut)} style={heightOf(day[1]!, axisMax)} />
+                              </div>
+                            ))}
+                          </div>
+                          <span />
+                          <div class="flex gap-2 text-center text-xs text-muted sm:gap-4">
+                            {days.map((day) => <span class="flex-1">{day}</span>)}
+                          </div>
+                        </div>
+                        <dl class="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-3 text-sm">
+                          <div class="flex items-center gap-2">
+                            <span aria-hidden="true" class={cx(legendDot, barIn)} />
+                            <dt class="text-muted">Inbound</dt>
+                            <dd class="font-medium tabular-nums">{num(totalIn)}</dd>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span aria-hidden="true" class={cx(legendDot, barOut)} />
+                            <dt class="text-muted">Outbound</dt>
+                            <dd class="font-medium tabular-nums">{num(totalOut)}</dd>
+                          </div>
+                          <div class="flex items-center gap-2 sm:ml-auto">
+                            <dt class="text-muted">Net change</dt>
+                            <dd class="font-medium tabular-nums">{`${signed(totalIn - totalOut)} units`}</dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </section>
+
+                    <section class={card} aria-labelledby="gudang-zones-title">
+                      <div class={cardHead}>
+                        <h2 id="gudang-zones-title" class={cardTitle}>Capacity by zone</h2>
+                        <span class="text-xs text-muted">{warehouses[wh].site}</span>
+                      </div>
+                      <ul class="grid gap-4 p-4">
+                        {zones[wh].map((zone) => (
+                          <li><Progress label={zone.label} value={zone.value} class={zone.value >= NEAR_CAPACITY ? warnBar : undefined} /></li>
+                        ))}
+                      </ul>
+                      <p class="border-t border-line px-4 py-3 text-xs text-muted">{full.length > 0 ? `${full[0]!.label.slice(0, 6)} is above ${NEAR_CAPACITY}%. Plan a transfer before the next inbound.` : "All zones have room for the next inbound."}</p>
+                    </section>
+                  </div>
+
+                  <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+                    <section class={card} aria-labelledby="gudang-activity-title">
+                      <div class={cardHead}>
+                        <h2 id="gudang-activity-title" class={cardTitle}>Recent activity</h2>
+                        <Button variant="ghost" size="sm" data-gd-link="movements">Open ledger<Fragment set:html={icon("next", "size-4")} /></Button>
+                      </div>
+                      <ul>
+                        {moves.slice(0, 5).map((move) => (
+                          <li data-activity={move.id} class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-b border-line px-4 py-2.5 last:border-b-0 sm:grid-cols-[104px_minmax(0,1fr)_auto]">
+                            <span class="max-sm:col-span-2"><Badge variant={moveTypes[move.type].variant}>{moveTypes[move.type].label}</Badge></span>
+                            <span class="min-w-0">
+                              <span class="block truncate text-sm font-medium">{productById(move.product).name}</span>
+                              <span class="block truncate text-xs text-muted">{`${shortDate(move.date)}, ${move.time} · ${move.ref} · ${move.note}`}</span>
+                            </span>
+                            <span class="text-sm font-medium tabular-nums">{signed(move.qty)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+
+                    <section class={card} aria-labelledby="gudang-short-title">
+                      <div class={cardHead}>
+                        <h2 id="gudang-short-title" class={cardTitle}>Below reorder point</h2>
+                        <span class="text-xs text-muted">{plural(short.length, "item")}</span>
+                      </div>
+                      <ul>
+                        {short.map((item) => (
+                          <li data-short={item.id} class="flex items-center gap-3 border-b border-line px-4 py-2.5 last:border-b-0">
+                            <span class="min-w-0 flex-1">
+                              <span class="block truncate text-sm font-medium">{item.name}</span>
+                              <span class="block text-xs text-muted tabular-nums">{`${num(item.stock[wh])} of ${num(item.reorder)} ${item.unit}`}</span>
+                            </span>
+                            <Button variant="secondary" size="sm" aria-label={`Reorder ${item.name}`} data-gd-toast="Draft PO created" data-gd-desc={`${item.name} from ${supplierById(item.supplier).name}`}>Reorder</Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  </div>
+                </>
+              )}
+
+              {id === "products" && (
+                <>
+                  <div class={toolbar}>
+                    <div class="w-full sm:w-64">
+                      <Input type="search" aria-label="Filter products" placeholder="Filter by name or SKU" data-gd-filter />
+                    </div>
+                    <div class="w-full sm:w-44">
+                      <Select aria-label="Category" data-gd-category>
+                        <option value="all">All categories</option>
+                        {categories.map((item) => <option>{item}</option>)}
+                      </Select>
+                    </div>
+                    <div class={toolbarEnd}>
+                      <Button variant="secondary" data-gd-toast="Export started" data-gd-desc="products.csv"><Fragment set:html={icon("download", "size-4")} />Export</Button>
+                      <Button data-gd-new-product><Fragment set:html={icon("plus", "size-4")} />Add product</Button>
+                    </div>
+                  </div>
+
+                  <section class={card} aria-label="Product list">
+                    <div data-bulk hidden class={cx(cardHead, "bg-primary-soft")}>
+                      <p class="text-sm font-medium" data-gd-picked>0 selected</p>
+                      <div class="flex flex-wrap gap-2">
+                        <Button size="sm" data-gd-bulk="Draft PO created">Create PO</Button>
+                        <Button size="sm" variant="secondary" data-gd-bulk="Labels sent to printer">Print labels</Button>
+                        <Button size="sm" variant="ghost" data-gd-clear>Clear</Button>
+                      </div>
+                    </div>
+                    <div class={cx(scroller, "rounded-t-xl")}>
+                      <table class={cx(table, "min-w-[760px]")}>
+                        <thead>
+                          <tr>
+                            <th scope="col" class={cx(th, "w-10")}><Checkbox aria-label="Select all products" data-gd-pick-all /></th>
+                            {productColumns.map((column) => (
+                              <th scope="col" aria-sort={column.key === "name" ? "ascending" : undefined} class={cx(th, column.key in warehouses && "text-right")}>
+                                <button type="button" class={sortButton} data-gd-sort={column.key}>{column.label}<Fragment set:html={icon("sort", cx("size-3.5", column.key === "name" ? "text-ink" : "text-faint"))} /></button>
+                              </th>
+                            ))}
+                            <th scope="col" class={th}>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody data-gd-rows>
+                          {sortedProducts.map((item) => (
+                            <tr data-product={item.sku} data-id={item.id} data-name={item.name} data-category={item.category} data-jkt={item.stock.jkt} data-sby={item.stock.sby} data-mdn={item.stock.mdn}>
+                              <td class={td}><Checkbox aria-label={`Select ${item.name}`} data-gd-pick /></td>
+                              <td class={td}>
+                                <button type="button" class={linkButton} data-gd-open-product={item.id}>{item.name}</button>
+                                <span class={cx(mono, "block")} data-gd-c="sku">{item.sku}</span>
+                              </td>
+                              <td class={cx(td, "text-muted")} data-gd-c="category">{item.category}</td>
+                              {whIds.map((key) => (
+                                <td class={cx(td, "text-right tabular-nums", key === wh ? "font-medium" : "text-muted")} data-gd-c={key}>{num(item.stock[key])}</td>
+                              ))}
+                              <td class={td} data-gd-c="status"><Badge variant={stockStatus[statusOf(item, wh)].variant}>{stockStatus[statusOf(item, wh)].label}</Badge></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p data-count class="px-4 py-3 text-xs text-muted">{`${plural(productList.length, "product")} · status for ${warehouses[wh].label}`}</p>
+                  </section>
+                  {(["ok", "out"] as const).map((key) => (
+                    <template data-gd-status={key}><Badge variant={stockStatus[key].variant}>{stockStatus[key].label}</Badge></template>
+                  ))}
+
+                  <Drawer id={PRODUCT_DRAWER} title="Product details">
+                    <div class="grid gap-5 text-ink">
+                      <div>
+                        <p class="text-base font-semibold" data-gd-f="name">{firstProduct.name}</p>
+                        <p class={mono} data-gd-f="meta">{`${firstProduct.sku} · ${firstProduct.category}`}</p>
+                      </div>
+                      <dl class="grid gap-2">
+                        {whIds.map((key) => (
+                          <div class="flex items-center justify-between gap-4">
+                            <dt class="text-muted">{warehouses[key].label}</dt>
+                            <dd data-stock={key} class="font-medium tabular-nums">{`${num(firstProduct.stock[key])} ${firstProduct.unit}`}</dd>
+                          </div>
+                        ))}
+                        <div class="flex items-center justify-between gap-4 border-t border-line pt-2">
+                          <dt class="text-muted">Reorder point</dt>
+                          <dd class="font-medium tabular-nums" data-gd-f="reorder">{`${num(firstProduct.reorder)} ${firstProduct.unit}`}</dd>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                          <dt class="text-muted">Unit cost</dt>
+                          <dd class="font-medium tabular-nums" data-gd-f="price">{rupiah(firstProduct.price)}</dd>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                          <dt class="text-muted">Supplier</dt>
+                          <dd class="font-medium" data-gd-f="supplier">{supplierById(firstProduct.supplier).name}</dd>
+                        </div>
+                      </dl>
+                      <div>
+                        <h3 class={cardTitle}>Stock history</h3>
+                        <div class="contents" data-gd-history />
+                        {[...productList.map((item) => item.id), "none"].map((key) => {
+                          const history = ledger.filter((move) => move.product === key);
+                          return (
+                            <template data-gd-history-of={key}>
+                              {history.length === 0 && <p class="mt-2 text-muted">No movements yet.</p>}
+                              {history.length > 0 && (
+                                <ul class="mt-2">
+                                  {history.map((move) => (
+                                    <li data-history={move.id} class="flex items-center justify-between gap-3 border-b border-line py-2 last:border-b-0">
+                                      <span>
+                                        <span class="block font-medium">{`${moveTypes[move.type].label} · ${warehouses[move.wh].label}`}</span>
+                                        <span class="block text-xs text-muted">{`${shortDate(move.date)}, ${move.time} · ${move.ref}`}</span>
+                                      </span>
+                                      <span class="font-medium tabular-nums">{signed(move.qty)}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </template>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <Fragment slot="footer">
+                      <Button variant="secondary" type="submit" value="close">Close</Button>
+                      <Button type="submit" value="reorder" data-gd-create-po>Create PO</Button>
+                    </Fragment>
+                  </Drawer>
+
+                  <Modal id={PRODUCT_MODAL} title="Add product">
+                    <form novalidate class="grid gap-4" data-gd-form="product">
+                      <div class="grid gap-1.5">
+                        <Input label="Product name" name="name" />
+                        <p id="gudang-name-error" hidden class={errorText} data-gd-error="name" />
+                      </div>
+                      <div class={fieldGrid}>
+                        <div class="grid content-start gap-1.5">
+                          <Input label="SKU" name="sku" placeholder="ABC-1234" />
+                          <p id="gudang-sku-error" hidden class={errorText} data-gd-error="sku" />
+                        </div>
+                        <Select label="Category" name="category">
+                          {categories.map((item) => <option>{item}</option>)}
+                        </Select>
+                      </div>
+                      <div class="grid gap-1.5">
+                        <Input label={`Opening stock in ${warehouses[wh].label}`} name="stock" inputmode="numeric" />
+                        <p id="gudang-stock-error" hidden class={errorText} data-gd-error="stock" />
+                      </div>
+                      <div class={formFooter}>
+                        <Button type="button" variant="secondary" data-gd-close={PRODUCT_MODAL}>Cancel</Button>
+                        <Button type="submit">Save product</Button>
+                      </div>
+                    </form>
+                  </Modal>
+                </>
+              )}
+
+              {id === "movements" && (
+                <>
+                  <div class={toolbar}>
+                    <div class={cx(scroller, "max-w-full")}>
+                      <ToggleGroup label="Filter by type" items={moveFilters} value="all" data-gd-toggle="type" />
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <Input type="date" aria-label="From date" data-gd-from />
+                      <span class="text-sm text-muted">to</span>
+                      <Input type="date" aria-label="To date" data-gd-to />
+                    </div>
+                    <div class={toolbarEnd}>
+                      <Button data-gd-new-adjustment><Fragment set:html={icon("plus", "size-4")} />New adjustment</Button>
+                    </div>
+                  </div>
+
+                  <section class={card} aria-label="Stock ledger">
+                    <div class={cx(scroller, "rounded-t-xl")}>
+                      <table class={cx(table, "min-w-[820px]")}>
+                        <thead>
+                          <tr>
+                            {["Date", "Reference", "Type", "Product"].map((label) => <th scope="col" class={th}>{label}</th>)}
+                            <th scope="col" class={cx(th, "text-right")}>Quantity</th>
+                            <th scope="col" class={th}>Note</th>
+                          </tr>
+                        </thead>
+                        <tbody data-gd-rows>
+                          {moves.map((move) => (
+                            <tr data-move={move.ref} data-type={move.type} data-date={move.date} data-qty={move.qty}>
+                              <td class={cx(td, "tabular-nums")} data-gd-c="date">{`${shortDate(move.date)}, ${move.time}`}</td>
+                              <td class={cx(td, mono)} data-gd-c="ref">{move.ref}</td>
+                              <td class={td} data-gd-c="type"><Badge variant={moveTypes[move.type].variant}>{moveTypes[move.type].label}</Badge></td>
+                              <td class={td}>
+                                <span class="block font-medium" data-gd-c="name">{productById(move.product).name}</span>
+                                <span class={cx(mono, "block")} data-gd-c="sku">{productById(move.product).sku}</span>
+                              </td>
+                              <td class={cx(td, "text-right font-medium tabular-nums")} data-gd-c="qty">{signed(move.qty)}</td>
+                              <td class={cx(td, "text-muted")} data-gd-c="note">{move.note}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p data-count class="px-4 py-3 text-xs text-muted">{`${plural(moves.length, "movement")} · net ${signed(moves.reduce((sum, move) => sum + move.qty, 0))} units`}</p>
+                  </section>
+                  <template data-gd-adjust-badge><Badge variant={moveTypes.adjust.variant}>{moveTypes.adjust.label}</Badge></template>
+
+                  <Modal id={ADJUST_MODAL} title="New adjustment">
+                    <form novalidate class="grid gap-4" data-gd-form="adjustment">
+                      <Select label="Product" name="product">
+                        {productList.map((item) => <option value={item.id}>{`${item.sku} · ${item.name}`}</option>)}
+                      </Select>
+                      <div class={fieldGrid}>
+                        <div class="grid content-start gap-1.5">
+                          <Input label="Quantity change" name="qty" inputmode="numeric" placeholder="-12" aria-describedby="gudang-qty-note" />
+                          <p id="gudang-qty-note" class={hintText} data-gd-note="qty">{QTY_HINT}</p>
+                        </div>
+                        <Select label="Reason" name="reason">
+                          {reasons.map((item) => <option>{item}</option>)}
+                        </Select>
+                      </div>
+                      <div class={formFooter}>
+                        <Button type="button" variant="secondary" data-gd-close={ADJUST_MODAL}>Cancel</Button>
+                        <Button type="submit">Record adjustment</Button>
+                      </div>
+                    </form>
+                  </Modal>
+                </>
+              )}
+
+              {id === "orders" && (
+                <>
+                  <div class={toolbar}>
+                    <ToggleGroup label="Filter by status" items={orderFilters} value="all" data-gd-toggle="status" />
+                    <div class={toolbarEnd}>
+                      <Button data-gd-toast="Draft PO created" data-gd-desc={`For ${warehouses[wh].label}`}><Fragment set:html={icon("plus", "size-4")} />New order</Button>
+                    </div>
+                  </div>
+
+                  <div class="grid items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
+                    <section class={cx(card, "overflow-hidden")} aria-label="Orders">
+                      <p hidden class="px-4 py-6 text-sm text-muted" data-gd-empty>No purchase orders with this status.</p>
+                      <ul data-gd-orders>
+                        {orders.map((item, index) => (
+                          <li data-id={item.id}>
+                            <button type="button" aria-pressed={index === 0 ? "true" : "false"} class={cx(orderItem, index === 0 ? orderOn : orderOff)} data-gd-order={item.id}>
+                              <span class="flex items-center justify-between gap-3">
+                                <span class="font-mono text-xs font-medium">{item.id}</span>
+                                {poSteps.map((key) => <Badge variant={poStatus[key].variant} hidden={key !== item.status} data-gd-badge={key}>{poStatus[key].label}</Badge>)}
+                              </span>
+                              <span class="truncate text-sm font-medium">{supplierById(item.supplier).name}</span>
+                              <span class="text-xs text-muted tabular-nums">{`${rupiah(orderTotal(item))} · ETA ${item.eta}`}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+
+                    <div class="contents" data-gd-detail>
+                      {orders.map((order, index) => {
+                        const Slot = index === 0 ? Fragment : "template";
+                        const step = poSteps.indexOf(order.status);
+                        const done = (at: number) => step > at || step === poSteps.length - 1;
+                        return (
+                          <Slot>
+                            <section class={card} data-order={order.id} aria-labelledby="gudang-order-title">
+                              <div class={cardHead}>
+                                <div>
+                                  <h2 id="gudang-order-title" class="font-mono text-sm font-semibold">{order.id}</h2>
+                                  <p class="text-xs text-muted">{`${supplierById(order.supplier).name} · ETA ${order.eta}`}</p>
+                                </div>
+                                <Button size="sm" hidden={!poStatus[order.status].action} data-gd-advance>{poStatus[order.status].action}</Button>
+                              </div>
+                              <div class="grid gap-5 p-4">
+                                <ol class="flex items-center gap-2" aria-label="Order progress">
+                                  {poSteps.map((key, at) => (
+                                    <li data-step={key} aria-current={at === step ? "step" : undefined} class="flex items-center gap-2 text-sm not-last:flex-1 not-last:after:h-px not-last:after:flex-1 not-last:after:bg-line">
+                                      <span aria-hidden="true" data-gd-dot class={cx(stepDot, done(at) ? stepDone : at === step ? stepNow : stepNext)}><Fragment set:html={icon("check", "size-3.5", done(at) ? "" : "hidden")} /><span hidden={done(at)}>{at + 1}</span></span>
+                                      <span data-gd-step-label class={step >= at ? "font-medium" : "text-muted"}>{poStatus[key].label}</span>
+                                    </li>
+                                  ))}
+                                </ol>
+                                <Table
+                                  label="Line items"
+                                  size="sm"
+                                  columns={lineColumns}
+                                  rows={order.lines.map((line) => ({
+                                    item: productById(line.product).name,
+                                    qty: num(line.qty),
+                                    cost: rupiah(productById(line.product).price),
+                                    subtotal: rupiah(line.qty * productById(line.product).price),
+                                    onHand: num(productById(line.product).stock[wh]),
+                                  }))}
+                                />
+                                <dl class="ml-auto grid w-full max-w-xs gap-1.5 text-sm">
+                                  <div class="flex justify-between gap-4">
+                                    <dt class="text-muted">Subtotal</dt>
+                                    <dd class="tabular-nums">{rupiah(orderTotal(order))}</dd>
+                                  </div>
+                                  <div class="flex justify-between gap-4">
+                                    <dt class="text-muted">PPN 11%</dt>
+                                    <dd class="tabular-nums">{rupiah(Math.round(orderTotal(order) * TAX_RATE))}</dd>
+                                  </div>
+                                  <div class="flex justify-between gap-4 border-t border-line pt-1.5 font-semibold">
+                                    <dt>Total</dt>
+                                    <dd data-total class="tabular-nums">{rupiah(Math.round(orderTotal(order) * (1 + TAX_RATE)))}</dd>
+                                  </div>
+                                </dl>
+                              </div>
+                            </section>
+                          </Slot>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {id === "shipments" && (
+                <>
+                  <div class={toolbar}>
+                    <div class="w-full sm:w-52">
+                      <Select aria-label="Courier" data-gd-courier>
+                        <option value="all">All couriers</option>
+                        {couriers.map((item) => <option>{item}</option>)}
+                      </Select>
+                    </div>
+                    <p data-open class="text-sm text-muted">{`${plural(shipments.filter((item) => item.stage !== stages.at(-1)).length, "open order")} from ${warehouses[wh].label}`}</p>
+                    <div class={toolbarEnd}>
+                      <Button variant="secondary" data-gd-manifest>Print manifest</Button>
+                    </div>
+                  </div>
+
+                  <div class="grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    {stages.map((name, at) => (
+                      <section data-stage={name} aria-label={name} class="rounded-xl bg-subtle p-2">
+                        <h2 class="flex items-center justify-between px-2 py-1.5 text-sm font-semibold">{name}<span class="text-xs font-medium text-muted tabular-nums" data-gd-count>{shipments.filter((item) => item.stage === name).length}</span></h2>
+                        <ul class="grid gap-2" data-gd-cards>
+                          {shipments.filter((item) => item.stage === name).map((item) => (
+                            <li data-shipment={item.id} data-courier={item.courier} data-customer={`${item.customer}, ${item.city}`} class={cx(card, "grid gap-2 p-3")}>
+                              <div>
+                                <p class={mono}>{item.id}</p>
+                                <p class="truncate text-sm font-medium">{item.customer}</p>
+                                <p class="text-xs text-muted">{`${item.city} · ${item.items} cartons`}</p>
+                              </div>
+                              <p class="border-t border-line pt-2 text-xs">{item.courier}<span class={cx(mono, "block")}>{item.tracking}</span></p>
+                              <Button variant="secondary" size="sm" hidden={!stages[at + 1]} aria-label={`Move to ${stages[at + 1]}: ${item.id}`} data-gd-move><span data-gd-move-label>{`Move to ${stages[at + 1]}`}</span><Fragment set:html={icon("next", "size-4")} /></Button>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {id === "suppliers" && (
+                <>
+                  <div class={toolbar}>
+                    <div class="w-full sm:w-56">
+                      <Select aria-label="Sort suppliers" data-gd-supplier-sort>
+                        {supplierSorts.map((item) => <option value={item.value}>{item.label}</option>)}
+                      </Select>
+                    </div>
+                    <div class={toolbarEnd}>
+                      <Button data-gd-toast="Invitation sent" data-gd-desc="Supplier onboarding form"><Fragment set:html={icon("plus", "size-4")} />Invite supplier</Button>
+                    </div>
+                  </div>
+
+                  <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-gd-suppliers>
+                    {sortedSuppliers.map((item) => (
+                      <li data-supplier={item.id} data-rating={item.rating} data-lead={item.lead} data-on-time={item.onTime} class={card}>
+                        <div class="p-4">
+                          <h2 class="truncate text-sm font-semibold">{item.name}</h2>
+                          <p class="text-xs text-muted">{`${item.city} · ${item.category}`}</p>
+                        </div>
+                        <dl class="grid grid-cols-3 border-y border-line">
+                          {[
+                            { label: "Lead time", value: plural(item.lead, "day") },
+                            { label: "Rating", value: `${item.rating.toFixed(1).replace(".", ",")} / 5` },
+                            { label: "On time", value: `${item.onTime}%` },
+                          ].map((fact) => (
+                            <div class="border-r border-line px-4 py-2.5 last:border-r-0">
+                              <dt class="text-xs text-muted">{fact.label}</dt>
+                              <dd class="text-sm font-medium tabular-nums">{fact.value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                        <div class="flex items-center justify-between gap-3 px-4 py-2.5">
+                          <p class="truncate text-xs text-muted">{item.contact}</p>
+                          <Button variant="secondary" size="sm" aria-label={`Contact ${item.name}`} data-gd-contact={item.id}>Contact</Button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Modal id={CONTACT_MODAL} title="Contact supplier">
+                    <form novalidate class="grid gap-4" data-gd-form="message">
+                      <div class="text-ink">
+                        <p class="font-medium" data-gd-f="contact">{firstSupplier.contact}</p>
+                        <p class="text-muted" data-gd-f="name">{firstSupplier.name}</p>
+                        <p class="mt-2 tabular-nums" data-gd-f="phone">{firstSupplier.phone}</p>
+                        <p data-gd-f="email">{firstSupplier.email}</p>
+                      </div>
+                      <div class="grid gap-1.5">
+                        <Input label="Message" name="message" placeholder="Ask about stock, price, or delivery" />
+                        <p id="gudang-message-error" hidden class={errorText} data-gd-error="message" />
+                      </div>
+                      <div class={formFooter}>
+                        <Button type="button" variant="secondary" data-gd-close={CONTACT_MODAL}>Cancel</Button>
+                        <Button type="submit">Send message</Button>
+                      </div>
+                    </form>
+                  </Modal>
+                </>
+              )}
+
+              {id === "reports" && (
+                <>
+                  <div class={toolbar}>
+                    <ToggleGroup label="Period" items={periods} value="30" data-gd-toggle="period" />
+                    <div class={toolbarEnd}>
+                      {exportFormats.map((format) => (
+                        <Button variant="secondary" data-gd-export={format}><Fragment set:html={icon("download", "size-4")} />{`Export ${format}`}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <dl class={cx(kpiGrid, "lg:grid-cols-3")}>
+                    {reportKpis.map((kpi, index) => (
+                      <div class={cx(kpiCell, index === 2 && "max-lg:col-span-2")}>
+                        <dt class="text-xs text-muted" data-gd-kpi-label={index}>{kpi.label}</dt>
+                        <dd data-kpi={index} class={kpiValue}>{kpi.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <div class="grid items-start gap-5 lg:grid-cols-2">
+                    <section class={card} aria-labelledby="gudang-ageing-title">
+                      <div class={cardHead}>
+                        <h2 id="gudang-ageing-title" class={cardTitle}>Stock ageing</h2>
+                        <span class="text-xs text-muted">Share of stock value</span>
+                      </div>
+                      <ul class="grid gap-4 p-4">
+                        {ageBuckets.map((label, index) => (
+                          <li data-age={index} class="grid gap-1.5">
+                            <span class="flex items-baseline justify-between gap-3 text-sm">
+                              <span class="font-medium">{label}</span>
+                              <span class="text-muted tabular-nums">{`${compact((value * ageing[wh][index]!) / 100)} · ${ageing[wh][index]}%`}</span>
+                            </span>
+                            <span aria-hidden="true" class={meter}><span class={cx("block h-full rounded-full", index === ageBuckets.length - 1 ? "bg-warning" : barIn)} style={`width: ${ageing[wh][index]}%`} /></span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+
+                    <section class={card} aria-labelledby="gudang-movers-title">
+                      <div class={cardHead}>
+                        <h2 id="gudang-movers-title" class={cardTitle}>Top movers</h2>
+                        <span class="text-xs text-muted">Units shipped</span>
+                      </div>
+                      <ol class="grid gap-4 p-4">
+                        {movers[wh].map((item, index) => (
+                          <li data-mover={index} data-units={item.units} class="grid gap-1.5">
+                            <span class="flex items-baseline justify-between gap-3 text-sm">
+                              <span class="truncate font-medium">{`${index + 1}. ${productById(item.product).name}`}</span>
+                              <span class="text-muted tabular-nums" data-gd-units>{num(item.units)}</span>
+                            </span>
+                            <span aria-hidden="true" class={meter}><span class={cx("block h-full rounded-full", barOut)} style={`width: ${(item.units / movers[wh][0]!.units) * 100}%`} /></span>
+                          </li>
+                        ))}
+                      </ol>
+                    </section>
+                  </div>
+                </>
+              )}
+
+              {id === "settings" && (
+                <form novalidate class="grid max-w-3xl gap-5" aria-label="Warehouse settings" data-gd-form="settings">
+                  <section class={card} aria-labelledby="gudang-rules-title">
+                    <div class={cardHead}>
+                      <h2 id="gudang-rules-title" class={cardTitle}>Reorder rules</h2>
+                    </div>
+                    <div class="grid gap-4 p-4">
+                      <div class="grid max-w-xs gap-1.5">
+                        <Input label="Safety stock (days)" name="safety" inputmode="numeric" value={SAFETY_DEFAULT} aria-describedby="gudang-safety-note" />
+                        <p id="gudang-safety-note" class={hintText} data-gd-note="safety">{SAFETY_HINT}</p>
+                      </div>
+                      <Switch label="Create a draft PO when an item drops below its reorder point" name="auto" checked />
+                    </div>
+                  </section>
+
+                  <section class={card} aria-labelledby="gudang-units-title">
+                    <div class={cardHead}>
+                      <h2 id="gudang-units-title" class={cardTitle}>Units</h2>
+                    </div>
+                    <div class={cx(fieldGrid, "p-4")}>
+                      <Select label="Default stock unit" name="unit">
+                        {stockUnits.map((item) => <option>{item}</option>)}
+                      </Select>
+                      <Select label="Weight" name="weight">
+                        {weightUnits.map((item) => <option>{item}</option>)}
+                      </Select>
+                    </div>
+                  </section>
+
+                  <section class={card} aria-labelledby="gudang-alerts-title">
+                    <div class={cardHead}>
+                      <h2 id="gudang-alerts-title" class={cardTitle}>Notifications</h2>
+                      <span data-alerts class="text-xs text-muted">{`${defaultAlerts.length} of ${alerts.length} on`}</span>
+                    </div>
+                    <ul>
+                      {alerts.map((alert) => (
+                        <li class="flex items-center justify-between gap-4 border-b border-line px-4 py-3 last:border-b-0">
+                          <span>
+                            <span class="block text-sm font-medium">{alert.label}</span>
+                            <span class="block text-xs text-muted">{alert.hint}</span>
+                          </span>
+                          <Switch aria-label={alert.label} name={alert.key} checked={defaultAlerts.includes(alert.key)} data-gd-alert />
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <div class="flex flex-wrap gap-2">
+                    <Button type="submit">Save changes</Button>
+                    <Button type="button" variant="secondary" data-gd-reset>Reset</Button>
+                  </div>
+                </form>
+              )}
+            </Wrapper>
+          );
+        })
+      }
+    </main>
+    <Toaster />
+  </div>
+</gudang-template>
+
+<script>
+  type Product = {
+    id: string;
+    sku: string;
+    name: string;
+    category: string;
+    unit: string;
+    price: number;
+    reorder: number;
+    supplier: string;
+    stock: Record<string, number>;
+  };
+  type Config = {
+    pages: Record<string, { label: string; title: string }>;
+    defaultPage: string;
+    defaultWh: string;
+    titleId: string;
+    ids: { drawer: string; product: string; adjust: string; contact: string };
+    contexts: Record<string, string>;
+    warehouses: Record<string, { label: string; code: string }>;
+    today: string;
+    adjustDate: string;
+    nextAdjustment: number;
+    skuPattern: string;
+    products: Product[];
+    suppliers: { id: string; name: string; contact: string; phone: string; email: string }[];
+    orders: { id: string; wh: string; status: string; supplier: string; lines: { qty: number; onHand: number }[] }[];
+    poSteps: string[];
+    poStatus: Record<string, { action: string; done: string }>;
+    stages: string[];
+    quarterFactor: number;
+    safetyDefault: string;
+    safetyMax: number;
+    hints: Record<string, string>;
+    defaultAlerts: string[];
+    user: string;
+    notices: number;
+    classes: Record<string, string>;
+  };
+
+  const notify = (title: string, description = "", variant = "success") =>
+    window.dispatchEvent(
+      new CustomEvent("markas-toast", {
+        detail: { title, description, variant },
+      }),
+    );
+  const swap = (element: Element, add: string, remove: string) => {
+    if (remove) element.classList.remove(...remove.split(" "));
+    if (add) element.classList.add(...add.split(" "));
+  };
+  const num = (value: number) => value.toLocaleString("id-ID");
+  const signed = (value: number) => `${value > 0 ? "+" : ""}${num(value)}`;
+  const rupiah = (value: number) => `Rp ${num(value)}`;
+  const plural = (count: number, word: string) =>
+    `${count} ${word}${count === 1 ? "" : "s"}`;
+  const dialogOf = (id: string) => {
+    const dialog = document.getElementById(id);
+    return dialog instanceof HTMLDialogElement ? dialog : null;
+  };
+  const fieldOf = (form: HTMLFormElement, name: string) =>
+    form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement;
+  const boxOf = (row: Element) =>
+    row.querySelector<HTMLInputElement>("input[type=checkbox]")!;
+
+  /** Satu elemen per template: navigasi hash, gudang aktif, dan interaksi tiap halaman. */
+  class GudangTemplate extends HTMLElement {
+    private readonly config = JSON.parse(this.dataset.config ?? "{}") as Config;
+    private page = "";
+    private wh = this.config.defaultWh;
+    private query = "";
+    /** Baris atau kartu halaman aktif (produk, mutasi, PO, pengiriman, pemasok), termasuk yang sedang tersaring. */
+    private rows: HTMLElement[] = [];
+    private bars: Element[][] = [];
+    private toggles: Record<string, string> = {};
+    private sort = { key: "name", asc: true };
+    private products: Product[] = [];
+    private productId = "p1";
+    private adjustments = 0;
+    private status: Record<string, string> = {};
+    private arrived: string[] = [];
+    private orderId = "";
+    private details = new Map<string, HTMLElement>();
+    private stage: Record<string, string> = {};
+    private supplierId = "s1";
+    private readonly onHashChange = () => {
+      this.open(this.readHash());
+      document.getElementById(this.config.titleId)?.focus();
+    };
+    private readonly onClick = (event: Event) => this.handleClick(event);
+    private readonly onInput = (event: Event) => this.handleInput(event);
+    private readonly onChange = (event: Event) => this.handleChange(event);
+    private readonly onSubmit = (event: Event) => this.handleSubmit(event);
+    private readonly onSelect = (event: Event) =>
+      notify((event as CustomEvent<string>).detail, this.config.user);
+
+    connectedCallback() {
+      this.open(this.readHash());
+      window.addEventListener("hashchange", this.onHashChange);
+      this.addEventListener("click", this.onClick);
+      this.addEventListener("input", this.onInput);
+      this.addEventListener("change", this.onChange);
+      this.addEventListener("submit", this.onSubmit);
+      this.addEventListener("markas-select", this.onSelect);
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener("hashchange", this.onHashChange);
+      this.removeEventListener("click", this.onClick);
+      this.removeEventListener("input", this.onInput);
+      this.removeEventListener("change", this.onChange);
+      this.removeEventListener("submit", this.onSubmit);
+      this.removeEventListener("markas-select", this.onSelect);
+    }
+
+    private find<T extends Element = HTMLElement>(selector: string) {
+      return this.querySelector<T>(selector);
+    }
+
+    private findAll<T extends Element = HTMLElement>(selector: string) {
+      return [...this.querySelectorAll<T>(selector)];
+    }
+
+    private readHash() {
+      const id = window.location.hash.slice(1);
+      return id in this.config.pages ? id : this.config.defaultPage;
+    }
+
+    /** Ganti isi halaman dengan klon baru dari <template> gudang aktif, lalu siapkan state-nya. */
+    private open(id: string) {
+      const template =
+        this.find<HTMLTemplateElement>(`template[data-gd-page="${id}"][data-gd-for="${this.wh}"]`) ??
+        this.find<HTMLTemplateElement>(`template[data-gd-page="${id}"][data-gd-for="all"]`);
+      const view = this.find("[data-gd-view]");
+      if (!template || !view) return;
+      view.replaceChildren(template.content.cloneNode(true));
+      const { pages, classes } = this.config;
+      this.page = id;
+      for (const button of this.findAll("[data-gd-go]")) {
+        const active = button.dataset.gdGo === id;
+        const kind = button.dataset.gdKind ?? "tab";
+        if (active) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
+        swap(button, classes[`${kind}${active ? "On" : "Off"}`]!, classes[`${kind}${active ? "Off" : "On"}`]!);
+      }
+      document.getElementById(this.config.titleId)!.textContent = pages[id]!.title;
+      this.toggles = { series: "both", type: "all", status: "all", period: "30" };
+      this.rows = [];
+      if (id === "overview")
+        this.bars = this.findAll("[data-day]").map((day) => [...day.children]);
+      if (id === "products") {
+        this.rows = [...this.find("[data-gd-rows]")!.children] as HTMLElement[];
+        this.products = this.config.products;
+        this.sort = { key: "name", asc: true };
+        this.find<HTMLInputElement>("[data-gd-filter]")!.value = this.query;
+        this.renderProducts();
+      }
+      if (id === "movements") {
+        this.rows = [...this.find("[data-gd-rows]")!.children] as HTMLElement[];
+        this.adjustments = 0;
+      }
+      if (id === "orders") {
+        const orders = this.config.orders.filter((order) => order.wh === this.wh);
+        this.rows = [...this.find("[data-gd-orders]")!.children] as HTMLElement[];
+        this.status = Object.fromEntries(orders.map((order) => [order.id, order.status]));
+        this.arrived = [];
+        this.orderId = "";
+        const slot = this.find("[data-gd-detail]")!;
+        const sections = [
+          ...slot.querySelectorAll<HTMLElement>(":scope > [data-order]"),
+          ...[...slot.querySelectorAll("template")].map((item) => item.content.firstElementChild!.cloneNode(true) as HTMLElement),
+        ];
+        this.details = new Map(sections.map((section) => [section.dataset.order!, section]));
+        this.renderOrders();
+      }
+      if (id === "shipments") {
+        this.rows = this.findAll("[data-shipment]");
+        this.stage = Object.fromEntries(
+          this.rows.map((card) => [card.dataset.shipment!, card.closest<HTMLElement>("[data-stage]")!.dataset.stage!]),
+        );
+      }
+      if (id === "suppliers") this.rows = this.findAll("[data-supplier]");
+    }
+
+    private setWarehouse(id: string) {
+      if (id === this.wh) return;
+      const { classes } = this.config;
+      this.wh = id;
+      for (const button of this.findAll("[data-gd-wh]")) {
+        const active = button.dataset.gdWh === id;
+        button.setAttribute("aria-pressed", String(active));
+        swap(button, active ? classes.whOn! : classes.whOff!, active ? classes.whOff! : classes.whOn!);
+      }
+      this.find("[data-context]")!.textContent = this.config.contexts[id]!;
+      this.open(this.page);
+    }
+
+    private handleClick(event: Event) {
+      const target = event.target as Element;
+      const hit = (selector: string) => target.closest<HTMLElement>(selector);
+      const { ids } = this.config;
+      let el: HTMLElement | null;
+      if ((el = hit("[data-gd-go]"))) return window.location.assign(`#${el.dataset.gdGo}`);
+      if ((el = hit("[data-gd-link]"))) return window.location.assign(`#${el.dataset.gdLink}`);
+      if ((el = hit("[data-gd-wh]"))) return this.setWarehouse(el.dataset.gdWh!);
+      if ((el = hit("[data-gd-toast]"))) return void notify(el.dataset.gdToast!, el.dataset.gdDesc);
+      if ((el = hit("[data-gd-close]"))) return dialogOf(el.dataset.gdClose!)?.close();
+      if (hit("[data-gd-read]")) return this.markRead();
+      if ((el = hit("[data-gd-toggle] > button"))) return this.pickToggle(el);
+      if ((el = hit("[data-gd-sort]"))) {
+        const key = el.dataset.gdSort!;
+        this.sort = { key, asc: this.sort.key === key ? !this.sort.asc : true };
+        return this.renderProducts();
+      }
+      if ((el = hit("[data-gd-open-product]"))) return this.openProduct(el.dataset.gdOpenProduct!);
+      if (hit("[data-gd-new-product]")) return this.openForm("product", ids.product);
+      if ((el = hit("[data-gd-bulk]"))) {
+        notify(el.dataset.gdBulk!, plural(this.picked().length, "product"));
+        return this.clearPicked();
+      }
+      if (hit("[data-gd-clear]")) return this.clearPicked();
+      if (hit("[data-gd-create-po]"))
+        return void notify("Draft PO created", this.products.find((item) => item.id === this.productId)!.name);
+      if (hit("[data-gd-new-adjustment]")) return this.openForm("adjustment", ids.adjust);
+      if ((el = hit("[data-gd-order]"))) {
+        this.orderId = el.dataset.gdOrder!;
+        return this.renderOrders();
+      }
+      if (hit("[data-gd-advance]")) return this.advanceOrder();
+      if ((el = hit("[data-gd-move]"))) return this.advanceShipment(el.closest<HTMLElement>("[data-shipment]")!);
+      if (hit("[data-gd-manifest]"))
+        return void notify("Manifest sent to printer", plural(this.openShipments(), "order"));
+      if ((el = hit("[data-gd-contact]"))) return this.contact(el.dataset.gdContact!);
+      if ((el = hit("[data-gd-export]"))) {
+        const format = el.dataset.gdExport!;
+        const code = this.config.warehouses[this.wh]!.code.toLowerCase();
+        return void notify(`${format} export ready`, `stock-report-${code}-${this.toggles.period}d.${format.toLowerCase()}`);
+      }
+      if (hit("[data-gd-reset]")) return this.resetSettings();
+    }
+
+    private handleInput(event: Event) {
+      const target = event.target as HTMLInputElement;
+      if (target.matches("[data-gd-filter], [data-gd-search] input")) {
+        this.query = target.value;
+        for (const input of this.findAll<HTMLInputElement>("[data-gd-filter], [data-gd-search] input"))
+          if (input !== target) input.value = this.query;
+        if (this.page === "products") this.renderProducts();
+      }
+      if (target.matches("[data-gd-from], [data-gd-to]")) this.renderMoves();
+    }
+
+    private handleChange(event: Event) {
+      const target = event.target as HTMLInputElement;
+      if (target.matches("[data-gd-pick-all]")) {
+        for (const row of this.shownProducts()) boxOf(row).checked = target.checked;
+        this.renderPicked();
+      }
+      if (target.matches("[data-gd-pick]")) this.renderPicked();
+      if (target.matches("[data-gd-category]")) this.renderProducts();
+      if (target.matches("[data-gd-courier]")) this.renderShipments();
+      if (target.matches("[data-gd-supplier-sort]")) this.sortSuppliers(target.value);
+      if (target.matches("[data-gd-alert]")) this.renderAlerts();
+    }
+
+    private handleSubmit(event: Event) {
+      const form = event.target as HTMLFormElement;
+      if (form.matches("[data-gd-search]")) {
+        event.preventDefault();
+        return window.location.assign("#products");
+      }
+      const name = form.dataset.gdForm;
+      if (!name) return;
+      event.preventDefault();
+      if (name === "product") this.submitProduct(form);
+      if (name === "adjustment") this.submitAdjustment(form);
+      if (name === "message") this.submitMessage(form);
+      if (name === "settings") this.saveSettings(form);
+    }
+
+    /* Bersama */
+
+    private markRead() {
+      this.find("[data-gd-bell-text]")!.textContent = "Notifications";
+      this.find("[data-gd-bell-dot]")!.hidden = true;
+      for (const notice of this.findAll("[data-gd-notice]")) notice.classList.remove("font-medium");
+      this.find<HTMLButtonElement>("[data-gd-read]")!.disabled = true;
+    }
+
+    /** ToggleGroup mengatur aria-pressed sendiri setelah klik ini; pilihan yang dilepas dipasang lagi. */
+    private pickToggle(button: HTMLElement) {
+      const group = button.parentElement!;
+      const name = group.dataset.gdToggle!;
+      this.toggles[name] = button.dataset.value!;
+      setTimeout(() => this.syncToggle(group, this.toggles[name]!));
+      if (name === "series") this.renderSeries();
+      if (name === "type") this.renderMoves();
+      if (name === "status") this.renderOrders();
+      if (name === "period") this.renderPeriod();
+    }
+
+    private syncToggle(group: Element, value: string) {
+      for (const item of group.querySelectorAll<HTMLElement>(":scope > button")) {
+        const on = item.dataset.value === value;
+        item.setAttribute("aria-pressed", String(on));
+        item.dataset.state = on ? "on" : "off";
+      }
+    }
+
+    /** Buka modal form dalam keadaan bersih. */
+    private openForm(name: string, dialogId: string) {
+      const form = this.find<HTMLFormElement>(`[data-gd-form="${name}"]`)!;
+      form.reset();
+      for (const key of ["name", "sku", "stock", "qty", "message"]) this.setError(form, key, "");
+      dialogOf(dialogId)?.showModal();
+    }
+
+    /** Pesan error di bawah field, atau hint yang berganti jadi error. Mengembalikan true kalau ada error. */
+    private setError(form: HTMLFormElement, key: string, message: string) {
+      const { classes, hints } = this.config;
+      const field = fieldOf(form, key);
+      const error = form.querySelector<HTMLElement>(`[data-gd-error="${key}"]`);
+      const note = form.querySelector<HTMLElement>(`[data-gd-note="${key}"]`);
+      if (!field || (!error && !note)) return false;
+      if (message) field.setAttribute("aria-invalid", "true");
+      else field.removeAttribute("aria-invalid");
+      if (error) {
+        error.textContent = message;
+        error.hidden = !message;
+        if (message) field.setAttribute("aria-describedby", error.id);
+        else field.removeAttribute("aria-describedby");
+      }
+      if (note) {
+        note.textContent = message || hints[key]!;
+        note.className = message ? classes.errorText! : classes.hintText!;
+      }
+      return message !== "";
+    }
+
+    /* Overview */
+
+    private renderSeries() {
+      const { series } = this.toggles;
+      this.findAll("[data-day]").forEach((day, index) =>
+        day.replaceChildren(
+          ...this.bars[index]!.filter((bar) => series === "both" || (bar as HTMLElement).dataset.bar === series),
+        ),
+      );
+    }
+
+    /* Products */
+
+    private shownProducts() {
+      const needle = this.query.trim().toLowerCase();
+      const category = this.find<HTMLSelectElement>("[data-gd-category]")!.value;
+      const { key, asc } = this.sort;
+      const numeric = key in this.config.warehouses;
+      return this.rows
+        .filter(
+          (row) =>
+            (category === "all" || row.dataset.category === category) &&
+            `${row.dataset.name} ${row.dataset.product}`.toLowerCase().includes(needle),
+        )
+        .toSorted((a, b) => {
+          const [x, y] = [a.dataset[key]!, b.dataset[key]!];
+          const order = numeric ? Number(x) - Number(y) : x.localeCompare(y);
+          return asc ? order : -order;
+        });
+    }
+
+    private renderProducts() {
+      const shown = this.shownProducts();
+      this.find("[data-gd-rows]")!.replaceChildren(...shown);
+      this.find("[data-count]")!.textContent =
+        shown.length > 0
+          ? `${plural(shown.length, "product")} · status for ${this.config.warehouses[this.wh]!.label}`
+          : "No products match this filter.";
+      for (const button of this.findAll("[data-gd-sort]")) {
+        const active = button.dataset.gdSort === this.sort.key;
+        const icon = button.querySelector("svg")!;
+        if (active) button.parentElement!.setAttribute("aria-sort", this.sort.asc ? "ascending" : "descending");
+        else button.parentElement!.removeAttribute("aria-sort");
+        swap(icon, active ? "text-ink" : "text-faint", active ? "text-faint" : "text-ink");
+        icon.classList.toggle("rotate-180", active && !this.sort.asc);
+      }
+      this.renderPicked();
+    }
+
+    private picked() {
+      return this.rows.filter((row) => boxOf(row).checked);
+    }
+
+    private renderPicked() {
+      const count = this.picked().length;
+      const shown = this.shownProducts();
+      this.find("[data-bulk]")!.hidden = count === 0;
+      this.find("[data-gd-picked]")!.textContent = `${count} selected`;
+      this.find<HTMLInputElement>("[data-gd-pick-all]")!.checked =
+        shown.length > 0 && shown.every((row) => boxOf(row).checked);
+    }
+
+    private clearPicked() {
+      for (const row of this.rows) boxOf(row).checked = false;
+      this.renderPicked();
+    }
+
+    private openProduct(id: string) {
+      const product = this.products.find((item) => item.id === id)!;
+      const drawer = dialogOf(this.config.ids.drawer)!;
+      const set = (key: string, text: string) =>
+        (drawer.querySelector(`[data-gd-f="${key}"]`)!.textContent = text);
+      this.productId = id;
+      set("name", product.name);
+      set("meta", `${product.sku} · ${product.category}`);
+      set("reorder", `${num(product.reorder)} ${product.unit}`);
+      set("price", rupiah(product.price));
+      set("supplier", product.supplier);
+      for (const cell of drawer.querySelectorAll<HTMLElement>("[data-stock]"))
+        cell.textContent = `${num(product.stock[cell.dataset.stock!]!)} ${product.unit}`;
+      const history =
+        drawer.querySelector<HTMLTemplateElement>(`[data-gd-history-of="${id}"]`) ??
+        drawer.querySelector<HTMLTemplateElement>('[data-gd-history-of="none"]')!;
+      drawer.querySelector("[data-gd-history]")!.replaceChildren(history.content.cloneNode(true));
+      drawer.showModal();
+    }
+
+    private submitProduct(form: HTMLFormElement) {
+      const name = fieldOf(form, "name").value.trim();
+      const sku = fieldOf(form, "sku").value.trim().toUpperCase();
+      const raw = fieldOf(form, "stock").value.trim();
+      const stock = Number(raw);
+      // prettier-ignore
+      const failed = [
+        this.setError(form, "name", name ? "" : "Enter a product name"),
+        this.setError(form, "sku", !new RegExp(this.config.skuPattern).test(sku) ? "Use the format ABC-1234" : this.products.some((item) => item.sku === sku) ? "This SKU already exists" : ""),
+        this.setError(form, "stock", raw !== "" && Number.isInteger(stock) && stock >= 0 ? "" : "Enter a quantity of 0 or more"),
+      ];
+      if (failed.some(Boolean)) return;
+      const category = fieldOf(form, "category").value;
+      const id = `p${this.products.length + 1}`;
+      // prettier-ignore
+      const added: Product = {
+        id, sku, name, category, unit: "carton", price: 0, reorder: 0, supplier: this.config.products[0]!.supplier,
+        stock: { jkt: 0, sby: 0, mdn: 0, [this.wh]: stock },
+      };
+      // Baris baru: klon baris yang ada lalu isi ulang, supaya markup tetap satu sumber.
+      const row = this.rows[0]!.cloneNode(true) as HTMLElement;
+      const cell = (key: string) => row.querySelector<HTMLElement>(`[data-gd-c="${key}"]`)!;
+      Object.assign(row.dataset, { product: sku, id, name, category, ...added.stock });
+      const box = boxOf(row);
+      box.checked = false;
+      box.id = `gudang-pick-${id}`;
+      box.setAttribute("aria-label", `Select ${name}`);
+      const link = row.querySelector<HTMLElement>("[data-gd-open-product]")!;
+      link.dataset.gdOpenProduct = id;
+      link.textContent = name;
+      cell("sku").textContent = sku;
+      cell("category").textContent = category;
+      for (const key of Object.keys(this.config.warehouses)) cell(key).textContent = num(added.stock[key]!);
+      const badge = this.find<HTMLTemplateElement>(`template[data-gd-status="${stock === 0 ? "out" : "ok"}"]`)!;
+      cell("status").replaceChildren(badge.content.cloneNode(true));
+      this.products = [added, ...this.products];
+      this.rows = [row, ...this.rows];
+      this.renderProducts();
+      dialogOf(this.config.ids.product)?.close();
+      notify("Product added", `${name} (${sku})`);
+    }
+
+    /* Stock movements */
+
+    private renderMoves() {
+      const from = this.find<HTMLInputElement>("[data-gd-from]")!.value;
+      const to = this.find<HTMLInputElement>("[data-gd-to]")!.value;
+      const { type } = this.toggles;
+      const shown = this.rows.filter(
+        ({ dataset }) =>
+          (type === "all" || dataset.type === type) &&
+          (!from || dataset.date! >= from) &&
+          (!to || dataset.date! <= to),
+      );
+      const net = shown.reduce((sum, row) => sum + Number(row.dataset.qty), 0);
+      this.find("[data-gd-rows]")!.replaceChildren(...shown);
+      this.find("[data-count]")!.textContent =
+        shown.length > 0
+          ? `${plural(shown.length, "movement")} · net ${signed(net)} units`
+          : "No movements in this range.";
+    }
+
+    private submitAdjustment(form: HTMLFormElement) {
+      const raw = fieldOf(form, "qty").value.trim();
+      const qty = Number(raw);
+      const valid = raw !== "" && Number.isInteger(qty) && qty !== 0;
+      if (this.setError(form, "qty", valid ? "" : "Enter a whole number other than 0")) return;
+      const product = this.config.products.find((item) => item.id === fieldOf(form, "product").value)!;
+      const ref = `ADJ-${String(this.config.nextAdjustment + this.adjustments).padStart(4, "0")}`;
+      const row = this.rows[0]!.cloneNode(true) as HTMLElement;
+      const cell = (key: string) => row.querySelector<HTMLElement>(`[data-gd-c="${key}"]`)!;
+      Object.assign(row.dataset, { move: ref, type: "adjust", date: this.config.today, qty: String(qty) });
+      cell("date").textContent = this.config.adjustDate;
+      cell("ref").textContent = ref;
+      cell("type").replaceChildren(
+        this.find<HTMLTemplateElement>("template[data-gd-adjust-badge]")!.content.cloneNode(true),
+      );
+      cell("name").textContent = product.name;
+      cell("sku").textContent = product.sku;
+      cell("qty").textContent = signed(qty);
+      cell("note").textContent = fieldOf(form, "reason").value;
+      this.adjustments += 1;
+      this.rows = [row, ...this.rows];
+      this.renderMoves();
+      dialogOf(this.config.ids.adjust)?.close();
+      notify("Adjustment recorded", `${product.name}: ${signed(qty)} ${product.unit}`);
+    }
+
+    /* Purchase orders */
+
+    private renderOrders() {
+      const { classes, poSteps, poStatus, orders } = this.config;
+      const filter = this.toggles.status;
+      const shown = this.rows.filter((row) => filter === "all" || this.status[row.dataset.id!] === filter);
+      const list = this.find("[data-gd-orders]")!;
+      const id = (shown.find((row) => row.dataset.id === this.orderId) ?? shown[0])?.dataset.id;
+      list.replaceChildren(...shown);
+      list.hidden = shown.length === 0;
+      this.find("[data-gd-empty]")!.hidden = shown.length > 0;
+      for (const row of this.rows) {
+        const button = row.querySelector("button")!;
+        const active = row.dataset.id === id;
+        button.setAttribute("aria-pressed", String(active));
+        swap(button, active ? classes.orderOn! : classes.orderOff!, active ? classes.orderOff! : classes.orderOn!);
+        for (const badge of row.querySelectorAll<HTMLElement>("[data-gd-badge]"))
+          badge.hidden = badge.dataset.gdBadge !== this.status[row.dataset.id!];
+      }
+      const section = id ? this.details.get(id) : undefined;
+      this.find("[data-gd-detail]")!.replaceChildren(...(section ? [section] : []));
+      if (!id || !section) return;
+      const status = this.status[id]!;
+      const step = poSteps.indexOf(status);
+      const action = section.querySelector<HTMLElement>("[data-gd-advance]")!;
+      action.textContent = poStatus[status]!.action;
+      action.hidden = !poStatus[status]!.action;
+      section.querySelectorAll<HTMLElement>("[data-step]").forEach((item, at) => {
+        const done = at < step || step === poSteps.length - 1;
+        const dot = item.querySelector("[data-gd-dot]")!;
+        if (at === step) item.setAttribute("aria-current", "step");
+        else item.removeAttribute("aria-current");
+        dot.classList.remove(...`${classes.stepDone} ${classes.stepNow} ${classes.stepNext}`.split(" "));
+        dot.classList.add(...(done ? classes.stepDone! : at === step ? classes.stepNow! : classes.stepNext!).split(" "));
+        dot.querySelector("svg")!.toggleAttribute("hidden", !done);
+        dot.querySelector("span")!.hidden = done;
+        item.querySelector("[data-gd-step-label]")!.className = at <= step ? "font-medium" : "text-muted";
+      });
+      // Barang yang diterima selama sesi ini menambah stok di kolom On hand.
+      const { lines } = orders.find((order) => order.id === id)!;
+      section.querySelectorAll("tbody tr").forEach((row, at) => {
+        const line = lines[at]!;
+        row.lastElementChild!.textContent = num(line.onHand + (this.arrived.includes(id) ? line.qty : 0));
+      });
+    }
+
+    private advanceOrder() {
+      const { poSteps, poStatus, orders, warehouses } = this.config;
+      const id = this.find("[data-gd-detail] [data-order]")!.dataset.order!;
+      const order = orders.find((item) => item.id === id)!;
+      const from = this.status[id]!;
+      const next = poSteps[poSteps.indexOf(from) + 1]!;
+      const units = order.lines.reduce((sum, line) => sum + line.qty, 0);
+      this.status = { ...this.status, [id]: next };
+      this.orderId = id;
+      this.toggles.status = "all";
+      this.syncToggle(this.find('[data-gd-toggle="status"]')!, "all");
+      if (next === "received") this.arrived = [...this.arrived, id];
+      this.renderOrders();
+      notify(
+        poStatus[from]!.done,
+        next === "received"
+          ? `${id}: ${signed(units)} units added to ${warehouses[this.wh]!.label}`
+          : `${id} to ${order.supplier}`,
+      );
+    }
+
+    /* Shipments */
+
+    private shownShipments() {
+      const courier = this.find<HTMLSelectElement>("[data-gd-courier]")!.value;
+      return this.rows.filter((card) => courier === "all" || card.dataset.courier === courier);
+    }
+
+    private openShipments() {
+      const last = this.config.stages.at(-1);
+      return this.shownShipments().filter((card) => this.stage[card.dataset.shipment!] !== last).length;
+    }
+
+    private renderShipments() {
+      const { stages, warehouses } = this.config;
+      const shown = this.shownShipments();
+      for (const column of this.findAll("[data-stage]")) {
+        const cards = shown.filter((card) => this.stage[card.dataset.shipment!] === column.dataset.stage);
+        column.querySelector("[data-gd-cards]")!.replaceChildren(...cards);
+        column.querySelector("[data-gd-count]")!.textContent = String(cards.length);
+      }
+      for (const card of this.rows) {
+        const id = card.dataset.shipment!;
+        const next = stages[stages.indexOf(this.stage[id]!) + 1];
+        const button = card.querySelector<HTMLElement>("[data-gd-move]")!;
+        button.hidden = !next;
+        button.setAttribute("aria-label", `Move to ${next}: ${id}`);
+        button.querySelector("[data-gd-move-label]")!.textContent = `Move to ${next}`;
+      }
+      this.find("[data-open]")!.textContent =
+        `${plural(this.openShipments(), "open order")} from ${warehouses[this.wh]!.label}`;
+    }
+
+    private advanceShipment(card: HTMLElement) {
+      const { stages } = this.config;
+      const id = card.dataset.shipment!;
+      const next = stages[stages.indexOf(this.stage[id]!) + 1]!;
+      this.stage = { ...this.stage, [id]: next };
+      this.renderShipments();
+      notify(`${id} moved to ${next}`, card.dataset.customer);
+    }
+
+    /* Suppliers */
+
+    private sortSuppliers(key: string) {
+      const value = (card: HTMLElement) => Number(card.dataset[key]);
+      this.find("[data-gd-suppliers]")!.replaceChildren(
+        ...this.rows.toSorted((a, b) => (key === "lead" ? value(a) - value(b) : value(b) - value(a))),
+      );
+    }
+
+    private contact(id: string) {
+      const supplier = this.config.suppliers.find((item) => item.id === id)!;
+      const dialog = dialogOf(this.config.ids.contact)!;
+      this.supplierId = id;
+      for (const key of ["contact", "name", "phone", "email"] as const)
+        dialog.querySelector(`[data-gd-f="${key}"]`)!.textContent = supplier[key];
+      this.openForm("message", this.config.ids.contact);
+    }
+
+    private submitMessage(form: HTMLFormElement) {
+      const supplier = this.config.suppliers.find((item) => item.id === this.supplierId)!;
+      const filled = fieldOf(form, "message").value.trim() !== "";
+      if (this.setError(form, "message", filled ? "" : "Write a message first")) return;
+      dialogOf(this.config.ids.contact)?.close();
+      notify("Message sent", `${supplier.contact} at ${supplier.name}`);
+    }
+
+    /* Reports */
+
+    private renderPeriod() {
+      const { period } = this.toggles;
+      const factor = period === "90" ? this.config.quarterFactor : 1;
+      let moved = 0;
+      for (const item of this.findAll("[data-mover]")) {
+        const units = Math.round(Number(item.dataset.units) * factor);
+        moved += units;
+        item.querySelector("[data-gd-units]")!.textContent = num(units);
+      }
+      this.find('[data-gd-kpi-label="2"]')!.textContent = `Units moved, ${period} days`;
+      this.find('[data-kpi="2"]')!.textContent = num(moved);
+    }
+
+    /* Settings */
+
+    private alertsOn() {
+      return this.findAll<HTMLInputElement>("[data-gd-alert]").filter((item) => item.checked);
+    }
+
+    private renderAlerts() {
+      this.find("[data-alerts]")!.textContent =
+        `${this.alertsOn().length} of ${this.findAll("[data-gd-alert]").length} on`;
+    }
+
+    private saveSettings(form: HTMLFormElement) {
+      const { safetyMax } = this.config;
+      const days = Number(fieldOf(form, "safety").value);
+      const valid = Number.isInteger(days) && days >= 1 && days <= safetyMax;
+      if (this.setError(form, "safety", valid ? "" : `Enter a number from 1 to ${safetyMax}`)) return;
+      notify("Settings saved", `Safety stock ${plural(days, "day")}, ${plural(this.alertsOn().length, "alert")} on`);
+    }
+
+    private resetSettings() {
+      const form = this.find<HTMLFormElement>('[data-gd-form="settings"]')!;
+      fieldOf(form, "safety").value = this.config.safetyDefault;
+      (fieldOf(form, "auto") as HTMLInputElement).checked = true;
+      for (const item of this.findAll<HTMLInputElement>("[data-gd-alert]"))
+        item.checked = this.config.defaultAlerts.includes(item.name);
+      this.setError(form, "safety", "");
+      this.renderAlerts();
+      notify("Settings reset", "Defaults restored", "default");
+    }
+  }
+
+  if (!customElements.get("gudang-template"))
+    customElements.define("gudang-template", GudangTemplate);
+</script>

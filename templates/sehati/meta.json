@@ -1,0 +1,32 @@
+{
+  "name": "sehati",
+  "accent": "emerald",
+  "kind": "dashboard",
+  "title": "Sehati",
+  "headline": {
+    "en": "Clinic Management Dashboard",
+    "id": "Dashboard Manajemen Klinik"
+  },
+  "description": {
+    "en": "Sehati is a clinic management dashboard for clinics, dental practices, and small hospitals: run the queue board with a live queue panel, book and reschedule appointments on the week grid, open patient records with visits, vitals, and allergies, manage the doctor roster, dispense prescriptions and watch stock, track BPJS and private invoices in Rupiah, and set clinic hours.",
+    "id": "Sehati adalah dashboard manajemen klinik untuk klinik, praktik dokter gigi, dan rumah sakit kecil: jalankan papan antrean dengan panel antrean langsung, buat dan jadwalkan ulang janji temu di kisi mingguan, buka rekam pasien berisi kunjungan, tanda vital, dan alergi, atur jadwal dokter, serahkan resep dan pantau stok, lacak tagihan BPJS dan umum dalam Rupiah, serta atur jam buka klinik."
+  },
+  "sectors": {
+    "en": ["Clinics", "Dental practices", "Pharmacies"],
+    "id": ["Klinik", "Praktik dokter gigi", "Apotek"]
+  },
+  "components": [
+    "badge",
+    "button",
+    "drawer",
+    "dropdown-menu",
+    "input",
+    "modal",
+    "popover",
+    "select",
+    "switch",
+    "tabs",
+    "toast"
+  ],
+  "addedAt": "2026-11-21"
+}

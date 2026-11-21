@@ -1,0 +1,1815 @@
+---
+/**
+ * Versi Astro: markup dirender di server, interaksi lewat custom element <sehati-template> di bawah.
+ * Isi tiap halaman disimpan di <template> dan diklon saat dibuka, jadi state halaman selalu mulai
+ * dari awal, sama seperti React yang me-mount ulang halaman. Antrean dan rekam pasien dipakai bersama.
+ */
+import Badge from "../../../components/badge/Badge.astro";
+import Button from "../../../components/button/Button.astro";
+import Drawer from "../../../components/drawer/Drawer.astro";
+import DropdownMenu, {
+  type DropdownMenuItem,
+} from "../../../components/dropdown-menu/DropdownMenu.astro";
+import Input from "../../../components/input/Input.astro";
+import Modal from "../../../components/modal/Modal.astro";
+import Popover from "../../../components/popover/Popover.astro";
+import Select from "../../../components/select/Select.astro";
+import Switch from "../../../components/switch/Switch.astro";
+import Tabs from "../../../components/tabs/Tabs.astro";
+import Toaster from "../../../components/toast/Toast.astro";
+
+// prettier-ignore
+const icons = {
+  pulse: "M3 12h4l3-8 4 16 3-8h4",
+  calendar: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2",
+  users: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  doctor: "M5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2h-1M8 15v1a6 6 0 0 0 12 0v-4M22 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0",
+  pill: "m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7ZM8.5 8.5l7 7",
+  receipt: "M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1ZM8 8h8M8 12h8M8 16h5",
+  sliders: "M4 6h10M18 6h2M4 12h2M10 12h10M4 18h8M16 18h4M14 4v4M6 10v4M12 16v4",
+  bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0",
+  plus: "M12 5v14M5 12h14",
+  check: "M20 6 9 17l-5-5",
+};
+type IconName = keyof typeof icons;
+
+// prettier-ignore
+const pages = {
+  today: { label: "Today", title: "Today", icon: "pulse" },
+  appointments: { label: "Agenda", title: "Appointments", icon: "calendar" },
+  patients: { label: "Patients", title: "Patients", icon: "users" },
+  doctors: { label: "Doctors", title: "Doctors", icon: "doctor" },
+  pharmacy: { label: "Pharmacy", title: "Pharmacy", icon: "pill" },
+  billing: { label: "Billing", title: "Billing", icon: "receipt" },
+  settings: { label: "Settings", title: "Settings", icon: "sliders" },
+} as const;
+type PageId = keyof typeof pages;
+const pageIds = Object.keys(pages) as PageId[];
+const DEFAULT_PAGE: PageId = "today";
+const TITLE_ID = "sehati-page-title";
+const PATIENT_DRAWER = "sehati-patient-drawer";
+const APPOINTMENT_MODAL = "sehati-appointment-modal";
+const INVOICE_MODAL = "sehati-invoice-modal";
+const CLINIC = "Klinik Sehati Bandung";
+const TODAY = "Thu, 19 Nov 2026";
+
+/* Dokter dan poli. Semua nama dan data pasien fiktif. */
+// prettier-ignore
+const doctors = [
+  { id: "d1", name: "dr. Ratna Dewi", poli: "General", room: "Room 1", tone: "c1", load: 14, hours: ["08-14", "08-14", "13-19", "08-14", "08-14", "Off"] },
+  { id: "d2", name: "drg. Bima Santoso", poli: "Dental", room: "Room 2", tone: "c2", load: 9, hours: ["09-15", "Off", "09-15", "09-15", "09-15", "09-13"] },
+  { id: "d3", name: "dr. Laras Putri, Sp.A", poli: "Pediatrics", room: "Room 3", tone: "c3", load: 7, hours: ["13-19", "13-19", "08-14", "08-14", "Off", "08-12"] },
+  { id: "d4", name: "dr. Yoga Pratama, Sp.PD", poli: "Internal medicine", room: "Room 4", tone: "c4", load: 0, hours: ["Off", "08-14", "08-14", "Off", "13-19", "08-12"] },
+];
+type Doctor = (typeof doctors)[number];
+const ROOMS = 3;
+const TODAY_INDEX = 3;
+
+// prettier-ignore
+const patients = [
+  { id: "p1", mrn: "RM-00412", name: "Siti Aminah", sex: "F", age: 34, payer: "BPJS", doctor: "d1", last: "12 Oct 2026", phone: "+62 812 5550 0141", blood: "O+", city: "Bandung", allergies: ["Penicillin"] },
+  { id: "p2", mrn: "RM-00398", name: "Budi Santoso", sex: "M", age: 52, payer: "Umum", doctor: "d1", last: "3 Nov 2026", phone: "+62 812 5550 0122", blood: "A+", city: "Cimahi", allergies: ["Sulfa drugs", "Shellfish"] },
+  { id: "p3", mrn: "RM-00377", name: "Made Wirawan", sex: "M", age: 61, payer: "BPJS", doctor: "d1", last: "28 Oct 2026", phone: "+62 812 5550 0109", blood: "B+", city: "Bandung", allergies: [] as string[] },
+  { id: "p4", mrn: "RM-00431", name: "Dewi Lestari", sex: "F", age: 28, payer: "Umum", doctor: "d2", last: "21 Jul 2026", phone: "+62 812 5550 0163", blood: "AB+", city: "Lembang", allergies: ["Latex"] },
+  { id: "p5", mrn: "RM-00405", name: "Agus Salim", sex: "M", age: 45, payer: "BPJS", doctor: "d2", last: "9 Sep 2026", phone: "+62 812 5550 0137", blood: "O+", city: "Bandung", allergies: [] as string[] },
+  { id: "p6", mrn: "RM-00440", name: "Putri Ayu", sex: "F", age: 6, payer: "Umum", doctor: "d3", last: "5 Nov 2026", phone: "+62 812 5550 0178", blood: "A+", city: "Cimahi", allergies: ["Egg protein"] },
+  { id: "p7", mrn: "RM-00442", name: "Rizky Ramadhan", sex: "M", age: 4, payer: "BPJS", doctor: "d3", last: "30 Oct 2026", phone: "+62 812 5550 0185", blood: "B+", city: "Bandung", allergies: [] as string[] },
+  { id: "p8", mrn: "RM-00366", name: "Nur Hidayati", sex: "F", age: 57, payer: "Umum", doctor: "d1", last: "14 Oct 2026", phone: "+62 812 5550 0104", blood: "O-", city: "Sumedang", allergies: ["Aspirin"] },
+];
+type Patient = (typeof patients)[number];
+
+/* Antrean hari ini */
+// prettier-ignore
+const queue = [
+  { id: "q1", no: "A-012", patient: "p1", doctor: "d1", type: "Consultation", at: "08:42", status: "serving" },
+  { id: "q4", no: "B-007", patient: "p4", doctor: "d2", type: "Scaling", at: "08:50", status: "serving" },
+  { id: "q2", no: "A-013", patient: "p2", doctor: "d1", type: "Follow-up", at: "08:55", status: "waiting" },
+  { id: "q6", no: "C-005", patient: "p6", doctor: "d3", type: "Immunization", at: "09:02", status: "waiting" },
+  { id: "q5", no: "B-008", patient: "p5", doctor: "d2", type: "Extraction", at: "09:05", status: "waiting" },
+  { id: "q3", no: "A-014", patient: "p3", doctor: "d1", type: "Lab review", at: "09:10", status: "waiting" },
+  { id: "q7", no: "C-006", patient: "p7", doctor: "d3", type: "Consultation", at: "09:14", status: "waiting" },
+  { id: "q8", no: "A-015", patient: "p8", doctor: "d1", type: "Consultation", at: "09:21", status: "waiting" },
+];
+type QueueState = Record<string, string>;
+const DONE_BASE = 21;
+const UP_NEXT = 5;
+
+// prettier-ignore
+const visitTypes = [
+  { label: "General", count: 14, tone: "c1" }, { label: "Dental", count: 9, tone: "c2" },
+  { label: "Pediatrics", count: 7, tone: "c3" }, { label: "Lab", count: 4, tone: "c4" },
+  { label: "Vaccination", count: 3, tone: "c5" },
+];
+const VISIT_TOTAL = 37;
+// prettier-ignore
+const flow = [
+  { hour: "08", count: 3 }, { hour: "09", count: 6 }, { hour: "10", count: 8 }, { hour: "11", count: 5 },
+  { hour: "12", count: 2 }, { hour: "13", count: 4 }, { hour: "14", count: 6 }, { hour: "15", count: 3 },
+];
+const FLOW_MAX = 8;
+
+/* Jadwal minggu ini */
+// prettier-ignore
+const days = [
+  { id: "mon", label: "Mon", date: "16" }, { id: "tue", label: "Tue", date: "17" }, { id: "wed", label: "Wed", date: "18" },
+  { id: "thu", label: "Thu", date: "19" }, { id: "fri", label: "Fri", date: "20" }, { id: "sat", label: "Sat", date: "21" },
+];
+const TODAY_DAY = "thu";
+const slots = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00"];
+// prettier-ignore
+const appointmentList = [
+  { id: "a1", patient: "Siti Aminah", doctor: "d1", day: "mon", time: "08:00" },
+  { id: "a2", patient: "Agus Salim", doctor: "d2", day: "mon", time: "10:00" },
+  { id: "a3", patient: "Budi Santoso", doctor: "d1", day: "tue", time: "09:00" },
+  { id: "a4", patient: "Putri Ayu", doctor: "d3", day: "tue", time: "13:00" },
+  { id: "a5", patient: "Dewi Lestari", doctor: "d2", day: "wed", time: "11:00" },
+  { id: "a6", patient: "Made Wirawan", doctor: "d1", day: "thu", time: "08:00" },
+  { id: "a7", patient: "Rizky Ramadhan", doctor: "d3", day: "thu", time: "10:00" },
+  { id: "a8", patient: "Nur Hidayati", doctor: "d1", day: "thu", time: "13:00" },
+  { id: "a9", patient: "Dewi Lestari", doctor: "d2", day: "fri", time: "09:00" },
+  { id: "a10", patient: "Siti Aminah", doctor: "d4", day: "fri", time: "14:00" },
+  { id: "a11", patient: "Budi Santoso", doctor: "d4", day: "sat", time: "08:00" },
+];
+type Appointment = (typeof appointmentList)[number];
+const blankAppointment: Appointment = {
+  id: "",
+  patient: "",
+  doctor: "d1",
+  day: TODAY_DAY,
+  time: "08:00",
+};
+
+/* Rekam medis ringkas */
+const visitDates = ["12 Oct 2026", "3 Sep 2026", "21 Jul 2026"];
+// prettier-ignore
+const visitPool = [
+  { title: "General checkup", note: "Blood pressure stable, continue current medication." },
+  { title: "Follow-up visit", note: "Lab results reviewed, no changes needed." },
+  { title: "Dental scaling", note: "Mild gingivitis, advised flossing daily." },
+  { title: "Vaccination", note: "Influenza vaccine given, no reaction observed." },
+  { title: "Lab panel", note: "Fasting glucose and lipid profile ordered." },
+];
+// prettier-ignore
+const vitalDefs = [
+  { label: "Systolic", unit: "mmHg", base: 110, step: 5, spread: 14 },
+  { label: "Heart rate", unit: "bpm", base: 66, step: 3, spread: 12 },
+  { label: "Resp. rate", unit: "/min", base: 14, step: 1, spread: 3 },
+];
+const wave = [0, 3, -2, 4, 1];
+const patientTabs = [
+  { value: "profile", label: "Profile" },
+  { value: "visits", label: "Visits" },
+  { value: "vitals", label: "Vitals" },
+  { value: "allergies", label: "Allergies" },
+];
+
+/* Farmasi */
+// prettier-ignore
+const prescriptions = [
+  { id: "r1", no: "RX-2051", patient: "Siti Aminah", doctor: "d1", items: "Amoxicillin 500 mg x15, Paracetamol 500 mg x10", dispensed: false },
+  { id: "r2", no: "RX-2052", patient: "Dewi Lestari", doctor: "d2", items: "Ibuprofen 400 mg x10, Chlorhexidine rinse x1", dispensed: false },
+  { id: "r3", no: "RX-2053", patient: "Made Wirawan", doctor: "d1", items: "Metformin 500 mg x60, Amlodipine 5 mg x30", dispensed: false },
+  { id: "r4", no: "RX-2054", patient: "Putri Ayu", doctor: "d3", items: "Cetirizine syrup x1, Zinc 20 mg x10", dispensed: false },
+  { id: "r5", no: "RX-2050", patient: "Nur Hidayati", doctor: "d1", items: "Omeprazole 20 mg x14", dispensed: true },
+];
+// prettier-ignore
+const stock = [
+  { name: "Amoxicillin 500 mg", form: "Capsule", stock: 320, min: 200, exp: "Aug 2027" },
+  { name: "Paracetamol 500 mg", form: "Tablet", stock: 1240, min: 500, exp: "Jan 2028" },
+  { name: "Cetirizine 10 mg", form: "Tablet", stock: 45, min: 150, exp: "Mar 2027" },
+  { name: "Metformin 500 mg", form: "Tablet", stock: 610, min: 300, exp: "Nov 2027" },
+  { name: "Amlodipine 5 mg", form: "Tablet", stock: 90, min: 200, exp: "Jun 2027" },
+  { name: "Ibuprofen 400 mg", form: "Tablet", stock: 260, min: 200, exp: "Sep 2027" },
+  { name: "Chlorhexidine rinse", form: "Bottle", stock: 0, min: 20, exp: "Dec 2026" },
+  { name: "ORS sachet", form: "Sachet", stock: 180, min: 100, exp: "May 2028" },
+];
+type StockItem = (typeof stock)[number];
+// prettier-ignore
+const stockStates = {
+  ok: { label: "In stock", badge: "success", bar: "bg-success" },
+  low: { label: "Low stock", badge: "warning", bar: "bg-warning" },
+  out: { label: "Out of stock", badge: "danger", bar: "bg-danger" },
+} as const;
+
+/* Tagihan */
+// prettier-ignore
+const invoices = [
+  { id: "i1", no: "INV-1182", patient: "Siti Aminah", payer: "BPJS", date: "19 Nov", covered: 150000, paid: false, items: [{ label: "Consultation", amount: 150000 }, { label: "Amoxicillin 500 mg", amount: 45000 }] },
+  { id: "i2", no: "INV-1181", patient: "Budi Santoso", payer: "Umum", date: "19 Nov", covered: 0, paid: false, items: [{ label: "Consultation", amount: 150000 }, { label: "Blood panel", amount: 220000 }] },
+  { id: "i3", no: "INV-1180", patient: "Dewi Lestari", payer: "Umum", date: "19 Nov", covered: 0, paid: true, items: [{ label: "Dental scaling", amount: 450000 }, { label: "Fluoride treatment", amount: 120000 }] },
+  { id: "i4", no: "INV-1179", patient: "Made Wirawan", payer: "BPJS", date: "18 Nov", covered: 210000, paid: true, items: [{ label: "Consultation", amount: 150000 }, { label: "Metformin 500 mg", amount: 60000 }] },
+  { id: "i5", no: "INV-1178", patient: "Putri Ayu", payer: "Umum", date: "18 Nov", covered: 0, paid: false, items: [{ label: "Pediatric visit", amount: 175000 }, { label: "Immunization", amount: 310000 }] },
+  { id: "i6", no: "INV-1177", patient: "Agus Salim", payer: "BPJS", date: "18 Nov", covered: 350000, paid: false, items: [{ label: "Tooth extraction", amount: 350000 }, { label: "Ibuprofen 400 mg", amount: 30000 }] },
+  { id: "i7", no: "INV-1176", patient: "Nur Hidayati", payer: "Umum", date: "17 Nov", covered: 0, paid: true, items: [{ label: "Consultation", amount: 150000 }, { label: "ECG", amount: 250000 }] },
+];
+type Invoice = (typeof invoices)[number];
+// prettier-ignore
+const statusFilters = [{ id: "all", label: "All" }, { id: "unpaid", label: "Unpaid" }, { id: "paid", label: "Paid" }];
+const payerFilters = ["All payers", "BPJS", "Umum"];
+
+/* Pengaturan */
+// prettier-ignore
+const openingHours = [
+  { day: "Monday", hours: "08:00 - 20:00", open: true }, { day: "Tuesday", hours: "08:00 - 20:00", open: true },
+  { day: "Wednesday", hours: "08:00 - 20:00", open: true }, { day: "Thursday", hours: "08:00 - 20:00", open: true },
+  { day: "Friday", hours: "08:00 - 20:00", open: true }, { day: "Saturday", hours: "08:00 - 14:00", open: true },
+  { day: "Sunday", hours: "09:00 - 12:00", open: false },
+];
+// prettier-ignore
+const alerts = [
+  { id: "queue", label: "Queue call announcements", note: "Play a chime and read the number in the waiting room.", on: true },
+  { id: "reminder", label: "WhatsApp appointment reminders", note: "Sent one day before the visit at 17:00.", on: true },
+  { id: "stock", label: "Low stock alerts", note: "Notify the pharmacist when an item drops below its minimum.", on: false },
+];
+// prettier-ignore
+const notifications = [
+  { title: "Low stock: Cetirizine 10 mg", time: "12 min ago" },
+  { title: "BPJS claim INV-1179 approved", time: "1 hour ago" },
+  { title: "dr. Laras Putri starts at 13:00 today", time: "2 hours ago" },
+];
+// prettier-ignore
+const userMenu: DropdownMenuItem[] = [
+  { label: "My profile", value: "Profile opened" }, { label: "Switch clinic", value: "Clinic switched" },
+  { separator: true }, { label: "Sign out", value: "Signed out", danger: true },
+];
+
+/* Gaya */
+// Palet lokal untuk kategori grafik dan avatar, nilai terang dan gelap. Hex hanya di sini.
+const palette =
+  "[--tpl-c1:#0d9488] [--tpl-c2:#2563eb] [--tpl-c3:#d97706] [--tpl-c4:#7c3aed] [--tpl-c5:#e11d48] [--tpl-av1:#ccfbf1] [--tpl-av2:#dbeafe] [--tpl-av3:#fef3c7] [--tpl-av4:#ede9fe] [--tpl-av5:#ffe4e6] [--tpl-av-ink:#1f2937] dark:[--tpl-c1:#2dd4bf] dark:[--tpl-c2:#60a5fa] dark:[--tpl-c3:#fbbf24] dark:[--tpl-c4:#a78bfa] dark:[--tpl-c5:#fb7185]";
+const shell = `${palette} min-h-dvh bg-canvas text-sm text-ink lg:pl-16 xl:pr-80`;
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const rail =
+  "fixed inset-y-0 left-0 z-20 hidden w-16 flex-col items-center gap-1 border-r border-line bg-surface py-3 lg:flex";
+const railBase = `inline-flex size-10 items-center justify-center rounded-lg transition-colors duration-150 ${focusRing}`;
+const railActive = "bg-primary-soft text-primary";
+const railIdle = "text-muted hover:bg-subtle hover:text-ink";
+const bottomBar =
+  "fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-surface px-1 lg:hidden";
+const bottomBase = `flex h-14 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium transition-colors duration-150 ${focusRing}`;
+const bottomActive = "text-primary";
+const bottomIdle = "text-muted hover:text-ink";
+const logo =
+  "inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-on-primary";
+const topbar =
+  "sticky top-0 z-10 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-line bg-surface px-4 py-2.5 lg:px-6";
+const iconTrigger = "[&>button]:relative [&>button]:px-2.5";
+const userTrigger = "[&>button]:gap-2 [&>button]:px-1.5 sm:[&>button]:pr-3";
+const main = "grid min-w-0 content-start gap-5 px-4 pt-5 pb-24 lg:px-6 lg:pb-8";
+const todayPanel =
+  "fixed inset-y-0 right-0 z-10 hidden w-80 flex-col gap-5 overflow-y-auto border-l border-line bg-surface p-5 xl:flex";
+const card = "rounded-xl border border-line bg-surface";
+const h2 = "text-base font-semibold";
+const h3 = "text-sm font-semibold";
+const note = "text-xs text-muted";
+const statGrid =
+  "grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line";
+const statCell = "bg-surface p-4";
+const statValue = "mt-1 text-2xl font-semibold tracking-tight tabular-nums";
+const ticket = "rounded-lg border border-primary-line bg-primary-soft p-3";
+const ticketFree =
+  "flex min-h-[86px] items-center rounded-lg border border-dashed border-line p-3 text-muted";
+const ticketNo = "text-2xl font-semibold tracking-tight tabular-nums";
+const queueRow = "flex items-center gap-3 py-2";
+const queueNo = "w-12 shrink-0 font-semibold tabular-nums";
+const tableWrap = `overflow-x-auto ${card}`;
+const table = "w-full border-collapse";
+const th =
+  "px-4 py-2.5 text-left text-xs font-medium whitespace-nowrap text-muted";
+const td = "border-t border-line px-4 py-2.5 whitespace-nowrap";
+const linkButton = `rounded-sm text-left font-medium underline-offset-4 hover:underline ${focusRing}`;
+const chip = `inline-flex h-8 items-center rounded-lg px-3 font-medium whitespace-nowrap transition-colors duration-150 ${focusRing}`;
+const chipOn = "bg-primary-soft text-primary";
+const chipOff = "text-muted hover:bg-subtle hover:text-ink";
+const slotCell = "h-16 border-t border-l border-line p-1 align-top";
+const slotToday = "bg-primary-soft/40";
+const booking = `flex w-full min-w-0 items-center gap-1.5 rounded-md bg-subtle px-2 py-1 text-left text-xs font-medium transition-colors duration-150 hover:bg-line ${focusRing}`;
+const face =
+  "inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-(--tpl-av-ink) select-none";
+const faceTones = [
+  "bg-(--tpl-av1)",
+  "bg-(--tpl-av2)",
+  "bg-(--tpl-av3)",
+  "bg-(--tpl-av4)",
+  "bg-(--tpl-av5)",
+];
+const tones: Record<string, string> = {
+  c1: "bg-(--tpl-c1)",
+  c2: "bg-(--tpl-c2)",
+  c3: "bg-(--tpl-c3)",
+  c4: "bg-(--tpl-c4)",
+  c5: "bg-(--tpl-c5)",
+};
+const dot = "size-2 shrink-0 rounded-full";
+const field = "rounded-lg bg-subtle p-3";
+
+const cx = (...c: (string | false | null | undefined)[]) =>
+  c.filter(Boolean).join(" ");
+const rupiah = (value: number) => `Rp ${value.toLocaleString("id-ID")}`;
+/** Inisial tanpa gelar (dr., drg., Sp.A). */
+const initials = (name: string) =>
+  name
+    .split(",")[0]!
+    .split(" ")
+    .filter((word) => !word.endsWith("."))
+    .filter((_, index, words) => index === 0 || index === words.length - 1)
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase();
+/** Warna avatar inisial yang selalu sama untuk nama yang sama. */
+const faceTone = (name: string) =>
+  faceTones[
+    [...name].reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+      faceTones.length
+  ];
+const doctorById = (id: string) => doctors.find((item) => item.id === id)!;
+const patientById = (id: string) => patients.find((item) => item.id === id)!;
+const dayById = (id: string) => days.find((item) => item.id === id)!;
+const sexLabel = (patient: Patient) =>
+  `${patient.age} yr, ${patient.sex === "F" ? "female" : "male"}`;
+
+const servingOf = (state: QueueState, doctorId: string) =>
+  queue.find(
+    (item) => item.doctor === doctorId && state[item.id] === "serving",
+  );
+const waitingOf = (state: QueueState, doctorId?: string) =>
+  queue.filter(
+    (item) =>
+      state[item.id] === "waiting" && (!doctorId || item.doctor === doctorId),
+  );
+const countOf = (state: QueueState, status: string) =>
+  queue.filter((item) => state[item.id] === status).length;
+
+const visitsFor = (index: number) =>
+  visitDates.map((date, offset) => ({
+    date,
+    ...visitPool[(index + offset) % visitPool.length]!,
+  }));
+const seriesFor = (def: (typeof vitalDefs)[number], index: number) =>
+  wave.map(
+    (_, at) =>
+      def.base +
+      ((index * def.step) % def.spread) +
+      wave[(at + index * def.step) % wave.length]!,
+  );
+/** Titik polyline sparkline di viewBox 100 x 32. */
+const spark = (values: number[]) => {
+  const min = Math.min(...values);
+  const span = Math.max(...values) - min || 1;
+  return values
+    .map(
+      (value, at) =>
+        `${at * 25},${28 - Math.round(((value - min) * 24) / span)}`,
+    )
+    .join(" ");
+};
+
+const stockState = (item: StockItem) =>
+  item.stock === 0 ? "out" : item.stock < item.min ? "low" : "ok";
+const stockLevel = (item: StockItem) =>
+  Math.min(100, Math.round((item.stock / (item.min * 2)) * 100));
+const subtotal = (invoice: Invoice) =>
+  invoice.items.reduce((sum, item) => sum + item.amount, 0);
+const due = (invoice: Invoice) => subtotal(invoice) - invoice.covered;
+const nextAppointmentId = (list: Appointment[]) =>
+  `a${1 + Math.max(0, ...list.map((item) => Number(item.id.slice(1))))}`;
+/** Nama wajib diisi dan satu dokter hanya punya satu pasien per slot. */
+const checkAppointment = (form: Appointment, list: Appointment[]) => ({
+  patient: form.patient.trim() ? "" : "Enter the patient name.",
+  slot: list.some(
+    (item) =>
+      item.id !== form.id &&
+      item.doctor === form.doctor &&
+      item.day === form.day &&
+      item.time === form.time,
+  )
+    ? "That slot is already booked for this doctor."
+    : "",
+});
+
+const headRow = "flex flex-wrap items-end justify-between gap-3";
+const nowBase = "flex items-center gap-3 rounded-lg border p-3";
+const nowOn = "border-primary-line bg-primary-soft";
+const nowOff = "border-dashed border-line";
+const errorText = "text-sm text-danger";
+const PATIENT_ERROR = "sehati-appointment-patient-error";
+const NAME_ERROR = "sehati-clinic-name-error";
+/** Ikon garis 24px sebagai HTML, seperti di versi Blade. */
+const icon = (name: IconName, className = "size-5") =>
+  `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[name]}"></path></svg>`;
+const faceHtml = (name: string, className: string) =>
+  `<span aria-hidden="true" class="${cx(face, faceTone(name), className)}" data-face>${initials(name)}</span>`;
+const headHtml = (id: string, title: string, text: string) =>
+  `<div><h2 id="${id}" class="${h2}">${title}</h2><p data-note class="${cx(note, "mt-0.5")}">${text}</p></div>`;
+type QueueItem = (typeof queue)[number];
+/** Baris antrean di papan dan di panel; script memasangnya ulang dari <template data-seh-store>. */
+const boardRowHtml = (item: QueueItem) =>
+  `<li class="${queueRow}" data-row="${item.id}"><span class="${queueNo}">${item.no}</span><button type="button" class="${cx(linkButton, "min-w-0 flex-1 truncate")}" data-seh-patient="${item.patient}">${patientById(item.patient).name}</button><span class="${cx(note, "tabular-nums")}">${item.at}</span></li>`;
+const nextRowHtml = (item: QueueItem) =>
+  `<li class="${queueRow}" data-row="${item.id}"><span class="${queueNo}">${item.no}</span><div class="min-w-0 flex-1"><p class="truncate">${patientById(item.patient).name}</p><p class="${cx(note, "truncate")}">${doctorById(item.doctor).room} · ${item.type}</p></div><span class="${cx(note, "tabular-nums")}">${item.at}</span></li>`;
+const rows = (items: QueueItem[], html: (item: QueueItem) => string) =>
+  items.map(html).join("");
+
+/* State awal, sama dengan render pertama React. */
+const initial: QueueState = Object.fromEntries(
+  queue.map((item) => [item.id, item.status]),
+);
+const rooms = doctors.slice(0, ROOMS).map((doctor) => ({
+  doctor,
+  serving: servingOf(initial, doctor.id),
+  waiting: waitingOf(initial, doctor.id),
+}));
+const upNext = waitingOf(initial).slice(0, UP_NEXT);
+// prettier-ignore
+const stats = [
+  { label: "Waiting", value: countOf(initial, "waiting"), text: "across 3 rooms" },
+  { label: "In consultation", value: countOf(initial, "serving"), text: "rooms occupied" },
+  { label: "Completed", value: DONE_BASE + countOf(initial, "done"), text: "visits since 08:00" },
+  { label: "Avg. wait", value: "14 min", text: "2 min faster than Wednesday" },
+];
+const counts: [string, number][] = [
+  ["Waiting", countOf(initial, "waiting")],
+  ["In room", countOf(initial, "serving")],
+  ["Done", DONE_BASE + countOf(initial, "done")],
+];
+const patient = patients[0]!;
+const profileOf = (item: Patient) => [
+  ["MRN", item.mrn],
+  ["Age and sex", sexLabel(item)],
+  ["Phone", item.phone],
+  ["Blood type", item.blood],
+  ["Insurance", item.payer],
+  ["City", item.city],
+];
+const acceptsToday = (doctor: Doctor) => doctor.hours[TODAY_INDEX] !== "Off";
+const lowCount = stock.filter((item) => stockState(item) !== "ok").length;
+const sum = (items: Invoice[], pick: (item: Invoice) => number) =>
+  items.reduce((total, item) => total + pick(item), 0);
+// prettier-ignore
+const totals = [
+  { label: "Outstanding", value: sum(invoices.filter((item) => !item.paid), due), text: "awaiting payment" },
+  { label: "Collected", value: sum(invoices.filter((item) => item.paid), due), text: "paid by patients this week" },
+  { label: "BPJS claims", value: sum(invoices, (item) => item.covered), text: "covered by BPJS Kesehatan" },
+];
+const firstInvoice = invoices[0]!;
+const doctorOptions = doctors.map((doctor) => ({
+  id: doctor.id,
+  label: `${doctor.name} (${doctor.poli})`,
+}));
+/** Data dan class yang dipakai script di klien. */
+const config = JSON.stringify({
+  pages,
+  defaultPage: DEFAULT_PAGE,
+  titleId: TITLE_ID,
+  drawerId: PATIENT_DRAWER,
+  appointmentId: APPOINTMENT_MODAL,
+  invoiceId: INVOICE_MODAL,
+  patientError: PATIENT_ERROR,
+  nameError: NAME_ERROR,
+  doctors: doctors.map(({ id, name, room, tone }) => ({ id, name, room, tone })),
+  rooms: ROOMS,
+  patients,
+  queue,
+  doneBase: DONE_BASE,
+  upNext: UP_NEXT,
+  days: days.map(({ id, label }) => ({ id, label })),
+  appointments: appointmentList,
+  blank: blankAppointment,
+  visitPool,
+  vitalDefs,
+  wave,
+  invoices,
+  prescriptions: prescriptions.map(({ id, no, patient }) => ({ id, no, patient })),
+  payerAll: payerFilters[0],
+  faceTones,
+  tones,
+  classes: { railActive, railIdle, bottomActive, bottomIdle, chipOn, chipOff, nowOn, nowOff },
+});
+---
+
+<sehati-template class="contents" data-config={config}>
+  <div class={shell}>
+    <nav aria-label="Main" class={rail}>
+      <span aria-hidden="true" class={cx(logo, "mb-3")} set:html={icon("plus")} />
+      {pageIds.map((id) => (
+        <button type="button" aria-label={pages[id].title} aria-current={id === DEFAULT_PAGE ? "page" : undefined} title={pages[id].title} class={cx(railBase, id === DEFAULT_PAGE ? railActive : railIdle, id === "settings" && "mt-auto")} data-seh-go={id} data-seh-nav="rail" set:html={icon(pages[id].icon)} />
+      ))}
+    </nav>
+
+    <header class={topbar}>
+      <span aria-hidden="true" class={cx(logo, "lg:hidden")} set:html={icon("plus")} />
+      <div class="min-w-0 flex-1">
+        <h1 id={TITLE_ID} tabindex="-1" class="truncate text-base leading-tight font-semibold focus:outline-none">{pages[DEFAULT_PAGE].title}</h1>
+        <p class={cx(note, "truncate")}>{`${CLINIC} · ${TODAY}`}</p>
+      </div>
+      <form role="search" class="order-last w-full sm:order-none sm:w-60" data-seh-search>
+        <Input type="search" aria-label="Search patients" placeholder="Search patient or MRN" />
+      </form>
+      <Popover align="end" class={iconTrigger}>
+        <Fragment slot="trigger"><Fragment set:html={icon("bell")} /><span data-unread class="sr-only">Notifications, 3 unread</span><span aria-hidden="true" class="absolute top-2 right-2 size-2 rounded-full bg-danger ring-2 ring-surface" data-seh-unread-dot /></Fragment>
+        <div class="grid gap-3">
+          <p class={h3}>Notifications</p>
+          <ul class="grid gap-3">
+            {notifications.map((item) => (
+              <li class="flex gap-2">
+                <span aria-hidden="true" class={cx(dot, "mt-1.5", "bg-primary")} data-seh-dot />
+                <div>
+                  <p class="font-medium">{item.title}</p>
+                  <p class={note}>{item.time}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <Button variant="secondary" size="sm" data-seh-read>Mark all as read</Button>
+        </div>
+      </Popover>
+      <DropdownMenu items={userMenu} class={userTrigger}>
+        <Fragment slot="trigger"><Fragment set:html={faceHtml("Ayu Kartika", "size-7 text-[11px]")} /><span class="sr-only">Account, </span><span class="hidden sm:inline">Ayu Kartika</span></Fragment>
+      </DropdownMenu>
+    </header>
+
+    <main class={main}>
+      {
+        /* Halaman bawaan dirender langsung (tanpa JS tetap tampil), lalu semua halaman sebagai <template>. */
+        [{ live: true, id: DEFAULT_PAGE }, ...pageIds.map((id) => ({ live: false, id }))].map(({ live, id }) => {
+          const Wrapper = live ? "div" : "template";
+          return (
+            <Wrapper class={live ? "contents" : undefined} data-seh-view={live ? "" : undefined} data-seh-page={live ? undefined : id}>
+              {id === "today" && (
+                <>
+                  <dl class={cx(statGrid, "lg:grid-cols-4")}>
+                    {stats.map((stat) => (
+                      <div class={statCell}>
+                        <dt class={note}>{stat.label}</dt>
+                        <dd data-stat={stat.label} class={statValue}>{stat.value}</dd>
+                        <dd class={note}>{stat.text}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <section aria-labelledby="sehati-board-title" class="grid gap-3">
+                    <div class={headRow} set:html={headHtml("sehati-board-title", "Queue board", "Call the next number when a room is ready.")} />
+                    <div class="grid gap-4 md:grid-cols-3">
+                      {rooms.map(({ doctor, serving, waiting }) => (
+                        <article data-room={doctor.id} aria-label={`${doctor.room}, ${doctor.name}`} class={cx(card, "flex flex-col gap-3 p-4")}>
+                          <div class="flex items-center gap-3">
+                            <Fragment set:html={faceHtml(doctor.name, "size-9 text-xs")} />
+                            <div class="min-w-0">
+                              <h3 class={cx(h3, "truncate")}>{doctor.name}</h3>
+                              <p class={note}>{`${doctor.poli} · ${doctor.room}`}</p>
+                            </div>
+                          </div>
+                          <div data-serving={serving ? "" : undefined} hidden={!serving} class={ticket} data-seh-ticket>
+                            <p class="text-xs font-medium text-primary">Now serving</p>
+                            <p class={ticketNo}>{serving?.no}</p>
+                            <p class="truncate text-xs">{serving && `${patientById(serving.patient).name}, ${serving.type}`}</p>
+                          </div>
+                          <p data-serving={serving ? undefined : ""} hidden={Boolean(serving)} class={ticketFree} data-seh-free>Room is free</p>
+                          <div>
+                            <p data-waiting class={note}>{`${waiting.length} waiting`}</p>
+                            <ul class="divide-y divide-line" set:html={rows(waiting, boardRowHtml)} />
+                          </div>
+                          <div class="mt-auto grid grid-cols-2 gap-2">
+                            <Button variant="secondary" size="sm" disabled={!serving} data-seh-done={doctor.id}>Mark done</Button>
+                            <Button size="sm" disabled={waiting.length === 0} data-seh-call={doctor.id}>Call next</Button>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                    <template data-seh-store="board" set:html={rows(queue, boardRowHtml)} />
+                  </section>
+
+                  <div class="grid gap-4 md:grid-cols-2">
+                    <section aria-labelledby="sehati-types-title" class={cx(card, "grid content-start gap-4 p-4")}>
+                      <div class={headRow} set:html={headHtml("sehati-types-title", "Visits by type", `${VISIT_TOTAL} visits registered today`)} />
+                      <div role="img" aria-label={visitTypes.map((type) => `${type.label} ${type.count}`).join(", ")} class="flex h-3 gap-0.5 overflow-hidden rounded-full">
+                        {visitTypes.map((type) => <span class={tones[type.tone]} style={`flex-grow: ${type.count}`} />)}
+                      </div>
+                      <ul class="grid gap-2">
+                        {visitTypes.map((type) => (
+                          <li class="flex items-center gap-2">
+                            <span aria-hidden="true" class={cx(dot, tones[type.tone])} />
+                            <span class="flex-1">{type.label}</span>
+                            <span class="font-medium tabular-nums">{type.count}</span>
+                            <span class={cx(note, "w-9 text-right tabular-nums")}>{`${Math.round((type.count / VISIT_TOTAL) * 100)}%`}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+
+                    <section aria-labelledby="sehati-flow-title" class={cx(card, "flex flex-col gap-4 p-4")}>
+                      <div class={headRow} set:html={headHtml("sehati-flow-title", "Patient flow", "Check-ins per hour, peak at 10:00")} />
+                      <ol aria-label="Check-ins per hour" class="flex min-h-36 flex-1 items-end gap-2">
+                        {flow.map((item) => (
+                          <li class="flex h-full flex-1 flex-col items-center justify-end gap-1">
+                            <span class="text-xs font-medium tabular-nums">{item.count}</span>
+                            <span aria-hidden="true" class={cx("w-full rounded-t-md", item.count === FLOW_MAX ? "bg-primary" : "bg-primary-line")} style={`height: ${(item.count / FLOW_MAX) * 70}%`} />
+                            <span class={cx(note, "tabular-nums")}><span class="sr-only">at </span>{item.hour}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </section>
+                  </div>
+                </>
+              )}
+
+              {id === "appointments" && (
+                <section aria-labelledby="sehati-week-title" class="grid gap-3">
+                  <div class={headRow}>
+                    <Fragment set:html={headHtml("sehati-week-title", "Week of 16 Nov 2026", `${appointmentList.length} appointments`)} />
+                    <div class="flex flex-wrap items-end gap-2">
+                      <Select aria-label="Filter by doctor" class="sm:w-56" data-seh-doctor-filter>
+                        <option value="all">All doctors</option>
+                        {doctorOptions.map((item) => <option value={item.id}>{item.label}</option>)}
+                      </Select>
+                      <Button data-seh-new><Fragment set:html={icon("plus", "size-4")} />New appointment</Button>
+                    </div>
+                  </div>
+                  <div class={tableWrap}>
+                    <table class={cx(table, "min-w-[720px] table-fixed")}>
+                      <thead>
+                        <tr>
+                          <th scope="col" class={cx(th, "w-16")}>Time</th>
+                          {days.map((day) => <th scope="col" class={cx(th, "border-l border-line", day.id === TODAY_DAY && "text-primary")}>{`${day.label} ${day.date}`}</th>)}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {slots.map((time) => (
+                          <tr>
+                            <th scope="row" class="border-t border-line px-4 py-2 text-left align-top text-xs font-medium text-muted tabular-nums">{time}</th>
+                            {days.map((day) => <td data-slot={`${day.id}-${time}`} class={cx(slotCell, day.id === TODAY_DAY && slotToday)}><div class="grid gap-1" /></td>)}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <template data-seh-store="chip"><button type="button" class={booking}><span aria-hidden="true" class={dot} /><span class="truncate" /></button></template>
+                  <ul aria-label="Doctors" class="flex flex-wrap gap-x-4 gap-y-1">
+                    {doctors.map((doctor) => <li class={cx(note, "flex items-center gap-1.5")}><span aria-hidden="true" class={cx(dot, tones[doctor.tone])} />{doctor.name}</li>)}
+                  </ul>
+
+                  <Modal id={APPOINTMENT_MODAL} title="New appointment">
+                    <div class="grid gap-4 text-ink">
+                      <div class="grid gap-1.5">
+                        <Input label="Patient name" data-seh-field="patient" />
+                        <p id={PATIENT_ERROR} class={errorText} hidden />
+                      </div>
+                      <Select label="Doctor" data-seh-field="doctor">
+                        {doctorOptions.map((item) => <option value={item.id}>{item.label}</option>)}
+                      </Select>
+                      <div class="grid grid-cols-2 gap-3">
+                        <Select label="Day" data-seh-field="day">
+                          {days.map((day) => <option value={day.id}>{`${day.label}, ${day.date} Nov`}</option>)}
+                        </Select>
+                        <Select label="Time" data-seh-field="time">
+                          {slots.map((time) => <option value={time}>{time}</option>)}
+                        </Select>
+                      </div>
+                      <p role="alert" class="text-danger" hidden data-seh-slot-error />
+                    </div>
+                    <Fragment slot="footer">
+                      <Button variant="danger" hidden data-seh-cancel>Cancel appointment</Button>
+                      <Button data-seh-save>Book appointment</Button>
+                    </Fragment>
+                  </Modal>
+                </section>
+              )}
+
+              {id === "patients" && (
+                <section aria-labelledby="sehati-patients-title" class="grid gap-3">
+                  <div class={headRow}>
+                    <Fragment set:html={headHtml("sehati-patients-title", "Patient records", `${patients.length} of ${patients.length} patients`)} />
+                    <div class="w-full sm:w-64"><Input type="search" aria-label="Filter patients" placeholder="Filter by name or MRN" data-seh-patient-query /></div>
+                  </div>
+                  <div class={tableWrap}>
+                    <table class={table}>
+                      <thead>
+                        <tr>
+                          <th scope="col" class={th}>Patient</th>
+                          <th scope="col" class={cx(th, "hidden sm:table-cell")}>MRN</th>
+                          <th scope="col" class={th}>Insurance</th>
+                          <th scope="col" class={cx(th, "hidden md:table-cell")}>Doctor</th>
+                          <th scope="col" class={cx(th, "hidden md:table-cell")}>Last visit</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {patients.map((item) => (
+                          <tr data-patient={item.id} data-key={`${item.name} ${item.mrn}`.toLowerCase()}>
+                            <td class={td}>
+                              <div class="flex items-center gap-3">
+                                <Fragment set:html={faceHtml(item.name, "size-8 text-xs")} />
+                                <div>
+                                  <button type="button" class={linkButton} data-seh-patient={item.id}>{item.name}</button>
+                                  <p class={note}>{sexLabel(item)}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td class={cx(td, "hidden tabular-nums sm:table-cell")}>{item.mrn}</td>
+                            <td class={td}><Badge variant={item.payer === "BPJS" ? "primary" : "neutral"} dot={false}>{item.payer}</Badge></td>
+                            <td class={cx(td, "hidden md:table-cell")}>{doctorById(item.doctor).name}</td>
+                            <td class={cx(td, "hidden text-muted md:table-cell")}>{item.last}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <p class="border-t border-line p-4 text-muted" hidden data-seh-empty>No patients match this filter.</p>
+                  </div>
+                </section>
+              )}
+
+              {id === "doctors" && (
+                <section aria-labelledby="sehati-roster-title" class="grid gap-3">
+                  <div class={headRow} set:html={headHtml("sehati-roster-title", "Roster", `${doctors.filter(acceptsToday).length} of ${doctors.length} doctors accepting patients`)} />
+                  <ul class="grid gap-4 md:grid-cols-2">
+                    {doctors.map((doctor) => (
+                      <li data-doctor={doctor.id} class={cx(card, "grid gap-4 p-4")}>
+                        <div class="flex items-start gap-3">
+                          <Fragment set:html={faceHtml(doctor.name, "size-11 text-sm")} />
+                          <div class="min-w-0 flex-1">
+                            <h3 class={cx(h3, "truncate")}>{doctor.name}</h3>
+                            <p class={note}>{`${doctor.poli} · ${doctor.room} · ${doctor.load} patients today`}</p>
+                          </div>
+                          <Badge variant="success" hidden={!acceptsToday(doctor)} data-seh-on>Available</Badge>
+                          <Badge hidden={acceptsToday(doctor)} data-seh-off>Away</Badge>
+                        </div>
+                        <dl class="grid grid-cols-6 gap-1 text-center">
+                          {days.map((day, index) => (
+                            <div class={cx("rounded-md py-1.5", day.id === TODAY_DAY ? "bg-primary-soft" : "bg-subtle")}>
+                              <dt class={note}>{day.label}</dt>
+                              <dd class={cx("text-xs font-medium tabular-nums", doctor.hours[index] === "Off" && "text-muted")}>{doctor.hours[index]}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                        <Switch label="Accepting patients" checked={acceptsToday(doctor)} data-seh-available={doctor.name} />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {id === "pharmacy" && (
+                <>
+                  <section aria-labelledby="sehati-rx-title" class="grid gap-3">
+                    <div class={headRow} set:html={headHtml("sehati-rx-title", "Prescription queue", `${prescriptions.filter((item) => !item.dispensed).length} waiting to be dispensed`)} />
+                    <ul class={cx(card, "divide-y divide-line")}>
+                      {prescriptions.map((item) => (
+                        <li data-rx={item.id} class="flex flex-wrap items-center gap-x-4 gap-y-2 p-4">
+                          <div class="min-w-0 flex-1 basis-56">
+                            <p class="font-medium"><span class="tabular-nums">{item.no}</span>{` · ${item.patient}`}</p>
+                            <p class={cx(note, "mt-0.5")}>{item.items}</p>
+                          </div>
+                          <p class={cx(note, "hidden md:block")}>{doctorById(item.doctor).name}</p>
+                          <Badge variant="success" hidden={!item.dispensed}>Dispensed</Badge>
+                          <Button variant="secondary" size="sm" aria-label={`Dispense ${item.no}`} hidden={item.dispensed} data-seh-dispense={item.id}><Fragment set:html={icon("check", "size-4")} />Dispense</Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section aria-labelledby="sehati-stock-title" class="grid gap-3">
+                    <div class={headRow}>
+                      <Fragment set:html={headHtml("sehati-stock-title", "Stock", `${lowCount} items need reorder`)} />
+                      <Switch label="Low stock only" data-seh-low />
+                    </div>
+                    <div class={tableWrap}>
+                      <table class={table}>
+                        <thead>
+                          <tr>
+                            <th scope="col" class={th}>Item</th>
+                            <th scope="col" class={th}>On hand</th>
+                            <th scope="col" class={cx(th, "hidden sm:table-cell")}>Minimum</th>
+                            <th scope="col" class={th}>Status</th>
+                            <th scope="col" class={cx(th, "hidden md:table-cell")}>Expires</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {stock.map((item) => {
+                            const state = stockStates[stockState(item)];
+                            return (
+                              <tr data-stock={stockState(item)}>
+                                <td class={td}>
+                                  <p class="font-medium">{item.name}</p>
+                                  <p class={note}>{item.form}</p>
+                                </td>
+                                <td class={td}>
+                                  <p class="font-medium tabular-nums">{item.stock}</p>
+                                  <span aria-hidden="true" class="mt-1 block h-1 w-20 overflow-hidden rounded-full bg-subtle"><span class={cx("block h-full rounded-full", state.bar)} style={`width: ${stockLevel(item)}%`} /></span>
+                                </td>
+                                <td class={cx(td, "hidden text-muted tabular-nums sm:table-cell")}>{item.min}</td>
+                                <td class={td}><Badge variant={state.badge}>{state.label}</Badge></td>
+                                <td class={cx(td, "hidden text-muted md:table-cell")}>{item.exp}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                </>
+              )}
+
+              {id === "billing" && (
+                <>
+                  <dl class={cx(statGrid, "sm:grid-cols-3")}>
+                    {totals.map((total, index) => (
+                      <div class={cx(statCell, index === 0 && "max-sm:col-span-2")}>
+                        <dt class={note}>{total.label}</dt>
+                        <dd data-total={total.label} class={statValue}>{rupiah(total.value)}</dd>
+                        <dd class={note}>{total.text}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <section aria-labelledby="sehati-invoices-title" class="grid gap-3">
+                    <div class={headRow}>
+                      <Fragment set:html={headHtml("sehati-invoices-title", "Invoices", `${invoices.length} of ${invoices.length} invoices`)} />
+                      <div class="flex flex-wrap items-center gap-2">
+                        <div role="group" aria-label="Filter by payment status" class="flex gap-1">
+                          {statusFilters.map((item) => <button type="button" aria-pressed={item.id === "all" ? "true" : "false"} class={cx(chip, item.id === "all" ? chipOn : chipOff)} data-seh-status={item.id}>{item.label}</button>)}
+                        </div>
+                        <Select aria-label="Filter by payer" class="w-36" data-seh-payer>
+                          {payerFilters.map((item) => <option>{item}</option>)}
+                        </Select>
+                      </div>
+                    </div>
+                    <div class={tableWrap}>
+                      <table class={table}>
+                        <thead>
+                          <tr>
+                            <th scope="col" class={th}>Invoice</th>
+                            <th scope="col" class={cx(th, "hidden sm:table-cell")}>Payer</th>
+                            <th scope="col" class={cx(th, "hidden md:table-cell")}>Date</th>
+                            <th scope="col" class={cx(th, "text-right")}>Amount due</th>
+                            <th scope="col" class={th}>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {invoices.map((item) => (
+                            <tr data-invoice={item.id}>
+                              <td class={td}>
+                                <button type="button" class={cx(linkButton, "tabular-nums")} data-seh-invoice={item.id}>{item.no}</button>
+                                <p class={note}>{item.patient}</p>
+                              </td>
+                              <td class={cx(td, "hidden sm:table-cell")}><Badge variant={item.payer === "BPJS" ? "primary" : "neutral"} dot={false}>{item.payer}</Badge></td>
+                              <td class={cx(td, "hidden text-muted md:table-cell")}>{item.date}</td>
+                              <td class={cx(td, "text-right font-medium tabular-nums")}>{rupiah(due(item))}</td>
+                              <td class={td}><Badge variant="success" hidden={!item.paid} data-seh-paid>Paid</Badge><Badge variant="warning" hidden={item.paid} data-seh-unpaid>Unpaid</Badge></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      <p class="border-t border-line p-4 text-muted" hidden data-seh-empty>No invoices match these filters.</p>
+                    </div>
+                  </section>
+
+                  <Modal id={INVOICE_MODAL} title={`Invoice ${firstInvoice.no}`}>
+                    <div class="grid gap-4 text-ink" data-seh-detail>
+                      <div class="flex items-center justify-between gap-3">
+                        <div>
+                          <p class="font-medium" data-seh-inv="patient">{firstInvoice.patient}</p>
+                          <p class={note} data-seh-inv="meta">{`${firstInvoice.date} 2026 · ${firstInvoice.payer}`}</p>
+                        </div>
+                        <Badge variant="success" hidden={!firstInvoice.paid} data-seh-paid>Paid</Badge><Badge variant="warning" hidden={firstInvoice.paid} data-seh-unpaid>Unpaid</Badge>
+                      </div>
+                      <dl class="grid gap-2 border-y border-line py-3">
+                        <div class="flex justify-between gap-3 text-muted" data-seh-coverage>
+                          <dt>BPJS coverage</dt>
+                          <dd class="tabular-nums" data-seh-inv="covered">{`- ${rupiah(firstInvoice.covered)}`}</dd>
+                        </div>
+                      </dl>
+                      <p class="flex items-baseline justify-between gap-3 font-semibold">Amount due<span data-due class="text-lg tabular-nums">{rupiah(due(firstInvoice))}</span></p>
+                      <template data-seh-store="line"><div class="flex justify-between gap-3" data-seh-line><dt /><dd class="tabular-nums" /></div></template>
+                    </div>
+                    <Fragment slot="footer">
+                      <Button variant="secondary" type="submit" value="close">Close</Button>
+                      <Button data-seh-mark-paid>Mark as paid</Button>
+                    </Fragment>
+                  </Modal>
+                </>
+              )}
+
+              {id === "settings" && (
+                <div class="grid items-start gap-4 lg:grid-cols-2">
+                  <section aria-labelledby="sehati-profile-title" class={cx(card, "grid gap-4 p-4 lg:row-span-2")}>
+                    <div class={headRow} set:html={headHtml("sehati-profile-title", "Clinic profile", "Shown on invoices and appointment reminders.")} />
+                    <form novalidate class="grid gap-4" data-seh-profile>
+                      <div class="grid gap-1.5">
+                        <Input label="Clinic name" value={CLINIC} data-seh-clinic />
+                        <p id={NAME_ERROR} class={errorText} hidden />
+                      </div>
+                      <Input label="Phone" type="tel" value="+62 22 5550 0100" />
+                      <Input label="Address" value="Jl. Cendana No. 12, Bandung" />
+                      <Input label="BPJS provider code" value="0114-B-027" />
+                      <div><Button type="submit">Save profile</Button></div>
+                    </form>
+                  </section>
+
+                  <section aria-labelledby="sehati-hours-title" class={cx(card, "grid gap-3 p-4")}>
+                    <div class={headRow} set:html={headHtml("sehati-hours-title", "Opening hours", "Patients can only book inside these hours.")} />
+                    <ul class="divide-y divide-line">
+                      {openingHours.map((item) => (
+                        <li data-day={item.day} class="flex items-center justify-between gap-3 py-2">
+                          <Switch label={item.day} checked={item.open} data-seh-open />
+                          <span class={cx("tabular-nums", !item.open && "text-muted")} data-hours={item.hours}>{item.open ? item.hours : "Closed"}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section aria-labelledby="sehati-alerts-title" class={cx(card, "grid gap-3 p-4")}>
+                    <div class={headRow} set:html={headHtml("sehati-alerts-title", "Notifications", "Choose what the front desk and pharmacy hear about.")} />
+                    <ul class="grid gap-4">
+                      {alerts.map((item) => (
+                        <li>
+                          <Switch label={item.label} checked={item.on} data-seh-alert={item.label} />
+                          <p class={cx(note, "mt-1 pl-[52px]")}>{item.note}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                </div>
+              )}
+            </Wrapper>
+          );
+        })
+      }
+    </main>
+
+    <aside aria-labelledby="sehati-panel-title" class={todayPanel}>
+      <div>
+        <h2 id="sehati-panel-title" class={h2}>Live queue</h2>
+        <p class={note}>{`${TODAY} · open until 20:00`}</p>
+      </div>
+      <dl class={cx(statGrid, "grid-cols-3")}>
+        {counts.map(([label, value]) => (
+          <div class="bg-surface px-3 py-2">
+            <dt class={note}>{label}</dt>
+            <dd data-count={label} class="text-lg font-semibold tabular-nums">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <section aria-labelledby="sehati-now-title" class="grid gap-2">
+        <h3 id="sehati-now-title" class={h3}>Now serving</h3>
+        <ul class="grid gap-2">
+          {rooms.map(({ doctor, serving }) => (
+            <li data-now={doctor.id} class={cx(nowBase, serving ? nowOn : nowOff)}>
+              <span class={cx(ticketNo, "w-20 text-xl")}>{serving ? serving.no : "Free"}</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium">{serving ? patientById(serving.patient).name : "No patient"}</p>
+                <p class={cx(note, "truncate")}>{`${doctor.room} · ${doctor.poli}`}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section aria-labelledby="sehati-next-title" class="grid gap-1">
+        <h3 id="sehati-next-title" class={h3}>Up next</h3>
+        <p class="text-muted" hidden data-seh-none>The waiting room is empty.</p>
+        <ol data-next class="divide-y divide-line" set:html={rows(upNext, nextRowHtml)} />
+        <template data-seh-store="next" set:html={rows(queue, nextRowHtml)} />
+      </section>
+    </aside>
+
+    <nav aria-label="Main mobile" class={bottomBar}>
+      {pageIds.map((id) => (
+        <button type="button" aria-current={id === DEFAULT_PAGE ? "page" : undefined} class={cx(bottomBase, id === DEFAULT_PAGE ? bottomActive : bottomIdle)} data-seh-go={id} data-seh-nav="bottom"><Fragment set:html={icon(pages[id].icon)} /><span class="max-w-full truncate">{pages[id].label}</span></button>
+      ))}
+    </nav>
+
+    <Drawer id={PATIENT_DRAWER} title="Patient record">
+      <div class="grid gap-4 text-ink">
+        <div class="flex items-center gap-3">
+          <Fragment set:html={faceHtml(patient.name, "size-12 text-sm")} />
+          <div class="min-w-0">
+            <p data-patient-name class="text-base font-semibold">{patient.name}</p>
+            <p class={note} data-seh-meta>{`${patient.mrn} · ${doctorById(patient.doctor).name}`}</p>
+          </div>
+        </div>
+        <Tabs items={patientTabs}>
+          <Fragment slot="profile">
+            <dl class="grid grid-cols-2 gap-2">
+              {profileOf(patient).map(([label, value]) => (
+                <div class={field}>
+                  <dt class={note}>{label}</dt>
+                  <dd data-field={label} class="mt-0.5 font-medium">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Fragment>
+          <Fragment slot="visits">
+            <ol class="ml-1.5 grid gap-4 border-l border-line">
+              {visitsFor(0).map((visit) => (
+                <li class="relative pl-4" data-seh-visit>
+                  <span aria-hidden="true" class="absolute top-1.5 -left-[4.5px] size-2 rounded-full bg-primary ring-4 ring-surface" />
+                  <p class={note}>{visit.date}</p>
+                  <p class="font-medium">{visit.title}</p>
+                  <p class="text-muted">{visit.note}</p>
+                </li>
+              ))}
+            </ol>
+          </Fragment>
+          <Fragment slot="vitals">
+            <ul class="grid gap-2">
+              {vitalDefs.map((def) => {
+                const values = seriesFor(def, 0);
+                return (
+                  <li class={cx(field, "flex items-center justify-between gap-3")} data-seh-vital>
+                    <div>
+                      <p class={note}>{def.label}</p>
+                      <p class="font-semibold tabular-nums">{`${values[values.length - 1]} ${def.unit}`}</p>
+                    </div>
+                    <svg role="img" aria-label={`${def.label} over the last 5 visits: ${values.join(", ")}`} viewBox="0 0 100 32" class="h-8 w-28 text-primary" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points={spark(values)} /></svg>
+                  </li>
+                );
+              })}
+            </ul>
+          </Fragment>
+          <Fragment slot="allergies">
+            <p hidden={patient.allergies.length > 0} data-allergies={patient.allergies.length === 0 ? "" : undefined} data-seh-no-allergy>No known allergies.</p>
+            <ul hidden={patient.allergies.length === 0} data-allergies={patient.allergies.length > 0 ? "" : undefined} class="flex flex-wrap gap-2" data-seh-allergy-list>
+              {patient.allergies.map((item) => <li><Badge variant="danger">{item}</Badge></li>)}
+            </ul>
+            <template data-seh-store="allergy"><li><Badge variant="danger">-</Badge></li></template>
+          </Fragment>
+        </Tabs>
+      </div>
+      <Fragment slot="footer">
+        <Button variant="secondary" type="submit" value="close">Close</Button>
+        <Button type="submit" value="remind" data-seh-remind>Send reminder</Button>
+      </Fragment>
+    </Drawer>
+    <Toaster />
+  </div>
+</sehati-template>
+
+<script>
+  type Doctor = { id: string; name: string; room: string; tone: string };
+  type Patient = {
+    id: string;
+    mrn: string;
+    name: string;
+    sex: string;
+    age: number;
+    payer: string;
+    doctor: string;
+    phone: string;
+    blood: string;
+    city: string;
+    allergies: string[];
+  };
+  type QueueItem = {
+    id: string;
+    no: string;
+    patient: string;
+    doctor: string;
+    type: string;
+    status: string;
+  };
+  type Appointment = {
+    id: string;
+    patient: string;
+    doctor: string;
+    day: string;
+    time: string;
+  };
+  type Invoice = {
+    id: string;
+    no: string;
+    patient: string;
+    payer: string;
+    date: string;
+    covered: number;
+    paid: boolean;
+    items: { label: string; amount: number }[];
+  };
+  type Vital = { label: string; unit: string; base: number; step: number; spread: number };
+  type Config = {
+    pages: Record<string, { label: string; title: string }>;
+    defaultPage: string;
+    titleId: string;
+    drawerId: string;
+    appointmentId: string;
+    invoiceId: string;
+    patientError: string;
+    nameError: string;
+    doctors: Doctor[];
+    rooms: number;
+    patients: Patient[];
+    queue: QueueItem[];
+    doneBase: number;
+    upNext: number;
+    days: { id: string; label: string }[];
+    appointments: Appointment[];
+    blank: Appointment;
+    visitPool: { title: string; note: string }[];
+    vitalDefs: Vital[];
+    wave: number[];
+    invoices: Invoice[];
+    prescriptions: { id: string; no: string; patient: string }[];
+    payerAll: string;
+    faceTones: string[];
+    tones: Record<string, string>;
+    classes: Record<string, string>;
+  };
+
+  const toast = (title: string, description = "", variant?: string) =>
+    window.dispatchEvent(
+      new CustomEvent("markas-toast", {
+        detail: { title, description, variant },
+      }),
+    );
+  const swap = (element: Element, add: string, remove: string) => {
+    element.classList.remove(...remove.split(" "));
+    element.classList.add(...add.split(" "));
+  };
+  const rupiah = (value: number) => `Rp ${value.toLocaleString("id-ID")}`;
+  const initials = (name: string) =>
+    name
+      .split(",")[0]!
+      .split(" ")
+      .filter((word) => !word.endsWith("."))
+      .filter((_, index, words) => index === 0 || index === words.length - 1)
+      .map((word) => word.charAt(0))
+      .join("")
+      .toUpperCase();
+  const spark = (values: number[]) => {
+    const min = Math.min(...values);
+    const span = Math.max(...values) - min || 1;
+    return values
+      .map((value, at) => `${at * 25},${28 - Math.round(((value - min) * 24) / span)}`)
+      .join(" ");
+  };
+  const due = (invoice: Invoice) =>
+    invoice.items.reduce((sum, item) => sum + item.amount, 0) - invoice.covered;
+  const checked = (event: Event) => (event.target as HTMLInputElement).checked;
+  /** Dua elemen bergantian: yang aktif tampil dan membawa atribut penanda untuk tes dan pembaca kode. */
+  const pick = (first: Element, second: Element, useFirst: boolean, mark: string) => {
+    (first as HTMLElement).hidden = !useFirst;
+    (second as HTMLElement).hidden = useFirst;
+    first.toggleAttribute(mark, useFirst);
+    second.toggleAttribute(mark, !useFirst);
+  };
+
+  /** Satu elemen per template: navigasi hash, antrean bersama, rekam pasien, dan interaksi tiap halaman. */
+  class SehatiTemplate extends HTMLElement {
+    private readonly config = JSON.parse(this.dataset.config ?? "{}") as Config;
+    private queueState: Record<string, string> = {};
+    private patientId = "p1";
+    /* State halaman, direset setiap kali halaman dibuka. */
+    private list: Appointment[] = [];
+    private doctorFilter = "all";
+    private form: Appointment = this.config.blank;
+    private paid: Record<string, boolean> = {};
+    private status = "all";
+    private payer = "";
+    private openId = "i1";
+    private readonly onHashChange = () => {
+      this.open(this.readHash());
+      document.getElementById(this.config.titleId)?.focus();
+    };
+    private readonly onClick = (event: Event) => this.handleClick(event);
+    private readonly onInput = (event: Event) => this.handleInput(event);
+    private readonly onChange = (event: Event) => this.handleChange(event);
+    private readonly onSubmit = (event: Event) => this.handleSubmit(event);
+    private readonly onSelect = (event: Event) =>
+      toast(String((event as CustomEvent).detail));
+
+    connectedCallback() {
+      this.queueState = Object.fromEntries(
+        this.config.queue.map((item) => [item.id, item.status]),
+      );
+      this.open(this.readHash());
+      window.addEventListener("hashchange", this.onHashChange);
+      this.addEventListener("click", this.onClick);
+      this.addEventListener("input", this.onInput);
+      this.addEventListener("change", this.onChange);
+      this.addEventListener("submit", this.onSubmit);
+      this.addEventListener("markas-select", this.onSelect);
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener("hashchange", this.onHashChange);
+      this.removeEventListener("click", this.onClick);
+      this.removeEventListener("input", this.onInput);
+      this.removeEventListener("change", this.onChange);
+      this.removeEventListener("submit", this.onSubmit);
+      this.removeEventListener("markas-select", this.onSelect);
+    }
+
+    private find<T extends Element = HTMLElement>(selector: string) {
+      return this.querySelector<T>(selector);
+    }
+
+    private findAll<T extends Element = HTMLElement>(selector: string) {
+      return [...this.querySelectorAll<T>(selector)];
+    }
+
+    private setText(selector: string, value: string | number) {
+      for (const element of this.findAll(selector))
+        element.textContent = String(value);
+    }
+
+    /** Catatan kecil di bawah judul bagian. */
+    private setNote(titleId: string, value: string) {
+      this.setText(`#${titleId} + [data-note]`, value);
+    }
+
+    private dialog(id: string) {
+      return document.getElementById(id) as HTMLDialogElement;
+    }
+
+    private showDialog(id: string) {
+      const dialog = this.dialog(id);
+      dialog.showModal();
+      dialog.dataset.state = "open";
+    }
+
+    /** Klon baris tersimpan untuk daftar id, lalu pasang sebagai isi daftar. */
+    private fill(list: Element, store: string, ids: string[]) {
+      const source = this.find<HTMLTemplateElement>(
+        `template[data-seh-store="${store}"]`,
+      )!.content;
+      list.replaceChildren(
+        ...ids.map((id) =>
+          source.querySelector(`[data-row="${id}"]`)!.cloneNode(true),
+        ),
+      );
+    }
+
+    private blank(store: string) {
+      return this.find<HTMLTemplateElement>(
+        `template[data-seh-store="${store}"]`,
+      )!.content.firstElementChild!.cloneNode(true) as HTMLElement;
+    }
+
+    /** Halaman aktif disimpan di hash URL supaya bisa dibagikan dan tombol Back bekerja. */
+    private readHash() {
+      const id = window.location.hash.slice(1);
+      return id in this.config.pages ? id : this.config.defaultPage;
+    }
+
+    private doctor(id: string) {
+      return this.config.doctors.find((item) => item.id === id)!;
+    }
+
+    private patient(id: string) {
+      return this.config.patients.find((item) => item.id === id)!;
+    }
+
+    /** Ganti isi halaman dengan klon baru dari <template>, lalu siapkan state-nya. */
+    private open(id: string) {
+      const template = this.find<HTMLTemplateElement>(
+        `template[data-seh-page="${id}"]`,
+      );
+      const view = this.find("[data-seh-view]");
+      if (!template || !view) return;
+      view.replaceChildren(template.content.cloneNode(true));
+      const { pages, classes } = this.config;
+      for (const button of this.findAll("[data-seh-go]")) {
+        const active = button.dataset.sehGo === id;
+        if (active) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
+        const on = classes[`${button.dataset.sehNav}Active`]!;
+        const off = classes[`${button.dataset.sehNav}Idle`]!;
+        swap(button, active ? on : off, active ? off : on);
+      }
+      document.getElementById(this.config.titleId)!.textContent =
+        pages[id]!.title;
+      this.list = this.config.appointments;
+      this.doctorFilter = "all";
+      this.paid = Object.fromEntries(
+        this.config.invoices.map((item) => [item.id, item.paid]),
+      );
+      this.status = "all";
+      this.payer = this.config.payerAll;
+      this.renderQueue();
+      if (id === "appointments") this.renderAppointments();
+    }
+
+    private handleClick(event: Event) {
+      const target = event.target as Element;
+      const closest = (selector: string) => target.closest<HTMLElement>(selector);
+      const go = closest("[data-seh-go]");
+      if (go) return window.location.assign(`#${go.dataset.sehGo}`);
+      const patient = closest("[data-seh-patient]");
+      if (patient) return this.openPatient(patient.dataset.sehPatient!);
+      const call = closest("[data-seh-call]");
+      if (call) return this.callNext(call.dataset.sehCall!);
+      const done = closest("[data-seh-done]");
+      if (done) return this.finish(done.dataset.sehDone!);
+      const booking = closest("[data-appointment]");
+      if (booking)
+        return this.openForm(
+          this.list.find((item) => item.id === booking.dataset.appointment)!,
+        );
+      const dispense = closest("[data-seh-dispense]");
+      if (dispense) return this.dispense(dispense);
+      const status = closest("[data-seh-status]");
+      if (status) {
+        this.status = status.dataset.sehStatus!;
+        return this.renderInvoices();
+      }
+      const invoice = closest("[data-seh-invoice]");
+      if (invoice) return this.viewInvoice(invoice.dataset.sehInvoice!);
+      if (closest("[data-seh-new]")) return this.openForm(this.config.blank);
+      if (closest("[data-seh-save]")) return this.save();
+      if (closest("[data-seh-cancel]")) return this.cancel();
+      if (closest("[data-seh-mark-paid]")) return this.markPaid();
+      if (closest("[data-seh-read]")) return this.markRead();
+      if (closest("[data-seh-remind]"))
+        toast(
+          "Reminder sent",
+          `WhatsApp to ${this.patient(this.patientId).name}`,
+          "success",
+        );
+    }
+
+    private handleInput(event: Event) {
+      const field = event.target as HTMLInputElement;
+      if (!field.matches("[data-seh-patient-query]")) return;
+      const needle = field.value.trim().toLowerCase();
+      const rows = this.findAll("tr[data-patient]");
+      for (const row of rows) row.hidden = !row.dataset.key!.includes(needle);
+      const shown = rows.filter((row) => !row.hidden).length;
+      this.setNote(
+        "sehati-patients-title",
+        `${shown} of ${rows.length} patients`,
+      );
+      this.find("[data-seh-empty]")!.hidden = shown > 0;
+    }
+
+    private handleChange(event: Event) {
+      const field = event.target as HTMLInputElement;
+      if (field.matches("[data-seh-doctor-filter]")) {
+        this.doctorFilter = field.value;
+        return this.renderAppointments();
+      }
+      if (field.matches("[data-seh-payer]")) {
+        this.payer = field.value;
+        return this.renderInvoices();
+      }
+      if (field.matches("[data-seh-low]")) {
+        for (const row of this.findAll("tr[data-stock]"))
+          row.hidden = field.checked && row.dataset.stock === "ok";
+        return;
+      }
+      if (field.matches("[data-seh-available]")) {
+        const on = checked(event);
+        const card = field.closest("[data-doctor]")!;
+        card.querySelector<HTMLElement>("[data-seh-on]")!.hidden = !on;
+        card.querySelector<HTMLElement>("[data-seh-off]")!.hidden = on;
+        const switches = this.findAll<HTMLInputElement>("[data-seh-available]");
+        this.setNote(
+          "sehati-roster-title",
+          `${switches.filter((item) => item.checked).length} of ${switches.length} doctors accepting patients`,
+        );
+        return toast(
+          on ? "Accepting patients" : "Set to away",
+          field.dataset.sehAvailable,
+        );
+      }
+      if (field.matches("[data-seh-open]")) {
+        const hours = field
+          .closest("[data-day]")!
+          .querySelector<HTMLElement>("[data-hours]")!;
+        hours.textContent = field.checked ? hours.dataset.hours! : "Closed";
+        hours.classList.toggle("text-muted", !field.checked);
+        return;
+      }
+      if (field.matches("[data-seh-alert]"))
+        toast(
+          field.checked ? "Notification enabled" : "Notification disabled",
+          field.dataset.sehAlert,
+        );
+    }
+
+    private handleSubmit(event: Event) {
+      const form = event.target as HTMLFormElement;
+      if (form.matches("[data-seh-search]")) {
+        event.preventDefault();
+        const query = form.querySelector("input")!.value.trim();
+        const needle = query.toLowerCase();
+        const match = this.config.patients.find((item) =>
+          `${item.name} ${item.mrn}`.toLowerCase().includes(needle),
+        );
+        if (!needle) return;
+        if (match) this.openPatient(match.id);
+        else toast("No patient found", `Nothing matches "${query}"`, "danger");
+        return;
+      }
+      if (!form.matches("[data-seh-profile]")) return;
+      event.preventDefault();
+      const field = form.querySelector<HTMLInputElement>("[data-seh-clinic]")!;
+      const name = field.value.trim();
+      this.setError(
+        field,
+        this.config.nameError,
+        name ? "" : "Enter the clinic name.",
+      );
+      if (name) toast("Clinic profile saved", name, "success");
+    }
+
+    private setError(field: HTMLElement, errorId: string, message: string) {
+      const error = document.getElementById(errorId)!;
+      error.textContent = message;
+      error.hidden = !message;
+      if (message) {
+        field.setAttribute("aria-invalid", "true");
+        field.setAttribute("aria-describedby", errorId);
+      } else {
+        field.removeAttribute("aria-invalid");
+        field.removeAttribute("aria-describedby");
+      }
+    }
+
+    private markRead() {
+      this.find("[data-unread]")!.textContent = "Notifications";
+      this.find("[data-seh-unread-dot]")!.hidden = true;
+      for (const dot of this.findAll("[data-seh-dot]"))
+        swap(dot, "bg-line", "bg-primary");
+      this.find<HTMLButtonElement>("[data-seh-read]")!.disabled = true;
+    }
+
+    /* Antrean */
+    private serving(doctorId: string) {
+      return this.config.queue.find(
+        (item) =>
+          item.doctor === doctorId && this.queueState[item.id] === "serving",
+      );
+    }
+
+    private waiting(doctorId?: string) {
+      return this.config.queue.filter(
+        (item) =>
+          this.queueState[item.id] === "waiting" &&
+          (!doctorId || item.doctor === doctorId),
+      );
+    }
+
+    private count(status: string) {
+      return this.config.queue.filter(
+        (item) => this.queueState[item.id] === status,
+      ).length;
+    }
+
+    private callNext(doctorId: string) {
+      const serving = this.serving(doctorId);
+      const next = this.waiting(doctorId)[0];
+      if (!next) return;
+      this.queueState = {
+        ...this.queueState,
+        ...(serving ? { [serving.id]: "done" } : {}),
+        [next.id]: "serving",
+      };
+      this.renderQueue();
+      toast(
+        `Calling ${next.no}`,
+        `${this.patient(next.patient).name} to ${this.doctor(doctorId).room}`,
+      );
+    }
+
+    private finish(doctorId: string) {
+      const serving = this.serving(doctorId);
+      if (!serving) return;
+      this.queueState = { ...this.queueState, [serving.id]: "done" };
+      this.renderQueue();
+      toast(
+        "Visit completed",
+        `${serving.no}, ${this.patient(serving.patient).name}`,
+        "success",
+      );
+    }
+
+    /** Panel antrean selalu ada; papan antrean hanya saat halaman Today terbuka. */
+    private renderQueue() {
+      const { doctors, rooms, doneBase, upNext, classes } = this.config;
+      const counts = {
+        waiting: this.count("waiting"),
+        serving: this.count("serving"),
+        done: doneBase + this.count("done"),
+      };
+      this.setText('[data-count="Waiting"], [data-stat="Waiting"]', counts.waiting);
+      this.setText(
+        '[data-count="In room"], [data-stat="In consultation"]',
+        counts.serving,
+      );
+      this.setText('[data-count="Done"], [data-stat="Completed"]', counts.done);
+      for (const doctor of doctors.slice(0, rooms)) {
+        const serving = this.serving(doctor.id);
+        const waiting = this.waiting(doctor.id);
+        const who = serving ? this.patient(serving.patient).name : "";
+        const now = this.find(`[data-now="${doctor.id}"]`)!;
+        swap(
+          now,
+          serving ? classes.nowOn! : classes.nowOff!,
+          serving ? classes.nowOff! : classes.nowOn!,
+        );
+        now.firstElementChild!.textContent = serving ? serving.no : "Free";
+        now.querySelector("p")!.textContent = serving ? who : "No patient";
+        const room = this.find(`[data-room="${doctor.id}"]`);
+        if (!room) continue;
+        const ticket = room.querySelector("[data-seh-ticket]")!;
+        pick(
+          ticket,
+          room.querySelector("[data-seh-free]")!,
+          Boolean(serving),
+          "data-serving",
+        );
+        if (serving) {
+          ticket.children[1]!.textContent = serving.no;
+          ticket.children[2]!.textContent = `${who}, ${serving.type}`;
+        }
+        room.querySelector("[data-waiting]")!.textContent =
+          `${waiting.length} waiting`;
+        this.fill(
+          room.querySelector("ul")!,
+          "board",
+          waiting.map((item) => item.id),
+        );
+        room.querySelector<HTMLButtonElement>("[data-seh-done]")!.disabled =
+          !serving;
+        room.querySelector<HTMLButtonElement>("[data-seh-call]")!.disabled =
+          waiting.length === 0;
+      }
+      const next = this.waiting().slice(0, upNext);
+      const list = this.find("aside ol")!;
+      pick(list, this.find("[data-seh-none]")!, next.length > 0, "data-next");
+      this.fill(
+        list,
+        "next",
+        next.map((item) => item.id),
+      );
+    }
+
+    /* Rekam pasien */
+    private openPatient(id: string) {
+      this.patientId = id;
+      const { patients, faceTones, visitPool, vitalDefs, wave } = this.config;
+      const patient = this.patient(id);
+      const index = patients.indexOf(patient);
+      const drawer = this.dialog(this.config.drawerId);
+      const face = drawer.querySelector("[data-face]")!;
+      const tone = [...patient.name].reduce(
+        (sum, char) => sum + char.charCodeAt(0),
+        0,
+      );
+      face.classList.remove(...faceTones);
+      face.classList.add(faceTones[tone % faceTones.length]!);
+      face.textContent = initials(patient.name);
+      drawer.querySelector("[data-patient-name]")!.textContent = patient.name;
+      drawer.querySelector("[data-seh-meta]")!.textContent =
+        `${patient.mrn} · ${this.doctor(patient.doctor).name}`;
+      const profile: Record<string, string> = {
+        MRN: patient.mrn,
+        "Age and sex": `${patient.age} yr, ${patient.sex === "F" ? "female" : "male"}`,
+        Phone: patient.phone,
+        "Blood type": patient.blood,
+        Insurance: patient.payer,
+        City: patient.city,
+      };
+      for (const field of drawer.querySelectorAll<HTMLElement>("[data-field]"))
+        field.textContent = profile[field.dataset.field!]!;
+      drawer.querySelectorAll("[data-seh-visit]").forEach((item, offset) => {
+        const visit = visitPool[(index + offset) % visitPool.length]!;
+        item.children[2]!.textContent = visit.title;
+        item.children[3]!.textContent = visit.note;
+      });
+      drawer.querySelectorAll("[data-seh-vital]").forEach((item, at) => {
+        const def = vitalDefs[at]!;
+        const values = wave.map(
+          (_, step) =>
+            def.base +
+            ((index * def.step) % def.spread) +
+            wave[(step + index * def.step) % wave.length]!,
+        );
+        item.querySelector("p:last-child")!.textContent =
+          `${values[values.length - 1]} ${def.unit}`;
+        item
+          .querySelector("svg")!
+          .setAttribute(
+            "aria-label",
+            `${def.label} over the last 5 visits: ${values.join(", ")}`,
+          );
+        item.querySelector("polyline")!.setAttribute("points", spark(values));
+      });
+      const list = drawer.querySelector("[data-seh-allergy-list]")!;
+      pick(
+        list,
+        drawer.querySelector("[data-seh-no-allergy]")!,
+        patient.allergies.length > 0,
+        "data-allergies",
+      );
+      list.replaceChildren(
+        ...patient.allergies.map((name) => {
+          const item = this.blank("allergy");
+          item.firstElementChild!.lastChild!.textContent = name;
+          return item;
+        }),
+      );
+      this.showDialog(this.config.drawerId);
+    }
+
+    /* Appointments */
+    private renderAppointments() {
+      const { days, tones } = this.config;
+      const shown = this.list.filter(
+        (item) =>
+          this.doctorFilter === "all" || item.doctor === this.doctorFilter,
+      );
+      this.setNote("sehati-week-title", `${shown.length} appointments`);
+      for (const cell of this.findAll("[data-slot]")) {
+        const day = days.find((item) => cell.dataset.slot!.startsWith(item.id))!;
+        const time = cell.dataset.slot!.slice(day.id.length + 1);
+        cell.firstElementChild!.replaceChildren(
+          ...shown
+            .filter((item) => item.day === day.id && item.time === time)
+            .map((item) => {
+              const doctor = this.doctor(item.doctor);
+              const chip = this.blank("chip");
+              chip.dataset.appointment = item.id;
+              chip.setAttribute(
+                "aria-label",
+                `${item.patient}, ${doctor.name}, ${day.label} ${time}`,
+              );
+              chip.firstElementChild!.classList.add(tones[doctor.tone]!);
+              chip.lastElementChild!.textContent = item.patient;
+              return chip;
+            }),
+        );
+      }
+    }
+
+    private field(name: string) {
+      return this.find<HTMLInputElement>(`[data-seh-field="${name}"]`)!;
+    }
+
+    private showErrors(patient: string, slot: string) {
+      this.setError(this.field("patient"), this.config.patientError, patient);
+      const alert = this.find("[data-seh-slot-error]")!;
+      alert.textContent = slot;
+      alert.hidden = !slot;
+    }
+
+    private openForm(appointment: Appointment) {
+      this.form = { ...appointment };
+      for (const key of ["patient", "doctor", "day", "time"] as const)
+        this.field(key).value = appointment[key];
+      this.showErrors("", "");
+      document.getElementById(`${this.config.appointmentId}-title`)!.textContent =
+        appointment.id ? "Edit appointment" : "New appointment";
+      this.find("[data-seh-cancel]")!.hidden = !appointment.id;
+      this.find("[data-seh-save]")!.textContent = appointment.id
+        ? "Save changes"
+        : "Book appointment";
+      this.showDialog(this.config.appointmentId);
+    }
+
+    private save() {
+      const form = {
+        id: this.form.id,
+        patient: this.field("patient").value,
+        doctor: this.field("doctor").value,
+        day: this.field("day").value,
+        time: this.field("time").value,
+      };
+      this.form = form;
+      // Nama wajib diisi dan satu dokter hanya punya satu pasien per slot.
+      const taken = this.list.some(
+        (item) =>
+          item.id !== form.id &&
+          item.doctor === form.doctor &&
+          item.day === form.day &&
+          item.time === form.time,
+      );
+      const missing = form.patient.trim() === "";
+      this.showErrors(
+        missing ? "Enter the patient name." : "",
+        taken ? "That slot is already booked for this doctor." : "",
+      );
+      if (missing || taken) return;
+      const saved = { ...form, patient: form.patient.trim() };
+      const nextId = `a${1 + Math.max(0, ...this.list.map((item) => Number(item.id.slice(1))))}`;
+      this.list = saved.id
+        ? this.list.map((item) => (item.id === saved.id ? saved : item))
+        : [...this.list, { ...saved, id: nextId }];
+      this.renderAppointments();
+      this.dialog(this.config.appointmentId).close();
+      const day = this.config.days.find((item) => item.id === saved.day)!;
+      toast(
+        saved.id ? "Appointment rescheduled" : "Appointment booked",
+        `${saved.patient}, ${day.label} ${saved.time}`,
+        "success",
+      );
+    }
+
+    private cancel() {
+      this.list = this.list.filter((item) => item.id !== this.form.id);
+      this.renderAppointments();
+      this.dialog(this.config.appointmentId).close();
+      toast("Appointment cancelled", this.form.patient);
+    }
+
+    /* Pharmacy */
+    private dispense(button: HTMLElement) {
+      const item = this.config.prescriptions.find(
+        (entry) => entry.id === button.dataset.sehDispense,
+      )!;
+      button.hidden = true;
+      (button.previousElementSibling as HTMLElement).hidden = false;
+      const pending = this.findAll("[data-seh-dispense]").filter(
+        (entry) => !entry.hidden,
+      ).length;
+      this.setNote("sehati-rx-title", `${pending} waiting to be dispensed`);
+      toast("Prescription dispensed", `${item.no} for ${item.patient}`, "success");
+    }
+
+    /* Billing */
+    private invoice() {
+      return this.config.invoices.find((item) => item.id === this.openId)!;
+    }
+
+    private setPaid(scope: Element, paid: boolean) {
+      scope.querySelector<HTMLElement>("[data-seh-paid]")!.hidden = !paid;
+      scope.querySelector<HTMLElement>("[data-seh-unpaid]")!.hidden = paid;
+    }
+
+    private renderInvoices() {
+      const { invoices, payerAll, classes } = this.config;
+      for (const chip of this.findAll("[data-seh-status]")) {
+        const on = chip.dataset.sehStatus === this.status;
+        chip.setAttribute("aria-pressed", String(on));
+        swap(
+          chip,
+          on ? classes.chipOn! : classes.chipOff!,
+          on ? classes.chipOff! : classes.chipOn!,
+        );
+      }
+      let shown = 0;
+      for (const row of this.findAll("tr[data-invoice]")) {
+        const invoice = invoices.find((item) => item.id === row.dataset.invoice)!;
+        const paid = Boolean(this.paid[invoice.id]);
+        const visible =
+          (this.status === "all" || (this.status === "paid") === paid) &&
+          (this.payer === payerAll || invoice.payer === this.payer);
+        row.hidden = !visible;
+        if (visible) shown += 1;
+        this.setPaid(row, paid);
+      }
+      this.setNote(
+        "sehati-invoices-title",
+        `${shown} of ${invoices.length} invoices`,
+      );
+      this.find("[data-seh-empty]")!.hidden = shown > 0;
+      const sum = (paid: boolean) =>
+        invoices
+          .filter((item) => Boolean(this.paid[item.id]) === paid)
+          .reduce((total, item) => total + due(item), 0);
+      this.setText('[data-total="Outstanding"]', rupiah(sum(false)));
+      this.setText('[data-total="Collected"]', rupiah(sum(true)));
+    }
+
+    private viewInvoice(id: string) {
+      this.openId = id;
+      const invoice = this.invoice();
+      const paid = Boolean(this.paid[id]);
+      const detail = this.find("[data-seh-detail]")!;
+      document.getElementById(`${this.config.invoiceId}-title`)!.textContent =
+        `Invoice ${invoice.no}`;
+      this.setText('[data-seh-inv="patient"]', invoice.patient);
+      this.setText(
+        '[data-seh-inv="meta"]',
+        `${invoice.date} 2026 · ${invoice.payer}`,
+      );
+      this.setText('[data-seh-inv="covered"]', `- ${rupiah(invoice.covered)}`);
+      this.setText("[data-due]", rupiah(due(invoice)));
+      this.setPaid(detail, paid);
+      for (const line of this.findAll("[data-seh-line]")) line.remove();
+      this.find("[data-seh-coverage]")!.before(
+        ...invoice.items.map((item) => {
+          const line = this.blank("line");
+          line.firstElementChild!.textContent = item.label;
+          line.lastElementChild!.textContent = rupiah(item.amount);
+          return line;
+        }),
+      );
+      this.find("[data-seh-mark-paid]")!.hidden = paid;
+      this.showDialog(this.config.invoiceId);
+    }
+
+    private markPaid() {
+      const invoice = this.invoice();
+      this.paid = { ...this.paid, [invoice.id]: true };
+      this.renderInvoices();
+      this.dialog(this.config.invoiceId).close();
+      toast(
+        "Payment recorded",
+        `${invoice.no}, ${rupiah(due(invoice))}`,
+        "success",
+      );
+    }
+  }
+
+  if (!customElements.get("sehati-template"))
+    customElements.define("sehati-template", SehatiTemplate);
+</script>
