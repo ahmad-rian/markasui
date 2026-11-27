@@ -56,14 +56,14 @@ const jsonLd = [
                 data-tone={TONES[index % TONES.length]}
                 class="frame template-card group block transition-colors"
               >
-                <div class="frame-panel relative aspect-[16/10] overflow-hidden">
+                <div class="frame-panel template-thumb relative aspect-[16/10] overflow-hidden">
                   <iframe
                     src={`/demo/templates/${template.name}/react`}
                     title={template.headline[locale]}
                     loading="lazy"
                     tabindex="-1"
                     aria-hidden="true"
-                    class="pointer-events-none absolute top-0 left-0 h-[900px] w-[1440px] origin-top-left scale-[0.4] border-0 sm:scale-[0.42] lg:scale-[0.41]"
+                    class="pointer-events-none absolute top-0 left-0 h-[900px] w-[1440px] origin-top-left border-0"
                   />
                 </div>
                 <div class="px-3 pt-3 pb-2.5">

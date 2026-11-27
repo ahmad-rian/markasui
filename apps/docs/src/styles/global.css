@@ -374,6 +374,17 @@
   --tone: var(--color-subtle);
   background-color: var(--tone);
 }
+/*
+ * Thumbnail kartu: demo 1440x900 diskalakan pas selebar panel (rasio 16/10 sama), jadi isinya utuh dan
+ * di tengah di semua lebar layar. tan(atan2(panjang, panjang)) menghasilkan angka tanpa JS.
+ */
+.template-thumb {
+  container-type: inline-size;
+}
+.template-thumb > iframe {
+  scale: 0.4;
+  scale: tan(atan2(100cqw, 1440px));
+}
 .template-card[data-tone="sky"] {
   --tone: color-mix(in oklab, var(--color-subtle) 55%, oklch(0.86 0.07 240));
 }
